@@ -390,14 +390,17 @@ import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/e
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
-// <<<<<<< HEAD
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { NgModule } from '@angular/core';
-// =======
-import { AddRemboussementComponent } from './remboussement/add-remboussement/add-remboussement.component';
-import { RemboursementListComponent } from './remboussement/remboursement-list/remboursement-list.component';
-
-// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
+import { DataCleComponent } from './remboursement/list-remboursement/data-cle/data-cle.component';
+import { DetailsCandidatComponent } from './remboursement/list-remboursement/details-candidat/details-candidat.component';
+import { ContactRemboursementComponent } from './remboursement/list-remboursement/contact/contact.component';
+import { DossierRemboursementComponent } from './remboursement/list-remboursement/dossier-remboursement/dossier-remboursement.component';
+import { CommentaireSectionComponent } from './remboursement/list-remboursement/commentaire-section/commentaire-section.component';
+import { PayementInformationComponent } from './remboursement/list-remboursement/payement-information/payement-information.component';
+import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
 @NgModule({
   imports: [
     TableModule,
@@ -799,12 +802,18 @@ import { RemboursementListComponent } from './remboussement/remboursement-list/r
     CalenderComponent,
     NewListTicketsComponent,
     ReadMoreComponent,
-// <<<<<<< HEAD
     NewCvthequeInterneComponent,
-// =======
+// ======= Remboursement
     AddRemboussementComponent,
-RemboursementListComponent,
-// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
+    ListRemboursementComponent,
+    ContactRemboursementComponent,
+    DataCleComponent,
+    DetailsCandidatComponent,
+    DossierRemboursementComponent,
+    CommentaireSectionComponent,
+    PayementInformationComponent,
+    InformationRemboursementComponent,
+// >>>>>>> 
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

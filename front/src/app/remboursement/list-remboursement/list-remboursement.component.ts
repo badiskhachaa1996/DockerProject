@@ -5,21 +5,29 @@ import { DemandeRemboursementService } from '../../services/demande-remboursemen
 import { Demande } from '../../models/Demande';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { saveAs as importedSaveAs } from "file-saver";
+import { environment } from 'src/environments/environment';
+import { MessageService } from 'primeng/api';
+import { AuthService } from 'src/app/services/auth.service';
+import jwt_decode from 'jwt-decode';
+
 
 @Component({
-  selector: 'app-remboursement-list',
-  templateUrl: './remboursement-list.component.html',
-  styleUrls: ['./remboursement-list.component.scss']
+  selector: 'app-list-remboursement',
+  templateUrl: './list-remboursement.component.html',
+  styleUrls: ['./list-remboursement.component.scss']
 })
 
-export class RemboursementListComponent implements OnInit {
+export class ListRemboursementComponent implements OnInit {
   searchQuery: string = '';
   selectedDemande: Demande | null = null; 
 
 
-  constructor(private demandeService: DemandeRemboursementService, private formBuilder: FormBuilder, )  { }
-  
+  constructor(private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
+
   showUpdateForm = false
+
+  motif = environment.motif
 
   formRembourssement = this.formBuilder.group({
     nom: [''],
@@ -46,19 +54,18 @@ export class RemboursementListComponent implements OnInit {
 
 })
 
+
+
   currentDemande
 
   refundRequests: Demande[] = [];
   items: any[];
   // selectedDemande
 
-
-
-
-
-  editKeyDates = true
-
+  token:any
   loading = true
+  userName=''
+  user: any
 
   
   ngOnInit(): void {
@@ -66,9 +73,21 @@ export class RemboursementListComponent implements OnInit {
 
     this.getDemandList()
 
+    
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.userServise.getInfoById(this.token.id).subscribe((user: any) => {
+      this.userName = user.firstname + ' ' + user.lastname
+      this.user = user
+    });
+
   }
+
+  onDemandeUpdated() {
+    this.getDemandList();
+  }
+
   getDemandList(){
-    this.demandeService.getAll()
+    this.demandeService.getAll() 
     .then((response: Demande[]) => {
       this.refundRequests = response;
       this.loading = false;
@@ -132,14 +151,31 @@ this.getDemandList()
 console.log('we are here')
   this.showUpdateForm = false
 }
-
-updateKeyDates(demande) {
-  // this.editKeyDates = true
-  // this.demandeService.updaterEMBOURSEMENT(demande)
-  console.log(demande.if)
+onMotifChange(event:any) {
+  console.log('event')
+  console.log(event)
 }
 
 
-
+updateDemande(data) {
+  // Use the service to make the POST request
+  this.demandeService.updateRemboursement(data.demande).subscribe(
+   (response) => {
+     this.messageService.add({
+       severity: 'success',
+       summary: 'Success',
+       detail: data.message
+     });
+   },
+   (error) => {
+     const errorMessage = error.error ? error.error.message : 'Echec de mis à jour.';
+     this.messageService.add({
+       severity: 'error',
+       summary: 'Error',
+       detail: errorMessage
+     });
+   }
+ );
+}
 
 }

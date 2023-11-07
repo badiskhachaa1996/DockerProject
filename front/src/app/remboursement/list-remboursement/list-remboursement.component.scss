@@ -1,0 +1,19 @@
+
+.details-element {
+    margin:  40px 0;
+}
+button.p-button-raised {
+   
+        padding: 15px;
+        margin-top: 10px;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        background-color: #37BAD4;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #2195ac;
+       
+    }
+}

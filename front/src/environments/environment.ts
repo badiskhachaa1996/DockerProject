@@ -65,7 +65,6 @@ export const environment = {
 
   ],
   paymentType : [
-    { label: '', value: 'Espèce' },
     { label: 'Virement', value: 'Virement' },
     { label: 'Chèque', value: 'Chèque' },
     { label: 'Compensation', value: 'Compensation' },

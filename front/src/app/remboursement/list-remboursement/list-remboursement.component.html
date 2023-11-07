@@ -1,0 +1,127 @@
+
+  <div *ngIf="showUpdateForm">
+      <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
+    </div>
+  <p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+    rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
+    responsiveLayout="scroll">
+  
+    <ng-template pTemplate="caption">
+      <div class="p-grid p-nogutter">
+        <div class="p-col-12 p-md-6 p-lg-4">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input [(ngModel)]="searchQuery" (input)="search()" class="p-inputtext" placeholder="rechercher">
+          </span>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-2">
+          <button pButton label="Search" (click)="search()" icon="pi pi-search" class="p-button-raised"></button>
+        </div>
+      </div>
+    </ng-template>
+  
+    <ng-template pTemplate="header" >
+      <tr >
+        <th style="width: 5rem"></th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            ID
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Nom
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Prénom
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Année Scolaire
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Ecole
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Montant
+          </div>
+        </th>
+        <th>
+          <div class="flex justify-content-between align-items-center">
+            Modalité de paiement
+          </div>
+        </th>
+        <th style="width: 4rem">
+          <div class="flex justify-content-between align-items-center" >
+            Statut
+          </div>
+        </th>
+        <th style="width: 4rem">
+          <div class="flex justify-content-between align-items-center">
+            Action
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+  
+    <ng-template pTemplate="body" let-demande let-expanded="expanded">
+      <tr >
+        <td style="width: 5rem;">
+            <button type="button" pButton pRipple [pRowToggler]="demande" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td>{{demande._id}}</td>
+        <td >{{demande.student?.last_name}}</td>
+        <td >{{demande.student?.first_name}}</td>
+        <td >{{ demande.training?.scholar_year}}</td>
+        <td >{{demande.training?.school}}</td>
+        <td >{{demande.refund?.montant}}</td>
+        <td >{{demande.refund?.method}}</td>
+        <td >{{demande.status}}</td>
+        <td class="text-right" >
+          <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="showFUpdateForm(demande)"></i>
+          <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+  
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-demande>
+      <tr>
+        <td  colspan="10" >
+          <div class="details-element">
+            <app-details-candidat [demande]="demande"></app-details-candidat>
+          </div>
+          <div class="details-element">
+            <app-contact-remboursement [demande]="demande"> </app-contact-remboursement>
+          </div>
+          <div class="details-element">
+            <app-data-cle (saveDemande)="updateDemande($event)" [demande]="demande"></app-data-cle>
+          </div>
+          <div class="details-element">
+            <app-details-candidat [demande]="demande"></app-details-candidat>
+          </div>
+          <div class="details-element">
+            <app-dossier-remboursement [demande]="demande" [user]="user" (demandeUpdated)="onDemandeUpdated($event)"></app-dossier-remboursement>
+          </div>
+          <div class="details-element">
+            <app-commentaire-section (saveDemande)="updateDemande($event)" [demande]="demande" [userName]="userName"></app-commentaire-section>
+          </div>
+          <div class="details-element">
+            <app-payement-information (saveDemande)="updateDemande($event)" [demande]="demande"></app-payement-information>
+          </div>
+          <div class="details-element">
+            <app-information-remboursement (saveDemande)="updateDemande($event)" [demande]="demande"></app-information-remboursement>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    
+ 
+
+  

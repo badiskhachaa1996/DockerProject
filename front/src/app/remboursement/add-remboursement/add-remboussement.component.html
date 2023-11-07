@@ -7,13 +7,15 @@
     <p>Si nous avons besoin de plus d'informations, nous vous contacterons à cette adresse e-mail. </p>
          -->
         <!-- <p>Bien à vous </p> -->
+        <div   style="justify-content: end; display: flex; "><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
+        </div>
     <div class="col-12 grid">
         <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement" (submit)="onSubmitRemboussementForm()">
             <h3 class="col-12" style="text-align: start;"> Etudiant</h3>
             <div class="field col-12 md:col-4">
                 <label for="civilite" >Civilité:</label>
                 <p-dropdown formControlName="civilite" [options]="civilitySelect"
-                            placeholder="Select Civilité" required></p-dropdown>
+                            placeholder="Select Civilité"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Nom</label>
@@ -54,7 +56,7 @@
             <h3 class="col-12" style="text-align: start;"> Formation</h3>
             <div class="field col-12 md:col-4">
                 <label>Année scolaire</label>
-                <p-dropdown [options]="annescolaires" formControlName="ecole"
+                <p-dropdown [options]="annescolaires" formControlName="annee_scolaire"
                 placeholder="Choisissez un service"></p-dropdown>            </div>
             <div class="field col-12 md:col-4">
                     <label>Ecole</label>
@@ -63,7 +65,7 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label>Formation</label>
-                <p-dropdown [options]="formations" optionLabel="value" formControlName="formation"
+                <p-dropdown [options]="formations" formControlName="formation"
                             placeholder="Choisissez une formation"></p-dropdown>
             </div>
 
@@ -71,7 +73,7 @@
             <h3 class="col-12" style="text-align: start;"> Demande</h3>
             <div class="field col-12 md:col-4">
                 <label>Motif de demande</label>
-                <p-dropdown [options]="motif" optionLabel="value" formControlName="formation"
+                <p-dropdown [options]="motif" optionLabel="value" formControlName="motif_refus"
                             placeholder="Choisissez une motif"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
@@ -93,20 +95,20 @@
                         <label for="rib-upload" class="upload-doc" (click)="rib.click()">
                             <i class="pi pi-cloud-upload"></i>Joindre
                         </label><span class="file-name" >{{rib?.files?.item(0)?.name}}</span>
-                        <input #rib multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'rib')" chooseLabel="Browse" inputId="rib-upload"/>
+                        <input #rib formControlName="rib" multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event, 'rib')" chooseLabel="Browse" inputId="rib"/>
                         <i class="pi pi-times cancel-icon" *ngIf="rib?.files?.item(0)" (click)="reset(rib)"></i>
                     </div>
                 </div>
                 <div class="doc-block grid">
                     <div class="doc-title col-4">Attestation de Paiement</div>
                     <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="attestation_payement.click()">
+                        <label for="rib-upload" class="upload-doc" (click)="attestion_paiement.click()">
                             <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{attestation_payement?.files?.item(0)?.name}}</span>
-                        <input #attestation_payement multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'attestation_payement')" chooseLabel="Browse" inputId="rib-upload"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="attestation_payement?.files?.item(0)" (click)="reset(attestation_payement)"></i>
+                        </label><span class="file-name" >{{attestion_paiement?.files?.item(0)?.name}}</span>
+                        <input #attestion_paiement formControlName="attestion_paiement" multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event, 'attestion_paiement')" chooseLabel="Browse" inputId="attestion_paiement"/>
+                        <i class="pi pi-times cancel-icon" *ngIf="attestion_paiement?.files?.item(0)" (click)="reset(attestion_paiement)"></i>
                     </div>
                 </div>
                 <div class="doc-block grid">
@@ -115,20 +117,20 @@
                         <label for="rib-upload" class="upload-doc" (click)="document_inscription.click()">
                             <i class="pi pi-cloud-upload"></i>Joindre
                         </label><span class="file-name" >{{document_inscription?.files?.item(0)?.name}}</span>
-                        <input #document_inscription multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'document_inscription')" chooseLabel="Browse" inputId="rib-upload"/>
+                        <input #document_inscription formControlName="document_inscription" multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event, 'document_inscription')" chooseLabel="Browse" inputId="document_inscription"/>
                         <i class="pi pi-times cancel-icon" *ngIf="document_inscription?.files?.item(0)" (click)="reset(document_inscription)"></i>
                     </div>
                 </div>
                 <div class="doc-block grid">
                     <div class="doc-title col-4">Preuve de Paiement</div>
                     <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="preuve_payement.click()">
+                        <label for="rib-upload" class="upload-doc" (click)="preuve_paiement.click()">
                             <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{preuve_payement?.files?.item(0)?.name}}</span>
-                        <input #preuve_payement multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'preuve_payement')" chooseLabel="Browse" inputId="rib-upload"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="preuve_payement?.files?.item(0)" (click)="reset(preuve_payement)"></i>
+                        </label><span class="file-name" >{{preuve_paiement?.files?.item(0)?.name}}</span>
+                        <input #preuve_paiement formControlName="preuve_paiement" multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event, 'preuve_paiement')" chooseLabel="Browse" inputId="preuve_paiement"/>
+                        <i class="pi pi-times cancel-icon" *ngIf="preuve_paiement?.files?.item(0)" (click)="reset(preuve_paiement)"></i>
                     </div>
                 </div>
                 <div class="doc-block grid">
@@ -137,8 +139,8 @@
                         <label for="rib-upload" class="upload-doc" (click)="autres_doc.click()">
                             <i class="pi pi-cloud-upload"></i>Joindre
                         </label><span class="file-name" >{{autres_doc?.files?.item(0)?.name}}</span>
-                        <input #autres_doc multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'autres_doc')" chooseLabel="Browse" inputId="rib-upload"/>
+                        <input #autres_doc formControlName="notification_ou_autre_justificatif" multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event, 'autres_doc')" chooseLabel="Browse" inputId="autres_doc"/>
                         <i class="pi pi-times cancel-icon" *ngIf="autres_doc?.files?.item(0)" (click)="reset(autres_doc)"></i>
                     </div>
                 </div>
@@ -147,8 +149,7 @@
             <div class="col-12  flex align-items-center justify-content-center ">
                 <br>
                 <span class="p-buttonset">
-                    <button [disabled]="formRembourssement.invalid" pButton pRipple class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
-                    <button *ngIf="currentDemande" pButton pRipple class="button-danger imen-btn" label="Cancel" icon="pi pi-times"  type="button" (click)="cancelForm()"></button>
+                    <button [disabled]="formRembourssement.invalid" pButton pRipple (click)=" goToList()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
                 </span>
             
             </div>

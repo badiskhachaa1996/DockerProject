@@ -1,5 +1,5 @@
 <div *ngIf="showUpdateForm">
-  <app-add-remboussement *ngIf="showUpdateForm" [currentDemande]="currentDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
+  <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
 </div>
 
 
@@ -7,7 +7,6 @@
 <p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
   rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
   responsiveLayout="scroll">
-
   <ng-template pTemplate="caption">
     <div class="p-grid p-nogutter">
       <div class="p-col-12 p-md-6 p-lg-4">
@@ -81,11 +80,11 @@
       <td style="min-width: 12rem;">{{demande._id}}</td>
       <td style="min-width: 12rem;">{{demande?.student?.last_name}}</td>
       <td style="min-width: 12rem;">{{demande?.student?.first_name}}</td>
-      <td style="min-width: 12rem;">{{ demande.training?.scholar_year}}</td>
-      <td style="min-width: 12rem;">{{demande.training?.school}}</td>
-      <td style="min-width: 12rem;">{{demande.refund?.montant}}</td>
-      <td style="min-width: 12rem;">{{demande.refund?.method}}</td>
-      <td style="min-width: 12rem;">{{demande.status}}</td>
+      <td style="min-width: 12rem;">{{ demande?.training?.scholar_year}}</td>
+      <td style="min-width: 12rem;">{{demande?.training?.school}}</td>
+      <td style="min-width: 12rem;">{{demande?.refund?.montant}}</td>
+      <td style="min-width: 12rem;">{{demande?.refund?.method}}</td>
+      <td style="min-width: 12rem;">{{demande?.status}}</td>
       <td class="text-right" style="min-width: 8rem">
         <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="showFUpdateForm(demande)"></i>
         <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
@@ -97,7 +96,7 @@
 
   <ng-template pTemplate="rowexpansion" let-demande>
     <tr>
-      <td colspan="6">
+      <td colspan="10">
           <div class="p-3">
             <h5>Détails Candidat</h5>
             <p-table>
@@ -135,12 +134,12 @@
                   </th>
                 </tr>
                 <tr>
-                  <td  style="min-width: 12rem;">{{demande.student.civility}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student.country_residence}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student.nationality}}</td>
-                  <td  style="min-width: 12rem;">{{demande.training.scholar_year}}</td>
-                  <td  style="min-width: 12rem;">{{ demande.training.name}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.civility}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.country_residence}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.nationality}}</td>
+                  <td  style="min-width: 12rem;">{{demande.training?.scholar_year}}</td>
+                  <td  style="min-width: 12rem;">{{ demande.training?.name}}</td>
                 </tr>
               </ng-template>
             </p-table>
@@ -207,18 +206,36 @@
                 
                 </tr>
                 <tr>
-                  <td  style="min-width: 12rem;">
-                    <input  [(ngModel)]="demande.motif" [disabled]="editKeyDates"> 
+                  <td style="min-width: 12rem">
+                    <span *ngIf="editKeyDates">{{demande.motif}}</span>
+                    <p-dropdown 
+                      *ngIf="!editKeyDates" 
+                      [options]="motif" 
+                      [(ngModel)]="keyDates.motif_refus" 
+                      placeholder="Choisissez une motif"
+                      [disabled]="editKeyDates"
+                    ></p-dropdown>
                   </td>
-                  <td  style="min-width: 12rem;">{{(demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.created_on | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.refund?.date_estimated | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.refund?.date | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
+                  <td style="min-width: 12rem">
+                    <span *ngIf="editKeyDates">{{(demande.date_refus  | date: 'dd/MM/yyyy') }}</span>
+                 <input *ngIf="!editKeyDates" [disabled]="editKeyDates" [(ngModel)]="keyDates.date_refus" type="date" > 
+                  </td>
+                  <td style="min-width: 12rem">
+                    <span *ngIf="editKeyDates">{{(demande.created_on  | date: 'dd/MM/yyyy') }}</span>
+                  <input *ngIf="!editKeyDates"  [disabled]="editKeyDates" [(ngModel)]="keyDates.created_on" type="date" >  
+                  </td>
+                  <td style="min-width: 12rem">
+                    <input  [disabled]="editKeyDates" [(ngModel)]="keyDates.refund_date_estimated" type="date">  {{(demande.refund?.date_estimated | date: 'dd/MM/yyyy') }}
+                  </td>
+                  <td style="min-width: 12rem">
+                    <input  [disabled]="editKeyDates" [(ngModel)]="keyDates.refund_date" type="date" >    {{(demande.refund?.date | date: 'dd/MM/yyyy') }}
+                  </td>
                   <td class="text-right" style="min-width: 8rem">
                     <i *ngIf="editKeyDates" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editKeyDates = false"></i>
-                    <i *ngIf="!editKeyDates" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updateKeyDates(demande)" ></i>
+                    <i *ngIf="!editKeyDates" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updateKeyDates(demande, keyDates)" ></i>
                   </td>
                 </tr>
+                
               </ng-template>
             </p-table>
             
@@ -240,6 +257,11 @@
                   </th>
                   <th>
                     <div class="flex justify-content-between align-items-center">
+                      Ajouté par
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
                     Lien de telechargement
                     </div>
                   </th>
@@ -249,52 +271,64 @@
                     </div>
                   
                 </tr>
-                <tr>
-                  <td  style="min-width: 12rem;">{{demande.docs?.rib.nom}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.docs?.rib.added_on| date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.rib.link}}</td>                
+                <tr *ngIf="demande.docs?.rib?.nom">
+
+                  <td  style="min-width: 12rem;">{{demande.docs?.rib?.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.rib?.added_on| date: 'dd/MM/yyyy')}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.rib?.added_by}}</td>
+
+                  <td  style="min-width: 12rem;" class="download-btn" (click)="downloadDoc(demande._id,'rib')">{{demande.docs?.rib?.nom}}</td>                           
                   <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-upload mr-2 clickable-element" title="charger" ></i>
                     <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
 
                   </td>
                 </tr>
-                <tr>
-                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement.nom}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.docs?.attestation_payement.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement.link}}</td>                
+                <tr *ngIf="demande.docs?.attestation_payement?.nom">
+                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement?.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.attestation_payement?.added_on | date: 'dd/MM/yyyy')}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement?.added_by }}</td>
+
+                  <td  style="min-width: 12rem;" class="download-btn" (click)="downloadDoc(demande._id,'attestion_paiement')"> {{demande.docs?.attestation_payement?.nom}}</td>                           
                   <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-upload mr-2 clickable-element" title="charger" ></i>
                     <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
 
                   </td>
                 </tr>
-                <tr>
-                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement.nom}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.docs?.preuve_payement.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement.added_on}}</td>                
+                <tr *ngIf="demande.docs?.preuve_payement?.nom">
+                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement?.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.preuve_payement?.added_on | date: 'dd/MM/yyyy') }}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement?.added_by}}</td>
+
+                  <td  style="min-width: 12rem;" class="download-btn" (click)="downloadDoc(demande._id,'preuve_paiement')"> {{demande.docs?.preuve_payement?.nom}}</td>                           
                   <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-upload mr-2 clickable-element" title="charger" ></i>
                     <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
 
                   </td>
                 </tr>
-                <tr>
-                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription.nom}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.docs?.document_inscription.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription.added_on}}</td>                
+                <tr *ngIf="demande.docs?.document_inscription?.nom">
+
+                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription?.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.document_inscription?.added_on | date: 'dd/MM/yyyy') }}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription?.added_by}}</td>
+
+                  <td  style="min-width: 12rem;" class="download-btn" (click)="downloadDoc(demande._id,'document_inscription')">{{demande.docs?.document_inscription?.nom}}</td>                           
                   <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-upload mr-2 clickable-element" title="charger" ></i>
                     <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
 
                   </td>
                 </tr>
-                <tr>
-                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc.nom}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.docs?.autres_doc.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc.added_on}}</td>                
+                <tr *ngIf="demande.docs?.autres_doc?.nom">
+
+                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc?.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.autres_doc?.added_on | date: 'dd/MM/yyyy')}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc?.added_by}}</td>
+                  <td  style="min-width: 12rem;" class="download-btn" (click)="downloadDoc(demande._id,'autres_doc')">{{demande.docs?.autres_doc?.nom}}</td>                           
                   <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-upload mr-2 clickable-element" title="charger" ></i>
                     <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
 
                   </td>
@@ -328,21 +362,23 @@
                     <div class="flex justify-content-between align-items-center">
                      Action
                     </div>
-                  
+                  </th>
                 </tr>
                 <tr>
-                  <td  style="min-width: 12rem;">
-                    <input  [(ngModel)]="demande.motif" [disabled]="editKeyDates"> 
+                  <td style="min-width: 12rem;"> <span    *ngIf="editcommSection">{{demande.note}}</span>
+                    <input *ngIf="!editKeyDates" [disabled]="editKeyDates" [(ngModel)]="commSection.note"  type="te" ></td>
+                  <td style="min-width: 12rem">
+                    <input [disabled]="editcommSection" [(ngModel)]="commSection.created_by" type="text">
                   </td>
-                  <td  style="min-width: 12rem;">{{demande.comments?.created_by }}</td>
-                  <td  style="min-width: 12rem;">{{(demande.comments?.created_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td style="min-width: 12rem">
+                    <input [disabled]="editcommSection" [(ngModel)]="commSection.created_on" type="date">
+                  </td>
                   <td class="text-right" style="min-width: 8rem">
-                    <i *ngIf="editKeyDates" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editKeyDates = false"></i>
-                    <i *ngIf="!editKeyDates" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updateKeyDates(demande)" ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
-
+                    <i *ngIf="editcommSection" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editcommSection = false"></i>
+                    <i *ngIf="!editcommSection" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updatecommSection(demande, commSection)"></i>
                   </td>
                 </tr>
+                
               </ng-template>
             </p-table>
             
@@ -375,24 +411,36 @@
                   <th>
                     <div class="flex justify-content-between align-items-center">
                      Action
-                    </div>
-                 
-                    <!-- (demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée" -->
+                    </div>                 
                 </tr>
                 <tr>
-                  <td  style="min-width: 12rem;">{{demande.student?.payment_date}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student?.montant}}</td>
-                  <td  style="min-width: 12rem;">{{(demande.student?.payment_method | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student?.note}}</td>
-                  <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editDatesDemande(demande)"></i>
-                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+                  <td  style="min-width: 12rem;"><span *ngIf="editPayInfo">{{demande.student?.payment_date | date: 'dd/MM/yyyy'}}</span>
+                    <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.payment_date" type="date">
+                    </td>
+                    <td  style="min-width: 12rem;"><span *ngIf="editPayInfo">{{demande.student?.montant }}</span>
+                      <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.montant" >
+                      </td>
+                      <td style="min-width: 12rem">
+                        <span *ngIf="editPayInfo">{{demande.payment_method}}</span>
+                        <p-dropdown 
+                          *ngIf="!editPayInfo" 
+                          [options]="payment_method" 
+                          [(ngModel)]="PayInfo.payment_method" 
+                          placeholder="Choisissez une motif"
+                          [disabled]="editPayInfo"
+                        ></p-dropdown>
+                      </td>
+                      <td style="min-width: 12rem;"> <span    *ngIf="editPayInfo">{{ demande.student.note}}</span>
+                        <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.note"  type="text" ></td>
+                        <td class="text-right" style="min-width: 8rem">
+                          <i *ngIf="editPayInfo" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editPayInfo = false"></i>
+                          <i *ngIf="!editPayInfo" class="pi pi-check mr-2 clickable-element" title="Check" (click)="updatePayInfo(demande, PayInfo)"></i>
 
-                  </td>
+                        </td>
                 </tr>
               </ng-template>
             </p-table>
-            
+             
           </div>
           <div class="p-3">
             <h5>information Remboursement</h5>
@@ -432,18 +480,33 @@
                   
                 </tr>
                 <tr>
-                  <td  style="min-width: 12rem;">{{demande.student?.payment_date}}</td>
-                  <!-- <td  style="min-width: 12rem;">{{(demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td> -->
-                  <td  style="min-width: 12rem;">{{demande.student?.payment_method}}</td>
-                  <td  style="min-width: 12rem;">{{demande.student?.montant }}</td>
-                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement}}</td>
-                  <td  style="min-width: 12rem;">{{demande.comments?.note}}</td>
-
-                  <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editDatesDemande(demande)"></i>
-                    <i class="pi pi-check mr-2 clickable-element" title="ckeck" ></i>
-
-                  </td>
+                  <td  style="min-width: 12rem;"><span *ngIf="editPayInfo">{{demande.student?.payment_date | date: 'dd/MM/yyyy'}}</span>
+                    <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.payment_date" type="date">
+                    </td>
+                    <td style="min-width: 12rem">
+                      <span *ngIf="editPayInfo">{{demande.payment_method}}</span>
+                      <p-dropdown 
+                        *ngIf="!editPayInfo" 
+                        [options]="payment_method" 
+                        [(ngModel)]="PayInfo.payment_method" 
+                        placeholder="Choisissez une motif"
+                        [disabled]="editPayInfo"
+                      ></p-dropdown>
+                    </td>
+                    <td  style="min-width: 12rem;"><span *ngIf="editPayInfo">{{demande.student?.montant }}</span>
+                      <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.montant" >
+                      </td>
+                      <td  style="min-width: 12rem;"><span *ngIf="editPayInfo">{{demande.docs?.attestation_payement }}</span>
+                        <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.montant" >
+                        </td>
+                        <td style="min-width: 12rem;"> <span    *ngIf="editPayInfo">{{ demande.student.note}}</span>
+                          <input *ngIf="!editPayInfo" [disabled]="editPayInfo" [(ngModel)]="PayInfo.note"  type="text" ></td>
+  
+                          <td class="text-right" style="min-width: 8rem">
+                            <i *ngIf="editPayInfo" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editPayInfo = false"></i>
+                            <i *ngIf="!editPayInfo" class="pi pi-check mr-2 clickable-element" title="Check" (click)="updatePayInfo(demande, PayInfo)"></i>
+  
+                          </td>
                 </tr>
               </ng-template>
             </p-table>

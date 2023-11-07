@@ -84,18 +84,23 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Remboussement',
+                            label: 'Remboursement',
                             icon: 'pi pi-dollar',
                             items: [
                                 {
-                                    label: 'Ajouter un remboussement',
+                                    label: 'Ajouter un remboursement',
                                     icon: 'pi pi-plus-circle',
-                                    routerLink: ['/ajout-remboussement'],
+                                    routerLink: ['/ajout-remboursement'],
                                 },
+                                // {
+                                //     label: 'Liste des remboursements',
+                                //     icon: 'pi pi-fw pi-tags',
+                                //     routerLink: ['/list-remboursement'],
+                                // },
                                 {
-                                    label: 'Liste des remboussements',
+                                    label: 'Remboursements',
                                     icon: 'pi pi-fw pi-tags',
-                                    routerLink: ['/list-remboussement'],
+                                    routerLink: ['/remboursements'],
                                 },
                             ]
                         },

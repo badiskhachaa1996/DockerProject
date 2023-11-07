@@ -41,46 +41,40 @@ export class Demande {
         },
         public motif?: string,
         public status?: string,
-        public comments?: [
-            {
+        public comments?: 
+            [{
                 note?: string,
                 created_by?: string,
                 created_on?: Date,
-            }
-        ],
+            }],
         public docs?: {
             
             rib: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             attestation_payement: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             preuve_payement: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
-                doc_number?: string;
+                doc_number?: string; 
             },
             document_inscription: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             autres_doc: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
