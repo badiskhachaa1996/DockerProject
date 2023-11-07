@@ -279,6 +279,15 @@ export class CollaborateursComponent implements OnInit {
       statut: collaborateur.statut,
       h_cra: collaborateur.h_cra,
     });
+    let r = false
+    this.agents.forEach(ag => {
+      if (ag.value == collaborateur.user_id._id)
+        r = true
+    })
+    if (!r)
+      this.agents.push({ label: `${collaborateur.user_id?.lastname} ${collaborateur.user_id?.firstname}`, value: collaborateur.user_id._id })
+
+
     if (collaborateur.date_demarrage)
       this.formUpdate.patchValue({ date_demarrage: new Date(collaborateur.date_demarrage), })
     if (collaborateur.date_naissance)
