@@ -23,6 +23,7 @@ export class Annonce {
         public custom_id?: string,
         public date_creation?: Date,
         public statut?: string,
-        public modified_at?: Date
+        public modified_at?: Date,
+        public archived?: boolean
     ) { }
 }

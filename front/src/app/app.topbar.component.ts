@@ -194,9 +194,9 @@ export class AppTopBarComponent implements OnInit {
       this.isAdmin = userconnected.role == 'Admin'
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
-      this.seeCRA = !this.isAdmin || !this.isAgent || !this.isCEO
+      this.seeCRA = (this.isAdmin || this.isAgent)
       if (userconnected.haveNewAccess) {
-        this.seeCRA = (userconnected.role != null)
+        this.seeCRA = (userconnected.type == 'Collaborateur' || userconnected.type == 'Responsable' || userconnected.type_supp.includes('Responsable') || userconnected.type == 'Formateur' || userconnected.type_supp.includes('Formateur') || userconnected.type_supp.includes('Collaborateur'))
       }
       this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
         this.isReinscrit = (dataEtu && dataEtu.classe_id == null)

@@ -43,8 +43,8 @@ export class NewListTicketsComponent implements OnInit {
   onChangeMode(e) {
     if (e.value == 'Personnel') {
       this.filterType = ['Mine']
-      this.filterBase = ['En attente de traitement', 'En cours de traitement']
-      this.dt1.filter(['En attente de traitement', 'En cours de traitement'], 'statut', 'in')
+      this.filterBase = []//'En attente de traitement', 'En cours de traitement'
+      this.dt1.filter(this.filterBase, 'statut', 'in')
     } else {
       this.filterType = ['Assigne Service']
       this.filterBase = []
@@ -126,7 +126,7 @@ export class NewListTicketsComponent implements OnInit {
         })
         //IF this.user ticketing !='Super-Admin'
         let role = service_dic['Ticketing']
-        if (role && role != 'Super-Admin')
+        if (!role || role != 'Super-Admin')
           this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
             nonassigne.forEach(e => {
               e.origin = 'Non Assigne'
@@ -199,13 +199,29 @@ export class NewListTicketsComponent implements OnInit {
     })
 
   }
-  filterBase = ['En attente de traitement', 'En cours de traitement']
+  roleAccess = 'Spectateur'
+  filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: any;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
       this.isAgent = (r.role != 'user')
+      if (r.haveNewAccess)
+        if ((r.type == 'Reponsable' || r.type == 'Collaborateur' || r.type == 'Formateur' || r.type_supp.includes('Collaborateur') || r.type_supp.includes('Reponsable')))
+          this.isAgent = true
+        else
+          this.isAgent = false
+      if (this.isAgent) {
+        let service_dic = {};
+        r.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
+        })
+        this.roleAccess = 'Admin'
+        if (service_dic['Ticketing'])
+          this.roleAccess = service_dic['Ticketing']
+      }
       this.ticketsOnglets = r.savedTicket
       this.updateTicketList()
     })

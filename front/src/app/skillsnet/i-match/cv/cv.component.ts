@@ -35,6 +35,7 @@ export class CvComponent implements OnInit {
       id = this.CV_ID
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
+      console.log(this.cv)
       this.user = data.dataCv.user_id
       if (!data) {
         this.UserService.getPopulate(id).subscribe(u => {

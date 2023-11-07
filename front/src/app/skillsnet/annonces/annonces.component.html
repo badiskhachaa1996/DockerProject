@@ -544,6 +544,9 @@
 												tooltipPosition="bottom"></i>
 											<i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
 												(click)="onDeleteOffre(annonce)" tooltipPosition="bottom"></i>
+											<i *ngIf="!annonce.archived" class="pi pi-ban mr-2" style="color: rgb(145, 32, 145);"
+												pTooltip="Archiver" (click)="onArchive(annonce)"
+												tooltipPosition="bottom"></i>
 											<ng-container *ngIf="dicOffreNB[annonce?._id]; then badge1 else no_badge1">
 
 											</ng-container>
@@ -790,7 +793,8 @@
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList"
 			[closable]="true">
-			<app-matching *ngIf="refresh" [ID]="annonce._id" (rdv)="takeRDV($event)"
+
+			<app-matching *ngIf="refresh" [ID]="annonce._id" (rdv)="takeRDV($event)" [needToRefresh]="refreshORDER.asObservable()"
 				(cv)="seeCV($event)"></app-matching>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="rdv.label" *ngFor="let rdv of rdvList" [closable]="true">
@@ -840,6 +844,11 @@
 		<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()" class="mb-2"
 			appendTo="body" [(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
 			[style]="{'width':'27em'}" placeholder="Date de début"></p-calendar>
+		<div style="width: 100%;text-align: center;">
+			<label>Voir les offres archivés :</label><br>
+			<p-checkbox [(ngModel)]="filter_value.archived" [binary]="true" inputId="binary"
+				(onChange)="updateFilter()"></p-checkbox>
+		</div>
 
 		<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
 			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->

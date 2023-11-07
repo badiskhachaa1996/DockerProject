@@ -28,9 +28,19 @@ export class UpdateAgentComponent implements OnInit {
     { label: 'Non défini', value: null },
     { label: 'Collaborateur', value: 'Collaborateur' },
     { label: 'Responsable', value: 'Responsable' },
+    { label: 'Formateur', value: 'Formateur' },
+  ]
+  typeList2 = [
+    { label: 'Non défini', value: null },
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+    { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+    { label: 'Initial', value: 'Initial' },
+    { label: 'Alternant', value: 'Alternant' },
   ]
   roleList = [
     { label: 'User', value: 'user' },
+    { label: 'Etudiant', value: 'Etudiant' },
     { label: 'Admin', value: 'Admin' },
   ]
   dropdownModule = [
@@ -97,7 +107,8 @@ export class UpdateAgentComponent implements OnInit {
     service_id: new FormControl(''),
     role: new FormControl('user', Validators.required),
     type: new FormControl(null),
-    _id: new FormControl('', Validators.required)
+    _id: new FormControl('', Validators.required),
+    type_supp: new FormControl([])
   })
   localisationList: any[] = [
     { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
@@ -114,7 +125,7 @@ export class UpdateAgentComponent implements OnInit {
   onAdd() {
     this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
       this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
-      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur')
+      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur') || this.addForm.value.type == 'Formateur' && this.USER.type != 'Formateur')
         this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
           if (!c)
             this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
@@ -123,9 +134,17 @@ export class UpdateAgentComponent implements OnInit {
           else
             this.router.navigate(['/agent/list'])
         })
-
       else
-        this.router.navigate(['/agent/list'])
+        this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
+          if (c)
+            this.CollaborateurService.patchCollaborateurData({ _id: c._id, user_id: this.USER, localisation: this.SITE }).then(c => {
+              this.router.navigate(['/agent/list'])
+            })
+          else
+            this.router.navigate(['/agent/list'])
+        })
+
+
     })
   }
   constructor(private UserService: AuthService, private ToastService: MessageService,
@@ -146,20 +165,35 @@ export class UpdateAgentComponent implements OnInit {
         this.USER = data
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
+        this.onSelectRole()
         this.roles_list = data.roles_list
         this.CollaborateurService.getCollaborateurByUserId(this.ID).then(val => {
           if (val) {
-            this.addForm.patchValue({ type: 'Collaborateur' })
+            if (!data.haveNewAccess)
+              this.addForm.patchValue({ type: 'Collaborateur' })
             this.SITE = val.localisation
           }
-          else
-            this.addForm.patchValue({ type: null })
         })
       })
     })
 
 
   }
-
+  onSelectRole() {
+    if (this.addForm.value.role == 'user' || this.addForm.value.role == 'Admin') {
+      this.typeList = [
+        { label: 'Non défini', value: null },
+        { label: 'Collaborateur', value: 'Collaborateur' },
+        { label: 'Responsable', value: 'Responsable' },
+        { label: 'Formateur', value: 'Formateur' },
+      ]
+    } else {
+      this.typeList = [
+        { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+        { label: 'Initial', value: 'Initial' },
+        { label: 'Alternant', value: 'Alternant' },
+      ]
+    }
+  }
 
 }

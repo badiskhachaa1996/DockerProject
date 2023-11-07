@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { Matching } from 'src/app/models/Matching';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-annonces',
@@ -211,6 +212,7 @@ export class AnnoncesComponent implements OnInit {
                 }
 
               })
+              this.updateFilter()
 
             })
             .catch((error) => console.error(error));
@@ -236,6 +238,7 @@ export class AnnoncesComponent implements OnInit {
               }
 
             })
+            this.updateFilter()
           })
         }
 
@@ -253,6 +256,7 @@ export class AnnoncesComponent implements OnInit {
           this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
+          this.updateFilter()
         });
       }),
       ((error) => console.error(error))
@@ -639,7 +643,8 @@ export class AnnoncesComponent implements OnInit {
     user: null,
     date: '',
     search: '',
-    entreprise_id: null
+    entreprise_id: null,
+    archived: false
   }
 
   updateFilter() {
@@ -679,6 +684,8 @@ export class AnnoncesComponent implements OnInit {
           !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
           r = false
       }
+      if (!this.filter_value.archived && val.archived)
+        r = false
 
       if (r)
         this.annoncesFiltered.push(val)
@@ -696,7 +703,8 @@ export class AnnoncesComponent implements OnInit {
       user: null,
       date: '',
       search: '',
-      entreprise_id: null
+      entreprise_id: null,
+      archived: false
     }
     this.annoncesFiltered = this.annonces
   }
@@ -708,6 +716,11 @@ export class AnnoncesComponent implements OnInit {
       return 'Expiré'
     else
       return "Clôturée"
+  }
+
+  onArchive(annonce: Annonce) {
+    annonce.archived = !annonce.archived
+    this.annonceService.putAnnonce({ _id: annonce._id, archived: annonce.archived }).then()
   }
 
   onDeleteOffre(annonce: Annonce) {
@@ -773,8 +786,8 @@ export class AnnoncesComponent implements OnInit {
 
   }
   refresh = true
+  refreshORDER: Subject<void> = new Subject<void>();
   formExit(e: { ID: string, offre_id: string }) {
-    console.log('HI', e, this.rdvList, this.offreList)
     this.refresh = false
     this.rdvList.forEach((rdv, idx) => {
       if (rdv.offer_id == e.offre_id && rdv.ID == e.ID)
@@ -785,7 +798,7 @@ export class AnnoncesComponent implements OnInit {
         this.refresh = true
         this.activeIndex1 = 2 + idx2
       }
-
+      this.refreshORDER.next();
     })
 
   }

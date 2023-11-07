@@ -1839,7 +1839,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },*/
-                                {
+                                /*{
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -1898,14 +1898,14 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Configuration',
                                             icon: 'pi pi-cog',
                                             routerLink: ['/ticketing/configuration'],
-                                        },*/
+                                        },
                                         {
                                             label: 'Dashboard',
                                             icon: 'pi pi-home',
                                             routerLink: ['/ticketing/dashboard'],
                                         },
                                     ],
-                                },
+                                },*/
                                 /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
@@ -4398,37 +4398,9 @@ export class AppMenuComponent implements OnInit {
                 if (response.type === 'Formateur' && response.role === 'user') {
                     this.FService.getByUserId(this.token.id).subscribe({
                         next: (dataF: Formateur) => {
-                            this.items = [
+                            this.items.push(
                                 {
-                                    label: 'Accueil',
-                                    icon: 'pi pi-fw pi-home',
-                                    items: [
-                                        {
-                                            label: 'Espace Personnel',
-                                            icon: 'pi pi-fw pi-home',
-                                            routerLink: ['/']
-                                        },
-                                        /*{
-                                            label: 'Signaler un problème technique',
-                                            icon: 'pi pi-fw pi-exclamation-triangle',
-                                            routerLink: ['/ticketing-igs'],
-                                        },*/
-                                    ]
-                                },
-
-                                /*{
-                                    label: 'Ticketing - Ancienne Version',
-                                    icon: 'pi pi-fw pi-ticket',
-                                    items: [
-                                        {
-                                            label: 'Suivi de mes tickets',
-                                            icon: 'pi pi-check-circle',
-                                            routerLink: ['/suivi-ticket'],
-                                        },
-                                    ],
-                                },*/
-                                {
-                                    label: 'Pédagogie',
+                                    label: 'Pédagogie - Formateur',
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
@@ -4461,14 +4433,9 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: '/formateur/etudiants',
                                         },
-                                        /*{ 
-                                            label: 'Gestions des devoirs', 
-                                            icon: 'pi pi-book', 
-                                            routerLink: 'devoirs' 
-                                        }*/
                                     ],
                                 },
-                            ];
+                            );
                         },
                         error: function (error: any) {
                             console.error(error);
@@ -4536,7 +4503,7 @@ export class AppMenuComponent implements OnInit {
                     ]
                 if (response.haveNewAccess) {
                     //1
-
+                    //console.log('haveNewAccess', this.items)
                     if (response.role == 'user') {
                         this.items = [
                             {
@@ -4546,7 +4513,7 @@ export class AppMenuComponent implements OnInit {
                             }
                         ]
                         if (response.type == 'Collaborateur') {
-                        } else if (response.type == 'Responsable') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
                             services_list.push('Ressources Humaines')
                         }
                     }
@@ -4581,6 +4548,17 @@ export class AppMenuComponent implements OnInit {
                                             },
                                         ]
 
+                                    },
+                                    {
+                                        label: 'Gestion RH',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Gestion des équipes',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/rh/teams']
+                                            }
+                                        ]
                                     },
                                     {
                                         label: 'Ticketing',
@@ -4698,7 +4676,7 @@ export class AppMenuComponent implements OnInit {
                             },
                         ]
                         if (response.type == 'Collaborateur') {
-                        } else if (response.type == 'Responsable') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
                             services_list.push('Ressources Humaines')
                         }
                     }
@@ -4741,7 +4719,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
-                                    }, {
+                                    },/* {
                                         label: 'Ticketing',
                                         icon: 'pi pi-fw pi-ticket',
                                         items: [
@@ -4756,7 +4734,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/ticketing/gestion/mes-tickets']
                                             }
                                         ]
-                                    },
+                                    },*/
                                     {
                                         label: 'Dashboard',
                                         icon: 'pi pi-chart-line'
@@ -4791,7 +4769,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            }, {
+                            }, /*{
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -4806,11 +4784,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
-                        }
+                        }*/
                         )
                     }
                 }
-                if (services_list.includes('Ticketing')) {
+                /*if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
                     if (role == "Super-Admin") {
                         this.items.push({
@@ -4987,7 +4965,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                     }
-                }
+                }*/
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
                     if (role == "Super-Admin")
@@ -5310,7 +5288,7 @@ export class AppMenuComponent implements OnInit {
                                 label: "Paiements et documents administratives",
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
-                            },
+                            },/*
                             {
                                 label: 'Ticketing',
                                 icon: 'pi pi-fw pi-ticket',
@@ -5326,7 +5304,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/ticketing/gestion/mes-tickets']
                                     }
                                 ]
-                            }
+                            }*/
 
                         ]
                         setTimeout(() => this.showMenu = true, 0);
@@ -6591,6 +6569,17 @@ export class AppMenuComponent implements OnInit {
 
                                 },
                                 {
+                                    label: 'Gestion RH',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Gestion des équipes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/rh/teams']
+                                        }
+                                    ]
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-ticket',
                                     routerLink: ['/ticketing/configuration']
@@ -6820,7 +6809,10 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
-                setTimeout(() => this.showMenu = true, 0);
+                setTimeout(() => {
+                    this.items = Object.assign([], this.items);
+                    this.showMenu = true
+                }, 0);
                 //this.showMenu=true
             },
             error: (error: any) => {

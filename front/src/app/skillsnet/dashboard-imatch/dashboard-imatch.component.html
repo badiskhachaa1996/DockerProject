@@ -45,11 +45,11 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Général" [toggleable]="true">
                     <p-table #dtoffregen [value]="dataTabGEN" dataKey="_id" [rows]="3" [rowHover]="true"
                         styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
-                        rowExpandMode="single"
+                        rowExpandMode="single" (onFilter)="onFilter($event, 'dataTabGEN')"
                         [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
                         responsiveLayout="scroll">
                         <ng-template pTemplate="caption">
@@ -59,7 +59,7 @@
                                     (onChange)="dtoffregen.filter($event.value,'label','equals')"
                                     emptyFilterMessage="Pas d'auteur trouvé"
                                     filterPlaceholder="Choisissez un auteur"></p-dropdown>
-                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceGENbyDate"
+                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceGENbyDate" 
                                     (onSelect)="getAnnonceGENbyDate()" (onBlur)="getAnnonceGENbyDate()"></p-calendar>
                                 <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
                                     <span style="font-weight: bold;">Total </span>{{annonceGEN.length}}
@@ -74,8 +74,8 @@
                                 <th pSortableColumn="nb" style="text-align: center;">Nombre des offres
                                     <p-sortIcon field="nb"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
-                                    <p-sortIcon field="taux"></p-sortIcon>
+                                <th pSortableColumn="nb" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="nb"></p-sortIcon>
                                 </th>
                             </tr>
                         </ng-template>
@@ -87,7 +87,7 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Histogramme" [toggleable]="true">
                     <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceHISTObyDate"
                         (onSelect)="getAnnonceHISTObyDate()" (onBlur)="getAnnonceGENbyDate()"></p-calendar>
@@ -139,9 +139,9 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Général" [toggleable]="true">
-                    <p-table #dtcvgen [value]="dataTabCVGEN" [rows]="3" [rowHover]="true"
+                    <p-table #dtcvgen [value]="dataTabCVGEN" [rows]="3" [rowHover]="true" (onFilter)="onFilter($event, 'dataTabCVGEN')"
                         styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
                         rowExpandMode="single"
                         [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
@@ -181,10 +181,10 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Histogramme" [toggleable]="true">
                     <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceCVbyDate"
-                    (onSelect)="getAnnonceCVbyDate()" (onBlur)="getAnnonceCVbyDate()"></p-calendar>
+                        (onSelect)="getAnnonceCVbyDate()" (onBlur)="getAnnonceCVbyDate()"></p-calendar>
                     <p-chart *ngIf='cvHisto?.labels' type="bar" [data]="cvHisto" [style]="{'color':'black'}"></p-chart>
                 </p-fieldset>
             </div>
@@ -229,38 +229,26 @@
                                 <td>
                                     Entreprise
                                 </td>
-                                <td>
-                                    NB
-                                </td>
-                                <td>
-                                    NB
-                                </td>
+                                <td>{{dicAjrMatching.entreprise}}</td>
+                                <td>{{(dicAjrMatching.entreprise/matchingAJR.length)*100| number:'1.0-2'}}%</td>
                             </tr>
                             <tr>
                                 <td>
                                     Candidat
                                 </td>
-                                <td>
-                                    NB
-                                </td>
-                                <td>
-                                    NB
-                                </td>
+                                <td>{{dicAjrMatching.candidat}}</td>
+                                <td>{{(dicAjrMatching.candidat/matchingAJR.length)*100| number:'1.0-2'}}%</td>
                             </tr>
                             <tr>
                                 <td>
                                     Commercial
                                 </td>
-                                <td>
-                                    NB
-                                </td>
-                                <td>
-                                    NB
-                                </td>
+                                <td>{{dicAjrMatching.commercial}}</td>
+                                <td>{{(dicAjrMatching.commercial/matchingAJR.length)*100| number:'1.0-2'}}%</td>
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Général" [toggleable]="true">
                     <p-table #dtmatchgen [value]="matchGEN" dataKey="_id" [rows]="3" [rowHover]="true"
                         styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
@@ -297,7 +285,7 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-fieldset>
+                </p-fieldset><br>
                 <p-fieldset legend="Histogramme" [toggleable]="true">
                     <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
                     <p-chart *ngIf="" type="bar" [data]="matchHisto" [options]="optionsMatching"

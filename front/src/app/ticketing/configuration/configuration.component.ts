@@ -189,9 +189,9 @@ export class ConfigurationComponent implements OnInit {
       this.responsableList = []
     this.UserService.getAllByServiceFromList(service._id).subscribe(data => {
       this.memberList = data
-      this.UserService.getAllAgent().subscribe(dataAgent => {
+      this.UserService.getAllPopulate().then(dataAgent => {
         dataAgent.forEach(agent => {
-          if (!this.customIncludes(data, agent)) {
+          if (!this.customIncludes(data, agent) && (agent.type == 'Collaborateur' || agent.type_supp.includes('Collaborateur') || (agent.type == 'Formateur' && agent.haveNewAccess))) {
             this.memberDropdown.push({ label: `${agent.lastname} ${agent.firstname}`, value: agent })
           }
         })

@@ -13,6 +13,7 @@ import { FormateurService } from '../../services/formateur.service';
 import { ServService } from '../../services/service.service';
 import { MessageService } from 'primeng/api';
 import { CampusService } from 'src/app/services/campus.service';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-users-settings',
@@ -39,15 +40,23 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
     { label: 'Commercial', value: 'Commercial' },
     { label: 'Visitor', value: 'Visitor' },
+    //ACCES V3
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+    { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+    { label: 'Initial', value: 'Initial' },
+    { label: 'Alternant', value: 'Alternant' },
   ];
 
   roleList: any = [
     { label: 'Tous les rôles', value: null },
     { label: 'Admin', value: 'Admin' },
-    { label: 'user', value: 'user' },
+    { label: 'User', value: 'user' },
     { label: 'Agent', value: 'Agent' },
     { label: 'Responsable', value: 'Responsable' },
     { label: 'Watcher', value: 'Watcher' },
+    //ACCES V3
+    { label: 'Etudiant', value: 'Etudiant' },
   ];
 
   civiliteList: any = [
@@ -87,7 +96,7 @@ export class UsersSettingsComponent implements OnInit {
 
   constructor(private userService: AuthService, private etudiantService: EtudiantService,
     private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
-    private serviceService: ServService, private formBuilder: FormBuilder,
+    private serviceService: ServService, private formBuilder: FormBuilder, private CollabService: RhService,
     private messageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
@@ -118,7 +127,9 @@ export class UsersSettingsComponent implements OnInit {
       rue_adresse: [''],
       ville_adresse: [''],
       date_creation: [''],
-      campus: ['']
+      campus: [''],
+      type_supp: [[]],
+      SITE: [[]]
     });
   }
 
@@ -204,15 +215,22 @@ export class UsersSettingsComponent implements OnInit {
       email_perso: this.userToUpdate.email_perso,
       mention: this.userToUpdate.mention,
       service: this.userToUpdate?.service_id?._id,
-      type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
-      role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
+      type: this.userToUpdate.type,
+      role: this.userToUpdate.role,
       pays_adresse: { value: this.userToUpdate.pays_adresse, label: this.userToUpdate.pays_adresse, actif: false },
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,
       date_creation: this.formatDate(this.userToUpdate.date_creation),
-      campus: this.userToUpdate.campus
+      campus: this.userToUpdate.campus,
+      type_supp: this.userToUpdate.type_supp
     });
+    this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(val => {
+      if (val && !this.userToUpdate.haveNewAccess && this.userToUpdate.type != 'Formateur')
+        this.formUpdate.patchValue({ type: 'Collaborateur' })
+      if (val)
+        this.formUpdate.patchValue({ SITE: val.localisation })
+    })
   }
   private formatDate(date) {
     const d = new Date(date);
@@ -226,7 +244,15 @@ export class UsersSettingsComponent implements OnInit {
   //Methode de modification des infos
   onUpdateUser() {
     const user = new User();
+    if (this.formUpdate.value.type == 'Collaborateur' || this.formUpdate.value.type_supp.includes('Collaborateur') || this.formUpdate.value.type == 'Formateur')
+      this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(c => {
+        if (!c)
+          this.CollabService.postCollaborateur({ user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => { })
+        else
+          this.CollabService.patchCollaborateurData({ _id: c._id, user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => {
 
+          })
+      })
     user._id = this.userToUpdate._id;
     user.civilite = this.formUpdate.get('civilite')?.value.label;
     user.lastname = this.formUpdate.get('lastname')?.value;
@@ -237,8 +263,8 @@ export class UsersSettingsComponent implements OnInit {
     user.email_perso = this.formUpdate.get('email_perso')?.value;
     user.service_id = this.formUpdate.get('service')?.value;
     user.mention = this.formUpdate.get('mention')?.value;
-    user.type = this.formUpdate.get('type')?.value.value;
-    user.role = this.formUpdate.get('role')?.value.value;
+    user.type = this.formUpdate.get('type')?.value;
+    user.role = this.formUpdate.get('role')?.value;
     user.pays_adresse = this.formUpdate.get('pays_adresse')?.value.value;
     user.postal_adresse = this.formUpdate.get('postal_adresse')?.value;
     user.numero_adresse = this.formUpdate.get('numero_adresse')?.value;
@@ -246,7 +272,9 @@ export class UsersSettingsComponent implements OnInit {
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
-    console.log(this.formUpdate.value);
+    user.type_supp = this.formUpdate.value.type_supp
+    user.haveNewAccess = true
+
 
     this.userService.patchById(user)
       .then((response) => {
@@ -282,6 +310,16 @@ export class UsersSettingsComponent implements OnInit {
     return r
   }
 
-
+  localisationList: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
 
 }

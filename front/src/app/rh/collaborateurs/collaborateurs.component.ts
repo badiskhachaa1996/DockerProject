@@ -163,7 +163,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [new Date()],
       date_naissance: [new Date()],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -176,7 +176,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [''],
       date_naissance: [''],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -273,14 +273,25 @@ export class CollaborateursComponent implements OnInit {
     this.formUpdate.patchValue({
       user_id: collaborateur.user_id._id,
       matricule: collaborateur.matricule,
-      date_demarrage: new Date(collaborateur.date_demarrage),
-      date_naissance: new Date(collaborateur.date_naissance),
       localisation: collaborateur.localisation,
       intitule_poste: collaborateur.intitule_poste,
       contrat_type: collaborateur.contrat_type,
       statut: collaborateur.statut,
       h_cra: collaborateur.h_cra,
     });
+    let r = false
+    this.agents.forEach(ag => {
+      if (ag.value == collaborateur.user_id._id)
+        r = true
+    })
+    if (!r)
+      this.agents.push({ label: `${collaborateur.user_id?.lastname} ${collaborateur.user_id?.firstname}`, value: collaborateur.user_id._id })
+
+
+    if (collaborateur.date_demarrage)
+      this.formUpdate.patchValue({ date_demarrage: new Date(collaborateur.date_demarrage), })
+    if (collaborateur.date_naissance)
+      this.formUpdate.patchValue({ date_naissance: new Date(collaborateur.date_naissance), })
 
     // masque les autres formulaires
     this.showFormAdd = false;
@@ -586,7 +597,7 @@ export class CollaborateursComponent implements OnInit {
 
   onEmailType() {
     const { user_id }: any = this.collaborateurToUpdate;
-    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.emailTypeService.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()
