@@ -28,6 +28,7 @@ export class UpdateAgentComponent implements OnInit {
     { label: 'Non défini', value: null },
     { label: 'Collaborateur', value: 'Collaborateur' },
     { label: 'Responsable', value: 'Responsable' },
+    { label: 'Formateur', value: 'Formateur' },
   ]
   typeList2 = [
     { label: 'Non défini', value: null },
@@ -124,20 +125,26 @@ export class UpdateAgentComponent implements OnInit {
   onAdd() {
     this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
       this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
-      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur'))
+      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur') || this.addForm.value.type == 'Formateur' && this.USER.type != 'Formateur')
         this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
           if (!c)
             this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
               this.router.navigate(['/agent/list'])
             })
           else
+            this.router.navigate(['/agent/list'])
+        })
+      else
+        this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
+          if (c)
             this.CollaborateurService.patchCollaborateurData({ _id: c._id, user_id: this.USER, localisation: this.SITE }).then(c => {
               this.router.navigate(['/agent/list'])
             })
+          else
+            this.router.navigate(['/agent/list'])
         })
 
-      else
-        this.router.navigate(['/agent/list'])
+
     })
   }
   constructor(private UserService: AuthService, private ToastService: MessageService,
@@ -162,8 +169,8 @@ export class UpdateAgentComponent implements OnInit {
         this.roles_list = data.roles_list
         this.CollaborateurService.getCollaborateurByUserId(this.ID).then(val => {
           if (val) {
-            console.log(val)
-            this.addForm.patchValue({ type: 'Collaborateur' })
+            if (!data.haveNewAccess)
+              this.addForm.patchValue({ type: 'Collaborateur' })
             this.SITE = val.localisation
           }
         })
@@ -178,6 +185,7 @@ export class UpdateAgentComponent implements OnInit {
         { label: 'Non défini', value: null },
         { label: 'Collaborateur', value: 'Collaborateur' },
         { label: 'Responsable', value: 'Responsable' },
+        { label: 'Formateur', value: 'Formateur' },
       ]
     } else {
       this.typeList = [

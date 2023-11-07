@@ -8,13 +8,13 @@
 					<strong>{{ today | date: 'H:mm' }} Paris</strong>
 				</div>
 				<p class="col-12">Site <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
-						[(ngModel)]="siteSelected" (onChange)="filterCollaborateur($event.value);onUpdateStats()" autoWidth="false"
-						[style]="{'width':'13em'}"></p-multiSelect></p>
+						[(ngModel)]="siteSelected" (onChange)="filterCollaborateur($event.value);onUpdateStats()"
+						autoWidth="false" [style]="{'width':'13em'}"></p-multiSelect></p>
 
 				<div class="col-12 md:col-4 align-self-center grid"
 					style="border: 1px black solid;margin:0px;height: 100px;">
 					<p class="col-12"><p-tag value="Checkin IMS"
-							icon="pi pi-check-circle"></p-tag><strong>&nbsp;{{numberOfChecks}}/{{collaborateurs.length}}</strong>
+							icon="pi pi-check-circle"></p-tag><strong>&nbsp;{{numberOfChecks}}/{{dailyChecks.length}}</strong>
 					</p>
 					<p class="col-12"><p-tag value="Pointage" icon="pi pi-bookmark"></p-tag><strong>&nbsp;WIP</strong>
 					</p>
@@ -230,7 +230,7 @@
 							style="min-width: 12rem;" *ngIf="!check.taux_cra">
 							0%
 						</td>
-						<td [ngClass]="{'valid-end':ccheckra?.validated,'non-valid-end':!check?.validated}">
+						<td [ngClass]="{'valid-end':check?.validated,'non-valid-end':!check?.validated}">
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
 							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
@@ -383,6 +383,8 @@
 				</tr>
 			</ng-template>
 		</p-table>
+		<p>&nbsp;</p>
+		<h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
 	</div>
 
 </p-dialog>
