@@ -966,7 +966,7 @@ export class CalenderComponent implements OnInit {
     this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: true })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bonne pause' });
 
@@ -985,7 +985,7 @@ export class CalenderComponent implements OnInit {
     this.dailyCheck.isInPause = false;
     this.dailyCheck.pause_timing = this.pauseTiming + this.dailyCheck.pause_timing;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: false, pause_timing: this.dailyCheck.pause_timing })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bon retour au travail' });
 
@@ -1111,7 +1111,7 @@ export class CalenderComponent implements OnInit {
       this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
     });
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, cra: this.dailyCheck.cra })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
         this.formAddCra.reset();
