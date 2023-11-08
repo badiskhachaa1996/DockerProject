@@ -15,6 +15,7 @@ const dailyCheckSchema = mongoose.Schema({
     commentaire: { type: String, required: false },
     commented_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user', },
     commented_date: { type: Date },
+    auto: { type: Boolean, default: false }
 });
 
 

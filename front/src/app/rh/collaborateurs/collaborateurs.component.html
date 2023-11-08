@@ -322,7 +322,7 @@
 					styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
 					<ng-template pTemplate="header">
 						<tr>
-							<th>Cra du {{historiqueCraSelected.today}}</th>
+							<th>Cra du {{dateParseur(historiqueCraSelected.today)}}</th>
 						</tr>
 						<tr>
 							<th>Tâche</th>
@@ -374,7 +374,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-cra>
 					<tr>
-						<td>{{cra.today}}</td>
+						<td>{{dateParseur(cra.today)}}</td>
 						<td>{{cra.check_in | date:'H:mm'}}</td>
 						<td>{{cra.check_out | date:'H:mm'}}</td>
 						<td>{{cra.pause_timing}}mn</td>

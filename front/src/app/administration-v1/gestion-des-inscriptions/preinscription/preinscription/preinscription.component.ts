@@ -23,6 +23,8 @@ import { Ticket } from 'src/app/models/Ticket';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { ServService } from 'src/app/services/service.service';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { VenteService } from 'src/app/services/vente.service';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -235,11 +237,12 @@ export class PreinscriptionComponent implements OnInit {
   TicketAffecter = null
   userDic = {}
   token;
+  candidatureDic = {}
   constructor(private UserService: AuthService, private commercialService: CommercialPartenaireService, private admissionService: AdmissionService,
     private etudiantService: EtudiantService, private ticketService: TicketService, private Socket: SocketService,
-    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService,
+    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService, private VenteService: VenteService,
     private ToastService: MessageService, private rhService: RhService, private NotifService: NotificationService,
-    private SujetService: SujetService, private ServiceService: ServService) { }
+    private SujetService: SujetService, private ServiceService: ServService, private CandidatureService: CandidatureLeadService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -318,10 +321,16 @@ export class PreinscriptionComponent implements OnInit {
           if (result.traited_by == "Local") {
             this.prospects.push(result);
           } else { this.prospectI.push(result); }
-          console.log(this.prospects);
+
 
         })
       }))
+      this.CandidatureService.getAll().subscribe(cs => {
+        cs.forEach(c => {
+          if (c.lead_id)
+            this.candidatureDic[c.lead_id._id] = c
+        })
+      })
       this.ticketService.getAll().subscribe(data => {
         this.tickets = data;
       });
@@ -552,16 +561,16 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
- 
-  
-  onshowDossier(student: Prospect) { 
-    this.defaultEtatDossier=student.etat_dossier;
+
+
+  onshowDossier(student: Prospect) {
+    this.defaultEtatDossier = student.etat_dossier;
     this.tabStates[student._id] = true;
     this.ticket = [];
     this.proscteList.push(student);
     this.prospect_acctuelle = student;
     this.showDossier = true;
-    
+
     this.admissionService.getPopulate(student._id).subscribe(data => {
       this.PROSPECT = data
 
@@ -580,52 +589,53 @@ export class PreinscriptionComponent implements OnInit {
       this.selectedTabIndex = 3; // Définir l'indice après un délai
     }, 500); // Réglez le délai en millisecondes selon vos besoins
     console.log(student);
-    
+
     this.DecisionForm.setValue({
-       date_d:this.conersiondate(this.prospect_acctuelle.decision.date_decision),
-     decisoin_admission:this.prospect_acctuelle.decision.decision_admission,
-     explication: this.prospect_acctuelle.decision.expliquation,
+      date_d: this.conersiondate(this.prospect_acctuelle.decision.date_decision),
+      decisoin_admission: this.prospect_acctuelle.decision.decision_admission,
+      explication: this.prospect_acctuelle.decision.expliquation,
     })
     this.entretienForm.patchValue({
-      date_e:this.conersiondate(this.prospect_acctuelle.entretien.date_entretien),
-      duree_e:this.prospect_acctuelle.entretien.Duree,
-      choix:this.prospect_acctuelle.entretien.choix,
-      niveau:this.prospect_acctuelle.entretien.niveau,
-      parcour:this.prospect_acctuelle.entretien.parcours
+      date_e: this.conersiondate(this.prospect_acctuelle.entretien.date_entretien),
+      duree_e: this.prospect_acctuelle.entretien.Duree,
+      choix: this.prospect_acctuelle.entretien.choix,
+      niveau: this.prospect_acctuelle.entretien.niveau,
+      parcour: this.prospect_acctuelle.entretien.parcours
     })
-    if(this.prospect_acctuelle.decision.expliquation=="En attente de traitement"){
-      if(this.prospect_acctuelle.entretien.niveau=="0"){
-        
-      }else{
-        this.prospect_acctuelle.etat_traitement=="ETAPE 3"
+    if (this.prospect_acctuelle.decision.expliquation == "En attente de traitement") {
+      if (this.prospect_acctuelle.entretien.niveau == "0") {
+
+      } else {
+        this.prospect_acctuelle.etat_traitement == "ETAPE 3"
       }
-    }else{
-      this.prospect_acctuelle.etat_traitement="ETAPE 4"
+    } else {
+      this.prospect_acctuelle.etat_traitement = "ETAPE 4"
     }
-    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data =>console.log(data))
+    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data => console.log(data))
   }
-  conersiondate(a){
-  const dl =a // Supposons que project.debut soit une date valide
+  conersiondate(a) {
+    const dl = a // Supposons que project.debut soit une date valide
     const dateObjectl = new Date(dl); // Conversion en objet Date
     const year = dateObjectl.getFullYear();
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     const new_date = `${year}-${month}-${day}`;
-  return new_date}
+    return new_date
+  }
   onTabClose() {
     this.selectedTabIndex = 0;
   }
   onshowDocuments() {
-    
+
     if (this.showDocuments == true) {
       this.showDocuments = false
     } else {
       this.showDocuments = true
     }
   }
-  onSelectEtat(event: any,procpect:Prospect){
-    procpect.etat_dossier=event.value
-    this.admissionService.updateV2(procpect).subscribe(data =>console.log(data))
+  onSelectEtat(event: any, procpect: Prospect) {
+    procpect.etat_dossier = event.value
+    this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
   }
   deletePro(prospect: Prospect) {
     console.log("hello")
@@ -816,5 +826,161 @@ export class PreinscriptionComponent implements OnInit {
       console.error(error)
     })
   }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
 
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
+  }
+  initalPayement = []
+  showPaiement: Prospect = null
+  lengthPaiement = 0
+  partenaireOwned: string = null
+  initPaiement(prospect) {
+    this.showPaiement = prospect
+    this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
+    if (prospect.code_commercial)
+      this.commercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        if (commercial && commercial.partenaire_id)
+          this.partenaireOwned = commercial.partenaire_id
+      })
+    this.lengthPaiement = prospect?.payement?.length
+    this.initalPayement = prospect?.payement
+  }
+  savePaiement() {
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    let phase_candidature = "En phase d'orientation consulaire"
+    if (this.payementList.length == 0) {
+      statut_payement = this.showPaiement.statut_payement;
+      phase_candidature = this.showPaiement.phase_candidature;
+    }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            this.ToastService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
+    }
+
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }, "Modification des paiements Admission").subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      //this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
+      this.showPaiement = null
+    })
+  }
+  payementList = []
+  typePaiement = [
+    { value: null, label: "Aucun Suite a un renouvelement" },
+    { value: "Chèque Montpellier", label: "Chèque Montpellier" },
+    { value: "Chèque Paris", label: "Chèque Paris" },
+    { value: "Chèque Tunis", label: "Chèque Tunis" },
+    { value: "Compensation", label: "Compensation" },
+    { value: "Espèce chèque Autre", label: "Espèce chèque Autre" },
+    { value: "Espèce chèque Montpellier", label: "Espèce chèque Montpellier" },
+    { value: "Espèce chèque Paris", label: "Espèce chèque Paris" },
+    { value: "Espèce Congo", label: "Espèce Congo" },
+    { value: "Espèce Maroc", label: "Espèce Maroc" },
+    { value: "Espèce Montpellier", label: "Espèce Montpellier" },
+    { value: "Espèce Paris", label: "Espèce Paris" },
+    { value: "Espèce Tunis", label: "Espèce Tunis" },
+    { value: "Lien de paiement", label: "Lien de paiement" },
+    { value: "PayPal", label: "PayPal" },
+    { value: "Virement", label: "Virement" },
+    { value: "Virement chèque Autre", label: "Virement chèque Autre" },
+    { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
+    { value: "Virement chèque Paris", label: "Virement chèque Paris" },
+  ]
+  onAddPayement() {
+    if (this.payementList == null) {
+      this.payementList = []
+    }
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "" })
+  }
+  changeMontant(i, event, type) {
+
+    if (type == "date") {
+      this.payementList[i][type] = event.target.value;
+    } else if (type == "montant") {
+      this.payementList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementList[i][type] = event.value;
+    }
+  }
+
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
+
+  deletePayement(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le paiement ?")) {
+      this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.ToastService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
+    }
+  }
+  typeMotif = [
+    { label: 'Préinscription', value: 'Préinscription' },
+    { label: 'Avance scolarité', value: 'Avance scolarité' },
+    { label: 'Scolarité', value: 'Scolarité' },
+    { label: 'Autre', value: 'Autre' },
+  ]
+  typeEtat = [
+    { label: 'Programmé', value: 'Programmé' },
+    { label: 'Encassé', value: 'Encassé' },
+    { label: 'Délai dépassé', value: 'Délai dépassé' },
+    { label: 'Impayé', value: 'Impayé' },
+  ]
+
+  downloadFilePayment(paiement, idx) {
+    this.admissionService.downloadFilePaiement(this.showPaiement._id, paiement.doc).subscribe(data => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), paiement.doc)
+    })
+  }
+  selectedPaiment
+  uploadFilePayement(paiement, idx) {
+    document.getElementById('UploadPaiement').click();
+    this.selectedPaiment = { paiement, idx }
+  }
+
+  FileUploadPaiement(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showPaiement._id);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFilePaiement(formData, this.showPaiement._id).subscribe(res => {
+      this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: event[0].name + ' a été envoyé' });
+      //TODO Update PayementList dans DB
+      this.showPaiement.payement[this.selectedPaiment.idx].doc = event[0].name
+      this.payementList[this.selectedPaiment.idx].doc = event[0].name
+    },
+      (error) => {
+        this.ToastService.add({ severity: 'error', summary: event[0].name, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
 }

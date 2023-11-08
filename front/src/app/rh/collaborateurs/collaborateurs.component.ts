@@ -729,5 +729,12 @@ export class CollaborateursComponent implements OnInit {
     db.setMonth(db.getMonth() + 5)
     return db.getTime() < new Date().getTime()
   }
+  dateParseur(date_str: string) {
+    let pos1 = date_str.indexOf('/')
+    let day = date_str.substring(0, pos1)
+    let month = date_str.substring(pos1 + 1, date_str.length - 5)
+    let year = date_str.substring(date_str.length - 4)
+    return `${day}/${month}/${year}`
 
+  }
 }

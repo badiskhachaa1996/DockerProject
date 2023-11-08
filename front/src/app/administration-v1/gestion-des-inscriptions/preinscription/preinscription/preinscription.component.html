@@ -1,5 +1,137 @@
 <div class="card">
+    
+    <div class="col-12 card" *ngIf="showPaiement">
+        <input type="file" (change)="FileUploadPaiement($event.target.files)" id="UploadPaiement" #UploadPaiement
+        style="display: none;" pInputFile />
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement de : {{
+            showPaiement?.user_id?.firstname }} {{
+            showPaiement?.user_id?.lastname | uppercase }}
+        </h3>
+        <div class="grid">
+            <p-table #dt2 dataKey="ID" [value]="payementList" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                            </p-sortIcon>
+                        </th>-->
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                field="montant"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="text-align: center;"> Modalité <p-sortIcon field="type">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="motif" style="text-align: center;"> Motif <p-sortIcon field="motif">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date" style="text-align: center;"> Date d'encaissement <p-sortIcon
+                                field="date"></p-sortIcon>
+                        </th>
 
+                        <th pSortableColumn="etat" style="text-align: center;">
+                            Etat<p-sortIcon field="etat"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="doc" style="text-align: center;">
+                            Lien
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                    <tr [pEditableRow]="paiement">
+                        <!--<td>
+                            {{paiement?.ID}}
+                        </td>-->
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="number" (change)="changeMontant(ri,$event,'montant')"
+                                        [(value)]="paiement.montant" placeholder="20" value="0" pInputText>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.montant}}€
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
+                                        placeholder="Choisissez la méthode de paiement"
+                                        (onChange)="changeMontant(ri,$event,'type')"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.type}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
+                                        *ngIf="['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
+                                        placeholder="Choisissez le motif du paiement"
+                                        (onChange)="changeMontant(ri,$event,'motif')"></p-dropdown>
+                                    <input
+                                        *ngIf="!['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
+                                        type="text" pInputText (change)="changeMontant(ri,$event.target,'motif')"
+                                        placeholder="Motif" [(value)]="paiement.motif">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.motif}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="date" pInputText (change)="changeMontant(ri,$event,'date')"
+                                        [(value)]="paiement.date">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.date | date:'dd MMMM yy'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="paiement.etat"
+                                        placeholder="Choisissez l'état du paiement"
+                                        (onChange)="changeMontant(ri,$event,'etat')"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.etat}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le fichier</a>
+                            <a *ngIf="!paiement.doc" (click)="uploadFilePayement(paiement,ri)">Uploader un fichier</a>
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deletePayement(ri)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="col-4">
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
+            </div>
+
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+                <button pButton label="Sauvegardez les modifications" (click)="savePaiement()"></button>
+            </div>
+        </div>
+    </div>
     <p-tabView [(activeIndex)]="selectedTabIndex">
 
         <p-tabPanel header="Local">
@@ -394,18 +526,20 @@
                             {{ prospect?.date_creation| date:'dd MMMM yy'}}
                         </td>
                         <td>
-                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
-                                pTooltip="Candidature"  aria-hidden="true"
+                            <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1" pBadge
+                                value="1" pTooltip="Candidature" aria-hidden="true"
+                                (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                            <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
                                 tooltipPosition="bottom"></i>
-                                <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
-                                pTooltip="Paiement"  aria-hidden="true"
-                                tooltipPosition="bottom"></i>
-                                <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
-                                pTooltip="Document"  aria-hidden="true"
-                                tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;" class="pi pi-building m-1"
-                                pTooltip="Admission" (click)="onshowDossier(prospect)" aria-hidden="true"
-                                tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1" (click)="initPaiement(prospect);scrollToTop()"
+                                pTooltip="Paiement" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
+                                pTooltip="Document" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-building m-1" pTooltip="Admission"
+                                (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
                                 " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
                                 pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
@@ -797,18 +931,23 @@
                             {{ prospect?.date_creation}}
                         </td>
                         <td>
-                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
-                                pTooltip="Candidature"  aria-hidden="true"
+                            <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1" pBadge
+                                value="1" pTooltip="Candidature" aria-hidden="true"
+                                (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                            <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
                                 tooltipPosition="bottom"></i>
-                                <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
-                                pTooltip="Paiement"  aria-hidden="true"
+
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
+                                (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
-                                <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
-                                pTooltip="Document"  aria-hidden="true"
-                                tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%; " class="pi pi-building m-1"
-                                pTooltip="Admission" (click)="onshowDossier(prospect)" aria-hidden="true"
-                                tooltipPosition="bottom"></i>
+
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
+                                pTooltip="Document" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%; " class="pi pi-building m-1" pTooltip="Admission"
+                                (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
                                 " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
                                 pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
@@ -1182,13 +1321,16 @@
                                 </div>
                             </form>
                         </p-dialog>
-                        <h4 style="text-align: center;color: green;" *ngIf="defaultEtatDossier === 'Complet'">Etat du dossier <p-dropdown [options]="etat_dossierDropdown"
+                        <h4 style="text-align: center;color: green;" *ngIf="defaultEtatDossier === 'Complet'">Etat du
+                            dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;color: orange;" *ngIf="defaultEtatDossier === 'En attente'">Etat du dossier <p-dropdown [options]="etat_dossierDropdown"
+                        <h4 style="text-align: center;color: orange;" *ngIf="defaultEtatDossier === 'En attente'">Etat
+                            du dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;color: red;" *ngIf="defaultEtatDossier === 'Manquant'">Etat du dossier <p-dropdown [options]="etat_dossierDropdown"
+                        <h4 style="text-align: center;color: red;" *ngIf="defaultEtatDossier === 'Manquant'">Etat du
+                            dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
@@ -1504,7 +1646,7 @@
                                     </td>
                                     <td>
                                         {{ ticket?.statut }}
-                                        
+
                                     </td>
                                     <td>
                                         {{ ticket?.agent_id?.firstname}}

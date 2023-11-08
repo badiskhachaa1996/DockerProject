@@ -4477,6 +4477,17 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
+                                        label: 'Administration V2',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Local - International',
+                                                icon: 'pi pi-prime',
+                                                routerLink: ['/administration/preinscription']
+                                            }
+                                        ]
+                                    },
+                                    {
                                         label: "Pointeuse",
                                         icon: 'pi pi-camera',
                                         items: [
@@ -6577,6 +6588,17 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Gestion des équipes',
                                             icon: 'pi pi-users',
                                             routerLink: ['/rh/teams']
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: 'Administration V2',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Local - International',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/administration/preinscription']
                                         }
                                     ]
                                 },

@@ -4,7 +4,7 @@ app.disabled("x-powered-by");
 const { Prospect } = require('../models/prospect');
 const { User } = require('./../models/user');
 const { Ticket } = require('../models/ticket');
-const {Sujet } = require('../models/sujet');
+const { Sujet } = require('../models/sujet');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
 const path = require('path');
@@ -152,21 +152,21 @@ app.post("/create", (req, res, next) => {
                         } else {
                             prospect.user_id = userFromDb._id;
                             const etudiantId = userFromDb._id;
-                            const sujetid="65156ff28c5d6b6e4ce982cb";
+                            const sujetid = "65156ff28c5d6b6e4ce982cb";
                             const ticket = new Ticket({
                                 etudiant_id: etudiantId,
-                                sujet_id:sujetid,
-                                 // Utilisez l'ID de l'utilisateur du prospect ici
+                                sujet_id: sujetid,
+                                // Utilisez l'ID de l'utilisateur du prospect ici
                                 // Autres champs du ticket
                             });
                             //ticket.save()
                             //.then((suc) => {res.status(201).json({ 
-                              //  success: 'ticket ajouté dans la BD'})})
+                            //  success: 'ticket ajouté dans la BD'})})
                             //.catch((er) => { res.status(400).json({ err:"impossible de cree le ticket" }) });
                             prospect.date_creation = new Date()
                             prospect.save()
                                 .then((prospectSaved) => {
-                                    
+
                                     let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                                     res.status(201).json({ success: 'Lead ajouté dans la BD', dataUser: userFromDb, token, prospect });
                                 })
@@ -182,13 +182,13 @@ app.post("/create", (req, res, next) => {
 
                         prospect.user_id = userCreated._id;
                         const etudiantId = userCreated._id;
-                            const ticket = new Ticket({
-                                etudiant_id: etudiantId,
-                               
-                                 // Utilisez l'ID de l'utilisateur du prospect ici
-                                // Autres champs du ticket
-                            });
-                            //ticket.save()
+                        const ticket = new Ticket({
+                            etudiant_id: etudiantId,
+
+                            // Utilisez l'ID de l'utilisateur du prospect ici
+                            // Autres champs du ticket
+                        });
+                        //ticket.save()
                         prospect.date_creation = new Date()
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
@@ -1037,7 +1037,42 @@ app.get("/deleteFile/:id/:directory/:filename", (req, res) => {
 
 });
 
+const storagepaiement = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        if (!fs.existsSync('storage/prospect/paiement/' + req.body.id + "/")) {
+            fs.mkdirSync('storage/prospect/paiement/' + req.body.id + "/", { recursive: true })
+        }
+        callBack(null, 'storage/prospect/paiement/' + req.body.id + "/")
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})
 
+app.post('/uploadFilePaiement/:id', multer({ storage: storagepaiement, limits: { fileSize: 20000000 } }).single('file'), (req, res, next) => {
+
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+        res.status(200).send('')
+    }
+
+}, (error) => { res.status(500).send(error); })
+
+app.get("/downloadFilePaiement/:id/:filename", (req, res) => {
+    let pathFile = "storage/prospect/paiement/" + req.params.id + "/" + req.params.filename
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+
+});
 
 
 const storage = multer.diskStorage({
