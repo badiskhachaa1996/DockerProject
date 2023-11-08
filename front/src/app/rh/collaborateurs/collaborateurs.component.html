@@ -17,12 +17,12 @@
 				</div>
 				<div class="field col-12 md:col-4">
 					<label htmlFor="date_demarrage">Date de démarrage</label>
-					<p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage"
+					<p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage" 
 						formControlName="date_demarrage"></p-calendar>
 				</div>
 				<div class="field col-12">
 					<label>Collaborateur<span class="obligatory"> *</span></label>
-					<p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true"
+					<p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true" [virtualScroll]="true" itemSize="30"
 						formControlName="user_id"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-4">
@@ -31,7 +31,7 @@
 						formControlName="date_naissance"></p-calendar>
 				</div>
 				<div class="field col-12 md:col-8">
-					<label htmlFor="localisation">Localisation</label>
+					<label htmlFor="localisation">Site</label>
 					<p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
 						formControlName="localisation"></p-multiSelect>
 				</div>
@@ -95,9 +95,9 @@
 						formControlName="date_naissance"></p-calendar>
 				</div>
 				<div class="field col-12 md:col-8">
-					<label htmlFor="localisation">Localisation</label>
-					<p-dropdown [options]="localisationList" placeholder="Paris, Tunis..."
-						formControlName="localisation"></p-dropdown>
+					<label htmlFor="localisation">Site</label>
+					<p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+						formControlName="localisation"></p-multiSelect>
 				</div>
 				<div class="field col-12">
 					<label htmlFor="poste">Intitulé du poste</label>

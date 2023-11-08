@@ -371,7 +371,7 @@ app.post("/updateById/:id", (req, res) => {
     user["password"] = bcrypt.hashSync(user.password_clear, 8);
   }
   delete user._id
-  User.findByIdAndUpdate(    req.params.id,    user,
+  User.findByIdAndUpdate(req.params.id, user,
     { new: true },
     (err, user) => {
       if (err) {
@@ -637,7 +637,7 @@ app.get("/getAllAgent/", (req, res) => {
 });
 
 app.get("/getAllAgentPopulate", (req, res) => {
-  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
+  User.find({ $or: [{ role: ["Responsable", "Agent", "Admin"] }, { type: ['Collaborateur', 'Responsable', null, 'Formateur'], haveNewAccess: true }, { type_supp: { $in: ['Collaborateur', 'Responsable'] } }] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
 
     .then((result) => {
       res.send(result.length > 0 ? result : []);
@@ -820,8 +820,10 @@ app.post("/AuthMicrosoft", (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: req.body.email,
-        role: "user",
+        role: 'Etudiant',
+        type: 'Externe-InProgress',
         service_id: null,
+        haveNewAccess: true
       });
       newUser.save().then(
         (userFromDb) => {
@@ -1430,11 +1432,21 @@ app.patch("/recovery-password", (req, res) => {
 
 app.post('/create', (req, res) => {
   let user = new User({ ...req.body })
+
   user.save().then(data => {
     res.send(data)
   }, error => {
     res.status(500).send(error)
   })
+  /*
+  User.findOne({ email: req.body.email }).then(u => {
+    if (!u || !req.body.email)
+
+    else {
+      res.status(500).send('Email déjà existant')
+    }
+  })*/
+
 })
 
 app.get('/getAllByServiceFromList/:service_id', (req, res) => {

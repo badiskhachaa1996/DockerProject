@@ -401,6 +401,17 @@ import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
 import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
+import { CvPdfPreviewComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-preview.component';
+import { CvPdfHeaderComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header.component';
+import { CvPdfHeaderEspicComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-espic/cv-pdf-header-espic.component';
+import { CvPdfHeaderStudinfoComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-studinfo/cv-pdf-header-studinfo.component';
+import { CvPdfHeaderAdgComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-adg/cv-pdf-header-adg.component';
+import { CvPdfHeaderMedasupComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-medasup/cv-pdf-header-medasup.component';
+import { CvPdfHeaderBtechComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-btech/cv-pdf-header-btech.component';
+import { CvPdfSidebarComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-sidebar/cv-pdf-sidebar.component';
+import { CvPdfContentComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-content/cv-pdf-content.component';
+import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 
 
 @NgModule({
@@ -814,6 +825,17 @@ import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.compo
     PreinscriptionComponent,
     PauseReadMoreComponent,
     NewCalendrierComponent,
+    DashboardImatchComponent,
+    CvPdfPreviewComponent,
+    CvPdfHeaderComponent,
+    CvPdfHeaderEspicComponent,
+    CvPdfHeaderStudinfoComponent,
+    CvPdfHeaderAdgComponent,
+    CvPdfHeaderMedasupComponent,
+    CvPdfHeaderBtechComponent,
+    CvPdfSidebarComponent,
+    CvPdfContentComponent,
+    GestionEquipeRhComponent,
     
     
   ],

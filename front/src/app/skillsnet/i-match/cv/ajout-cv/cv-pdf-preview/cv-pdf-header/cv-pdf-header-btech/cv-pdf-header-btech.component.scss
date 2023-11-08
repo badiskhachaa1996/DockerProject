@@ -1,0 +1,84 @@
+.header {
+    background: center center no-repeat;
+    background-size: cover;
+    height: 100mm;
+    padding: 0;
+    padding-top: 10mm;
+    text-align: center;
+    font-size: 14px;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    background-size: contain;
+    margin-bottom: -18mm;
+
+    .header-inner {
+        height: 76mm;
+        display: flex;
+        position: sticky;
+        z-index: 30;
+        padding-left: 14mm;
+        padding-top: 2mm;
+        .section-left {
+            height: 100%;
+            padding: 0;
+
+            .student-image-container {
+                padding: 2mm;
+                padding-right: 4mm;
+                height: 79mm;
+                width: 69mm;
+                background: white;
+                border-right: solid 8mm #E38D26;
+        
+                .student-image {
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        .section-right {
+            text-align: left;
+            padding: 20mm 12mm 11mm 22mm;
+            margin-top: 13mm;
+            margin-left: 4mm;
+
+            width: 100%;
+            background-color: #EAEAEA;
+            h1 {
+                margin: 0;
+                padding: 0;
+                color: #0B3434;
+            }
+        }
+    }
+
+    .logo {
+        position: absolute;
+        height: 30mm;
+        top: 7mm;
+        right: 15mm;
+        z-index: 1000;
+        
+    }
+
+
+  }
+
+  
+
+  .overlay {
+
+    height: 91mm;
+    width: 100%;
+    margin-top: -86mm;
+    z-index: 100;
+    background: no-repeat url(../../../../../../../../assets/images/imatch/gen-cv/btech/btech-header.png);
+    background-size: cover;
+    background-position: top center;
+    position: sticky;
+
+  }

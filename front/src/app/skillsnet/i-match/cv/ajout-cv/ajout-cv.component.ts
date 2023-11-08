@@ -171,10 +171,28 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
-  ecolesImage = [
-    { label: "Espic", value: 'espic' }
+  ecoleImage ='espic'
+
+  pdfPreviewSchools = [
+    {
+      label: "Espic", value: 'espic'
+    },
+    {
+      label: "Studinfo", value: 'studinfo'
+    },
+    {
+      label: "ADG Education", value: 'adg'
+    },
+    {
+      label: "MedaSup", value: 'medasup'
+    },
+    {
+      label: "BTECH", value: 'btech'
+    },
+
   ]
-  ecoleImage = "espic"
+
+  pdfPreviewChosenSchool= "btech"
 
   etudes = [
     { label: 'Baccalauréat', value: 'Baccalauréat' },
@@ -183,6 +201,9 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Master 1er année', value: 'Master 1er année' },
     { label: 'Master 2ème année', value: 'Master 2ème année' },
   ]
+
+
+  userName = 'Nom et Prénom'
 
   @ViewChild('filter') filter: ElementRef;
   isEtudiant = false
@@ -312,6 +333,7 @@ export class AjoutCvComponent implements OnInit {
       this.userService.getProfilePicture(id).subscribe((data) => {
         console.log(data)
         if (data.error) {
+          this.studentImage = 'assets/images/imatch/female.png'
           this.imgPDP = null
         } else {
           const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -335,7 +357,7 @@ export class AjoutCvComponent implements OnInit {
         // remplissage de la dropdown des users pour ajouter le CV
         response.forEach((user: User) => {
           if (user.firstname && user.lastname && user.type) {
-            let username = `${user.firstname} ${user.lastname} | ${user.type}`;
+            let username = `${user.firstname} ${user.lastname}`;
             if (user.type == 'Externe' || user.type == 'Externe-InProgress')
               this.dropdownUserExterne.push({ label: username, value: user._id });
             else
@@ -704,6 +726,12 @@ export class AjoutCvComponent implements OnInit {
   }
 
   onSelectUser(val) {
+    console.log('Val')
+    console.log(val)
+    this.userName = this.dropdownUserExterne.find(obj => obj.value === val).label
+
+    console.log('This')
+    console.log(this.userName)
     this.onGetUserById(val)
     this.cvService.getCvbyUserId(val).subscribe(c => {
       this.cv = c
@@ -751,6 +779,7 @@ export class AjoutCvComponent implements OnInit {
     });*/
     window.print()
   }
+  studentImage = 'assets/images/imatch/female.png';
   imgPDP;
   reader: FileReader = new FileReader();
   FileUploadPDP(event) {
@@ -772,4 +801,9 @@ export class AjoutCvComponent implements OnInit {
       })
     }
   }
+
+
+  // labelByValue(array, val) {
+  //   for i)
+  // }
 }

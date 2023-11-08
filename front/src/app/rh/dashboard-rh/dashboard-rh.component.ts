@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
@@ -12,6 +12,8 @@ import { User } from 'src/app/models/User';
 import mongoose from 'mongoose';
 import * as moment from 'moment';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
+import { TeamsRHService } from 'src/app/services/teams-rh.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-dashboard-rh',
   templateUrl: './dashboard-rh.component.html',
@@ -35,7 +37,7 @@ export class DashboardRhComponent implements OnInit {
   numberOfOccupe: number = 0;
   collaborateurConnected: Collaborateur
   token;
-
+  teamRHFilter = []
   loading: boolean = true;
   statutList: any[] = [
     { label: 'En congé', value: 'En congé' },
@@ -49,7 +51,7 @@ export class DashboardRhComponent implements OnInit {
   dataMachine;
   USER: User
   constructor(private rhService: RhService, private dailyCheckService: DailyCheckService, private PoiService: PointeuseService,
-    private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService) { }
+    private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService, private TeamRHService: TeamsRHService) { }
   machineList = []
   machineDic = {}
   uidDic = {}
@@ -80,7 +82,31 @@ export class DashboardRhComponent implements OnInit {
       })
     })
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
+    this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      this.USER = user
+      let services_list = [];
+      let service_dic = {};
+      user.roles_list.forEach((val) => {
+        if (!service_dic[val.module])
+          service_dic[val.module] = val.role
+      })
+      services_list = Object.keys(service_dic)
+      if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+        this.TeamRHService.MRgetByUSERID(this.token.id).subscribe(members => {
+          if (members)
+            members.forEach(m => {
+              if (m.role == 'Responsable')
+                this.teamRHFilter.push({ label: m.team_id.nom, value: m.team_id._id })
+            })
+        })
+      else
+        this.TeamRHService.TRgetAll().subscribe(teams => {
+          teams.forEach(m => {
+            this.teamRHFilter.push({ label: m.nom, value: m._id })
+          })
+        })
+    })
+
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
@@ -90,18 +116,59 @@ export class DashboardRhComponent implements OnInit {
       .then((dcs) => {
         this.dailyChecks = [];
         dcs.forEach(dc => {
-          /*let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
-          if (dc.check_out)
-            workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
-          let max = workingTiming
-          let worked = 0
-          dc?.cra.map((cra) => {
-            worked += cra.number_minutes;
-          });
-          dc.taux_cra = ((worked * 100) / max)
-          console.log(dc)*/
-          if (dc && dc.user_id)
-            this.dailyChecks.push(dc)
+          let pauseTiming = 0;
+          if (dc && dc.pause && dc.pause.length != 0) {
+            dc?.pause.forEach((p) => {
+              if (p.out) {
+                pauseTiming = pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+              } else {
+                pauseTiming = pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+              }
+            })
+          }
+          if (dc && dc.cra) {
+            let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
+            if (dc.check_out)
+              workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
+            let max = workingTiming - pauseTiming
+            let worked = 0
+            dc?.cra.map((cra) => {
+              worked += cra.number_minutes;
+            });
+            dc.taux_cra = ((worked * 100) / max)
+          }
+          this.rhService.getCollaborateurByUserId(dc.user_id._id)
+            .then((collaborateur) => {
+              let totalTimeCra = 0;
+
+              dc?.cra.map((cra) => {
+                totalTimeCra += cra.number_minutes;
+              });
+
+              if (!collaborateur || !collaborateur.h_cra) {
+                collaborateur.h_cra = 7
+              }
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              dc.taux_cra = percent
+              if (dc && dc.user_id)
+                this.dailyChecks.push(dc)
+            })
+            .catch((error) => { console.error(error); });
+
+        })
+        this.AuthService.getPopulate(this.token.id).subscribe(USER => {
+          let services_list = [];
+          let service_dic = {};
+          USER.roles_list.forEach((val) => {
+            if (!service_dic[val.module])
+              service_dic[val.module] = val.role
+          })
+          services_list = Object.keys(service_dic)
+          if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+            this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
         })
         // nombre de checks
         this.numberOfChecks = this.dailyChecks.length;
@@ -133,33 +200,7 @@ export class DashboardRhComponent implements OnInit {
             })
             this.defaultdailyChecks = this.dailyChecks
             this.loading = false;
-
-            // initialisation à zero
-            this.numberOfDisponible = 0;
-            this.numberOfConge = 0;
-            this.numberOfReunion = 0;
-            this.numberOfOccupe = 0;
-            this.numberOfAbsent = 0;
-            this.numberOfPause = 0;
-            console.log(this.collaborateurs)
-            // remplissage des variables de statuts
-            this.collaborateurs.forEach((collaborateur: Collaborateur) => {
-              const { user_id }: any = collaborateur;
-
-              if (user_id?.statut == 'Disponible') {
-                this.numberOfDisponible++;
-              } else if (user_id?.statut == 'En congé') {
-                this.numberOfConge++;
-              } else if (user_id?.statut == 'En réunion') {
-                this.numberOfReunion++;
-              } else if (user_id?.statut == 'Occupé') {
-                this.numberOfOccupe++;
-              } else if (user_id?.statut == 'Absent') {
-                this.numberOfAbsent++;
-              } else if (user_id?.statut == 'En pause') {
-                this.numberOfPause++;
-              }
-            });
+            this.onUpdateStats()
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des collaborateurs' }); console.error(error) });
       })
@@ -172,7 +213,7 @@ export class DashboardRhComponent implements OnInit {
 
     this.dailyCheckService.getUserChecks(user_id._id)
       .then((response) => {
-        this.userChecksHistorique = response;
+        this.userChecksHistorique = response.reverse();
         this.defaultUserChecksHistorique = response
         this.showUserChecksHistorique = true;
       })
@@ -232,18 +273,20 @@ export class DashboardRhComponent implements OnInit {
     if (e.length != 0)
       this.defaultdailyChecks.forEach(check => {
         if (check.user_id) {
-          let localisations: string[] = []
-          if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof 'str')
-            localisations = [this.dicCollaborateurs[check.user_id._id].localisation]
-          else if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof ['str'])
-            localisations = this.dicCollaborateurs[check.user_id._id].localisation
-          let r = false
-          localisations.forEach(val => {
-            if (this.siteSelected.includes(val))//this.siteSelected
-              r = true
-          })
-          if (r) {
-            this.dailyChecks.push(check)
+          if ((this.dicCollaborateurs[check.user_id._id] && this.dicCollaborateurs[check.user_id._id]?.localisation)) {
+            let localisations: string[] = []
+            if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof 'str')
+              localisations = [this.dicCollaborateurs[check.user_id._id].localisation]
+            else if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof ['str'])
+              localisations = this.dicCollaborateurs[check.user_id._id].localisation
+            let r = false
+            localisations.forEach(val => {
+              if (this.siteSelected.includes(val))//this.siteSelected
+                r = true
+            })
+            if (r) {
+              this.dailyChecks.push(check)
+            }
           }
         }
       })
@@ -252,11 +295,8 @@ export class DashboardRhComponent implements OnInit {
   }
 
   onReinitPointage(check: DailyCheck) {
-    this.dailyCheckService.deleteCheck(check._id).then(d => {
-      if (this.defaultdailyChecks.indexOf(check) != -1)
-        this.defaultdailyChecks.splice(this.defaultdailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
-      if (this.dailyChecks.indexOf(check) != -1)
-        this.dailyChecks.splice(this.dailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
+    this.dailyCheckService.patchCheckIn({ _id: check._id, check_out: null, pause: [], isInPause: false, pause_timing: 0, validated: false, taux_cra: 0 }).then(d => {
+      this.onGetUsersDailyChecksAndCollaborateur();
     })
   }
   craStatutList = [
@@ -325,5 +365,75 @@ export class DashboardRhComponent implements OnInit {
       })
       this.displayActivite = true
     })
+  }
+  @ViewChild('dt1') dt1: Table;
+  chooseTeam(team_id) {
+    if (team_id)
+      this.TeamRHService.MRgetAllByTeamID(team_id).subscribe(members => {
+        let ids = []
+        members.forEach(m => { ids.push(m.user_id._id) })
+        this.dt1.filter(ids, 'user_id._id', 'in')
+        this.onUpdateStats()
+      })
+    else
+      this.AuthService.getPopulate(this.token.id).subscribe(USER => {
+        let services_list = [];
+        let service_dic = {};
+        USER.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
+        })
+        services_list = Object.keys(service_dic)
+        if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+          this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
+        else
+          this.dt1.filter([], 'user_id._id', 'in')
+        this.onUpdateStats()
+      })
+  }
+  onUpdateStats() {
+
+    // initialisation à zero
+    this.numberOfDisponible = 0;
+    this.numberOfConge = 0;
+    this.numberOfReunion = 0;
+    this.numberOfOccupe = 0;
+    this.numberOfAbsent = 0;
+    this.numberOfPause = 0;
+    this.numberOfChecks = 0
+
+    this.dailyChecks.forEach(element => {
+      if (element.check_in)
+        this.numberOfChecks++
+    });;
+    // remplissage des variables de statuts
+    this.dailyChecks.forEach((collaborateur: DailyCheck) => {
+      const user_id: User = collaborateur?.user_id;
+
+      if (user_id?.statut == 'Disponible') {
+        this.numberOfDisponible++;
+      } else if (user_id?.statut == 'En congé') {
+        this.numberOfConge++;
+      } else if (user_id?.statut == 'En réunion') {
+        this.numberOfReunion++;
+      } else if (user_id?.statut == 'Occupé') {
+        this.numberOfOccupe++;
+      } else if (user_id?.statut == 'Absent') {
+        this.numberOfAbsent++;
+      } else if (user_id?.statut == 'En pause') {
+        this.numberOfPause++;
+      }
+    });
+  }
+
+  totalCalc(cra: any[]) {
+    let r = 0
+    cra.forEach(c => { r += c.number_minutes })
+    if (r != 0) {
+      let h = Math.trunc(r / 60)
+      let m = r - (h * 60)
+      return `${h}H ${m}min`
+    } else
+      return '0 min'
   }
 }

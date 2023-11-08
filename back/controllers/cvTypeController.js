@@ -220,5 +220,21 @@ app.get('/getAllPicture', (req, res) => {
     res.status(200).send({ files: fileDic, ids })
 })
 
+app.get('/getAllToday', (req, res) => {
+    let day = new Date().getDate().toString()
+    let month = (new Date().getMonth() + 1).toString()
+    let year = new Date().getFullYear().toString()
+    console.log(`${year}-${month}-${day}`)
+    CvType.find({ date_creation: { $gte: `${year}-${month}-${day}`, $lte: `${year}-${month}-${day} 23:59` } }).populate('createur_id').then(val => {
+        res.send(val)
+    })
+})
+
+app.get('/getAllByDate/:date1/:date2', (req, res) => {
+    CvType.find({ date_creation: { $gte: req.params.date1, $lte: req.params.date2 } }).sort({ date_creation: 1 }).populate('createur_id').then(val => {
+        res.send(val)
+    })
+})
+
 
 module.exports = app;

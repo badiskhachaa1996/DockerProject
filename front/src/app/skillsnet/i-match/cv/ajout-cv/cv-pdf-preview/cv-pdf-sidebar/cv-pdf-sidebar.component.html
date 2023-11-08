@@ -1,0 +1,25 @@
+<div class="main-container" [ngClass]="school">
+    <h2>BIO</h2>
+    <div class="inner-content">
+        <div class="block competences" *ngIf="sidebar?.competences && sidebar?.competences.length > 0">
+            <h3>Coméptences</h3>
+            <div>
+                <p *ngFor="let competence of sidebar?.competences">{{competence.label}}</p>
+            </div>
+        </div>
+        <div class="block" *ngIf="sidebar?.apropos && sidebar?.apropos.length > 0">
+            <h3>À propos</h3>
+            <p>{{sidebar?.apropos}}</p>
+        </div>
+        <div class="block langues" *ngIf="sidebar?.langues && sidebar?.langues.length > 0">
+            <h3>Langues</h3>
+            <div>
+                <p *ngFor="let langue of sidebar?.langues">{{langue.label}}</p>
+            </div>        
+        </div>
+        <div class="block" *ngIf="sidebar?.interets && sidebar?.interets.length > 0">
+            <h3>Centres d'intérêts</h3>
+            <p>{{sidebar?.interets}}</p>
+        </div>
+    </div>
+</div>

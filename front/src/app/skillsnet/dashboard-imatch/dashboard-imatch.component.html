@@ -1,0 +1,297 @@
+<div class="card">
+    <p-tabView styleClass="tabview-custom">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="pi pi-volume-up mr-2"></i>
+                <span>Offre</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtoffreaj [value]="dataTabAJR" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffre"
+                                    filter="true" autoWidth="false"
+                                    (onChange)="dtoffreaj.filter($event.value,'label','equals')"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="label" style="text-align: center;">Auteur
+                                    <p-sortIcon field="label"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Nombre des offres
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item>
+                            <tr>
+                                <td>{{item.label}}</td>
+                                <td>{{item.nb}}</td>
+                                <td>{{(item.nb/annonceAJR.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtoffregen [value]="dataTabGEN" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single" (onFilter)="onFilter($event, 'dataTabGEN')"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffreGEN"
+                                    filter="true" autoWidth="false"
+                                    (onChange)="dtoffregen.filter($event.value,'label','equals')"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceGENbyDate" 
+                                    (onSelect)="getAnnonceGENbyDate()" (onBlur)="getAnnonceGENbyDate()"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="label" style="text-align: center;">Auteur
+                                    <p-sortIcon field="label"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Nombre des offres
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item>
+                            <tr>
+                                <td>{{item.label}}</td>
+                                <td>{{item.nb}}</td>
+                                <td>{{(item.nb/annonceGEN.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceHISTObyDate"
+                        (onSelect)="getAnnonceHISTObyDate()" (onBlur)="getAnnonceGENbyDate()"></p-calendar>
+                    <p-chart *ngIf="annonceHisto?.labels" type="bar" [data]="annonceHisto"
+                        [options]="basicOptions"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="CV">
+            <ng-template pTemplate="header">
+                <i class="pi pi-briefcase mr-2"></i>
+                <span>CV</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtcvaj [value]="dataCVAJR" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single" responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurCV"
+                                    filter="true" autoWidth="false"
+                                    (onChange)="dtcvaj.filter($event.value,'label','equals')"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{cvAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="label" style="text-align: center;">Auteur
+                                    <p-sortIcon field="label"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Nombre des CV
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item>
+                            <tr>
+                                <td>{{item.label}}</td>
+                                <td>{{item.nb}}</td>
+                                <td>{{(item.nb/cvAJR.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtcvgen [value]="dataTabCVGEN" [rows]="3" [rowHover]="true" (onFilter)="onFilter($event, 'dataTabCVGEN')"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurCVGEN"
+                                    filter="true" autoWidth="false"
+                                    (onChange)="dtcvgen.filter($event.value,'label','equals')"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="CVGENbyDate"
+                                    (onSelect)="getCVGENbyDate()" (onBlur)="getCVGENbyDate()"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{cvGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="label" style="text-align: center;">Auteur
+                                    <p-sortIcon field="label"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Nombre des CV
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nb" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="nb"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item>
+                            <tr>
+                                <td>{{item.label}}</td>
+                                <td>{{item.nb}}</td>
+                                <td>{{(item.nb/cvGEN.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceCVbyDate"
+                        (onSelect)="getAnnonceCVbyDate()" (onBlur)="getAnnonceCVbyDate()"></p-calendar>
+                    <p-chart *ngIf='cvHisto?.labels' type="bar" [data]="cvHisto" [style]="{'color':'black'}"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Matching">
+            <ng-template pTemplate="header">
+                <i class="pi pi-users mr-2"></i>
+                <span>Matching</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtmatchaj [value]="['']" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterCommercialMatch"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtmatchaj)"
+                                    emptyFilterMessage="Pas de commercial trouvé"
+                                    filterPlaceholder="Choisissez un commercial"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="text-align: center;">
+                                    Type
+                                </th>
+                                <th style="text-align: center;">
+                                    Nbr Matching
+                                </th>
+                                <th style="text-align: center;">
+                                    Taux de contribution
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                                <td>
+                                    Entreprise
+                                </td>
+                                <td>{{dicAjrMatching.entreprise}}</td>
+                                <td>{{(dicAjrMatching.entreprise/matchingAJR.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Candidat
+                                </td>
+                                <td>{{dicAjrMatching.candidat}}</td>
+                                <td>{{(dicAjrMatching.candidat/matchingAJR.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Commercial
+                                </td>
+                                <td>{{dicAjrMatching.commercial}}</td>
+                                <td>{{(dicAjrMatching.commercial/matchingAJR.length)*100| number:'1.0-2'}}%</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtmatchgen [value]="matchGEN" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterCommercialMatch"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtmatchgen)"
+                                    emptyFilterMessage="Pas de commercial trouvé"
+                                    filterPlaceholder="Choisissez un commercial"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{matchGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="matchings" style="text-align: center;">Nombre des Matchings
+                                    <p-sortIcon field="matchings"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset><br>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                    <p-chart *ngIf="" type="bar" [data]="matchHisto" [options]="optionsMatching"
+                        [style]="{'color':'black'}"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</div>

@@ -42,9 +42,9 @@ export class Ticket {
         public type?: string,
         public origin?: string,
         public assigne_by?: User,
-        public demande?:String,
-        public campus?:String,
-        public filiere?:String,
+        public demande?: String,
+        public campus?: String,
+        public filiere?: String,
     ) { }
 
 

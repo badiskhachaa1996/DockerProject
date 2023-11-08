@@ -66,6 +66,7 @@ import { PointeuseService } from 'src/app/services/pointeuse.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   paysList = environment.pays;
@@ -919,7 +920,7 @@ export class DashboardComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({ in: new Date(),motif: this.motifStr });
+    this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)

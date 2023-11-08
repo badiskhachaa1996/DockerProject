@@ -19,13 +19,19 @@ import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
 import { Sujet } from 'src/app/models/Sujet';
 import { Service } from 'src/app/models/Service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
   styleUrls: ['./new-list-tickets.component.scss']
 })
 export class NewListTicketsComponent implements OnInit {
-
+  campusDropdown: any[] = [
+    { value: 'Paris', label: "Paris" },
+    { value: "Marne", label: "Marne" },
+    { value: 'Montpelier', label: "Montpelier" },
+  ];
+  serviceFiltered: string[] = []
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
@@ -37,8 +43,8 @@ export class NewListTicketsComponent implements OnInit {
   onChangeMode(e) {
     if (e.value == 'Personnel') {
       this.filterType = ['Mine']
-      this.filterBase = ['En attente de traitement', 'En cours de traitement']
-      this.dt1.filter(['En attente de traitement', 'En cours de traitement'], 'statut', 'in')
+      this.filterBase = []//'En attente de traitement', 'En cours de traitement'
+      this.dt1.filter(this.filterBase, 'statut', 'in')
     } else {
       this.filterType = ['Assigne Service']
       this.filterBase = []
@@ -50,7 +56,8 @@ export class NewListTicketsComponent implements OnInit {
   isAgent = false
   constructor(private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
-    private NotifService: NotificationService, private Socket: SocketService, private router: Router, private MessageService: MessageService) { }
+    private NotifService: NotificationService, private Socket: SocketService, private router: Router,
+    private MessageService: MessageService, private diplomeService: DiplomeService) { }
   tickets: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
@@ -119,7 +126,7 @@ export class NewListTicketsComponent implements OnInit {
         })
         //IF this.user ticketing !='Super-Admin'
         let role = service_dic['Ticketing']
-        if (role && role != 'Super-Admin')
+        if (!role || role != 'Super-Admin')
           this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
             nonassigne.forEach(e => {
               e.origin = 'Non Assigne'
@@ -192,13 +199,29 @@ export class NewListTicketsComponent implements OnInit {
     })
 
   }
-  filterBase = ['En attente de traitement', 'En cours de traitement']
+  roleAccess = 'Spectateur'
+  filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: any;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
       this.isAgent = (r.role != 'user')
+      if (r.haveNewAccess)
+        if ((r.type == 'Reponsable' || r.type == 'Collaborateur' || r.type == 'Formateur' || r.type_supp.includes('Collaborateur') || r.type_supp.includes('Reponsable')))
+          this.isAgent = true
+        else
+          this.isAgent = false
+      if (this.isAgent) {
+        let service_dic = {};
+        r.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
+        })
+        this.roleAccess = 'Admin'
+        if (service_dic['Ticketing'])
+          this.roleAccess = service_dic['Ticketing']
+      }
       this.ticketsOnglets = r.savedTicket
       this.updateTicketList()
     })
@@ -231,7 +254,11 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
 
-
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.filiereDropdown.push({ value: d._id, label: d.titre })
+      })
+    })
     this.AuthService.getAllAgentPopulate().subscribe(users => {
       let itemsSuperAdmin = []
       let itemsService = {}
@@ -724,6 +751,15 @@ export class NewListTicketsComponent implements OnInit {
   }
   onFilter(event, dt) {
     this.filteredValues = event.filteredValue;
+  }
+  filiereDropdown: any[] = [];
+  showPedagogieFilter() {
+    let r = false
+    this.serviceFiltered.forEach(s => {
+      if (this.serviceDic[s] == 'Pédagogie' || this.serviceDic[s] == 'Pedagogie' || this.serviceDic[s] == 'Administration')
+        r = true
+    })
+    return r
   }
 }
 

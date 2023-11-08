@@ -139,7 +139,7 @@
 
                 <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
                     [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
-                    {{check?.taux_cra}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
+                    {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
                         pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
                         tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
                 </td>
@@ -295,10 +295,10 @@
             <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
                 <tr [pEditableRow]="cra">
                     <td>
-                        {{cra.task}}
+                        {{cra?.task}}
                     </td>
                     <td>
-                        {{cra.number_minutes}} mn
+                        {{cra?.number_minutes}} mn
                     </td>
 
                 </tr>

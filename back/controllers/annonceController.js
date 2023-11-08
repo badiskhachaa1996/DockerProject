@@ -23,7 +23,7 @@ app.post("/post-annonce", (req, res) => {
                             if (sujet && (!auteur || auteur.type == 'CEO Entreprise' || auteur.type == 'Entreprise' || auteur.type == 'Tuteur'))
                                 createTicket(req.body?.created_by,
                                     `L'entreprise ${ent_name} a publié une nouvelle offre,${annonce?.custom_id}`, sujet, 'Offre publié')
-                            else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin' ))
+                            else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin'))
                                 createTicket(req.body?.created_by,
                                     `${auteur?.firstname} ${auteur?.lastname} a publié une nouvelle offre,${annonce?.custom_id}`, sujet, 'Offre publié')
                         })
@@ -71,6 +71,20 @@ app.put("/put-annonce", (req, res) => {
         .catch((error) => { res.status(500).send(error.message) })
 });
 
+app.get('/getAllToday', (req, res) => {
+    let day = new Date().getDate().toString()
+    let month = (new Date().getMonth() + 1).toString()
+    let year = new Date().getFullYear().toString()
+    Annonce.find({ date_creation: { $gte: `${year}-${month}-${day}`, $lte: `${year}-${month}-${day} 23:59` } }).populate('user_id').then(val => {
+        res.send(val)
+    })
+})
+
+app.get('/getAllByDate/:date1/:date2', (req, res) => {
+    Annonce.find({ date_creation: { $gte: req.params.date1, $lte: req.params.date2 } }).sort({ date_creation: 1 }).populate('user_id').then(val => {
+        res.send(val)
+    })
+})
 app.delete('/delete/:id', (req, res) => {
     Annonce.findByIdAndRemove(req.params.id)
         .then((annonce) => {

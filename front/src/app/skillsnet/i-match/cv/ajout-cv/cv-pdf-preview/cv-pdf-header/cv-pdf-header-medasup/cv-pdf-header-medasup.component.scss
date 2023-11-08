@@ -1,0 +1,78 @@
+.header {
+    background: center center no-repeat;
+    background-size: cover;
+    height: 120mm;
+    text-align: center;
+    font-size: 14pt;
+    padding: 0;
+    background: #653686;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    color: white;
+    .header-inner {
+        height: 100%;
+        z-index: 30;
+        width: 100%;
+        padding-top: 15mm;
+        padding-bottom: 5mm;
+        position: sticky;
+        
+        justify-content: space-between;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .medasup-icon {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        height: 120mm;
+        margin-top: -110mm;
+        padding: 0;
+        z-index: 30;
+        position: sticky;
+    }
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    position: absolute;
+    height: 60mm;
+    top: -8mm;
+    right: 15mm;
+}
+
+
+.student-image {
+    margin-left: auto;
+    margin-right: auto;
+    height: 60mm;
+    width: 60mm;
+    border-radius: 45mm;
+    z-index: 100;
+    position: sticky;
+    background-size: contain;
+    background-position: center;
+}
+
+.background {
+    height: 66mm;
+    width: 66mm;
+    border-radius: 70mm;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10;
+    margin-top: -63mm;
+    margin-bottom: -3mm;
+    position: sticky;
+    background-color: #4F286F;
+
+}
+
+.section-right {
+    margin-top: 8mm;
+}

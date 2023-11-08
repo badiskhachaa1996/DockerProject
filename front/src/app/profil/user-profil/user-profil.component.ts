@@ -330,10 +330,9 @@ export class UserProfilComponent implements OnInit {
       this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(c => {
         this.dataCollab = c
       })
-      /*this.MCService.getInfo().then(u => {
-        console.log(u)
+      this.MCService.getInfo().then(u => {
         this.dataMC = u
-      })*/
+      })
       this.userco = jwt_decode(data['userToken'])['userFromDb']
       //TODO C'est quoi cette merde
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
@@ -525,6 +524,7 @@ export class UserProfilComponent implements OnInit {
   }]
   seeOrga() {
     this.MCService.getSalaries().then(r => {
+
       let label = this.dataMC.displayName
       if (this.dataMC.jobTitle)
         label = label + ' - ' + this.dataMC.jobTitle

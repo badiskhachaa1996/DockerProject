@@ -155,7 +155,7 @@ export class RdvCalendarInterneComponent implements OnInit {
       ], isOnlineMeeting: true,
       onlineMeetingProvider: 'teamsForBusiness'
     };
-    this.MeetingTeamService.create(new MeetingTeams(null, this.USER?.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone, null, null, this.form.value.offre_id)).subscribe(mt => {
+    this.MeetingTeamService.create(new MeetingTeams(null, this.USER?.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone, 'Entretien', null, this.form.value.offre_id)).subscribe(mt => {
       this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été enregistré sur IMS' })
       meeting_start_date.setHours(meeting_start_date.getHours() - 1)
       this.DispoEtuService.create(new DisponibiliteEtudiant(null, 'Entretien avec ' + company_email, 'Other', this.ID, meeting_start_date, new Date(meeting_start_date.getTime() + + 3600000))).subscribe(dispoR => {
@@ -186,7 +186,7 @@ export class RdvCalendarInterneComponent implements OnInit {
       center: 'title',
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
-   locale: frLocale,
+    locale: frLocale,
     events: [],
 
     defaultView: 'timeGridWeek',

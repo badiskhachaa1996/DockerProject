@@ -72,7 +72,7 @@ export class AuthService {
   getAllPopulate() {
     let url = this.apiUrl + "getAllPopulate";
 
-    return new Promise((resolve, reject) => {
+    return new Promise<User[]>((resolve, reject) => {
       this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         ((response) => { resolve(response) }),
         ((error) => { reject(error); })

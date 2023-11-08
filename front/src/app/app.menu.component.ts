@@ -256,7 +256,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Commerciale',
                             icon: 'pi pi-fw pi-briefcase',
                             items: [
@@ -313,7 +313,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ajout-lead'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Questionnaire',
                             icon: 'pi pi-sort-alpha-down',
@@ -1839,7 +1839,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },*/
-                                {
+                                /*{
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -1898,14 +1898,14 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Configuration',
                                             icon: 'pi pi-cog',
                                             routerLink: ['/ticketing/configuration'],
-                                        },*/
+                                        },
                                         {
                                             label: 'Dashboard',
                                             icon: 'pi pi-home',
                                             routerLink: ['/ticketing/dashboard'],
                                         },
                                     ],
-                                },
+                                },*/
                                 /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
@@ -4394,92 +4394,7 @@ export class AppMenuComponent implements OnInit {
                     });
                 }
 
-                //menu formateur
-                if (response.type === 'Formateur' && response.role === 'user') {
-                    this.FService.getByUserId(this.token.id).subscribe({
-                        next: (dataF: Formateur) => {
-                            this.items = [
-                                {
-                                    label: 'Accueil',
-                                    icon: 'pi pi-fw pi-home',
-                                    items: [
-                                        {
-                                            label: 'Espace Personnel',
-                                            icon: 'pi pi-fw pi-home',
-                                            routerLink: ['/']
-                                        },
-                                        /*{
-                                            label: 'Signaler un problème technique',
-                                            icon: 'pi pi-fw pi-exclamation-triangle',
-                                            routerLink: ['/ticketing-igs'],
-                                        },*/
-                                    ]
-                                },
 
-                                /*{
-                                    label: 'Ticketing - Ancienne Version',
-                                    icon: 'pi pi-fw pi-ticket',
-                                    items: [
-                                        {
-                                            label: 'Suivi de mes tickets',
-                                            icon: 'pi pi-check-circle',
-                                            routerLink: ['/suivi-ticket'],
-                                        },
-                                    ],
-                                },*/
-                                {
-                                    label: 'Pédagogie',
-                                    icon: 'pi pi-fw pi-folder',
-                                    items: [
-                                        {
-                                            label: 'Emploi du temps',
-                                            icon: 'pi pi-calendar',
-                                            routerLink:
-                                                'emploi-du-temps/formateur/' +
-                                                this.token.id,
-                                        },
-                                        {
-                                            label: 'Gestions des évaluations',
-                                            icon: 'pi pi-copy',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter une évaluation',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: [
-                                                        '/ajout-examen',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Liste des évaluations',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Liste de vos étudiants',
-                                            icon: 'pi pi-users',
-                                            routerLink: '/formateur/etudiants',
-                                        },
-                                        /*{ 
-                                            label: 'Gestions des devoirs', 
-                                            icon: 'pi pi-book', 
-                                            routerLink: 'devoirs' 
-                                        }*/
-                                    ],
-                                },
-                            ];
-                        },
-                        error: function (error: any) {
-                            console.error(error);
-                        },
-                        complete: () => {
-                            console.log(
-                                'Informations du formateur récupérer avec succès !'
-                            );
-                        },
-                    });
-                }
 
                 /* end menus internes */
 
@@ -4534,6 +4449,240 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },*/
                     ]
+                if (response.haveNewAccess) {
+                    //1
+                    //console.log('haveNewAccess', this.items)
+                    if (response.role == 'user') {
+                        this.items = [
+                            {
+                                label: 'Espace Personnel',
+                                icon: 'pi pi-fw pi-home',
+                                routerLink: ['/'],
+                            }
+                        ]
+                        if (response.type == 'Collaborateur') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
+                            services_list.push('Ressources Humaines')
+                        }
+                    }
+                    else if (response.role == 'Admin') {
+                        this.items = [
+                            {
+                                label: 'Espace Personnel',
+                                icon: 'pi pi-fw pi-home',
+                                routerLink: ['/'],
+                            },
+                            {
+                                label: "Admin IMS",
+                                icon: 'pi pi-star',
+                                items: [
+                                    {
+                                        label: "Pointeuse",
+                                        icon: 'pi pi-camera',
+                                        items: [
+                                            {
+                                                label: "Configuration",
+                                                icon: 'pi pi-cog',
+                                                routerLink: ['/pointeuse/configuration']
+                                            }, {
+                                                label: "Activités",
+                                                icon: 'pi pi-desktop',
+                                                routerLink: ['/pointage/configuration']
+                                            },
+                                            {
+                                                label: "Historique",
+                                                icon: 'pi pi-book',
+                                                routerLink: ['/pointage/archivage']
+                                            },
+                                        ]
+
+                                    },
+                                    {
+                                        label: 'Gestion RH',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Gestion des équipes',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/rh/teams']
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        label: 'Ticketing',
+                                        icon: 'pi pi-ticket',
+                                        routerLink: ['/ticketing/configuration']
+                                    },
+                                    {
+                                        label: 'Configuration des mentions et services',
+                                        icon: 'pi pi-cog',
+                                        routerLink: ['/configuration/service-mention']
+                                    },
+                                    {
+                                        label: 'Gestion des Agents',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un agent',
+                                                icon: 'pi pi-plus',
+                                                routerLink: ['/agent/ajout'],
+                                            },
+                                            {
+                                                label: 'Liste des agents',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/agent/list'],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Actualité et notifications',
+                                        icon: 'pi pi-tags',
+                                        routerLink: ['/rh/actualite-notifications'],
+                                    },
+                                    {
+                                        label: 'Développeur',
+                                        icon: 'pi pi-fw pi-cog',
+                                        items: [
+                                            {
+                                                label: 'Gestion des utilisateurs',
+                                                icon: 'pi pi-fw pi-user',
+                                                routerLink: ['/gestion-des-utilisateurs'],
+                                            },
+                                            {
+                                                label: 'Analyseur de doublon',
+                                                icon: 'pi pi-fw pi-server',
+                                                routerLink: ['/analyseur-doublons'],
+                                            },
+                                            {
+                                                label: 'Connexion des étudiants',
+                                                icon: 'pi pi-fw pi-sign-in',
+                                                routerLink: ['/gestion-etudiants'],
+                                            },
+                                            {
+                                                label: 'Infos IMS',
+                                                icon: 'pi pi-fw pi-info-circle',
+                                                routerLink: ['/infos-ims'],
+                                            },
+                                            {
+                                                label: 'Template Code',
+                                                icon: 'pi pi-copy',
+                                                items: [
+                                                    {
+                                                        label: 'Formulaire',
+                                                        icon: 'pi pi-align-center',
+                                                        routerLink: ['/template/formulaire/GH4'],
+                                                    },
+                                                ]
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Support',
+                                        icon: 'pi pi-cog',
+                                        items: [
+                                            {
+                                                label: 'Étudiants en attente de leur compte IMS',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: ['/assign-ims'],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'iMatch',
+                                        icon: 'pi pi-briefcase',
+                                        items: [{
+                                            label: 'Mes offres',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/mes-offres'],
+                                        }, {
+                                            label: 'Gestion des compétences',
+                                            icon: 'pi pi-book',
+                                            routerLink: ['/skills-management'],
+                                        },
+                                        {
+                                            label: 'Gestions des externes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/imatch/externe'],
+                                        },
+                                        {
+                                            label: 'Gestions des événements',
+                                            icon: 'pi pi-flag',
+                                            routerLink: ['/evenements'],
+                                        }
+                                            , {
+                                            label: 'Rendez-vous',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/imatch/rendez-vous']
+                                        }, {
+                                            label: 'Cvthèque Externe',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/imatch'],
+                                        },
+                                        ]
+                                    }
+                                ]
+                            },
+                        ]
+                        if (response.type == 'Collaborateur') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
+                            services_list.push('Ressources Humaines')
+                        }
+                    }
+
+                }
+                //menu formateur
+                if (response.type === 'Formateur' && response.role === 'user') {
+                    this.FService.getByUserId(this.token.id).subscribe({
+                        next: (dataF: Formateur) => {
+                            this.items.push(
+                                {
+                                    label: 'Pédagogie - Formateur',
+                                    icon: 'pi pi-fw pi-folder',
+                                    items: [
+                                        {
+                                            label: 'Emploi du temps',
+                                            icon: 'pi pi-calendar',
+                                            routerLink:
+                                                'emploi-du-temps/formateur/' +
+                                                this.token.id,
+                                        },
+                                        {
+                                            label: 'Gestions des évaluations',
+                                            icon: 'pi pi-copy',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter une évaluation',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: [
+                                                        '/ajout-examen',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Liste des évaluations',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/examens'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Liste de vos étudiants',
+                                            icon: 'pi pi-users',
+                                            routerLink: '/formateur/etudiants',
+                                        },
+                                    ],
+                                },
+                            );
+                        },
+                        error: function (error: any) {
+                            console.error(error);
+                        },
+                        complete: () => {
+                            console.log(
+                                'Informations du formateur récupérer avec succès !'
+                            );
+                        },
+                    });
+                }
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
                         this.items.push(
@@ -4571,7 +4720,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
-                                    }, {
+                                    },/* {
                                         label: 'Ticketing',
                                         icon: 'pi pi-fw pi-ticket',
                                         items: [
@@ -4586,7 +4735,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/ticketing/gestion/mes-tickets']
                                             }
                                         ]
-                                    },
+                                    },*/
                                     {
                                         label: 'Dashboard',
                                         icon: 'pi pi-chart-line'
@@ -4621,7 +4770,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            }, {
+                            }, /*{
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -4636,11 +4785,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
-                        }
+                        }*/
                         )
                     }
                 }
-                if (services_list.includes('Ticketing')) {
+                /*if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
                     if (role == "Super-Admin") {
                         this.items.push({
@@ -4817,7 +4966,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                     }
-                }
+                }*/
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
                     if (role == "Super-Admin")
@@ -5140,7 +5289,7 @@ export class AppMenuComponent implements OnInit {
                                 label: "Paiements et documents administratives",
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
-                            },
+                            },/*
                             {
                                 label: 'Ticketing',
                                 icon: 'pi pi-fw pi-ticket',
@@ -5156,7 +5305,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/ticketing/gestion/mes-tickets']
                                     }
                                 ]
-                            }
+                            }*/
 
                         ]
                         setTimeout(() => this.showMenu = true, 0);
@@ -6225,7 +6374,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-list',
                                         routerLink: ['/cvtheque-interne']
                                     },
-
+                                    {
+                                        label: 'Reporting',
+                                        icon: 'pi pi-chart-line',
+                                        routerLink: ['/imatch/reporting']
+                                    },
                                     /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',
@@ -6415,6 +6568,17 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
 
+                                },
+                                {
+                                    label: 'Gestion RH',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Gestion des équipes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/rh/teams']
+                                        }
+                                    ]
                                 },
                                 {
                                     label: 'Ticketing',
@@ -6646,7 +6810,10 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
-                setTimeout(() => this.showMenu = true, 0);
+                setTimeout(() => {
+                    this.items = Object.assign([], this.items);
+                    this.showMenu = true
+                }, 0);
                 //this.showMenu=true
             },
             error: (error: any) => {

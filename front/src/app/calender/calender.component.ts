@@ -335,6 +335,7 @@ export class CalenderComponent implements OnInit {
   machineDic = {}
   collaborateurList = []
   userSelected
+  collaborateurDic = {}
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -381,6 +382,17 @@ export class CalenderComponent implements OnInit {
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id) {
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            this.collaborateurDic[c.user_id._id] = c
+          }
+
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
         this.user = dataUser;
@@ -546,14 +558,14 @@ export class CalenderComponent implements OnInit {
       }];
     this.itemsCra = [
       {
-        label: "ticket",
+        label: "Ticket",
         command: () => {
           this.showFormAddCraTicket = true
 
         }
       },
       {
-        label: 'Autre',
+        label: 'Saisir',
         command: () => {
           this.showFormAddCra = true;
         }
@@ -566,10 +578,15 @@ export class CalenderComponent implements OnInit {
     else { this.visible = false }
   }
   showAssiduite() {
+    let craLast: DailyCheck = this.historiqueCra[this.historiqueCra.length - 1]
     if (this.visibleA == false) {
       this.visibleA = true
     }
     else { this.visibleA = false }
+    if (craLast?.today != new Date().toLocaleDateString('en-US')) {
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${craLast?.today}` })
+    }
+
   }
   showConge() {
     this.visibleC = true
@@ -900,16 +917,15 @@ export class CalenderComponent implements OnInit {
               this.dailyCheck?.cra.map((cra) => {
                 totalTimeCra += cra.number_minutes;
               });
-              console.log(totalTimeCra, collaborateur.h_cra)
-              if (collaborateur != null && collaborateur.h_cra) {
-                // conversion du taux cra du collaborateur en minutes
-                collaborateur.h_cra *= 60;
-                // partie calcule du pourcentage en fonction du totalTimeCra
-                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
-                console.log(percent)
-                this.craPercent = percent
-              }
 
+              if (!collaborateur || !collaborateur.h_cra) {
+                collaborateur.h_cra = 7
+              }
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              this.craPercent = percent
             })
             .catch((error) => { console.error(error); });
 
@@ -960,7 +976,7 @@ export class CalenderComponent implements OnInit {
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
-
+  historiqueCraHisto = []
   // méthode de fin de la pause
   onStopPause(): void {
     // taille du tableau de check
@@ -1019,25 +1035,44 @@ export class CalenderComponent implements OnInit {
       worked += cra.number_minutes;
     });
     this.dailyCheck.check_out = new Date();
-    this.dailyCheck.taux_cra = this.craPercent;
-    this.dailyCheck.pause_timing = this.pauseTiming;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Absent')
-        // recuperation de l'historique du cra
-        this.dailyCheckService.getUserChecks(this.token.id)
+    this.dailyCheck.pause_timing = this.pauseTiming;
+    this.rhService.getCollaborateurByUserId(this.userConnected._id)
+      .then((collaborateur) => {
+        let totalTimeCra = 0;
+
+        this.dailyCheck?.cra.map((cra) => {
+          totalTimeCra += cra.number_minutes;
+        });
+
+        if (!collaborateur || !collaborateur.h_cra) {
+          collaborateur.h_cra = 7
+        }
+        // conversion du taux cra du collaborateur en minutes
+        collaborateur.h_cra *= 60;
+        // partie calcule du pourcentage en fonction du totalTimeCra
+        let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+        this.craPercent = percent
+        this.dailyCheck.taux_cra = this.craPercent;
+        this.dailyCheckService.patchCheckIn(this.dailyCheck)
           .then((response) => {
-            this.historiqueCra = response
-            this.lastCras = response[response.length - 1];
-            console.log(this.lastCras);
+            this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+            // recuperation du check journalier
+            this.onCheckDailyCheck(response.user_id);
+            this.onUpdateStatus('Absent')
+            // recuperation de l'historique du cra
+            this.dailyCheckService.getUserChecks(this.token.id)
+              .then((response) => {
+                this.historiqueCra = response
+                this.lastCras = response[response.length - 1];
+                console.log(this.lastCras);
+              })
+              .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
           })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
       })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+      .catch((error) => { console.error(error); });
+
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
@@ -1306,9 +1341,7 @@ export class CalenderComponent implements OnInit {
     if (value)
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
-          this.historiqueCra = response.reverse();
-          this.lastCras = response[response.length - 1];
-          console.log(this.lastCras);
+          this.historiqueCraHisto = response.reverse();
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
@@ -1601,6 +1634,7 @@ export class CalenderComponent implements OnInit {
     contentHeight: 500,
     events: [],
     eventClick: this.eventClickUser.bind(this),
+    dateClick: this.dateClickFC.bind(this),
     //eventDidMount: this.eventToolTip(this),
     defaultView: "dayGridMonth",
     minTime: '08:00:00',
@@ -1670,6 +1704,8 @@ export class CalenderComponent implements OnInit {
             }
 
           })
+          //Charger les Réunions Teams
+
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
@@ -1685,6 +1721,10 @@ export class CalenderComponent implements OnInit {
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
+          events.forEach(ev => {
+            if (ev.type == 'Cours' && ev?.personal == this.token.id)
+              this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
+          })
           this.defaultEventUsers = this.eventUsers
           this.onFilter()
         })
@@ -1698,7 +1738,7 @@ export class CalenderComponent implements OnInit {
     if (event.type == 'Jour férié France') {
       backgroundColor = '#D4AC0D'
       borderColor = '#D35400'
-    } else if (event.type == 'Autre événement') {
+    } else if (event.type == 'Autre événement' || event.type == 'Cours') {
       backgroundColor = '#9B59B6'
       borderColor = '#8E44AD'
     } else if (event.type == "Autorisation") {
@@ -1721,12 +1761,70 @@ export class CalenderComponent implements OnInit {
   DataCRA = []
   displayCRA
   dateCRA: string;
+  displayCRACheck = false
+  dataCHECK: DailyCheck
+  onValidateCRA(check: DailyCheck) {
+    this.displayCRACheck = true
+    this.dataCHECK = check
+  }
   eventClickUser(event) {
     if (event.event.extendedProps.type == "Présent") {
       this.dateCRA = new Date(event.event.start).toDateString()
       this.DataCRA = this.PresentDicUser[this.dateCRA]
       this.displayCRA = true
     }
+  }
+  dateClickFC(event) {
+    let r = true
+
+    this.eventUsers.forEach(ev => {
+      if (ev.extendedProps.type == 'Cours' && new Date(event.date).toString() == new Date(ev.extendedProps.date).toString()) {
+        //console.log(ev.extendedProps.type, new Date(event.date).toString(), new Date(ev.extendedProps.date).toString())
+        r = false
+      }
+    })
+    if (r) {
+      this.displayCours = true
+      this.DataDay = event
+    }
+  }
+  DataDay: any
+  displayCours = false
+  onAddJourDeCours() {
+    this.CalendrierRHService.create({ type: 'Cours', created_by: this.token.id, date: this.DataDay.date, personal: this.token.id }).subscribe(newEvent => {
+      this.addEventUser(newEvent)
+      this.displayCours = false
+      this.DataDay = null
+      this.messageService.add({ severity: 'success', summary: 'Ajout d\'un événement avec succès' })
+    })
+  }
+  isNaN(nb: number) { return isNaN(nb) }
+  isInfinity(nb: number) { return nb == Infinity }
+
+
+  getCheckOut(user_id) {
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) > date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
+    }
+
+  }
+
+  saveCheck(check: DailyCheck) {
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+
+    }, error => { console.error(error) })
   }
 }
 

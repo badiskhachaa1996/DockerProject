@@ -1,0 +1,203 @@
+<div class="grid">
+    <div class="col-12 grid" *ngIf="selectedTeam">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Modifier les informations de {{selectedTeam.nom}} </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="selectedTeam = null; updateForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+
+                <div class="field col-12">
+                    <label>Nom <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="Equipe Incroyable" formControlName="nom" />
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-12 grid" *ngIf="newTeam">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'une nouvelle équipe </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="newTeam = null; createForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
+
+                <div class="field col-12">
+                    <label>Nom <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="Equipe Incroyable" formControlName="nom" />
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="newMember">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'une nouveau membre </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="newMember = null; AddMbForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="AddMbForm" (ngSubmit)="onAddMember()">
+
+                <div class="field col-12">
+                    <label>Prénom & Nom <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="user_id" [options]="userList" placeholder="Choisissez une personne"
+                        [virtualScroll]="true" itemSize="30" emptyFilterMessage="Personne n'a été trouvé"
+                        filterPlaceholder="Nom & Prénom" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label>Role <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="role" [options]="roleList" placeholder="Choisissez un role">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="AddMbForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- Listing des équipes -->
+    <div class="col-12">
+        <div class="card">
+
+            <!--<h5>Liste des équipes RH</h5>-->
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="teams" dataKey="_id" responsiveLayout="scroll" rowExpandMode="single"
+                [globalFilterFields]="['nom', 'description']" [rows]="5" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="teams.length" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                    <div style="float: right;">
+                        <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Ajouter"
+                            (click)="initCreate()"></button>
+                    </div>
+
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="nom">Nom de l'équipe<p-sortIcon field="nom">
+                            </p-sortIcon>
+                        </th>
+                        <th>Responsable</th>
+                        <th>Membres</th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-team let-expanded="expanded">
+                    <tr>
+                        <td>
+                            {{ team.nom }}
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let member of responsableDic[team._id];let index = index">
+                                <ng-container *ngIf="index==0">
+                                    {{member?.user_id?.firstname}} {{member?.user_id?.lastname}}
+                                </ng-container>
+                                <ng-container *ngIf="index!=0">
+                                    ,{{member?.user_id?.firstname}} {{member?.user_id?.lastname}}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let member of membersDic[team._id];let index = index">
+                                <ng-container *ngIf="index==0">
+                                    {{member?.user_id?.firstname}} {{member?.user_id?.lastname}}
+                                </ng-container>
+                                <ng-container *ngIf="index!=0">
+                                    ,{{member?.user_id?.firstname}} {{member?.user_id?.lastname}}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-users" pTooltip="Voir les membres"
+                                [pRowToggler]="team" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(team);scrollToTop()"
+                                pTooltip="Modifier l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(team);"
+                                pTooltip="Supprimer l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-team>
+                    <tr>
+                        <td colspan="4">
+                            <p-table #dtmem [value]="AllmembersDic[team._id]" dataKey="_id" [loading]="loading"
+                                [rowHover]="true" [totalRecords]="AllmembersDic[team._id].length"
+                                styleClass="p-datatable-gridlines"
+                                [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
+                                responsiveLayout="scroll">
+                                <ng-template pTemplate="caption">
+                                    <input pInputText type="text" #filter
+                                        (input)="dtmem.filterGlobal($event.target.value, 'contains')"
+                                        placeholder="Recherche" />
+                                    <div style="float: right;">
+                                        <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
+                                            label="Ajouter" (click)="AddMember(team)"></button>
+                                    </div>
+
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom et prénom</th>
+                        <th>Role</th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-member let-expanded="expanded">
+                    <tr>
+                        <td>
+                            {{member?.user_id?.firstname}} {{member?.user_id?.lastname}}
+                        </td>
+                        <td>
+                            {{member.role}}
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-star"
+                                (click)="convertMB(member);" *ngIf="member.role!='Responsable'"
+                                pTooltip="Définir responsable" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color:rgb(255, 153, 0)" class="pi pi-star-fill" (click)="convertMB(member);"
+                                *ngIf="member.role=='Responsable'" pTooltip="Définir membre" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="deleteMB(member);"
+                                pTooltip="Supprimer le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            </td>
+            </tr>
+            </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

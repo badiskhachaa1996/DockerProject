@@ -1,0 +1,247 @@
+.main-container {
+    width: 100%;
+    height: 100%;
+    h2 {
+        font-size: 14pt;
+        font-weight: 700;
+    }
+
+    h3 {
+        font-size: 12pt;
+        font-weight: 700;
+        padding-top: 5mm;
+        margin-bottom: 0;
+    }
+
+    p {
+        font-size: 11pt;
+    }
+
+    .inner-content {
+        padding: 5mm;
+        padding-top: 0;
+        height: 100%;
+    }
+
+    .langues {
+        p {
+            margin: 0;
+        }
+    }
+    .bg-comp {
+        display: none;
+    }
+
+    .comp-list {
+        display: inline-block;
+    }
+    
+}
+
+.btech {
+    h2 {
+        color: #0B3434;
+    }
+
+    h3 {
+        color: #E38D26;
+    }
+
+    p {
+        color: white;
+    }
+
+    .inner-content {
+        background-color: #0B3434;
+    }
+
+    .competences {
+        p {
+            background-color: white;
+            color: #0B3434;
+            text-align: center;
+
+        }
+        h3 {
+            margin-bottom: 3mm;
+        }
+    
+    }
+    
+
+
+}
+
+
+.espic {
+    h2 {
+        color: white;
+        background-color: #E0252F;
+        padding-left: 5mm;
+        border-radius: 0 2mm 2mm 2mm;
+    }
+
+    h3 {
+        color: white;
+    }
+
+    p {
+        color: white;
+    }
+
+    
+    .competences {
+
+
+
+
+        p {
+           color: #FFDA00;
+           display: inline-block;
+           padding-right: 3mm;
+           border-right: 1px solid white;
+           padding-left: 2mm;
+
+           &:not(:first-child) {
+            padding-left: 2mm;
+            }
+        }
+
+
+
+        h3 {
+            margin-bottom: 3mm;
+        }
+    
+    }
+
+    .inner-content {
+        background: linear-gradient(0deg, rgba(30,31,65,1) 0%, rgba(42,43,93,1) 50%);
+    }
+
+
+}
+
+.studinfo {
+    background-color: #014A6B;
+    border: 2mm solid white;
+    border-radius: 0 20mm ;
+   color: white;
+
+
+   .inner-content {
+    padding: 0;
+    height: 100%;
+    padding: 5mm;
+    padding-top: 0;
+    }
+
+    h2 {
+        padding: 5mm;
+        padding-bottom: 1mm;
+        border-bottom: 2px solid #E8AC09;
+        width: 10mm;
+    }
+
+    .competences {
+
+
+
+
+        p {
+           background-color: #E8AC02;
+           color: #1D1D1B;
+           display: inline-block;
+           padding-right: 3mm;
+           padding-left: 3mm;
+           margin-left: 2mm;
+        }
+
+
+
+        h3 {
+            margin-bottom: 3mm;
+        }
+    
+    }
+
+
+
+}
+
+
+.adg {
+    h2 {
+        color: white;
+        background-color: #BB945F;
+        padding-left: 5mm;
+    }
+
+ 
+    .competences {
+
+        p {
+           color: #1D1D1B;
+           display: inline-block;
+           padding-right: 3mm;
+
+        }
+
+
+
+        h3 {
+            margin-bottom: 3mm;
+        }
+    
+    }
+
+    .inner-content {
+        border: 0.3mm solid #BB945F;
+
+        h3 {
+            color: #1D1D1B;
+        }
+    }
+
+
+}
+
+
+.medasup {
+    h2 {
+        color: #653686;
+        border-bottom: 0.5mm solid #653686;
+    }
+
+    h3 {
+        color: white;
+    }
+
+    p {
+        color: white;
+    }
+
+    .inner-content {
+        background-color: #E65B26;
+    }
+
+    .competences {
+        p {
+            background-color: white;
+            color: #1DA5DB;
+            text-align: center;
+            display: inline-block;
+            padding-left: 3mm;
+            padding-right: 3mm;
+            margin-left: 2mm;
+            border-radius: 5mm;
+        }
+        h3 {
+            margin-bottom: 3mm;
+        }
+    
+    }
+    
+
+
+}

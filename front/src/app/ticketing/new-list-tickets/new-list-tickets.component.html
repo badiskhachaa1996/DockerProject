@@ -137,21 +137,22 @@
         </p-tabPanel>
         <p-tabPanel header="Liste">
             <div class="grid">
-                <div class="col-12" *ngIf="isAgent">
+                <div class="col-12" *ngIf="isAgent && roleAccess!='Spectateur'">
                     <p-selectButton [options]="modeOptions" [(ngModel)]="TicketMode" optionLabel="label"
-                        (onChange)="onChangeMode($event)" optionValue="label"></p-selectButton>
+                        [disabled]=" roleAccess=='Agent'" (onChange)="onChangeMode($event)"
+                        optionValue="label"></p-selectButton>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent && TicketMode=='Personnel'">
+                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' && TicketMode=='Personnel'">
                     <p-checkbox name="filterType" value="Mine" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
                 </div>
-                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
+                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode!='Personnel'">
                     <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
                     <label for="city1">Non assignés</label>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode=='Personnel'">
+                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode=='Personnel'">
                     <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type2"></p-checkbox>
                     <label for="city1">Assignés</label>
@@ -186,14 +187,15 @@
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterService" filter="true"
+                            [(ngModel)]="serviceFiltered"
                             (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');"
                             placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
                             [showClear]="true" (onClear)="dt1.filter('', 'sujet_id.service_id._id', 'equals');"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true" [group]="true"
                             [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
-                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');" placeholder="Choisissez un sujet"
-                            emptyFilterMessage="Pas de sujet trouvé"
+                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');"
+                            placeholder="Choisissez un sujet" emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
                             [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
@@ -205,6 +207,15 @@
                             (onChange)="dt1.filter($event.value, 'statut', 'in');" placeholder="Choisissez un statut"
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez un statut"></p-multiSelect>
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="campusDropdown" filter="true"
+                            *ngIf="showPedagogieFilter()" [showClear]="true" (onClear)="dt1.filter('', 'campus', 'in');"
+                            (onChange)="dt1.filter($event.value, 'campus', 'in');"
+                            placeholder="Choisissez un campus"></p-multiSelect>
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="filiereDropdown" filter="true"
+                            *ngIf="showPedagogieFilter()" [showClear]="true"
+                            (onClear)="dt1.filter('', 'filiere', 'in');"
+                            (onChange)="dt1.filter($event.value, 'filiere', 'in');"
+                            placeholder="Choisissez une filière"></p-multiSelect>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -584,8 +595,9 @@
                         <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                         <td>{{message.description}}</td>
                         <td>
-                            <i *ngIf="message.user_id._id==token.id" pTooltip="Supprimer le commentaire" tooltipPosition="bottom" class="pi pi-trash mr-2"
-                                aria-hidden="true" (click)="deleteCom(idx,message)"> </i>
+                            <i *ngIf="message.user_id._id==token.id" pTooltip="Supprimer le commentaire"
+                                tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                                (click)="deleteCom(idx,message)"> </i>
                         </td>
                     </tr>
                 </ng-template>

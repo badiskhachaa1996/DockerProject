@@ -148,13 +148,15 @@ export class NewCalendrierComponent implements OnInit {
       let listPresent = []
       if (this.PresentDic[this.dateAbsence])
         this.PresentDic[this.dateAbsence].forEach(pd => {
-          listPresent.push(pd.user_id._id)
+          if (pd.user_id)
+            listPresent.push(pd.user_id._id)
         })
       this.collaborateurList.forEach(c => {
-        if (listPresent.includes(c.value.user_id._id) == false && this.siteSelected.length == 0)
-          this.dicAbsent[this.dateAbsence].push(c.value)
-        else if (listPresent.includes(c.value.user_id._id) == false && this.atleastOne(c.value.localisation, this.siteSelected))
-          this.dicAbsent[this.dateAbsence].push(c.value)
+        if (c.value.user_id)
+          if (listPresent.includes(c.value.user_id._id) == false && this.siteSelected.length == 0)
+            this.dicAbsent[this.dateAbsence].push(c.value)
+          else if (listPresent.includes(c.value.user_id._id) == false && this.atleastOne(c.value.localisation, this.siteSelected))
+            this.dicAbsent[this.dateAbsence].push(c.value)
       })
       this.displayAbsence = true
     } else if (event.event.extendedProps.type == 'Autorisation') {
@@ -193,20 +195,21 @@ export class NewCalendrierComponent implements OnInit {
       this.dailyCheckService.getChecks().then(dcs => {
         this.congeService.getAll().then(conges => {
           //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
-          let congesList: Date[] = []
+          let congesList: string[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
             let dateC = new Date(c.date_debut)
             dateC.setDate(dateC.getDate() - 1)
             while (dateC < new Date(c.date_fin)) {
-              congesList.push(dateC)
               if (this.CongeDic[dateC.toDateString()]) {
                 this.CongeDic[dateC.toDateString()].push(c)
               } else {
                 this.CongeDic[dateC.toDateString()] = [c]
               }
-
-              this.addEventGlobal(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, "Autorisation"))
+              if (!congesList.includes(dateC.toString()))
+                this.addEventGlobal(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, "Autorisation"))
+              else
+                congesList.push(dateC.toString())
               dateC.setDate(dateC.getDate() + 1)
             }
           })
@@ -265,7 +268,6 @@ export class NewCalendrierComponent implements OnInit {
             }
 
           })
-          console.log(this.PresentDicUser)
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
@@ -277,12 +279,14 @@ export class NewCalendrierComponent implements OnInit {
                 events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
                 absencesList.push(dateDebut)
                 this.addEventUser(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
-              } else {
-                //console.log(dateDebut,events)
               }
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
+          events.forEach(ev => {
+            if (ev.type == 'Cours' && ev?.personal == this.userSelected.user_id._id)
+              this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
+          })
           this.defaultEventUsers = this.eventUsers
           this.onFilter()
         })
@@ -312,7 +316,8 @@ export class NewCalendrierComponent implements OnInit {
       title = event.name
     if (event.campus)
       title = title + ", " + event.campus
-    this.eventGlobal.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    if (!event.personal)
+      this.eventGlobal.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     this.optionsGlobal.events = this.eventGlobal
     this.eventGlobal = Object.assign([], this.eventGlobal) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
 

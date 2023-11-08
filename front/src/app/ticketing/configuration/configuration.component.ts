@@ -104,6 +104,37 @@ export class ConfigurationComponent implements OnInit {
     })
     this.SujetForm.patchValue({ service_id: service._id })
   }
+  addExtra: Service = null
+  AddExtra(service: Service) {
+    this.addExtra = service
+  }
+  textExtra1 = ""
+  textExtra2 = ""
+  saveExtra() {
+    this.ServServ.update({ ...this.addExtra, id: this.addExtra._id }).subscribe(r => {
+      this.addExtra = null
+    })
+  }
+  addExtra1() {
+    this.addExtra.extra1.push(this.textExtra1)
+    this.addExtra.extra1 = Object.assign([], this.addExtra.extra1);
+    this.textExtra1 = ""
+  }
+  addExtra2() {
+    this.addExtra.extra2.push(this.textExtra2)
+    this.addExtra.extra2 = Object.assign([], this.addExtra.extra2);
+    this.textExtra2 = ""
+  }
+
+  removeExtra1(idx: number) {
+    this.addExtra.extra1.splice(idx, 1)
+    this.addExtra.extra1 = Object.assign([], this.addExtra.extra1);
+  }
+  removeExtra2(idx: number) {
+    this.addExtra.extra2.splice(idx, 1)
+    this.addExtra.extra2 = Object.assign([], this.addExtra.extra2);
+  }
+
 
   removeSujet(sujet: Sujet, ri) {
     this.SujetServ.delete(sujet._id).subscribe(data => {
@@ -158,9 +189,9 @@ export class ConfigurationComponent implements OnInit {
       this.responsableList = []
     this.UserService.getAllByServiceFromList(service._id).subscribe(data => {
       this.memberList = data
-      this.UserService.getAllAgent().subscribe(dataAgent => {
+      this.UserService.getAllPopulate().then(dataAgent => {
         dataAgent.forEach(agent => {
-          if (!this.customIncludes(data, agent)) {
+          if (!this.customIncludes(data, agent) && (agent.type == 'Collaborateur' || agent.type_supp.includes('Collaborateur') || (agent.type == 'Formateur' && agent.haveNewAccess))) {
             this.memberDropdown.push({ label: `${agent.lastname} ${agent.firstname}`, value: agent })
           }
         })
@@ -287,7 +318,10 @@ export class ConfigurationComponent implements OnInit {
         this.responsableList.push(user)
       else
         this.responsableList = [user]
-      this.responsableDic[service._id].push(user)
+      if (this.responsableDic[service._id])
+        this.responsableDic[service._id].push(user)
+      else
+        this.responsableDic[service._id] = [user]
       user.roles_ticketing_list.forEach((roleTicket, idx) => {
         if (roleTicket.module._id == service._id) {
           user.roles_ticketing_list[idx].role = 'Responsable'
