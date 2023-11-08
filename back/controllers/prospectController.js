@@ -4,6 +4,7 @@ app.disabled("x-powered-by");
 const { Prospect } = require('../models/prospect');
 const { User } = require('./../models/user');
 const { Ticket } = require('../models/ticket');
+const {Sujet } = require('../models/sujet');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
 const path = require('path');
@@ -23,6 +24,17 @@ const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
 const { DocumentInternational } = require('../models/documentInternational');
 const { HistoriqueLead } = require('../models/HistoriqueLead');
+//creation d'un transporter smtperrFile
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -140,14 +152,17 @@ app.post("/create", (req, res, next) => {
                         } else {
                             prospect.user_id = userFromDb._id;
                             const etudiantId = userFromDb._id;
+                            const sujetid="65156ff28c5d6b6e4ce982cb";
                             const ticket = new Ticket({
-                                etudiant_id: etudiantId, // Utilisez l'ID de l'utilisateur du prospect ici
+                                etudiant_id: etudiantId,
+                                sujet_id:sujetid,
+                                 // Utilisez l'ID de l'utilisateur du prospect ici
                                 // Autres champs du ticket
                             });
-                            ticket.save()
-                            .then((suc) => {res.status(201).json({ 
-                                success: 'ticket ajouté dans la BD'})})
-                            .catch((er) => { res.status(400).json({ err:"impossible de cree le ticket" }) });
+                            //ticket.save()
+                            //.then((suc) => {res.status(201).json({ 
+                              //  success: 'ticket ajouté dans la BD'})})
+                            //.catch((er) => { res.status(400).json({ err:"impossible de cree le ticket" }) });
                             prospect.date_creation = new Date()
                             prospect.save()
                                 .then((prospectSaved) => {
@@ -173,7 +188,7 @@ app.post("/create", (req, res, next) => {
                                  // Utilisez l'ID de l'utilisateur du prospect ici
                                 // Autres champs du ticket
                             });
-                            ticket.save()
+                            //ticket.save()
                         prospect.date_creation = new Date()
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
@@ -489,7 +504,138 @@ app.post("/create", (req, res, next) => {
         res.status(404).send(error);
     })
 });
+//Création d'un nouveau ticket
+app.post("/createticket", (req, res) => {
+    console.log("heeeeeeeeeeeeeeeeeeeeeeeeee");
+    Ticket.find({ sujet_id: req.body.sujet_id }).then(tkt => {
+        var lengTicket = tkt.length + 1
+        Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+            User.findById(req.body.createur_id).then(u => {
+                //Generation Custom ID
+                let id = ""
+                let d = new Date()
+                let month = (d.getUTCMonth() + 1).toString()
+                if (d.getUTCMonth() + 1 < 10)
+                    month = "0" + month
+                let day = (d.getUTCDate()).toString()
+                if (d.getUTCDate() < 10)
+                    day = "0" + day
+                let year = d.getUTCFullYear().toString().slice(-2);
+                while (lengTicket > 1000)
+                    lengTicket - 1000
+                let nb = (lengTicket).toString()
+                if (lengTicket < 10)
+                    nb = "00" + nb
+                if (lengTicket < 100)
+                    nb = "0" + nb
 
+
+                id = "IGTP" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
+
+                const ticket = new Ticket({
+                    ...req.body,
+                    createur_id: req.body.createur_id,
+                    sujet_id: req.body.sujet_id,
+                    description: req.body.description,
+                    date_ajout: d,
+                    customid: id,
+                    etudiant_id: req.body.etudiant_id,
+                    priorite: req.body.priorite,
+                    documents: req.body.documents,
+                    module: req.body.module,
+                });
+
+                let htmlemail = `
+                <p>Bonjour,</p><br>
+
+<p>Nous confirmons la création de votre ticket ${id}, Le sujet de ce ticket est "${sujet.label}". Il a été créé le ${day}/${month}/${year} , dès que le ticket sera traité, vous aurez une notification par email et sur votre compte IMS</p><br>
+
+<p>Cordialement,</p>
+                `
+                let mailOptions = {
+                    from: 'ims@intedgroup.com',
+                    to: u.email,
+                    subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                    html: htmlemail
+                };
+
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
+                ticket.save((err, doc) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(404).send(err)
+                    }
+                    else
+                        res.send({ message: "Votre ticket a été crée!", doc });
+                    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
+                        //console.log(users)
+                        let emailList = []
+                        users.forEach(u => {
+                            emailList.push(u.email)
+                        })
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: emailList,
+                            subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                            html: htmlemail
+                        };
+
+
+                        /*transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });*/
+                    })
+                    Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: 'ims.support@intedgroup.com',
+                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            html: htmlemail,
+                            priority: 'high',
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
+
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
+                    })
+                });
+            })
+        })
+    })
+});
+function entierAleatoire(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 app.get('/getAllEtudiant', (req, res, next) => {
     let u = []
     Etudiant.find({ user_id: { $ne: null } }).then(data => {
@@ -750,13 +896,14 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
+    console.log("rgfsqfsdgfdsdsq");
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
         }, { new: true })
         .then((prospectUpdated) => {
             console.log('NAN')
-            Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
+            Prospect.findById(prospectUpdated._id).populate("user_id")?.populate('agent_id')
                 .then((prospectsFromDb) => {
                     let detail = "Mise à jour des informations"
                     if (req.body.detail)

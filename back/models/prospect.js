@@ -117,7 +117,7 @@ const prospect_schema = new mongoose.Schema({
 
     etat_traitement: {
         type: String,
-        default: "Nouvelle"
+        default: "Etape 1"
     },
     nir: {
         type: String,
@@ -314,7 +314,7 @@ const prospect_schema = new mongoose.Schema({
     date_inscription_def: {
         type: Date,
     },
-    lead_type:{type: String},
+    lead_type: { type: String },
     ville_adresse: {
         type: String,
         required: false
@@ -326,6 +326,41 @@ const prospect_schema = new mongoose.Schema({
     numero_adresse: {
         type: String,
         required: false
+    },
+    evaluation: [{ name: String, Score: String, duree: Number, date_envoi: Date, date_passage: Date }],
+    entretien: {
+        date_entretien: {
+            type: Date,
+            default: Date.now
+        }, Duree: {
+            type: Number,
+            default: 0
+        }, niveau: {
+            type: String,
+            default: "0"
+        },
+        parcours: {
+            type: String,
+            default: "0"
+        },
+        choix: {
+            type: String,
+            default: " "
+        }
+    },
+    decision: {
+        decision_admission: {
+            type: String,
+            default: "En attente de traitement" // Valeur par défaut pour decision_admission
+        },
+        expliquation: {
+            type: String,
+            default: "En attente de traitement" // Valeur par défaut pour expliquation
+        },
+        date_decision: {
+            type: Date,
+            default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
+        }
     },
 });
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const ticket_schema = new mongoose.Schema({
     createur_id: {
         type: mongoose.Schema.Types.ObjectId, ref: "user",
-        required: true
+        required: true,
     },
     sujet_id: {
         type: mongoose.Schema.Types.ObjectId,

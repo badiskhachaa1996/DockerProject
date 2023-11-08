@@ -96,6 +96,9 @@ export class Prospect {
         public lead_type? :String,
         public rue_adresse? :String,
         public numero_adresse? :String,
+        public evaluation?:[{name: string,Score: string,duree:number,date_envoi:Date,date_passage:Date}],
+        public entretien?: {date_entretien: Date,Duree: number,niveau:string,parcours:string,choix:string },
+        public decision?: {decision_admission:string,expliquation:string,date_decision:Date}
     ) { }
 
 }
