@@ -373,6 +373,7 @@ export class DashboardRhComponent implements OnInit {
         let ids = []
         members.forEach(m => { ids.push(m.user_id._id) })
         this.dt1.filter(ids, 'user_id._id', 'in')
+        this.onUpdateStats()
       })
     else
       this.AuthService.getPopulate(this.token.id).subscribe(USER => {
@@ -387,6 +388,7 @@ export class DashboardRhComponent implements OnInit {
           this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
         else
           this.dt1.filter([], 'user_id._id', 'in')
+        this.onUpdateStats()
       })
   }
   onUpdateStats() {
