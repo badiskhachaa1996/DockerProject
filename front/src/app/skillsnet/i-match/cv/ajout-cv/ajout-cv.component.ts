@@ -171,10 +171,6 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
-  ecolesImage = [
-    { label: "Espic", value: 'espic' }
-  ]
-
   ecoleImage ='espic'
 
   pdfPreviewSchools = [
