@@ -25,6 +25,10 @@ export class AdmissionService {
     let registerUrl = this.apiUrl + 'create';
     return this.httpClient.post<any>(registerUrl, tbObj, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
+  createticket(ticket) {
+    let registreUrl = this.apiUrl + "createticket";
+    return this.httpClient.post<any>(registreUrl, ticket, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   //Modification d'un prospect
   update(tbObj: { prospect: any, user: any }) {
@@ -291,6 +295,7 @@ export class AdmissionService {
   }
 
   updateV2(data, detail = "") {
+    
     let url = this.apiUrl + "updateV2";
     if (localStorage.getItem('token'))
       return this.httpClient.put<Prospect>(url, { ...data, detail }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
