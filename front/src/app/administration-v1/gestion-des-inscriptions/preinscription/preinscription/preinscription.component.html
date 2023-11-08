@@ -374,7 +374,7 @@
                             {{ prospect.user_id.lastname | uppercase }}
                         </td>
                         <td>
-                            {{ prospect.formation}},{{prospect.campus_choix_1}},{{prospect.rentree_scolaire}}
+                            {{prospect.rentree_scolaire}},{{ prospect.formation}},{{prospect.campus_choix_1}}
                         </td>
                         <td>
                             {{prospect.rythme_formation}}
@@ -403,7 +403,7 @@
                                 <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
                                 pTooltip="Document"  aria-hidden="true"
                                 tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
+                            <i style="padding-left: 3%;" class="pi pi-building m-1"
                                 pTooltip="Admission" (click)="onshowDossier(prospect)" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -445,7 +445,7 @@
                         </td>
                         <td>
                             {{
-                            user.date_naissance
+                            user.date_naissance| date:'dd MMMM yy'
                             }}
                         </td>
                         <td>{{ user.user_id.pays_adresse}}</td>
@@ -777,7 +777,7 @@
                             {{ prospect.user_id.lastname | uppercase }}
                         </td>
                         <td>
-                            {{ prospect.formation}},{{prospect.campus_choix_1}},{{prospect.rentree_scolaire}}
+                            {{prospect.rentree_scolaire}},{{ prospect.formation}},{{prospect.campus_choix_1}}
                         </td>
                         <td>
                             {{prospect.rythme_formation}}
@@ -806,7 +806,7 @@
                                 <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
                                 pTooltip="Document"  aria-hidden="true"
                                 tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
+                            <i style="padding-left: 3%; " class="pi pi-building m-1"
                                 pTooltip="Admission" (click)="onshowDossier(prospect)" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -848,7 +848,7 @@
                         </td>
                         <td>
                             {{
-                            user.date_naissance
+                            user.date_naissance | date:'dd MMMM yy'
                             }}
                         </td>
                         <td>{{ user.user_id.pays_adresse}}</td>
