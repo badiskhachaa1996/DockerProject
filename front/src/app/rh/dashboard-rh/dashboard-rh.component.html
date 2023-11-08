@@ -63,7 +63,7 @@
 								class="w-full" />
 						</span>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
-							(onChange)="chooseTeam($event.value);onUpdateStats()" placeholder="Equipe RH"
+							(onChange)="chooseTeam($event.value);" placeholder="Equipe RH"
 							[showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"

@@ -83,6 +83,7 @@ export class CV {
         public last_modified_at?: Date,
         public source?: string,
         public profil?: Profile,
-        public taux?: number
+        public taux?: number,
+        public ecole?: string
     ) { }
 }

@@ -158,7 +158,7 @@
                                             chiffres sont acceptés</span>
                                     </div>
                                 </div>
-                                <div class="field col-12 md:col-3">
+                                <!--<div class="field col-12 md:col-3">
                                     <label For="indicatif">Indicatif WhatsApp</label>
                                     <input pInputText id="indicatif" type="text" placeholder="+33"
                                         formControlName="indicatif_whatsapp" />
@@ -215,7 +215,7 @@
                                             *ngIf="numero_telegram.errors?.pattern">*
                                             Seul les chiffres sont acceptés</span>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div>
@@ -547,7 +547,7 @@
                             <button pButton type="button" label="Précedent" style="float: left;"
                                 (click)="previousPage()"></button>
                             <button pButton type="button" label="Suivant"
-                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
+                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid"
                                 type="submit" style="float: right;"></button>
                         </div>
                     </p-fieldset>
