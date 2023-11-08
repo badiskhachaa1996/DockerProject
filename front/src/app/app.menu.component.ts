@@ -4394,59 +4394,7 @@ export class AppMenuComponent implements OnInit {
                     });
                 }
 
-                //menu formateur
-                if (response.type === 'Formateur' && response.role === 'user') {
-                    this.FService.getByUserId(this.token.id).subscribe({
-                        next: (dataF: Formateur) => {
-                            this.items.push(
-                                {
-                                    label: 'Pédagogie - Formateur',
-                                    icon: 'pi pi-fw pi-folder',
-                                    items: [
-                                        {
-                                            label: 'Emploi du temps',
-                                            icon: 'pi pi-calendar',
-                                            routerLink:
-                                                'emploi-du-temps/formateur/' +
-                                                this.token.id,
-                                        },
-                                        {
-                                            label: 'Gestions des évaluations',
-                                            icon: 'pi pi-copy',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter une évaluation',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: [
-                                                        '/ajout-examen',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Liste des évaluations',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Liste de vos étudiants',
-                                            icon: 'pi pi-users',
-                                            routerLink: '/formateur/etudiants',
-                                        },
-                                    ],
-                                },
-                            );
-                        },
-                        error: function (error: any) {
-                            console.error(error);
-                        },
-                        complete: () => {
-                            console.log(
-                                'Informations du formateur récupérer avec succès !'
-                            );
-                        },
-                    });
-                }
+
 
                 /* end menus internes */
 
@@ -4681,6 +4629,59 @@ export class AppMenuComponent implements OnInit {
                         }
                     }
 
+                }
+                //menu formateur
+                if (response.type === 'Formateur' && response.role === 'user') {
+                    this.FService.getByUserId(this.token.id).subscribe({
+                        next: (dataF: Formateur) => {
+                            this.items.push(
+                                {
+                                    label: 'Pédagogie - Formateur',
+                                    icon: 'pi pi-fw pi-folder',
+                                    items: [
+                                        {
+                                            label: 'Emploi du temps',
+                                            icon: 'pi pi-calendar',
+                                            routerLink:
+                                                'emploi-du-temps/formateur/' +
+                                                this.token.id,
+                                        },
+                                        {
+                                            label: 'Gestions des évaluations',
+                                            icon: 'pi pi-copy',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter une évaluation',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: [
+                                                        '/ajout-examen',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Liste des évaluations',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/examens'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Liste de vos étudiants',
+                                            icon: 'pi pi-users',
+                                            routerLink: '/formateur/etudiants',
+                                        },
+                                    ],
+                                },
+                            );
+                        },
+                        error: function (error: any) {
+                            console.error(error);
+                        },
+                        complete: () => {
+                            console.log(
+                                'Informations du formateur récupérer avec succès !'
+                            );
+                        },
+                    });
                 }
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {

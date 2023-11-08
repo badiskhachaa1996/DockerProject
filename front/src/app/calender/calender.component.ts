@@ -1035,25 +1035,44 @@ export class CalenderComponent implements OnInit {
       worked += cra.number_minutes;
     });
     this.dailyCheck.check_out = new Date();
-    this.dailyCheck.taux_cra = this.craPercent;
-    this.dailyCheck.pause_timing = this.pauseTiming;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Absent')
-        // recuperation de l'historique du cra
-        this.dailyCheckService.getUserChecks(this.token.id)
+    this.dailyCheck.pause_timing = this.pauseTiming;
+    this.rhService.getCollaborateurByUserId(this.userConnected._id)
+      .then((collaborateur) => {
+        let totalTimeCra = 0;
+
+        this.dailyCheck?.cra.map((cra) => {
+          totalTimeCra += cra.number_minutes;
+        });
+
+        if (!collaborateur || !collaborateur.h_cra) {
+          collaborateur.h_cra = 7
+        }
+        // conversion du taux cra du collaborateur en minutes
+        collaborateur.h_cra *= 60;
+        // partie calcule du pourcentage en fonction du totalTimeCra
+        let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+        this.craPercent = percent
+        this.dailyCheck.taux_cra = this.craPercent;
+        this.dailyCheckService.patchCheckIn(this.dailyCheck)
           .then((response) => {
-            this.historiqueCra = response
-            this.lastCras = response[response.length - 1];
-            console.log(this.lastCras);
+            this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+            // recuperation du check journalier
+            this.onCheckDailyCheck(response.user_id);
+            this.onUpdateStatus('Absent')
+            // recuperation de l'historique du cra
+            this.dailyCheckService.getUserChecks(this.token.id)
+              .then((response) => {
+                this.historiqueCra = response
+                this.lastCras = response[response.length - 1];
+                console.log(this.lastCras);
+              })
+              .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
           })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
       })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+      .catch((error) => { console.error(error); });
+
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
