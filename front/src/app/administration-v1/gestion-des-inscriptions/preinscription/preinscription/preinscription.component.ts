@@ -4,9 +4,12 @@ import { AdmissionService } from 'src/app/services/admission.service';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
 import { saveAs as importedSaveAs } from "file-saver";
+import { SocketService } from 'src/app/services/socket.service';
 import { environment } from 'src/environments/environment';
+import { NotificationService } from 'src/app/services/notification.service';
 import { Prospect } from 'src/app/models/Prospect';
 import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/services/auth.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PartenaireService } from 'src/app/services/partenaire.service';
@@ -15,29 +18,44 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { RhService } from 'src/app/services/rh.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import mongoose from 'mongoose';
+import { Notification } from 'src/app/models/notification';
 import { Ticket } from 'src/app/models/Ticket';
 import { TicketService } from 'src/app/services/ticket.service';
+import { SujetService } from 'src/app/services/sujet.service';
+import { ServService } from 'src/app/services/service.service';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
   styleUrls: ['./preinscription.component.scss']
 })
 export class PreinscriptionComponent implements OnInit {
-  prospects:Prospect[]=[];
-  prospectI:Prospect[]= [];
-  PROSPECT:Prospect;
-  ticket:Ticket;
+  prospects: Prospect[] = [];
+  prospectI: Prospect[] = [];
+  PROSPECT: Prospect;
+  proscteList: Prospect[] = [];
+  prospect_acctuelle: Prospect;
+  userConnected: User;
+  ticket: any[] = [];
+  tickets: Ticket[] = [];
   selectedTabIndex: number = 0;
   selectedTabIndex1: number = 0;
   shownewLeadForm: boolean = false;
+  showupdateLeadForm: boolean = false;
   shownewLeadFormI: boolean = false;
-  shownewRIForm:boolean = false;
+  shownewRIForm: boolean = false;
   itslead: boolean = false;
+  service_id: any;
+  sujet_id: any;
+  visible: boolean = false;
+  visible_evaluation: boolean = false;
+  showDocuments: boolean = false;
   showDossier: boolean = false;
   showDoccuments: boolean = false;
   nationList = environment.nationalites;
   paysList = environment.pays;
+  TicketnewPro: Ticket;
   civiliteList = environment.civilite;
+  tabStates: { [tabId: string]: boolean } = {};
   programeFrDropdown = [
 
   ]
@@ -48,11 +66,27 @@ export class PreinscriptionComponent implements OnInit {
   rentreeList = [
 
   ]
+
   etat_dossierDropdown = [
-    {value:"En attente",label:"En attente"},
-    {value:"Manquant",label:"Manquant"},
-    {value:"Complet",label:"Complet"}
+    { value: "En attente", label: "En attente" },
+    { value: "Manquant", label: "Manquant" },
+    { value: "Complet", label: "Complet" }
+  ];
+  decision_dropdown = [
+    { value: "Admis", label: "Admis" },
+    { value: "Admis sous réserve", label: "Admis sous réserve" },
+    { value: "Réorientation", label: "Réorientation" },
+    { value: "Refusé", label: "Refusé" },
+  ];
+  niveux_dropdown = [
+    { value: "Bac", label: "Bac" },
+    { value: "Bac+1", label: "Bac+1" },
+    { value: "Bac+2", label: "Bac+2" },
+    { value: "Bac+3", label: "Bac+3" },
+    { value: "Bac+4", label: "Bac+4" },
+    { value: "Bac+5", label: "Bac+5" },
   ]
+  defaultEtatDossier: string = "En attente";
   campusDropdown =
     [
       { value: "Paris - France", label: "Paris - France" },
@@ -74,9 +108,9 @@ export class PreinscriptionComponent implements OnInit {
     ];
   isPartenaireExterne = false
 
-  typeList=[
-    {label:"Local",value:"Local"},
-    {label:"International",value:"International"}
+  typeList = [
+    { label: "Local", value: "Local" },
+    { label: "International", value: "International" }
   ]
   ecoleList = [
     { label: "Estya", value: "estya" },
@@ -95,14 +129,14 @@ export class PreinscriptionComponent implements OnInit {
     { label: "Equipe commerciale", value: "Equipe commerciale" },
     { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
     { label: "Lead", value: "Lead" },
-    {label:"Spontané",value:"Spontané"} //Par défaut si Lead
+    { label: "Spontané", value: "Spontané" } //Par défaut si Lead
   ]
 
   commercialList = []
 
   EcoleListRework = []
   newLeadForm: FormGroup = new FormGroup({
-    type:new FormControl('',Validators.required),
+    type: new FormControl('', Validators.required),
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
@@ -121,12 +155,42 @@ export class PreinscriptionComponent implements OnInit {
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
-    rue:new FormControl(''),
-    ville:new FormControl(''),
-    codep:new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
+  });
+  updateLeadForm: FormGroup = new FormGroup({
+    type: new FormControl('', Validators.required),
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0], Validators.required),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
+  })
+  formAffectation = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl('', Validators.required),
+    date_limite: new FormControl(''),
+    note_assignation: new FormControl(''),
   })
   RIForm: FormGroup = new FormGroup({
-    etudiant:new FormControl('',Validators.required),
+    etudiant: new FormControl('', Validators.required),
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
@@ -145,9 +209,9 @@ export class PreinscriptionComponent implements OnInit {
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
-    rue:new FormControl(''),
-    ville:new FormControl(''),
-    codep:new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
   })
 
   RegisterForm2: FormGroup = new FormGroup({
@@ -155,10 +219,37 @@ export class PreinscriptionComponent implements OnInit {
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required)
   })
-  constructor(private commercialService: CommercialPartenaireService, private admissionService: AdmissionService,private etudiantService: EtudiantService,private ticketService: TicketService,
-    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService, private ToastService: MessageService, private rhService: RhService) { }
+  DecisionForm: FormGroup = new FormGroup({
+    decisoin_admission: new FormControl('', [Validators.required]),
+    explication: new FormControl('',),
+    date_d: new FormControl('',)
+  })
+  entretienForm: FormGroup = new FormGroup({
+    date_e: new FormControl('',),
+    duree_e: new FormControl('', [Validators.required]),
+    niveau: new FormControl('',),
+    parcour: new FormControl('',),
+    choix: new FormControl('',)
+  })
+  dropdownMember = []
+  TicketAffecter = null
+  userDic = {}
+  token;
+  constructor(private UserService: AuthService, private commercialService: CommercialPartenaireService, private admissionService: AdmissionService,
+    private etudiantService: EtudiantService, private ticketService: TicketService, private Socket: SocketService,
+    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService,
+    private ToastService: MessageService, private rhService: RhService, private NotifService: NotificationService,
+    private SujetService: SujetService, private ServiceService: ServService) { }
 
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.getthecrateur();
+    this.UserService.getAllAgent().subscribe(data => {
+      data.forEach(u => {
+        this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
+        this.userDic[u._id] = u
+      })
+    })
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
@@ -222,15 +313,28 @@ export class PreinscriptionComponent implements OnInit {
         ])*/
       })
       //recuperation des prospect 
-      this.admissionService.getAll().subscribe((results=>{
+      this.admissionService.getAll().subscribe((results => {
         results.forEach((result) => {
-          if(result.traited_by=="Local"){
-        this.prospects.push(result);}else{this.prospectI.push(result);}
-        console.log(this.prospects);
+          if (result.traited_by == "Local") {
+            this.prospects.push(result);
+          } else { this.prospectI.push(result); }
+          console.log(this.prospects);
 
-      })}))
+        })
+      }))
+      this.ticketService.getAll().subscribe(data => {
+        this.tickets = data;
+      });
+
     }
 
+  }
+  getthecrateur() {
+    this.UserService.getInfoById(this.token.id).subscribe({
+      next: (response) => { this.userConnected = response; },
+      error: (error) => { console.error(error); },
+      complete: () => console.log("information de l'utilisateur connecté récuperé")
+    });
   }
   onSelectEcole() {
     this.FAService.EAgetByParams(this.newLeadForm.value.ecole).subscribe(data => {
@@ -309,58 +413,87 @@ export class PreinscriptionComponent implements OnInit {
         'user',
         true,
         null,
-        this.newLeadForm.value.civilite.value,
+        this.newLeadForm?.value?.civilite?.value,
         null, null, 'Prospect', null,
-        this.newLeadForm.value.pays.value,
+        this.newLeadForm?.value?.pays?.value,
         null, null, null, null,
-        this.newLeadForm.value.nationalite.value,
+        this.newLeadForm?.value?.nationalite?.value,
         null,
         new Date(),
         null, null,
-        this.newLeadForm.value.campus?.value
+        this.newLeadForm?.value?.campus?.value
 
       ), 'newProspect': new Prospect(
         null, null,
-        this.newLeadForm.value.date_naissance,
+        this.newLeadForm?.value?.date_naissance,
         null, null, null, null, null, null,
-        this.newLeadForm.value.campus?.value,
+        this.newLeadForm?.value?.campus?.value,
         null, null,
-        this.newLeadForm.value.programme.value,
-        this.newLeadForm.value.formation,
-        this.newLeadForm.value.rythme_formation.value,
+        this.newLeadForm?.value?.programme?.value,
+        this.newLeadForm?.value?.formation,
+        this.newLeadForm?.value?.rythme_formation?.value,
         null, null, null, null, true, new Date(),
-        this.newLeadForm.value.ecole,
-        this.newLeadForm.value.commercial,
+        this.newLeadForm?.value?.ecole,
+        this.newLeadForm?.value?.commercial,
         null, null, null, null, null, null, null, null,
         null,
-        customid,this.newLeadForm.value.type,
-        this.newLeadForm.value.rue,
-        this.newLeadForm.value.ville,
-        this.newLeadForm.value.codep
+        customid, this.newLeadForm?.value?.type,
+        this.newLeadForm?.value.rue,
+        this.newLeadForm?.value.ville,
+        this.newLeadForm?.value.codep
       )
     }).subscribe(
-      ((response) => {
+      ((responsePRO) => {
+        console.log(responsePRO);
         this.newLeadForm.reset()
+        this.ServiceService.getAServiceByLabel("Administration").subscribe((response) => {
+          console.log(response);
+          this.service_id = response.dataService._id;
+          console.log(this.service_id);
+          this.SujetService.getAllByServiceID(this.service_id).subscribe((response) => {
+            console.log(response);
+            response.forEach((result) => {
+
+              if (result.label = "Inscription") {
+                console.log(result);
+                this.sujet_id = result._id;
+                this.TicketnewPro = {}
+                this.TicketnewPro.createur_id = responsePRO?.dataUser._id;
+                this.TicketnewPro.sujet_id = this.sujet_id;
+                console.log(this.userConnected);
+                console.log(this.service_id);
+                console.log(this.sujet_id);
+                console.log(this.TicketnewPro);
+                this.admissionService.createticket(this.TicketnewPro).subscribe((result) => { console.log(result); });
+
+              }
+            })
+          })
+
+
+        })
         this.ToastService.add({ severity: 'success', summary: 'Création du prospect avec succès', detail: "L'inscription a été finalisé" });
       })
     );
-    
+
+
+
 
   }
-  
+
   changeSource(source: string) {
-    this.commercialList=[]
+    this.commercialList = []
     console.log(source)
     if (source == "Partenaire") {
-      this.itslead=false
+      this.itslead = false
       this.PService.getAll().subscribe(commercials => {
         this.commercialList = []
         commercials.forEach(commercial => {
           this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
         })
       })
-    } else if (source == "Equipe commerciale"){
-      this.itslead=false
+    } else if (source == "Equipe commerciale") {
+      this.itslead = false
       this.commercialService.getAllPopulate().subscribe(commercials => {
         this.commercialList = []
         commercials.forEach(commercial => {
@@ -381,19 +514,20 @@ export class PreinscriptionComponent implements OnInit {
             this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
           })
         })
-      })}else if(source=="Etudiant interne"){
-        this.etudiantService.getAllEtudiantPopulate().subscribe(etudiants=>{
-          this.commercialList=[];
-          etudiants.forEach(etudiant => {
-            this.commercialList.push({label: `${etudiant?.user_id}`,value: etudiant.user_id} )
+      })
+    } else if (source == "Etudiant interne") {
+      this.etudiantService.getAllEtudiantPopulate().subscribe(etudiants => {
+        this.commercialList = [];
+        etudiants.forEach(etudiant => {
+          this.commercialList.push({ label: `${etudiant?.user_id}`, value: etudiant.user_id })
 
         })
       })
-    }else if(source=="Lead"){
-      this.itslead=true
+    } else if (source == "Lead") {
+      this.itslead = true
     }
   }
-  
+
   generateCode(nation, firstname, lastname, date_naissance) {
     let code_pays = nation.substring(0, 3)
     environment.dicNationaliteCode.forEach(code => {
@@ -418,12 +552,182 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-  onshowDossier(student:Prospect){
-    this.showDossier=true;
+ 
+  
+  onshowDossier(student: Prospect) { 
+    this.defaultEtatDossier=student.etat_dossier;
+    this.tabStates[student._id] = true;
+    this.ticket = [];
+    this.proscteList.push(student);
+    this.prospect_acctuelle = student;
+    this.showDossier = true;
+    
     this.admissionService.getPopulate(student._id).subscribe(data => {
       this.PROSPECT = data
 
-  })}
+    })
+    console.log(student.user_id);
+    this.ticketService.getAllMine(student.user_id._id).subscribe(tick => {
+      console.log(student._id);
+      console.log(tick);
+      console.log(tick[0]);
+      this.ticket.push(tick[0]);
+      console.log(tick[0].agent_id?.firstname)
+
+    })
+
+    setTimeout(() => {
+      this.selectedTabIndex = 3; // Définir l'indice après un délai
+    }, 500); // Réglez le délai en millisecondes selon vos besoins
+    console.log(student);
+    
+    this.DecisionForm.setValue({
+       date_d:this.conersiondate(this.prospect_acctuelle.decision.date_decision),
+     decisoin_admission:this.prospect_acctuelle.decision.decision_admission,
+     explication: this.prospect_acctuelle.decision.expliquation,
+    })
+    this.entretienForm.patchValue({
+      date_e:this.conersiondate(this.prospect_acctuelle.entretien.date_entretien),
+      duree_e:this.prospect_acctuelle.entretien.Duree,
+      choix:this.prospect_acctuelle.entretien.choix,
+      niveau:this.prospect_acctuelle.entretien.niveau,
+      parcour:this.prospect_acctuelle.entretien.parcours
+    })
+    if(this.prospect_acctuelle.decision.expliquation=="En attente de traitement"){
+      if(this.prospect_acctuelle.entretien.niveau=="0"){
+        
+      }else{
+        this.prospect_acctuelle.etat_traitement=="ETAPE 3"
+      }
+    }else{
+      this.prospect_acctuelle.etat_traitement="ETAPE 4"
+    }
+    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data =>console.log(data))
+  }
+  conersiondate(a){
+  const dl =a // Supposons que project.debut soit une date valide
+    const dateObjectl = new Date(dl); // Conversion en objet Date
+    const year = dateObjectl.getFullYear();
+    const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const day = String(dateObjectl.getDate()).padStart(2, '0');
+    const new_date = `${year}-${month}-${day}`;
+  return new_date}
+  onTabClose() {
+    this.selectedTabIndex = 0;
+  }
+  onshowDocuments() {
+    
+    if (this.showDocuments == true) {
+      this.showDocuments = false
+    } else {
+      this.showDocuments = true
+    }
+  }
+  onSelectEtat(event: any,procpect:Prospect){
+    procpect.etat_dossier=event.value
+    this.admissionService.updateV2(procpect).subscribe(data =>console.log(data))
+  }
+  deletePro(prospect: Prospect) {
+    console.log("hello")
+    this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => { console.log(res) });
+
+
+  }
+  adddicision(prospect: Prospect) {
+    console.log(prospect);
+    console.log(this.DecisionForm.value.date_d);
+    console.log(this.prospect_acctuelle);
+    this.prospect_acctuelle.decision.date_decision = this.DecisionForm.value.date_d;
+    this.prospect_acctuelle.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
+    this.prospect_acctuelle.decision.expliquation = this.DecisionForm.value.explication;
+    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
+    console.log(this.prospect_acctuelle)
+
+
+  }
+  addEntretien() {
+    this.prospect_acctuelle.entretien.Duree = this.entretienForm.value.duree_e;
+    this.prospect_acctuelle.entretien.choix = this.entretienForm.value.choix;
+    this.prospect_acctuelle.entretien.date_entretien = this.entretienForm.value.date_e;
+    this.prospect_acctuelle.entretien.niveau = this.entretienForm.value.niveau;
+    this.prospect_acctuelle.entretien.parcours = this.entretienForm.value.parcour;
+    console.log("***************************************************************");
+    console.log(this.prospect_acctuelle);
+    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
+  }
+  showDialog(ticket: any) {
+    this.visible = true;
+    this.TicketAffecter = ticket
+    this.formAffectation.patchValue({ ...ticket })
+    this.UserService.getAllByServiceFromList(ticket.sujet_id.service_id._id).subscribe(data => {
+      this.dropdownMember = []
+      data.forEach(u => {
+        this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
+      })
+    })
+  }
+
+  initupdateLeadForm(prospect) {
+    console.log(prospect.user_id.numero_adresse);
+    this.updateLeadForm.patchValue({
+      type: prospect?.traited_by,
+      ecole: prospect?.type_form,
+      //commercial:
+      //source:
+      lastname: prospect.user_id.lastname,
+      firstname: prospect.user_id.firstname,
+      civilite: prospect.user_id.civilite,
+      date_naissance: prospect.date_naissance,
+      //nationalite: 
+      pays: prospect.user_id.pays_adresse,
+      email_perso: prospect.user_id.email_perso,
+      indicatif: prospect.user_id.indicatif,
+      phone: prospect.user_id.phone,
+      //campus:
+      rentree_scolaire: prospect?.rentree_scolaire,
+      programme: prospect?.programme,
+      //formation:
+      rythme_formation: prospect.rythme_formation,
+      //nomlead:
+      rue: prospect.user_id.numero_adresse,
+      ville: prospect.user_id.ville_adresse,
+      codep: prospect.user_id.postal_adresse
+
+    })
+    this.showupdateLeadForm = true
+  }
+  initEvaluation() {
+    this.visible_evaluation = true;
+  }
+  UpadateProspect() {
+
+  }
+  onAffectation() {
+    this.ticketService.update({ ...this.formAffectation.value, statut: "En cours de traitement", assigne_by: this.token.id }).subscribe(data => {
+      let d = new Date()
+      let month = (d.getUTCMonth() + 1).toString()
+      if (d.getUTCMonth() + 1 < 10)
+        month = "0" + month
+      let day = (d.getUTCDate()).toString()
+      if (d.getUTCDate() < 10)
+        day = "0" + day
+      let year = d.getUTCFullYear().toString().slice(-2);
+      this.Socket.NewNotifV2(this.formAffectation.value.agent_id, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`)
+      this.ticketService.sendMailAff({ sujet: this.TicketAffecter.sujet_id.label, service: this.TicketAffecter.sujet_id.service_id.label, date: `${day}/${month}/${year}`, agent_email: this.userDic[this.formAffectation.value.agent_id]?.email }).subscribe(() => {
+
+      })
+      this.NotifService.create(new Notification(null, null, false, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`, new Date(), this.formAffectation.value.agent_id, this.TicketAffecter.sujet_id.service_id._id)).subscribe(() => { console.log('SUCCES') })
+      this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
+      //verfier si c'est une tache alors modifier la tache
+
+      this.TicketAffecter = null
+      this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
+    })
+
+
+
+
+  }
   downloadFile(doc: { date: Date, nom: String, path: String }) {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));

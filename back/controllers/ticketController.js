@@ -612,6 +612,16 @@ app.get("/getAllAccAff", (req, res) => {
             console.error(err);
         })
 })
+//recuperation d'un ticket par 'identifiant d'un etudiant
+app.get("/getByIdEtudiant/:id", (req, res) => {
+    Ticket.findOne({ etudiant_id: req.params.id }).then((dataTicket) => {
+        res.status(200).send({ dataTicket });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
+
+
 
 //Renvoie un ticket dans la queue d'entrée
 app.post("/revertTicket/:id", (req, res) => {
