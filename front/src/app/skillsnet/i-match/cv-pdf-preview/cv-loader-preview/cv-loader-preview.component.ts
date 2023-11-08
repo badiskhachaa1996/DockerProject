@@ -26,7 +26,6 @@ export class CvLoaderPreviewComponent implements OnInit {
     }, false);
     this.CVService.getByID(this.CV_ID).subscribe(cv => {
       this.CV = cv.dataCv
-      console.log(this.CV)
       this.user = this.CV.user_id
       this.fullName = `${this.user?.lastname} ${this.user?.firstname}`
       this.AuthService.getProfilePicture(this.CV.user_id._id).subscribe((data) => {

@@ -4,14 +4,16 @@
             <a (click)="gotoEdit()" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-cog"></i>&nbsp;Modifier</a>
             <a (click)="takeARendezVous()" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
         </div>
-        <div class="header">
+        <div>
+            <app-cv-loader-preview [CV_ID]="CV_ID"></app-cv-loader-preview>
+        </div>
+        <!--<div class="header">
             <div class="container">
                 <div class="grid" style="padding-left: 80px;padding-right: 80px;">
                     <div class="cv-title col-12">
                         <div *ngIf="profilePic;then cv_image else default_image"></div>
                         <ng-template #cv_image>
                             <div class="img-card" style="background-image: url('{{profilePic}}');"></div>
-                            <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
                         </ng-template>
                         <ng-template #default_image>
                             <div *ngIf="user.civilite == 'Madame'; then is_madame else other"></div>
@@ -19,12 +21,10 @@
                                 <div class="img-card"
                                     style="background-image: url('../../../assets/images/imatch/female.png');"></div>
 
-                                <!-- <img src='../../../assets/images/imatch/female.png'/> -->
                             </ng-template>
                             <ng-template #other>
                                 <div class="img-card"
                                     style="background-image: url('../../../assets/images/imatch/male.png');"></div>
-                                <!-- <img src='../../../assets/images/imatch/male.png'/> -->
                             </ng-template>
                         </ng-template>
                         <div class="cv-main-info">
@@ -53,10 +53,6 @@
                 </div>
 
                 <div class="row other-cv-info grid">
-                    <!--<div class="col-md-4 first-block">
-                        <h2>à propos</h2>
-                        <p>{{cv.a_propos || 'A propos non spécifié'}}</p>
-                    </div>-->
                     <div class="col-md-12 second-block">
                         <div class="row gx-5">
                             <div class="col inner-area-2">
@@ -131,6 +127,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
