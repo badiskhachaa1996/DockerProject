@@ -148,6 +148,8 @@ const rhControlleur = require('./controllers/rhController');
 const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
 const meetingTeamsController = require('./controllers/meetingTeamsController');
+const gestionProduitsCrmController = require('./controllers/gestionProduitsCrmController');
+
 
 const { User } = require("./models/user");
 
@@ -410,6 +412,13 @@ app.use('/soc/meetingTeams', meetingTeamsController)
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
+
+//CRM Gestion Produits
+
+app.use('/soc/gestion-produits', gestionProduitsCrmController)
+
+
+
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

@@ -2,7 +2,7 @@
     <div class="col-12 grid" *ngIf="selectedProduit">
         <div class="card col-12">
 
-            <h4 style="text-align: center;">Modifier les informations du produit {{selectedProduit.name | uppercase}}
+            <h4 style="text-align: center;">Modifier les informations du produit {{selectedProduit.nom | uppercase}}
                  </h4>
             <div style="text-align: center;">
                 <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
@@ -16,12 +16,12 @@
 
                 <div class="field col-12">
                     <label>Nom du produit <span style="color: red;"> * </span></label>
-                    <input pInputText type="text"  placeholder="nom de vôtre produit" formControlName="nom_produit" />
+                    <input pInputText type="text" placeholder="nom de vôtre produit" formControlName="nom" />
                 </div>
                 <!-- textarea pour long text -->
                 <div class="field col-12">
                     <label>Description <span style="color: red;"> * </span></label>
-                    <textarea  rows="4" placeholder="Description du produit"  formControlName="description">
+                    <textarea pInputTextarea rows="4" placeholder="Description du produit" formControlName="description">
                     </textarea>
                 </div>
                 <div>
@@ -74,7 +74,7 @@
             <h5>Liste des produits des du CRM</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="products" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="[ 'nom','description']"
+                [globalFilterFields]="[ 'nom','description', '_id']"
                 [rows]="4" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="products.length">
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -99,10 +99,10 @@
                 <ng-template pTemplate="body" let-product>
                     <tr>
                         <td>
-                            {{ product?._id }}
+                            {{ product?._id.slice(19, 25) }}
                         </td>
                         <td>
-                            {{ product?.name }} | uppercase }}
+                            {{ product?.nom  | uppercase }}
                         </td>
                         <td>
                             {{ product?.description }}

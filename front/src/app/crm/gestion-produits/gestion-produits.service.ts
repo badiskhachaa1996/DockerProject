@@ -8,13 +8,6 @@ import {ProduitCRM} from "../../models/produitCRM";
 })
 export class GestionProduitsService {
 
-    ProduitTest = [
-    {id: 1, name: 'Produit 1', description: 'Description 1'},
-    {id: 2, name: 'Produit 2', description: 'Description 2'},
-    {id: 3, name: 'Produit 3', description: 'Description 3'},
-    {id: 4, name: 'Produit 4', description: 'Description 4'}
-    ];
-
     apiUrl = environment.origin + "gestion-produits";
 
     constructor(private http: HttpClient) { }

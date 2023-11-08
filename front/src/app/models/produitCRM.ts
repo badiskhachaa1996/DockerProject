@@ -3,9 +3,9 @@ import { User } from "./User";
 
 export class ProduitCRM {
     constructor(
-        public name?: string,
+        public nom?: string,
         public description?: string,
-        public _id?: string
+        public _id?: string,
     ) { }
 
 }
