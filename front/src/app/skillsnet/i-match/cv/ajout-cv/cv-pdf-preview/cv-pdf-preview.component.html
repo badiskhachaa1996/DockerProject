@@ -1,0 +1,16 @@
+<div class="page-inner-content">
+    <app-cv-pdf-header
+    [school]="school"
+    [student]="student"
+    ></app-cv-pdf-header>
+    <div class="content-container" [ngClass]="school">
+        <div class="sidebar">
+            <app-cv-pdf-sidebar [sidebar]="sidebar" [school]="school"></app-cv-pdf-sidebar>
+        </div>
+
+        <div class="content">
+            <app-cv-pdf-content [maintContent]="maintContent" [school]="school"></app-cv-pdf-content>
+        </div>
+        <img class="bottom-meda" src="assets/images/imatch/gen-cv/medasup/bottom.png" *ngIf="school == 'medasup'"/>
+    </div>
+</div>

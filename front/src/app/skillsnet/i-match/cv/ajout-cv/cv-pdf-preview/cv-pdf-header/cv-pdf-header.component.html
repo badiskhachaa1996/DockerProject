@@ -1,0 +1,22 @@
+<ng-container [ngSwitch]="school">
+    <app-cv-pdf-header-espic *ngSwitchCase="'espic'"
+    [student] = 'student'
+></app-cv-pdf-header-espic>
+
+    <app-cv-pdf-header-studinfo *ngSwitchCase="'studinfo'"
+    [student] = 'student'
+></app-cv-pdf-header-studinfo>
+
+    <app-cv-pdf-header-adg *ngSwitchCase="'adg'"
+        [student] = 'student'
+    ></app-cv-pdf-header-adg>
+
+    <app-cv-pdf-header-medasup *ngSwitchCase="'medasup'"
+    [student] = 'student'
+></app-cv-pdf-header-medasup>
+
+    <app-cv-pdf-header-btech *ngSwitchCase="'btech'"
+    [student] = 'student'
+></app-cv-pdf-header-btech>
+</ng-container>
+
