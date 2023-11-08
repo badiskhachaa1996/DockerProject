@@ -192,6 +192,12 @@
                                     appendTo="body" [(ngModel)]="filter_value.taux"
                                     (onChange)="updateFilter()"></p-dropdown>
                             </div>
+                            <div *ngIf="filter_value.ecole" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Ecole</label><br>
+                                <p-dropdown [options]="ecoleFilter" placeholder="Choisissez une école" autoWidth="false"
+                                    [style]="{'width':'10em'}" filter="true" class="mb-2" appendTo="body"
+                                    [(ngModel)]="filter_value.ecole" (onChange)="updateFilter()"></p-dropdown>
+                            </div>
                         </div>
                         <div class="col-12 grid" style="text-align: right;">
                             <div class="md:col-1 col-3" style="text-align: center;">
@@ -422,11 +428,11 @@
                                 <div class="cv-card-information">
 
                                     <div
-                                        *ngIf="dicPicture && dicPicture[cv?._id]?.url;then cv_image else default_image">
+                                        *ngIf="dicPicture && dicPicture[cv?.user_id?._id]?.url;then cv_image else default_image">
                                     </div>
                                     <ng-template #cv_image>
                                         <div class="img-card"
-                                            style="background-image: url('{{dicPicture[cv._id].url}}');">
+                                            style="background-image: url('{{dicPicture[cv?.user_id?._id].url}}');">
                                         </div>
                                     </ng-template>
                                     <ng-template #default_image>
@@ -537,6 +543,9 @@
             [(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
         <p-dropdown [options]="colorFilter" placeholder="Choisissez une couleur" autoWidth="false"
             [style]="{'width':'27em'}" filter="true" class="mb-2" appendTo="body" [(ngModel)]="filter_value.taux"
+            (onChange)="updateFilter()"></p-dropdown>
+        <p-dropdown [options]="ecoleFilter" placeholder="Choisissez une école" autoWidth="false"
+            [style]="{'width':'27em'}" filter="true" class="mb-2" appendTo="body" [(ngModel)]="filter_value.ecole"
             (onChange)="updateFilter()"></p-dropdown>
         <p-dropdown placeholder="Auteur" [options]="auteurFilter" [style]="{'width':'27em'}" autoWidth="false"
             class="mb-2" appendTo="body" [(ngModel)]="filter_value.createur_id" (onChange)="updateFilter()">

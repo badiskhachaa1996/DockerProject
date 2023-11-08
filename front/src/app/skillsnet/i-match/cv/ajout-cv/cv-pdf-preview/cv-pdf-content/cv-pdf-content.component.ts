@@ -13,6 +13,7 @@ export class CvPdfContentComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.maintContent)
   }
 
 }

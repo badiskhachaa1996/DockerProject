@@ -2,7 +2,9 @@
     <div class="header-inner">
         <div class="section-left">
             <div class="student-image-container">
-                <div class="student-image" [style.backgroundImage]="'url('+student.imgPDP+')'"></div>
+                <div class="student-image" [style.backgroundImage]="'url('+student.imgPDP+')'" *ngIf="student.imgPDP"></div>
+                <div class="student-image" *ngIf="!student.imgPDP"
+                [style.backgroundImage]="'url(../../../../../assets/images/imatch/female.png)'"></div>
             </div>
         </div>
 

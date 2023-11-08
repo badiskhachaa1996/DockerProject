@@ -89,6 +89,7 @@ export class NewCvthequeInterneComponent implements OnInit {
         }
       })
     })
+    this.AuthService.getAll
     this.MatchingService.getAll().subscribe(matchings => {
       this.dicMatching = {}
       matchings.forEach(m => {
@@ -227,6 +228,23 @@ export class NewCvthequeInterneComponent implements OnInit {
     { label: 'Orange', value: 'orange' },
     { label: 'Vert', value: 'green' }
   ]
+  ecoleFilter = [
+    {
+      label: "Espic", value: 'espic'
+    },
+    {
+      label: "Studinfo", value: 'studinfo'
+    },
+    {
+      label: "ADG Education", value: 'adg'
+    },
+    {
+      label: "MedaSup", value: 'medasup'
+    },
+    {
+      label: "BTECH", value: 'btech'
+    },
+  ]
 
   locations = [
     //{ label: "Choisissez une ville", value: null },
@@ -311,7 +329,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     search: '',
     type: null,
     taux: '',
-    createur_id: null
+    createur_id: null,
+    ecole: '',
   }
   updateFilter() {
     this.cvs = []
@@ -364,6 +383,8 @@ export class NewCvthequeInterneComponent implements OnInit {
         else if (this.filter_value.createur_id != 'Candidat' && this.filter_value.createur_id != val.createur_id._id)
           r = false
       }
+      if (this.filter_value.ecole && this.filter_value.ecole != val.ecole)
+        r = false
       //if(this.filter_value.type && !this.filter_value.type.includes(val))
       if (r)
         this.cvs.push(val)
@@ -381,7 +402,8 @@ export class NewCvthequeInterneComponent implements OnInit {
       search: '',
       type: null,
       taux: '',
-      createur_id: null
+      createur_id: null,
+      ecole: '',
     }
     this.cvs = this.defaultcvs
   }
