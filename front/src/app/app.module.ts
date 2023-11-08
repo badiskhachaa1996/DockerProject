@@ -177,7 +177,6 @@ import { EmploiDuTempsComponent } from './pedagogie/seances/emploi-du-temps/empl
 import { EmergementComponent } from './pedagogie/seances/emergement/emergement.component';
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
-
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
@@ -392,6 +391,7 @@ import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { AddRemboussementComponent } from './remboussement/add-remboussement/add-remboussement.component';
+import {GestionProduitsComponent} from "./crm/gestion-produits/gestion-produits.component";
 
 @NgModule({
   imports: [
@@ -489,6 +489,7 @@ import { AddRemboussementComponent } from './remboussement/add-remboussement/add
     EditorModule,
     QRCodeModule,
     PdfViewerModule,
+
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -795,6 +796,7 @@ import { AddRemboussementComponent } from './remboussement/add-remboussement/add
     NewListTicketsComponent,
     ReadMoreComponent,
     AddRemboussementComponent,
+    GestionProduitsComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

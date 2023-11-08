@@ -283,6 +283,7 @@ import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
+import {GestionProduitsComponent} from "./crm/gestion-produits/gestion-produits.component";
 const routes: Routes = [
     {
         path: '',
@@ -1133,6 +1134,7 @@ const routes: Routes = [
                 component: LeadsNonQualifiesComponent,
                 canActivate: [AuthGuardService],
             },
+
             {
                 path: 'crm/mes-leads/pre-qualifies/:id',
                 component: LeadsPrequalifiesComponent,
@@ -1163,6 +1165,12 @@ const routes: Routes = [
                 component: DashboardTargetComponent,
                 canActivate: [AuthGuardService],
             },
+            {
+                path: 'crm/gestion-produits',
+                component: GestionProduitsComponent,
+                canActivate: [AuthGuardService],
+            },
+
             /* Intuns */
             {
                 path: 'intuns/employabilite',

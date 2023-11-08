@@ -19,12 +19,14 @@ export class AjoutLeadcrmComponent implements OnInit {
     { value: 'Online Meeting' },
     { value: 'Marketing' },
     { value: 'Recyclage' },
+    { value: 'LinkdIn' },
   ]
   operationDropdown = [
     { value: 'Prospection FRP' },
     { value: 'Prospection ENP' },
     { value: 'Prospection ICBS Malte' },
     { value: 'Prospection ICBS Dubai' },
+      { value: 'Prospection Alternant' },
   ]
   civiliteDropdown = [
     { value: 'Monsieur' },

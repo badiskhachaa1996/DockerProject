@@ -3,8 +3,7 @@
     <div class="grid col-12 card" *ngIf="EditTarget">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="EditTarget=null"
             aria-hidden="true"> </i>
-        <h3 style="font-weight: bold; text-align: center;">Mettre à jour
-            : {{EditTarget.custom_id }}
+        <h3 style="font-weight: bold; text-align: center;">Mettre à jour : {{EditTarget.custom_id }}
         </h3>
         <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEdit" (ngSubmit)="onUpdate()">
             <div class="field col-12" *ngIf="!formEdit.value.member_id">
