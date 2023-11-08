@@ -90,7 +90,7 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
   ];
 
-  selectedMultiCpt: { label: string, value: string, profile: any }[] = [];
+  selectedMultiCpt: any[] = [];
   selectedMultiOutils: string[] = [];
   selectedMultilang: { label: string }[] = [];
   locations: any[] = [
@@ -171,7 +171,7 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
-  ecoleImage ='espic'
+  ecoleImage = 'espic'
 
   pdfPreviewSchools = [
     {
@@ -192,7 +192,7 @@ export class AjoutCvComponent implements OnInit {
 
   ]
 
-  pdfPreviewChosenSchool= "btech"
+  pdfPreviewChosenSchool = "btech"
 
   etudes = [
     { label: 'Baccalauréat', value: 'Baccalauréat' },
@@ -257,11 +257,13 @@ export class AjoutCvComponent implements OnInit {
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
         this.onLoadFile(this.ID)
         this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
-
+        this.pdfPreviewChosenSchool = c.ecole
         this.selectedMultiCpt = []
         c.competences.forEach(val => {
           this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
         })
+        if (c.competences.length == 0)
+          this.selectedMultiCpt = ['']
         this.selectedMultilang = []
         c.langues.forEach(val => {
           this.selectedMultilang.push({ label: val })
@@ -329,9 +331,9 @@ export class AjoutCvComponent implements OnInit {
     if (id) {
       this.userService.getPopulate(id).subscribe(user => {
         this.user = user
+        this.userName = `${user.firstname} ${user.lastname}`
       })
       this.userService.getProfilePicture(id).subscribe((data) => {
-        console.log(data)
         if (data.error) {
           this.studentImage = 'assets/images/imatch/female.png'
           this.imgPDP = null
@@ -393,7 +395,6 @@ export class AjoutCvComponent implements OnInit {
       let id = this.ID
       if (!id)
         id = this.formAddCV.value.user_id
-      console.log(id, this.ID, this.formAddCV.value.user_id, this.CV_USER_ID, this.uploadedFiles)
       formData.append('id', id);
       formData.append('file', this.uploadedFiles);
       this.cvService.postCVBrute(formData)
@@ -465,7 +466,7 @@ export class AjoutCvComponent implements OnInit {
 
 
     //cv.video_lien = formValue.video_lien;
-
+    cv.ecole = this.pdfPreviewChosenSchool
     // si un cv brute à été ajouté
     if (this.uploadedFiles) {
       cv.filename = this.uploadedFiles.name;
@@ -726,12 +727,6 @@ export class AjoutCvComponent implements OnInit {
   }
 
   onSelectUser(val) {
-    console.log('Val')
-    console.log(val)
-    this.userName = this.dropdownUserExterne.find(obj => obj.value === val).label
-
-    console.log('This')
-    console.log(this.userName)
     this.onGetUserById(val)
     this.cvService.getCvbyUserId(val).subscribe(c => {
       this.cv = c

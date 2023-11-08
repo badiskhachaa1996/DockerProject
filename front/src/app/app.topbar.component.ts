@@ -37,6 +37,7 @@ export class AppTopBarComponent implements OnInit {
   isEtudiant = false
   isExterne = false
   isAgent = false
+  isProspect = false
   isAdmin = false
   isReinscrit = false
   seeCRA = false
@@ -192,6 +193,7 @@ export class AppTopBarComponent implements OnInit {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
       this.isAgent = userconnected.role == 'Agent' || userconnected.role == 'Responsable'
       this.isAdmin = userconnected.role == 'Admin'
+      this.isProspect = userconnected.type == 'Prospect'
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
       this.seeCRA = (this.isAdmin || this.isAgent)

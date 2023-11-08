@@ -14,6 +14,8 @@ export class CvPdfHeaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if (!this.student.imgPDP)
+      this.student.imgPDP = '../../../../../assets/images/imatch/female.png'
   }
 
 }

@@ -662,7 +662,7 @@
         <div class="new-cv">
             <div class="page-container" id="page-certif">
                 <app-cv-pdf-preview
-                [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: studentImage}"
+                [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
                 [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
                 [maintContent]="{
                     experiences_pro: experiences_pro,
