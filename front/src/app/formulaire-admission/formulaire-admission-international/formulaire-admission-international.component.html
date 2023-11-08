@@ -50,7 +50,6 @@
                     {{event}}
                 </ng-template>
             </p-timeline>
-
             <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
                 <div *ngIf="ActiveIndex==0">
                     <div style="text-align: center;">
@@ -488,10 +487,10 @@
                     <div style="text-align: center;">
                         <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
                     </div>
-                    <p-fieldset legend="Autre" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <p-fieldset legend="Fin" [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div class="grid" style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
-                                <div class="field col-12 md:col-12">
+                                <!--<div class="field col-12 md:col-12">
                                     <label For="agence">Faites vous vos procédures d'admission avec une agence
                                         intermédiaire
                                         ? <span style="color: red;"> *
@@ -499,7 +498,7 @@
                                     <p-selectButton formControlName="agence"
                                         [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
                                     </p-selectButton>
-                                </div>
+                                </div>-->
                                 <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                     <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
                                             style="color: red;"> * </span></label>
@@ -547,7 +546,7 @@
                             <button pButton type="button" label="Précedent" style="float: left;"
                                 (click)="previousPage()"></button>
                             <button pButton type="button" label="Suivant"
-                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid"
+                                [disabled]="donneePerso.value==false"
                                 type="submit" style="float: right;"></button>
                         </div>
                     </p-fieldset>

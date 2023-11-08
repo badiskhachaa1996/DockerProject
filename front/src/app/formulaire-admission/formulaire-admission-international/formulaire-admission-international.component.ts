@@ -63,7 +63,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   formSteps: any[] = [
     "Infos",
-    "Programme"
+    "Programme",
+    "Fin"
   ];
 
   rentreeList = [
@@ -193,6 +194,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       this.formSteps = [
         "Infos",
         "Programme",
+        "Fin"
       ];
 
       this.nationList = environment.nationalities;
@@ -243,9 +245,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         ];
       this.formSteps = [
         "Infos",
-        "Parcours",
         "Programme",
-        "Partenaires",
         "Fin",
       ];
 
@@ -409,8 +409,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     }
     if (this.ActiveIndex == 3) {
       //A la demande de Haithem caché la page Accompagnement et Autre
-      this.ActiveIndex = 5
-      this.onAddProspect()
+      this.ActiveIndex = 4
     }
   }
 
