@@ -18,7 +18,7 @@ let transporter = nodemailer.createTransport({
 });
 //0 9 * * * node /home/ubuntu/ems3/back/scriptCron/congeChecker.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-congeChecker.log 2>&1
 mongoose
-    .connect(`mongodb://127.0.01:27017/learningNode`, {
+    .connect(`mongodb://127.0.0.1:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,

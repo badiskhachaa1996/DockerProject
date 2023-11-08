@@ -233,7 +233,7 @@
                                             </td>
                                             <td
                                                 [ngClass]="{'valid-middle':cra?.validated,'non-valid-middle':!cra?.validated}">
-                                                {{cra?.today}}</td>
+                                                {{dateParseur(cra?.today)}}</td>
                                             <td
                                                 [ngClass]="{'valid-middle':cra?.validated,'non-valid-middle':!cra?.validated}">
                                                 {{cra.check_in | date:'H:mm'}}</td>
@@ -475,6 +475,8 @@
                             </tr>
                         </ng-template>
                     </p-table>
+                    <p>&nbsp;</p>
+                    <h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dailyCheck?.cra)}}</h3>
                     <br><br>
                     <p-button style="width: 100px; height: 50px;" styleClass="p-button-info"
                         (click)="showHistorique()">Historique</p-button>
@@ -495,7 +497,7 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-cra>
                                 <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
-                                    <td>{{cra?.today}}</td>
+                                    <td>{{dateParseur(cra?.today)}}</td>
 
                                     <td *ngIf="cra.taux_cra && !isNaN(cra.taux_cra)">{{ cra.taux_cra | number:'1.0-2'
                                         }}%</td>
@@ -525,8 +527,7 @@
                             responsiveLayout="scroll">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th colspan="2" style="text-align: center;">Cra du {{historiqueCraSelected?.today
-                                        |date}}</th>
+                                    <th colspan="2" style="text-align: center;">Cra du {{dateParseur(cra?.today)}}</th>
                                 </tr>
                                 <tr>
                                     <th>Durée</th>
@@ -550,6 +551,8 @@
                                 </tr>
                             </ng-template>
                         </p-table>
+                        <p>&nbsp;</p>
+                        <h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(historiqueCraSelected?.cra)}}</h3>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Calendrier">
@@ -985,6 +988,8 @@
                 </tr>
             </ng-template>
         </p-table>
+        <p>&nbsp;</p>
+		<h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
     </div>
 
 </p-dialog>

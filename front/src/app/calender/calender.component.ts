@@ -584,7 +584,7 @@ export class CalenderComponent implements OnInit {
     }
     else { this.visibleA = false }
     if (craLast?.today != new Date().toLocaleDateString('en-US')) {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${craLast?.today}` })
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` })
     }
 
   }
@@ -1825,6 +1825,26 @@ export class CalenderComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
 
     }, error => { console.error(error) })
+  }
+
+  dateParseur(date_str: string) {
+    let pos1 = date_str.indexOf('/')
+    let day = date_str.substring(0, pos1)
+    let month = date_str.substring(pos1 + 1, date_str.length - 5)
+    let year = date_str.substring(date_str.length - 4)
+    return `${day}/${month}/${year}`
+
+  }
+  totalCalc(cra: any[]) {
+    let r = 0
+    if (cra)
+      cra.forEach(c => { r += c.number_minutes })
+    if (r != 0) {
+      let h = Math.trunc(r / 60)
+      let m = r - (h * 60)
+      return `${h}H ${m}min`
+    } else
+      return '0 min'
   }
 }
 

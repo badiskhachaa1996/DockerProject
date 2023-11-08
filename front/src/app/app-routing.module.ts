@@ -1274,6 +1274,7 @@ const routes: Routes = [
                 component: LeadCandidatureComponent,
                 canActivate: [AuthGuardService],
             },
+            { path: 'administration/preinscription', component: PreinscriptionComponent,canActivate: [AuthGuardService], },
             //Module Mail Type
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
@@ -1381,7 +1382,6 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
-    { path: 'administration/preinscription', component: PreinscriptionComponent }
 ]
 
 
