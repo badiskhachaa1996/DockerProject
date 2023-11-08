@@ -15,6 +15,7 @@ export class CvPdfPreviewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

@@ -204,16 +204,16 @@ app.get('/get-picture-by-user/:id', (req, res) => {
 })
 
 app.get('/getAllPicture', (req, res) => {
-    let ids = fs.readdirSync("storage/cvPicture")
+    let ids = fs.readdirSync("storage/profile/")
     let fileDic = {}
     ids.forEach(id => {
-        let filenames = fs.readdirSync("storage/cvPicture/" + id)
+        let filenames = fs.readdirSync("storage/profile/" + id)
         if (filenames)
             fileDic[id] = {
-                file: fs.readFileSync("storage/cvPicture/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                file: fs.readFileSync("storage/profile/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
                     if (err) return console.error(err);
                 }),
-                extension: mime.contentType(path.extname("storage/cvPicture/" + id + "/" + filenames[0])),
+                extension: mime.contentType(path.extname("storage/profile/" + id + "/" + filenames[0])),
                 url: ""
             }
     })

@@ -98,7 +98,8 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
             Matching.find({ offre_id: req.params.offre_id }).populate('cv_id').then(match => {
                 let listIds = []
                 match.forEach(m => {
-                    listIds.push(m.cv_id.user_id)
+                    if (m.cv_id && m.cv_id.user_id)
+                        listIds.push(m.cv_id.user_id)
                 })
                 CvType.find({ user_id: { $nin: listIds } }).populate('user_id').populate('competences').then(resultat => {
                     resultat.forEach(cv => {
@@ -130,7 +131,8 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
 
                 })
             })
-        }
+        } else
+            res.status(404).send('Annonce non trouvée')
     })
 })
 

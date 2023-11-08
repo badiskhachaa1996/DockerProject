@@ -335,7 +335,6 @@ export class AjoutCvComponent implements OnInit {
       })
       this.userService.getProfilePicture(id).subscribe((data) => {
         if (data.error) {
-          this.studentImage = 'assets/images/imatch/female.png'
           this.imgPDP = null
         } else {
           const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -564,6 +563,8 @@ export class AjoutCvComponent implements OnInit {
     //this.selectedMultiOutils = cv_outils
     this.selectedMultilang = cv_langues
     this.selectedMultiCpt = cv_competences
+    if (cv_competences.length == 0)
+      this.selectedMultiCpt = ['']
     this.formUpdateCV.patchValue({
       competences: cv_competences,
       //outils: cv_outils,
@@ -774,7 +775,6 @@ export class AjoutCvComponent implements OnInit {
     });*/
     window.print()
   }
-  studentImage = 'assets/images/imatch/female.png';
   imgPDP;
   reader: FileReader = new FileReader();
   FileUploadPDP(event) {

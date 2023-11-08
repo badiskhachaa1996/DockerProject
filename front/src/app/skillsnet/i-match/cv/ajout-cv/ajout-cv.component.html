@@ -661,8 +661,21 @@
         </div>
         <div class="new-cv">
             <div class="page-container" id="page-certif">
-                <app-cv-pdf-preview
+                {{selectedMultiCpt|json}}
+                <app-cv-pdf-preview *ngIf="selectedMultiCpt && selectedMultiCpt.length!=0"
                 [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
+                [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
+                [maintContent]="{
+                    experiences_pro: experiences_pro,
+                    experiences_associatif: experiences_associatif,
+                    educations: education,
+                    informatiques: informatique 
+                }"
+                [school]="pdfPreviewChosenSchool"
+                ></app-cv-pdf-preview>
+
+                <app-cv-pdf-preview *ngIf="!selectedMultiCpt || selectedMultiCpt.length==0"
+                [student]="{fullName: userName, profile: 'Profile non spécifié', imgPDP: imgPDP}"
                 [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
                 [maintContent]="{
                     experiences_pro: experiences_pro,
