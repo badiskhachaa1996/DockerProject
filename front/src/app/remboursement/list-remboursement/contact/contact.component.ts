@@ -17,7 +17,7 @@ export class ContactRemboursementComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.demande && this.demande.student){
-    this.contacts[0].tel=  ('+')+ this.demande.student.indicatif_phone +(' ') + this.demande?.student.phone
+    this.contacts[0].tel=  '(' + this.demande.student.indicatif_phone + ')' +' ' + this.demande?.student.phone
     this.contacts[0].email=this.demande?.student.email
   }
 }

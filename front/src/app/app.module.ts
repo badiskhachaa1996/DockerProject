@@ -401,6 +401,7 @@ import { DossierRemboursementComponent } from './remboursement/list-remboursemen
 import { CommentaireSectionComponent } from './remboursement/list-remboursement/commentaire-section/commentaire-section.component';
 import { PayementInformationComponent } from './remboursement/list-remboursement/payement-information/payement-information.component';
 import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
+import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
 @NgModule({
   imports: [
     TableModule,
@@ -813,6 +814,7 @@ import { InformationRemboursementComponent } from './remboursement/list-rembours
     CommentaireSectionComponent,
     PayementInformationComponent,
     InformationRemboursementComponent,
+    UploadRemboursementDocComponent,
 // >>>>>>> 
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,

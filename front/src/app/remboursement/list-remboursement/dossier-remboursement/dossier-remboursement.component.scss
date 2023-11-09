@@ -35,3 +35,16 @@
             input{
                 display: none;
             }
+
+
+.file-name {
+    cursor: pointer;
+    color: #37BAD4;
+
+
+    &:hover {
+
+        color: #1E526C;
+        text-decoration: underline;
+    }
+}

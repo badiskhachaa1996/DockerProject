@@ -7,10 +7,10 @@
     <p>Si nous avons besoin de plus d'informations, nous vous contacterons à cette adresse e-mail. </p>
          -->
         <!-- <p>Bien à vous </p> -->
-        <div   style="justify-content: end; display: flex; "><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
+        <div   style="justify-content: end; display: flex; width: 100%;" *ngIf="showUpdateForm"><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
         </div>
     <div class="col-12 grid">
-        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement" (submit)="onSubmitRemboussementForm()">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement">
             <h3 class="col-12" style="text-align: start;"> Etudiant</h3>
             <div class="field col-12 md:col-4">
                 <label for="civilite" >Civilité:</label>
@@ -86,72 +86,21 @@
                             placeholder="Choisissez une modalité de paiement"></p-dropdown>
             </div>
 
-            <div class="col-12 p-fluid p-formgrid grid ">
+            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm">
                 <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
                 <div style="width: 100%;">
-                <div class="doc-block grid">
-                    <div class="doc-title col-4">RIB</div>
-                    <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="rib.click()">
-                            <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{rib?.files?.item(0)?.name}}</span>
-                        <input #rib formControlName="rib" multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'rib')" chooseLabel="Browse" inputId="rib"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="rib?.files?.item(0)" (click)="reset(rib)"></i>
-                    </div>
-                </div>
-                <div class="doc-block grid">
-                    <div class="doc-title col-4">Attestation de Paiement</div>
-                    <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="attestion_paiement.click()">
-                            <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{attestion_paiement?.files?.item(0)?.name}}</span>
-                        <input #attestion_paiement formControlName="attestion_paiement" multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'attestion_paiement')" chooseLabel="Browse" inputId="attestion_paiement"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="attestion_paiement?.files?.item(0)" (click)="reset(attestion_paiement)"></i>
-                    </div>
-                </div>
-                <div class="doc-block grid">
-                    <div class="doc-title col-4">Document d'inscription</div>
-                    <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="document_inscription.click()">
-                            <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{document_inscription?.files?.item(0)?.name}}</span>
-                        <input #document_inscription formControlName="document_inscription" multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'document_inscription')" chooseLabel="Browse" inputId="document_inscription"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="document_inscription?.files?.item(0)" (click)="reset(document_inscription)"></i>
-                    </div>
-                </div>
-                <div class="doc-block grid">
-                    <div class="doc-title col-4">Preuve de Paiement</div>
-                    <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="preuve_paiement.click()">
-                            <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{preuve_paiement?.files?.item(0)?.name}}</span>
-                        <input #preuve_paiement formControlName="preuve_paiement" multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'preuve_paiement')" chooseLabel="Browse" inputId="preuve_paiement"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="preuve_paiement?.files?.item(0)" (click)="reset(preuve_paiement)"></i>
-                    </div>
-                </div>
-                <div class="doc-block grid">
-                    <div class="doc-title col-4">Notification de refus (ou autre justificatif)</div>
-                    <div class="col-8">
-                        <label for="rib-upload" class="upload-doc" (click)="autres_doc.click()">
-                            <i class="pi pi-cloud-upload"></i>Joindre
-                        </label><span class="file-name" >{{autres_doc?.files?.item(0)?.name}}</span>
-                        <input #autres_doc formControlName="notification_ou_autre_justificatif" multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event, 'autres_doc')" chooseLabel="Browse" inputId="autres_doc"/>
-                        <i class="pi pi-times cancel-icon" *ngIf="autres_doc?.files?.item(0)" (click)="reset(autres_doc)"></i>
-                    </div>
+                    <app-upload-remboursement-doc *ngFor="let doc of docList" [document]="doc" [user]="user" (uploadDoc)="uploadDoc($event)"  (removeDoc)="removeDoc($event)"></app-upload-remboursement-doc>
                 </div>
             </div>
+            <div style="width: 100%;" *ngIf="showUpdateForm">
+                <app-dossier-remboursement [demande]="currentDemande" [user]="user"></app-dossier-remboursement>
             </div>
+
             <div class="col-12  flex align-items-center justify-content-center ">
                 <br>
                 <span class="p-buttonset">
-                    <button [disabled]="formRembourssement.invalid" pButton pRipple (click)=" goToList()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button [disabled]="formRembourssement.invalid" pButton pRipple (click)=" onSubmitRemboussementForm()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
                 </span>
-            
             </div>
         </form>
         

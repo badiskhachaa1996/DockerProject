@@ -52,7 +52,6 @@ export class DemandeRemboursementService {
       'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
       'token': localStorage.getItem('token')
     });
-
     return this.http.put(registerUrl, demande, { headers });
   }
 

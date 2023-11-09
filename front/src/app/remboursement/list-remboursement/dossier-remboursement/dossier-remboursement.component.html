@@ -1,4 +1,4 @@
-    <p-table [value]="docInfos" styleClass="p-datatable-gridlines" >
+    <p-table [value]="docList" styleClass="p-datatable-gridlines" >
         <ng-template pTemplate="caption"><h3 class="title">Dossier remboursement</h3></ng-template>
         <ng-template pTemplate="header">
             <tr>
@@ -10,71 +10,17 @@
             
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-docInfo >
-
+        <ng-template pTemplate="body" let-document >
             <tr>
-                <td><h6 >Rib</h6></td>
-                <td>{{docInfo?.rib?.added_on | date: 'dd/MM/yyyy'}}</td>
-                <td>{{docInfo?.rib?.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name" >{{rib?.files?.item(0)?.name}}</span></td>  
+                <td><h6 >{{document.nom}}</h6></td>
+                <td><span *ngIf="document.added_by">{{document.added_on | date: 'dd/MM/yyyy'}}</span></td>
+                <td>{{document.added_by}}</td>
+                <td type="link" class="download-btn"><span class="file-name" (click)="downloadDoc(document.slug)" *ngIf="document.added_by">{{document.doc_number}}</span></td>  
                 <td class="text-right" style="min-width: 8rem">
-                    <input #rib type="file" accept="application/pdf" maxFileSize="10000000"
-                    (change)="onUpload($event, 'rib')" chooseLabel="Browse" inputId="rib"/> 
-                    <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="rib.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="docInfo.rib" (click)=" deleteDoc('rib')" title="supprimer"></i>
-
-                </td>
-                
-            </tr>
-            <tr>
-                <td><h6 >Attestation de paiement</h6></td>
-                <td>{{docInfo?.attestation_payement?.added_on | date: 'dd/MM/yyyy'}}</td>
-                <td>{{docInfo?.attestation_payement?.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name" >{{attestation_payement?.files?.item(0)?.name}}</span></td>  
-                <td class="text-right" style="min-width: 8rem">
-                    <input #attestation_payement type="file" accept="application/pdf" maxFileSize="10000000"
-                    (change)="onUpload($event, 'attestation_payement')" chooseLabel="Browse" inputId="attestation_payement"/>           
-                        <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="attestation_payement.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="docInfo.attestation_payement" (click)=" deleteDoc('attestation_payement')" title="supprimer"></i>
-                </td>
-        
-            </tr>
-            <tr>
-                <td><h6>Preuve de paiement</h6></td>
-                <td>{{docInfo?.preuve_payement?.added_on | date: 'dd/MM/yyyy'}}</td>
-                <td>{{docInfo?.preuve_payement?.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name">{{preuve_payement?.files?.item(0)?.name}}</span></td>
-                <td class="text-right" style="min-width: 8rem">
-                    <input #preuve_payement type="file" accept="application/pdf" maxFileSize="10000000"
-                    (change)="onUpload($event, 'preuve_payement')" chooseLabel="Browse" inputId="preuve_payement"/>            
-                    <i class="pi pi-upload mr-2 clickable-element" title="charger" (click)="preuve_payement.click()"></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="docInfo.preuve_payement" (click)="deleteDoc('preuve_payement')" title="supprimer"></i>
-                </td>
-            </tr>
-            
-            <tr>
-                <td><h6 >Documents d'inscription</h6></td>
-                <td>{{docInfo?.document_inscription?.added_on | date: 'dd/MM/yyyy'}}</td>
-                <td>{{docInfo?.document_inscription?.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name" >{{document_inscription?.files?.item(0)?.name}}</span></td>  
-                <td class="text-right" style="min-width: 8rem">
-                    <input #document_inscription type="file" accept="application/pdf" maxFileSize="10000000"
-                    (change)="onUpload($event, 'document_inscription')" chooseLabel="Browse" inputId="document_inscription"/>   
-                    <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="document_inscription.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="docInfo.document_inscription" (click)=" deleteDoc('document_inscription')" title="supprimer"></i>
-                </td>
-        
-            </tr>
-            <tr>
-                <td><h6 >Notification de refus (ou autre justificatif)</h6></td>
-                <td>{{docInfo?.autres_doc?.added_on | date: 'dd/MM/yyyy'}}</td>
-                <td>{{docInfo?.autres_doc?.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name" >{{autres_doc?.files?.item(0)?.name}}</span></td>  
-                <td class="text-right" style="min-width: 8rem">
-                    <input #autres_doc type="file" accept="application/pdf" maxFileSize="10000000"
-                    (change)="onUpload($event, 'autres_doc')" chooseLabel="Browse" inputId="autres_doc"/>              
-                    <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="autres_doc.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="docInfo.autres_doc" (click)=" deleteDoc('autres_doc')" title="supprimer"></i>
+                    <input #doc type="file" accept="application/pdf" maxFileSize="10000000"
+                    (change)="onUpload($event.target.files[0], document)" chooseLabel="Browse" inputId="doc"/> 
+                    <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="doc.click()"  ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="document.added_by" (click)=" deleteDoc(document)" title="supprimer"></i>
                 </td>
             </tr>
         </ng-template>

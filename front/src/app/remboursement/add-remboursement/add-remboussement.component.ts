@@ -1,433 +1,190 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-
 import {  FormBuilder, FormGroup } from '@angular/forms';
-
 import { HttpClient } from '@angular/common/http';
-
 import { MessageService } from 'primeng/api';
-
 import { DemandeRemboursementService } from 'src/app/services/demande-remboursement.service';
-
-import { User } from 'src/app/models/User';
-
 import { environment } from 'src/environments/environment';
-
 import jwt_decode from 'jwt-decode';
-
 import { Demande } from 'src/app/models/Demande';
-
 import { Router } from '@angular/router';
-
-import { error } from 'console';
-
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { AuthService } from 'src/app/services/auth.service';
 
  
 
 @Component({
-
   selector: 'app-add-remboussement',
-
   templateUrl: './add-remboussement.component.html',
-
   styleUrls: ['./add-remboussement.component.scss']
-
 })
 
 export class AddRemboussementComponent implements OnInit {
 
- 
-
   constructor(
-
     private formBuilder: FormBuilder,
-
     private http: HttpClient,
-
     private messageService: MessageService,
-
     private demandeRemboursementService: DemandeRemboursementService,
-
     private router: Router,
-
-    private formationService : FormulaireAdmissionService
-
+    private formationService : FormulaireAdmissionService,
+    private userService: AuthService
   ) {}
 
  
 
+
+  docList = [
+    {
+      name: 'RIB',
+      slug: 'rib',
+      doc: '',
+      added_on: '',
+      added_by: '',
+      doc_number: ''
+
+    },
+    {
+      name: 'Attestation de Paiement',
+      slug: 'attestation_payement',
+      doc: '',
+      added_on: '',
+      added_by: '',
+      doc_number: ''
+    },
+    {
+      name: "Document d'inscription",
+      slug: 'document_inscription',
+      doc: '',
+      added_on: '',
+      added_by: '',
+      doc_number: ''
+    },
+    {
+      name: 'Preuve de Paiement',
+      slug: 'preuve_payement',
+      doc: '',
+      added_on: '',
+      added_by: '',
+      doc_number: ''
+    },
+    {
+      name: 'Notification de refus (ou autre justificatif)',
+      slug: 'autres_doc',
+      doc: '',
+      added_on: '',
+      added_by: '',
+      doc_number: ''
+    }
+  ]
+
   civilitySelect = [
-
     { label: "Monsieur", value: "Monsieur" },
-
     { label: "Madame", value: "Madame" },
-
     { label: "Non Précisé", value: "Non précisé" },
-
 ]
-
- 
 
 ecoles = []
 
- 
-
- 
-
 formations = []
 
- 
-
 annescolaires=[]
-
- 
-
- 
 
 //TODO à rajouter au fichier env
 
 motifs = [
-
     { label: "1"  },
-
     { label: "2" },
-
     { label: "3" },
-
     { label: "4" },
-
     { label: "5" },
-
     { label: "6"},
-
     { label: "7"},
-
 ]
-
- 
 
 token: any;
 
-motif = environment.motif
+user: any;
 
- 
+motif = environment.motif
 
 modePaiement = environment.paymentType
 
- 
-
-documents = [
-
-    { label: "RIB", value: "rib" },
-
-    { label: "Attestion de paiement", value: "attestion_paiement" },
-
-    { label: "Preuve de paiement", value: "preuve_paiement" },
-
-    { label: "Document d'inscription", value: "document_inscription" },
-
-    { label: "Notification de refus (ou autre justificatif)", value: "notification_ou_autre_justificatif" },
-
-]
-
- 
-
 pays_residence = environment.pays
-
- 
 
 @Output() cancelFormOutPut = new EventEmitter<boolean>();
 
- 
-
 @Output() doneUpdating = new EventEmitter<boolean>();
 
- 
 
- 
+@Input() currentDemande = new Demande;
 
-@Input() currentDemande;
-
-showUpdateForm = false;
-
- 
+@Input() showUpdateForm = false;
 
 formRembourssement: FormGroup;
 
- 
+availableStatus = environment.availableStatus
 
- 
-
- 
-
- availableStatus = environment.availableStatus
-
- 
-
- 
-
-user: User;
-
- 
-
- 
-
- 
-
- 
 
   ngOnInit(): void {
 
- 
+    this.formRembourssement =  this.formBuilder.group({
+      civilite: [''],
+      nom: [''],
+      prenom: [''],
+      date_naissance: [''],
+      nationalite: [''],
+      pays_resid: [''],
+      paymentType: [''],
+      indicatif_phone: [''],
+      phone: [''],
+      email: [''],
+      annee_scolaire: [''],
+      ecole: [''],
+      formation: [''],
+      motif_refus: [''],
+      montant: [''],
+    })
 
- 
 
     this.formationService.FAgetAll().subscribe(data => {
-
- 
-
-     
-
       data.forEach(d => {
-
         this.formations.push({ label: d.nom, value: d.nom })
-
       })
-
- 
-
-    })
-
-    this.formationService.RAgetAll().subscribe(data =>{
-
-      data.forEach(d => {
-
-        this.annescolaires.push({ label: d.nom, value: d._id })
-
+      this.formationService.RAgetAll().subscribe(data =>{
+        data.forEach(d => {
+          this.annescolaires.push({ label: d.nom, value: d._id })
+        })
+        this.formationService.EAgetAll().subscribe(data => {
+          data.forEach(d => {
+            this.ecoles.push({ label: d.titre, value: d.url_form }) 
+          })
+          if(this.showUpdateForm ) {
+            this.chargeFormDate(this.currentDemande)
+          } else {
+            this.currentDemande.docs = {
+              rib: null,
+              attestation_payement: null,
+              autres_doc: null,
+              preuve_payement: null,
+              document_inscription: null
+            }
+          }
+          
+        })
       })
-
-     
-
     })
-
- 
-
-    this.formationService.EAgetAll().subscribe(data => {
-
-     
-
-      data.forEach(d => {
-
-        this.ecoles.push({ label: d.titre, value: d.url_form })
-
-      })
-
-    })
-
- 
-
-   
-
- 
-
- 
-
- 
-
-    this.formRembourssement =  this.formBuilder.group({
-
-      civilite: [''],
-
-      nom: [''],
-
-      prenom: [''],
-
-      date_naissance: [''],
-
-      nationalite: [''],
-
-      pays_resid: [''],
-
-      paymentType: [''],
-
-      indicatif_phone: [''],
-
-      phone: [''],
-
-      email: [''],
-
-      annee_scolaire: [''],
-
-      ecole: [''],
-
-      formation: [''],
-
-      motif_refus: [''],
-
-      montant: [''],
-
-      rib: [''],
-
-      attestion_paiement: [''],
-
-      preuve_paiement: [''],
-
-      document_inscription: [''],
-
-      notification_ou_autre_justificatif: [''],
-
-    })
-
- 
-
-    if(this.currentDemande && this.showUpdateForm ) {
-
-      this.chargeFormDate(this.currentDemande)
-
-    }
-
-   
 
     this.token = jwt_decode(localStorage.getItem('token'));
-
+    this.user = this.token.id
   }
 
-  selectedDocument: string | null = null; // Variable pour stocker le document sélectionné
 
- 
 
-  onClickToAddFile(event: any, document_name: string) {
 
-      event.preventDefault();
 
-      this.selectedDocument = document_name;
-
-      const fileInput = document.getElementById(document_name) as HTMLInputElement;
-
-      fileInput.click();
-
-  }
-
- 
-
-  onFileSelected(event: any) {
-
-      if (!this.selectedDocument) {
-
-          return;
-
-      }
-
- 
-
-      const selectedFile = event.target.files[0];
-
-      if (selectedFile && selectedFile.type === 'application/pdf') {
-
-          this.formRembourssement.get(this.selectedDocument)?.setValue(selectedFile);
-
-      } else {
-
-          alert('Veuillez sélectionner un fichier PDF valide.');
-
-      }
-
- 
-
-      // Réinitialiser la variable de document sélectionné après la sélection du fichier
-
-      this.selectedDocument = null;
-
-  }
-
-  refundRequests: any[] = [];
-
-  deleteDemande(){}
-
-  // deleteDocument( documentId: string) {
-
-  //   if (!documentId) {
-
-  //     console.error('Invalid document ID');
-
-  //     return;
-
-  //   }
-
-  //   this.demandeRemboursementService.deleteDemande(documentId ).subscribe(()=>
-
-  //  {
-
-  //   console.log('Doc deleted');
-
-  //  },
-
-  //  (error)=>{
-
-  //   console.log('error',error)
-
-  //  }
-
-  //   )
-
-  // }
-
-  onSubmitRemboussementForm() {
-
- 
-
-    if (this.formRembourssement.invalid) {
-
-      this.messageService.add({
-
-        severity: 'error',
-
-        summary: 'Error',
-
-        detail: 'Form is incomplete or contains errors.'
-
-      });
-
-      return;
-
-    };
-
- 
-
-    if(!this.showUpdateForm) {
-
-      const demande  = new Demande
-
-      demande.created_on = new Date;
-
-      this.updateDemandeObject(demande, false)
-
-   
-
-    }  else {
-      this.updateDemandeObject(this.currentDemande, true)
-    }
-
- 
-
-  }
-
-  cancelForm() {
-
-    this.cancelFormOutPut.emit(true)
-    this.showUpdateForm = false
-    this.ngOnInit()
-
-  }
-
- 
-
- 
+// Mis à jour de la demande 
 
   chargeFormDate(demande) {
-
-    var indicatifLength = this.formRembourssement.value.indicatif_phone.length + 2;
-
     this.formRembourssement =  this.formBuilder.group({
       civilite: [demande.student?.civility],
       nom: [demande.student?.last_name],
@@ -436,25 +193,30 @@ user: User;
       nationalite: [demande.student?.nationality],
       pays_resid: [demande.student?.country_residence],
       paymentType: [demande.refund?.method],
-     indicatif_phone:[demande.student?.phone.slice(0, indicatifLength + 4)],
-     phone:[demande.student?.phone.slice(indicatifLength + 4  )],
+      indicatif_phone:[demande.student?.indicatif_phone],
+      phone:[demande.student?.phone],
       email: [demande.student?.email],
       annee_scolaire: [ demande.training?.scholar_year],
       ecole: [ demande.training?.school],
       formation: [ demande.training?.name],
       motif_refus: [demande.motif],
       montant: [demande.refund?.montant],
-      rib: [demande.docs?.rib],
-      attestion_paiement: [demande.docs?.attestation_payement],
-      preuve_paiement: [demande.docs?.preuve_payement],
-      document_inscription: [demande.docs?.document_inscription],
-      notification_ou_autre_justificatif: [demande.docs?.autres_doc],
     })
+
+      for (let key in demande.docs) {
+        if (demande.docs[key]) {
+          this.chargeDocs(key)
+        }
+    }
+
   }
 
 
+
+
+
   updateDemandeObject(demande, update) {
-    console.log(this.formRembourssement.value)
+    demande.created_on = !update ? new Date() : demande.created_on
     demande.created_by = this.token.id
     demande.motif = this.formRembourssement.value.motif_refus
     demande.student = {
@@ -465,14 +227,14 @@ user: User;
      nationality:  this.formRembourssement.value.nationalite,
      country_residence: this.formRembourssement.value.pays_resid ,
      indicatif_phone: this.formRembourssement.value.indicatif_phone,
-     phone: "(" + this.formRembourssement.value.indicatif_phone + ")" + this.formRembourssement.value.phone,
+     phone: this.formRembourssement.value.phone,
      email:  this.formRembourssement.value.email,
    },
 
    demande.training = {
      scholar_year :this.formRembourssement.value.annee_scolaire,
      school:this.formRembourssement.value.ecole,
-     name:this.formRembourssement.value.formation?.value,
+     name:this.formRembourssement.value.formation,
    }
 
    demande.refund ={
@@ -480,61 +242,21 @@ user: User;
      method:this.formRembourssement.value.paymentType
    }
 
- 
-
-demande.docs={
-       rib: this.formRembourssement.value.rib ?
-       {
-         added_on: this.formRembourssement.value.rib.lastModifiedDate,
-         nom: this.formRembourssement.value.rib.lastModifiedDate,
-         added_by : this.token.id,
-         link: 'Link Here',
-         doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-       } : null ,
-       attestation_payement: this.formRembourssement.value.attestion_paiement ?
-       {
-         added_on : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
-         nom : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
-         added_by : this.token.id,
-         link : 'Link Here',
-         doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-       } : null,
-       document_inscription: this.formRembourssement.value.document_inscription ?
-          {
-            added_on : this.formRembourssement.value.document_inscription.lastModifiedDate,
-            nom : this.formRembourssement.value.document_inscription.lastModifiedDate,
-            added_by : this.token.id,
-            link : 'Link Here',
-            doc_number :this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-          } : null ,
-       preuve_payement: this.formRembourssement.value.preuve_paiement ?
-
-       {
-         added_on : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
-         nom : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
-         added_by : this.token.id,
-         link : 'Link Here',
-         doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-       } : null,
-       autres_doc: this.formRembourssement.value.notification_ou_autre_justificatif ?
-       {
-         added_on : this.formRembourssement.value.notification_ou_autre_justificatif.lastModifiedDate,
-         nom : this.formRembourssement.value.rnotification_ou_autre_justificatifib.lastModifiedDate,
-         added_by : this.token.id,
-         link : 'Link Here'  ,
-         doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-       } : null
-     }
-
- 
-
- 
-
      if (update) {
       this.updateDemande(demande)
      } else {
       this.newDemande(demande)
      }
+  }
+
+
+
+  chargeDocs(doc) {
+    let index = this.docList.findIndex(document => document.slug === doc);
+
+    this.getDocOwner(index, this.currentDemande.docs[doc].added_by) 
+    this.docList[index].added_on = this.currentDemande.docs[doc].added_on
+    this.docList[index].doc_number = this.currentDemande.docs[doc].doc_number
   }
 
   updateDemande(demande) {
@@ -548,7 +270,9 @@ demande.docs={
                     summary: 'Success',
                     detail: 'Remboursement added successfully.'
                   });
-                  // this.router.navigate(['remboursement-list']);
+
+
+                  this.router.navigate(['remboursements']);
                 },
                 (error) => {
                   // Handle error (show an error message)
@@ -576,7 +300,21 @@ demande.docs={
                     summary: 'Success',
                     detail: 'Remboursement added successfully.'
                   });
-                  // this.router.navigate(['remboursement-list']);
+
+                  for (let key in this.docList) {
+                    let doc = this.docList[key]
+                    if (doc.doc) {
+                      const formData = new FormData();
+                      formData.append('id', response._id)
+                      formData.append('name', doc.slug)
+                      formData.append('file', doc.doc)
+                      this.demandeRemboursementService.postDoc(formData)
+                      .then((response) => {})
+                      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: "Le document " + doc.name + " n'a pas pu être ajouté" }); });
+                    }
+                }
+
+                  this.router.navigate(['remboursements']);
                 },
                 (error) => {
                   // Handle error (show an error message)
@@ -593,48 +331,47 @@ demande.docs={
   }
 
 
+  onSubmitRemboussementForm() {
+    this.updateDemandeObject(this.currentDemande, this.showUpdateForm)
+  }
 
-  rib: any;
-  attestation_payement: any;
-  document_inscription: any;
-  preuve_payement: any;
-  autres_doc: any;
+  cancelForm() {
+    this.cancelFormOutPut.emit(true)
+    this.showUpdateForm = false
+    this.ngOnInit()
+  }
 
-  onUpload(event: any, doc:string ) {
-
-    if (event.target.files.length > 0) {
-      switch (doc) {
-        case 'rib': {
-          this.rib = event.target.files[0];
-          break;
-        }
-        case "attestation_payement": {
-          this.attestation_payement = event.target.files[0];
-          break;
-        }
-        case "document_inscription": {
-          this.document_inscription = event.target.files[0];
-          break;
-        }
-        case 'preuve_payement': {
-          this.preuve_payement = event.target.files[0];
-          break;
-        }
-        case 'autres_doc': {
-          this.autres_doc = event.target.files[0];
-          break;
-        }
-        default: {
-          break;
-       }
-      }
-      console.log(this.autres_doc)
+  uploadDoc(doc) {
+    this.currentDemande.docs[doc.slug] = {
+        nom: doc.name,
+        added_on: new Date,
+        added_by: this.user,
+        doc_number: doc.doc_number,
     }
   }
 
-  reset(doc) {
-    doc.value = ""
+  removeDoc(doc) {
+    this.currentDemande.docs[doc] = null
+    this.docList.find(document => document.slug === doc).doc = null;
   }
- 
+
+  getUserNameById(id) {
+    console.log(id)
+    let added_by
+
+
+    console.log(added_by)
+    return ''
+  }
+
+
+
+  
+  getDocOwner(index, id) {
+    this.userService.getPopulate(id).subscribe(u => {
+      this.docList[index].added_by =  u.firstname + ' ' + u.lastname
+    })
+  }
+
 }
  

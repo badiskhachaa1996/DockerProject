@@ -59,6 +59,8 @@ export class PayementInformationComponent implements OnInit {
         this.infoPays.splice(index, 1);
 
     } 
+    this.demande.payment=this.infoPays
+    this.updateDemande(this.demande) 
   }
   updateDemande(demande) {
     const data = {

@@ -48,6 +48,8 @@ export class CommentaireSectionComponent implements OnInit {
          if (index !== -1) {
         this.commentaires.splice(index, 1);
     } 
+    this.demande.comments = this.commentaires
+    this.updateDemande(this.demande)
   }
   addComment() {
     this.commentaires.push(

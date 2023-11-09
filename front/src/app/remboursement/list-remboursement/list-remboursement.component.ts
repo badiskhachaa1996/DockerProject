@@ -120,7 +120,11 @@ export class ListRemboursementComponent implements OnInit {
 deleteDemande(demandeId: string ) {
   this.demandeService.deleteDemande(demandeId).subscribe(
     () => {
-      console.log('Demande deleted successfully');
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Demande supprimé avec Succés'
+      });
       // Perform any additional actions here, e.g., updating the local data source.
         this.getDemandList()
     },
