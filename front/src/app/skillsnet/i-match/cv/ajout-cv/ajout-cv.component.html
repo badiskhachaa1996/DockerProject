@@ -73,9 +73,11 @@
                             <button pButton icon="pi pi-plus" label="Ajouter une expérience" type="button"
                                 (click)="onAddXpPro()" class="p-button-outlined p-button-info"></button>
                         </div>-->
-
-
-
+                    <!--<div class="field col-12">
+                        <label htmlFor="profil">Profil</label>
+                        <p-dropdown id="profil" [options]="profilsList" formControlName="profil"
+                            [(ngModel)]="profilSelected"></p-dropdown>
+                    </div>-->
                     <div class="field col-12">
                         <label>Compétences</label>
                         <p-multiSelect [options]="competencesList" [(ngModel)]="selectedMultiCpt"
@@ -129,7 +131,7 @@
                     <div class="field col-12 md:col-12">
                         <label>Langues</label>
                         <p-multiSelect [options]="languesList" [(ngModel)]="selectedMultilang"
-                            defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+                            defaultLabel="Selectionner les langues" optionLabel="label" class="multiselect-custom"
                             formControlName="langues">
                             <ng-template let-value pTemplate="selectedItems">
                                 <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary border-round mr-2"
@@ -163,8 +165,8 @@
                     </div>
                     <div class="field col-6">
                         <label>Joindre une photo</label>
-                        <input #selectedFile id="selectedFile" multiple type="file" accept="image/*" maxFileSize="10000000"
-                            (change)="FileUploadPDP($event)" chooseLabel="Browse" />
+                        <input #selectedFile id="selectedFile" multiple type="file" accept="image/*"
+                            maxFileSize="10000000" (change)="FileUploadPDP($event)" chooseLabel="Browse" />
                     </div>
                     <div class="field col-12">
                         <label>Mobilité - Ville</label>
@@ -662,28 +664,24 @@
         <div class="new-cv">
             <div class="page-container" id="page-certif">
                 <app-cv-pdf-preview *ngIf="selectedMultiCpt && selectedMultiCpt.length!=0"
-                [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
-                [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
-                [maintContent]="{
+                    [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
+                    [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
+                    [maintContent]="{
                     experiences_pro: experiences_pro,
                     experiences_associatif: experiences_associatif,
                     educations: education,
                     informatiques: informatique 
-                }"
-                [school]="pdfPreviewChosenSchool"
-                ></app-cv-pdf-preview>
+                }" [school]="pdfPreviewChosenSchool"></app-cv-pdf-preview>
 
                 <app-cv-pdf-preview *ngIf="!selectedMultiCpt || selectedMultiCpt.length==0"
-                [student]="{fullName: userName, profile: 'Profile non spécifié', imgPDP: imgPDP}"
-                [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
-                [maintContent]="{
+                    [student]="{fullName: userName, profile: 'Profile non spécifié', imgPDP: imgPDP}"
+                    [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
+                    [maintContent]="{
                     experiences_pro: experiences_pro,
                     experiences_associatif: experiences_associatif,
                     educations: education,
                     informatiques: informatique 
-                }"
-                [school]="pdfPreviewChosenSchool"
-                ></app-cv-pdf-preview>
+                }" [school]="pdfPreviewChosenSchool"></app-cv-pdf-preview>
             </div>
             <div class="grid mt-2 footer-content">
                 <div class="col-4">
@@ -698,10 +696,10 @@
                     <button pButton label="Exporter en PDF" type="submit" autoWidth="false" [style]="{'width':'100%'}"
                         (click)="onPrint()"></button>
                 </div>
-        
+
             </div>
         </div>
-    
+
 
     </div>
     <div class="page-footer"></div>

@@ -837,7 +837,7 @@ import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-
     CvPdfSidebarComponent,
     CvPdfContentComponent,
     GestionEquipeRhComponent,
-    CvLoaderPreviewComponent,
+    CvLoaderPreviewComponent
     
     
   ],

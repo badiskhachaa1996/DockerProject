@@ -15,7 +15,11 @@ const dailyCheckSchema = mongoose.Schema({
     commentaire: { type: String, required: false },
     commented_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user', },
     commented_date: { type: Date },
-    auto: { type: Boolean, default: false }
+    auto: { type: Boolean, default: false },
+    platform_out: { type: String, default: 'Inconnu' },
+    platform_in: { type: String, default: 'Inconnu' },
+    localisation_out: { type: String, default: 'Inconnu' },
+    localisation_in: { type: String, default: 'Inconnu' },
 });
 
 

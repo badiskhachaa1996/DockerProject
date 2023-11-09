@@ -22,6 +22,7 @@ import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Annonce } from 'src/app/models/Annonce';
 import { Matching } from 'src/app/models/Matching';
 import { sub } from 'date-fns';
+import { Profile } from 'src/app/models/Profile';
 
 
 
@@ -46,6 +47,7 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Saisonnière', value: 'Saisonnière' },
     { label: 'Contrat', value: 'Contrat' },
     { label: 'Alternance', value: 'Alternance' },
+    { label: 'Stage', value: 'Stage' }
   ]
   languesList: any[] = [
     { label: 'Français' },
@@ -207,7 +209,8 @@ export class AjoutCvComponent implements OnInit {
 
   @ViewChild('filter') filter: ElementRef;
   isEtudiant = false
-
+  profilsList = []
+  profilSelected: Profile
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
@@ -215,6 +218,14 @@ export class AjoutCvComponent implements OnInit {
     private MatchingService: MatchingService, private AnnonceService: AnnonceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //Récupération de la liste des profiles
+    this.skillsService.getProfiles()
+      .then((response: Profile[]) => {
+        response.forEach((profile: Profile) => {
+          this.profilsList.push({ label: profile.libelle, value: profile });
+        })
+      })
+      .catch((error) => { console.error(error); });
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
@@ -229,7 +240,7 @@ export class AjoutCvComponent implements OnInit {
       user_create_type: ['Externe'],
       winner_id: [null],
       isPublic: [true],
-      niveau_etude: ['']
+      niveau_etude: [''],
     });
     this.reader.addEventListener("load", () => {
       this.imgPDP = this.reader.result;

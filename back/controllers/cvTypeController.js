@@ -152,7 +152,7 @@ app.get("/get-object-cv/:id", (req, res) => {
 
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id/:id", (req, res) => {
-    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
+    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').populate('profil')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });

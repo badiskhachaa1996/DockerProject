@@ -7,31 +7,42 @@
                     <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." [(ngModel)]="siteSelected"
                         (onChange)="changeSite($event.value)" autoWidth="false"
                         [style]="{'width':'30em'}"></p-multiSelect>
+                    <br>
+                    <label>Equipe&nbsp;</label><br>
+                    <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
+                        [style]="{'width':'30em'}" (onChange)="chooseTeam($event.value);" placeholder="Equipe"
+                        [showClear]="true"></p-dropdown>
+
                 </div>
                 <div class="xl:col-6 col-12 grid">
                     <div class="col-4">
                         <label>Absence</label><br>
-                        <p-checkbox class="bered" [(ngModel)]="filter_value" value="Absence"
+                        <p-checkbox class="absence" [(ngModel)]="filter_value" value="Absence"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-4">
                         <label>Autorisation</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Autorisation"
+                        <p-checkbox class="autorisation" [(ngModel)]="filter_value" value="Autorisation"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-4">
                         <label>Férié Tunis</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis"
+                        <p-checkbox class="ferieT" [(ngModel)]="filter_value" value="Jour férié Tunis"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-4">
                         <label>Férié France</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Jour férié France"
+                        <p-checkbox class="ferieFR" [(ngModel)]="filter_value" value="Jour férié France"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Cours</label><br>
+                        <p-checkbox class="cours" [(ngModel)]="filter_value" value="Cours"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-4">
                         <label>Autre événement</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Autre événement"
+                        <p-checkbox class="Autre" [(ngModel)]="filter_value" value="Autre événement"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                 </div>
@@ -41,30 +52,32 @@
         </p-tabPanel>
         <p-tabPanel header="Users" leftIcon="pi pi-users">
             <div class="col-12 grid">
-                <div class="col-4">
+                <div class="xl:col-6 col-12">
                     <label>Collaborateur&nbsp;</label>
                     <p-dropdown filter="true" [options]="collaborateurList" placeholder="Choisissez un collaborateur"
                         [(ngModel)]="userSelected" (onChange)="changeUser($event.value)" autoWidth="false"
                         [style]="{'width':'30em'}"></p-dropdown>
                 </div>
-                <div class="col-8 grid">
+                <div class="xl:col-6 col-12 grid">
                     <div class="col-6">
                         <label>Absence Non Justifiée</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié"
+                        <p-checkbox class="absence" [(ngModel)]="filter_value" value="Absence Non Justifié"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-6">
                         <label>Autorisation</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Autorisation"
+                        <p-checkbox class="autorisation" [(ngModel)]="filter_value" value="Autorisation"
                             (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-6">
-                        <label>Présent</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Présent" (onChange)="onFilter()"></p-checkbox>
+                        <label>Activité</label><br>
+                        <p-checkbox class="activite" [(ngModel)]="filter_value" value="Présent"
+                            (onChange)="onFilter()"></p-checkbox>
                     </div>
                     <div class="col-6">
                         <label>Cours</label><br>
-                        <p-checkbox [(ngModel)]="filter_value" value="Cours" (onChange)="onFilter()"></p-checkbox>
+                        <p-checkbox class="cours" [(ngModel)]="filter_value" value="Cours"
+                            (onChange)="onFilter()"></p-checkbox>
                     </div>
                 </div>
             </div>
@@ -133,15 +146,16 @@
                         [pauseList]="check?.pause"></app-pause-read-more>
                 </td>
                 <td style="min-width: 10rem;">
-                    <strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
+                    <strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <span
+                        *ngIf="check.auto">AUTOMATIQUE</span><br>
                     <strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
                 </td>
 
                 <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
                     [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
-                    {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
-                        pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
-                        tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
+                    {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check"
+                        tooltipPosition="bottom" pTooltip="CRA Validé"></i> <i *ngIf="!check.validated"
+                        class="pi pi-times" tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
                 </td>
                 <td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
                     0% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
@@ -157,6 +171,9 @@
                 </td>
                 <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
                     <p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Ecole'">
+                    <p-tag value="Ecole" severity="info" icon="pi pi-book"></p-tag>
                 </td>
                 <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
                     <p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
@@ -234,7 +251,28 @@
         </ng-template>
     </p-table>
 </p-dialog>
-
+<p-dialog *ngIf="dateCours" [(visible)]="displayCours" header="Jour de Cours du {{dateCours| date:'dd MMMM yy'}}"
+    [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtCon dataKey="_id" styleClass="p-datatable-gridlines" [value]="coursDic[dateCours]" style="width: 100%;">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.created_by.firstname | titlecase}} {{rowData.created_by.lastname | uppercase}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
 <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
     [style]="{width: '75vw'}">
     <div class="col-12 grid">
