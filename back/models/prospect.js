@@ -361,7 +361,10 @@ const prospect_schema = new mongoose.Schema({
             type: Date,
             default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
         }
-    },
+    }, payement_programme: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    }
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

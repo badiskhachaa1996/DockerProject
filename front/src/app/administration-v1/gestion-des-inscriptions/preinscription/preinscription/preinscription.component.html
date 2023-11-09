@@ -1,8 +1,8 @@
 <div class="card">
-    
+
     <div class="col-12 card" *ngIf="showPaiement">
         <input type="file" (change)="FileUploadPaiement($event.target.files)" id="UploadPaiement" #UploadPaiement
-        style="display: none;" pInputFile />
+            style="display: none;" pInputFile />
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
             aria-hidden="true"> </i>
         <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement de : {{
@@ -13,9 +13,9 @@
             <p-table #dt2 dataKey="ID" [value]="payementList" class="col-12" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
-                        <!--<th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                        <th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
                             </p-sortIcon>
-                        </th>-->
+                        </th>
                         <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
                                 field="montant"></p-sortIcon>
                         </th>
@@ -29,9 +29,6 @@
                                 field="date"></p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="etat" style="text-align: center;">
-                            Etat<p-sortIcon field="etat"></p-sortIcon>
-                        </th>
                         <th pSortableColumn="doc" style="text-align: center;">
                             Lien
                         </th>
@@ -44,9 +41,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
                     <tr [pEditableRow]="paiement">
-                        <!--<td>
+                        <td>
                             {{paiement?.ID}}
-                        </td>-->
+                        </td>
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -98,20 +95,9 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-dropdown [options]="typeEtat" [(ngModel)]="paiement.etat"
-                                        placeholder="Choisissez l'état du paiement"
-                                        (onChange)="changeMontant(ri,$event,'etat')"></p-dropdown>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{paiement.etat}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
                         <td>
-                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le fichier</a>
+                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
+                                fichier</a>
                             <a *ngIf="!paiement.doc" (click)="uploadFilePayement(paiement,ri)">Uploader un fichier</a>
                         </td>
                         <td>
@@ -131,8 +117,496 @@
                 <button pButton label="Sauvegardez les modifications" (click)="savePaiement()"></button>
             </div>
         </div>
+        <input type="file" (change)="FileUploadPaiementProgram($event.target.files)" id="UploadPaiementProgram"
+            #UploadPaiementProgram style="display: none;" pInputFile />
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement programmé de : {{
+            showPaiement?.user_id?.firstname }} {{
+            showPaiement?.user_id?.lastname | uppercase }}
+        </h3>
+        <div class="grid">
+            <p-table #dt2 dataKey="ID" [value]="payementProgramList" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                            </p-sortIcon>
+                        </th>-->
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                field="montant"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="text-align: center;"> Modalité <p-sortIcon field="type">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="motif" style="text-align: center;"> Motif <p-sortIcon field="motif">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date" style="text-align: center;"> Date d'encaissement <p-sortIcon
+                                field="date"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="etat" style="text-align: center;">
+                            Etat<p-sortIcon field="etat"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="doc" style="text-align: center;">
+                            Lien
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                    <tr [pEditableRow]="paiement">
+                        <!--<td>
+                            {{paiement?.ID}}
+                        </td>-->
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="number" (change)="changeMontantProgram(ri,$event,'montant')"
+                                        [(value)]="paiement.montant" placeholder="20" value="0" pInputText>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.montant}}€
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
+                                        placeholder="Choisissez la méthode de paiement"
+                                        (onChange)="changeMontantProgram(ri,$event,'type')"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.type}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
+                                        *ngIf="['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
+                                        placeholder="Choisissez le motif du paiement"
+                                        (onChange)="changeMontantProgram(ri,$event,'motif')"></p-dropdown>
+                                    <input
+                                        *ngIf="!['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
+                                        type="text" pInputText (change)="changeMontantProgram(ri,$event.target,'motif')"
+                                        placeholder="Motif" [(value)]="paiement.motif">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.motif}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="date" pInputText (change)="changeMontantProgram(ri,$event,'date')"
+                                        [(value)]="paiement.date">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.date | date:'dd MMMM yy'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeEtat" [(ngModel)]="paiement.etat"
+                                        placeholder="Choisissez l'état du paiement"
+                                        (onChange)="changeMontantProgram(ri,$event,'etat')"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{paiement.etat}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
+                                fichier</a>
+                            <a *ngIf="!paiement.doc" (click)="uploadFilePayementProgram(paiement,ri)">Uploader un
+                                fichier</a>
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deletePayementProgram(ri)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="col-4">
+                <button type="button" (click)="onAddPayementProgram()" pButton label="Ajouter un paiement"></button>
+            </div>
+
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+                <button pButton label="Sauvegardez les modifications" (click)="savePaiement()"></button>
+            </div>
+        </div>
     </div>
-    <p-tabView [(activeIndex)]="selectedTabIndex">
+    <div class="col-12 card" *ngIf="showEmail">
+        <p-tabView>
+            <p-tabPanel header="Email personnalisé">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
+                    <div class="field col-6">
+                        <label>Objet: </label>
+                        <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
+                    </div>
+                    <div class="field col-12">
+                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email de l'envoyeur: </label>
+                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email(s)en cc: </label>
+                        <p-chips formControlName="cc" separator=","
+                            placeholder="email1@email.com , email2.email.com"></p-chips>
+                    </div>
+                    <div class="field col-12">
+                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
+                            #selectedFilePJ style="display: none;" pInputFile />
+                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Date d'upload
+                                    </th>
+                                    <th>
+                                        Nom du document
+                                    </th>
+                                    <th>
+                                        Lien de téléchargement
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                <tr>
+                                    <td>
+                                        {{rowData.date | date:'dd MMMM yy'}}
+                                    </td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                        {{rowData.nom}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
+                                    </td>
+                                    <td *ngIf="rowData.path">
+                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                        {{rowData.path}}
+                                    </td>
+                                    <td *ngIf="!rowData.path">
+                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
+                                        </i>
+                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                        </i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="mt-2 col-12" style="text-align: center;">
+                            <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
+                        </div>
+                    </div>
+                    <button pButton [disabled]="formEmailPerso.invalid" (click)="onEmailPerso()"
+                        label="Envoyer l'email"></button>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Depuis un mail type">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
+                    <div class="field col-12">
+                        <label>Email Type: </label>
+                        <p-dropdown placeholder="Choisissez un mail type" filter="true"
+                            (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-6">
+                        <label>Objet: </label>
+                        <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
+                    </div>
+                    <div class="field col-12">
+                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email de l'envoyeur: </label>
+                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
+                        <p-chips formControlName="cc" separator=","
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
+                    </div>
+                    <div class="field col-12">
+                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
+                            #selectedFilePJ style="display: none;" pInputFile />
+                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Date d'upload
+                                    </th>
+                                    <th>
+                                        Nom du document
+                                    </th>
+                                    <th>
+                                        Lien de téléchargement
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                <tr>
+                                    <td>
+                                        {{rowData.date | date:'dd MMMM yy'}}
+                                    </td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                        {{rowData.nom}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
+                                    </td>
+                                    <td *ngIf="rowData.path">
+                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                        {{rowData.path}}
+                                    </td>
+                                    <td *ngIf="!rowData.path">
+                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
+                                        </i>
+                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                        </i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="mt-2 col-12" style="text-align: center;">
+                            <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
+                        </div>
+                    </div>
+                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
+                        (click)="onEmailType()"></button>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Historique des emails">
+                <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="historiqueEmails"
+                    [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem" scope="col"></th>
+                            <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="objet" scope="col" style="text-align: center;">
+                                Objet du mail <p-sortIcon field="objet"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
+                                Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="cc" scope="col" style="text-align: center;">
+                                Envoyé à <p-sortIcon field="cc"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="send_from" scope="col" style="text-align: center;">
+                                Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-email let-expanded="expanded">
+                        <tr>
+
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="email"
+                                    class="p-button-text p-button-rounded p-button-plain"
+                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>
+                                {{email.date_creation|date:'dd MMMM yy'}}
+                            </td>
+                            <td>
+                                {{email.objet}}
+                            </td>
+                            <td>
+                                {{email?.send_by?.firstname | titlecase}} {{email?.send_by?.lastname | uppercase}}
+                            </td>
+                            <td>
+                                <strong>{{prospectSendTo?.user_id?.email_perso }}</strong> {{cc}}
+                            </td>
+                            <td>
+                                {{email.send_from}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-email>
+                        <div [innerHTML]="email.body">
+
+                        </div>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+    <div class="col-12" *ngIf="showUploadFile!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadFile = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                showUploadFile.user_id?.firstname }} {{
+                showUploadFile.user_id?.lastname | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                <div class="field col-6">
+                    <label>Date de délivrance</label>
+                    <input type="date" formControlName="date" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Nom du Fichier</label>
+                    <input type="text" formControlName="nom" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Note :</label>
+                    <textarea pInputTextarea formControlName="note"></textarea>
+                </div>
+                <div class="field col-6">
+                    <label>Traité par :</label>
+                    <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
+                        optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label>Type de document :</label>
+                    <p-dropdown [options]="documentDropdown" formControlName="type" placeholder="Choisissez un type"
+                        filter="true"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-12 card" *ngIf="showDocAdmin">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+        (click)="showDocAdmin = null" aria-hidden="true"> </i>
+        <div class="col-12 grid">
+            <div class="col-12">
+                <strong>Mes attestations disponibles:</strong>
+            </div>
+            <div class="col-12">
+                <p-table styleClass="p-datatable-gridlines" [value]="showDocAdmin.documents_administrative"
+                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th>
+                                Date de délivrance
+                            </th>
+                            <th>
+                                Nom du document
+                            </th>
+                            <th>
+                                Traité par
+                            </th>
+                            <th>
+                                Lien de téléchargement
+                            </th>
+                            <th>
+                                Note
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{rowData.custom_id}}
+                            </td>
+                            <td>
+                                {{rowData.type}}
+                            </td>
+                            <td>
+                                {{rowData.date | date:'dd MMMM yy'}}
+                            </td>
+                            <td>
+                                {{rowData.nom}}
+                            </td>
+                            <td>
+                                {{rowData.traited_by}}
+                            </td>
+                            <td>
+                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                            </td>
+                            <td>
+                                {{rowData.note}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <p *ngIf="showDocAdmin.documents_administrative==null || showDocAdmin.documents_administrative.length==0">
+            Aucun document n'a été chargé !
+        </p>
+        <div class="col-12">
+            <button pButton label="Ajouter un document" (click)="showUploadFile=showDocAdmin;scrollToTop()"></button>
+        </div>
+    </div>
+    <p-tabView [(activeIndex)]="selectedTabIndex" (onClose)="onTabClose($event)">
 
         <p-tabPanel header="Local">
 
@@ -530,14 +1004,18 @@
                                 style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1" pBadge
                                 value="1" pTooltip="Candidature" aria-hidden="true"
                                 (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                            <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
+                                style="padding-left: 3%" aria-hidden="true"
+                                (click)="initSendEmail(prospect);scrollToTop()"> </i>
                             <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
                                 style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
                                 pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
                                 tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1" (click)="initPaiement(prospect);scrollToTop()"
-                                pTooltip="Paiement" aria-hidden="true" tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
-                                pTooltip="Document" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
+                                (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i pTooltip="Documents Administratif" tooltipPosition="bottom" class="pi pi-file m-1"
+                                (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i style="padding-left: 3%;" class="pi pi-building m-1" pTooltip="Admission"
                                 (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -935,6 +1413,9 @@
                                 style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1" pBadge
                                 value="1" pTooltip="Candidature" aria-hidden="true"
                                 (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                            <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
+                                style="padding-left: 3%" aria-hidden="true"
+                                (click)="initSendEmail(prospect);scrollToTop()"> </i>
                             <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
                                 style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-envelope m-1"
                                 pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
@@ -944,13 +1425,16 @@
                                 (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
 
-                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1"
-                                pTooltip="Document" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i pTooltip="Documents administratif" tooltipPosition="bottom" class="pi pi-file m-1"
+                                (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
+
                             <i style="padding-left: 3%; " class="pi pi-building m-1" pTooltip="Admission"
                                 (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
+
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
                                 " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
                                 pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+
                             <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
                                 (click)="deletePro(prospect)" pTooltip="Supprimer" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
@@ -1285,8 +1769,8 @@
 
         </p-tabPanel>
         <p-tabPanel style="width: 100%;" [header]="PROSPECT.customid" *ngFor="let PROSPECT of proscteList"
-            [closable]="true" (onClose)="onTabClose()">
-            <div *ngIf="showDossier">
+            [closable]="true">
+            <div>
                 <p-accordion [(activeIndex)]="selectedTabIndex1">
                     <p-accordionTab>
                         <ng-template pTemplate="header">

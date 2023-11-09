@@ -661,7 +661,6 @@
         </div>
         <div class="new-cv">
             <div class="page-container" id="page-certif">
-                {{selectedMultiCpt|json}}
                 <app-cv-pdf-preview *ngIf="selectedMultiCpt && selectedMultiCpt.length!=0"
                 [student]="{fullName: userName, profile: selectedMultiCpt[0]?.profile?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
                 [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"

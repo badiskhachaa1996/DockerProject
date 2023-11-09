@@ -896,13 +896,12 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
-    console.log("rgfsqfsdgfdsdsq");
+    console.log(req.body)
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
         }, { new: true })
         .then((prospectUpdated) => {
-            console.log('NAN')
             Prospect.findById(prospectUpdated._id).populate("user_id")?.populate('agent_id')
                 .then((prospectsFromDb) => {
                     let detail = "Mise à jour des informations"
@@ -1129,7 +1128,6 @@ app.post('/uploadAdminFile/:id', uploadAdmin.single('file'), (req, res, next) =>
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
-        console.log({ ...req.body }, 0)
         Prospect.findById(req.body.id, ((err, newProspect) => {
             newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note.toString(), traited_by: req.body.traited_by.toString(), path: req.body.path.toString(), nom: req.body.nom.toString(), type: req.body.type.toString(), custom_id: req.body.custom_id.toString() })
             Prospect.findByIdAndUpdate(req.body.id, { documents_administrative: newProspect.documents_administrative }, { new: true }, (err, doc) => {

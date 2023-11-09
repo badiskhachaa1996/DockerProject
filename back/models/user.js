@@ -145,7 +145,10 @@ const user_schema = new mongoose.Schema({
     linksnames: [{ type: String }],
     haveNewAccess: { type: Boolean, default: false },
     type_supp: { type: [String], default: [] }
-
+    ,
+    savedAdministration: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "prospect" }], default: []
+    },
 
 
 });
