@@ -832,10 +832,11 @@ export class DashboardComponent implements OnInit {
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
-        console.log(response);
+
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, id)
         } else {
+          //console.log(response);
           this.dailyCheck = response;
 
           // verifie s'il y'a eu un checkout

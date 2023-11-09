@@ -584,7 +584,7 @@ export class CalenderComponent implements OnInit {
     }
     else { this.visibleA = false }
     if (craLast?.today != new Date().toLocaleDateString('en-US')) {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` })
+      console.error({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` },new Date().toLocaleDateString('en-US'),craLast?.today)
     }
 
   }
@@ -862,7 +862,7 @@ export class CalenderComponent implements OnInit {
     this.dailyCheckService.verifCheckByUserId(this.token.id)
       .then((response) => {
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, this.token.id)
         } else {
           this.dailyCheck = response;
           console.log(response)
