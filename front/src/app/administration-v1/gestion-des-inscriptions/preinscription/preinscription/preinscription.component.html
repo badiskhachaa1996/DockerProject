@@ -119,10 +119,8 @@
         </div>
         <input type="file" (change)="FileUploadPaiementProgram($event.target.files)" id="UploadPaiementProgram"
             #UploadPaiementProgram style="display: none;" pInputFile />
-        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement programmé de : {{
-            showPaiement?.user_id?.firstname }} {{
-            showPaiement?.user_id?.lastname | uppercase }}
-        </h3>
+        <h4 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement programmé
+        </h4>
         <div class="grid">
             <p-table #dt2 dataKey="ID" [value]="payementProgramList" class="col-12" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
