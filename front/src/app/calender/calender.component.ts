@@ -1853,14 +1853,15 @@ export class CalenderComponent implements OnInit {
         ua
       )
     ) {
-      return "Mobile";
+      return "Mob";
     }
-    return "Ordinateur";
+    return "PC";
   };
   getIP() {
     return fetch("https://checkip.amazonaws.com/").then(res => res.text()).then(data => {
       console.log(data)
-      return data
+      //return data
+      return 'Refus de partage'
     }, error => {
       return "Inconnu (Error)"
     })
