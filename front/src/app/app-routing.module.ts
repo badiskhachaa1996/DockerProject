@@ -1084,6 +1084,13 @@ const routes: Routes = [
                 component: AjoutLeadcrmComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm/leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
+                component: AjoutLeadcrmComponent,
+                canActivate: [AuthGuardService],
+            },
+
             {
                 path: 'crm/leads/liste',
                 component: ListLeadcrmComponent,

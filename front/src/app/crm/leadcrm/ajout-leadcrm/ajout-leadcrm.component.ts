@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { environment } from 'src/environments/environment';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-ajout-leadcrm',
@@ -117,9 +118,24 @@ export class AjoutLeadcrmComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+      this.route.params.subscribe(params => {
+          const id = params['id']; // Récupérez l'ID à partir de l'URL
+          if (id) {
+              // Si un ID est fourni, chargez les données du lead pour la mise à jour
+              this.loadLeadData(id);
+          }
+      });
+
   }
 
+
+
+    private loadLeadData(id: string) {
+        this.LCS.getOneByID(id).subscribe(data => {
+            this.addForm.patchValue({...data})
+        })
+    }
 }

@@ -35,6 +35,12 @@ export class LeadcrmService {
 
   }
 
+  getOneByID(id: string) {
+      let registreUrl = this.apiUrl + "getOneByID/" + id;
+        return this.httpClient.get<LeadCRM>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+
   getAllNonAffecte() {
     let registreUrl = this.apiUrl + "getAllNonAffecte";
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
