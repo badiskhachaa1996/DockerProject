@@ -259,6 +259,14 @@ export class AppTopBarComponent implements OnInit {
 
               }
 
+            }, {
+              label: 'Ecole',
+              icon: 'pi pi-book',
+              command: () => {
+                this.onUpdateStatus('Ecole');
+
+              }
+
             },
           ]
           ,

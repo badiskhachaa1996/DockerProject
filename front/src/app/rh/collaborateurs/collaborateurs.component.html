@@ -376,7 +376,7 @@
 					<tr>
 						<td>{{dateParseur(cra.today)}}</td>
 						<td>{{cra.check_in | date:'H:mm'}}</td>
-						<td>{{cra.check_out | date:'H:mm'}}</td>
+						<td>{{cra.check_out | date:'H:mm'}} <span *ngIf="cra.auto">AUTOMATIQUE</span></td>
 						<td>{{cra.pause_timing}}mn</td>
 						<td>{{cra.taux_cra | number:'1.0-2'}}%</td>
 						<td>

@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
     campus: { type: String },
     name: { type: String },
     created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    personal: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 });
 
 //Creation de la table ecole et export du model Ecole

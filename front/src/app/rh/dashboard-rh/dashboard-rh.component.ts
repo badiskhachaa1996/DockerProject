@@ -34,15 +34,17 @@ export class DashboardRhComponent implements OnInit {
   numberOfPause: number = 0;
   numberOfDisponible: number = 0;
   numberOfReunion: number = 0;
+  numberOfCours: number = 0;
   numberOfOccupe: number = 0;
   collaborateurConnected: Collaborateur
   token;
-  teamRHFilter = []
+  teamRHFilter = [{ label: 'Toutes les équipes', value: null }]
   loading: boolean = true;
   statutList: any[] = [
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -189,7 +191,9 @@ export class DashboardRhComponent implements OnInit {
             })
             this.collaborateurs.forEach((c, idx) => {
               if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
-                c.user_id.statut = "Absent"
+                console.log(c.user_id)
+                if (c.user_id.statut == 'Disponible' || !c.user_id?.statut)
+                  c.user_id.statut = "Absent"
                 this.dailyChecks.push(new DailyCheck(new mongoose.Types.ObjectId().toString(), c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
               }
               if (c.user_id) {
@@ -397,6 +401,7 @@ export class DashboardRhComponent implements OnInit {
     this.numberOfDisponible = 0;
     this.numberOfConge = 0;
     this.numberOfReunion = 0;
+    this.numberOfCours = 0
     this.numberOfOccupe = 0;
     this.numberOfAbsent = 0;
     this.numberOfPause = 0;
@@ -422,6 +427,8 @@ export class DashboardRhComponent implements OnInit {
         this.numberOfAbsent++;
       } else if (user_id?.statut == 'En pause') {
         this.numberOfPause++;
+      } else if (user_id?.statut == 'Ecole') {
+        this.numberOfCours++;
       }
     });
   }

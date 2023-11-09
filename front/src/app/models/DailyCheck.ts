@@ -17,6 +17,10 @@ export class DailyCheck {
             public validated?: boolean,
             public commentaire?: string,
             public commented_by?: User,
-            public commented_date?: Date
+            public commented_date?: Date,
+            public platform_out?: string,
+            public platform_in?: string,
+            public localisation_out?: string,
+            public localisation_in?: string
         ) { }
 }

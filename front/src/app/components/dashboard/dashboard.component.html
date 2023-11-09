@@ -362,7 +362,7 @@
                                 <td>{{cra.today}}</td>
                                 <td>{{cra.check_in | date:'H:mm'}}</td>
                                 <td>WIP</td>
-                                <td>{{cra.check_out | date:'H:mm'}}</td>
+                                <td>{{cra.check_out | date:'H:mm'}} <span *ngIf="cra.auto">AUTOMATIQUE</span></td>
                                 <td>WIP</td>
                                 <td *ngIf="cra.pause_timing">
                                     <ul>
@@ -1609,7 +1609,7 @@
                                     <td>{{cra.today}}</td>
                                     <td>{{cra.check_in | date:'H:mm'}}</td>
                                     <td>WIP</td>
-                                    <td>{{cra.check_out | date:'H:mm'}}</td>
+                                    <td>{{cra.check_out | date:'H:mm'}} <span *ngIf="cra.auto">AUTOMATIQUE</span></td>
                                     <td>WIP</td>
                                     <td *ngIf="cra.pause_timing">
                                         <ul>

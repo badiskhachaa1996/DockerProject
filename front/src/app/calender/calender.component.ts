@@ -275,6 +275,7 @@ export class CalenderComponent implements OnInit {
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -584,7 +585,7 @@ export class CalenderComponent implements OnInit {
     }
     else { this.visibleA = false }
     if (craLast?.today != new Date().toLocaleDateString('en-US')) {
-      console.error({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` },new Date().toLocaleDateString('en-US'),craLast?.today)
+      console.error({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` }, new Date().toLocaleDateString('en-US'), craLast?.today)
     }
 
   }
@@ -936,20 +937,24 @@ export class CalenderComponent implements OnInit {
 
   // méthode de checkin
   onCheckIn(): void {
-    const check = new DailyCheck();
 
+    const check = new DailyCheck();
+    check.platform_in = this.getDeviceType()
     check.user_id = this.user._id;
     check.check_in = new Date();
     check.isInPause = false;
     this.classbutonchekin = "p-button-secondary mb-2"
+    this.getIP().then(txt => {
+      //check.localisation_in = txt
+      this.dailyCheckService.postCheckIn(check)
+        .then((response) => {
+          this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
+          this.onCheckDailyCheck(response.user_id);
+          this.onUpdateStatus('Disponible')
+        })
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
+    })
 
-    this.dailyCheckService.postCheckIn(check)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Disponible')
-      })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
 
   motifStr = ''
@@ -1035,6 +1040,7 @@ export class CalenderComponent implements OnInit {
       worked += cra.number_minutes;
     });
     this.dailyCheck.check_out = new Date();
+    this.dailyCheck.platform_out = this.getDeviceType()
 
     this.dailyCheck.pause_timing = this.pauseTiming;
     this.rhService.getCollaborateurByUserId(this.userConnected._id)
@@ -1054,22 +1060,26 @@ export class CalenderComponent implements OnInit {
         let percent = (totalTimeCra * 100) / collaborateur.h_cra;
         this.craPercent = percent
         this.dailyCheck.taux_cra = this.craPercent;
-        this.dailyCheckService.patchCheckIn(this.dailyCheck)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-            // recuperation du check journalier
-            this.onCheckDailyCheck(response.user_id);
-            this.onUpdateStatus('Absent')
-            // recuperation de l'historique du cra
-            this.dailyCheckService.getUserChecks(this.token.id)
-              .then((response) => {
-                this.historiqueCra = response
-                this.lastCras = response[response.length - 1];
-                console.log(this.lastCras);
-              })
-              .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
-          })
-          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+        this.getIP().then(txt => {
+          //this.dailyCheck.localisation_out = txt
+          this.dailyCheckService.patchCheckIn(this.dailyCheck)
+            .then((response) => {
+              this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+              // recuperation du check journalier
+              this.onCheckDailyCheck(response.user_id);
+              this.onUpdateStatus('Absent')
+              // recuperation de l'historique du cra
+              this.dailyCheckService.getUserChecks(this.token.id)
+                .then((response) => {
+                  this.historiqueCra = response
+                  this.lastCras = response[response.length - 1];
+                  console.log(this.lastCras);
+                })
+                .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+            })
+            .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+        })
+
       })
       .catch((error) => { console.error(error); });
 
@@ -1442,15 +1452,6 @@ export class CalenderComponent implements OnInit {
       this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
         .then((response) => {
           response.forEach(c => {
-            /*
-      { label: 'Congé payé', value: 'Congé payé' },
-      { label: 'Congé sans solde', value: 'Congé sans solde' },
-      { label: 'Absence maladie', value: 'Absence maladie' },
-      { label: 'Télétravail', value: 'Télétravail' },
-      { label: 'Départ anticipé', value: 'Départ anticipé' },
-      { label: 'Autorisation', value: 'Autorisation' },
-      { label: 'Autre motif', value: 'Autre motif' },
-            */
             let dd = new Date(c.date_debut)
             if (dd > new Date(this.dateChoose + '-31'))
               dd = new Date(this.dateChoose + '-31')
@@ -1536,6 +1537,9 @@ export class CalenderComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
     }
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
@@ -1556,13 +1560,16 @@ export class CalenderComponent implements OnInit {
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
-              dateC.setDate(dateC.getDate() + 1)
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              dateC.setDate(dateC.getDate() - 1)
+              while (dateC < new Date(c.date_fin)) {
+                congesList.push(new Date(dateC))
+                this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
             }
+
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
@@ -1690,7 +1697,7 @@ export class CalenderComponent implements OnInit {
             dateC.setDate(dateC.getDate() - 1)
             while (dateC < new Date(c.date_fin)) {
               congesList.push(new Date(dateC))
-              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
+              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
               dateC.setDate(dateC.getDate() + 1)
             }
           })
@@ -1700,7 +1707,7 @@ export class CalenderComponent implements OnInit {
               this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
             } else {
               this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
-              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Présent"))
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Activité"))
             }
 
           })
@@ -1722,8 +1729,11 @@ export class CalenderComponent implements OnInit {
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
           events.forEach(ev => {
-            if (ev.type == 'Cours' && ev?.personal == this.token.id)
+            if (ev.type == 'Cours' && ev?.personal == this.token.id) {
               this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
+            } else if (ev.type == 'Cours')
+              console.log(ev)
+
           })
           this.defaultEventUsers = this.eventUsers
           this.onFilter()
@@ -1738,7 +1748,7 @@ export class CalenderComponent implements OnInit {
     if (event.type == 'Jour férié France') {
       backgroundColor = '#D4AC0D'
       borderColor = '#D35400'
-    } else if (event.type == 'Autre événement' || event.type == 'Cours') {
+    } else if (event.type == 'Autre événement') {
       backgroundColor = '#9B59B6'
       borderColor = '#8E44AD'
     } else if (event.type == "Autorisation") {
@@ -1747,6 +1757,12 @@ export class CalenderComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
+    } else if (event.type == "Présent") {
+      backgroundColor = '#37BAD4'
+      borderColor = '#2fa2b9'
     }
     let title = event.type
     if (event.name)
@@ -1826,13 +1842,40 @@ export class CalenderComponent implements OnInit {
 
     }, error => { console.error(error) })
   }
+  getDeviceType() {
 
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return "Mobile";
+    }
+    if (
+      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        ua
+      )
+    ) {
+      return "Mobile";
+    }
+    return "Ordinateur";
+  };
+  getIP() {
+    return fetch("https://checkip.amazonaws.com/").then(res => res.text()).then(data => {
+      console.log(data)
+      return data
+    }, error => {
+      return "Inconnu (Error)"
+    })
+  }
   dateParseur(date_str: string) {
-    let pos1 = date_str.indexOf('/')
-    let day = date_str.substring(0, pos1)
-    let month = date_str.substring(pos1 + 1, date_str.length - 5)
-    let year = date_str.substring(date_str.length - 4)
-    return `${day}/${month}/${year}`
+    if (date_str) {
+      let pos1 = date_str.indexOf('/')
+      let day = date_str.substring(0, pos1)
+      let month = date_str.substring(pos1 + 1, date_str.length - 5)
+      let year = date_str.substring(date_str.length - 4)
+      return `${day}/${month}/${year}`
+    } else {
+      return 'Inconnu'
+    }
+
 
   }
   totalCalc(cra: any[]) {
@@ -1846,6 +1889,8 @@ export class CalenderComponent implements OnInit {
     } else
       return '0 min'
   }
+
+
 }
 
 

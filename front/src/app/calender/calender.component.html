@@ -130,7 +130,8 @@
                                         <td *ngIf="!pauseTiming">
                                             0mn
                                         </td>
-                                        <td>{{cra.check_out | date:'H:mm'}}</td>
+                                        <td>{{cra.check_out | date:'H:mm'}} <span *ngIf="cra.auto">AUTOMATIQUE</span>
+                                        </td>
                                         <td>WIP</td>
 
 
@@ -218,7 +219,6 @@
                                             <th>Pauses</th>
                                             <th>Checkout IMS</th>
                                             <th>Checkout Pointeuse</th>
-                                            <th>Validé</th>
 
                                         </tr>
                                     </ng-template>
@@ -251,16 +251,11 @@
                                             </td>
                                             <td
                                                 [ngClass]="{'valid-middle':cra?.validated,'non-valid-middle':!cra?.validated}">
-                                                {{cra.check_out | date:'H:mm'}}</td>
+                                                {{cra.check_out | date:'H:mm'}} <span
+                                                    *ngIf="cra.auto">AUTOMATIQUE</span></td>
                                             <td
-                                                [ngClass]="{'valid-middle':cra?.validated,'non-valid-middle':!cra?.validated}">
+                                                [ngClass]="{'valid-end':cra?.validated,'non-valid-end':!cra?.validated}">
                                                 WIP</td>
-                                            <td *ngIf="cra?.validated" class="valid-end">
-                                                Validé
-                                            </td>
-                                            <td *ngIf="!cra?.validated" class="non-valid-end">
-                                                Non Validé
-                                            </td>
 
                                         </tr>
                                     </ng-template>
@@ -552,7 +547,8 @@
                             </ng-template>
                         </p-table>
                         <p>&nbsp;</p>
-                        <h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(historiqueCraSelected?.cra)}}</h3>
+                        <h3 style="text-align: center;width: 100%;">Total durée :
+                            {{totalCalc(historiqueCraSelected?.cra)}}</h3>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Calendrier">
@@ -560,22 +556,22 @@
                         <div class="col-12 grid">
                             <div class="col-6">
                                 <label>Absence Non Justifiée</label><br>
-                                <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié"
+                                <p-checkbox class="absence" [(ngModel)]="filter_value" value="Absence Non Justifié"
                                     (onChange)="onFilter()"></p-checkbox>
                             </div>
                             <div class="col-6">
                                 <label>Autorisation</label><br>
-                                <p-checkbox [(ngModel)]="filter_value" value="Autorisation"
+                                <p-checkbox class="autorisation" [(ngModel)]="filter_value" value="Autorisation"
                                     (onChange)="onFilter()"></p-checkbox>
                             </div>
                             <div class="col-6">
-                                <label>Présent</label><br>
-                                <p-checkbox [(ngModel)]="filter_value" value="Présent"
+                                <label>Activité</label><br>
+                                <p-checkbox class="activite" [(ngModel)]="filter_value" value="Présent"
                                     (onChange)="onFilter()"></p-checkbox>
                             </div>
                             <div class="col-6">
                                 <label>Cours</label><br>
-                                <p-checkbox [(ngModel)]="filter_value" value="Cours"
+                                <p-checkbox class="cours" [(ngModel)]="filter_value" value="Cours"
                                     (onChange)="onFilter()"></p-checkbox>
                             </div>
                         </div>
@@ -868,70 +864,6 @@
         </ng-template>
         </p-table>
         </p-tabPanel>
-        <!-- <p-tabPanel header="Assiduité">
-            <div class="grid">
-                <div class="col-6">
-                    <div>
-                        <label htmlFor="">Choisissez un mois et une année</label> <br>
-                        <input pInputText type="month" (input)="dateChoose=$event.target.value;OnCalcAssiduite()">
-                    </div>
-                    <h6>Nombre de jours de congés payés: <strong>{{stats.conges_pay}} jrs</strong></h6>
-                    <h6>Nombre de jours de congés sans solde: <strong>{{stats.conges_ss}} jrs</strong></h6>
-                    <h6>Nombre de jours de congés maladie: <strong>{{stats.maladie}} jrs</strong></h6>
-                    <h6>Nombre de jours en absences justifies: <strong>{{stats.absence_justifie}} jrs</strong>
-                    </h6>
-                    <h6>Nombre de jours en absences non justifies:
-                        <strong>{{22-stats.assiduite-stats.absence_justifie-stats.maladie-stats.conges_ss-stats.conges_pay}}
-                            jrs</strong>
-                    </h6>
-
-                </div>
-                <div class="col-6 flex justify-content-center align-items-center">
-                    <h6>Taux d'assiduité: <strong>{{(stats.assiduite/22)*100 | number:'1.0-2'}} %</strong></h6>
-                </div>
-
-            </div>
-
-        </p-tabPanel>-->
-
-
-        <!--<p-tabPanel header="Mes favoris">
-            <div class="card" *ngIf="showForm">
-                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
-                <h4 style="text-align: center;">Ajouter un lien</h4>
-                <div style="text-align: center;">
-                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                        obligatoires</small><br>
-                </div>
-                <br>
-                <form class="p-fluid p-formgrid grid" [formGroup]="addLinkForm" (ngSubmit)="saveLink()">
-                    <div class="field col-12 md:col-6">
-                        <label for="libelle">Libellé <span style="color: red;"> * </span></label>
-                        <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Google" />
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="link">Lien <span style="color: red;"> * </span></label>
-                        <input pInputText id="link" type="text" formControlName="link" placeholder="google.fr" />
-                    </div>
-                    <div style="justify-content: right;">
-                        <button pButton label="Ajouter" type="submit" [disabled]="addLinkForm.invalid"></button>
-                    </div>
-                </form>
-            </div>
-            <div class="card">
-                <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus"
-                    label="Ajouter un nouveau lien" style="width:auto;float:right"></button>
-                <div class="grid" *ngIf="dashboard">
-                    <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
-                        <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
-                        <i class="col-1 pi pi-trash"
-                            style="font-size: 20px; color: red; cursor: pointer; margin-left: 1%;"
-                            (click)="deleteLink(i)" aria-hidden="true"> </i>
-                    </div>
-                </div>
-            </div>
-        </p-tabPanel>-->
         </p-tabView>
     </div>
 
@@ -989,7 +921,7 @@
             </ng-template>
         </p-table>
         <p>&nbsp;</p>
-		<h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
+        <h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
     </div>
 
 </p-dialog>
