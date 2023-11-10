@@ -784,6 +784,7 @@ app.get("/getAllNonAssigne", (req, res) => {
 });
 
 app.post("/getAllNonAssigneV2", (req, res) => {
+    console.log({ ...req.body },"TROP MARRANT LES BUGS")
     Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })

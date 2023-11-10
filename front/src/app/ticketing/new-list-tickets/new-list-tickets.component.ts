@@ -128,16 +128,21 @@ export class NewListTicketsComponent implements OnInit {
         })
         //IF this.user ticketing !='Super-Admin'
         let role = service_dic['Ticketing']
-        if (!role || role != 'Super-Admin')
-          this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
+        if (!role || role != 'Super-Admin') {
+          let serviceList = []
+          this.USER.roles_ticketing_list.forEach(val => {
+            if (val?.role == 'Responsable')
+              serviceList.push(val.module)
+          })
+          this.TicketService.getAllNonAssigneV2(serviceList || []).subscribe(nonassigne => {
             nonassigne.forEach(e => {
               e.origin = 'Non Assigne'
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            console.log(this.USER?.service_list,nonassigne)
+            console.log(this.USER?.service_list, nonassigne, role, serviceList)
             this.tickets = this.tickets.concat(nonassigne)
-            this.TicketService.getAllAssigneV2(this.USER?.service_list || []).subscribe(allAssigne => {
+            this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
                 e.documents_service.forEach(ds => { ds.by = "Agent" })
@@ -164,6 +169,7 @@ export class NewListTicketsComponent implements OnInit {
               }
             })
           })
+        }
         else
           this.TicketService.getAllNonAssigne().subscribe(nonassigne => {
             nonassigne.forEach(e => {

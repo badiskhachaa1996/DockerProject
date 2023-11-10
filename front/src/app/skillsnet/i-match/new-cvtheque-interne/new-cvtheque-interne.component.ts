@@ -465,5 +465,9 @@ export class NewCvthequeInterneComponent implements OnInit {
     return r
   }
 
+  onPrinting(){
+    this.cvToUpdate=null
+  }
+
 
 }
