@@ -82,7 +82,19 @@ export class InscriptionComponent implements OnInit {
       { label: "Lead", value: "Lead" },
       { label: "Spontané", value: "Spontané" } //Par défaut si Lead
     ];
+    EcoleFiltre = [{
+      label: "Toutes les écoles", value:null
+    }]
     formationsFitre=[];
+    rentreeFiltere=[{label:"Toutes les rentrées ",value:null,_id:null}];
+    EtapeFiltere = [
+      {label:"Toutes les étapes",value:null},
+      {label:"Etape 1",value:"Etape 1"},
+      {label:"Etape 2",value:"Etape 2"},
+      {label:"Etape 3",value:"Etape 3"},
+      {label:"Etape 4",value:"Etape 4"},
+  
+    ];
     filterValue: string | null = null;
   updateLeadForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], Validators.required),
@@ -129,10 +141,10 @@ export class InscriptionComponent implements OnInit {
     //RECUPERATION ECOLES
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(e => {
-        this.EcoleListRework.push({ label: e.titre, value: e.url_form })
+        this.EcoleFiltre.push({ label: e.titre, value: e.url_form })
         this.FAService.RAgetByEcoleID(e._id).subscribe(dataEcoles => {
           dataEcoles.forEach(rentre => {
-            this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+            this.rentreeFiltere.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
           })})})});
     //RECUPERATION DES FORMATIONS
     this.FAService.FAgetAll().subscribe(form=>{

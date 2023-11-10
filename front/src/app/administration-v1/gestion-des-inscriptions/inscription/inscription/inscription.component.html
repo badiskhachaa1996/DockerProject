@@ -194,6 +194,7 @@
             (input)="dt1.filterGlobal($event.target.value, 'contains')"
                 placeholder="Recherche" />
         </div>
+    </div>
     <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
         [globalFilterFields]="['customid', 'user_id.lastname', 'user_id.firstname']" [rows]="8" [pageLinks]="5"
         [paginator]="true" rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">

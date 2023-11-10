@@ -825,6 +825,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
     VoirDetailsOffreComponent,
     CvEtudiantComponent,
     PreinscriptionComponent,
+    InscriptionComponent,
     PauseReadMoreComponent,
     NewCalendrierComponent,
     DashboardImatchComponent,
@@ -838,12 +839,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
     CvPdfSidebarComponent,
     CvPdfContentComponent,
     GestionEquipeRhComponent,
-<<<<<<< HEAD
-    CvLoaderPreviewComponent,
-    InscriptionComponent,
-=======
     CvLoaderPreviewComponent
->>>>>>> 7cc0d39f85c3a7d7e3ce82cc8ad43a890b5afc03
     
     
   ],

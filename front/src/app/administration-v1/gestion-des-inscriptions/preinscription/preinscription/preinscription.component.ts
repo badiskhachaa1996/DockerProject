@@ -30,17 +30,20 @@ import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { EmailTypeService } from 'src/app/services/email-type.service';
 import { FileUpload } from 'primeng/fileupload';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
   styleUrls: ['./preinscription.component.scss']
 })
 export class PreinscriptionComponent implements OnInit {
+  @ViewChild('dt1') dt1: Table | undefined;
   prospects: Prospect[] = [];
   prospectI: Prospect[] = [];
   PROSPECT: Prospect;
   proscteList: Prospect[] = [];
   prospect_acctuelle: Prospect;
+  displayFilter:boolean = false;
   userConnected: User;
   ticket: any[] = [];
   tickets: Ticket[] = [];
@@ -51,6 +54,7 @@ export class PreinscriptionComponent implements OnInit {
   shownewLeadFormI: boolean = false;
   shownewRIForm: boolean = false;
   itslead: boolean = false;
+  showDocumentB: boolean = false;
   service_id: any;
   sujet_id: any;
   visible: boolean = false;
@@ -58,10 +62,14 @@ export class PreinscriptionComponent implements OnInit {
   showDocuments: boolean = false;
   showDossier: boolean = false;
   showDoccuments: boolean = false;
+  visibleC:boolean = false;
   nationList = environment.nationalites;
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
+  formationsFitre=[
+    {label:"Toutes les Formations ",value:null }
+  ];
   tabStates: { [tabId: string]: boolean } = {};
   programeFrDropdown = [
 
@@ -70,14 +78,45 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
-  rentreeList = [
+  rentreeList = [];
+  rentreeFiltere=[{label:"Toutes les rentrées ",value:null,_id:null}];
+  EtapeFiltere = [
+    {label:"Toutes les étapes",value:null},
+    {label:"Etape 1",value:"Etape 1"},
+    {label:"Etape 2",value:"Etape 2"},
+    {label:"Etape 3",value:"Etape 3"},
+    {label:"Etape 4",value:"Etape 4"},
 
-  ]
-
+  ];
+  visiblecon:boolean = false;
   etat_dossierDropdown = [
     { value: "En attente", label: "En attente" },
     { value: "Manquant", label: "Manquant" },
     { value: "Complet", label: "Complet" }
+  ];
+  rythme_filtre=[
+    {label:"Tous les rythmes", value:null},
+    { label: "Initiale", value: 'Initiale' },
+    { label: "Alternance", value:'Alternance' }
+  ];
+  campusfiltre =
+  [
+    { value: null, label: "Tous les campus" },
+    { value: "Paris", label: "Paris - France" },
+    { value: "Montpellier", label: "Montpellier - France" },
+    { value: "Brazzaville", label: "Brazzaville - Congo" },
+    { value: "Rabat", label: "Rabat - Maroc" },
+    { value: "La Valette", label: "La Valette - Malte" },
+    { value: "UAE", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
+  ];
+  sourceFiltre = [
+    { label: "Toutes sources", value: null },
+    { label: "Partenaire", value: "Partenaire" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
+    { label: "Lead", value: "Lead" },
+    { label: "Spontané", value: "Spontané" } //Par défaut si Lead
   ];
   decision_dropdown = [
     { value: "Admis", label: "Admis" },
@@ -140,8 +179,10 @@ export class PreinscriptionComponent implements OnInit {
   ]
 
   commercialList = []
-
   EcoleListRework = []
+  EcoleFiltre = [{
+    label: "Toutes les écoles", value:null
+  }]
   newLeadForm: FormGroup = new FormGroup({
     type: new FormControl('', Validators.required),
     ecole: new FormControl('', [Validators.required]),
@@ -350,6 +391,20 @@ export class PreinscriptionComponent implements OnInit {
         this.proscteList = user.savedAdministration
       })
     }
+    //RECUPERATION ECOLES
+    this.FAService.EAgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.EcoleFiltre.push({ label: e.titre, value: e.url_form })
+        this.FAService.RAgetByEcoleID(e._id).subscribe(dataEcoles => {
+          dataEcoles.forEach(rentre => {
+            this.rentreeFiltere.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+          })})})});
+    //RECUPERATION DES FORMATIONS
+    this.FAService.FAgetAll().subscribe(form=>{
+      form.forEach(f=>{
+        this.formationsFitre.push({ label:f.nom,value:f.nom})
+      })
+    })
 
   }
   getthecrateur() {
@@ -1193,6 +1248,7 @@ export class PreinscriptionComponent implements OnInit {
   }
 
   initDocument(prospect) {
+    this.PROSPECT=prospect;
     this.showDocAdmin = prospect
     this.scrollToTop()
   }
@@ -1311,4 +1367,47 @@ export class PreinscriptionComponent implements OnInit {
     })
 
   }
+  clearFilter(){};
+  onTeamsCheckboxChange(event: any) {
+    console.log('Checkbox changed', event);
+  if (event.checked) {
+    console.log(event.checked)
+    // Checkbox est coché, appliquer le filtre
+    this.dt1?.filter('NON', 'teams', 'equals');
+    
+  } 
+  if(event.checked.length <1) {
+    console.log("notchecked")
+    // Checkbox est décoché, réinitialiser le filtre
+    this.dt1?.filter('', 'teams', 'equals');
+  }
+}
+onYpareoCheckboxChange(event: any) {
+  console.log('Checkbox changed', event);
+if (event.checked) {
+  console.log(event.checked)
+  // Checkbox est coché, appliquer le filtre
+  this.dt1?.filter('NON', 'Ypareo', 'equals');
+  
+} 
+if(event.checked.length <1) {
+  console.log("notchecked")
+  // Checkbox est décoché, réinitialiser le filtre
+  this.dt1?.filter('', 'Ypareo', 'equals');
+}
+}
+onGroupeCheckboxChange(event: any) {
+  console.log('Checkbox changed', event);
+if (event.checked) {
+  console.log(event.checked)
+  // Checkbox est coché, appliquer le filtre
+  this.dt1?.filter('NON', 'groupe', 'equals');
+  
+} 
+if(event.checked.length <1) {
+  console.log("notchecked")
+  // Checkbox est décoché, réinitialiser le filtre
+  this.dt1?.filter('', 'groupe', 'equals');
+}
+}
 }
