@@ -440,7 +440,8 @@ export class PreinscriptionComponent implements OnInit {
         customid, this.newLeadForm?.value?.type,
         this.newLeadForm?.value.rue,
         this.newLeadForm?.value.ville,
-        this.newLeadForm?.value.codep
+        this.newLeadForm?.value.codep,
+        
       )
     }).subscribe(
       ((responsePRO) => {
@@ -630,8 +631,6 @@ export class PreinscriptionComponent implements OnInit {
   deletePro(prospect: Prospect) {
     console.log("hello")
     this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => { console.log(res) });
-
-
   }
   adddicision(prospect: Prospect) {
     console.log(prospect);

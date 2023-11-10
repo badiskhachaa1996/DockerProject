@@ -1,0 +1,512 @@
+<div class="card">
+    <div *ngIf="showupdateLeadForm" class="col-12 card">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="showupdateLeadForm = false" aria-hidden="true"> </i>
+        <h2 style="text-align: center;">Modifier l'étudiant </h2>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+        <form class="p-fluid p-formgrid grid" (ngSubmit)="UpadateProspect() " [formGroup]="updateLeadForm">
+            <br>
+            <div class="field col-12 md:col-2">
+                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                    placeholder="Choisissez une civilité" formControlName="civilite"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-5">
+                <label For="nom">Nom <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="lastname" />
+            </div>
+            <div class="field col-12 md:col-5">
+                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                    formControlName="firstname" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                    </span></label>
+                <input type="date" formControlName="date_naissance" pInputText />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
+                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
+                    optionDisabled="actif"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                    filter="true"></p-dropdown>
+            </div>
+            <h5 class="col-12" style="text-align: center;">Contact</h5> <br>
+            <div class="field col-12 md:col-3">
+                <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
+            </div>
+            <div class="field col-12 md:col-9">
+                <label For="telephone">Numéro de téléphone <span style="color: red;"> *
+                    </span></label>
+                <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
+                    formControlName="phone" />
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Email :<span style="color:red"> *</span></label>
+                <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
+                    pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Numéro rue:<span style="color:red"> *</span></label>
+                <input formControlName="rue" placeholder="rue" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>ville:<span style="color:red"> *</span></label>
+                <input formControlName="ville" placeholder="ville" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>code postale:<span style="color:red"> *</span></label>
+                <input formControlName="codep" placeholder="code postale" pInputText>
+            </div>
+
+
+            <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
+            <div class="field col-12 md:col-12">
+                <label For="ecole">Ecole <span style="color:red"> *</span></label>
+                <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
+                    (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>Choix du campus <span style="color: red;"> * </span></label>
+                <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
+                    placeholder="Choisissez un campus">
+                </p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-12">
+                <label>Choix de la rentrée <span style="color: red;"> * </span></label>
+                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                    placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
+                </p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-4">
+                <label>Choix du programme <span style="color: red;"> * </span></label>
+                <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
+                    placeholder="Choisissez un programme">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-8" *ngIf="updateLeadForm.value.programme.value=='Programme Anglais'">
+                <label For="formation">Choix de la formation <span style="color: red;">
+                        *</span></label>
+                <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program" autoWidth="false"
+                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="formation"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-8" *ngIf="updateLeadForm.value.programme.value=='Programme Français'">
+                <label For="programme_fr">Choix de la formation <span style="color: red;"> *
+                    </span></label>
+                <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français" [filter]="true"
+                    [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                    formControlName="programme"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label For="rythme">Rythme de la formation <span style="color: red;"> *
+                    </span></label>
+                <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
+                    placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
+                    formControlName="rythme_formation"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                <label For="source">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
+                    (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
+            </div>
+            <div *ngIf="!itslead" class="field col-12 md:col-6"> <!--SI INTERNE-->
+                <label For="commercial">Commercial</label>
+                <p-dropdown [options]="commercialList" filter="true"
+                    placeholder="Choisissez le commercial qui a ajouté le lead"
+                    formControlName="commercial"></p-dropdown>
+            </div>
+            <div *ngIf="itslead" class="field col-12 md:col-6">
+                <label>Nom et prénom :<span style="color:red"> *</span></label>
+                <input formControlName="nomlead" placeholder="nom et pénom" pInputText>
+            </div> <br>
+            <div style="justify-content: right;">
+                <button pButton type="submit" label="Modifier"
+                    [disabled]="(updateLeadForm.invalid && !isPartenaireExterne) || (!updateLeadForm.value.ecole)"></button>
+            </div>
+        </form>
+    </div>
+    <p-dialog header="Comptes de l'étudiant" [(visible)]="visible" [style]="{width: '50vw'}">
+
+        <form [formGroup]="compteForm" class="p-fluid p-formgrid grid col-12">
+            <div class="field col-12">
+                <label>Compte teams </label><br>
+                <input pInputText autoWidth="false" [style]="{'width':'80%'}" formControlName="teams" filter="true"
+                    placeholder="etudiant@intedgroup.com" />
+                <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onAddTeams()" pTooltip="Modifier" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+                <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1" (click)="onDeleteTeams()"
+                    pTooltip="Supprimer" aria-hidden="true" tooltipPosition="bottom"></i>
+            </div>
+            <div class="field col-12">
+                <label>Ypareo </label> <br>
+                <input pInputText placeholder="EX ID ......" formControlName="Ypareo" autoWidth="false"
+                    [style]="{'width':'80%'}" />
+                <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" pTooltip="Modifier" (click)="onAddYpareo()" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+                <i style="padding-left: 3%; color: rgb(255, 0, 0)" (click)="onDeleteYpareo()" class="pi pi-trash m-1"
+                    pTooltip="Supprimer" aria-hidden="true" tooltipPosition="bottom"></i>
+            </div>
+            <div class="field col-12">
+                <label For="groupe">Groupe </label>
+                <p-dropdown [options]="groupe_dropdown" autoWidth="false" [style]="{'width':'80%'}"
+                    formControlName="groupe" (onChange)="onAddGroup($event)"
+                    placeholder="Choisissez un groupe"></p-dropdown>
+
+
+            </div>
+            <div class="field col-12"></div>
+            <div class="field col-12"></div>
+            <div class="field col-12"></div>
+            <div class="field col-12"></div>
+        </form>
+    </p-dialog>
+    <div class="col-12 grid" style="text-align: right;">
+        <div class="md:col-1 col-6" style="text-align: center;">
+            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                (click)="displayFilter=true"></button>
+        </div>
+        <div class="md:col-1 col-6" style="text-align: center;">
+            <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                (click)="clearFilter()"></button>
+        </div>
+        <div class="md:col-3 col-9" style="text-align: center;">
+            <input pInputText type="text" style="width: 100%;"
+            (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                placeholder="Recherche" />
+        </div>
+    <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+        [globalFilterFields]="['customid', 'user_id.lastname', 'user_id.firstname']" [rows]="8" [pageLinks]="5"
+        [paginator]="true" rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="caption">
+            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                placeholder="Recherche" />
+
+            <p-dropdown [style]="{'margin':'5px'}" [options]="rythme_filtre" filter="true" s
+                (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
+                filterPlaceholder="Type"></p-dropdown>
+                
+            <p-dropdown [style]="{'margin':'5px'}" [options]="campusfiltre" filter="true"
+                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown>
+                <p-dropdown [style]="{'margin':'5px'}" [options]="rentreeList" filter="true"
+                (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown>
+                <p-dropdown [style]="{'margin':'5px'}" [options]="sourceFiltre" filter="true"
+                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown>
+                <p-checkbox [style]="{'margin':'5px'}" filter="true"
+                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle">Teams</p-checkbox>
+            <div class="flex table-header">
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 5em"></th>
+                <th pSortableColumn="_id">
+                    ID de l'étudiant<p-sortIcon field="_id"> </p-sortIcon>
+                </th>
+                <th pSortableColumn="nom">
+                    Prénom et Nom<p-sortIcon field="nom"> </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="choix">
+                    Choix académique <p-sortIcon field="choix"> </p-sortIcon>
+                </th>
+                <th pSortableColumn="rythme">
+                    Rythme <p-sortIcon field="rythme"> </p-sortIcon>
+                </th>
+                <th pSortableColumn="decision">
+                    Compte teams<p-sortIcon field="decision"> </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="paiement">
+                    Ypareo<p-sortIcon field="paiement"> </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="etape">
+                    Groupe<p-sortIcon field="etape"> </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="date">
+                    Date d'inscription<p-sortIcon field="date">
+                    </p-sortIcon>
+
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prospect>
+            <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="prospect"
+                        class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'
+                                "></button>
+                </td>
+                <td>
+                    {{ prospect.customid}}
+                </td>
+                <td>
+                    {{ prospect.user_id.firstname | titlecase }}
+                    {{ prospect.user_id.lastname | uppercase }}
+                </td>
+                <td>
+                    {{prospect?.rentree_scolaire}},{{ prospect?.formation}},{{prospect?.campus_choix_1}}
+                </td>
+                <td>
+                    {{prospect?.rythme_formation}}
+                </td>
+                <td>
+                    {{prospect?.teams}}
+                </td>
+                <td>
+                    {{prospect?.Ypareo}}
+                </td>
+                <td>
+                    {{prospect?.groupe}}
+                </td>
+                <td>
+                    {{ prospect?.date_creation| date:'dd MMMM yy'}}
+                </td>
+                <td>
+                    <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pTooltip="Candidature"
+                        aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-send m-1"
+                        pTooltip="Envoyer un email" aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-at m-1" pTooltip="Compte"
+                        (click)="onShowCompte(prospect); " aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1" pTooltip="Document"
+                        aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1" pTooltip="Paiement"
+                        aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                                " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
+                        pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+                    <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
+                        (click)="deletePro(prospect)" pTooltip="Supprimer" aria-hidden="true"
+                        tooltipPosition="bottom"></i>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-user>
+            <tr>
+                <td colspan="10">
+
+
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Détails
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+            <tr>
+
+                <th>ID</th>
+                <th>Prénom et Nom </th>
+                <th>Date de naissance</th>
+                <th>Pays de résidence</th>
+                <th>Nationalité</th>
+                <th>Action</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{ user.customid }}</td>
+                <td>
+                    {{ user.user_id.firstname | titlecase }}
+                    {{ user.user_id.lastname | uppercase }}
+                </td>
+                <td>
+                    {{
+                    user.date_naissance| date:'dd MMMM yy'
+                    }}
+                </td>
+                <td>{{ user.user_id.pays_adresse}}</td>
+                <td>
+                    {{user.user_id.nationnalite}}
+                </td>
+
+                <td></td>
+            </tr>
+
+        </ng-template>
+
+    </p-table>
+    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+        Contact
+    </h5>
+    <p-table responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Adresse mail</th>
+                <th>Adresse mail école </th>
+                <th>numéro de téléphone</th>
+                <th>Adresse</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{user.user_id.email}}</td>
+                <td>
+                    {{ user.user_id.email_perso}}
+                </td>
+                <td>
+                    {{
+                    user.user_id.phone
+                    }}
+                </td>
+                <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                </td>
+
+
+                <td></td>
+
+            </tr>
+
+
+        </ng-template>
+
+    </p-table>
+    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+        Choix académique
+    </h5>
+    <p-table responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Session</th>
+                <th>Ecole </th>
+                <th>Campus</th>
+                <th>Formation</th>
+                <th>Groupe</th>
+                <th>Rythme</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{user.formation}}</td>
+                <td>
+                    {{ user.user_id.email_perso}}
+                </td>
+                <td>
+                    {{
+                    user.user_id.phone
+                    }}
+                </td>
+                <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                </td>
+
+
+                <td></td>
+                <td>{{user?.rythme_formation}}</td>
+                <td></td>
+            </tr>
+
+
+        </ng-template>
+
+    </p-table>
+    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+        Source
+    </h5>
+    <p-table responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Source</th>
+                <th>Commercial </th>
+                <th>Adresse mail</th>
+                <th>Téléphone</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{user.source}}</td>
+                <td>
+                    {{ user.user_id.email_perso}}
+                </td>
+                <td>
+                    {{
+                    user.user_id.phone
+                    }}
+                </td>
+                <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                </td>
+
+
+                <td></td>
+
+            </tr>
+
+
+        </ng-template>
+
+    </p-table>
+    </td>
+    </tr>
+    </ng-template>
+
+    </p-table>
+</div>
+<p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
+	<h3>Filtres</h3>
+	<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
+		    <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
+                (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
+                filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
+            <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
+                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+                <p-dropdown [style]="{'width':'27em'}" [options]="rentreeList" filter="true"
+                (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+                <p-dropdown [style]="{'width':'27em'}" [options]="EcoleListRework" filter="true"
+                (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+                <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
+                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+                <label>Teams</label>
+                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onTeamsCheckboxChange($event)">
+                   
+                </p-checkbox><br><br><br><br>
+                <label>Ypareo</label>
+                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onYpareoCheckboxChange($event)">
+                    
+                </p-checkbox><br><br><br><br>
+                <label>Groupe</label>
+                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onGroupeCheckboxChange($event)">
+                    
+                </p-checkbox>
+                <div ></div>
+		<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
+			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
+		<button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
+			(click)="displayFilter = false"></button>
+		<button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
+			(click)="clearFilter()"></button>
+	</div>
+</p-sidebar>
