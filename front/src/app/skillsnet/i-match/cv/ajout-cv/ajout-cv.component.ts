@@ -4,7 +4,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleService } from 'src/app/services/ecole.service';
 import * as html2pdf from 'html2pdf.js';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,6 +33,7 @@ import { Profile } from 'src/app/models/Profile';
 })
 export class AjoutCvComponent implements OnInit {
   @Input() CV_USER_ID
+  @Output() PRINTING = new EventEmitter<any>();
   cv: CV
   ID = this.route.snapshot.paramMap.get('id');
   // partie dedié aux CV
@@ -785,7 +786,11 @@ export class AjoutCvComponent implements OnInit {
     html2pdf().from(element).toPdf().get('pdf').then(function (pdf) {
       window.open(pdf.output('bloburl'), '_blank');
     });*/
-    window.print()
+    this.PRINTING.emit(true)
+    setTimeout(() => {
+      window.print()
+    }, 5)
+
   }
   imgPDP;
   reader: FileReader = new FileReader();
