@@ -866,7 +866,6 @@ export class CalenderComponent implements OnInit {
           console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, this.token.id)
         } else {
           this.dailyCheck = response;
-          console.log(response)
           // verifie s'il y'a eu un checkout
           if (response?.check_out != null) {
             // remise à zero des temps de travail
@@ -1003,8 +1002,6 @@ export class CalenderComponent implements OnInit {
       .then((response) => {
         this.historiqueCra = response
         this.lastCras = response[response.length - 1];
-
-        console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
 
@@ -1073,7 +1070,6 @@ export class CalenderComponent implements OnInit {
                 .then((response) => {
                   this.historiqueCra = response
                   this.lastCras = response[response.length - 1];
-                  console.log(this.lastCras);
                 })
                 .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
             })
@@ -1134,7 +1130,6 @@ export class CalenderComponent implements OnInit {
   onAddCraTicket(): void {
     const formValue = this.formAddCraTicket.value;
     // ajout des données formulaire au dailycheck
-    console.log(formValue);
 
     this.dailyCheck.cra.push({ task: this.formAddCraTicket.get('ticket').value.label, number_minutes: this.formAddCraTicket.get('duration').value });
 
@@ -1466,7 +1461,6 @@ export class CalenderComponent implements OnInit {
 
             // To calculate the no. of days between two dates
             var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
-            console.log(c.type_conge, Difference_In_Days)
             if (c.type_conge == "Congé payé")
               this.stats.conges_pay += Difference_In_Days
             else if (c.type_conge == "Congé sans solde")
@@ -1493,34 +1487,8 @@ export class CalenderComponent implements OnInit {
     }
   }
   eventsRH = []
-  optionsRH = {
-    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
-    defaultDate: new Date(),
-    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
-    header: {
-      left: "title",
-      right: 'prev,next'
-      // left: 'prev,next'
-    },
-    locale: frLocale,
-    timeZone: 'local',
-    contentHeight: 500,
-    eventClick: this.eventClickFCRH.bind(this),
-    events: [
-
-    ],
-    defaultView: "dayGridMonth",
-    minTime: '08:00:00',
-    firstDay: 1,
-    selectable: true,
-  };
   displayData = false
   dataEvent: EventCalendarRH
-  eventClickFCRH(event) {
-    this.displayData = true
-    this.dataEvent = event.event.extendedProps;
-    //console.log(event)
-  }
 
   addEvent(event: EventCalendarRH) {
     let backgroundColor = '#1F618D'
@@ -1577,7 +1545,6 @@ export class CalenderComponent implements OnInit {
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
-          console.log(congesList, conges)
           while (dateEnd < dateDebut) {
             if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
               //Vérifier si il a été présent ou si il a été en congé 
@@ -1586,8 +1553,6 @@ export class CalenderComponent implements OnInit {
                 events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
                 absencesList.push(dateDebut)
                 this.addEvent(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
-              } else {
-                //console.log(dateDebut,events)
               }
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
@@ -1616,9 +1581,7 @@ export class CalenderComponent implements OnInit {
   }
   displayPointeuse = false
   onSeePointeuse() {
-    console.log('test')
     this.displayPointeuse = true
-    console.log(this.displayPointeuse)
   }
   seeDescriptionActu = false
   seeActu: ActualiteRH
@@ -1684,6 +1647,7 @@ export class CalenderComponent implements OnInit {
   getUsersEvents() {
     this.eventUsers = []
     this.defaultEventUsers = []
+    this.PresentDicUser = {}
     this.CalendrierRHService.getAll().subscribe(events => {
       //events.forEach(ev => { this.addEventUser(ev) })
       this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
@@ -1695,13 +1659,14 @@ export class CalenderComponent implements OnInit {
           conges.forEach(c => {
             if (c.statut == 'Validé') {
               let dateC = new Date(c.date_debut)
-              dateC.setDate(dateC.getDate() - 1)
-              while (dateC < new Date(c.date_fin)) {
+              let dateF = new Date(c.date_fin)
+              dateF.setDate(dateF.getDate() + 1)
+              while (dateC < dateF) {
                 congesList.push(new Date(dateC))
                 this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
                 dateC.setDate(dateC.getDate() + 1)
               }
-            } 
+            }
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
@@ -1732,9 +1697,8 @@ export class CalenderComponent implements OnInit {
           }
           events.forEach(ev => {
             if (ev.type == 'Cours' && ev?.personal == this.token.id) {
-              this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
-            } else if (ev.type == 'Cours')
-              console.log(ev)
+              this.addEventUser(new EventCalendarRH(ev?._id, new Date(ev.date), "Cours", null, null))
+            }
 
           })
           this.defaultEventUsers = this.eventUsers
@@ -1790,6 +1754,9 @@ export class CalenderComponent implements OnInit {
       this.dateCRA = new Date(event.event.start).toDateString()
       this.DataCRA = this.PresentDicUser[this.dateCRA]
       this.displayCRA = true
+    } else if (event.event.extendedProps.type == "Cours") {
+      this.displayData = true
+      this.dataEvent = event.event.extendedProps
     }
   }
   dateClickFC(event) {
@@ -1797,7 +1764,6 @@ export class CalenderComponent implements OnInit {
 
     this.eventUsers.forEach(ev => {
       if (ev.extendedProps.type == 'Cours' && new Date(event.date).toString() == new Date(ev.extendedProps.date).toString()) {
-        //console.log(ev.extendedProps.type, new Date(event.date).toString(), new Date(ev.extendedProps.date).toString())
         r = false
       }
     })
@@ -1893,7 +1859,13 @@ export class CalenderComponent implements OnInit {
     } else
       return '0 min'
   }
-
+  onDelete() {
+    this.CalendrierRHService.delete(this.dataEvent._id).subscribe(d => {
+      this.getUsersEvents()
+      this.displayData = false
+      this.dataEvent = null
+    })
+  }
 
 }
 

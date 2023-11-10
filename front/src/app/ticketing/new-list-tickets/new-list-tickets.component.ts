@@ -135,6 +135,7 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
+            console.log(this.USER?.service_list,nonassigne)
             this.tickets = this.tickets.concat(nonassigne)
             this.TicketService.getAllAssigneV2(this.USER?.service_list || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {

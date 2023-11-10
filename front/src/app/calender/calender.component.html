@@ -960,3 +960,16 @@
     <p>Voulez-vous déclarez {{DataDay?.day | date: 'dd MM YYYY'}} comme un jour de cours ?</p>
     <button pButton label="Déclarez comme un jour de cours" (click)="onAddJourDeCours()"></button>
 </p-dialog>
+
+<p-dialog class="grid" header="Cours du {{dataEvent?.date | date: 'dd MM YYYY'}}" [(visible)]="displayData" [modal]="true"
+    [style]="{width: '75vw'}">
+    <div class="col-12 grid">
+        <div class="col-12">
+            <span>{{dataEvent|json}}</span>
+        </div>
+        <div class="col-12" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-trash" [style]="{'width':'100%'}" label="Supprimer le cours"
+                styleClass="p-button-danger" (click)="onDelete()"></p-button>
+        </div>
+    </div>
+</p-dialog>
