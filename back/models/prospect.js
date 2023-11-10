@@ -361,10 +361,27 @@ const prospect_schema = new mongoose.Schema({
             type: Date,
             default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
         }
-    }, payement_programme: {
+    },
+    teams: {
+        type: String,
+        default: "NON"
+    },
+    Ypareo: {
+        type: String,
+        default: "NON"
+    },
+    groupe: {
+        type: String,
+        default: "NON"
+    },
+     payement_programme: {
         type: [mongoose.Schema.Types.Mixed],
         default: []
-    }
+    },
+    ecole:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ecoleadmissions",
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);
