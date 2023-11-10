@@ -413,6 +413,7 @@ import { CvPdfSidebarComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-pr
 import { CvPdfContentComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-content/cv-pdf-content.component';
 import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-loader-preview/cv-loader-preview.component';
+import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 
 
 @NgModule({
@@ -837,7 +838,8 @@ import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-
     CvPdfSidebarComponent,
     CvPdfContentComponent,
     GestionEquipeRhComponent,
-    CvLoaderPreviewComponent
+    CvLoaderPreviewComponent,
+    PreviewCandidatureComponent
     
     
   ],
