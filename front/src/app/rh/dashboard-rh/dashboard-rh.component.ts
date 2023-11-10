@@ -139,7 +139,7 @@ export class DashboardRhComponent implements OnInit {
             });
             dc.taux_cra = ((worked * 100) / max)
           }
-          this.rhService.getCollaborateurByUserId(dc.user_id._id)
+          this.rhService.getCollaborateurByUserId(dc?.user_id?._id)
             .then((collaborateur) => {
               let totalTimeCra = 0;
 
