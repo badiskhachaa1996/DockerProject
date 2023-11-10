@@ -241,6 +241,7 @@ export class AjoutCvComponent implements OnInit {
       winner_id: [null],
       isPublic: [true],
       niveau_etude: [''],
+      profil: ['']
     });
     this.reader.addEventListener("load", () => {
       this.imgPDP = this.reader.result;
@@ -267,7 +268,8 @@ export class AjoutCvComponent implements OnInit {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
         this.onLoadFile(this.ID)
-        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
+        console.log(c)
+        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
         this.pdfPreviewChosenSchool = c.ecole
         this.selectedMultiCpt = []
         c.competences.forEach(val => {
@@ -455,7 +457,6 @@ export class AjoutCvComponent implements OnInit {
     cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
 
-    console.log(this.formAddCV)
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
@@ -473,7 +474,7 @@ export class AjoutCvComponent implements OnInit {
     formValue.langues?.forEach(langue => {
       cv.langues.push(langue.label);
     });
-
+    cv.profil = this.formAddCV.value.profil._id
 
     //cv.video_lien = formValue.video_lien;
     cv.ecole = this.pdfPreviewChosenSchool

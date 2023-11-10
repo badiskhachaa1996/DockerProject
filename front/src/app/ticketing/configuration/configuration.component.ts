@@ -164,7 +164,8 @@ export class ConfigurationComponent implements OnInit {
       agent.service_list.push(this.addMemberOfService._id)
     else
       agent.service_list = [this.addMemberOfService._id]
-    this.UserService.update({ _id: agent._id, service_list: agent.service_list }).subscribe(data => {
+    agent.roles_ticketing_list.push({ module: this.addMemberOfService, role: 'Agent' })
+    this.UserService.update({ _id: agent._id, service_list: agent.service_list, roles_ticketing_list: agent.roles_ticketing_list }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: "Le membre a été ajouté au service avec succès" })
       this.memberList.push(data)
       this.memberDropdown.splice(this.customIndexOfDropdown(this.memberDropdown, agent), 1)

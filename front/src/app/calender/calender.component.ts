@@ -1874,6 +1874,7 @@ export class CalenderComponent implements OnInit {
       let year = date_str.substring(date_str.length - 4)
       return `${day}/${month}/${year}`
     } else {
+      console.log(date_str)
       return 'Inconnu'
     }
 
