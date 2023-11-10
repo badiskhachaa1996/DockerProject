@@ -58,7 +58,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   formSteps: any[] = [
     "Infos",
     "Parcours",
-    "Programme",
+    "Choix",
     "Partenaires",
     "Fin",
   ];
@@ -594,7 +594,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.routeItems = [
       { label: 'Infos' },
       { label: 'Parcours' },
-      { label: 'Programme' },
+      { label: 'Choix' },
       { label: 'Partenaires' },
       { label: 'Dernière étape' },
     ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Prospect } from 'src/app/models/Prospect';
@@ -10,14 +10,17 @@ import { AdmissionService } from 'src/app/services/admission.service';
   styleUrls: ['./lead-programme.component.scss']
 })
 export class LeadProgrammeComponent implements OnInit {
-
-  ID = this.route.snapshot.paramMap.get('id');
+  @Input() ID
+  ID2 = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService) { }
   ngOnInit(): void {
-    if (this.ID)
-      this.ProspectService.getPopulate(this.ID).subscribe(data => {
-        this.PROSPECT = data
+    if (!this.ID2 && this.ID)
+      this.ID2 = this.ID
+    if (this.ID2)
+      this.ProspectService.getPopulate(this.ID2).subscribe(data => {
+        if (data)
+          this.PROSPECT = data
       })
   }
 
