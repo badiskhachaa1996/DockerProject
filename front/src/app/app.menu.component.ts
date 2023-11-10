@@ -5272,30 +5272,29 @@ export class AppMenuComponent implements OnInit {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {
                             this.showMenu = false
-                            let CHECK1 = (p != null)
-                            let CHECK2 = (c != null)
-                            let CHECK3 = (isCHECK3(p.documents_dossier))
+                            let t1 = "Fiche de Renseignement ✅"
+                            let t2 = "Demande de candidature ❌"
+                            let t3 = "Dossier de candidature ❌"
+                            if (c != null)
+                                t2 = "Demande de candidature ✅"
+                            if (isCHECK3(p.documents_dossier))
+                                t3 = "Dossier de candidature ✅"
                             this.items = [
                                 {
-                                    label: "Fiche de Renseignement",
+                                    label: t1,
                                     icon: "pi pi-id-card",
                                     routerLink: ['/admission/lead-informations/' + p._id]
                                 },
                                 {
-                                    label: "Demande de candidature",
+                                    label: t2,
                                     icon: "pi pi-list",
                                     routerLink: ['/admission/lead-candidature/' + p._id]
                                 },
                                 {
-                                    label: "Dossier de candidature",
+                                    label: t3,
                                     icon: "pi pi-briefcase",
                                     routerLink: ['/admission/lead-dossier/' + p._id]
                                 },
-                                /*{
-                                    label: "Programme d'étude",
-                                    icon: "pi pi-book",
-                                    routerLink: ['/admission/lead-programme/' + p._id]
-                                },*/
                                 {
                                     label: "Suivre ma candidature",
                                     icon: "pi pi-list",
