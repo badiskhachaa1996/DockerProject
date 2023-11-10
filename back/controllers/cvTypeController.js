@@ -143,7 +143,7 @@ app.delete("/delete-cv/:id", (req, res) => {
 });
 
 app.get("/get-object-cv/:id", (req, res) => {
-    CvType.findOne({ _id: req.params.id }).populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').then((dataCv) => {
+    CvType.findOne({ _id: req.params.id }).populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').populate('profil').then((dataCv) => {
         res.status(200).send({ dataCv });
     }).catch((error) => {
         res.status(400).send("erreur :" + error);

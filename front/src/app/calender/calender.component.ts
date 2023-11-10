@@ -1693,13 +1693,15 @@ export class CalenderComponent implements OnInit {
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
-              dateC.setDate(dateC.getDate() + 1)
-            }
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              dateC.setDate(dateC.getDate() - 1)
+              while (dateC < new Date(c.date_fin)) {
+                congesList.push(new Date(dateC))
+                this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
+            } 
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
@@ -1874,6 +1876,7 @@ export class CalenderComponent implements OnInit {
       let year = date_str.substring(date_str.length - 4)
       return `${day}/${month}/${year}`
     } else {
+      console.log(date_str)
       return 'Inconnu'
     }
 

@@ -1,5 +1,5 @@
 <app-cv-pdf-preview
-    [student]="{fullName: fullName, profile: CV.competences[0]?.profile_id?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
+    [student]="{fullName: fullName, profile: profil, imgPDP: imgPDP}"
     [sidebar]="{apropos: CV?.a_propos, interets: CV?.centre_interets, competences: CV.competences, langues: CV.langues}"
     [maintContent]="{
     experiences_pro: CV?.experiences_pro,

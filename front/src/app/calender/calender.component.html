@@ -522,7 +522,8 @@
                             responsiveLayout="scroll">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th colspan="2" style="text-align: center;">Cra du {{dateParseur(cra?.today)}}</th>
+                                    <th colspan="2" style="text-align: center;">Cra du
+                                        {{dateParseur(historiqueCraSelected?.today)}}</th>
                                 </tr>
                                 <tr>
                                     <th>Durée</th>
@@ -649,6 +650,34 @@
                             <ng-template pTemplate="emptymessage">
                                 <tr>
                                     <td colspan="6">Aucun tache de cra trouvé.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <br>
+                        <p>&nbsp;</p>
+                        <p-table *ngIf="DataCRA.length!=0" [value]="DataCRA[0].cra" dataKey="_id"
+                            [rowHover]="true" styleClass="p-datatable-gridlines"
+                            responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Durée</th>
+                                    <th>Activité</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-cra>
+                                <tr>
+                                    <td>{{cra.number_minutes}}mn</td>
+                                    <td>{{cra.task}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="2">Vous n'avez aucun CRA enregistré pour le jour sélectionné.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="2">Chargement de votre CRA, merci de patienter...</td>
                                 </tr>
                             </ng-template>
                         </p-table>
