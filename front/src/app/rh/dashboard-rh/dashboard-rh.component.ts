@@ -148,7 +148,7 @@ export class DashboardRhComponent implements OnInit {
               });
 
               if (!collaborateur || !collaborateur.h_cra) {
-                collaborateur.h_cra = 7
+                collaborateur = { h_cra: 7 }
               }
               // conversion du taux cra du collaborateur en minutes
               collaborateur.h_cra *= 60;
