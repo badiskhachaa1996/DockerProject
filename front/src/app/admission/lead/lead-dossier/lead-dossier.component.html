@@ -17,7 +17,13 @@
         </ng-template>
         <ng-template pTemplate="body" let-doc>
             <tr>
-                <td>{{doc.nom}}</td>
+                <td>
+                    {{doc.nom}}
+                    <span *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
+                    <span *ngIf="doc.nom=='TCF'">(Obligatoire pour les étudiants des pays non francophone)</span>
+                    <span *ngIf="doc.nom=='Carte de séjour'">(Obligatoire pour les étudiants qui résident en
+                        France)</span>
+                </td>
                 <td>
                     <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
                 </td>
@@ -62,7 +68,8 @@
                     <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
                 </td>
                 <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file" *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                        *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
                         (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                         (click)="deleteOther(doc)" aria-hidden="true"></i>

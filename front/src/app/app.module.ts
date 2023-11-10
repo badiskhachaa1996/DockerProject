@@ -414,6 +414,7 @@ import { CvPdfContentComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-pr
 import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-loader-preview/cv-loader-preview.component';
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
+import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 
 
 @NgModule({
@@ -839,7 +840,8 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
     CvPdfSidebarComponent,
     CvPdfContentComponent,
     GestionEquipeRhComponent,
-    CvLoaderPreviewComponent
+    CvLoaderPreviewComponent,
+    PreviewCandidatureComponent
     
     
   ],

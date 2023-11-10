@@ -35,7 +35,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   routeItems: MenuItem[] = [
     { label: 'Infos' },
     { label: 'Parcours' },
-    { label: 'Programme' },
+    { label: 'Choix' },
     { label: 'Autres' },
     { label: 'Dernière étape' },
   ];;
@@ -63,8 +63,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   formSteps: any[] = [
     "Infos",
-    "Programme",
-    "Fin"
+    "Choix",
+    "Créer mon compte"
   ];
 
   rentreeList = [
@@ -193,8 +193,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         ];
       this.formSteps = [
         "Infos",
-        "Programme",
-        "Fin"
+        "Choix",
+        "Créer mon compte"
       ];
 
       this.nationList = environment.nationalities;
@@ -245,8 +245,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         ];
       this.formSteps = [
         "Infos",
-        "Programme",
-        "Fin",
+        "Choix",
+        "Créer mon compte",
       ];
 
       this.nationList = environment.nationalites;
