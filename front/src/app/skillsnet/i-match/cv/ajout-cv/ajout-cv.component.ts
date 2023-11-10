@@ -4,7 +4,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleService } from 'src/app/services/ecole.service';
 import * as html2pdf from 'html2pdf.js';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +22,7 @@ import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Annonce } from 'src/app/models/Annonce';
 import { Matching } from 'src/app/models/Matching';
 import { sub } from 'date-fns';
+import { Profile } from 'src/app/models/Profile';
 
 
 
@@ -32,6 +33,7 @@ import { sub } from 'date-fns';
 })
 export class AjoutCvComponent implements OnInit {
   @Input() CV_USER_ID
+  @Output() PRINTING = new EventEmitter<any>();
   cv: CV
   ID = this.route.snapshot.paramMap.get('id');
   // partie dedié aux CV
@@ -46,6 +48,7 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Saisonnière', value: 'Saisonnière' },
     { label: 'Contrat', value: 'Contrat' },
     { label: 'Alternance', value: 'Alternance' },
+    { label: 'Stage', value: 'Stage' }
   ]
   languesList: any[] = [
     { label: 'Français' },
@@ -207,7 +210,8 @@ export class AjoutCvComponent implements OnInit {
 
   @ViewChild('filter') filter: ElementRef;
   isEtudiant = false
-
+  profilsList = []
+  profilSelected: Profile
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
@@ -215,6 +219,14 @@ export class AjoutCvComponent implements OnInit {
     private MatchingService: MatchingService, private AnnonceService: AnnonceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //Récupération de la liste des profiles
+    this.skillsService.getProfiles()
+      .then((response: Profile[]) => {
+        response.forEach((profile: Profile) => {
+          this.profilsList.push({ label: profile.libelle, value: profile });
+        })
+      })
+      .catch((error) => { console.error(error); });
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
@@ -229,7 +241,8 @@ export class AjoutCvComponent implements OnInit {
       user_create_type: ['Externe'],
       winner_id: [null],
       isPublic: [true],
-      niveau_etude: ['']
+      niveau_etude: [''],
+      profil: ['']
     });
     this.reader.addEventListener("load", () => {
       this.imgPDP = this.reader.result;
@@ -256,7 +269,8 @@ export class AjoutCvComponent implements OnInit {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
         this.onLoadFile(this.ID)
-        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
+        console.log(c)
+        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
         this.pdfPreviewChosenSchool = c.ecole
         this.selectedMultiCpt = []
         c.competences.forEach(val => {
@@ -444,7 +458,6 @@ export class AjoutCvComponent implements OnInit {
     cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
 
-    console.log(this.formAddCV)
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
@@ -462,7 +475,7 @@ export class AjoutCvComponent implements OnInit {
     formValue.langues?.forEach(langue => {
       cv.langues.push(langue.label);
     });
-
+    cv.profil = this.formAddCV.value.profil._id
 
     //cv.video_lien = formValue.video_lien;
     cv.ecole = this.pdfPreviewChosenSchool
@@ -773,7 +786,11 @@ export class AjoutCvComponent implements OnInit {
     html2pdf().from(element).toPdf().get('pdf').then(function (pdf) {
       window.open(pdf.output('bloburl'), '_blank');
     });*/
-    window.print()
+    this.PRINTING.emit(true)
+    setTimeout(() => {
+      window.print()
+    }, 5)
+
   }
   imgPDP;
   reader: FileReader = new FileReader();

@@ -124,6 +124,11 @@ export class AdmissionService {
     let url = this.apiUrl + "downloadFile/" + id + "/" + filename
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  
+  downloadFilePaiement(id, filename) {
+    let url = this.apiUrl + "downloadFilePaiement/" + id + "/" + filename
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   downloadFileAdmin(id, path) {
     let url = this.apiUrl + "downloadFileAdmin/" + id + "/" + path
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
@@ -137,6 +142,11 @@ export class AdmissionService {
 
   uploadFile(formData, id, token = 'token') {
     let url = this.apiUrl + "uploadFile/" + id
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
+  }
+
+  uploadFilePaiement(formData, id, token = 'token') {
+    let url = this.apiUrl + "uploadFilePaiement/" + id
     return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
   }
 

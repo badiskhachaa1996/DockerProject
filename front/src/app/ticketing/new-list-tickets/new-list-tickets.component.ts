@@ -20,6 +20,7 @@ import { User } from 'src/app/models/User';
 import { Sujet } from 'src/app/models/Sujet';
 import { Service } from 'src/app/models/Service';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -104,6 +105,7 @@ export class NewListTicketsComponent implements OnInit {
   ]
   sujetDic = {}
   serviceDic = {}
+  createurList = []
   updateTicketList() {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
       this.tickets = dataM
@@ -126,15 +128,21 @@ export class NewListTicketsComponent implements OnInit {
         })
         //IF this.user ticketing !='Super-Admin'
         let role = service_dic['Ticketing']
-        if (!role || role != 'Super-Admin')
-          this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
+        if (!role || role != 'Super-Admin') {
+          let serviceList = []
+          this.USER.roles_ticketing_list.forEach(val => {
+            if (val?.role == 'Responsable')
+              serviceList.push(val.module)
+          })
+          this.TicketService.getAllNonAssigneV2(serviceList || []).subscribe(nonassigne => {
             nonassigne.forEach(e => {
               e.origin = 'Non Assigne'
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
+            console.log(this.USER?.service_list, nonassigne, role, serviceList)
             this.tickets = this.tickets.concat(nonassigne)
-            this.TicketService.getAllAssigneV2(this.USER?.service_list || []).subscribe(allAssigne => {
+            this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
                 e.documents_service.forEach(ds => { ds.by = "Agent" })
@@ -161,6 +169,7 @@ export class NewListTicketsComponent implements OnInit {
               }
             })
           })
+        }
         else
           this.TicketService.getAllNonAssigne().subscribe(nonassigne => {
             nonassigne.forEach(e => {
@@ -201,7 +210,7 @@ export class NewListTicketsComponent implements OnInit {
   }
   roleAccess = 'Spectateur'
   filterBase = []//'En attente de traitement', 'En cours de traitement'
-  @ViewChild('dt1', { static: true }) dt1: any;
+  @ViewChild('dt1', { static: true }) dt1: Table;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
@@ -624,7 +633,8 @@ export class NewListTicketsComponent implements OnInit {
     if (!this.filterType.includes('Non Assigne') && this.TicketMode != 'Personnel' && this.filterType.indexOf('Assigne Service') == -1)
       this.filterType.push('Assigne Service')
 
-    console.log(this.filterType)
+    this.createurList = []
+    let ids = []
     this.defaultTicket.forEach((t: Ticket) => {
       let r = true
       if (this.filterStatutTicket.includes("Urgent")) {
@@ -640,8 +650,14 @@ export class NewListTicketsComponent implements OnInit {
         r = false
       }
 
-      if (r)
+      if (r) {
         this.tickets.push(t)
+        if (t.createur_id && !ids.includes(t.createur_id._id)) {
+          ids.push(t.createur_id._id)
+          this.createurList.push({ label: `${t.createur_id.firstname} ${t.createur_id.lastname}`, value: t.createur_id._id })
+        }
+      }
+
     })
   }
   YpareoDropdown: any[] = [
@@ -760,6 +776,16 @@ export class NewListTicketsComponent implements OnInit {
         r = true
     })
     return r
+  }
+  filterDate(tab, val) {
+    console.log(val)
+    console.log(new Date(val))
+    let d1 = new Date(val)
+    d1.setHours(0, 0, 0)
+    console.log(d1, d1.toISOString())
+    this.dt1.filter(d1.toISOString(), 'date_ajout', "gte")
+    /*d1.setHours(23,59,0)
+    this.dt1.filter(d1.toISOString(), 'date_ajout', "lte")*/
   }
 }
 

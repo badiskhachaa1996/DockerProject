@@ -278,6 +278,7 @@ export class DashboardComponent implements OnInit {
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -832,10 +833,11 @@ export class DashboardComponent implements OnInit {
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
-        console.log(response);
+
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, id)
         } else {
+          //console.log(response);
           this.dailyCheck = response;
 
           // verifie s'il y'a eu un checkout
@@ -1413,6 +1415,9 @@ export class DashboardComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    }else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
     }
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })

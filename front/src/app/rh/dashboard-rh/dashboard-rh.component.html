@@ -38,10 +38,13 @@
 							icon="pi pi-moon"></p-tag>
 						<strong>&nbsp;{{numberOfPause}}</strong>
 					</p>
-					<p class="col-6" style="text-align: center;margin-bottom: 0px;"><p-tag value="Occupé"
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="Occupé"
 							severity="danger" icon="pi pi-pencil"></p-tag> <strong>&nbsp;{{numberOfOccupe}}</strong></p>
-					<p class="col-6" style="text-align: center;margin-bottom: 0px;"><p-tag value="En réunion"
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="En réunion"
 							severity="warning" icon="pi pi-phone"></p-tag> <strong>&nbsp;{{numberOfReunion}}</strong>
+					</p>
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="Ecole" severity="info"
+							icon="pi pi-book"></p-tag> <strong>&nbsp;{{numberOfCours}}</strong>
 					</p>
 				</div>
 			</div>
@@ -63,7 +66,7 @@
 								class="w-full" />
 						</span>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
-							(onChange)="chooseTeam($event.value);" placeholder="Equipe RH"
+							(onChange)="chooseTeam($event.value);" placeholder="Equipe"
 							[showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
@@ -103,7 +106,8 @@
 							{{dicCollaborateurs[check?.user_id._id]?.localisation}}
 						</td>
 						<td style="min-width: 14rem;">
-							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}}<br>
+							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} {{check?.platform_in}}<br>
+							<!--<strong>IP:{{check?.localisation_in}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
 						</td>
 						<td style="min-width: 10rem;padding: 0%;">
@@ -111,7 +115,9 @@
 								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td style="min-width: 10rem;">
-							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} {{check?.platform_out}} <span
+								*ngIf="check.auto">AUTOMATIQUE</span><br>
+							<!--<strong>IP:{{check?.localisation_out}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
 						</td>
 
@@ -135,6 +141,9 @@
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
 							<p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
+						</td>
+						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Ecole'">
+							<p-tag value="Ecole" severity="info" icon="pi pi-book"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
 							<p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
@@ -205,7 +214,7 @@
 					<tr>
 						<td [ngClass]="{'valid-begin':check?.validated,'non-valid-begin':!check?.validated}"
 							style="min-width: 12rem;">
-							{{check?.today}}
+							{{dateParseur(check?.today)}}
 						</td>
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
 							style="min-width: 14rem;">
@@ -219,7 +228,8 @@
 						</td>
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
 							style="min-width: 10rem;">
-							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <span
+								*ngIf="check.auto">AUTOMATIQUE</span><br>
 							<strong>Pointage: </strong>WIP
 						</td>
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"

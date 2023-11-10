@@ -1,5 +1,6 @@
 import { Annonce } from "./Annonce";
 import { Matching } from "./Matching";
+import { Prospect } from "./Prospect";
 import { Service } from "./Service";
 import { Ticket } from "./Ticket";
 
@@ -59,7 +60,8 @@ export class User {
         public linksnames?: string[],
         public last_connection?: Date,
         public haveNewAccess?: Boolean,
-        public type_supp?: string[]
+        public type_supp?: string[],
+        public savedAdministration?: Prospect[]
     ) { }
 
 

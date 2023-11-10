@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { User } from 'src/app/models/User';
@@ -23,6 +23,13 @@ import { Ticket } from 'src/app/models/Ticket';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { ServService } from 'src/app/services/service.service';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { VenteService } from 'src/app/services/vente.service';
+import { MailType } from 'src/app/models/MailType';
+import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { FileUpload } from 'primeng/fileupload';
+import { TeamsIntService } from 'src/app/services/teams-int.service';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -235,11 +242,13 @@ export class PreinscriptionComponent implements OnInit {
   TicketAffecter = null
   userDic = {}
   token;
+  candidatureDic = {}
   constructor(private UserService: AuthService, private commercialService: CommercialPartenaireService, private admissionService: AdmissionService,
     private etudiantService: EtudiantService, private ticketService: TicketService, private Socket: SocketService,
-    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService,
+    private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService, private VenteService: VenteService,
     private ToastService: MessageService, private rhService: RhService, private NotifService: NotificationService,
-    private SujetService: SujetService, private ServiceService: ServService) { }
+    private SujetService: SujetService, private ServiceService: ServService, private CandidatureService: CandidatureLeadService,
+    private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -261,6 +270,28 @@ export class PreinscriptionComponent implements OnInit {
           }
         })
       } else {
+        this.TeamsIntService.MIgetAll().subscribe(data => {
+          let dic = {}
+          let listTeam = []
+          data.forEach(element => {
+            if (!dic[element.team_id.nom]) {
+              dic[element.team_id.nom] = [element]
+              listTeam.push(element.team_id.nom)
+            }
+            else
+              dic[element.team_id.nom].push(element)
+          })
+          listTeam.forEach(team => {
+            let items = []
+            dic[team].forEach(element => {
+              items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+            })
+            this.agentSourcingList.push({
+              label: team,
+              items
+            })
+          })
+        })
         this.commercialService.getAllPopulate().subscribe(commercials => {
           commercials.forEach(commercial => {
             let { user_id }: any = commercial
@@ -294,23 +325,6 @@ export class PreinscriptionComponent implements OnInit {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
           //this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
         })
-        /*this.sourceList.push({ label: "Site Web", value: "Site Web" })
-        this.sourceList = this.sourceList.concat([
-          { label: "Equipe communication", value: "Equipe communication" },
-          { label: "Bureau Congo", value: "Bureau Congo" },
-          { label: "Bureau Maroc", value: "Bureau Maroc" },
-          { label: "Collaborateur interne", value: "Collaborateur interne" },
-          { label: "Report", value: "Report" },
-          { label: "Equipe commerciale interne - bureau Tunis", value: "Equipe commerciale interne - bureau Tunis" },
-          { label: "Equipe commerciale interne - bureau Paris", value: "Equipe commerciale interne - bureau Paris" },
-          { label: "Equipe commerciale interne - bureau Montpellier", value: "Equipe commerciale interne - bureau Montpellier" },
-          { label: "Equipe commerciale interne - bureau Congo Brazzaville", value: "Equipe commerciale interne - bureau Congo Brazzaville" },
-          { label: "Equipe commerciale interne - bureau Dubaï", value: "Equipe commerciale interne - bureau Dubaï" },
-          { label: "Equipe commerciale interne - bureau Maroc", value: "Equipe commerciale interne - bureau Maroc" },
-
-          { label: "Site web", value: "Site web" },
-          { label: "Candidature spontanée", value: "Candidature spontanée" },
-        ])*/
       })
       //recuperation des prospect 
       this.admissionService.getAll().subscribe((results => {
@@ -318,14 +332,23 @@ export class PreinscriptionComponent implements OnInit {
           if (result.traited_by == "Local") {
             this.prospects.push(result);
           } else { this.prospectI.push(result); }
-          console.log(this.prospects);
+
 
         })
       }))
+      this.CandidatureService.getAll().subscribe(cs => {
+        cs.forEach(c => {
+          if (c.lead_id)
+            this.candidatureDic[c.lead_id._id] = c
+        })
+      })
       this.ticketService.getAll().subscribe(data => {
         this.tickets = data;
       });
-
+      this.UserService.getPopulate(this.token.id).subscribe((user: User) => {
+        console.log(user.savedAdministration)
+        this.proscteList = user.savedAdministration
+      })
     }
 
   }
@@ -553,80 +576,94 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
- 
-  
-  onshowDossier(student: Prospect) { 
-    this.defaultEtatDossier=student.etat_dossier;
+
+
+  onshowDossier(student: Prospect) {
+    this.defaultEtatDossier = student.etat_dossier;
     this.tabStates[student._id] = true;
     this.ticket = [];
-    this.proscteList.push(student);
+    let ids = []
+    this.proscteList.forEach((p, idx) => {
+      ids.push(p._id)
+      if (p._id == student._id)
+        this.selectedTabIndex = 3 + idx;
+    })
+    if (!ids.includes(student._id))
+      this.proscteList.push(student);
+
+    this.UserService.update({ _id: this.token.id, savedAdministration: this.proscteList }).subscribe(r => {
+
+    })
     this.prospect_acctuelle = student;
     this.showDossier = true;
-    
+
     this.admissionService.getPopulate(student._id).subscribe(data => {
       this.PROSPECT = data
 
     })
     console.log(student.user_id);
     this.ticketService.getAllMine(student.user_id._id).subscribe(tick => {
-      console.log(student._id);
-      console.log(tick);
-      console.log(tick[0]);
       this.ticket.push(tick[0]);
-      console.log(tick[0].agent_id?.firstname)
+      //console.log(tick[0].agent_id?.firstname)
 
     })
 
     setTimeout(() => {
-      this.selectedTabIndex = 3; // Définir l'indice après un délai
-    }, 500); // Réglez le délai en millisecondes selon vos besoins
+      console.log(2 + this.proscteList.length)
+      this.selectedTabIndex = 2 + this.proscteList.length; // Définir l'indice après un délai
+    }, 100); // Réglez le délai en millisecondes selon vos besoins
     console.log(student);
-    
+
     this.DecisionForm.setValue({
-       date_d:this.conersiondate(this.prospect_acctuelle.decision.date_decision),
-     decisoin_admission:this.prospect_acctuelle.decision.decision_admission,
-     explication: this.prospect_acctuelle.decision.expliquation,
+      date_d: this.conersiondate(this.prospect_acctuelle.decision.date_decision),
+      decisoin_admission: this.prospect_acctuelle.decision.decision_admission,
+      explication: this.prospect_acctuelle.decision.expliquation,
     })
     this.entretienForm.patchValue({
-      date_e:this.conersiondate(this.prospect_acctuelle.entretien.date_entretien),
-      duree_e:this.prospect_acctuelle.entretien.Duree,
-      choix:this.prospect_acctuelle.entretien.choix,
-      niveau:this.prospect_acctuelle.entretien.niveau,
-      parcour:this.prospect_acctuelle.entretien.parcours
+      date_e: this.conersiondate(this.prospect_acctuelle.entretien.date_entretien),
+      duree_e: this.prospect_acctuelle.entretien.Duree,
+      choix: this.prospect_acctuelle.entretien.choix,
+      niveau: this.prospect_acctuelle.entretien.niveau,
+      parcour: this.prospect_acctuelle.entretien.parcours
     })
-    if(this.prospect_acctuelle.decision.expliquation=="En attente de traitement"){
-      if(this.prospect_acctuelle.entretien.niveau=="0"){
-        
-      }else{
-        this.prospect_acctuelle.etat_traitement=="ETAPE 3"
+    if (this.prospect_acctuelle.decision.expliquation == "En attente de traitement") {
+      if (this.prospect_acctuelle.entretien.niveau == "0") {
+
+      } else {
+        this.prospect_acctuelle.etat_traitement == "ETAPE 3"
       }
-    }else{
-      this.prospect_acctuelle.etat_traitement="ETAPE 4"
+    } else {
+      this.prospect_acctuelle.etat_traitement = "ETAPE 4"
     }
-    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data =>console.log(data))
+    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data => console.log(data))
   }
-  conersiondate(a){
-  const dl =a // Supposons que project.debut soit une date valide
+  conersiondate(a) {
+    const dl = a // Supposons que project.debut soit une date valide
     const dateObjectl = new Date(dl); // Conversion en objet Date
     const year = dateObjectl.getFullYear();
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     const new_date = `${year}-${month}-${day}`;
-  return new_date}
-  onTabClose() {
+    return new_date
+  }
+  onTabClose(e) {
+    this.proscteList.splice(e.index - 3, 1)
     this.selectedTabIndex = 0;
+    this.UserService.update({ _id: this.token.id, savedAdministration: this.proscteList }).subscribe(r => {
+
+    })
   }
   onshowDocuments() {
-    
+
     if (this.showDocuments == true) {
       this.showDocuments = false
     } else {
       this.showDocuments = true
     }
   }
-  onSelectEtat(event: any,procpect:Prospect){
-    procpect.etat_dossier=event.value
-    this.admissionService.updateV2(procpect).subscribe(data =>console.log(data))
+  onSelectEtat(event: any, procpect: Prospect) {
+    procpect.etat_dossier = event.value
+    this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
   }
   deletePro(prospect: Prospect) {
     console.log("hello")
@@ -815,5 +852,463 @@ export class PreinscriptionComponent implements OnInit {
       console.error(error)
     })
   }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
 
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
+  }
+  initalPayement = []
+  showPaiement: Prospect = null
+  partenaireOwned: string = null
+  initPaiement(prospect: Prospect) {
+    this.showPaiement = prospect
+    this.payementList = prospect?.payement
+    this.payementProgramList = prospect?.payement_programme
+    if (!this.payementList) { this.payementList = [] }
+    if (!this.payementProgramList) { this.payementProgramList = [] }
+    console.log(this.payementProgramList)
+    this.payementProgramList.forEach(pay => {
+      if (pay && pay.etat == 'Programmé')
+        if (new Date().getTime() > new Date(pay.date).getTime())
+          pay.etat = "Délai dépassé"
+    })
+    console.log(this.payementProgramList)
+    if (prospect.code_commercial)
+      this.commercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        if (commercial && commercial.partenaire_id)
+          this.partenaireOwned = commercial.partenaire_id
+      })
+    this.initalPayement = prospect?.payement
+  }
+  savePaiement() {
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    let phase_candidature = "En phase d'orientation consulaire"
+    if (this.payementList.length == 0) {
+      statut_payement = this.showPaiement.statut_payement;
+      phase_candidature = this.showPaiement.phase_candidature;
+    }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            this.ToastService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
+    }
+    console.log(this.payementProgramList)
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature, payement_programme: this.payementProgramList }, "Modification des paiements Admission").subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.showPaiement = data
+      //this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
+      this.showPaiement = null
+    })
+  }
+  payementList = []
+  payementProgramList = []
+  typePaiement = [
+    { value: null, label: "Aucun Suite a un renouvelement" },
+    { value: "Chèque Montpellier", label: "Chèque Montpellier" },
+    { value: "Chèque Paris", label: "Chèque Paris" },
+    { value: "Chèque Tunis", label: "Chèque Tunis" },
+    { value: "Compensation", label: "Compensation" },
+    { value: "Espèce chèque Autre", label: "Espèce chèque Autre" },
+    { value: "Espèce chèque Montpellier", label: "Espèce chèque Montpellier" },
+    { value: "Espèce chèque Paris", label: "Espèce chèque Paris" },
+    { value: "Espèce Congo", label: "Espèce Congo" },
+    { value: "Espèce Maroc", label: "Espèce Maroc" },
+    { value: "Espèce Montpellier", label: "Espèce Montpellier" },
+    { value: "Espèce Paris", label: "Espèce Paris" },
+    { value: "Espèce Tunis", label: "Espèce Tunis" },
+    { value: "Lien de paiement", label: "Lien de paiement" },
+    { value: "PayPal", label: "PayPal" },
+    { value: "Virement", label: "Virement" },
+    { value: "Virement chèque Autre", label: "Virement chèque Autre" },
+    { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
+    { value: "Virement chèque Paris", label: "Virement chèque Paris" },
+  ]
+  onAddPayement() {
+    if (this.payementList == null) {
+      this.payementList = []
+    }
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "" })
+  }
+  changeMontant(i, event, type) {
+
+    if (type == "date") {
+      this.payementList[i][type] = event.target.value;
+    } else if (type == "montant") {
+      this.payementList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementList[i][type] = event.value;
+    }
+  }
+  deletePayement(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le paiement ?")) {
+      this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.ToastService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
+    }
+  }
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + this.payementProgramList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
+
+
+  typeMotif = [
+    { label: 'Préinscription', value: 'Préinscription' },
+    { label: 'Avance scolarité', value: 'Avance scolarité' },
+    { label: 'Scolarité', value: 'Scolarité' },
+    { label: 'Autre', value: 'Autre' },
+  ]
+  typeEtat = [
+    { label: 'Programmé', value: 'Programmé' },
+    { label: 'Encassé', value: 'Encassé' },
+    { label: 'Délai dépassé', value: 'Délai dépassé' },
+    { label: 'Impayé', value: 'Impayé' },
+  ]
+
+  downloadFilePayment(paiement, idx) {
+    this.admissionService.downloadFilePaiement(this.showPaiement._id, paiement.doc).subscribe(data => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), paiement.doc)
+    })
+  }
+  selectedPaiment
+  uploadFilePayement(paiement, idx) {
+    document.getElementById('UploadPaiement').click();
+    this.selectedPaiment = { paiement, idx }
+  }
+
+  FileUploadPaiement(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showPaiement._id);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFilePaiement(formData, this.showPaiement._id).subscribe(res => {
+      this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: event[0].name + ' a été envoyé' });
+      //TODO Update PayementList dans DB
+      this.showPaiement.payement[this.selectedPaiment.idx].doc = event[0].name
+      this.payementList[this.selectedPaiment.idx].doc = event[0].name
+    },
+      (error) => {
+        this.ToastService.add({ severity: 'error', summary: event[0].name, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
+
+  onAddPayementProgram() {
+    if (this.payementProgramList == null) {
+      this.payementProgramList = []
+    }
+    this.payementProgramList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "Programmé" })
+  }
+  changeMontantProgram(i, event, type) {
+
+    if (type == "date") {
+      this.payementProgramList[i][type] = event.target.value;
+    } else if (type == "montant") {
+      this.payementProgramList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementProgramList[i][type] = event.value;
+    }
+  }
+  deletePayementProgram(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le paiement programmé ?")) {
+      this.payementProgramList.splice(i, 1)
+    }
+  }
+  uploadFilePayementProgram(paiement, idx) {
+    document.getElementById('UploadPaiementProgram').click();
+    this.selectedPaiment = { paiement, idx }
+  }
+  FileUploadPaiementProgram(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showPaiement._id);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFilePaiement(formData, this.showPaiement._id).subscribe(res => {
+      this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: event[0].name + ' a été envoyé' });
+      //TODO Update PayementList dans DB
+
+      this.payementProgramList[this.selectedPaiment.idx].doc = event[0].name
+      if (this.showPaiement.payement_programme && this.showPaiement.payement_programme[this.selectedPaiment.idx])
+        this.showPaiement.payement_programme[this.selectedPaiment.idx].doc = event[0].name
+      else
+        if (this.showPaiement.payement_programme)
+          this.showPaiement.payement_programme[this.selectedPaiment.idx] = this.payementProgramList[this.selectedPaiment.idx]
+        else
+          this.showPaiement.payement_programme = [this.payementProgramList[this.selectedPaiment.idx]]
+    },
+      (error) => {
+        this.ToastService.add({ severity: 'error', summary: event[0].name, detail: 'Erreur de chargement\n' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
+  showEmail = false
+  prospectSendTo: Prospect = null
+  emailTypeSelected: string = null
+  mailDropdown = []
+  mailTypeDropdown = []
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
+  })
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
+  })
+  onEmailPerso() {
+    console.log(this.formEmailPerso.value)
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+        this.formEmailPerso.reset()
+        this.historiqueEmails.push(data2)
+        this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  onEmailType() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+        this.formEmailType.reset()
+        this.historiqueEmails.push(data2)
+        this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  initSendEmail(prospect: Prospect) {
+    this.showEmail = true
+    this.prospectSendTo = prospect
+    this.EmailTypeS.HEgetAllTo(this.prospectSendTo._id).subscribe(data => {
+      this.historiqueEmails = data
+    })
+    this.EmailTypeS.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.mailDropdown.push({ label: val.email, value: val })
+      })
+    })
+    this.EmailTypeS.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
+  }
+
+  onMailType(event: MailType) {
+    this.formEmailType.patchValue({
+      ...event
+    })
+    this.piece_jointes = event.pieces_jointe
+    this.mailTypeSelected = event
+  }
+  mailTypeSelected: MailType
+  historiqueEmails: HistoriqueEmail[] = []
+  piece_jointes = []
+
+  //Gestion des PJs
+  onDeletePJ(ri) {
+    delete this.piece_jointes[ri]
+  }
+
+  uploadFilePJ: {
+    date: Date,
+    nom: string,
+    path: string,
+    _id: string
+  } = null
+
+  onAddPj() {
+    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+  downloadPJFile(pj) {
+    this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      importedSaveAs(blob, pj.path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+  onUploadPJ(uploadFilePJ) {
+    if (uploadFilePJ?.nom && uploadFilePJ.nom != 'Cliquer pour modifier le nom du document ici') {
+      document.getElementById('selectedFilePJ').click();
+      this.uploadFilePJ = uploadFilePJ
+    } else {
+      this.ToastService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+    }
+
+  }
+  @ViewChild('fileInput') fileInput: FileUpload;
+  FileUploadPJ(event: [File]) {
+    console.log(event)
+    if (event != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('nom', this.uploadFilePJ.nom)
+      formData.append('pj_id', this.uploadFilePJ._id)
+      formData.append('path', event[0].name)
+      formData.append('_id', this.mailTypeSelected?._id)
+      formData.append('file', event[0])
+      this.EmailTypeS.uploadPJ(formData).subscribe(res => {
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.piece_jointes[this.piece_jointes.indexOf(this.uploadFilePJ)].path = event[0].name
+        this.uploadFilePJ = null;
+        this.fileInput.clear()
+      }, error => {
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
+  initDocument(prospect) {
+    this.showDocAdmin = prospect
+    this.scrollToTop()
+  }
+  convertTime(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
+  uploadAdminFileForm: FormGroup = new FormGroup({
+    //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("", Validators.required),
+    note: new FormControl(""),
+    traited_by: new FormControl("", Validators.required),
+    type: new FormControl(""),
+  })
+  showUploadFile = null
+  showDocAdmin: Prospect = null
+  agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
+  FileUploadAdmin(event: { files: [File], target: EventTarget }) {
+
+    if (this.uploadAdminFileForm.valid && event.files != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+
+      formData.append('id', this.showUploadFile._id)
+      formData.append('date', this.uploadAdminFileForm.value.date)
+      formData.append('note', this.uploadAdminFileForm.value.note)
+      formData.append('nom', this.uploadAdminFileForm.value.nom)
+      formData.append('type', this.uploadAdminFileForm.value.type)
+      formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
+      formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.Socket.NewNotifV2(this.showUploadFile.user_id._id, `Un document est disponibe dans votre espace pour le téléchargement `)
+
+        this.NotifService.create(new Notification(null, null, false,
+          `Un document est disponibe dans votre espace pour le téléchargement `,
+          new Date(), this.showUploadFile.user_id._id, null)).subscribe(test => { })
+        if (this.showUploadFile.code_commercial)
+          this.commercialService.getByCode(this.showUploadFile.code_commercial).subscribe(commercial => {
+            if (commercial) {
+              this.Socket.NewNotifV2(commercial.user_id._id, `Un document est disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}`)
+
+              this.NotifService.create(new Notification(null, null, false,
+                `Un document est disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}`,
+                new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+              this.EmailTypeS.defaultEmail({
+                email: commercial.user_id?.email,
+                objet: '[IMS] Admission - Document inscription disponible  d\'un de vos leads ',
+                mail: `
+
+                Cher partenaire,
+
+                Nous avons le plaisir de vous informer qu'un document important est désormais disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}. Ce document est accessible via notre plateforme en ligne ou peut être récupéré auprès de notre équipe administrative. Nous tenons à vous remercier pour votre collaboration continue dans le suivi et le soutien des étudiants. Votre engagement est essentiel pour assurer leur réussite et leur satisfaction.
+                
+                N'hésitez pas à nous contacter si vous avez des questions supplémentaires ou besoin de plus amples informations.
+                
+                Cordialement,
+              `
+              }).subscribe(() => { })
+            }
+          })
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        if (res.documents_administrative)
+          this.showDocAdmin.documents_administrative = res.documents_administrative
+        event.target = null;
+        this.showUploadFile = null;
+
+        this.fileInput.clear()
+      }, error => {
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
+  generateCustomID(nom) {
+    let reeldate = new Date();
+
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+
+    nom = nom.substr(0, 2).toUpperCase();
+
+    return 'DOC' + nom + date + random;
+  }
+  documentDropdown = [
+    { label: "Inscription", value: "inscription" },
+    { label: "Préinscription", value: "preinscription" },
+    { label: "Paiement", value: "paiement" },
+    { label: "Paiement préinscription", value: "paiement-preinscription" },
+    { label: "Paiement préinscription - acompte", value: "paiement-preinscription-acompte" },
+    { label: "Paiement acompte", value: "paiement-acompte" },
+    { label: "Dérogation", value: "derogation" },
+    { label: "Lettre d'acceptation", value: "lettre-acceptation" },
+    { label: "Attestation de scolarité", value: "attestation-scolarite" },
+    { label: "Attestation d'assiduité", value: "attestation-assiduite" },
+    { label: "Contrat d'engagement", value: "contrat-engagement" },
+    { label: "Candidature", value: "candidature" },
+  ]
+  downloadAdminFile(path) {
+    this.admissionService.downloadFileAdmin(this.showDocAdmin._id, path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(blob, path)
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
 }

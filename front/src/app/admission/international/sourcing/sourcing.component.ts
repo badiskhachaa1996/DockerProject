@@ -338,7 +338,8 @@ export class SourcingComponent implements OnInit {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.CandidatureLeadService.getAll().subscribe(candidatures => {
       candidatures.forEach(v => {
-        this.candidatureDic[v.lead_id._id] = v
+        if (v.lead_id)
+          this.candidatureDic[v.lead_id._id] = v
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {

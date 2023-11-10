@@ -18,6 +18,7 @@ import { Conge } from 'src/app/models/Conge';
 import { PointageService } from 'src/app/services/pointage.service';
 import { PointageData } from 'src/app/models/PointageData';
 import { DailyCheck } from 'src/app/models/DailyCheck';
+import { TeamsRHService } from 'src/app/services/teams-rh.service';
 
 @Component({
   selector: 'app-new-calendrier',
@@ -103,13 +104,19 @@ export class NewCalendrierComponent implements OnInit {
   };
   constructor(private rhService: RhService, private ToastService: MessageService, private PointageService: PointageService,
     private CalendrierRHService: CalendrierRhService, private dailyCheckService: DailyCheckService,
-    private congeService: CongeService) { }
+    private congeService: CongeService, private TeamRHService: TeamsRHService) { }
   token;
+  teamRHFilter = [{ label: 'Toutes les équipes', value: null }]
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getGlobalEvents()
     this.PointageService.getAllWithUserID().subscribe(r => {
       this.dataMachine = r
+    })
+    this.TeamRHService.TRgetAll().subscribe(teams => {
+      teams.forEach(m => {
+        this.teamRHFilter.push({ label: m.nom, value: m._id })
+      })
     })
     this.rhService.getCollaborateurs()
       .then((response) => {
@@ -162,6 +169,9 @@ export class NewCalendrierComponent implements OnInit {
     } else if (event.event.extendedProps.type == 'Autorisation') {
       this.dateAutorisation = new Date(event.event.start).toDateString()
       this.displayAutorisation = true
+    } else if (event.event.extendedProps.type == 'Cours') {
+      this.dateCours = new Date(event.event.start).toDateString()
+      this.displayCours = true
     } else {
       this.displayData = true
       this.dataEvent = event.event.extendedProps;
@@ -185,41 +195,72 @@ export class NewCalendrierComponent implements OnInit {
   }
   AbsentDic = {}
   CongeDic = {}
+  coursDic = {}
   PresentDic = {}
 
   getGlobalEvents() {
+    this.AbsentDic = {}
+    this.CongeDic = {}
+    this.coursDic = {}
+    this.PresentDic = {}
     this.eventGlobal = []
     this.defaultEventsGlobal = []
+
     this.CalendrierRHService.getAll().subscribe(events => {
-      events.forEach(ev => { this.addEventGlobal(ev) })
+      events.forEach(ev => {
+
+        let coursList = []
+        if (ev.type == 'Cours') {
+          let dateCours = new Date(ev.date)
+          if (!coursList.includes(dateCours.toString())) {
+            coursList.push(dateCours.toString())
+            this.addEventGlobal(ev)
+          }
+          if (this.coursDic[dateCours.toDateString()]) {
+            this.coursDic[dateCours.toDateString()].push(ev)
+          } else {
+            this.coursDic[dateCours.toDateString()] = [ev]
+          }
+        } else {
+          this.addEventGlobal(ev)
+        }
+      })
       this.dailyCheckService.getChecks().then(dcs => {
         this.congeService.getAll().then(conges => {
           //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
+
           let congesList: string[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              if (this.CongeDic[dateC.toDateString()]) {
-                this.CongeDic[dateC.toDateString()].push(c)
-              } else {
-                this.CongeDic[dateC.toDateString()] = [c]
+            if (this.membersTeams.length == 0 || this.membersTeams.includes(c.user_id._id))
+              if (c.statut == 'Validé') {
+                let dateC = new Date(c.date_debut)
+                dateC.setDate(dateC.getDate() - 1)
+                while (dateC < new Date(c.date_fin)) {
+                  if (this.CongeDic[dateC.toDateString()]) {
+                    this.CongeDic[dateC.toDateString()].push(c)
+                  } else {
+                    this.CongeDic[dateC.toDateString()] = [c]
+                  }
+                  if (!congesList.includes(dateC.toString()) && c) {
+                    congesList.push(dateC.toString())
+                    this.addEventGlobal(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, 'Autorisation'))
+                  }
+
+                  dateC.setDate(dateC.getDate() + 1)
+                }
               }
-              if (!congesList.includes(dateC.toString()))
-                this.addEventGlobal(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, "Autorisation"))
-              else
-                congesList.push(dateC.toString())
-              dateC.setDate(dateC.getDate() + 1)
-            }
           })
           dcs.forEach(dc => {
-            presencesList.push(new Date(dc.check_in))
-            if (this.PresentDic[new Date(dc.check_in).toDateString()]) {
-              this.PresentDic[new Date(dc.check_in).toDateString()].push(dc)
-            } else {
-              this.PresentDic[new Date(dc.check_in).toDateString()] = [dc]
+            if (this.membersTeams.length == 0 || this.membersTeams.includes(dc.user_id._id)) {
+              presencesList.push(new Date(dc.check_in))
+              if (this.PresentDic[new Date(dc.check_in).toDateString()]) {
+                this.PresentDic[new Date(dc.check_in).toDateString()].push(dc)
+              } else {
+                this.PresentDic[new Date(dc.check_in).toDateString()] = [dc]
+              }
             }
+
           })
           let dateDebut = new Date()
           let dateEnd = new Date()
@@ -244,18 +285,20 @@ export class NewCalendrierComponent implements OnInit {
     this.CalendrierRHService.getAll().subscribe(events => {
       //events.forEach(ev => { this.addEventUser(ev) })
       this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
-        this.congeService.getAllByUserId(this.userSelected.user_id._id).then(conges => {
+        this.congeService.getAllByUserId(this.userSelected.user_id._id,).then(conges => {
           //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
           let congesList: Date[] = []
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
-              dateC.setDate(dateC.getDate() + 1)
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              dateC.setDate(dateC.getDate() - 1)
+              while (dateC < new Date(c.date_fin)) {
+                congesList.push(new Date(dateC))
+                this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
             }
           })
           dcs.forEach(dc => {
@@ -264,7 +307,7 @@ export class NewCalendrierComponent implements OnInit {
               this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
             } else {
               this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
-              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Présent"))
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Activité"))
             }
 
           })
@@ -310,14 +353,19 @@ export class NewCalendrierComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié" || event.type == "Absence") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
+    } else if (event.type == "Présent") {
+      backgroundColor = '#37BAD4'
+      borderColor = '#2fa2b9'
     }
     let title = event.type
     if (event.name)
       title = event.name
     if (event.campus)
       title = title + ", " + event.campus
-    if (!event.personal)
-      this.eventGlobal.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    this.eventGlobal.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     this.optionsGlobal.events = this.eventGlobal
     this.eventGlobal = Object.assign([], this.eventGlobal) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
 
@@ -337,6 +385,12 @@ export class NewCalendrierComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
+    } else if (event.type == "Présent") {
+      backgroundColor = '#37BAD4'
+      borderColor = '#2fa2b9'
     }
     let title = event.type
     if (event.name)
@@ -392,11 +446,14 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
     if (typeof arr2 != typeof ['qsdqdqsd'])
       arr2 = [arr2.toString()]
     let r = false
-    arr1.forEach(val => {
-      if (arr2.includes(val))
-        r = true
-    })
+    if (arr1) {
+      arr1.forEach(val => {
+        if (arr2.includes(val))
+          r = true
+      })
+    }
     return r
+
   }
   DataDay: {
     date: Date,
@@ -473,7 +530,8 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
       this.formUpdate.reset()
     })
   }
-
+  dateCours: string = ''
+  displayCours = false
   dateAbsence: string = ''
   dateAutorisation: string = ''
   displayAutorisation = false
@@ -525,5 +583,20 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
       this.ToastService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
 
     }, error => { console.error(error) })
+  }
+  membersTeams = []
+  chooseTeam(team_id) {
+    if (team_id)
+      this.TeamRHService.MRgetAllByTeamID(team_id).subscribe(members => {
+        let ids = []
+        members.forEach(m => { ids.push(m.user_id._id) })
+        this.membersTeams = members
+        console.log(members)
+      })
+    else {
+      this.membersTeams = []
+      this.getGlobalEvents()
+    }
+
   }
 }

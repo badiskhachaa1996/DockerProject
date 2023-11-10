@@ -275,6 +275,7 @@ export class CalenderComponent implements OnInit {
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -584,7 +585,7 @@ export class CalenderComponent implements OnInit {
     }
     else { this.visibleA = false }
     if (craLast?.today != new Date().toLocaleDateString('en-US')) {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${craLast?.today}` })
+      console.error({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` }, new Date().toLocaleDateString('en-US'), craLast?.today)
     }
 
   }
@@ -862,10 +863,9 @@ export class CalenderComponent implements OnInit {
     this.dailyCheckService.verifCheckByUserId(this.token.id)
       .then((response) => {
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, this.token.id)
         } else {
           this.dailyCheck = response;
-          console.log(response)
           // verifie s'il y'a eu un checkout
           if (response?.check_out != null) {
             // remise à zero des temps de travail
@@ -936,20 +936,24 @@ export class CalenderComponent implements OnInit {
 
   // méthode de checkin
   onCheckIn(): void {
-    const check = new DailyCheck();
 
+    const check = new DailyCheck();
+    check.platform_in = this.getDeviceType()
     check.user_id = this.user._id;
     check.check_in = new Date();
     check.isInPause = false;
     this.classbutonchekin = "p-button-secondary mb-2"
+    this.getIP().then(txt => {
+      //check.localisation_in = txt
+      this.dailyCheckService.postCheckIn(check)
+        .then((response) => {
+          this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
+          this.onCheckDailyCheck(response.user_id);
+          this.onUpdateStatus('Disponible')
+        })
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
+    })
 
-    this.dailyCheckService.postCheckIn(check)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Disponible')
-      })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
 
   motifStr = ''
@@ -966,7 +970,7 @@ export class CalenderComponent implements OnInit {
     this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: true })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bonne pause' });
 
@@ -985,7 +989,7 @@ export class CalenderComponent implements OnInit {
     this.dailyCheck.isInPause = false;
     this.dailyCheck.pause_timing = this.pauseTiming + this.dailyCheck.pause_timing;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: false, pause_timing: this.dailyCheck.pause_timing })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bon retour au travail' });
 
@@ -998,8 +1002,6 @@ export class CalenderComponent implements OnInit {
       .then((response) => {
         this.historiqueCra = response
         this.lastCras = response[response.length - 1];
-
-        console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
 
@@ -1035,6 +1037,7 @@ export class CalenderComponent implements OnInit {
       worked += cra.number_minutes;
     });
     this.dailyCheck.check_out = new Date();
+    this.dailyCheck.platform_out = this.getDeviceType()
 
     this.dailyCheck.pause_timing = this.pauseTiming;
     this.rhService.getCollaborateurByUserId(this.userConnected._id)
@@ -1054,22 +1057,25 @@ export class CalenderComponent implements OnInit {
         let percent = (totalTimeCra * 100) / collaborateur.h_cra;
         this.craPercent = percent
         this.dailyCheck.taux_cra = this.craPercent;
-        this.dailyCheckService.patchCheckIn(this.dailyCheck)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-            // recuperation du check journalier
-            this.onCheckDailyCheck(response.user_id);
-            this.onUpdateStatus('Absent')
-            // recuperation de l'historique du cra
-            this.dailyCheckService.getUserChecks(this.token.id)
-              .then((response) => {
-                this.historiqueCra = response
-                this.lastCras = response[response.length - 1];
-                console.log(this.lastCras);
-              })
-              .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
-          })
-          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+        this.getIP().then(txt => {
+          //this.dailyCheck.localisation_out = txt
+          this.dailyCheckService.patchCheckIn(this.dailyCheck)
+            .then((response) => {
+              this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+              // recuperation du check journalier
+              this.onCheckDailyCheck(response.user_id);
+              this.onUpdateStatus('Absent')
+              // recuperation de l'historique du cra
+              this.dailyCheckService.getUserChecks(this.token.id)
+                .then((response) => {
+                  this.historiqueCra = response
+                  this.lastCras = response[response.length - 1];
+                })
+                .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+            })
+            .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+        })
+
       })
       .catch((error) => { console.error(error); });
 
@@ -1111,7 +1117,7 @@ export class CalenderComponent implements OnInit {
       this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
     });
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, cra: this.dailyCheck.cra })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
         this.formAddCra.reset();
@@ -1124,7 +1130,6 @@ export class CalenderComponent implements OnInit {
   onAddCraTicket(): void {
     const formValue = this.formAddCraTicket.value;
     // ajout des données formulaire au dailycheck
-    console.log(formValue);
 
     this.dailyCheck.cra.push({ task: this.formAddCraTicket.get('ticket').value.label, number_minutes: this.formAddCraTicket.get('duration').value });
 
@@ -1442,15 +1447,6 @@ export class CalenderComponent implements OnInit {
       this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
         .then((response) => {
           response.forEach(c => {
-            /*
-      { label: 'Congé payé', value: 'Congé payé' },
-      { label: 'Congé sans solde', value: 'Congé sans solde' },
-      { label: 'Absence maladie', value: 'Absence maladie' },
-      { label: 'Télétravail', value: 'Télétravail' },
-      { label: 'Départ anticipé', value: 'Départ anticipé' },
-      { label: 'Autorisation', value: 'Autorisation' },
-      { label: 'Autre motif', value: 'Autre motif' },
-            */
             let dd = new Date(c.date_debut)
             if (dd > new Date(this.dateChoose + '-31'))
               dd = new Date(this.dateChoose + '-31')
@@ -1465,7 +1461,6 @@ export class CalenderComponent implements OnInit {
 
             // To calculate the no. of days between two dates
             var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
-            console.log(c.type_conge, Difference_In_Days)
             if (c.type_conge == "Congé payé")
               this.stats.conges_pay += Difference_In_Days
             else if (c.type_conge == "Congé sans solde")
@@ -1492,34 +1487,8 @@ export class CalenderComponent implements OnInit {
     }
   }
   eventsRH = []
-  optionsRH = {
-    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
-    defaultDate: new Date(),
-    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
-    header: {
-      left: "title",
-      right: 'prev,next'
-      // left: 'prev,next'
-    },
-    locale: frLocale,
-    timeZone: 'local',
-    contentHeight: 500,
-    eventClick: this.eventClickFCRH.bind(this),
-    events: [
-
-    ],
-    defaultView: "dayGridMonth",
-    minTime: '08:00:00',
-    firstDay: 1,
-    selectable: true,
-  };
   displayData = false
   dataEvent: EventCalendarRH
-  eventClickFCRH(event) {
-    this.displayData = true
-    this.dataEvent = event.event.extendedProps;
-    //console.log(event)
-  }
 
   addEvent(event: EventCalendarRH) {
     let backgroundColor = '#1F618D'
@@ -1536,6 +1505,9 @@ export class CalenderComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
     }
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
@@ -1556,13 +1528,16 @@ export class CalenderComponent implements OnInit {
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
-              dateC.setDate(dateC.getDate() + 1)
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              dateC.setDate(dateC.getDate() - 1)
+              while (dateC < new Date(c.date_fin)) {
+                congesList.push(new Date(dateC))
+                this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
             }
+
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
@@ -1570,7 +1545,6 @@ export class CalenderComponent implements OnInit {
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
-          console.log(congesList, conges)
           while (dateEnd < dateDebut) {
             if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
               //Vérifier si il a été présent ou si il a été en congé 
@@ -1579,8 +1553,6 @@ export class CalenderComponent implements OnInit {
                 events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
                 absencesList.push(dateDebut)
                 this.addEvent(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
-              } else {
-                //console.log(dateDebut,events)
               }
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
@@ -1609,9 +1581,7 @@ export class CalenderComponent implements OnInit {
   }
   displayPointeuse = false
   onSeePointeuse() {
-    console.log('test')
     this.displayPointeuse = true
-    console.log(this.displayPointeuse)
   }
   seeDescriptionActu = false
   seeActu: ActualiteRH
@@ -1677,6 +1647,7 @@ export class CalenderComponent implements OnInit {
   getUsersEvents() {
     this.eventUsers = []
     this.defaultEventUsers = []
+    this.PresentDicUser = {}
     this.CalendrierRHService.getAll().subscribe(events => {
       //events.forEach(ev => { this.addEventUser(ev) })
       this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
@@ -1686,12 +1657,15 @@ export class CalenderComponent implements OnInit {
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
-              dateC.setDate(dateC.getDate() + 1)
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              let dateF = new Date(c.date_fin)
+              dateF.setDate(dateF.getDate() + 1)
+              while (dateC < dateF) {
+                congesList.push(new Date(dateC))
+                this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
             }
           })
           dcs.forEach(dc => {
@@ -1700,7 +1674,7 @@ export class CalenderComponent implements OnInit {
               this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
             } else {
               this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
-              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Présent"))
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Activité"))
             }
 
           })
@@ -1722,8 +1696,10 @@ export class CalenderComponent implements OnInit {
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
           events.forEach(ev => {
-            if (ev.type == 'Cours' && ev?.personal == this.token.id)
-              this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
+            if (ev.type == 'Cours' && ev?.personal == this.token.id) {
+              this.addEventUser(new EventCalendarRH(ev?._id, new Date(ev.date), "Cours", null, null))
+            }
+
           })
           this.defaultEventUsers = this.eventUsers
           this.onFilter()
@@ -1738,7 +1714,7 @@ export class CalenderComponent implements OnInit {
     if (event.type == 'Jour férié France') {
       backgroundColor = '#D4AC0D'
       borderColor = '#D35400'
-    } else if (event.type == 'Autre événement' || event.type == 'Cours') {
+    } else if (event.type == 'Autre événement') {
       backgroundColor = '#9B59B6'
       borderColor = '#8E44AD'
     } else if (event.type == "Autorisation") {
@@ -1747,6 +1723,12 @@ export class CalenderComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
+    } else if (event.type == "Présent") {
+      backgroundColor = '#37BAD4'
+      borderColor = '#2fa2b9'
     }
     let title = event.type
     if (event.name)
@@ -1772,6 +1754,9 @@ export class CalenderComponent implements OnInit {
       this.dateCRA = new Date(event.event.start).toDateString()
       this.DataCRA = this.PresentDicUser[this.dateCRA]
       this.displayCRA = true
+    } else if (event.event.extendedProps.type == "Cours") {
+      this.displayData = true
+      this.dataEvent = event.event.extendedProps
     }
   }
   dateClickFC(event) {
@@ -1779,7 +1764,6 @@ export class CalenderComponent implements OnInit {
 
     this.eventUsers.forEach(ev => {
       if (ev.extendedProps.type == 'Cours' && new Date(event.date).toString() == new Date(ev.extendedProps.date).toString()) {
-        //console.log(ev.extendedProps.type, new Date(event.date).toString(), new Date(ev.extendedProps.date).toString())
         r = false
       }
     })
@@ -1826,6 +1810,63 @@ export class CalenderComponent implements OnInit {
 
     }, error => { console.error(error) })
   }
+  getDeviceType() {
+
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return "Mobile";
+    }
+    if (
+      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        ua
+      )
+    ) {
+      return "Mob";
+    }
+    return "PC";
+  };
+  getIP() {
+    return fetch("https://checkip.amazonaws.com/").then(res => res.text()).then(data => {
+      console.log(data)
+      //return data
+      return 'Refus de partage'
+    }, error => {
+      return "Inconnu (Error)"
+    })
+  }
+  dateParseur(date_str: string) {
+    if (date_str) {
+      let pos1 = date_str.indexOf('/')
+      let day = date_str.substring(0, pos1)
+      let month = date_str.substring(pos1 + 1, date_str.length - 5)
+      let year = date_str.substring(date_str.length - 4)
+      return `${day}/${month}/${year}`
+    } else {
+      console.log(date_str)
+      return 'Inconnu'
+    }
+
+
+  }
+  totalCalc(cra: any[]) {
+    let r = 0
+    if (cra)
+      cra.forEach(c => { r += c.number_minutes })
+    if (r != 0) {
+      let h = Math.trunc(r / 60)
+      let m = r - (h * 60)
+      return `${h}H ${m}min`
+    } else
+      return '0 min'
+  }
+  onDelete() {
+    this.CalendrierRHService.delete(this.dataEvent._id).subscribe(d => {
+      this.getUsersEvents()
+      this.displayData = false
+      this.dataEvent = null
+    })
+  }
+
 }
 
 

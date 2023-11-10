@@ -374,10 +374,14 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         default: "NON"
     },
+     payement_programme: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    },
     ecole:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "ecoleadmissions",
-    }
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

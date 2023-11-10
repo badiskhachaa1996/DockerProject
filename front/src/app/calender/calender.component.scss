@@ -31,3 +31,57 @@
     border-bottom: 2px solid red !important;
     border-right: 2px solid red !important;
 }
+
+:host ::ng-deep .absence div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #E74C3C!important;
+    border-color: #7B241C!important;
+}
+
+:host ::ng-deep .absence div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .absence div.p-checkbox-box.p-focus {
+    border-color: #7B241C!important;
+}
+
+:host ::ng-deep .autorisation div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #1ABC9C!important;
+    border-color: #186A3B!important;
+}
+:host ::ng-deep .autorisation div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .autorisation div.p-checkbox-box.p-focus {
+    border-color: #186A3B!important;
+}
+
+:host ::ng-deep .ferieT div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #1F618D!important;
+    border-color: #17202A!important;
+}
+
+:host ::ng-deep .ferieT div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .ferieT div.p-checkbox-box.p-focus {
+    border-color: #17202A!important;
+}
+
+:host ::ng-deep .ferieFR div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #D4AC0D!important;
+    border-color: #D35400!important;
+}
+
+:host ::ng-deep .ferieFR div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .ferieFR div.p-checkbox-box.p-focus {
+    border-color: #D35400!important;
+}
+
+:host ::ng-deep .cours div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #c82df7!important;
+    border-color: #9300bf!important;
+}
+
+:host ::ng-deep .cours div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .cours div.p-checkbox-box.p-focus {
+    border-color: #9300bf!important;
+}
+
+
+:host ::ng-deep .activite div.p-checkbox .p-checkbox-box.p-highlight {
+    background: #37BAD4!important;
+    border-color: #2fa2b9!important;
+}
+
+:host ::ng-deep .activite div.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,:host ::ng-deep .cours div.p-checkbox-box.p-focus {
+    border-color: #2fa2b9!important;
+}

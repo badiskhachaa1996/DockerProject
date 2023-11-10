@@ -19,6 +19,7 @@ export class CvLoaderPreviewComponent implements OnInit {
   user: User
   @Input() CV_ID = ""
   fullName = ""
+  profil = "Profil Non Spécifié"
   loaded = false
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
@@ -26,8 +27,13 @@ export class CvLoaderPreviewComponent implements OnInit {
     }, false);
     this.CVService.getByID(this.CV_ID).subscribe(cv => {
       this.CV = cv.dataCv
+      if (this.CV.profil)
+        this.profil = this.CV.profil.libelle
+      else if (this.CV.competences && this.CV.competences.length != 0 && this.CV.competences[0]?.profile_id)
+        this.profil = this.CV.competences[0]?.profile_id?.libelle
       this.user = this.CV.user_id
       this.fullName = `${this.user?.lastname} ${this.user?.firstname}`
+
       this.AuthService.getProfilePicture(this.CV.user_id._id).subscribe((data) => {
         if (data.error) {
           this.imgPDP = null

@@ -142,17 +142,20 @@
                         [disabled]=" roleAccess=='Agent'" (onChange)="onChangeMode($event)"
                         optionValue="label"></p-selectButton>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' && TicketMode=='Personnel'">
+                <div class="col-6 md:col-3 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur' && TicketMode=='Personnel'">
                     <p-checkbox name="filterType" value="Mine" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
                 </div>
-                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode!='Personnel'">
+                <div class="col-6 md:col-6 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode!='Personnel'">
                     <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
                     <label for="city1">Non assignés</label>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode=='Personnel'">
+                <div class="col-6 md:col-3 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode=='Personnel'">
                     <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type2"></p-checkbox>
                     <label for="city1">Assignés</label>
@@ -183,6 +186,21 @@
                 selectionMode="single" class="col-12" [globalFilterFields]="['customid']" responsiveLayout="scroll"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row" *ngIf="TicketMode!='Personnel'">
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="createurList" filter="true" [showClear]="true"
+                            (onChange)="dt1.filter($event.value, 'createur_id._id', 'equals');"
+                            (onClear)="dt1.filter('', 'createur_id._id', 'equals');"
+                            placeholder="Choisissez un créateur" emptyFilterMessage="Pas de user trouvé"
+                            filterPlaceholder="Choisissez un créateur"></p-dropdown>
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
+                            [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
+                            (onClear)="dt1.filter('', 'agent_id._id', 'equals');"
+                            placeholder="Choisissez un agent Ticketing"
+                            emptyFilterMessage="Pas d'agent Ticketing trouvé"
+                            filterPlaceholder="Choisissez un agent Ticketing"></p-dropdown>
+                        <input type="date" (change)="filterDate(dt1,$event.target.value)"
+                            placeholder="Choisissez une date" pInputText>
+                    </div>
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
@@ -197,11 +215,7 @@
                             (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');"
                             placeholder="Choisissez un sujet" emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
-                            [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
-                            *ngIf="TicketMode!='Personnel'" (onClear)="dt1.filter('', 'agent_id._id', 'equals');"
-                            placeholder="Choisissez un user" emptyFilterMessage="Pas de user trouvé"
-                            filterPlaceholder="Choisissez un user"></p-dropdown>
+
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
                             [showClear]="true" (onClear)="dt1.filter('', 'statut', 'in');" [(ngModel)]="filterBase"
                             (onChange)="dt1.filter($event.value, 'statut', 'in');" placeholder="Choisissez un statut"
@@ -216,6 +230,7 @@
                             (onClear)="dt1.filter('', 'filiere', 'in');"
                             (onChange)="dt1.filter($event.value, 'filiere', 'in');"
                             placeholder="Choisissez une filière"></p-multiSelect>
+
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
