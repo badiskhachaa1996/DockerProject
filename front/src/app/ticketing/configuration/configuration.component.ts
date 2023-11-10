@@ -218,7 +218,7 @@ export class ConfigurationComponent implements OnInit {
   customIndexOfDropdown(listUser: { value: User, label: string }[], agent: User) {
     let r = -1
     listUser.forEach((val, idx) => {
-      if (val.value._id.toString() == agent._id.toString())
+      if (val.value?._id.toString() == agent?._id.toString())
         r = idx
     })
     return r

@@ -208,14 +208,21 @@ export class NewCalendrierComponent implements OnInit {
 
     this.CalendrierRHService.getAll().subscribe(events => {
       events.forEach(ev => {
-        this.addEventGlobal(ev)
+
+        let coursList = []
         if (ev.type == 'Cours') {
           let dateCours = new Date(ev.date)
+          if (!coursList.includes(dateCours.toString())) {
+            coursList.push(dateCours.toString())
+            this.addEventGlobal(ev)
+          }
           if (this.coursDic[dateCours.toDateString()]) {
             this.coursDic[dateCours.toDateString()].push(ev)
           } else {
             this.coursDic[dateCours.toDateString()] = [ev]
           }
+        } else {
+          this.addEventGlobal(ev)
         }
       })
       this.dailyCheckService.getChecks().then(dcs => {
@@ -245,7 +252,7 @@ export class NewCalendrierComponent implements OnInit {
               }
           })
           dcs.forEach(dc => {
-            if (this.membersTeams.length == 0 || this.membersTeams.includes(dc.user_id._id)){
+            if (this.membersTeams.length == 0 || this.membersTeams.includes(dc.user_id._id)) {
               presencesList.push(new Date(dc.check_in))
               if (this.PresentDic[new Date(dc.check_in).toDateString()]) {
                 this.PresentDic[new Date(dc.check_in).toDateString()].push(dc)
