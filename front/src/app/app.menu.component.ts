@@ -96,27 +96,6 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
-                            label: 'Remboursement',
-                            icon: 'pi pi-dollar',
-                            items: [
-                                {
-                                    label: 'Ajouter un remboursement',
-                                    icon: 'pi pi-plus-circle',
-                                    routerLink: ['/ajout-remboursement'],
-                                },
-                                // {
-                                //     label: 'Liste des remboursements',
-                                //     icon: 'pi pi-fw pi-tags',
-                                //     routerLink: ['/list-remboursement'],
-                                // },
-                                {
-                                    label: 'Remboursements',
-                                    icon: 'pi pi-fw pi-tags',
-                                    routerLink: ['/remboursements'],
-                                },
-                            ]
-                        },
                     ];
                 }
                 // menu service pédagogique
@@ -4498,6 +4477,22 @@ export class AppMenuComponent implements OnInit {
                                 label: "Admin IMS",
                                 icon: 'pi pi-star',
                                 items: [
+                                    {
+                                        label: 'Remboursement',
+                                        icon: 'pi pi-dollar',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un remboursement',
+                                                icon: 'pi pi-plus-circle',
+                                                routerLink: ['/ajout-remboursement'],
+                                            },
+                                            {
+                                                label: 'Remboursements',
+                                                icon: 'pi pi-fw pi-tags',
+                                                routerLink: ['/remboursements'],
+                                            },
+                                        ]
+                                    },
                                     {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
