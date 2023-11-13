@@ -34,7 +34,6 @@
             </p-dropdown>
         </div>
         <div class="field col-12 md:col-6" *ngIf="serviceSelected && serviceSelected?.extra2?.length!=0">
-            {{serviceSelected?.extra2|json}}
             <label For="campus">{{serviceSelected?.extraInfo?.title2}} <span style="color: red"> * </span></label>
             <p-dropdown [options]="serviceSelected?.extra2" formControlName="type"
                 [placeholder]="serviceSelected?.extraInfo?.placeholder2">

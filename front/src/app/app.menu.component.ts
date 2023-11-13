@@ -5282,7 +5282,7 @@ export class AppMenuComponent implements OnInit {
                             let t3 = "Dossier de candidature ❌"
                             if (c != null)
                                 t2 = "Demande de candidature ✅"
-                            if (isCHECK3(p.documents_dossier))
+                            if (!isCHECK3(p.documents_dossier))
                                 t3 = "Dossier de candidature ✅"
                             this.items = [
                                 {
@@ -5306,11 +5306,15 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/admission/lead-suivi/' + p._id]
                                 },
                                 {
-                                    label: "Paiements et documents administratives",
+                                    label: "Paiements",
                                     icon: "pi pi-credit-card",
                                     routerLink: ['/admission/lead-paiements/' + p._id]
                                 },
-
+                                {
+                                    label: "Documents Administratifs",
+                                    icon: "pi pi-file",
+                                    routerLink: ['/admission/lead-documents/' + p._id]
+                                },
                             ]
                             setTimeout(() => this.showMenu = true, 0);
                         })
@@ -6590,7 +6594,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-users',
                                     items: [
                                         {
-                                            label: 'Préinscription Local - International',
+                                            label: 'Préinscription - Admission',
                                             icon: 'pi pi-prime',
                                             routerLink: ['/administration/preinscription']
                                         },
@@ -6848,7 +6852,7 @@ export class AppMenuComponent implements OnInit {
 }
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernier années ( 1er année )", "Relevé de note des deux dernier années ( 2ème année )"]
+    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

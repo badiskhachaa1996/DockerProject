@@ -286,9 +286,10 @@ const prospect_schema = new mongoose.Schema({
             { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
             { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
             { nom: "Relevé de note baccaulauréat", path: null, date: null },
-            { nom: "Relevé de note des deux dernier années ( 1er année )", path: null, date: null },
-            { nom: "Relevé de note des deux dernier années ( 2ème année )", path: null, date: null },
-            { nom: "TCF", path: null, date: null }
+            { nom: "Relevé de note des deux dernières années ( 1er année )", path: null, date: null },
+            { nom: "Relevé de note des deux dernières années ( 2ème année )", path: null, date: null },
+            { nom: "TCF", path: null, date: null },
+            { nom: 'Carte de séjour', path: null, date: null }
         ]
     },
     documents_autre: {
@@ -314,7 +315,7 @@ const prospect_schema = new mongoose.Schema({
     date_inscription_def: {
         type: Date,
     },
-    lead_type: { type: String },
+    lead_type: { type: String, default: 'Ancien' },
     ville_adresse: {
         type: String,
         required: false
@@ -374,14 +375,14 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         default: "NON"
     },
-     payement_programme: {
+    payement_programme: {
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
-    ecole:{
+    ecole: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ecoleadmissions",
-    },
+    }
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

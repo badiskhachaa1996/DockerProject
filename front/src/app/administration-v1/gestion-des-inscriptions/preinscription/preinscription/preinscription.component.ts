@@ -43,11 +43,11 @@ export class PreinscriptionComponent implements OnInit {
   PROSPECT: Prospect;
   proscteList: Prospect[] = [];
   prospect_acctuelle: Prospect;
-  displayFilter:boolean = false;
+  displayFilter: boolean = false;
   userConnected: User;
   ticket: any[] = [];
   tickets: Ticket[] = [];
-  selectedTabIndex: number = 0;
+  selectedTabIndex: number = 1;
   selectedTabIndex1: number = 0;
   shownewLeadForm: boolean = false;
   showupdateLeadForm: boolean = false;
@@ -62,13 +62,13 @@ export class PreinscriptionComponent implements OnInit {
   showDocuments: boolean = false;
   showDossier: boolean = false;
   showDoccuments: boolean = false;
-  visibleC:boolean = false;
+  visibleC: boolean = false;
   nationList = environment.nationalites;
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  formationsFitre=[
-    {label:"Toutes les Formations ",value:null }
+  formationsFitre = [
+    { label: "Toutes les Formations ", value: null }
   ];
   tabStates: { [tabId: string]: boolean } = {};
   programeFrDropdown = [
@@ -79,37 +79,37 @@ export class PreinscriptionComponent implements OnInit {
 
   ]
   rentreeList = [];
-  rentreeFiltere=[{label:"Toutes les rentrées ",value:null,_id:null}];
+  rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
   EtapeFiltere = [
-    {label:"Toutes les étapes",value:null},
-    {label:"Etape 1",value:"Etape 1"},
-    {label:"Etape 2",value:"Etape 2"},
-    {label:"Etape 3",value:"Etape 3"},
-    {label:"Etape 4",value:"Etape 4"},
+    { label: "Toutes les étapes", value: null },
+    { label: "Etape 1", value: "Etape 1" },
+    { label: "Etape 2", value: "Etape 2" },
+    { label: "Etape 3", value: "Etape 3" },
+    { label: "Etape 4", value: "Etape 4" },
 
   ];
-  visiblecon:boolean = false;
+  visiblecon: boolean = false;
   etat_dossierDropdown = [
     { value: "En attente", label: "En attente" },
     { value: "Manquant", label: "Manquant" },
     { value: "Complet", label: "Complet" }
   ];
-  rythme_filtre=[
-    {label:"Tous les rythmes", value:null},
+  rythme_filtre = [
+    { label: "Tous les rythmes", value: null },
     { label: "Initiale", value: 'Initiale' },
-    { label: "Alternance", value:'Alternance' }
+    { label: "Alternance", value: 'Alternance' }
   ];
   campusfiltre =
-  [
-    { value: null, label: "Tous les campus" },
-    { value: "Paris", label: "Paris - France" },
-    { value: "Montpellier", label: "Montpellier - France" },
-    { value: "Brazzaville", label: "Brazzaville - Congo" },
-    { value: "Rabat", label: "Rabat - Maroc" },
-    { value: "La Valette", label: "La Valette - Malte" },
-    { value: "UAE", label: "UAE - Dubai" },
-    { value: "En ligne", label: "En ligne" },
-  ];
+    [
+      { value: null, label: "Tous les campus" },
+      { value: "Paris", label: "Paris - France" },
+      { value: "Montpellier", label: "Montpellier - France" },
+      { value: "Brazzaville", label: "Brazzaville - Congo" },
+      { value: "Rabat", label: "Rabat - Maroc" },
+      { value: "La Valette", label: "La Valette - Malte" },
+      { value: "UAE", label: "UAE - Dubai" },
+      { value: "En ligne", label: "En ligne" },
+    ];
   sourceFiltre = [
     { label: "Toutes sources", value: null },
     { label: "Partenaire", value: "Partenaire" },
@@ -180,11 +180,11 @@ export class PreinscriptionComponent implements OnInit {
 
   commercialList = []
   EcoleListRework = [];
-  DocumentsCandidature:any[]= [];
-  DocumentsAdministratif:any[]= [];
-  DoccumentProfessionel:any[]=[];
+  DocumentsCandidature: any[] = [];
+  DocumentsAdministratif: any[] = [];
+  DoccumentProfessionel: any[] = [];
   EcoleFiltre = [{
-    label: "Toutes les écoles", value:null
+    label: "Toutes les écoles", value: null
   }]
   newLeadForm: FormGroup = new FormGroup({
     type: new FormControl('', Validators.required),
@@ -345,7 +345,8 @@ export class PreinscriptionComponent implements OnInit {
           this.rhService.getCollaborateurs()
             .then((response) => {
               response.forEach((c: Collaborateur) => {
-                this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+                if (c.user_id)
+                  this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
               })
             })
             .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
@@ -371,14 +372,11 @@ export class PreinscriptionComponent implements OnInit {
         })
       })
       //recuperation des prospect 
-      this.admissionService.getAll().subscribe((results => {
-        results.forEach((result) => {
-          if (result.traited_by == "Local") {
-            this.prospects.push(result);
-          } else { this.prospectI.push(result); }
-
-
-        })
+      this.admissionService.getAllLocal().subscribe((results => {
+        this.prospects = results
+      }))
+      this.admissionService.getAllInt().subscribe((results => {
+        this.prospectI = results
       }))
       this.CandidatureService.getAll().subscribe(cs => {
         cs.forEach(c => {
@@ -401,11 +399,14 @@ export class PreinscriptionComponent implements OnInit {
         this.FAService.RAgetByEcoleID(e._id).subscribe(dataEcoles => {
           dataEcoles.forEach(rentre => {
             this.rentreeFiltere.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
-          })})})});
+          })
+        })
+      })
+    });
     //RECUPERATION DES FORMATIONS
-    this.FAService.FAgetAll().subscribe(form=>{
-      form.forEach(f=>{
-        this.formationsFitre.push({ label:f.nom,value:f.nom})
+    this.FAService.FAgetAll().subscribe(form => {
+      form.forEach(f => {
+        this.formationsFitre.push({ label: f.nom, value: f.nom })
       })
     })
 
@@ -481,78 +482,80 @@ export class PreinscriptionComponent implements OnInit {
     } catch (error) {
       customid = ""
     }
-    this.admissionService.create({
-      'newUser': new User(
-        null,
-        this.newLeadForm.value.firstname,
-        this.newLeadForm.value.lastname,
-        this.newLeadForm.value.indicatif,
-        this.newLeadForm.value.phone,
-        null,
-        this.newLeadForm.value.email_perso,
-        null,
-        'user',
-        true,
-        null,
-        this.newLeadForm?.value?.civilite?.value,
-        null, null, 'Prospect', null,
-        this.newLeadForm?.value?.pays?.value,
-        null, null, null, null,
-        this.newLeadForm?.value?.nationalite?.value,
-        null,
-        new Date(),
-        null, null,
-        this.newLeadForm?.value?.campus?.value
+    let newUser = new User(
+      null,
+      this.newLeadForm.value.firstname,
+      this.newLeadForm.value.lastname,
+      this.newLeadForm.value.indicatif,
+      this.newLeadForm.value.phone,
+      null,
+      this.newLeadForm.value.email_perso,
+      null,
+      'user',
+      true,
+      null,
+      this.newLeadForm?.value?.civilite?.value,
+      null, null, 'Prospect', null,
+      this.newLeadForm?.value?.pays?.value,
+      null, null, null, null,
+      this.newLeadForm?.value?.nationalite?.value,
+      null,
+      new Date(),
+      null, null,
+      this.newLeadForm?.value?.campus?.value
 
-      ), 'newProspect': new Prospect(
-        null, null,
-        this.newLeadForm?.value?.date_naissance,
-        null, null, null, null, null, null,
-        this.newLeadForm?.value?.campus?.value,
-        null, null,
-        this.newLeadForm?.value?.programme?.value,
-        this.newLeadForm?.value?.formation,
-        this.newLeadForm?.value?.rythme_formation?.value,
-        null, null, null, null, true, new Date(),
-        this.newLeadForm?.value?.ecole,
-        this.newLeadForm?.value?.commercial,
-        null, null, null, null, null, null, null, null,
-        null,
-        customid, this.newLeadForm?.value?.type,
-        this.newLeadForm?.value.rue,
-        this.newLeadForm?.value.ville,
-        this.newLeadForm?.value.codep,
-        
-      )
+    )
+    let newProspect = new Prospect(
+      null, null,
+      this.newLeadForm?.value?.date_naissance,
+      null, null, null, null, null, null,
+      this.newLeadForm?.value?.campus?.value,
+      null, null,
+      this.newLeadForm?.value?.programme?.value,
+      this.newLeadForm?.value?.formation,
+      this.newLeadForm?.value?.rythme_formation?.value,
+      null, null, null, null, true, new Date(),
+      this.newLeadForm?.value?.ecole,
+      this.newLeadForm?.value?.commercial,
+      null, null, null, null, null, null, null, null,
+      null,
+      customid,
+
+
+    )
+    newProspect.lead_type = this.newLeadForm?.value.type
+    newUser.rue_adresse = this.newLeadForm?.value.rue
+    newUser.ville_adresse = this.newLeadForm?.value.ville
+    newUser.postal_adresse = this.newLeadForm?.value.codep
+    this.admissionService.create({
+      newUser, newProspect
     }).subscribe(
       ((responsePRO) => {
-        console.log(responsePRO);
+        if (responsePRO.lead_type == 'Local')
+          this.admissionService.getAllLocal().subscribe((results => {
+            this.prospects = results
+          }))
+        else
+          this.admissionService.getAllInt().subscribe((results => {
+            this.prospectI = results
+          }))
         this.newLeadForm.reset()
         this.ServiceService.getAServiceByLabel("Administration").subscribe((response) => {
-          console.log(response);
           this.service_id = response.dataService._id;
-          console.log(this.service_id);
           this.SujetService.getAllByServiceID(this.service_id).subscribe((response) => {
-            console.log(response);
             response.forEach((result) => {
 
               if (result.label = "Inscription") {
-                console.log(result);
                 this.sujet_id = result._id;
                 this.TicketnewPro = {}
                 this.TicketnewPro.createur_id = responsePRO?.dataUser._id;
                 this.TicketnewPro.sujet_id = this.sujet_id;
-                console.log(this.userConnected);
-                console.log(this.service_id);
-                console.log(this.sujet_id);
-                console.log(this.TicketnewPro);
+
                 this.admissionService.createticket(this.TicketnewPro).subscribe((result) => { console.log(result); });
 
               }
             })
           })
-
-
         })
         this.ToastService.add({ severity: 'success', summary: 'Création du prospect avec succès', detail: "L'inscription a été finalisé" });
       })
@@ -705,8 +708,7 @@ export class PreinscriptionComponent implements OnInit {
     return new_date
   }
   onTabClose(e) {
-    this.proscteList.splice(e.index - 3, 1)
-    this.selectedTabIndex = 0;
+    this.proscteList.splice(e.index - 4, 1)
     this.UserService.update({ _id: this.token.id, savedAdministration: this.proscteList }).subscribe(r => {
 
     })
@@ -1251,11 +1253,11 @@ export class PreinscriptionComponent implements OnInit {
   }
 
   initDocument(prospect) {
-    this.PROSPECT=prospect;
+    this.PROSPECT = prospect;
     this.showDocAdmin = prospect
     this.scrollToTop()
     this.PROSPECT.documents_administrative.forEach(document => {
-      
+
     })
   }
   convertTime(date) {
@@ -1348,8 +1350,8 @@ export class PreinscriptionComponent implements OnInit {
 
     return 'DOC' + nom + date + random;
   }
-  visibleADM:boolean = false;
-  visiblep:boolean = false;
+  visibleADM: boolean = false;
+  visiblep: boolean = false;
   documentDropdownc = [
     { label: "Formulaire de candidature", value: "Formulaire de candidature" },
     { label: "Test de Sélection", value: "Test de Sélection" },
@@ -1361,7 +1363,7 @@ export class PreinscriptionComponent implements OnInit {
     { label: "Attestation de présence / assiduité", value: "Attestation de présence / assiduité" },
     { label: "Réglement intérieur", value: "Réglement intérieur" },
     { label: "Livret d'accueil", value: "Livret d'accueil" },
-    { label: "Autorisation de diffusion et d'utilisation de photographie et vidéos", value:"Autorisation de diffusion et d'utilisation de photographie et vidéos"}
+    { label: "Autorisation de diffusion et d'utilisation de photographie et vidéos", value: "Autorisation de diffusion et d'utilisation de photographie et vidéos" }
   ];
   documentDropdownpro = [
     { label: "Convention de stage", value: "Convention de stage" },
@@ -1369,10 +1371,10 @@ export class PreinscriptionComponent implements OnInit {
     { label: "Satisfaction de stage", value: "Satisfaction de stage" },
     { label: "Contrat d'apprentisage", value: "Contrat d'apprentisage" },
     { label: "Convention de formation", value: "Convention de formation" },
-    { label: "Livret de suivi", value:"Livret de suivi"},
+    { label: "Livret de suivi", value: "Livret de suivi" },
     { label: "Convocation d'examen", value: "Convocation d'examen" },
     { label: "Bulletin de note", value: "Bulletin de note" },
-    { label: "Suivi post formation-orientation", value:"Suivi post formation-orientation"}
+    { label: "Suivi post formation-orientation", value: "Suivi post formation-orientation" }
 
   ];
 
@@ -1401,47 +1403,58 @@ export class PreinscriptionComponent implements OnInit {
     })
 
   }
-  clearFilter(){};
+  clearFilter() { };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
-  if (event.checked) {
-    console.log(event.checked)
-    // Checkbox est coché, appliquer le filtre
-    this.dt1?.filter('NON', 'teams', 'equals');
-    
-  } 
-  if(event.checked.length <1) {
-    console.log("notchecked")
-    // Checkbox est décoché, réinitialiser le filtre
-    this.dt1?.filter('', 'teams', 'equals');
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'teams', 'equals');
+
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'teams', 'equals');
+    }
   }
-}
-onYpareoCheckboxChange(event: any) {
-  console.log('Checkbox changed', event);
-if (event.checked) {
-  console.log(event.checked)
-  // Checkbox est coché, appliquer le filtre
-  this.dt1?.filter('NON', 'Ypareo', 'equals');
-  
-} 
-if(event.checked.length <1) {
-  console.log("notchecked")
-  // Checkbox est décoché, réinitialiser le filtre
-  this.dt1?.filter('', 'Ypareo', 'equals');
-}
-}
-onGroupeCheckboxChange(event: any) {
-  console.log('Checkbox changed', event);
-if (event.checked) {
-  console.log(event.checked)
-  // Checkbox est coché, appliquer le filtre
-  this.dt1?.filter('NON', 'groupe', 'equals');
-  
-} 
-if(event.checked.length <1) {
-  console.log("notchecked")
-  // Checkbox est décoché, réinitialiser le filtre
-  this.dt1?.filter('', 'groupe', 'equals');
-}
-}
+  onYpareoCheckboxChange(event: any) {
+    console.log('Checkbox changed', event);
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'Ypareo', 'equals');
+
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'Ypareo', 'equals');
+    }
+  }
+  onGroupeCheckboxChange(event: any) {
+    console.log('Checkbox changed', event);
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'groupe', 'equals');
+
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'groupe', 'equals');
+    }
+  }
+  verifEmailInBD() {
+    this.UserService.getByEmail(this.newLeadForm.value.email_perso).subscribe((dataMail) => {
+      if (dataMail) {
+        this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        return true
+      }
+    },
+      (error) => {
+        return false
+      })
+  }
 }

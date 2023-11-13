@@ -460,27 +460,13 @@ export class DashboardRhComponent implements OnInit {
       this.dailyCheckService.getAllUsersDateChecks(date_str)
         .then((dcs) => {
           this.dailyChecks = [];
+          let listCIDS = []
           dcs.forEach(dc => {
-            this.rhService.getCollaborateurByUserId(dc?.user_id?._id)
-              .then((collaborateur) => {
-                let totalTimeCra = 0;
-                if (dc?.cra && dc?.cra.length != 0)
-                  dc?.cra.map((cra) => {
-                    totalTimeCra += cra.number_minutes;
-                  });
-
-                if (!collaborateur || !collaborateur.h_cra) {
-                  collaborateur = { h_cra: 7 }
-                }
-                // conversion du taux cra du collaborateur en minutes
-                collaborateur.h_cra *= 60;
-                // partie calcule du pourcentage en fonction du totalTimeCra
-                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
-                dc.taux_cra = percent
-                if (dc && dc.user_id)
-                  this.dailyChecks.push(dc)
-              })
-              .catch((error) => { console.error(error); });
+            if (dc && dc.user_id){
+              this.dailyChecks.push(dc)
+              listCIDS.push(dc.user_id._id)
+            }
+              
 
           })
           this.AuthService.getPopulate(this.token.id).subscribe(USER => {
@@ -497,18 +483,11 @@ export class DashboardRhComponent implements OnInit {
           // nombre de checks
           this.numberOfChecks = this.dailyChecks.length;
 
-          // recuperation de la liste des collaborateurs
-          let listCIDS = []
-          this.dailyChecks.forEach((dc: any) => {
-            if (dc && dc.user_id)
-              listCIDS.push(dc.user_id._id)
-          })
           this.collaborateurs.forEach((c, idx) => {
             if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
-              console.log(c.user_id)
               if (c.user_id.statut == 'Disponible' || !c.user_id?.statut)
                 c.user_id.statut = "Absent"
-              this.dailyChecks.push(new DailyCheck(new mongoose.Types.ObjectId().toString(), c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
+              this.dailyChecks.push(new DailyCheck(new mongoose.Types.ObjectId().toString(), c.user_id, new Date().toLocaleDateString()))
             }
           })
           this.defaultdailyChecks = this.dailyChecks

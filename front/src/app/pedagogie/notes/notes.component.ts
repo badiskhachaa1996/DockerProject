@@ -716,7 +716,12 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.etudiantFromClasse = response;
         this.semestreForGenerateBulletin = this.formGenerateBulletin.get('semestre').value.value;
-
+        console.log(this.semestreForGenerateBulletin.includes('Semestre'), this.typeBulletin)
+        if (this.semestreForGenerateBulletin.includes('Semestre'))
+          this.typeBulletin = "Bulletin du " + this.semestreForGenerateBulletin
+        else
+          this.typeBulletin = "Bulletin Annuel"
+        console.log(this.semestreForGenerateBulletin.includes('Semestre'), this.typeBulletin)
         this.showFormGenerateBulletin = false;
         this.showGenerateBulletin = true;
       }),
