@@ -13,7 +13,11 @@ export class EcoleAdmission {
         public campus?: string[],
         public langue?: string,
         public NDA?: string,
-        public UAI?: string,
+        public campusinfo?:[ {
+            campus: string,
+            adresse?: string,
+            UAI?: string,
+        }],
     ) { }
 
 }

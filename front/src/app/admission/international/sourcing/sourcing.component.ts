@@ -338,7 +338,8 @@ export class SourcingComponent implements OnInit {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.CandidatureLeadService.getAll().subscribe(candidatures => {
       candidatures.forEach(v => {
-        this.candidatureDic[v.lead_id._id] = v
+        if (v.lead_id)
+          this.candidatureDic[v.lead_id._id] = v
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -596,16 +597,19 @@ export class SourcingComponent implements OnInit {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
-        this.ListDocuments = data
-        this.ListPiped = []
-        data.forEach(doc => {
-          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
-          this.ListPiped.push(docname)
-        })
+        if (data) {
+          this.ListDocuments = data
+          this.ListPiped = []
+          data.forEach(doc => {
+            let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+            this.ListPiped.push(docname)
+          })
+        }
+
       },
       (error) => { console.error(error) }
     );
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement

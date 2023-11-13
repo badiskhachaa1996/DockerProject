@@ -1,0 +1,21 @@
+<div class="header">
+    <div class="header-inner">
+        <div class="section-left">
+            <div class="student-image-container">
+                <div class="student-image" [style.backgroundImage]="'url('+student.imgPDP+')'" *ngIf="student.imgPDP"></div>
+                <div class="student-image" *ngIf="!student.imgPDP"
+                    [style.backgroundImage]="'url(../../../../../assets/images/imatch/female.png)'"></div>
+                <div class="background"></div>
+            </div>
+            <div class="section-right">
+                <h1><strong>{{ student.fullName }}</strong></h1>
+                <h1>{{ student.profile }}</h1>
+            </div>
+        </div>
+        <img class="logo" src="../../../../../../../../assets/images/imatch/gen-cv/medasup/logo-white.png" />
+        <div class="medasup-icon"
+            [style.backgroundImage]="'url(assets/images/imatch/gen-cv/medasup/medasup-header.png)'"></div>
+
+    </div>
+
+</div>

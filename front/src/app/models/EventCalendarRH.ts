@@ -1,3 +1,4 @@
+import { Collaborateur } from "./Collaborateur";
 import { User } from "./User";
 
 export class EventCalendarRH {
@@ -7,5 +8,8 @@ export class EventCalendarRH {
         public type?: string,
         public note?: string,
         public created_by?: User,
+        public name?: string,
+        public campus?: string,
+        public personal?: string
     ) { };
 }

@@ -14,7 +14,7 @@ export class Annonce {
         public entreprise_phone_indicatif?: string,
         public entreprise_phone?: string,
         public profil?: any,
-        public competences?: string[],
+        public competences?: any[],
         public outils?: string[],
         public workplaceType?: string,
         public publicationDate?: Date,
@@ -22,6 +22,8 @@ export class Annonce {
         public isClosed?: boolean,
         public custom_id?: string,
         public date_creation?: Date,
-        public statut?: string
+        public statut?: string,
+        public modified_at?: Date,
+        public archived?: boolean
     ) { }
 }

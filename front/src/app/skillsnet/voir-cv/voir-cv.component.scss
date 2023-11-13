@@ -26,14 +26,16 @@
     margin-right: -200px;
     height: 29.7cm;
     transform: scale(0.7);
-    transform-origin: top left;
+    transform-origin: top;
   }
   
   .new-cv {
+    //min-width: 21cm;
+    //min-height: 29.7cm;
     min-width: 21cm;
-    height: 29.7cm;
-    transform: scale(0.7);
-    transform-origin: top left;
+    min-height: 29.7cm;
+    //transform: scale(0.7);
+    transform-origin: top;
   }
   
   .input-form-cv {
@@ -187,66 +189,3 @@
   
   
   
-  @page {
-    size: A4;
-    margin: 0;
-  }
-  
-  @media print {
-  
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: white;
-  
-    }
-  
-    .layout-sidebar {
-      display: none;
-    }
-  
-    .layout-topbar {
-      display: none;
-    }
-  
-  
-    .main-page {
-      padding: 0;
-    }
-  
-    .display-top {
-      width: 21cm;
-      min-height: 29.7cm;
-      margin: 0;
-    }
-  
-    .old-cv,
-    .input-form-cv {
-      display: none;
-    }
-  
-  
-    .new-cv {
-      padding: 0 !important;
-      margin: 0 !important;
-      width: 21cm !important;
-      min-height: 29.7cm !important;
-      margin-top: 0 !important;
-      transform: scale(1) !important;
-      overflow: hidden;
-    }
-  
-    .page-container {
-      padding: 0;
-      padding-bottom: 30px;
-      margin: 0;
-      max-height: 29.7cm !important;
-      width: 21cm !important;
-    }
-  
-    .logo-image {
-      bottom: 30px;
-      right: 25px;
-    }
-  }

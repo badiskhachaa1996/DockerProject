@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Entreprise } from '../models/Entreprise';
 import { ContratAlternance } from '../models/ContratAlternance';
+import { User } from '../models/User';
 
 
 @Injectable({
@@ -31,7 +32,7 @@ export class EntrepriseService {
   // Création d'une entreprise et d'un représentant 
   createEntrepriseRepresentant(tbObj: any) {
     let registreUrl = this.apiUrl + "createEntrepriseRepresentant";
-    return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<{ entreprise: Entreprise, representant: User }>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   // recuperation de la liste des entreprises d'un CEO
@@ -51,6 +52,11 @@ export class EntrepriseService {
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Entreprise>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  delete(id: string) {
+    let registreUrl = this.apiUrl + "delete/" + id;
+    return this.httpClient.delete<Entreprise>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Recuperation d'une entreprise via un id populate

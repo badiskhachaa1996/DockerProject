@@ -1,6 +1,6 @@
 <div class="grid col-12 card">
-    <h5 class="col-12">Liste des agents</h5>
-    <p-table #dt1 [value]="agents" dataKey="_id" responsiveLayout="scroll" class="col-12"
+    <h5 class="col-12">Liste des agents</h5><!-- NOUVEAU -->
+    <p-table #dt1 [value]="agents" dataKey="_id" responsiveLayout="scroll" class="col-12" rowExpandMode="single"
         [globalFilterFields]="['lastname', 'email', 'firstname', 'site_web']" [rows]="8" [paginator]="true"
         [totalRecords]="agents.length" styleClass="p-datatable-gridlines">
         <ng-template pTemplate="caption">
@@ -9,6 +9,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 3rem"></th>
                 <th pSortableColumn="civilite" scope="col" style="text-align: center;">
                     Civilité <p-sortIcon field="civilite"></p-sortIcon>
                 </th>
@@ -33,20 +34,29 @@
                 <th pSortableColumn="type" scope="col" style="text-align: center;">
                     Type <p-sortIcon field="type"></p-sortIcon>
                 </th>
-                <th>
+                <th pSortableColumn="type_supp" scope="col" style="text-align: center;">
+                    Type Supp<p-sortIcon field="type_supp"></p-sortIcon>
+                </th>
+                <!--<th>
                     Accès<br>
                     Module : Role
-                </th>
+                </th>-->
                 <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                     Date de création <p-sortIcon field="date_creation"></p-sortIcon>
                 </th>
-                <th >
-                    Action 
+                <th>
+                    Action
                 </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-agent>
             <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="agent"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
                 <td>
                     {{agent.civilite}}
                 </td>
@@ -68,16 +78,22 @@
                 <td>
                     {{agent.role}}
                 </td>
-                <td>
+                <td *ngIf="agent.type">
                     {{agent.type}}
                 </td>
+                <td *ngIf="!agent.type">
+                    Non défini
+                </td>
                 <td>
+                    {{agent.type_supp}}
+                </td>
+                <!--<td>
                     <ng-container *ngFor="let role of agent.roles_list">
                         {{role.module}} : {{role.role}}<br>
                     </ng-container>
-                </td>
+                </td>-->
                 <td>
-                    {{agent?.date_creation | date:'mediumDate'}}
+                    {{agent?.date_creation | date:'dd MMMM yy'}}
                 </td>
                 <td>
                     <i pTooltip="Mettre à jour cette agent" tooltipPosition="bottom" class="pi pi-cog ml-2"
@@ -87,5 +103,36 @@
                 </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="rowexpansion" let-agent>
+            <tr>
+                <td colspan="11">
+                    <div class="p-3">
+                        <p-table responsiveLayout="scroll" [value]="agent.roles_list">
+                            <ng-template pTemplate="header">
+            <tr>
+                <th>Module</th>
+                <th>Role</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-role let-index="rowIndex">
+            <tr *ngIf="index==0 && agent.role=='Admin'">
+                <td>Admin IMS</td>
+                <td>Super-Admin</td>
+            </tr>
+            <tr *ngIf="index==0 && agent.type=='Responsable'">
+                <td>Ressources Humaines</td>
+                <td>Super-Admin</td>
+            </tr>
+            <tr>
+                <td>{{role.module}}</td>
+                <td>{{role.role}}</td>
+            </tr>
+        </ng-template>
     </p-table>
+</div>
+</td>
+</tr>
+
+</ng-template>
+</p-table>
 </div>

@@ -1,130 +1,28 @@
 <div *ngIf="showUpdateStatut" class="col-12 card">
-	<h3 style="text-align: center;">Mis à jour du matching</h3>
+	<!--Formulaire Modification Matching-->
+	<i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+		pTooltip="Fermer" (click)="showUpdateStatut = null" aria-hidden="true"> </i>
 	<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
-		<div class="field col-12 ">
-			<small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
-				obligatoires</small>
-		</div>
-
-		<div class="field col-12">
+		<div class="field col-12 md:col-6">
 			<label>Remarque<span style="color:red">*</span>:</label><br>
-			<textarea type="text" formControlName="remarque" class="form-control col-12"
-				placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
-				pInputTextarea>
+			<textarea type="text" formControlName="remarque" class="form-control col-12" placeholder="" pInputTextarea>
                     </textarea>
-
 		</div>
-
-		<div class="field col-12">
+		<div class="field col-12 md:col-6">
 			<label>Statut du Matching<span style="color:red">*</span>:</label><br>
 			<p-dropdown [options]="statutList" formControlName="statut" optionLabel="value" optionValue="value"
 				placeholder="Choisissez un statut">
 			</p-dropdown>
 		</div>
 		<div>
-			<button pButton type="submit" label="Mis à jour du matching" [disabled]="formUpdateStatut.invalid"></button>
+			<button pButton type="submit" label="Valider" [disabled]="formUpdateStatut.invalid"></button>
 		</div>
 	</form>
 </div>
 <div class="card" *ngIf="offre && isNotWinner">
-	<h5>Liste des matchings en cours pour {{offre.missionName}} de {{offre.entreprise_name}}</h5>
+	<h5>Matching en cours</h5>
 	<p-table #dt1 rowExpandMode="single" [value]="matching" dataKey="_id" [rows]="5" [rowHover]="true"
-		[globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']" styleClass="p-datatable-gridlines"
-		[paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
-
-		<ng-template pTemplate="caption">
-			<div class="flex justify-content-between flex-column sm:flex-row">
-				<span class="p-input-icon-left mb-3">
-					<i class="pi pi-search"></i>
-					<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-						placeholder="Recherche" />
-				</span>
-			</div>
-		</ng-template>
-		<ng-template pTemplate="header">
-			<tr>
-				<th style="width: 3rem"></th>
-				<th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
-					Nom <p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="cv_id.user_id.firstname" style="text-align:center">
-					Prénom <p-sortIcon field="cv_id.user_id.firstname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="taux" style="text-align:center">
-					Matcher <p-sortIcon field="taux"></p-sortIcon>
-				</th>
-				<th style="text-align:center">
-					Type Matching
-				</th>
-				<th style="text-align:center">
-					Statut du Matching
-				</th>
-				<th pSortableColumn="date_creation" style="text-align:center">
-					Date du matching <p-sortIcon field="date_creation"></p-sortIcon>
-				</th>
-				<th>
-					Action
-				</th>
-		</ng-template>
-		<ng-template pTemplate="body" let-match let-expanded="expanded">
-			<tr>
-				<td>
-					<button type="button" pButton pRipple [pRowToggler]="match"
-						class="p-button-text p-button-rounded p-button-plain"
-						[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-				</td>
-				<td>
-					{{ match.cv_id.user_id?.lastname | uppercase}}
-				</td>
-				<td>
-					{{ match.cv_id.user_id?.firstname | titlecase}}
-				</td>
-				<td>
-					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
-				</td>
-				<td>
-					{{match.type_matching}}
-				</td>
-				<td>
-					{{match.statut}}
-				</td>
-				<td>
-					{{match.date_creation|date:medium}}
-				</td>
-				<td>
-					<i *ngIf="isCommercial" pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-						(click)="InitUpdateStatut(match)" aria-hidden="true"></i>
-					<i *ngIf="!isCommercial && match.statut=='Validé par l\'étudiant'" pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
-						(click)="UpdateStatut(match)" aria-hidden="true"></i>
-				</td>
-			</tr>
-		</ng-template>
-		<ng-template pTemplate="rowexpansion" let-match>
-            <tr>
-                <td colspan="7">
-                    <div class="p-3">
-                        <p-table responsiveLayout="scroll" *ngIf="isCommercial || token.role=='Admin'">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>Remarque</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td>{{match.remarque}}</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-                </td>
-            </tr>
-		</ng-template>
-	</p-table>
-</div>
-<div class="card" *ngIf="offre">
-	<h5>Liste des matchings potentiels sur {{offre.missionName}} de {{offre.entreprise_name}}</h5>
-	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="8"
-		[rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
+		[totalRecords]="matching" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
 		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
 		<ng-template pTemplate="caption">
@@ -138,47 +36,206 @@
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
-				<th style="width: 3rem"></th>
-				<th pSortableColumn="cv.user_id.lastname" style="text-align:center">
-					Nom <p-sortIcon field="cv.user_id.lastname"></p-sortIcon>
+				<th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
+					Nom & Prénom<p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
 				</th>
-				<th pSortableColumn="cv.user_id.firstname" style="text-align:center">
-					Prénom <p-sortIcon field="cv.user_id.firstname"></p-sortIcon>
+				<th style="text-align:center">
+					Type
 				</th>
-				<th pSortableColumn="taux" style="text-align:center">
+				<th pSortableColumn="taux" sstyle="text-align:center;width: 2px;">
+					Commercial <p-sortIcon field="taux"></p-sortIcon>
+				</th>
+
+				<th style="text-align:center">
+					Statut
+				</th>
+				<th pSortableColumn="date_creation" style="text-align:center">
+					Date <p-sortIcon field="date_creation"></p-sortIcon>
+				</th>
+				<th pSortableColumn="taux" style="text-align:center;width: 2px;">
 					Taux <p-sortIcon field="taux"></p-sortIcon>
 				</th>
-				<th>Action</th>
+				<th style="text-align:center;width: 2px;">
+					Entretien
+				</th>
+				<th>
+					Action
+				</th>
 		</ng-template>
 		<ng-template pTemplate="body" let-match let-expanded="expanded">
-			<tr>
+			<tr *ngIf="match.cv_id.user_id">
 				<td>
-					<button type="button" pButton pRipple [pRowToggler]="match"
-						class="p-button-text p-button-rounded p-button-plain"
-						[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+					{{ match.cv_id.user_id?.lastname | uppercase}} {{ match.cv_id.user_id?.firstname | titlecase}}
 				</td>
 				<td>
-					{{ match.cv.user_id?.lastname | uppercase}}
+					{{match.type_matching}}
+				</td>
+				<td *ngIf="match.type_matching!='Candidat'">
+					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+				</td>
+				<td *ngIf="match.type_matching=='Candidat'">
+					Non
+				</td>
+				<td [pTooltip]="match.remarque" tooltipPosition="bottom">
+					<ng-container *ngIf="!rdvDic[match.cv_id.user_id._id]">
+						{{match.statut}}
+					</ng-container>
+					<ng-container *ngIf="rdvDic[match.cv_id.user_id._id]">
+						Entretien
+					</ng-container>
 				</td>
 				<td>
-					{{ match.cv.user_id?.firstname | titlecase}}
+					{{match.date_creation|date:medium}}
 				</td>
 				<td>
-					{{ match.taux |number:'1.0-0' }}%
+					{{match.taux|number:'1.0-0'}}%
+				</td>
+				<td *ngIf="rdvDic[match.cv_id.user_id._id]">
+					<i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
+						style="color: green;cursor: pointer;" pTooltip="Voir l'entretien"
+						(click)="seeRDV(rdvDic[match.cv_id.user_id._id])"></i>
+				</td>
+				<td *ngIf="!rdvDic[match.cv_id.user_id._id]">
+					<i class="pi false-icon pi-times-circle" tooltipPosition="bottom" style="color: red;"
+						pTooltip="Pas d'entretien"></i>
 				</td>
 				<td>
-					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
-						(click)="AcceptMatching(match.cv)" aria-hidden="true"></i>
+					<i *ngIf="!rdvDic[match.cv_id.user_id._id]" pTooltip="Prendre rendez-vous"
+						style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar" (click)="takeRDV(match)"
+						aria-hidden="true"></i>
+					<i *ngIf="rdvDic[match.cv_id.user_id._id]" pTooltip="Vous avez déjà pris un rendez-vous"
+						style="margin-left: 2%; cursor: pointer;color: gray;" class="pi pi-calendar"
+						aria-hidden="true"></i>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
+					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+						(click)="InitUpdateStatut(match)" aria-hidden="true"></i>
+					<i pTooltip="Annuler" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban" aria-hidden="true"
+						(click)="cancelMatching(match)"></i>
 				</td>
 			</tr>
 		</ng-template>
 		<ng-template pTemplate="rowexpansion" let-match>
 			<tr>
 				<td colspan="7">
-					<p>A Afficher: Détails du CV</p>
-					<p>Mettre en vert les compétences qui sont dans l'offre</p>
+					<div class="p-3">
+						<p-table responsiveLayout="scroll" *ngIf="isCommercial || token.role=='Admin'">
+							<ng-template pTemplate="header">
+			<tr>
+				<th>Remarque</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="emptymessage">
+			<tr>
+				<td>{{match.remarque}}</td>
+			</tr>
+		</ng-template>
+	</p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+</p-table>
+</div>
+<div class="card" *ngIf="offre">
+	<h5>Potentiel</h5>
+	<p-table #dtmatching id="dtmatching" rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id"
+		[rows]="8" [rowHover]="true" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
+		[totalRecords]="matchingsPotentiel" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
+		responsiveLayout="scroll">
+
+		<ng-template pTemplate="caption">
+			<div class="flex justify-content-between flex-column sm:flex-row">
+				<span class="p-input-icon-left mb-3">
+					<i class="pi pi-search"></i>
+					<input pInputText type="text" (input)="dtmatching.filterGlobal($event.target.value, 'contains');"
+						placeholder="Recherche" />
+				</span>
+				<div>
+					<label class="mr-2">Favoris</label>
+					<p-checkbox value="val2" (onChange)="filterCustomFav($event.checked);" [binary]="true"></p-checkbox>
+				</div>
+
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
+					Nom & Prénom<p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
+				</th>
+				<th pSortableColumn="taux" style="text-align:center">
+					Taux <p-sortIcon field="taux"></p-sortIcon>
+				</th>
+				<th>Action</th>
+		</ng-template>
+		<ng-template pTemplate="body" let-match let-expanded="expanded" let-ri="rowIndex">
+			<tr [ngClass]="match.hide ? 'hidden-color':''" *ngIf="match.cv_id.user_id">
+				<td>
+					{{ match.cv_id?.user_id?.lastname | uppercase}} {{ match.cv_id?.user_id?.firstname | titlecase}}
+				</td>
+				<td>
+					{{ match.taux |number:'1.0-0' }}%
+				</td>
+				<td>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
+
+					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
+						(click)="AcceptMatching(match.cv_id, match.taux,match)" aria-hidden="true"></i>
+
+					<i *ngIf="match.favoris" pTooltip="Enlever des favoris"
+						style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)" (click)="myFavorite(match,ri)"
+						class="pi pi-star-fill" aria-hidden="true"></i>
+					<i *ngIf="!match.favoris" pTooltip="Ajouter au favoris"
+						style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)" (click)="myFavorite(match,ri)"
+						class="pi pi-star" aria-hidden="true"></i>
+
+					<i *ngIf="!match.hide" pTooltip="Cacher" style="margin-left: 2%; cursor: pointer;"
+						(click)="hideAndSeek(match,ri)" class="pi pi-eye-slash" aria-hidden="true"></i>
+					<i *ngIf="match.hide" pTooltip="Afficher" style="margin-left: 2%; cursor: pointer;"
+						(click)="hideAndSeek(match,ri)" class="pi pi-eye" aria-hidden="true"></i>
 				</td>
 			</tr>
 		</ng-template>
 	</p-table>
 </div>
+
+<p-dialog header="Informations du Rendez-Vous" [(visible)]="displayRDV" modal="modal" showEffect="fade"
+	[style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+	<p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
+		styleClass="p-datatable-gridlines">
+		<ng-template pTemplate="header">
+			<tr>
+				<th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+					ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
+				</th>
+				<th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+					Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
+				</th>
+				<th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+					Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+				</th>
+				<th pSortableColumn="statut" scope="col" style="text-align: center;">
+					Statut <p-sortIcon field="statut"></p-sortIcon>
+				</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-rdv>
+			<tr>
+				<td>
+					{{rdv?.offre_id?.custom_id }}
+				</td>
+				<td>
+					{{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+				</td>
+				<td>
+					{{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+				</td>
+				<td>
+					{{rdv?.statut}}
+				</td>
+			</tr>
+
+		</ng-template>
+	</p-table>
+</p-dialog>

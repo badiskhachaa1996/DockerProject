@@ -5,8 +5,8 @@
             <hr class="imatch-main">
         </div>
             <div class="header-top-container ">
-                <a class="btn-cv  btn-cv-1" target="_blank" href="#">Comment ça marche ?</a>
-                <a *ngIf="portail === 'etudiant'" class="btn-cv btn-cv-2" target="_blank" href="#">Déposer mon CV</a>
+                <a class="btn-cv  btn-cv-1" href="https://ieg.group/alternance/pour-les-entreprises/#imatch" target="_blank">Comment ça marche ?</a>
+                <a *ngIf="portail === 'etudiant'" class="btn-cv btn-cv-2" (click)="DepositCV()">Déposer mon CV</a>
                 <div *ngIf="portail === 'entreprise'" class="btn-cv btn-cv-3" (click)="showDeposerOffre = true">Déposer mon Offre</div>
             </div>
     </div>
@@ -14,4 +14,96 @@
         <img class="steps-imatch" src="../../assets/images/imatch/steps-offre.svg">
     </div>
     <app-entreprise-list></app-entreprise-list>
+</div>
+
+<div *ngIf="showPostuler" class="offre-details-card">
+    <div class="container">
+        <div class="modal-content">
+            <span class="close" (click)="showPostuler = false">&times;</span>
+            <h2>Déposer mon CV :</h2>    
+            <form class="form-container" [formGroup]="form" (submit)="onSubmit()">
+                <div class="row">
+                    <div class="col-12">
+                        <label>Civilité</label>
+                        <p-dropdown [options]="civiliteList" formControlName="civilite" optionValue="label"
+                            placeholder="Choisissez une civilité" optionLabel="label" autoWidth="false"
+                            [style]="{'width':'100%'}"></p-dropdown>
+                    </div>
+                    <div class="col-12">
+                        <label>Nom</label>
+                        <input pInputText type="text" formControlName="lastname" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                    </div>
+                    <div class="col-12">
+                        <label>Prénom</label>
+                        <input pInputText type="text" formControlName="firstname" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Adresse e-mail</label>
+                        <input pInputText type="text" formControlName="email_perso" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Numéro de téléphone (avec indicatif)</label><br>
+                        <input pInputText placeholder="Ex: +33 623568978" type="phone" formControlName="phone"
+                            autoWidth="false" [style]="{'width':'100%'}">
+                        <!--<ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [searchCountryField]="[
+                      SearchCountryField.Iso2,
+                      SearchCountryField.Name
+                    ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
+                            [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National"
+                            name="phone" formControlName="phone"> </ngx-intl-tel-input>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+
+                        <label for="file-upload" class="upload-cv" (click)="file.click()">
+                            <i class="pi pi-cloud-upload"></i>Joindre un CV
+                        </label><span style="margin-left: 10px;">{{file.files.item(0)?.name}}</span>
+                        <input #file multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event)" chooseLabel="Browse" inputId="file-upload"/>
+
+                    </div>
+                </div>
+                <!-- <div class="row col-12" *ngIf="pdfSrc" style="height: 400px;">
+                    <i class="pi pi-times-circle"
+                        style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+                        pTooltip="Supprimer" (click)="deleteDoc()" aria-hidden="true"> </i>
+                    <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
+                        class="pdf-viewer-here"></pdf-viewer>
+                </div><br> -->
+                <div class="row col-12 grid">
+                    <p><p-checkbox formControlName="consent" value="consent" inputId="consent3"></p-checkbox>
+                        <span style="margin-left: 10px;">J'ai pris connaissances et lu les </span><a href="/#/mentions-legales"
+                            target="_blank">mentions légales</a> et accepte que mes données soient
+                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande.</p>
+                    <!-- <div class="field-radiobutton col-6">
+                        <p-radioButton name="consent" value="Oui" formControlName="consent"
+                            inputId="consent3"></p-radioButton>
+                        <label for="consent3">Oui</label>
+                    </div>
+                    <div class="field-radiobutton col-6">
+                        <p-radioButton name="consent" value="Non" formControlName="consent"
+                            inputId="consent4"></p-radioButton>
+                        <label for="consent4">Non</label>
+                    </div> -->
+                </div>
+                <div class="btns-postuler">
+                    <div class="btn btn-retour" (click)="showPostuler = false">Retour</div>
+                    <button pButton type="submit" [disabled]="form.invalid ||    !form.value.consent"
+                        label="Créer mon compte" class="btn btn-envoyer"></button>
+                </div>
+            </form>
+            <p class="information">Vous avez déjà un compte, <a href="#/login">cliquez ici</a> pour déposer via votre
+                portail.</p>
+        </div>
+    </div>
 </div>

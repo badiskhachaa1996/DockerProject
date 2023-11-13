@@ -386,7 +386,7 @@
         </div>
         <div class="field col-12 md:col-6">
             <label For="task_id">Activité <span style="color: red;"> * </span></label>
-            <p-dropdown [options]="taskListe" formControlName="task_id"placeholder="Choisissez une activité"
+            <p-dropdown [options]="taskListe" formControlName="task_id" placeholder="Choisissez une activité"
                 (onChange)="onSelectedTache($event)"></p-dropdown>
         </div>
         <div class="field col-12 md:col-4">
@@ -424,7 +424,7 @@
             </div>
         </div>
         <div></div>
-     
+
         <div class="col-3"></div>
         <div class="col-6">
             <div></div>
@@ -475,7 +475,8 @@
                 <td>{{ task.identifian }}</td>
                 <td><ng-container *ngFor="let t of task.ticketId">{{ t.customid}} <br></ng-container></td>
                 <td>{{ task.libelle}}</td>
-                <td><ng-container *ngFor="let a of task.ticketId ">{{ a?.agent_id?.firstname}} {{a?.agent_id?.lastname }}<br></ng-container></td>
+                <td><ng-container *ngFor="let a of task.ticketId ">{{ a?.agent_id?.firstname}} {{a?.agent_id?.lastname
+                        }}<br></ng-container></td>
                 <td>{{ task.etat }}</td>
                 <td>
                     <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
@@ -508,7 +509,7 @@
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td>{{tache.description_task}}</td>
-                <td>{{tache.date_limite| date:'mediumDate'}}</td>
+                <td>{{tache.date_limite| date:'dd MMMM yy'}}</td>
                 <td>{{tache.number_of_hour}}</td>
 
             </tr>
@@ -569,7 +570,8 @@
         </div>
         <div class="field col-12 md:col-10"></div>
         <div class="field col-12 md:col-2">
-        <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formAddProject.invalid"></button>
+            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                [disabled]="formAddProject.invalid"></button>
         </div>
     </form>
 </div>
@@ -615,13 +617,14 @@
         </div>
         <div class="field col-12 md:col-10"></div>
         <div class="field col-12 md:col-2">
-        <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formAddProject.invalid"></button>
-    </div>
+            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                [disabled]="formAddProject.invalid"></button>
+        </div>
     </form>
 </div>
-<p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true"  [value]="project" [paginator]="true"
-    rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
-    [globalFilterFields]="['project_id', 'titre','sujet']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+<p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [value]="project" [paginator]="true" rowExpandMode="single"
+    [pageLinks]="5" selectionMode="single" class="col-12" [globalFilterFields]="['project_id', 'titre','sujet']"
+    responsiveLayout="scroll" styleClass="p-datatable-gridlines">
     <ng-template pTemplate="caption">
         <div class="flex justify-content-between flex-column sm:flex-row">
             <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -682,7 +685,7 @@
                 {{project.titre}}
             </td>
             <td>
-                {{project.created_date | date:'mediumDate'}}
+                {{project.created_date | date:'dd MMMM yy'}}
             </td>
 
             <td>
@@ -739,8 +742,8 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td>{{ticket.description}}</td>
-            <td>{{ticket.debut| date:'mediumDate'}}</td>
-            <td>{{ticket.fin| date:'mediumDate'}}</td>
+            <td>{{ticket.debut| date:'dd MMMM yy'}}</td>
+            <td>{{ticket.fin| date:'dd MMMM yy'}}</td>
 
         </tr>
 

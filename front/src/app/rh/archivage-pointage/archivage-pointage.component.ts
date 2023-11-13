@@ -73,7 +73,8 @@ export class ArchivagePointageComponent implements OnInit {
       } else {
         this.dataHisto[p.machine] = [p]
       }
-      this.date_dernier_maj = new Date(p.updateDate)
+      if (new Date(p.updateDate).toString() != 'Invalid Date')
+        this.date_dernier_maj = new Date(p.updateDate)
     })
     this.display = true
   }

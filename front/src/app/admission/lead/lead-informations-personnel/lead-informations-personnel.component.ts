@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { FormationAdmission } from 'src/app/models/FormationAdmission';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-lead-informations-personnel',
@@ -14,12 +16,19 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LeadInformationsPersonnelComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
-  constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService, private UserService: AuthService) { }
+  constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService,
+    private UserService: AuthService, private FAService: FormulaireAdmissionService) { }
   editInfo = false
-
+  FORMATION: FormationAdmission
   ngOnInit(): void {
     if (this.ID)
-      this.ProspectService.getPopulate(this.ID).subscribe(dataP => {
+      this.ProspectService.getPopulate(this.ID).subscribe((dataP: Prospect) => {
+        this.FAService.FAgetAll().subscribe(fas => {
+          fas.forEach(val => {
+            if (val.nom == dataP.formation)
+              this.FORMATION = val
+          })
+        })
         this.PROSPECT = dataP
         this.UserService.getProfilePicture(dataP.user_id._id).subscribe((data) => {
           if (data.error) {
@@ -45,6 +54,8 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     date_naissance: new FormControl('', Validators.required),
     nationnalite: new FormControl('', Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    pays_adresse: new FormControl('', Validators.required),
     _id: new FormControl("", Validators.required)
   })
   initEditForm() {
@@ -54,10 +65,11 @@ export class LeadInformationsPersonnelComponent implements OnInit {
       firstname: bypass?.firstname,
       phone: bypass?.phone,
       date_naissance: new Date(this.PROSPECT?.date_naissance),
-      nationnalite: bypass.nationnalite,
+      nationnalite: bypass?.nationnalite,
+      email_perso: bypass?.email_perso,
+      pays_adresse: bypass?.pays_adresse,
       _id: bypass._id
     })
-    console.log(this.editInfoForm.value.date_naissance)
     this.editInfo = true;
   }
 

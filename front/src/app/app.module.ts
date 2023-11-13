@@ -403,6 +403,32 @@ import { PayementInformationComponent } from './remboursement/list-remboursement
 import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
 import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
 import { LabelPipe } from './directives/label.pipe';
+import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
+import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
+import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
+import { RdvCalendarInterneComponent } from './skillsnet/i-match/rdv-calendar-interne/rdv-calendar-interne.component';
+import { SeeCvExterneComponent } from './skillsnet/i-match/see-cv-externe/see-cv-externe.component';
+import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-details-offre.component';
+import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
+import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
+import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
+import { CvPdfPreviewComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-preview.component';
+import { CvPdfHeaderComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header.component';
+import { CvPdfHeaderEspicComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-espic/cv-pdf-header-espic.component';
+import { CvPdfHeaderStudinfoComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-studinfo/cv-pdf-header-studinfo.component';
+import { CvPdfHeaderAdgComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-adg/cv-pdf-header-adg.component';
+import { CvPdfHeaderMedasupComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-medasup/cv-pdf-header-medasup.component';
+import { CvPdfHeaderBtechComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-btech/cv-pdf-header-btech.component';
+import { CvPdfSidebarComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-sidebar/cv-pdf-sidebar.component';
+import { CvPdfContentComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-content/cv-pdf-content.component';
+import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
+import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-loader-preview/cv-loader-preview.component';
+import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
+import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
+import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
+
 
 @NgModule({
   imports: [
@@ -817,9 +843,36 @@ import { LabelPipe } from './directives/label.pipe';
     PayementInformationComponent,
     InformationRemboursementComponent,
     UploadRemboursementDocComponent,
-    LabelPipe
+    LabelPipe,
   
 // >>>>>>> 
+    MatchingViewerComponent,
+    NewEntreprisesComponent,
+    AnnonceViewerComponent,
+    RdvCalendarInterneComponent,
+    SeeCvExterneComponent,
+    VoirDetailsOffreComponent,
+    CvEtudiantComponent,
+    PreinscriptionComponent,
+    InscriptionComponent,
+    PauseReadMoreComponent,
+    NewCalendrierComponent,
+    DashboardImatchComponent,
+    CvPdfPreviewComponent,
+    CvPdfHeaderComponent,
+    CvPdfHeaderEspicComponent,
+    CvPdfHeaderStudinfoComponent,
+    CvPdfHeaderAdgComponent,
+    CvPdfHeaderMedasupComponent,
+    CvPdfHeaderBtechComponent,
+    CvPdfSidebarComponent,
+    CvPdfContentComponent,
+    GestionEquipeRhComponent,
+    CvLoaderPreviewComponent,
+    PreviewCandidatureComponent,
+    LeadDocumentsComponent
+    
+    
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

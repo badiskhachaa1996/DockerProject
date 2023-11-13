@@ -82,4 +82,16 @@ app.get("/getPopulate/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
+
+app.get("/getAllPopulate", (req, res) => {
+    //Récupérer tous les sujets
+    Sujet.find().populate('service_id')
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+
+})
 module.exports = app;

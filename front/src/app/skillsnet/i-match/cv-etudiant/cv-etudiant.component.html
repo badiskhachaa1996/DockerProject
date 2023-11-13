@@ -1,0 +1,226 @@
+<div class="col-12">
+    <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
+        <p-tabPanel header="Mes rendez-vous" >
+            <app-rendez-vous-resultats></app-rendez-vous-resultats>
+        </p-tabPanel>
+        <p-tabPanel header="Générateur de CV" >
+            <app-ajout-cv *ngIf="USER" [CV_USER_ID]="USER._id"></app-ajout-cv>
+        </p-tabPanel>
+        <p-tabPanel header="Mes matchings">
+            <p-table #dtm rowExpandMode="single" [value]="matchingList" dataKey="_id" [rows]="5" [rowHover]="true"
+                class="col-12" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
+                styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-3">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dtm.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">
+                            Type
+                        </th>
+                        <th pSortableColumn="taux" sstyle="text-align:center;width: 2px;">
+                            Commercial <p-sortIcon field="taux"></p-sortIcon>
+                        </th>
+        
+                        <th style="text-align:center">
+                            Statut
+                        </th>
+                        <th pSortableColumn="date_creation" style="text-align:center">
+                            Date <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="taux" style="text-align:center;width: 2px;">
+                            Taux <p-sortIcon field="taux"></p-sortIcon>
+                        </th>
+                        <th style="text-align:center;width: 2px;">
+                            Entretien
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                </ng-template>
+                <ng-template pTemplate="body" let-match let-expanded="expanded">
+                    <tr>
+                        <td [ngClass]="{'valid-begin':match.statut=='Validé'}">
+                            <button type="button" pButton pRipple [pRowToggler]="match" (click)="onExpand(match)"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            <!--<a (click)="seeOffre(match.offre_id)"></a>--> {{ match.offre_id.custom_id | uppercase}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            {{match.type_matching}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}" *ngIf="match.type_matching!='Candidat'">
+                            {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}" *ngIf="match.type_matching=='Candidat'">
+                            Non
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            {{match.statut}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            {{match.date_creation|date:medium}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            {{match.taux|number:'1.0-0'}}%
+                        </td>
+                        <td *ngIf="rdvDic[match.offre_id._id]" [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            <i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
+                                style="color: green;cursor: pointer;" pTooltip="Voir l'entretien"
+                                (click)="seeRDV(rdvDic[match.offre_id._id])"></i>
+                        </td>
+                        <td *ngIf="!rdvDic[match.offre_id._id]" [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            <i class="pi false-icon pi-times-circle" tooltipPosition="bottom" style="color: red;"
+                                pTooltip="Pas d'entretien"></i>
+                        </td>
+                        <td [ngClass]="{'valid-end':match.statut=='Validé'}">
+                            <i pTooltip="Valider" style="margin-left: 2%; cursor: pointer;color: green;"
+                                *ngIf="match.statut=='Entretien' || match.statut=='Accepté'" class="pi pi-check"
+                                (click)="changeStatut('Validé',match)" aria-hidden="true"></i>
+                            <i pTooltip="Annulé" style="margin-left: 2%; cursor: pointer;color: red;"
+                                *ngIf="match.statut=='En cours' || match.statut=='En Cours'" class="pi pi-times"
+                                (click)="changeStatut('Annulé',match)" aria-hidden="true"></i>
+                            <!--<i pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+                                (click)="InitUpdateStatut(match)" aria-hidden="true"></i>-->
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-match>
+                    <tr>
+                        <td colspan="9">
+                            <div class="competences-block">
+                                <h4 class="mb-2">Compétences</h4>
+                                <div class="grid gx-5 competence">
+                                    <div class="col-12 md:col-4">
+                                        <p>{{match.offre_id.competences[0]?.libelle | titlecase}}</p>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <p>{{match.offre_id.competences[1]?.libelle | titlecase}}</p>
+                                    </div>
+                                    <div class="col-12 md:col-4">
+                                        <p>{{match.offre_id.competences[2]?.libelle | titlecase}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4>Description</h4>
+                            <p>
+                                {{match.offre_id.missionDesc}}
+                            </p>
+                            <p-table responsiveLayout="scroll" [value]="['sq']" styleClass="p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th scope="col">Entreprise</th>-->
+                        <th scope="col">Déroulement</th>
+                        <th scope="col">Crée le</th>
+                        <!--<th scope="col">Auteur</th>
+                        <th scope="col">Modifié le</th>-->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <tr>
+                        <!--<td>{{match.offre_id.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>-->
+                        <td>{{match.offre_id.workplaceType}}</td>
+                        <td>{{match.offre_id.date_creation | date:'dd MMMM yy'}}</td>
+                        <!--<td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
+                            titlecase}}</td>
+                        <td>
+                            {{match.offre_id.modified_at| date:'dd MMMM yy'}}
+                        </td>-->
+                    </tr>
+                </ng-template>
+            </p-table>
+            </td>
+            </tr>
+            </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+
+</div>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" [modal]="false">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+        annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span><br>
+        <span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <!--<h5 style="font-weight: bold">Outils</h5>
+<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+<ul>
+    <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+</ul>-->
+
+    <hr />
+</p-sidebar>
+
+<p-dialog header="Informations du Rendez-Vous" [(visible)]="displayRDV" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+    <p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                    ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                    Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+                    Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+                </th>
+                <th pSortableColumn="statut" scope="col" style="text-align: center;">
+                    Statut <p-sortIcon field="statut"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rdv>
+            <tr>
+                <td>
+                    {{rdv?.offre_id?.custom_id }}
+                </td>
+                <td>
+                    {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+                </td>
+                <td>
+                    {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+                </td>
+                <td>
+                    {{rdv?.statut}}
+                </td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+</p-dialog>

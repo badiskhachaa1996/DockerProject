@@ -262,7 +262,7 @@
                             {{ vente?.montant }}€
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente?.date_reglement| date:'mediumDate' }}
+                            {{ vente?.date_reglement| date:'dd MMMM yy' }}
                         </td>
                         <td style="min-width: 14rem;">
                             {{ vente?.modalite_paiement }}
@@ -297,7 +297,7 @@
                         </td>
                         <td style="min-width: 14rem;">
                             <span *ngIf="vente?.facture_id">
-                                {{ vente?.facture_id?.date_paiement| date:'mediumDate' }}
+                                {{ vente?.facture_id?.date_paiement| date:'dd MMMM yy' }}
                             </span>
                             <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>

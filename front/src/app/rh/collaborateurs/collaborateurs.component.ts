@@ -17,6 +17,7 @@ import mongoose from 'mongoose';
 import { AuthService } from 'src/app/services/auth.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { Router } from '@angular/router';
+import { ServService } from 'src/app/services/service.service';
 
 @Component({
   selector: 'app-collaborateurs',
@@ -24,7 +25,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./collaborateurs.component.scss']
 })
 export class CollaborateursComponent implements OnInit {
-
   collaborateurs: Collaborateur[] = [];
   agents: any[] = [];
   collaborateurToUpdate: Collaborateur;
@@ -63,6 +63,17 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Tunis M4', value: 'Tunis M4' },
     { label: 'Autre', value: 'Autre' },
   ];
+  siteFilter = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ]
 
   contratList: any[] = [
     { label: 'Stage', value: 'Stage' },
@@ -77,6 +88,15 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Actif', value: 'Actif' },
     { label: 'Démission', value: 'Démission' },
     { label: 'Abandon poste', value: 'Abandon poste' },
+    { label: 'Période d\'essai', value: 'Période d\'essai' },
+    { label: 'Fin contrat', value: 'Fin contrat' },
+  ];
+  serviceFilter = []
+  statutFilter: any[] = [
+    { label: 'Actif', value: 'Actif' },
+    { label: 'Démission', value: 'Démission' },
+    { label: 'Abandon poste', value: 'Abandon poste' },
+    { label: 'Période d\'essai', value: 'Période d\'essai' },
     { label: 'Fin contrat', value: 'Fin contrat' },
   ];
 
@@ -114,15 +134,18 @@ export class CollaborateursComponent implements OnInit {
 
   constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
     private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder,
-    private UserService: AuthService, private congeService: CongeService, private router: Router) { }
+    private UserService: AuthService, private congeService: CongeService, private router: Router, private ServService: ServService) { }
 
   ngOnInit(): void {
     // décodage du token
     this.token = jwt_decode(localStorage.getItem('token'));
-
     // recuperation de la liste des collaborateurs
     this.onGetCollaborateurs();
-
+    this.ServService.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.serviceFilter.push({ label: val.label, value: val._id })
+      })
+    })
     // recuperation de la liste des agents
     this.rhService.getAgents()
       .then((response) => {
@@ -140,7 +163,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [new Date()],
       date_naissance: [new Date()],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -153,7 +176,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [''],
       date_naissance: [''],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -250,14 +273,25 @@ export class CollaborateursComponent implements OnInit {
     this.formUpdate.patchValue({
       user_id: collaborateur.user_id._id,
       matricule: collaborateur.matricule,
-      date_demarrage: new Date(collaborateur.date_demarrage),
-      date_naissance: new Date(collaborateur.date_naissance),
       localisation: collaborateur.localisation,
       intitule_poste: collaborateur.intitule_poste,
       contrat_type: collaborateur.contrat_type,
       statut: collaborateur.statut,
       h_cra: collaborateur.h_cra,
     });
+    let r = false
+    this.agents.forEach(ag => {
+      if (ag.value == collaborateur.user_id._id)
+        r = true
+    })
+    if (!r)
+      this.agents.push({ label: `${collaborateur.user_id?.lastname} ${collaborateur.user_id?.firstname}`, value: collaborateur.user_id._id })
+
+
+    if (collaborateur.date_demarrage)
+      this.formUpdate.patchValue({ date_demarrage: new Date(collaborateur.date_demarrage), })
+    if (collaborateur.date_naissance)
+      this.formUpdate.patchValue({ date_naissance: new Date(collaborateur.date_naissance), })
 
     // masque les autres formulaires
     this.showFormAdd = false;
@@ -563,7 +597,7 @@ export class CollaborateursComponent implements OnInit {
 
   onEmailType() {
     const { user_id }: any = this.collaborateurToUpdate;
-    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.emailTypeService.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()
@@ -651,7 +685,7 @@ export class CollaborateursComponent implements OnInit {
   }
 
   onUpdateConge() {
-    this.rhService.patchCollaborateurData({ _id: this.dataConge._id, conge_nb: this.dataConge.conge_nb }).then(c => { })
+    this.rhService.patchCollaborateurData({ _id: this.dataConge._id, conge_nb: this.dataConge.conge_nb, plafond: this.dataConge.plafond }).then(c => { })
   }
 
   calculDay(): number {
@@ -690,4 +724,17 @@ export class CollaborateursComponent implements OnInit {
     this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
   }
 
+  testDate(date: string) {
+    let db = new Date(date)
+    db.setMonth(db.getMonth() + 5)
+    return db.getTime() < new Date().getTime()
+  }
+  dateParseur(date_str: string) {
+    let pos1 = date_str.indexOf('/')
+    let day = date_str.substring(0, pos1)
+    let month = date_str.substring(pos1 + 1, date_str.length - 5)
+    let year = date_str.substring(date_str.length - 4)
+    return `${day}/${month}/${year}`
+
+  }
 }

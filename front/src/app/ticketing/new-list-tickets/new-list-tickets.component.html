@@ -95,14 +95,28 @@
             <p-dropdown [options]="moduleDropdown" formControlName="module"
                 placeholder="Choisissez un module"></p-dropdown>
         </div>
+        <div class="field col-12 md:col-6" *ngIf="showDemandeDropdown">
+            <label For="module">Demande <span style="color: red"> * </span></label>
+            <p-dropdown [options]="demandeDropdown" formControlName="module"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
         <div class="field col-12 md:col-6" *ngIf="showTypeDropdown">
             <label For="type">Type <span style="color: red"> * </span></label>
             <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"
                 placeholder="Choisissez le type"></p-dropdown>
         </div>
-        <div class="field col-12">
+        <div class="field col-6">
             <label For="sujet">Agent <span style="color: red;"> * </span></label>
             <p-dropdown [options]="dropdownMember" formControlName="agent_id" filter="true"></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>DDL: </label>
+            <p-calendar dateFormat="dd/mm/yy" formControlName="date_limite"></p-calendar>
+        </div>
+        <div class="field col-12">
+            <label For="description">Note</label>
+            <textarea pInputTextarea placeholder="Bon courage" formControlName="note_assignation" autoResize rows="3"
+                cols="30"></textarea>
         </div>
         <div class="col-12  flex align-items-center justify-content-center ">
             <br>
@@ -116,47 +130,107 @@
         <button pButton label="Ajouter un ticket" icon="pi pi-plus" (click)="goToAddTicket()"
             style="margin-top: 6rem;"></button>
     </div>-->
-    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;" [(activeIndex)]="activeIndex1">
+    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;" [(activeIndex)]="activeIndex1"
+        (onClose)="handleClose($event)">
+        <p-tabPanel header="Créer un ticket">
+            <app-ajout-ticket (ADD)="onAddTicket($event)"></app-ajout-ticket>
+        </p-tabPanel>
         <p-tabPanel header="Liste">
             <div class="grid">
-                <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterType" value="Assignes" [(ngModel)]="filterType"
-                        (onChange)="onFilterTicket()" inputId="type2"></p-checkbox>
-                    <label for="city1">Assignés</label>
+                <div class="col-12" *ngIf="isAgent && roleAccess!='Spectateur'">
+                    <p-selectButton [options]="modeOptions" [(ngModel)]="TicketMode" optionLabel="label"
+                        [disabled]=" roleAccess=='Agent'" (onChange)="onChangeMode($event)"
+                        optionValue="label"></p-selectButton>
                 </div>
-                <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterType" value="Crees" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
+                <div class="col-6 md:col-3 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur' && TicketMode=='Personnel'">
+                    <p-checkbox name="filterType" value="Mine" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
                 </div>
+                <div class="col-6 md:col-6 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode!='Personnel'">
+                    <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
+                        (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
+                    <label for="city1">Non assignés</label>
+                </div>
+                <div class="col-6 md:col-3 field-checkbox"
+                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode=='Personnel'">
+                    <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
+                        inputId="type2"></p-checkbox>
+                    <label for="city1">Assignés</label>
+                </div>
+                <!--<div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
+                    <p-checkbox name="filterType" value="Assigne Service" [(ngModel)]="filterType"
+                        (onChange)="onFilterTicket()" inputId="type2"></p-checkbox>
+                    <label for="city1">Assignés au service</label>
+                </div>-->
+
                 <div class="col-6 md:col-2 field-checkbox">
                     <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
                         [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
-                    <label for="city1">Tickets > 24 heures</label>
+                    <label for="city1">Tickets > 48 heures</label>
                 </div>
                 <div class="col-6 md:col-2 field-checkbox">
                     <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
                         (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
                     <label for="city1">Urgent</label>
                 </div>
-                <div class="col-6 md:col-4 grid">
-                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets selectionnés &nbsp;&nbsp;&nbsp;&nbsp;</span> {{tickets.length}}</p>
+                <div class="col-6 md:col-2 grid">
+                    <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets
+                            selectionnés </span>{{filteredValues.length}}</p>
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
-                [paginator]="true" rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
-                [globalFilterFields]="['customid']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                (onFilter)="onFilter($event, dt1)" [paginator]="true" rowExpandMode="single" [pageLinks]="5"
+                selectionMode="single" class="col-12" [globalFilterFields]="['customid']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row" *ngIf="TicketMode!='Personnel'">
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="createurList" filter="true" [showClear]="true"
+                            (onChange)="dt1.filter($event.value, 'createur_id._id', 'equals');"
+                            (onClear)="dt1.filter('', 'createur_id._id', 'equals');"
+                            placeholder="Choisissez un créateur" emptyFilterMessage="Pas de user trouvé"
+                            filterPlaceholder="Choisissez un créateur"></p-dropdown>
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
+                            [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
+                            (onClear)="dt1.filter('', 'agent_id._id', 'equals');"
+                            placeholder="Choisissez un agent Ticketing"
+                            emptyFilterMessage="Pas d'agent Ticketing trouvé"
+                            filterPlaceholder="Choisissez un agent Ticketing"></p-dropdown>
+                        <input type="date" (change)="filterDate(dt1,$event.target.value)"
+                            placeholder="Choisissez une date" pInputText>
+                    </div>
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterService" filter="true"
+                            [(ngModel)]="serviceFiltered"
                             (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');"
                             placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
+                            [showClear]="true" (onClear)="dt1.filter('', 'sujet_id.service_id._id', 'equals');"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
-                            (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
-                            emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true" [group]="true"
+                            [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
+                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');"
+                            placeholder="Choisissez un sujet" emptyFilterMessage="Pas de sujet trouvé"
+                            filterPlaceholder="Choisissez un sujet"></p-dropdown>
+
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
+                            [showClear]="true" (onClear)="dt1.filter('', 'statut', 'in');" [(ngModel)]="filterBase"
+                            (onChange)="dt1.filter($event.value, 'statut', 'in');" placeholder="Choisissez un statut"
+                            emptyFilterMessage="Pas de statut trouvé"
+                            filterPlaceholder="Choisissez un statut"></p-multiSelect>
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="campusDropdown" filter="true"
+                            *ngIf="showPedagogieFilter()" [showClear]="true" (onClear)="dt1.filter('', 'campus', 'in');"
+                            (onChange)="dt1.filter($event.value, 'campus', 'in');"
+                            placeholder="Choisissez un campus"></p-multiSelect>
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="filiereDropdown" filter="true"
+                            *ngIf="showPedagogieFilter()" [showClear]="true"
+                            (onClear)="dt1.filter('', 'filiere', 'in');"
+                            (onChange)="dt1.filter($event.value, 'filiere', 'in');"
+                            placeholder="Choisissez une filière"></p-multiSelect>
+
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -203,7 +277,7 @@
                             {{ticket.customid}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
-                            {{ticket.date_ajout | date:'mediumDate'}}
+                            {{ticket.date_ajout | date:'dd MMMM yy'}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{ticket?.sujet_id?.service_id?.label}}
@@ -234,30 +308,47 @@
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{getDelaiTraitrement(ticket)}}
                         </td>
-                        <td *ngIf="ticket.origin" [ngClass]="{'urgent-end':ticket.priorite}">
+                        <td *ngIf="ticket.origin=='Mine'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Modifier" style="cursor: pointer;" class="pi pi-pencil mr-2"
                                 tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                                 tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
                         </td>
-                        <td *ngIf="!ticket.origin" [ngClass]="{'urgent-end':ticket.priorite}">
+                        <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
                                 tooltipPosition="bottom" (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
-                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban"
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
                                 tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="ticket.origin=='Non Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
+                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Assigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user-plus"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="ticket.origin=='Assigne Service'" [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
+                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket>
                     <tr>
                         <td colspan="10">
-                            <h5 *ngIf="!ticket.origin">Détails affectation</h5>
+                            <h5 *ngIf="ticket.origin!='Mine'">Détails affectation</h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
-                                *ngIf="!ticket.origin">
+                                *ngIf="ticket.origin!='Mine'">
                                 <ng-template pTemplate="header">
                     <tr>
                         <th> Crée par </th>
                         <th> Assigné par </th>
+                        <th> Assigner à</th>
                         <th> Priorité </th>
                         <th> Deadline </th>
                         <th> Note assignation </th>
@@ -265,10 +356,11 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
-                        <td>{{ticket.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
-                        <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
-                        <td>{{ticket.date_limite |date:"mediumDate"}}</td>
+                        <td>{{ticket?.createur_id?.firstname|titlecase}} {{ticket?.createur_id?.lastname|uppercase}}</td>
+                        <td>{{ticket?.assigne_by?.firstname|titlecase}} {{ticket?.assigne_by?.lastname|uppercase}}</td>
+                        <td>{{ticket?.agent_id?.firstname|titlecase}} {{ticket?.agent_id?.lastname|uppercase}}</td>
+                        <td>{{(ticket?.priorite)?'Urgent':'Pas Urgent'}}</td>
+                        <td>{{ticket?.date_limite |date:"dd MMMM yy"}}</td>
                         <td>
                             <app-read-more [string]="ticket.note_assignation"></app-read-more>
                         </td>
@@ -291,7 +383,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-message>
                 <tr>
-                    <td>{{message.date_ajout | date:"mediumDate"}}</td>
+                    <td>{{message.date_ajout | date:"dd MMMM yy"}}</td>
                     <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                     <td>{{message.description}}</td>
                 </tr>
@@ -366,10 +458,7 @@
             </p-table>
         </p-tabPanel>
 
-        <p-tabPanel [header]="ticket?.customid" *ngFor="let ticket of ticketsOnglets">
-            <i class="pi pi-times-circle mb-2" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                title="Fermer" (click)="deleteTicket(ticket)" aria-hidden="true" pTooltip="Supprimer l'onglet"
-                tooltipPosition="bottom"> </i>
+        <p-tabPanel [header]="ticket?.customid" *ngFor="let ticket of ticketsOnglets" [closable]="true">
             <p-table #dt3 dataKey="_id" [value]="[ticket]" rowExpandMode="single" selectionMode="single" class="col-12"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -415,7 +504,7 @@
                             {{ticket.customid}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
-                            {{ticket.date_ajout | date:'mediumDate'}}
+                            {{ticket.date_ajout | date:'dd MMMM yy'}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{ticket?.sujet_id?.service_id?.label}}
@@ -450,11 +539,11 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket3>
                     <tr>
-                        
+
                         <td colspan="10">
-                            <h5 *ngIf="!ticket.origin">Détails affectation </h5>
+                            <h5 *ngIf="ticket.origin!='Mine'">Détails affectation </h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
-                                *ngIf="!ticket.origin">
+                                *ngIf="ticket.origin!='Mine'">
                                 <ng-template pTemplate="header">
                     <tr>
                         <th> Crée par </th>
@@ -469,7 +558,7 @@
                         <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
                         <td>{{ticket.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
                         <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
-                        <td>{{ticket.date_limite |date:"mediumDate"}}</td>
+                        <td>{{ticket.date_limite |date:"dd MMMM yy"}}</td>
                         <td> <app-read-more [string]="ticket.note_assignation"></app-read-more>
                         </td>
                     </tr>
@@ -483,7 +572,7 @@
             </ng-template>
             </p-table>
             <div class="col-12 card" *ngIf="ticketTraiter">
-                <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                <i class="pi pi-times-circle" style="color: red; cursor: pointer; width: 100%;text-align: right;"
                     (click)="ticketTraiter = null" aria-hidden="true"> </i>
                 <h3 class="text-center" style="font-weight: bold;">
                     {{ ticketTraiter.customid | uppercase }}
@@ -512,21 +601,41 @@
                         <th>Date</th>
                         <th>Commenté par</th>
                         <th>Commentaire</th>
+                        <th>Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-message>
+                <ng-template pTemplate="body" let-message let-idx="index">
                     <tr>
-                        <td>{{message.date_ajout | date:"mediumDate"}}</td>
+                        <td>{{message.date_ajout | date:"dd MMMM yy"}}</td>
                         <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                         <td>{{message.description}}</td>
+                        <td>
+                            <i *ngIf="message.user_id._id==token.id" pTooltip="Supprimer le commentaire"
+                                tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                                (click)="deleteCom(idx,message)"> </i>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
-            <h5 class="col-12" style="text-align: center;">Statut:</h5>
-            <div class="col-6 col-offset-3">
+            <h5 class="col-12">Statut:</h5>
+            <div class="col-6">
                 <p-dropdown [options]="statutDropdown" placeholder="Choisissez un statut" [filter]="true"
                     [style]="{'width':'100%'}" autoWidth="false" [(ngModel)]="ticket.statut"
                     (onChange)="updateTicketStatut(ticket)"></p-dropdown>
+            </div>
+            <div class="col-6">
+                <p-fileUpload (uploadHandler)="onUpload($event, fu2,ticket)" #fu2 mode="basic" customUpload="true"
+                    chooseIcon="pi pi-paperclip" chooseIcon="pi pi-paperclip" maxFileSize="10000000" [auto]="true">
+                </p-fileUpload>
+                <div>
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes <i
+                                class="pi pi-trash" style="float:right; color: red; cursor: pointer;"
+                                pTooltip="Supprimer le fichier" tooltipPosition="bottom"
+                                (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))" aria-hidden="true">
+                            </i></li>
+                    </ul>
+                </div>
             </div>
             <p-table dataKey="_id" [value]="ticket.documents" class="col-12" styleClass="p-datatable-gridlines"
                 *ngIf="ticket.documents.length!=0">
@@ -557,23 +666,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <div class="col-12">
-                <div class="field col-6">
-                    <p-fileUpload (uploadHandler)="onUpload($event, fu2,ticket)" #fu2 mode="basic" customUpload="true"
-                        chooseIcon="pi pi-paperclip" chooseIcon="pi pi-paperclip" maxFileSize="10000000"
-                        chooseLabel="Ajouter un document" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
-                    </p-fileUpload>
-                    <div>
-                        <ul *ngIf="uploadedFiles.length">
-                            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes <i
-                                    class="pi pi-trash" style="float:right; color: red; cursor: pointer;"
-                                    pTooltip="Supprimer le fichier" tooltipPosition="bottom"
-                                    (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))" aria-hidden="true">
-                                </i></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <!-- <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines"
                 *ngIf="ticket.documents_service.length!=0">
                 <ng-template pTemplate="header">
@@ -597,9 +689,7 @@
                 </ng-template>
             </p-table>-->
         </p-tabPanel>
-        <p-tabPanel header="Créer un ticket">
-            <app-ajout-ticket></app-ajout-ticket>
-        </p-tabPanel>
+
     </p-tabView>
 
 </div>

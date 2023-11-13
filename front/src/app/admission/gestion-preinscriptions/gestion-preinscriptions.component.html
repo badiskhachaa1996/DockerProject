@@ -199,7 +199,7 @@
                 </button>
             </div>-->
             <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
-                style="margin-left: 2px;">
+                [disabled]="prospects.length==0" style="margin-left: 2px;">
             </button>
             <h5>Liste des leads {{infoFiltered}}</h5>
 
@@ -263,13 +263,13 @@
                         (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
                         emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
                     </p-dropdown>
-                    <div class="flex table-header">
-                    </div>
+                    <p-calendar *ngIf="!dataCommercial" placeholder="Date Inscr."
+                        (onSelect)="filterProspects($event)"></p-calendar>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
-                        <th pSortableColumn="origine" scope="col" style="text-align: center;">
+                        <!--<th pSortableColumn="origine" scope="col" style="text-align: center;">
                             Origine <p-sortIcon field="origine"></p-sortIcon>
                         </th>
                         <th pSortableColumn="source" scope="col" style="text-align: center;">
@@ -277,7 +277,7 @@
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Lead <p-sortIcon field="customid"></p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
                         </th>
@@ -293,7 +293,13 @@
                         <th scope="col" style="text-align: center;">
                             Emails
                         </th>
-                        <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
+                        <th scope="col" style="text-align: center;">
+                            Téléphone
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                            Pays de résidence
+                        </th>
+                        <!--<th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
                             ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
                         </th>
                         <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
@@ -310,8 +316,8 @@
                         </th>
                         <th scope="col" style="text-align: center;">
                             Visa
-                        </th>
-                        <th pSortableColumn="date_creation" scope="col">
+                        </th>-->
+                        <th style="text-align: center;" pSortableColumn="date_creation" scope="col">
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
@@ -328,7 +334,7 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
 
-                        <td>
+                        <!--<td>
                             {{ prospect.origin }}
                         </td>
 
@@ -338,7 +344,7 @@
 
                         <td>
                             {{ prospect.customid }}
-                        </td>
+                        </td>-->
 
                         <td *ngIf="prospect.user_id && prospect.user_id.lastname && prospect.user_id.firstname">
                             {{ prospect.user_id.firstname | titlecase }}
@@ -360,6 +366,12 @@
                             {{prospect.user_id?.email}} {{ prospect.user_id?.email_perso }}
                         </td>
                         <td>
+                            {{ prospect.user_id?.indicatif }} {{ prospect.user_id?.phone }}
+                        </td>
+                        <td>
+                            {{ prospect.user_id?.pays_adresse }}
+                        </td>
+                        <!--<td>
                             {{ prospect.code_commercial }}
                         </td>
                         <td *ngIf="prospect.haveDoc">
@@ -382,7 +394,7 @@
                         </td>
                         <td *ngIf="!prospect.avancement_visa">
                             Non
-                        </td>
+                        </td>-->
                         <td>
                             {{prospect.date_creation | date :'dd/MM/yyyy' }}
                         </td>
@@ -429,7 +441,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{prospect.user_id.civilite}}</td>
-                        <td>{{ prospect.date_naissance | date: 'mediumDate'}}</td>
+                        <td>{{ prospect.date_naissance | date: 'dd MMMM yy'}}</td>
                         <td>{{prospect.user_id.nationnalite}}</td>
                         <td>{{prospect.user_id.pays_adresse}}</td>
                         <td>{{prospect.statut_actuel}}</td>
@@ -811,7 +823,7 @@
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
                         <th></th>
-                        <th pSortableColumn="origine" scope="col" style="text-align: center;">
+                        <!--<th pSortableColumn="origine" scope="col" style="text-align: center;">
                             Origine <p-sortIcon field="origine"></p-sortIcon>
                         </th>
                         <th pSortableColumn="source" scope="col" style="text-align: center;">
@@ -819,16 +831,16 @@
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Lead <p-sortIcon field="customid"></p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="formation" scope="col" style="text-align: center;">
                             Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
+                        <!--<th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
                             Rythme Formation <p-sortIcon field="rythme_formation"></p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="type_form" scope="col" style="text-align: center;">
                             Etablissement <p-sortIcon field="type_form"></p-sortIcon>
                         </th>
@@ -836,9 +848,15 @@
                             Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
                         <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
-                            Email perso <p-sortIcon field="user_id.email_perso"></p-sortIcon>
+                            Emails <p-sortIcon field="user_id.email_perso"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
+                        <th pSortableColumn="user_id.phone" scope="col" style="text-align: center;">
+                            Téléphone
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                            Pays de résidence
+                        </th>
+                        <!--<th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
                             ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
                         </th>
                         <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
@@ -855,7 +873,7 @@
                         </th>
                         <th scope="col" style="text-align: center;">
                             Visa
-                        </th>
+                        </th>-->
                         <th pSortableColumn="date_creation" scope="col">
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
@@ -879,7 +897,7 @@
 
                         </td>
 
-                        <td>
+                        <!--<td>
                             {{ prospect.origin }}
                         </td>
 
@@ -889,7 +907,7 @@
 
                         <td>
                             {{ prospect.customid }}
-                        </td>
+                        </td>-->
 
                         <td *ngIf="prospect.user_id && prospect.user_id.lastname && prospect.user_id.firstname">
                             {{ prospect.user_id.firstname | titlecase }}
@@ -914,6 +932,12 @@
                             {{ prospect.user_id?.email_perso }}
                         </td>
                         <td>
+                            {{ prospect.user_id?.indicatif }} {{ prospect.user_id?.phone }}
+                        </td>
+                        <td>
+                            {{ prospect.user_id?.pays_adresse }}
+                        </td>
+                        <!--<td>
                             {{ prospect.code_commercial }}
                         </td>
                         <td *ngIf="prospect.haveDoc">
@@ -936,7 +960,7 @@
                         </td>
                         <td *ngIf="!prospect.avancement_visa">
                             Non
-                        </td>
+                        </td>-->
                         <td>
                             {{prospect.date_creation | date :'dd/MM/yyyy' }}
                         </td>
@@ -988,7 +1012,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{prospect.user_id?.civilite}}</td>
-                        <td>{{prospect.date_naissance | date: 'mediumDate'}}</td>
+                        <td>{{prospect.date_naissance | date: 'dd MMMM yy'}}</td>
                         <td>{{prospect.user_id?.nationnalite}}</td>
                         <td>{{prospect.user_id?.pays_adresse}}</td>
                         <td>{{prospect.user_id?.email}}</td>

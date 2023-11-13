@@ -6,7 +6,7 @@ import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { Etudiant } from 'src/app/models/Etudiant';
-import { MessageService } from 'primeng/api';
+import { MessageService, TreeNode } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
@@ -25,6 +25,7 @@ import { AbscenceCollaborateur } from 'src/app/models/AbscenceCollaborateur';
 import { JustificatifCollaborateurService } from 'src/app/services/justificatif-collaborateur.service';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { RhService } from 'src/app/services/rh.service';
+import { MicrosoftService } from 'src/app/services/microsoft.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -299,11 +300,11 @@ export class UserProfilComponent implements OnInit {
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
 
   dataCollab: Collaborateur
-
+  dataMC
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService, private congeService: CongeService,
+    private TCService: TeamCommercialService, private congeService: CongeService, private MCService: MicrosoftService,
     private abscenceCollaborateurService: JustificatifCollaborateurService, private CollaborateurService: RhService) { }
 
   ngOnInit(): void {
@@ -325,9 +326,12 @@ export class UserProfilComponent implements OnInit {
       }
 
     })
-    this.AuthService.getById(this.userupdate.id).subscribe((data) => {
+    this.AuthService.getById(this.userupdate.id).subscribe((data: User) => {
       this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(c => {
         this.dataCollab = c
+      })
+      this.MCService.getInfo().then(u => {
+        this.dataMC = u
       })
       this.userco = jwt_decode(data['userToken'])['userFromDb']
       //TODO C'est quoi cette merde
@@ -507,8 +511,38 @@ export class UserProfilComponent implements OnInit {
 
   onUpdateDNC() {
     this.dataCollab.date_naissance = new Date(this.dataCollab.date_naissance)
-    this.CollaborateurService.patchCollaborateurData(this.dataCollab).then(d=>{
+    this.CollaborateurService.patchCollaborateurData(this.dataCollab).then(d => {
       this.updateDNC = false
+    })
+  }
+  seeOrgaBool = false
+  dataOrga: TreeNode[] = [{
+    label: 'Root',
+    children: [
+
+    ]
+  }]
+  seeOrga() {
+    this.MCService.getSalaries().then(r => {
+
+      let label = this.dataMC.displayName
+      if (this.dataMC.jobTitle)
+        label = label + ' - ' + this.dataMC.jobTitle
+      this.dataOrga[0] = {
+        label,
+        children: [],
+        expanded: true
+      }
+      this.seeOrgaBool = true
+      console.log(r)
+      r.value.forEach(v => {
+        let label = v.displayName
+        if (v.jobTitle)
+          label = label + ' - ' + v.jobTitle
+        this.dataOrga[0].children.push({
+          label
+        })
+      })
     })
   }
 

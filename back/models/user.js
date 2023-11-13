@@ -57,7 +57,8 @@ const user_schema = new mongoose.Schema({
     },
     type: {
         type: String,
-        required: false
+        required: false,
+        default: 'Externe-InProgress'
     },
     entreprise: {
         type: String,
@@ -98,7 +99,7 @@ const user_schema = new mongoose.Schema({
     },
     date_creation: { type: Date, required: false, default: Date.now },
     departement: { type: String },
-    last_connection: { type: Date },
+    last_connection: { type: Date, default: new Date() },
     mention: { //not used
         type: String,
         required: false,
@@ -129,12 +130,26 @@ const user_schema = new mongoose.Schema({
             date: { type: Date },
             filename: { type: String },
             path: { type: String },
-            note: { type: String }
+            note: { type: String },
         }], default: []
     },
     savedTicket: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "ticket" }], default: []
-    }
+    },
+    savedAnnonces: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "annonce" }], default: []
+    },
+    savedMatching: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
+    },
+    linksnames: [{ type: String }],
+    haveNewAccess: { type: Boolean, default: false },
+    type_supp: { type: [String], default: [] }
+    ,
+    savedAdministration: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "prospect" }], default: []
+    },
+
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

@@ -518,8 +518,13 @@ export class CvthequeComponent implements OnInit {
   })
 
   onAssignOffer() {
+    let type_matching = "Commercial"
+    if (this.token.type == "CEO Entreprise" || this.token.type == "Entreprise" || this.token.type == "Tuteur")
+      type_matching = "Entreprise"
+    else if (this.token.type == "Initial" || this.token.type == "Alternant" || this.token.type == null)
+      type_matching = "Candidat"
     this.selectedCVs.forEach((cv: any) => {
-      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En Cours", "Etudiant", new Date())).subscribe(match => {
+      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En cours", type_matching, new Date(), null, null, null, true)).subscribe(match => {
         this.messageService.add({ severity: 'success', summary: "Création du Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname })
       }, error => {
         this.messageService.add({ severity: 'error', summary: "Error sur le Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname, detail: error.toString() })

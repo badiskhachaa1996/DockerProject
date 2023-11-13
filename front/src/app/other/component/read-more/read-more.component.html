@@ -1,9 +1,9 @@
 <ng-container *ngIf="string && string.length!=0">
     <ng-container *ngIf="!seeAllString">
-        <p *ngIf="string.length>20" (click)="onClick()" tooltipPosition="bottom" pTooltip="Lire la suite">
-            {{string| slice:0:20}}...<br><span style="cursor: pointer;color: blue;">Lire la suite</span>
+        <p *ngIf="string.length>size_max" (click)="onClick()" tooltipPosition="bottom" pTooltip="Lire la suite">
+            {{string| slice:0:size_max}}...<br><span style="cursor: pointer;color: blue;">Lire la suite</span>
         </p>
-        <ng-container *ngIf="string.length<=20">
+        <ng-container *ngIf="string.length<=size_max">
             {{string}}
         </ng-container>
     </ng-container>

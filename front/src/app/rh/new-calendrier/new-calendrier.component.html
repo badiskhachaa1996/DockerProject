@@ -1,0 +1,357 @@
+<div class="card grid">
+    <p-tabView [(activeIndex)]="indexTabView">
+        <p-tabPanel header="Global" leftIcon="pi pi-globe">
+            <div class="col-12 grid" style="width: 100%">
+                <div class="xl:col-6 col-12">
+                    <label>Site&nbsp;</label><br>
+                    <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." [(ngModel)]="siteSelected"
+                        (onChange)="changeSite($event.value)" autoWidth="false"
+                        [style]="{'width':'30em'}"></p-multiSelect>
+                    <br>
+                    <label>Equipe&nbsp;</label><br>
+                    <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
+                        [style]="{'width':'30em'}" (onChange)="chooseTeam($event.value);" placeholder="Equipe"
+                        [showClear]="true"></p-dropdown>
+
+                </div>
+                <div class="xl:col-6 col-12 grid">
+                    <div class="col-4">
+                        <label>Absence</label><br>
+                        <p-checkbox class="absence" [(ngModel)]="filter_value" value="Absence"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Autorisation</label><br>
+                        <p-checkbox class="autorisation" [(ngModel)]="filter_value" value="Autorisation"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Férié Tunis</label><br>
+                        <p-checkbox class="ferieT" [(ngModel)]="filter_value" value="Jour férié Tunis"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Férié France</label><br>
+                        <p-checkbox class="ferieFR" [(ngModel)]="filter_value" value="Jour férié France"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Cours</label><br>
+                        <p-checkbox class="cours" [(ngModel)]="filter_value" value="Cours"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-4">
+                        <label>Autre événement</label><br>
+                        <p-checkbox class="Autre" [(ngModel)]="filter_value" value="Autre événement"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                </div>
+            </div>
+            <p-fullCalendar #calendar [events]="eventGlobal" [options]="optionsGlobal">
+            </p-fullCalendar>
+        </p-tabPanel>
+        <p-tabPanel header="Users" leftIcon="pi pi-users">
+            <div class="col-12 grid">
+                <div class="xl:col-6 col-12">
+                    <label>Collaborateur&nbsp;</label>
+                    <p-dropdown filter="true" [options]="collaborateurList" placeholder="Choisissez un collaborateur"
+                        [(ngModel)]="userSelected" (onChange)="changeUser($event.value)" autoWidth="false"
+                        [style]="{'width':'30em'}"></p-dropdown>
+                </div>
+                <div class="xl:col-6 col-12 grid">
+                    <div class="col-6">
+                        <label>Absence Non Justifiée</label><br>
+                        <p-checkbox class="absence" [(ngModel)]="filter_value" value="Absence Non Justifié"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-6">
+                        <label>Autorisation</label><br>
+                        <p-checkbox class="autorisation" [(ngModel)]="filter_value" value="Autorisation"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-6">
+                        <label>Activité</label><br>
+                        <p-checkbox class="activite" [(ngModel)]="filter_value" value="Présent"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                    <div class="col-6">
+                        <label>Cours</label><br>
+                        <p-checkbox class="cours" [(ngModel)]="filter_value" value="Cours"
+                            (onChange)="onFilter()"></p-checkbox>
+                    </div>
+                </div>
+            </div>
+            <p-fullCalendar #calendar [events]="eventUsers" [options]="optionsUsers">
+            </p-fullCalendar>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-dialog class="grid" header="Ajouter un événement" [(visible)]="displayPopUp" [modal]="true"
+    [style]="{width: '75vw'}">
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onSave()">
+        <div class="field col-12 md:col-6">
+            <label>Type: </label>
+            <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true" appendTo="body"
+                placeholder="Choisissez un type d'événement" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Intitulé </label>
+            <input pInputText id="title" type="text" formControlName="name" placeholder="Intitulé" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Campus: </label>
+            <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false" [filter]="true"
+                appendTo="body" placeholder="Choisissez un campus" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Description </label>
+            <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+        </div>
+        <button pButton [disabled]="formAdd.invalid" label="Ajouter l'événement"></button>
+    </form>
+</p-dialog>
+
+<p-dialog *ngIf="dateCRA" [(visible)]="displayCRA" header="CRA du {{dateCRA| date:'dd MMMM yy'}}"
+    [style]="{width: '75vw',height:'75vw'}" [modal]="true">
+    <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="DataCRA">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Site</th>
+                <th>Checkin</th>
+                <th>Pause</th>
+                <th>Checkout</th>
+                <th style="width: 8rem">
+                    Taux CRA
+                </th>
+                <th style="width: 8rem">
+                    Statut
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-check>
+            <tr>
+                <td>
+                    {{collaborateurDic[check?.user_id._id]?.localisation}}
+                </td>
+                <td style="min-width: 14rem;">
+                    <strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}}<br>
+                    <strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
+                </td>
+                <td style="min-width: 10rem;padding: 0%;">
+                    <app-pause-read-more [pausemin]="check?.pause_timing"
+                        [pauseList]="check?.pause"></app-pause-read-more>
+                </td>
+                <td style="min-width: 10rem;">
+                    <strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <span
+                        *ngIf="check.auto">AUTOMATIQUE</span><br>
+                    <strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
+                </td>
+
+                <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
+                    [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
+                    {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check"
+                        tooltipPosition="bottom" pTooltip="CRA Validé"></i> <i *ngIf="!check.validated"
+                        class="pi pi-times" tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
+                </td>
+                <td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
+                    0% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
+                        pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
+                        tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
+                </td>
+
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Disponible'">
+                    <p-tag value="Disponible" severity="success" icon="pi pi-check"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En congé'">
+                    <p-tag value="En congé" icon="pi pi-home" severity="info"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
+                    <p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Ecole'">
+                    <p-tag value="Ecole" severity="info" icon="pi pi-book"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
+                    <p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
+                    <p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
+                </td>
+                <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
+                    <p-tag value="En pause" severity="warning" icon="pi pi-moon"></p-tag>
+                </td>
+                <td>
+                    <i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check" tooltipPosition="bottom"
+                        (click)="onValidateCRA(check)" aria-hidden="true"></i>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">Aucun tache de cra trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+
+<p-dialog *ngIf="dateAbsence" [(visible)]="displayAbsence" header="Absents du {{dateAbsence| date:'dd MMMM yy'}}"
+    [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="dicAbsent[dateAbsence]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+                <th>
+                    Statut
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.user_id.firstname | titlecase}} {{rowData.user_id.lastname | uppercase}}</td>
+                <td>Absent</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+
+<p-dialog *ngIf="dateAutorisation" [(visible)]="displayAutorisation"
+    header="Autorisations du {{dateAutorisation| date:'dd MMMM yy'}}" [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtCon dataKey="_id" styleClass="p-datatable-gridlines" [value]="CongeDic[dateAutorisation]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+                <th>
+                    Type de congé
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.user_id.firstname | titlecase}} {{rowData.user_id.lastname | uppercase}}</td>
+                <td>{{rowData.type_conge}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-dialog *ngIf="dateCours" [(visible)]="displayCours" header="Jour de Cours du {{dateCours| date:'dd MMMM yy'}}"
+    [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtCon dataKey="_id" styleClass="p-datatable-gridlines" [value]="coursDic[dateCours]" style="width: 100%;">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.created_by.firstname | titlecase}} {{rowData.created_by.lastname | uppercase}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+    [style]="{width: '75vw'}">
+    <div class="col-12 grid">
+        <div class="col-12">
+            <p>
+                {{dataEvent?.note}}
+            </p>
+        </div>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formUpdate" (ngSubmit)="onUpdate()" *ngIf="showEdit">
+            <div class="field col-12 md:col-6">
+                <label>Type: </label>
+                <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true"
+                    appendTo="body" placeholder="Choisissez un type d'événement"
+                    [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Intitulé </label>
+                <input pInputText id="title" type="text" formControlName="name" placeholder="Intitulé" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Campus: </label>
+                <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false" [filter]="true"
+                    appendTo="body" placeholder="Choisissez un campus" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Description </label>
+                <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+            </div>
+            <button pButton [disabled]="formUpdate.invalid" label="Modifier l'événement"></button>
+        </form>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-cog" [style]="{'width':'100%'}" label="Modifier l'événement"
+                (click)="onInitUpdate()"></p-button>
+        </div>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-trash" [style]="{'width':'100%'}" label="Supprimer l'événement"
+                styleClass="p-button-danger" (click)="onDelete()"></p-button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Valider CRA" [(visible)]="displayCRACheck" [modal]="true" showEffect="fade" [style]="{width: '50vw'}"
+    [breakpoints]="{'960px': '75vw'}">
+    <div [style]="{'width':'100%'}" *ngIf="dataCHECK">
+        <p-toggleButton autoWidth="false" [style]="{'width':'100%'}" onLabel="Validé" offLabel="Non validé"
+            offIcon="pi pi-times" [(ngModel)]="dataCHECK.validated" (onChange)="saveCheck(dataCHECK)">
+            <!-- ERREUR VSCode Qui n'en est pas une -->
+        </p-toggleButton>
+        <p>&nbsp;</p>
+        <p-table [value]="dataCHECK?.cra" dataKey="_id" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Tâche</th>
+                    <th>Durée</th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="cra">
+                    <td>
+                        {{cra?.task}}
+                    </td>
+                    <td>
+                        {{cra?.number_minutes}} mn
+                    </td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="3">Aucun CRA pour le moment.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="3">Chargement des CRA, merci de patienter...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</p-dialog>

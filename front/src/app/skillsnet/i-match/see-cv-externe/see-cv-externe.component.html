@@ -1,0 +1,132 @@
+<div *ngIf="cv && user" class="imatch-main-page">
+    <div class="page-content">
+        <div class="top-header container">
+            <a (click)="gotoEdit()" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-cog"></i>&nbsp;Modifier</a>
+            <a (click)="takeARendezVous()" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
+        </div>
+        <div>
+            <app-cv-loader-preview [CV_ID]="CV_ID"></app-cv-loader-preview>
+        </div>
+        <!--<div class="header">
+            <div class="container">
+                <div class="grid" style="padding-left: 80px;padding-right: 80px;">
+                    <div class="cv-title col-12">
+                        <div *ngIf="profilePic;then cv_image else default_image"></div>
+                        <ng-template #cv_image>
+                            <div class="img-card" style="background-image: url('{{profilePic}}');"></div>
+                        </ng-template>
+                        <ng-template #default_image>
+                            <div *ngIf="user.civilite == 'Madame'; then is_madame else other"></div>
+                            <ng-template #is_madame>
+                                <div class="img-card"
+                                    style="background-image: url('../../../assets/images/imatch/female.png');"></div>
+
+                            </ng-template>
+                            <ng-template #other>
+                                <div class="img-card"
+                                    style="background-image: url('../../../assets/images/imatch/male.png');"></div>
+                            </ng-template>
+                        </ng-template>
+                        <div class="cv-main-info">
+                            <h1 class="cv-name">{{user.firstname.substring(0, 1)}}. {{user.lastname.substring(0, 2)}}.
+                            </h1>
+                            <hr>
+                            <h1 class="cv-profile">{{cv.competences[0]?.profile_id?.libelle || "Profile non spécifié"}}
+                            </h1>
+                            <h2>à propos</h2>
+                            <p>{{cv.a_propos || 'A propos non spécifié'}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="competences-block">
+                    <h2>Compétences</h2>
+                    <div class="row gx-5 competence grid">
+                        <div class="col-md col-4" *ngFor="let comp of competencesList">
+                            <p>{{comp?.libelle || "Compétences"}}</p>
+                        </div>
+                    </div>
+                    <a *ngIf="cv?.competences?.length>3 && competencesList.length<4" style="float: right;"
+                        (click)="seeAllCompetences()">Voir la suite</a>
+                    <a *ngIf="competencesList.length>3" style="float: right;"
+                        (click)="hideAllCompetences()">Cacher</a>
+                </div>
+
+                <div class="row other-cv-info grid">
+                    <div class="col-md-12 second-block">
+                        <div class="row gx-5">
+                            <div class="col inner-area-2">
+                                <h2>Langues</h2>
+                                <p>{{cv.langues || 'Langues non spécifiés'}}</p>
+                            </div>
+                            <div class="col inner-area-1">
+                                <h2>Centres D'Intérêts</h2>
+                                <p>{{cv.centre_interets || "Centre d'intérets non spécifiés"}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="container" style="padding-left: 80px;padding-right: 80px;">
+                    <div class="big-section" *ngIf="cv.experiences_pro && cv.experiences_pro.length!=0">
+                        <h2>Expériences professionnelles</h2>
+                        <div class="section-block" *ngFor="let exp of cv.experiences_pro">
+                            <div class="section-sub-info">
+                                <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                                <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
+                                    date:'YYYY' || '20xx'}}</h4>
+                            </div>
+                            <h4 class="structure-name">{{exp?.structure}}</h4>
+                            <div class="section-details">
+                                <p>{{exp?.type}} : {{exp?.details}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="big-section" *ngIf="cv.education && cv.education.length!=0">
+                        <h2>Education</h2>
+                        <div class="section-block" *ngFor="let exp of cv.education">
+                            <div class="section-sub-info">
+                                <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                                <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
+                                    date:'YYYY' || '20xx'}}</h4>
+                            </div>
+                            <h4 class="structure-name">{{exp?.structure}}</h4>
+                            <div class="section-details">
+                                <p>{{exp?.type}} : {{exp?.details}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="big-section" *ngIf="cv.experiences_associatif && cv.experiences_associatif.length!=0">
+                        <h2>Expériences Associatives</h2>
+                        <div class="section-block" *ngFor="let exp of cv.experiences_associatif">
+                            <div class="section-sub-info">
+                                <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                                <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
+                                    date:'YYYY' || '20xx'}}</h4>
+                            </div>
+                            <h4 class="structure-name">{{exp?.structure}}</h4>
+                            <div class="section-details">
+                                <p>{{exp?.type}} : {{exp?.details}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="big-section" *ngIf="cv.informatique && cv.informatique.length!=0">
+                        <h2>Informatique</h2>
+                        <div class="section-block" *ngFor="let exp of cv.informatique">
+                            <div class="section-sub-info">
+                                <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                                <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
+                                    date:'YYYY' || '20xx'}}</h4>
+                            </div>
+                            <h4 class="structure-name">{{exp?.structure}}</h4>
+                            <div class="section-details">
+                                <p>{{exp?.type}} : {{exp?.details}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>

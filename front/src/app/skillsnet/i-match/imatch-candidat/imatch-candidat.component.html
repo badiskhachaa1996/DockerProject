@@ -4,20 +4,16 @@
             <h1>iMATCH<br>Votre portail de mise en relation entre alternants et entreprises</h1>
             <hr class="imatch-main">
         </div>
-            <div class="header-top-container ">
-                <a class="btn-cv  btn-cv-1" target="_blank" href="#">Comment ça marche ?</a>
-                <div class="btn-cv btn-cv-3" (click)="showDeposerOffre = true">Déposer mon Offre</div>
-            </div>
+        <div class="header-top-container ">
+            <a class="btn-cv  btn-cv-1" target="_blank" href="https://ieg.group/alternance/pour-les-apprenants/#imatch">Comment ça marche ?</a>
+            <div class="btn-cv btn-cv-3" (click)="showDeposerOffre = true">Déposer mon Offre</div>
+        </div>
     </div>
     <div class="container" style="text-align: center;">
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-cv.svg">
     </div>
-    <app-candidat-list 
-    [showDeposerOffre]="showDeposerOffre"
-    [locations]="locations"
-    [skills] = "skills"
-    [profiles] = "profiles"
-    ></app-candidat-list>
+    <app-candidat-list [showDeposerOffre]="showDeposerOffre" [locations]="locations" [skills]="skills"
+        [profiles]="profiles"></app-candidat-list>
 </div>
 
 
@@ -27,12 +23,17 @@
         <div class="modal-content">
             <span class="close" (click)="showDeposerOffre = false">&times;</span>
             <h2>Déposer mon offre</h2>
-            <h3>Informations sur l'entreprise</h3>
+            <h3>Coordonnés représentant</h3>
             <form class="form-container" [formGroup]="form">
                 <div class="row">
                     <div class="col-12">
-                        <label>Nom de l'entreprise</label>
-                        <input pInputText type="text" formControlName="company_name" autoWidth="false"
+                        <label>Nom</label>
+                        <input pInputText type="text" formControlName="lastname" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                    </div>
+                    <div class="col-12">
+                        <label>Prénom </label>
+                        <input pInputText type="text" formControlName="firstname" autoWidth="false"
                             [style]="{'width':'100%'}">
                     </div>
                     <div class="col-12">
@@ -45,13 +46,19 @@
                         <input pInputText placeholder="Ex: +33 623568978" type="phone" formControlName="company_phone"
                             autoWidth="false" [style]="{'width':'100%'}">
                     </div>
+                    <div class="col-12">
+                        <label>Entreprise</label>
+                        <input pInputText type="text" formControlName="r_sociale" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                    </div>
                 </div>
                 <hr>
                 <h3>Informations sur l'offre</h3>
                 <div class="row">
                     <div class="col-12">
                         <label>Profil</label><br>
-                        <p-dropdown formControlName="profile" placeholder="Choisir profile" optionLabel="label" [options]="profiles" [style]="{'width':'100%'}"></p-dropdown>
+                        <p-dropdown formControlName="profile" placeholder="Choisir profile" optionLabel="label"
+                            [options]="profiles" [style]="{'width':'100%'}"></p-dropdown>
                     </div>
                     <div class="col-12">
                         <label>Compétences</label><br>
@@ -63,8 +70,7 @@
                                     *ngFor="let option of selectedSkills">
                                     <div>{{option.label}}</div>
                                 </div>
-                                <div *ngIf="!selectedSkills || selectedSkills.length === 0"
-                                    class="country-placeholder">
+                                <div *ngIf="!selectedSkills || selectedSkills.length === 0" class="country-placeholder">
                                     Selectionner une ou plusieurs compétences
                                 </div>
                             </ng-template>
@@ -77,7 +83,8 @@
                     </div>
                     <div class="col-12">
                         <label>Lieu</label><br>
-                        <p-dropdown formControlName="location" placeholder="Choisir lieu"  [options]="locations" [style]="{'width':'100%'}"></p-dropdown>
+                        <p-dropdown formControlName="location" placeholder="Choisir lieu" [options]="locations"
+                            [style]="{'width':'100%'}"></p-dropdown>
                     </div>
                     <div class="col-12">
                         <label for="email">Description</label><br>
@@ -86,20 +93,22 @@
                     </div>
                     <div class="col-12">
                         <label>Date de début</label><br>
-                        <p-calendar formControlName="start_date" view="month" dateFormat="mm/yy" inputId="range" autoWidth="false"
-                        [style]="{'width':'100%'}"></p-calendar>
+                        <p-calendar formControlName="start_date" view="month" dateFormat="mm/yy" inputId="range"
+                            autoWidth="false" [style]="{'width':'100%'}"></p-calendar>
                     </div>
                 </div><br>
                 <div class="row col-12 grid">
                     <p><p-checkbox formControlName="consent" value="consent" inputId="consent3"></p-checkbox>
-                        <span style="margin-left: 10px;">J'ai pris connaissances et lu les </span><a href="/#/mentions-legales"
-                            target="_blank">mentions légales</a> et accepte que mes données soient
-                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande.</p>
+                        <span style="margin-left: 10px;">J'ai pris connaissances et lu les </span><a
+                            href="/#/mentions-legales" target="_blank">mentions légales</a> et accepte que mes données
+                        soient
+                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande.
+                    </p>
                 </div>
                 <div class="btns-postuler">
                     <div class="btn btn-retour" (click)="showPostuler = false">Retour</div>
                     <button pButton type="submit" [disabled]="form.invalid ||    !form.value.consent"
-                        label="Soumettre l'offre" class="btn btn-envoyer"></button>
+                        (click)="submitForm()" label="Soumettre l'offre" class="btn btn-envoyer"></button>
                 </div>
             </form>
             <p class="information">Vous avez déjà un compte, <a href="#/login">cliquez ici</a> pour postuler via votre

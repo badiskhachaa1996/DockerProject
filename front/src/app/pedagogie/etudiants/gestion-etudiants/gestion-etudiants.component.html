@@ -75,7 +75,7 @@
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td>
-                                                {{ etudiant.date_naissance | date:'mediumDate' }}
+                                                {{ etudiant.date_naissance | date:'dd MMMM yy' }}
                                             </td>
                                             <td *ngIf="etudiant.user_id">
                                                 {{ etudiant.user_id?.phone }}

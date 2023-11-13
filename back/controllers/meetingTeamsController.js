@@ -1,18 +1,23 @@
 const express = require("express");
 const { MeetingTeams } = require("../models/meetingTeams");
+const { Ticket } = require("../models/ticket");
+const { User } = require("../models/user");
+const { Service } = require("../models/service");
+const { Sujet } = require("../models/sujet");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 
 app.post("/create", (req, res) => {
     delete req.body._id
-    let f = new MeetingTeams({ ...req.body })
+    let f = new MeetingTeams({ ...req.body, statut: 'Planifié' })
+
     f.save()
         .then((FFSaved) => { res.status(201).send(FFSaved) })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
 app.get("/getAll", (req, res, next) => {
-    MeetingTeams.find().populate('winner_id').populate('user_id').populate('cv_id').sort({ date_creation: -1 })
+    MeetingTeams.find().populate('winner_id').populate('user_id').populate('cv_id').populate('offre_id').sort({ date_creation: -1 })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
@@ -28,7 +33,11 @@ app.get("/getAllByUserID/:user_id", (req, res, next) => {
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
-
+app.get("/getAllByOffreID/:offre_id", (req, res, next) => {
+    MeetingTeams.find({ offre_id: req.params.offre_id }).populate('winner_id').populate('user_id').populate('cv_id').populate('offre_id').sort({ date_creation: -1 })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+});
 app.put("/update", (req, res) => {
     MeetingTeams.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
         res.status(200).send(doc);

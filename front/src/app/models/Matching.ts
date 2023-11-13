@@ -12,7 +12,10 @@ export class Matching {
         public type_matching?: string,
         public date_creation?: Date,
         public remarque?: string,
-        public taux?: number
+        public taux?: number,
+        public hide?: boolean,
+        public accepted?: boolean,
+        public favoris?: boolean
     ) { }
 
 }

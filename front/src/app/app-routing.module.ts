@@ -291,6 +291,15 @@ import { ListRemboursementComponent } from './remboursement/list-remboursement/l
 // =======
 // import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
 // >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
+import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
+import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
+import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
+import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
+import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
+import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
+import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 const routes: Routes = [
     {
         path: '',
@@ -734,6 +743,8 @@ const routes: Routes = [
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'imatch/cv-etudiant', component: CvEtudiantComponent, canActivate: [AuthGuardService] },
+            { path: 'imatch/reporting', component: DashboardImatchComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
             { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
@@ -845,7 +856,7 @@ const routes: Routes = [
                 component: DemandesReclamationsComponent,
             },
             { path: 'rh/dashboard', component: DashboardRhComponent },
-            { path: 'rh/calendrier', component: CalendrierRhComponent },
+            { path: 'rh/calendrier', component: NewCalendrierComponent },
             { path: 'rh/calendrier/:id', component: CalendrierRhComponent },
 
             /** end */
@@ -971,6 +982,11 @@ const routes: Routes = [
             {
                 path: 'international/teams',
                 component: TeamsIntComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'rh/teams',
+                component: GestionEquipeRhComponent,
                 canActivate: [AuthGuardService],
             },
             {
@@ -1272,6 +1288,11 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
+                path: 'admission/lead-documents/:id',
+                component: LeadDocumentsComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
                 path: 'admission/lead-informations/:id',
                 component: LeadInformationsPersonnelComponent,
                 canActivate: [AuthGuardService],
@@ -1286,6 +1307,8 @@ const routes: Routes = [
                 component: LeadCandidatureComponent,
                 canActivate: [AuthGuardService],
             },
+            { path: 'administration/preinscription', component: PreinscriptionComponent,canActivate: [AuthGuardService], },
+            { path: 'administration/inscription',component: InscriptionComponent,canActivate: [AuthGuardService],},
             //Module Mail Type
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
@@ -1315,6 +1338,9 @@ const routes: Routes = [
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
 
             // Generateur de Doc
+            { path: 'imatch/entreprise', component: NewEntreprisesComponent, canActivate: [AuthGuardService], },
+            { path: 'imatch/annonce/entreprise/:entreprise_id', component: AnnonceViewerComponent, canActivate: [AuthGuardService], },
+            // Generateur de Doc 
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
@@ -1388,7 +1414,6 @@ const routes: Routes = [
     { path: 'imatch', component: IMatchComponent },
     { path: 'imatch/cvtheque', component: ImatchCandidatComponent },
     { path: 'imatch/offres', component: ImatchEntrepriseComponent },
-    { path: 'rendez-vous', component: RendezVousComponent },
     { path: 'rendez-vous/:user_id', component: RendezVousComponent },
     { path: 'imatch/cv/:id', component: CvComponent },
 

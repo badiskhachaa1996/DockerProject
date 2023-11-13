@@ -110,7 +110,8 @@ export class AuthGuardService implements CanActivate {
                                 this.router.navigate(['/login']);
                             }
                         }else{
-                            this.router.navigate(['/formulaire-externe']);
+                            return true
+                            //this.router.navigate(['/formulaire-externe']);
                         }
 
                     }),

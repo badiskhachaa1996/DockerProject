@@ -58,7 +58,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   formSteps: any[] = [
     "Infos",
     "Parcours",
-    "Programme",
+    "Choix",
     "Partenaires",
     "Fin",
   ];
@@ -594,14 +594,12 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.routeItems = [
       { label: 'Infos' },
       { label: 'Parcours' },
-      { label: 'Programme' },
+      { label: 'Choix' },
       { label: 'Partenaires' },
       { label: 'Dernière étape' },
     ];
-    console.log(this.route.snapshot.paramMap.get('code_commercial'))
     if (this.route.snapshot.paramMap.get('code_commercial'))
       this.hideCC = true
-    console.log(this.hideCC)
   }
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({

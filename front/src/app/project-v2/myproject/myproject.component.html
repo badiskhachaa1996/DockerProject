@@ -17,13 +17,13 @@
 <div *ngIf="showproject" class="card">
     <div class="grid col-12">
         <div class="col-3"><strong>ID:</strong> {{selectedProject?.identifian}}</div>
-        <div class="col-3"><strong>Date de création:</strong> {{selectedProject?.created_date| date:'mediumDate'}}</div>
-        <div class="col-3"><strong>Date de fin estimé:</strong>{{selectedProject?.fin| date:'mediumDate'}} </div>
+        <div class="col-3"><strong>Date de création:</strong> {{selectedProject?.created_date| date:'dd MMMM yy'}}</div>
+        <div class="col-3"><strong>Date de fin estimé:</strong>{{selectedProject?.fin| date:'dd MMMM yy'}} </div>
         <div class="col-3"><strong>Nombre d'heurs restante:{{heur_total-heur_realiser| number:'2.2-2'}}</strong></div>
     </div>
     <div class="grid col-12">
         <div class="col-3"><strong>Nom: </strong>{{selectedProject?.titre}}</div>
-        <div class="col-3"><strong>Date de début :</strong>{{selectedProject?.debut| date:'mediumDate'}}</div>
+        <div class="col-3"><strong>Date de début :</strong>{{selectedProject?.debut| date:'dd MMMM yy'}}</div>
         <div class="col-3"><strong>Nombre d'heurs realisés: {{heur_realiser| number:'2.2-2'}}</strong></div>
         <div class="col-3"><strong>Avancement: <p-progressBar
                     [value]="selectedProject?.avancement"></p-progressBar></strong></div>
@@ -62,10 +62,10 @@
                                     <tr>
                                         <th>Assigné le:<span
                                                     style="color:#878787"> {{task?.task_id?.date_ajout |
-                                                    date:'mediumDate'}}</span><br></th>
+                                                    date:'dd MMMM yy'}}</span><br></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.task_id?.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787">
@@ -228,10 +228,10 @@
                                     <tr>
                                         <th>Assigné le:<span
                                                     style="color:#878787"> {{task?.task_id?.date_ajout |
-                                                    date:'mediumDate'}}</span><br></th>
+                                                    date:'dd MMMM yy'}}</span><br></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.task_id?.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787">
@@ -394,10 +394,10 @@
                                     <tr>
                                         <th>Assigné le:<span
                                                     style="color:#878787"> {{task?.task_id?.date_ajout |
-                                                    date:'mediumDate'}}</span><br></th>
+                                                    date:'dd MMMM yy'}}</span><br></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.task_id?.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787">

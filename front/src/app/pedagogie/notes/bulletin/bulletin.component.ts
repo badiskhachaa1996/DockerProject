@@ -18,6 +18,7 @@ export class BulletinComponent implements OnInit {
   constructor(private GroupeService: ClasseService, private NoteS: NoteService, private EtuService: EtudiantService,
     private CFAService: EcoleService, private messageService: MessageService, private sanitizer: DomSanitizer, private route: ActivatedRoute) { }
   //:semestre/:classe_id/:etudiant_id/:pv_id
+  typeBulletin = 'Bulletin Annuel'
   ngOnInit(): void {
     this.GroupeService.getAll().subscribe(classes => {
       classes.forEach(c => {
@@ -32,10 +33,12 @@ export class BulletinComponent implements OnInit {
         })
         this.SemestreList = this.SemestreList.sort()
         this.SEMESTRE = this.SemestreList[this.SemestreList.length - 1]
+        this.typeBulletin = 'Bulletin Annuel'
         this.semestreLoader()
       })
     else if (this.route.snapshot.paramMap.get('semestre')) {
       this.SEMESTRE = this.route.snapshot.paramMap.get('semestre')
+      this.typeBulletin = "Bulletin du " + this.SEMESTRE.toString()
       this.semestreLoader()
     }
 
@@ -106,6 +109,10 @@ export class BulletinComponent implements OnInit {
     this.askGroupeSemestrePV = false
     this.showGroupe = true
     this.SEMESTRE = this.formAGSPV.value.semestre
+    if (this.SEMESTRE.includes('Semestre'))
+      this.typeBulletin = "Bulletin du " + this.SEMESTRE.toString()
+    else
+      this.typeBulletin = "Bulletin Annuel"
     this.GroupeService.getPopulate(this.formAGSPV.value.classe).subscribe(classe => { this.GROUPE = classe })
     this.EtuService.getAllByClasseId(this.formAGSPV.value.classe).subscribe(etudiants => { this.etudiantFromClasse = etudiants })
     if (this.formAGSPV.value.pv != "Aucun/Nouveau PV") { this.PV = this.formAGSPV.value.pv }
@@ -158,7 +165,7 @@ export class BulletinComponent implements OnInit {
     } else {
       this.generateBulletin()
     }
-    if (this.route.snapshot.paramMap.get('semestre') == "Annuel")
+    if (this.formAGSPV.value.pv == "Annuel")
       this.SemestreList.forEach((semestre, index) => {
         this.NoteS.getPVAnnuel(semestre, this.GROUPE._id).subscribe(data => {
           //this.cols[semestre] = data.cols
@@ -230,12 +237,12 @@ export class BulletinComponent implements OnInit {
       this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"", appreciation_annuel:"" }
         if (pv.email == this.ETUDIANT.user_id.email) {
           this.APPRECIATION_GENERALE = pv.appreciation
-          if (pv.appreciation_annuel && this.route.snapshot.paramMap.get('semestre') == "Annuel")
+          if (pv.appreciation_annuel && this.route.snapshot.paramMap.get('semestre') == "Annuel") {
             this.APPRECIATION_GENERALE = pv.appreciation_annuel
+          }
           if (this.NOTES.length == 0)
             listModule.forEach(n => {
               let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
-              console.log(3)
               if (!t.appreciation_module) {
                 t.appreciation_module = {}
               }

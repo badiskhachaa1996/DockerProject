@@ -4,33 +4,56 @@
 			<h1 class="text-center">Dashboard</h1>
 			<div class="grid text-center">
 				<div class="col-12">
-					Date: <strong>{{ today | date: 'dd MMMM YYYY' }}</strong> <br>
-					Heure: <strong>{{ today | date: 'H:mm' }}</strong>
+					<strong>{{ today | date: 'dd MMMM YYYY' }}</strong> <br>
+					<strong>{{ today | date: 'H:mm' }} Paris</strong>
+				</div>
+				<p class="col-12">Site <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+						[(ngModel)]="siteSelected" (onChange)="filterCollaborateur($event.value);onUpdateStats()"
+						autoWidth="false" [style]="{'width':'13em'}"></p-multiSelect></p>
+
+				<div class="col-12 md:col-4 align-self-center grid"
+					style="border: 1px black solid;margin:0px;height: 100px;">
+					<p class="col-12"><p-tag value="Checkin IMS"
+							icon="pi pi-check-circle"></p-tag><strong>&nbsp;{{numberOfChecks}}/{{dailyChecks.length}}</strong>
+					</p>
+					<p class="col-12"><p-tag value="Pointage" icon="pi pi-bookmark"></p-tag><strong>&nbsp;WIP</strong>
+					</p>
 				</div>
 
-				<div class="col-12 md:col-4 align-self-center">
-					Nombre de checkin: <strong>{{numberOfChecks}}</strong> <br>
-					Taux de checkin: <strong>{{checkPercent}}%</strong>
+				<div class="col-12 md:col-4 align-self-center grid"
+					style="border: 1px black solid;margin:0px;height: 100px;">
+					<p class="col-12"><p-tag value="Absent" icon="pi pi-times"
+							severity="danger"></p-tag><strong>&nbsp;{{numberOfAbsent}}</strong></p>
+					<p class="col-12"><p-tag value="Congé" icon="pi pi-home"
+							severity="info"></p-tag><strong>&nbsp;{{numberOfConge}}</strong> </p>
 				</div>
 
-				<div class="col-12 md:col-4 align-self-center">
-					Personnels en congés: <strong>{{numberOfConge}}</strong> <br>
-					Personnels absents: <strong>{{numberOfAbsent}}</strong>
-				</div>
-
-				<div class="col-12 md:col-4">
-					Pause: <strong>{{numberOfPause}}</strong> <br>
-					Disponible: <strong>{{numberOfDisponible}}</strong> <br>
-					En reunion: <strong>{{numberOfReunion}}</strong> <br>
-					Occupé: <strong>{{numberOfOccupe}}</strong> <br>
+				<div class="col-12 md:col-4 align-self-center grid"
+					style="border: 1px black solid;margin:0px;height: 100px;">
+					<p class="col-6" style="text-align: center;"><p-tag value="Disponible" severity="success"
+							icon="pi pi-check"></p-tag>
+						<strong>&nbsp;{{numberOfDisponible}}</strong>
+					</p> <!-- Icon à faire -->
+					<p class="col-6" style="text-align: center;"><p-tag value="En pause" severity="warning"
+							icon="pi pi-moon"></p-tag>
+						<strong>&nbsp;{{numberOfPause}}</strong>
+					</p>
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="Occupé"
+							severity="danger" icon="pi pi-pencil"></p-tag> <strong>&nbsp;{{numberOfOccupe}}</strong></p>
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="En réunion"
+							severity="warning" icon="pi pi-phone"></p-tag> <strong>&nbsp;{{numberOfReunion}}</strong>
+					</p>
+					<p class="col-4" style="text-align: center;margin-bottom: 0px;"><p-tag value="Ecole" severity="info"
+							icon="pi pi-book"></p-tag> <strong>&nbsp;{{numberOfCours}}</strong>
+					</p>
 				</div>
 			</div>
 		</div>
 
-		<!-- tableau d'affichage des données en temps réel -->
+		<!-- tableau d'affichage des données en temps réel Activités-->
 		<div class="card">
-			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [totalRecords]="dailyChecks.length"
-				styleClass="p-datatable-gridlines" [paginator]="true"
+			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true" rowExpandMode="single"
 				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
 				responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
@@ -41,7 +64,10 @@
 								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
 								class="w-full" />
 						</span>
-
+						<p-calendar [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" placeholder="Date"
+							(onSelect)="onFilterDate($event)" (onInput)="onFilterDate($event)"></p-calendar>
+						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
+							(onChange)="chooseTeam($event.value);" placeholder="Equipe" [showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
 							[showClear]="true"></p-dropdown>
@@ -49,180 +75,332 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
+						<th></th>
+						<th pSortableColumn="user_id.lastname">Collaborateur  <p-sortIcon field="user_id?.lastname"></p-sortIcon></th>
+						<th>Site</th>
+						<th>Checkin</th>
+						<th>Pause</th>
+						<th>Checkout</th>
+						<th style="width: 8rem" pSortableColumn="taux_cra">
+							Taux CRA <p-sortIcon field="taux_cra"></p-sortIcon>
+						</th>
+						<th style="width: 8rem"  pSortableColumn="user_id.statut">
+							Statut <p-sortIcon field="user_id.statut"></p-sortIcon>
+						</th>
 						<th>
-							<div class="flex justify-content-between align-items-center">
-								Nom et prénom
-							</div>
-						</th>
-						<th>Heure Check in Online</th>
-						<th>Heure Check in Pointeuse</th>
-						<th>Heure Check out Online</th>
-						<th>Heure Check out Pointeuse</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heures pauses
-							</div>
-						</th>
-						<th style="width: 8rem">
-							<div class="flex justify-content-between align-items-center">
-								Taux CRA
-							</div>
-						</th>
-						<th style="width: 8rem">
-							<div class="flex justify-content-between align-items-center">
-								Statut
-							</div>
+							Action
 						</th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-check>
-					<tr (click)="onGetUserChecksHistorique(check);" style="cursor: pointer;">
+				<ng-template pTemplate="body" let-check let-expanded="expanded">
+					<tr [pRowToggler]="check" (click)="onGetUserChecksHistorique(check);" style="cursor: pointer;">
+						<td [pRowToggler]="check">
+							<button type="button" pButton pRipple [pRowToggler]="check"
+								class="p-button-text p-button-rounded p-button-plain"
+								[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+						</td>
 						<td style="min-width: 12rem;">
 							{{check?.user_id?.lastname | uppercase}} {{check?.user_id?.firstname | titlecase}}
 						</td>
-						<td style="min-width: 14rem;">
-							{{check?.check_in | date: 'H:mm'}}
+						<td>
+							{{dicCollaborateurs[check?.user_id._id]?.localisation}}
 						</td>
 						<td style="min-width: 14rem;">
-							{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
+							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_in).logo' [pTooltip]="getPlatform(check.auto,check?.platform_in).text"></i><br>
+							<!--<strong>IP:{{check?.localisation_in}} </strong><br>-->
+							<strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
+						</td>
+						<td style="min-width: 10rem;padding: 0%;">
+							<app-pause-read-more [pausemin]="check?.pause_timing"
+								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td style="min-width: 10rem;">
-							{{check?.check_out | date: 'H:mm'}}
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_out).logo' [pTooltip]="getPlatform(check.auto,check?.platform_out).text"></i><br>
+							<!--<strong>IP:{{check?.localisation_out}} </strong><br>-->
+							<strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
 						</td>
-						<td style="min-width: 14rem;">
-							{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
+
+						<td *ngIf="check?.taux_cra" style="min-width: 12rem;"
+							[ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
+							{{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check?.validated" class="pi pi-check"
+								tooltipPosition="bottom" pTooltip="CRA Validé"></i> <i *ngIf="!check?.validated"
+								class="pi pi-times" tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
 						</td>
-						<td style="min-width: 10rem;">
-							<ul>
-								<li *ngFor="let pause of check.pause; let i = index">
-									{{pause?.in | date: 'H:mm'}} - {{pause?.out | date: 'H:mm'}}
-								</li>
-							</ul>
-							<strong *ngIf="check.pause_timing">Total: {{check?.pause_timing}}mn</strong>
-						</td>
-						<td *ngIf="taux_cra" style="min-width: 12rem;">
-							{{check?.taux_cra}}%
-						</td>
-						<td *ngIf="!taux_cra" style="min-width: 12rem;">
-							0%
+						<td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
+							0% <i *ngIf="check?.validated" class="pi pi-check" tooltipPosition="bottom"
+								pTooltip="CRA Validé"></i> <i *ngIf="!check?.validated" class="pi pi-times"
+								tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
 						</td>
 
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Disponible'">
-							<p-tag value="{{check.user_id?.statut}}" severity="success"></p-tag>
+							<p-tag value="Disponible" severity="success" icon="pi pi-check"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En congé'">
-							<p-tag value="{{check.user_id?.statut}}" severity="info"></p-tag>
+							<p-tag value="En congé" icon="pi pi-home" severity="info"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
-							<p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
+							<p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
+						</td>
+						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Ecole'">
+							<p-tag value="Ecole" severity="info" icon="pi pi-book"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
-							<p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
+							<p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
 						</td>
-						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
-							<p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
+						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent' || !check.user_id?.statut">
+							<p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
-							<p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
+							<p-tag value="En pause" severity="warning" icon="pi pi-moon"></p-tag>
 						</td>
-
+						<td>
+							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
+								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
+							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera ml-2"
+								tooltipPosition="bottom" (click)="seePointage(check)" aria-hidden="true"></i>
+							<i pTooltip="Réinitialiser Pointage" style=" cursor: pointer;" class="pi pi-clock ml-2"
+								tooltipPosition="bottom" (click)="onReinitPointage(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
+						</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="6">Aucun utilisateurs trouvé.</td>
+						<td colspan="9">Aucun utilisateurs trouvé.</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">
 					<tr>
-						<td colspan="6">Chargement des données, veuillez patienter...</td>
+						<td colspan="9">Chargement des données, veuillez patienter...</td>
 					</tr>
 				</ng-template>
-			</p-table>
-		</div>
-
-		<!-- affichage de l'historique de pointage -->
-		<div class="card" *ngIf="showUserChecksHistorique">
-			<i class="pi pi-times-circle" (click)="showUserChecksHistorique = false"
-				style="float: right; font-size: 20px; cursor: pointer; color: red;"></i>
-			<div style="clear: right;"></div>
-
-			<h3 class="text-center">
-				Historique
-			</h3>
-			<p-table #dt1 [value]="userChecksHistorique" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
-				styleClass="p-datatable-gridlines" [paginator]="true"
-				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
-				responsiveLayout="scroll">
-				<ng-template pTemplate="header">
+				<ng-template pTemplate="rowexpansion" let-check>
 					<tr>
-						<th>
-							<div class="flex justify-content-between align-items-center" pSortableColumn="today">
-								Date <p-sortIcon field="today"></p-sortIcon>
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Nom et prénom
-							</div>
-						</th>
-						<th>Heure Check in Online</th>
-						<th>Heure Check in Pointeuse</th>
-						<th>Heure Check out Online</th>
-						<th>Heure Check out Pointeuse</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heures pauses
-							</div>
-						</th>
-						<th style="width: 8rem">
-							<div class="flex justify-content-between align-items-center">
-								Taux CRA
-							</div>
-						</th>
+						<td colspan="9">
+							<div class="card" *ngIf="showUserChecksHistorique">
+								<i class="pi pi-times-circle" (click)="showUserChecksHistorique = false"
+									style="float: right; font-size: 20px; cursor: pointer; color: red;"></i>
+								<div style="clear: right;"></div>
+
+								<h3 class="text-center">
+									Historique
+								</h3>
+								<p-table #dtHisto [value]="userChecksHistorique" dataKey="_id" [rows]="10" rowExpandMode="single"
+									[loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines"
+									[paginator]="true"
+									[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
+									responsiveLayout="scroll">
+									<ng-template pTemplate="caption">
+										<div class="flex justify-content-between flex-column sm:flex-row">
+											<input pInputText type="date" #filter
+												(input)="onFilter($event.target.value)"
+												placeholder="Recherche par date" />
+										</div>
+									</ng-template>
+									<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="today"> Date <p-sortIcon field="today"></p-sortIcon></th>
+						<th>Checkin</th>
+						<th>Pause </th>
+						<th>Checkout</th>
+						<th style="width: 8rem"> Taux CRA </th>
+						<th>Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-check>
 					<tr>
-						<td style="min-width: 12rem;">
-							{{check?.today}}
+						<td [ngClass]="{'valid-begin':check?.validated,'non-valid-begin':!check?.validated}"
+							style="min-width: 12rem;">
+							{{dateParseur(check?.today)}}
 						</td>
-						<td style="min-width: 12rem;">
-							{{check?.user_id?.lastname | uppercase}} {{check?.user_id?.firstname | titlecase}}
+						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
+							style="min-width: 14rem;">
+							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}}<br>
+							<strong>Pointage: </strong>WIP
 						</td>
-						<td style="min-width: 14rem;">
-							{{check?.check_in | date: 'H:mm'}}
+						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
+							style="min-width: 14rem;">
+							<app-pause-read-more [pausemin]="check?.pause_timing"
+								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
-						<td style="min-width: 14rem;">
-							WIP
+						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
+							style="min-width: 10rem;">
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <span
+								*ngIf="check.auto">AUTOMATIQUE</span><br>
+							<strong>Pointage: </strong>WIP
 						</td>
-						<td style="min-width: 10rem;">
-							{{check?.check_out | date: 'H:mm'}}
+						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
+							style="min-width: 12rem;" *ngIf="check.taux_cra">
+							{{check?.taux_cra | number:'1.0-2'}}%
 						</td>
-						<td style="min-width: 14rem;">
-							WIP
-						</td>
-						<td style="min-width: 10rem;">
-							<ul>
-								<li *ngFor="let pause of check.pause; let i = index">
-									de {{pause?.in | date: 'H:mm'}} <br> à {{pause?.out | date: 'H:mm'}}
-								</li>
-							</ul>
-						</td>
-						<td style="min-width: 12rem;" *ngIf="check.taux_cra > 0">
-							{{check?.taux_cra}}%
-						</td>
-						<td style="min-width: 12rem;" *ngIf="!check.taux_cra">
+						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
+							style="min-width: 12rem;" *ngIf="!check.taux_cra">
 							0%
+						</td>
+						<td [ngClass]="{'valid-end':check?.validated,'non-valid-end':!check?.validated}">
+							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
+								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="6">Aucun historique de pointage trouvé.</td>
+						<td colspan="8">Aucun historique de pointage trouvé.</td>
 					</tr>
 				</ng-template>
 			</p-table>
 		</div>
+		</td>
+		</tr>
+		</ng-template>
+		</p-table>
 	</div>
+
+	<!-- affichage de l'historique de pointage -->
+
 </div>
+</div>
+
+<p-dialog header="Ajouter une note" [(visible)]="displayNote" [modal]="true" showEffect="fade" [style]="{width: '50vw'}"
+	[breakpoints]="{'960px': '75vw'}">
+	<div [style]="{'width':'100%'}" *ngIf="noteCheck" class="grid">
+		<div class="col-12">
+			<label class="mb-1">Commentaire</label><br>
+			<textarea rows="5" cols="60" pInputTextarea [(ngModel)]="noteCheck.commentaire"></textarea>
+		</div>
+
+		<p-table class="col-12" [value]="['']" dataKey="_id" styleClass="p-datatable-gridlines"
+			responsiveLayout="scroll">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Commenté le</th>
+					<th>Commenté par</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body">
+				<tr>
+					<td>{{noteCheck?.commented_by?.firstname | titlecase}} {{noteCheck?.commented_by?.lastname |
+						uppercase}}</td>
+					<td>{{noteCheck?.commented_date|date:'dd MMMM yy'}}</td>
+				</tr>
+			</ng-template>
+		</p-table>
+		<p-button class="col-12" [style]="{'width':'35%'}" (click)="saveNote(noteCheck)" icon="pi pi-plus"
+			autoWidth="false" label="Sauvegarder le commentaire"></p-button>
+	</div>
+</p-dialog>
+
+<p-dialog *ngIf="choosenCollaborateur"
+	header="Activité de {{choosenCollaborateur.user_id.lastname}} {{choosenCollaborateur.user_id.firstname}}"
+	[(visible)]="displayActivite" [modal]="true">
+	<div style="width: 100%;">
+		<p-table #dt2 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="pointages"
+			[paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['uid', 'machine']"
+			responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+			<!--<ng-template pTemplate="caption">
+				<span class="p-input-icon-left mb-2">
+					<i class="pi pi-search"></i>
+					<input pInputText type="text" #filter (input)="dt2.filterGlobal($event.target.value, 'contains')"
+						placeholder="Recherche" class="w-full" />
+				</span>
+			</ng-template>-->
+			<ng-template pTemplate="header">
+				<tr>
+					<th pSortableColumn="date" scope="col" style="text-align: center;">
+						Heure <p-sortIcon field="date"></p-sortIcon>
+					</th>
+					<th>
+						ID
+					</th>
+					<th pSortableColumn="uid" scope="col" style="text-align: center;">
+						UID <p-sortIcon field="uid"></p-sortIcon>
+					</th>
+					<th>
+						Site
+					</th>
+					<th>
+						Emplacement
+					</th>
+					<th pSortableColumn="type" scope="col" style="text-align: center;">
+						Type <p-sortIcon field="type"></p-sortIcon>
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-point>
+				<tr>
+					<td>
+						{{point.date | date:'H:mm' }}
+					</td>
+					<td>
+						{{machineDic[point.machine]._id | slice:0:5}}
+					</td>
+					<td>
+						{{point.uid}}
+					</td>
+					<td>
+						{{machineDic[point.machine].localisation}}
+					</td>
+					<td>
+						{{machineDic[point.machine].emplacement}}
+					</td>
+					<td>
+						{{point.type}}
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</p-dialog>
+
+<p-dialog header="Valider CRA" [(visible)]="displayCRA" [modal]="true" showEffect="fade" [style]="{width: '50vw'}"
+	[breakpoints]="{'960px': '75vw'}">
+	<div [style]="{'width':'100%'}" *ngIf="dataCHECK">
+		<p-toggleButton autoWidth="false" [style]="{'width':'100%'}" onLabel="Validé" offLabel="Non validé"
+			offIcon="pi pi-times" onIcon="// pi pi-check" [(ngModel)]="dataCHECK.validated"
+			(onChange)="saveCheck(dataCHECK)">
+		</p-toggleButton>
+		<p>&nbsp;</p>
+		<p-table [value]="dataCHECK?.cra" dataKey="_id" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Durée</th>
+					<th>Tâche</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+				<tr [pEditableRow]="cra">
+					<td>
+						{{cra?.number_minutes}} mn
+					</td>
+					<td>
+						{{cra?.task}}
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="emptymessage">
+				<tr>
+					<td colspan="3">Aucun CRA pour le moment.</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="loadingbody">
+				<tr>
+					<td colspan="3">Chargement des CRA, merci de patienter...</td>
+				</tr>
+			</ng-template>
+		</p-table>
+		<p>&nbsp;</p>
+		<h3 style="text-align: center;width: 100%;">Durée totale : {{totalCalc(dataCHECK?.cra)}}</h3>
+	</div>
+
+</p-dialog>

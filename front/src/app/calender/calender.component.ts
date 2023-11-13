@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-import { GalleriaModule } from 'primeng/galleria';
+import frLocale from '@fullcalendar/core/locales/fr';
 import { saveAs as importedSaveAs } from "file-saver";
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -141,7 +141,7 @@ export class CalenderComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -152,7 +152,7 @@ export class CalenderComponent implements OnInit {
   }
 
   dernotes: Note[] = [];
-  classbutonchekin:String="p-button-warning mb-2"
+  classbutonchekin: String = "p-button-warning mb-2"
   //Options du calendrier formateur
   optionsforma = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -162,7 +162,7 @@ export class CalenderComponent implements OnInit {
       left: "title",
       right: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -275,6 +275,7 @@ export class CalenderComponent implements OnInit {
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -285,7 +286,7 @@ export class CalenderComponent implements OnInit {
   showFormAddCraTicket: boolean = false;
   ticketListe: any[] = [];
   clonedCras: { [s: string]: any } = {};
-  craPercent: string = '0';
+  craPercent: number = 0;
   historiqueCra: DailyCheck[] = [];
   lastCras: any;
   historiqueCraSelected: DailyCheck;
@@ -333,7 +334,9 @@ export class CalenderComponent implements OnInit {
   histoPointage: PointageData[];
   reader: FileReader = new FileReader();
   machineDic = {}
-  
+  collaborateurList = []
+  userSelected
+  collaborateurDic = {}
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -362,13 +365,38 @@ export class CalenderComponent implements OnInit {
         }
       }
     })
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id) {
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            if (c.user_id._id == this.token.id) {
+              this.userSelected = c
+              this.getUsersEvents()
+            }
+
+          }
+
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id) {
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            this.collaborateurDic[c.user_id._id] = c
+          }
+
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
         this.user = dataUser;
-        // console.log(dataUser.type);
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
         let service: any = dataUser.service_id
@@ -461,20 +489,21 @@ export class CalenderComponent implements OnInit {
 
     // initialisation du formulaire d'ajout de cra
     this.formAddCra = this.formBuilder.group({
-      cras: this.formBuilder.array([this.onCreateCraField()]),
+      number_minutes: [null, Validators.required],
+      task: [null, Validators.required],
+      mode_type: ['/min', Validators.required]
     });
     //initialisation du formulaire d'ajout de cra ticket
-    this.formAddCraTicket=this.formBuilder.group({
-      ticket: ['' , Validators.required],
-      duration:['' , Validators.required],
+    this.formAddCraTicket = this.formBuilder.group({
+      ticket: ['', Validators.required],
+      duration: ['', Validators.required],
     })
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
       .then((response) => {
         this.historiqueCra = response;
-        this.lastCras=response[response.length-1];
-        console.log(this.lastCras);
+        this.lastCras = response[response.length - 1];
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
 
@@ -491,6 +520,7 @@ export class CalenderComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     // initialisation du formulaire de modification de congé
@@ -501,12 +531,12 @@ export class CalenderComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     this.route.queryParams.subscribe(params => {
       // Convertissez la valeur du paramètre en nombre en utilisant parseInt ou parseFloat
       this.paramValue = parseInt(params['param'], 10); // 10 est la base (base 10 pour les nombres)
-      console.log('Valeur du paramètre :', this.paramValue);
 
       // Assurez-vous que la conversion s'est bien passée
       if (this.paramValue) {
@@ -518,48 +548,54 @@ export class CalenderComponent implements OnInit {
     });
     this.items = [
       {
-          label: "Aujourd'hui",
-          command: () => {
-            this.showAssiduite()
-          }
+        label: "Aujourd'hui",
+        command: () => {
+          this.showAssiduite()
+        }
       },
       {
-          label: 'Historique',
-          command: () => {
-            this.showHistorique()
-          }
+        label: 'Historique',
+        command: () => {
+          this.showHistorique()
+        }
       }];
-      this.itemsCra = [
-        {
-            label: "ticket",
-            command: () => {
-              this.showFormAddCraTicket=true
-              
-            }
-        },
-        {
-            label: 'Autre',
-            command: () => {
-              this.showFormAddCra = true;
-            }
-        }];
+    this.itemsCra = [
+      {
+        label: "Ticket",
+        command: () => {
+          this.showFormAddCraTicket = true
+
+        }
+      },
+      {
+        label: 'Saisir',
+        command: () => {
+          this.showFormAddCra = true;
+        }
+      }];
   }
+  dateFilterHistorique = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString()
   showHistorique() {
-    if (this.visible==false){
-      this.visible = true}
-      else{this.visible = false}
+    if (this.visible == false) {
+      this.visible = true
+      this.dateFilterHistorique = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString()
+      this.getHistoPointage(this.dateFilterHistorique)
+    }
+    else { this.visible = false }
   }
   showAssiduite() {
-    if (this.visibleA==false){
-    this.visibleA = true}
-    else{this.visibleA = false}
+    let craLast: DailyCheck = this.historiqueCra[this.historiqueCra.length - 1]
+    if (this.visibleA == false) {
+      this.visibleA = true
+    }
+    else { this.visibleA = false }
+    if (craLast?.today != new Date().toLocaleDateString('en-US')) {
+      console.error({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${this.dateParseur(craLast?.today)}` }, new Date().toLocaleDateString('en-US'), craLast?.today)
+    }
+
   }
   showConge() {
     this.visibleC = true
-  }
-  SCIENCE() {
-    console.log("PAS TOUCHE")
-
   }
 
   refreshEvent(etu: any) {
@@ -656,7 +692,6 @@ export class CalenderComponent implements OnInit {
 
       formData.append('id', this.PartenaireInfo._id)
       formData.append('file', event[0])
-      console.log(formData)
       this.CService.uploadimageprofile(formData).subscribe(() => {
         this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de la photo de profil avec succès' });
         this.loadPP(this.PartenaireInfo)
@@ -668,9 +703,7 @@ export class CalenderComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
-    console.log(rowData)
     this.imageToShow = "../assets/images/avatar.PNG"
-    console.log(rowData)
     this.CService.getProfilePicture(rowData._id).subscribe((data) => {
       if (data.error) {
         console.error(data.error)
@@ -775,7 +808,22 @@ export class CalenderComponent implements OnInit {
     })
 
   }
-
+  onCreateSujetLabel(ticket: Ticket) {
+    let r = ''
+    if (ticket?.sujet_id?.label)
+      r = ticket?.sujet_id?.label
+    if (ticket.module)
+      r = r + " - " + ticket.module
+    if (ticket.type)
+      r = r + " - " + ticket.type
+    if (ticket.campus)
+      r = r + " - " + ticket.campus
+    if (ticket.filiere)
+      r = r + " - " + ticket.filiere
+    if (ticket.demande)
+      r = r + " - " + ticket.demande
+    return r
+  }
   //* Check methods
   // recuperation de l'utilisateur connecté
   onGetUserConnectedInformation(): void {
@@ -783,11 +831,13 @@ export class CalenderComponent implements OnInit {
       next: (response) => {
         this.userConnected = response;
         this.ticketService.getAccAff(this.userConnected._id)
-        .subscribe(datatache => {
-          this.ticketListe = datatache.map(ticket => ({
-            ...ticket, 
-            label: ` ${ticket.customid}  ${ticket.statut}`
-          }))});
+          .subscribe(datatache => {
+            this.ticketListe = datatache.map(ticket => ({
+              ...ticket,
+              label: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`,
+              value: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
+            }))
+          });
         // recupere la liste des congés
         this.onGetConges(this.userConnected._id);
         // verification du check in journalier
@@ -815,73 +865,76 @@ export class CalenderComponent implements OnInit {
   }
 
   // verification et recuperation du dailyCheck
-  onCheckDailyCheck(id: string): void {
-    this.dailyCheckService.verifCheckByUserId(id)
+  onCheckDailyCheck(id): void {
+    this.dailyCheckService.verifCheckByUserId(this.token.id)
       .then((response) => {
-        console.log(response);
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, this.token.id)
         } else {
           this.dailyCheck = response;
-
           // verifie s'il y'a eu un checkout
           if (response?.check_out != null) {
             // remise à zero des temps de travail
             this.pauseTiming = 0;
-            this.craPercent = '0';
+            this.craPercent = 0;
             this.workingTiming = 0;
             this.workingHour = 0;
             this.workingMinute = 0;
-            this.dailyCheck.check_in = null;
-            this.dailyCheck.cra = [];
-          } else {
-            // calcule du temps passé en pause
-            this.pauseTiming = 0;
-            this.dailyCheck?.pause.forEach((p) => {
-              if (p.out) {
-                this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
-              } else {
-                this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
-              }
-            })
-
-            // calcule du temps passé au travail
-            this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
-            // Retrait du temps passé en pause
-            this.workingTiming = this.workingTiming - this.pauseTiming;
-            if (this.workingTiming < 60) {
-              this.workingHour = 0;
-              this.workingMinute = this.workingTiming;
-            } else {
-              this.workingHour = Math.floor(this.workingTiming / 60);
-              this.workingMinute = this.workingTiming % 60;
-            }
-
-            /* calcul du pourcentage de remplissage du CRA */
-            // recuperation du collaborateur
-            this.rhService.getCollaborateurByUserId(this.userConnected._id)
-              .then((collaborateur) => {
-                let totalTimeCra = 0;
-
-                this.dailyCheck?.cra.map((cra) => {
-                  totalTimeCra += cra.number_minutes;
-                });
-
-                if (collaborateur != null) {
-                  // conversion du taux cra du collaborateur en minutes
-                  collaborateur.h_cra *= 60;
-                  // partie calcule du pourcentage en fonction du totalTimeCra
-                  let percent = (totalTimeCra * 100) / collaborateur.h_cra;
-
-                  this.craPercent = percent.toString().substring(0, 4);
-                } else {
-                  this.craPercent = '0';
-                  this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' })
-                }
-
-              })
-              .catch((error) => { console.error(error); });
+            //this.dailyCheck.check_in = null;
+            //this.dailyCheck.cra = [];
           }
+          // calcule du temps passé en pause
+          this.pauseTiming = 0;
+          this.dailyCheck?.pause.forEach((p) => {
+            if (p.out) {
+              this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+            } else {
+              this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+            }
+          })
+
+          // calcule du temps passé au travail
+          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+          if (this.dailyCheck?.check_out)
+            this.workingTiming = (moment(new Date(this.dailyCheck?.check_out)).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+          // Retrait du temps passé en pause
+          this.workingTiming = this.workingTiming - this.pauseTiming;
+          if (this.workingTiming < 60) {
+            this.workingHour = 0;
+            this.workingMinute = this.workingTiming;
+          } else {
+            this.workingHour = Math.floor(this.workingTiming / 60);
+            this.workingMinute = this.workingTiming % 60;
+          }
+          //Calcul CRA Version Morgan
+          let max = this.workingTiming
+          let worked = 0
+          this.dailyCheck?.cra.map((cra) => {
+            worked += cra.number_minutes;
+          });
+          this.craPercent = ((worked * 100) / max)
+          this.dailyCheck.taux_cra = this.craPercent
+          /* calcul du pourcentage de remplissage du CRA */
+          // recuperation du collaborateur
+          this.rhService.getCollaborateurByUserId(this.userConnected._id)
+            .then((collaborateur) => {
+              let totalTimeCra = 0;
+
+              this.dailyCheck?.cra.map((cra) => {
+                totalTimeCra += cra.number_minutes;
+              });
+
+              if (!collaborateur || !collaborateur.h_cra) {
+                collaborateur.h_cra = 7
+              }
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              this.craPercent = percent
+            })
+            .catch((error) => { console.error(error); });
+
         }
       })
       .catch((error) => { console.error(error) });
@@ -889,28 +942,41 @@ export class CalenderComponent implements OnInit {
 
   // méthode de checkin
   onCheckIn(): void {
-    const check = new DailyCheck();
 
+    const check = new DailyCheck();
+    check.platform_in = this.getDeviceType()
     check.user_id = this.user._id;
     check.check_in = new Date();
     check.isInPause = false;
-    this.classbutonchekin="p-button-secondary mb-2"
+    this.classbutonchekin = "p-button-secondary mb-2"
+    this.getIP().then(txt => {
+      //check.localisation_in = txt
+      this.dailyCheckService.postCheckIn(check)
+        .then((response) => {
+          this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
+          this.onCheckDailyCheck(response.user_id);
+          this.onUpdateStatus('Disponible')
+        })
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
+    })
 
-    this.dailyCheckService.postCheckIn(check)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Disponible')
-      })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
+
+  motifStr = ''
+  displayMotif = false
+
+  motifDropdown = [
+    { label: 'Déjeuner', value: 'Déjeuner' },
+    { label: 'Autre', value: 'Autre' }
+  ]
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({ in: new Date() });
+
+    this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: true })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bonne pause' });
 
@@ -920,16 +986,16 @@ export class CalenderComponent implements OnInit {
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
-
+  historiqueCraHisto = []
   // méthode de fin de la pause
   onStopPause(): void {
     // taille du tableau de check
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
     this.dailyCheck.isInPause = false;
-    this.dailyCheck.pause_timing = this.pauseTiming +this.dailyCheck.pause_timing;
+    this.dailyCheck.pause_timing = this.pauseTiming + this.dailyCheck.pause_timing;
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, pause: this.dailyCheck.pause, isInPause: false, pause_timing: this.dailyCheck.pause_timing })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bon retour au travail' });
 
@@ -938,30 +1004,87 @@ export class CalenderComponent implements OnInit {
         this.onUpdateStatus('Disponible')
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
+    this.dailyCheckService.getUserChecks(this.token.id)
+      .then((response) => {
+        this.historiqueCra = response
+        this.lastCras = response[response.length - 1];
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
   }
 
   // methôde de checkout
   onCheckOut(): void {
+    this.pauseTiming = 0;
+    this.dailyCheck?.pause.forEach((p) => {
+      if (p.out) {
+        this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+      } else {
+        this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+      }
+    })
+    // calcule du temps passé au travail
+    this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+    if (this.dailyCheck?.check_out)
+      this.workingTiming = (moment(new Date(this.dailyCheck?.check_out)).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+    // Retrait du temps passé en pause
+    this.workingTiming = this.workingTiming - this.pauseTiming;
+    if (this.workingTiming < 60) {
+      this.workingHour = 0;
+      this.workingMinute = this.workingTiming;
+    } else {
+      this.workingHour = Math.floor(this.workingTiming / 60);
+      this.workingMinute = this.workingTiming % 60;
+    }
+    //Calcul CRA Version Morgan
+    let max = this.workingTiming
+    let worked = 0
+    this.dailyCheck?.cra.map((cra) => {
+      worked += cra.number_minutes;
+    });
     this.dailyCheck.check_out = new Date();
-    this.dailyCheck.taux_cra = this.craPercent;
-    this.dailyCheck.pause_timing = this.pauseTiming;
+    this.dailyCheck.platform_out = this.getDeviceType()
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
-        this.onUpdateStatus('Absent')
-        // recuperation de l'historique du cra
-        this.dailyCheckService.getUserChecks(this.token.id)
-          .then((response) => {
-            this.historiqueCra = response;
-            this.lastCras=response[response.length-1];
-            console.log(this.lastCras);
-          })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+    this.dailyCheck.pause_timing = this.pauseTiming;
+    this.rhService.getCollaborateurByUserId(this.userConnected._id)
+      .then((collaborateur) => {
+        let totalTimeCra = 0;
+
+        this.dailyCheck?.cra.map((cra) => {
+          totalTimeCra += cra.number_minutes;
+        });
+
+        if (!collaborateur || !collaborateur.h_cra) {
+          collaborateur.h_cra = 7
+        }
+        // conversion du taux cra du collaborateur en minutes
+        collaborateur.h_cra *= 60;
+        // partie calcule du pourcentage en fonction du totalTimeCra
+        let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+        this.craPercent = percent
+        this.dailyCheck.taux_cra = this.craPercent;
+        this.getIP().then(txt => {
+          //this.dailyCheck.localisation_out = txt
+          this.dailyCheckService.patchCheckIn(this.dailyCheck)
+            .then((response) => {
+              this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+              // recuperation du check journalier
+              this.onCheckDailyCheck(response.user_id);
+              this.onUpdateStatus('Absent')
+              // recuperation de l'historique du cra
+              this.dailyCheckService.getUserChecks(this.token.id)
+                .then((response) => {
+                  this.historiqueCra = response
+                  this.lastCras = response[response.length - 1];
+                })
+                .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+            })
+            .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+        })
+
       })
-      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+      .catch((error) => { console.error(error); });
+
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
@@ -973,55 +1096,39 @@ export class CalenderComponent implements OnInit {
       })
     );
   }
-
-  // récupère les compétences
-  getCras(): FormArray {
-    return this.formAddCra.get('cras') as FormArray;
-    return this.formAddCraTicket.get('cras') as FormArray;
-  }
-
-  // ajoute de nouveaux champs au formulaire
-  onAddCraField(): void {
-    const newCraControl = this.onCreateCraField();
-    this.getCras().push(newCraControl);
-  }
-
-  // suppression d'un champ de compétence
-  onDeleteCraField(i: number): void {
-    this.getCras().removeAt(i);
-  }
-
   // ajout de CRA
   onAddCra(): void {
-    const formValue = this.formAddCra.value;
     // ajout des données formulaire au dailycheck
+    let number_minutes = this.formAddCra.value.number_minutes
+    if (this.formAddCra.value.mode_type == '/H')
+      number_minutes = number_minutes * 60
 
-    formValue.cras.forEach((cra) => {
-      this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
-    });
+    if (this.dailyCheck.cra)
+      this.dailyCheck.cra.push({ ... this.formAddCra.value, number_minutes });
+    else
+      this.dailyCheck.cra = [{ ... this.formAddCra.value, number_minutes }]
 
-    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, cra: this.dailyCheck.cra })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
         this.formAddCra.reset();
+        this.formAddCra.patchValue({ mode_type: '/min' })
         this.showFormAddCra = false;
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
+        this.onCheckDailyCheck(response.user_id)
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
   onAddCraTicket(): void {
     const formValue = this.formAddCraTicket.value;
     // ajout des données formulaire au dailycheck
-console.log(formValue);
-    
-      this.dailyCheck.cra.push({ task:this.formAddCraTicket.get('ticket').value.label, number_minutes:this.formAddCraTicket.get('duration').value });
-    
+
+    this.dailyCheck.cra.push({ task: this.formAddCraTicket.get('ticket').value.label, number_minutes: this.formAddCraTicket.get('duration').value });
+
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
-        
+
         this.formAddCraTicket.reset();
         this.showFormAddCraTicket = false;
         // recuperation du check journalier
@@ -1127,6 +1234,7 @@ console.log(formValue);
     conge.date_fin = formValue.fin;
     conge.nombre_jours = formValue.nb_jour;
     conge.motif = formValue.motif;
+    conge.urgent = formValue.urgent;
     conge.statut = 'En attente';
 
     // envoi des données en bd
@@ -1196,6 +1304,7 @@ console.log(formValue);
       fin: new Date(conge.date_fin),
       nb_jour: conge.nombre_jours,
       motif: conge.motif,
+      urgent: conge.urgent
     });
 
     this.showUpdateCongeForm = true;
@@ -1212,7 +1321,7 @@ console.log(formValue);
     this.congeToUpdate.date_fin = formValue.fin;
     this.congeToUpdate.nombre_jours = formValue.nb_jour;
     this.congeToUpdate.motif = formValue.motif;
-
+    this.congeToUpdate.urgent = formValue.urgent;
     this.congeService.putConge(this.congeToUpdate)
       .then(() => {
         this.formUpdateConge.reset();
@@ -1225,12 +1334,11 @@ console.log(formValue);
   }
 
   getHistoPointage(value) {
+    console.log(value)
     if (value)
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
-          this.historiqueCra = response;
-          this.lastCras=response[response.length-1];
-          console.log(this.lastCras);
+          this.historiqueCraHisto = response.reverse();
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
@@ -1331,15 +1439,6 @@ console.log(formValue);
       this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
         .then((response) => {
           response.forEach(c => {
-            /*
-      { label: 'Congé payé', value: 'Congé payé' },
-      { label: 'Congé sans solde', value: 'Congé sans solde' },
-      { label: 'Absence maladie', value: 'Absence maladie' },
-      { label: 'Télétravail', value: 'Télétravail' },
-      { label: 'Départ anticipé', value: 'Départ anticipé' },
-      { label: 'Autorisation', value: 'Autorisation' },
-      { label: 'Autre motif', value: 'Autre motif' },
-            */
             let dd = new Date(c.date_debut)
             if (dd > new Date(this.dateChoose + '-31'))
               dd = new Date(this.dateChoose + '-31')
@@ -1354,7 +1453,6 @@ console.log(formValue);
 
             // To calculate the no. of days between two dates
             var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
-            console.log(c.type_conge, Difference_In_Days)
             if (c.type_conge == "Congé payé")
               this.stats.conges_pay += Difference_In_Days
             else if (c.type_conge == "Congé sans solde")
@@ -1381,34 +1479,8 @@ console.log(formValue);
     }
   }
   eventsRH = []
-  optionsRH = {
-    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
-    defaultDate: new Date(),
-    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
-    header: {
-      left: "title",
-      right: 'prev,next'
-      // left: 'prev,next'
-    },
-    locale: 'fr',
-    timeZone: 'local',
-    contentHeight: 500,
-    eventClick: this.eventClickFCRH.bind(this),
-    events: [
-
-    ],
-    defaultView: "dayGridMonth",
-    minTime: '08:00:00',
-    firstDay: 1,
-    selectable: true,
-  };
   displayData = false
   dataEvent: EventCalendarRH
-  eventClickFCRH(event) {
-    this.displayData = true
-    this.dataEvent = event.event.extendedProps;
-    //console.log(event)
-  }
 
   addEvent(event: EventCalendarRH) {
     let backgroundColor = '#1F618D'
@@ -1425,6 +1497,9 @@ console.log(formValue);
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
     }
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
@@ -1445,13 +1520,16 @@ console.log(formValue);
           let absencesList: Date[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
-            let dateC = new Date(c.date_debut)
-            dateC.setDate(dateC.getDate() - 1)
-            while (dateC < new Date(c.date_fin)) {
-              congesList.push(new Date(dateC))
-              this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
-              dateC.setDate(dateC.getDate() + 1)
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              dateC.setDate(dateC.getDate() - 1)
+              while (dateC < new Date(c.date_fin)) {
+                congesList.push(new Date(dateC))
+                this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
             }
+
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
@@ -1459,7 +1537,6 @@ console.log(formValue);
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
-          console.log(congesList, conges)
           while (dateEnd < dateDebut) {
             if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
               //Vérifier si il a été présent ou si il a été en congé 
@@ -1468,8 +1545,6 @@ console.log(formValue);
                 events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
                 absencesList.push(dateDebut)
                 this.addEvent(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
-              } else {
-                //console.log(dateDebut,events)
               }
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
@@ -1498,15 +1573,7 @@ console.log(formValue);
   }
   displayPointeuse = false
   onSeePointeuse() {
-    console.log('test')
     this.displayPointeuse = true
-    console.log(this.displayPointeuse)
-  }
-
-  onConvertText(description: string) {
-    if (description.length > 500)
-      description = description.substring(0, 500) + "..."
-    return description
   }
   seeDescriptionActu = false
   seeActu: ActualiteRH
@@ -1514,7 +1581,287 @@ console.log(formValue);
     this.seeActu = act
     this.seeDescriptionActu = true
   }
+  eventUsers = []
+  optionsUsers = {
+    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
+    defaultDate: new Date(),
+    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    header: {
+      right: 'prev,next',
+      center: 'title',
+      left: 'today,dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    locale: frLocale,
+    timeZone: 'local',
+    contentHeight: 500,
+    events: [],
+    eventClick: this.eventClickUser.bind(this),
+    dateClick: this.dateClickFC.bind(this),
+    //eventDidMount: this.eventToolTip(this),
+    defaultView: "dayGridMonth",
+    minTime: '08:00:00',
+    firstDay: 1,
+    selectable: true,
+    views: {
+      dayGridMonth: { // name of view
+        titleFormat: { year: 'numeric', month: 'long' }
+        // other view-specific options here
+      }
+    }
+  };
+  defaultEventUsers = []
+  filter_value = ['Absence Non Justifié', 'Absence', 'Autorisation', 'Jour férié Tunis', 'Jour férié France', 'Autre événement', 'Présent', 'Cours']
+  //Calendrier RH
+  onFilter() {
+    this.eventUsers = []
+    this.defaultEventUsers.forEach(r => {
+      if (this.filter_value.includes(r.extendedProps.type)) {
+        this.eventUsers.push(r)
+      }
+    })
+    /*if (this.siteSelected.length != 0) {
+      let keys = Object.keys(this.CongeDic)
+      keys.forEach(k => {
+        let r = []
+        this.CongeDic[k].forEach((value: Conge) => {
+          if (value.user_id) {
+            let c: Collaborateur = this.collaborateurDic[value.user_id._id]
+            if (this.atleastOne(c.localisation, this.siteSelected))
+              r.push(c)
+          }
+        })
+        this.CongeDic[k] = r
+      })
+    }*/
 
+  }
+  PresentDicUser = {}
+  getUsersEvents() {
+    this.eventUsers = []
+    this.defaultEventUsers = []
+    this.PresentDicUser = {}
+    this.CalendrierRHService.getAll().subscribe(events => {
+      //events.forEach(ev => { this.addEventUser(ev) })
+      this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
+        this.congeService.getAllByUserId(this.userSelected.user_id._id).then(conges => {
+          //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
+          let congesList: Date[] = []
+          let absencesList: Date[] = []
+          let presencesList: Date[] = []
+          conges.forEach(c => {
+            if (c.statut == 'Validé') {
+              let dateC = new Date(c.date_debut)
+              let dateF = new Date(c.date_fin)
+              dateF.setDate(dateF.getDate() + 1)
+              while (dateC < dateF) {
+                congesList.push(new Date(dateC))
+                this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, c.type_conge))
+                dateC.setDate(dateC.getDate() + 1)
+              }
+            }
+          })
+          dcs.forEach(dc => {
+            presencesList.push(new Date(dc.check_in))
+            if (this.PresentDicUser[new Date(dc.check_in).toDateString()]) {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
+            } else {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Activité"))
+            }
+
+          })
+          //Charger les Réunions Teams
+
+          let dateDebut = new Date()
+          let dateEnd = new Date()
+          dateEnd.setFullYear(dateEnd.getFullYear() - 1)
+          while (dateEnd < dateDebut) {
+            if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
+              //Vérifier si il a été présent ou si il a été en congé 
+              if (presencesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                congesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
+                absencesList.push(dateDebut)
+                this.addEventUser(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
+              }
+            }
+            dateDebut.setDate(dateDebut.getDate() - 1)
+          }
+          events.forEach(ev => {
+            if (ev.type == 'Cours' && ev?.personal == this.token.id) {
+              this.addEventUser(new EventCalendarRH(ev?._id, new Date(ev.date), "Cours", null, null))
+            }
+
+          })
+          this.defaultEventUsers = this.eventUsers
+          this.onFilter()
+        })
+      })
+    })
+    this.onFilter()
+  }
+  addEventUser(event: EventCalendarRH) {
+    let backgroundColor = '#1F618D'
+    let borderColor = '#17202A'
+    if (event.type == 'Jour férié France') {
+      backgroundColor = '#D4AC0D'
+      borderColor = '#D35400'
+    } else if (event.type == 'Autre événement') {
+      backgroundColor = '#9B59B6'
+      borderColor = '#8E44AD'
+    } else if (event.type == "Autorisation") {
+      backgroundColor = '#1ABC9C'
+      borderColor = '#186A3B'
+    } else if (event.type == "Absence Non Justifié") {
+      backgroundColor = '#E74C3C'
+      borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
+    } else if (event.type == "Présent") {
+      backgroundColor = '#37BAD4'
+      borderColor = '#2fa2b9'
+    }
+    let title = event.type
+    if (event.name)
+      title = event.name
+    if (event.campus)
+      title = title + ", " + event.campus
+    this.eventUsers.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    this.optionsUsers.events = this.eventUsers
+    this.eventUsers = Object.assign([], this.eventUsers)
+
+  }
+  DataCRA = []
+  displayCRA
+  dateCRA: string;
+  displayCRACheck = false
+  dataCHECK: DailyCheck
+  onValidateCRA(check: DailyCheck) {
+    this.displayCRACheck = true
+    this.dataCHECK = check
+  }
+  eventClickUser(event) {
+    if (event.event.extendedProps.type == "Présent") {
+      this.dateCRA = new Date(event.event.start).toDateString()
+      this.DataCRA = this.PresentDicUser[this.dateCRA]
+      this.displayCRA = true
+    } else if (event.event.extendedProps.type == "Cours") {
+      this.displayData = true
+      this.dataEvent = event.event.extendedProps
+    }
+  }
+  dateClickFC(event) {
+    let r = true
+
+    this.eventUsers.forEach(ev => {
+      if (ev.extendedProps.type == 'Cours' && new Date(event.date).toString() == new Date(ev.extendedProps.date).toString()) {
+        r = false
+      }
+    })
+    if (r) {
+      this.displayCours = true
+      this.DataDay = event
+    }
+  }
+  DataDay: any
+  displayCours = false
+  onAddJourDeCours() {
+    this.CalendrierRHService.create({ type: 'Cours', created_by: this.token.id, date: this.DataDay.date, personal: this.token.id }).subscribe(newEvent => {
+      this.addEventUser(newEvent)
+      this.displayCours = false
+      this.DataDay = null
+      this.messageService.add({ severity: 'success', summary: 'Ajout d\'un événement avec succès' })
+    })
+  }
+  isNaN(nb: number) { return isNaN(nb) }
+  isInfinity(nb: number) { return nb == Infinity }
+
+
+  getCheckOut(user_id) {
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) > date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
+    }
+
+  }
+
+  saveCheck(check: DailyCheck) {
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+
+    }, error => { console.error(error) })
+  }
+  getDeviceType() {
+
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return "Mobile";
+    }
+    if (
+      /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        ua
+      )
+    ) {
+      return "Mob";
+    }
+    return "PC";
+  };
+  getIP() {
+    return fetch("https://checkip.amazonaws.com/").then(res => res.text()).then(data => {
+      console.log(data)
+      //return data
+      return 'Refus de partage'
+    }, error => {
+      return "Inconnu (Error)"
+    })
+  }
+  dateParseur(date_str: string) {
+    if (date_str) {
+      let pos1 = date_str.indexOf('/')
+      let day = date_str.substring(0, pos1)
+      let month = date_str.substring(pos1 + 1, date_str.length - 5)
+      let year = date_str.substring(date_str.length - 4)
+      return `${day}/${month}/${year}`
+    } else {
+      console.log(date_str)
+      return 'Inconnu'
+    }
+
+
+  }
+  totalCalc(cra: any[]) {
+    let r = 0
+    if (cra)
+      cra.forEach(c => { r += c.number_minutes })
+    if (r != 0) {
+      let h = Math.trunc(r / 60)
+      let m = r - (h * 60)
+      return `${h}H ${m}min`
+    } else
+      return '0 min'
+  }
+  onDelete() {
+    this.CalendrierRHService.delete(this.dataEvent._id).subscribe(d => {
+      this.getUsersEvents()
+      this.displayData = false
+      this.dataEvent = null
+    })
+  }
+  modeType = [
+    { label: '/min', value: '/min' },
+    { label: '/H', value: '/H' }
+  ]
 }
 
 

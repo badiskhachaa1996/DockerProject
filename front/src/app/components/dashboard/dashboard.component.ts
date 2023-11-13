@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
-import { Product } from '../../dev-components/api-template/product';
-import { ProductService } from '../../dev-components/service-template/productservice';
-import { Subscription } from 'rxjs';
-import { ConfigService } from '../../dev-components/service-template/app.config.service';
-import { AppConfig } from '../../dev-components/api-template/appconfig';
+import frLocale from '@fullcalendar/core/locales/fr';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
@@ -70,6 +66,7 @@ import { PointeuseService } from 'src/app/services/pointeuse.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   paysList = environment.pays;
@@ -138,7 +135,7 @@ export class DashboardComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -159,7 +156,7 @@ export class DashboardComponent implements OnInit {
       left: "title",
       right: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -281,6 +278,7 @@ export class DashboardComponent implements OnInit {
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
     { label: 'En réunion', value: 'En réunion' },
+    { label: 'Ecole', value: 'Ecole' },
     { label: 'Occupé', value: 'Occupé' },
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
@@ -489,6 +487,7 @@ export class DashboardComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     // initialisation du formulaire de modification de congé
@@ -499,6 +498,7 @@ export class DashboardComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     this.route.queryParams.subscribe(params => {
@@ -516,55 +516,55 @@ export class DashboardComponent implements OnInit {
     });
     this.menuCalenders = [
       {
-        label:"CRA",
+        label: "CRA",
         command: () => {
-          if (this.showCRA==false){
+          if (this.showCRA == false) {
             this.showCRA = true;
-          }else{
-            this.showCRA=false
+          } else {
+            this.showCRA = false
           };
         }
       },
       {
-        label:"Calendrier",
+        label: "Calendrier",
         command: () => {
-          if (this.showCalender==false){
+          if (this.showCalender == false) {
             this.showCalender = true;
-          }else{
-            this.showCalender=false
+          } else {
+            this.showCalender = false
           };
         }
       },
       {
-        label:"Historique",
+        label: "Historique",
         command: () => {
-          if (this.showHis==false){
+          if (this.showHis == false) {
             this.showHis = true;
-          }else{
-            this.showHis=false
+          } else {
+            this.showHis = false
           };
         }
       },
       {
-        label:"Congé",
+        label: "Congé",
         command: () => {
-          if (this.showCon==false){
+          if (this.showCon == false) {
             this.showCon = true;
-          }else{
-            this.showCon=false
+          } else {
+            this.showCon = false
           };
         }
       },
       {
-        label:"Assiduité",
+        label: "Assiduité",
         command: () => {
-          if (this.showAassiduite==false){
+          if (this.showAassiduite == false) {
             this.showAassiduite = true;
-          }else{
-            this.showAassiduite=false
+          } else {
+            this.showAassiduite = false
           };
-          }
-        
+        }
+
       },
     ];
   }
@@ -833,10 +833,11 @@ export class DashboardComponent implements OnInit {
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
-        console.log(response);
+
         if (response == null) {
-          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+          console.error({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" }, id)
         } else {
+          //console.log(response);
           this.dailyCheck = response;
 
           // verifie s'il y'a eu un checkout
@@ -877,10 +878,10 @@ export class DashboardComponent implements OnInit {
             this.rhService.getCollaborateurByUserId(this.userConnected._id)
               .then((collaborateur) => {
                 let totalTimeCra = 0;
-
-                this.dailyCheck?.cra.map((cra) => {
-                  totalTimeCra += cra.number_minutes;
-                });
+                if (this.dailyCheck?.cra && this.dailyCheck?.cra.length != 0)
+                  this.dailyCheck?.cra.map((cra) => {
+                    totalTimeCra += cra.number_minutes;
+                  });
 
                 if (collaborateur != null) {
                   // conversion du taux cra du collaborateur en minutes
@@ -921,7 +922,7 @@ export class DashboardComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({ in: new Date() });
+    this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
@@ -1115,6 +1116,7 @@ export class DashboardComponent implements OnInit {
     conge.date_fin = formValue.fin;
     conge.nombre_jours = formValue.nb_jour;
     conge.motif = formValue.motif;
+    conge.urgent = formValue.urgent;
     conge.statut = 'En attente';
 
     // envoi des données en bd
@@ -1184,6 +1186,7 @@ export class DashboardComponent implements OnInit {
       fin: new Date(conge.date_fin),
       nb_jour: conge.nombre_jours,
       motif: conge.motif,
+      urgent: conge.urgent
     });
 
     this.showUpdateCongeForm = true;
@@ -1200,6 +1203,7 @@ export class DashboardComponent implements OnInit {
     this.congeToUpdate.date_fin = formValue.fin;
     this.congeToUpdate.nombre_jours = formValue.nb_jour;
     this.congeToUpdate.motif = formValue.motif;
+    this.congeToUpdate.urgent = formValue.urgent;
 
     this.congeService.putConge(this.congeToUpdate)
       .then(() => {
@@ -1376,7 +1380,7 @@ export class DashboardComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFCRH.bind(this),
@@ -1411,6 +1415,9 @@ export class DashboardComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
+    } else if (event.type == "Cours") {
+      backgroundColor = '#c82df7'
+      borderColor = '#9300bf'
     }
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
@@ -1493,15 +1500,17 @@ export class DashboardComponent implements OnInit {
     event.preventDefault();
     contextMenu.show(event);
   }
-  onConvertText(description: string) {
-    if (description.length > 500)
-      description = description.substring(0, 500) + "..."
-    return description
-  }
   seeDescriptionActu = false
   seeActu: ActualiteRH
   seeMore(act: ActualiteRH) {
     this.seeActu = act
     this.seeDescriptionActu = true
   }
+  motifStr = ''
+  displayMotif = false
+
+  motifDropdown = [
+    { label: 'Déjeuner', value: 'Déjeuner' },
+    { label: 'Autre', value: 'Autre' }
+  ]
 }

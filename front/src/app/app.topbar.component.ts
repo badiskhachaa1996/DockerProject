@@ -36,7 +36,11 @@ export class AppTopBarComponent implements OnInit {
   isCEO = false
   isEtudiant = false
   isExterne = false
+  isAgent = false
+  isProspect = false
+  isAdmin = false
   isReinscrit = false
+  seeCRA = false
   userConnected: User;
   token: any;
   user = true;
@@ -187,8 +191,15 @@ export class AppTopBarComponent implements OnInit {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
+      this.isAgent = userconnected.role == 'Agent' || userconnected.role == 'Responsable'
+      this.isAdmin = userconnected.role == 'Admin'
+      this.isProspect = userconnected.type == 'Prospect'
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
+      this.seeCRA = (this.isAdmin || this.isAgent)
+      if (userconnected.haveNewAccess) {
+        this.seeCRA = (userconnected.type == 'Collaborateur' || userconnected.type == 'Responsable' || userconnected.type_supp.includes('Responsable') || userconnected.type == 'Formateur' || userconnected.type_supp.includes('Formateur') || userconnected.type_supp.includes('Collaborateur'))
+      }
       this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
         this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
       })
@@ -245,6 +256,14 @@ export class AppTopBarComponent implements OnInit {
               icon: 'pi pi-circle-fill',
               command: () => {
                 this.onUpdateStatus('En réunion');
+
+              }
+
+            }, {
+              label: 'Ecole',
+              icon: 'pi pi-book',
+              command: () => {
+                this.onUpdateStatus('Ecole');
 
               }
 

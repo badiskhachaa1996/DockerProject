@@ -111,24 +111,36 @@ app.post("/create", (req, res) => {
                         };
 
 
-                        transporter.sendMail(mailOptions, function (error, info) {
+                        /*transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.error(error);
                             }
-                        });
+                        });*/
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
                         let htmlemail = `
-                        <p>Bonjour,</p><br>
-
-                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
-                        
-                        <p>Cordialement,</p>
+                        Créé par : ${u.lastname} ${u.firstname}<br>
+                        Crée le  : ${day}/${month}/${year}<br>
+                        Service : ${sujet.service_id.label}<br>
+                        Sujet : ${sujet.label}<br>
+                        Résumé : ${ticket.resum}<br>
+                        Description : ${ticket.description}<br>
                         `
+                        let r = ''
+                        if (ticket.module)
+                            r = r + " - " + ticket.module
+                        if (ticket.type)
+                            r = r + " - " + ticket.type
+                        if (ticket.campus)
+                            r = r + " - " + ticket.campus
+                        if (ticket.filiere)
+                            r = r + " - " + ticket.filiere
+                        if (ticket.demande)
+                            r = r + " - " + ticket.demande
                         let mailOptions = {
                             from: 'ims@intedgroup.com',
                             to: 'ims.support@intedgroup.com',
-                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label + r,
                             html: htmlemail,
                             priority: 'high',
                             attachments: [{
@@ -440,7 +452,7 @@ app.post("/AccAff/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             agent_id: req.body.agent_id,
-            statut: "En cours de traitement",
+            statut: "En attente de traitement",
             date_affec_accep: Date.now(),
             isAffected: req.body?.isAffected || false
         },
@@ -612,6 +624,16 @@ app.get("/getAllAccAff", (req, res) => {
             console.error(err);
         })
 })
+//recuperation d'un ticket par 'identifiant d'un etudiant
+app.get("/getByIdEtudiant/:id", (req, res) => {
+    Ticket.findOne({ etudiant_id: req.params.id }).then((dataTicket) => {
+        res.status(200).send({ dataTicket });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
+
+
 
 //Renvoie un ticket dans la queue d'entrée
 app.post("/revertTicket/:id", (req, res) => {
@@ -762,44 +784,71 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
 
 app.get("/getAllAssigne/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id })
-    .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+        .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllNonAssigne", (req, res) => {
-    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.post("/getAllNonAssigneV2", (req, res) => {
-    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Sujet.find({ service_id: { $in: req.body.service_list } }).then(sujets => {
+        let ids = []
+        sujets.forEach(s => {
+            ids.push(s._id)
+        })
+        console.log(req.body.service_list, ids)
+        Ticket.find({ agent_id: null, sujet_id: { $in: ids } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+            .then((ticket) => { res.status(200).send(ticket); })
+            .catch((error) => { res.status(400).send(error); })
+    })
+
+});
+
+app.post("/getAllAssigneV2", (req, res) => {
+    Sujet.find({ service_id: { $in: req.body.service_list } }).then(sujets => {
+        let ids = []
+        sujets.forEach(s => {
+            ids.push(s._id)
+        })
+        console.log(req.body.service_list, ids)
+        Ticket.find({ agent_id: { $ne: null }, sujet_id: { $in: ids } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+            .then((ticket) => { res.status(200).send(ticket); })
+            .catch((error) => { res.status(400).send(error); })
+    })
+});
+
+app.get("/getAllAssigneAdmin", (req, res) => {
+    Ticket.find({ agent_id: { $ne: null } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllRefuse", (req, res) => {
-    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('user_revert')
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by').populate('user_revert')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllTraite", (req, res) => {
-    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllAttenteDeTraitement", (req, res) => {
-    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 //Récupérer tous les tickets d'un User
 app.get("/getAllMine/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
-    .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+        .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })

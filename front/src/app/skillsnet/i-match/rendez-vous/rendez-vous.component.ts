@@ -164,7 +164,7 @@ export class RendezVousComponent implements OnInit {
       center: 'title',
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
-    locale: 'fr',
+   locale: frLocale,
     events: [],
     minTime: '08:00:00',
     maxTime: '19:00:00',

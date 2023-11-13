@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CV } from 'src/app/models/CV';
@@ -14,17 +14,28 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class CvComponent implements OnInit {
 
+  showingmore = false
+
   cv: CV;
   user: User;
   dicPicture
   profilePic
   showEditBtn = false
-
+  @Input() CV_ID = ""
   constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute, private router: Router) {
-    const id = this.route.snapshot.paramMap.get('id')
 
+  }
+  takeARendezVous() {
+    this.router.navigate(['rendez-vous/', this.user._id])
+  }
+
+  ngOnInit(): void {
+    let id = this.route.snapshot.paramMap.get('id')
+    if (this.CV_ID)
+      id = this.CV_ID
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
+      console.log(this.cv)
       this.user = data.dataCv.user_id
       if (!data) {
         this.UserService.getPopulate(id).subscribe(u => {
@@ -32,19 +43,6 @@ export class CvComponent implements OnInit {
         })
       }
     })
-
-    // this.cvservice.getAllPicture().subscribe(data => {
-    //   this.dicPicture = data.files // {id:{ file: string, extension: string }}
-    //   data.ids.forEach(id => {
-    //     const reader = new FileReader();
-    //     const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
-    //     let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
-    //     reader.readAsDataURL(blob);
-    //     reader.onloadend = () => {
-    //       this.dicPicture[id].url = reader.result;
-    //     }
-    //   })
-    // })
 
     this.cvservice.getPictureByUser(id).subscribe(data => {
       this.dicPicture = data // {id:{ file: string, extension: string }}
@@ -56,19 +54,21 @@ export class CvComponent implements OnInit {
         this.profilePic = reader.result;
       }
     })
-  }
-  takeARendezVous() {
-    this.router.navigate(['rendez-vous/', this.user._id])
-  }
-
-  ngOnInit(): void {
     if (localStorage.getItem('seeEditBTNCV')) {
       localStorage.removeItem('seeEditBTNCV')
       this.showEditBtn = true
     }
   }
 
-  gotoEdit(){
+  gotoEdit() {
     this.router.navigate(['generateur-cv/', this.user._id])
+  }
+
+  showMore() {
+    this.showingmore = true
+  }
+
+  showLess() {
+    this.showingmore = false
   }
 }

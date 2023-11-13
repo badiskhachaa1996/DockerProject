@@ -186,10 +186,10 @@
     </button>
     <div class="p-fluid p-formgrid grid" id="Resultat" #Resultat>
         <h1 class="col-12 text-center" *ngIf="diplomeChoisi">
-            Résultat des questionnaires de satisfaction à chaud de {{diplomeChoisi}} du {{date_auj|date:'mediumDate'}}
+            Résultat des questionnaires de satisfaction à chaud de {{diplomeChoisi}} du {{date_auj|date:'dd MMMM yy'}}
         </h1>
         <h1 class="col-12 text-center" *ngIf="!diplomeChoisi">
-            Résultat des questionnaires de satisfaction à chaud du {{date_auj|date:'mediumDate'}}
+            Résultat des questionnaires de satisfaction à chaud du {{date_auj|date:'dd MMMM yy'}}
         </h1>
         <div class="field col-6">
             <label>Question 6 :</label><br>

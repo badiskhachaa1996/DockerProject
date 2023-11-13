@@ -25,6 +25,10 @@ export class AdmissionService {
     let registerUrl = this.apiUrl + 'create';
     return this.httpClient.post<any>(registerUrl, tbObj, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
+  createticket(ticket) {
+    let registreUrl = this.apiUrl + "createticket";
+    return this.httpClient.post<any>(registreUrl, ticket, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   //Modification d'un prospect
   update(tbObj: { prospect: any, user: any }) {
@@ -60,7 +64,14 @@ export class AdmissionService {
     let registreUrl = this.apiUrl + 'getAll';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-
+  getAllLocal() {
+    let registreUrl = this.apiUrl + 'getAllLocal';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getAllInt() {
+    let registreUrl = this.apiUrl + 'getAllInt';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   get100Sourcing() {
     let registreUrl = this.apiUrl + 'get100Sourcing';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -120,6 +131,11 @@ export class AdmissionService {
     let url = this.apiUrl + "downloadFile/" + id + "/" + filename
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  
+  downloadFilePaiement(id, filename) {
+    let url = this.apiUrl + "downloadFilePaiement/" + id + "/" + filename
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   downloadFileAdmin(id, path) {
     let url = this.apiUrl + "downloadFileAdmin/" + id + "/" + path
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
@@ -133,6 +149,11 @@ export class AdmissionService {
 
   uploadFile(formData, id, token = 'token') {
     let url = this.apiUrl + "uploadFile/" + id
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
+  }
+
+  uploadFilePaiement(formData, id, token = 'token') {
+    let url = this.apiUrl + "uploadFilePaiement/" + id
     return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
   }
 
@@ -291,6 +312,7 @@ export class AdmissionService {
   }
 
   updateV2(data, detail = "") {
+    
     let url = this.apiUrl + "updateV2";
     if (localStorage.getItem('token'))
       return this.httpClient.put<Prospect>(url, { ...data, detail }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

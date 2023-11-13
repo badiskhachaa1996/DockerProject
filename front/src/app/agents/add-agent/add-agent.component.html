@@ -68,7 +68,24 @@
             <p-dropdown [options]="serviceList" placeholder="Choisissez un service"
                 formControlName="service_id"></p-dropdown>
         </div>
+        <div class="field col-12" style="text-align: center;">
+            <label htmlFor="localisation">Lui accorder les nouveaux accès ?</label><br>
+            <p-checkbox  [formControl]="addForm.controls['haveNewAccess']" [binary]="true" inputId="binary"></p-checkbox>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="addForm.value.haveNewAccess">
+            <label For="phone">Rôle<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="role" [options]="roleList" placeholder="Choisissez un role"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="addForm.value.haveNewAccess">
+            <label For="service">Type<span style="color:red"> *</span></label>
+            <p-dropdown [options]="typeList" placeholder="Choisissez un type" formControlName="type"></p-dropdown>
+        </div>
     </form>
+    <div class="field col-12" style="width: 100%;" *ngIf="addForm.value.type">
+        <label htmlFor="localisation">Site</label><br>
+        <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"[style]="{'width':'100%'}"
+            [(ngModel)]="SITE"></p-multiSelect>
+    </div>
     <div class="col-12 grid">
         <p-table #dtrole dataKey="_id" [value]="roles_list" class="col-12" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
@@ -113,6 +130,8 @@
             <button pButton type="button" (click)="addRole()" label="Ajouter un niveau d'accès"></button>
         </div>
     </div>
+
+
     <div class="col-12">
         <button [disabled]="addForm.invalid" pButton type="submit" label="Ajouter un agent"
             (click)="onAdd()"></button>

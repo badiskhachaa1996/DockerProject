@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="field col-6">
-                    <label>Test Mobilité - Ville</label>
+                    <label>Mobilité - Ville</label>
                     <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
                         autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
                         formControlName="locations"></p-multiSelect>
@@ -238,7 +238,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -258,7 +258,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -268,7 +268,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -316,7 +316,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -336,7 +336,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -346,7 +346,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -405,7 +405,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -425,7 +425,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -435,7 +435,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -494,7 +494,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -514,7 +514,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -524,7 +524,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -644,8 +644,13 @@
                         formControlName="video_lien" />
                 </div>-->
 
+                <div class="field col-12">
+                    <label>joindre un fichier (pdf)</label>
+                    <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event)" chooseLabel="Browse" />
+                </div>
                 <div class="field col-6">
-                    <label>Test Mobilité - Ville</label>
+                    <label>Mobilité - Ville</label>
                     <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
                         autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
                         formControlName="locations"></p-multiSelect>
@@ -739,7 +744,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -759,7 +764,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -769,7 +774,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -818,7 +823,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -838,7 +843,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -848,7 +853,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -908,7 +913,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -928,7 +933,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -938,7 +943,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -999,7 +1004,7 @@
                                         <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.details}}
+                                        <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1019,7 +1024,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_debut">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_debut| date:'mediumDate'}}
+                                        {{exp.date_debut| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1029,7 +1034,7 @@
                                         <input type="date" pInputText [(ngModel)]="exp.date_fin">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{exp.date_fin| date:'mediumDate'}}
+                                        {{exp.date_fin| date:'dd MMMM yy'}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -1249,7 +1254,7 @@
                     </td>
 
                     <td style="min-width: 12rem;">
-                        {{cv?.date_creation | date:'mediumDate'}}
+                        {{cv?.date_creation | date:'dd MMMM yy'}}
                     </td>
                     <td style="min-width: 12rem;">
                         {{cv?.createur_id?.lastname | uppercase}} {{cv?.createur_id?.firstname | titlecase}}

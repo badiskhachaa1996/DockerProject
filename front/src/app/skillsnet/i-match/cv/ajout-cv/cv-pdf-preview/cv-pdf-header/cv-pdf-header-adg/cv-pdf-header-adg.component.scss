@@ -1,0 +1,103 @@
+.header {
+    background: center center no-repeat;
+    background-size: cover;
+    height: 100mm;
+    padding: 15mm;
+    padding-right: 0;
+    text-align: center;
+    font-size: 14px;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    margin-bottom: -22mm;
+    .header-inner {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+
+
+
+  }
+
+
+  .content {
+    background-color: #1D1D1B;
+  }
+
+  .logo {
+    height: 23mm;
+    margin-bottom: 5mm;
+}
+
+
+
+.section-left {
+    height: 70mm;
+    width: 72mm;
+    padding: 0;
+    margin-bottom: 3mm;
+    z-index: 0;
+    .student-image-container {
+        height: 100%;
+        .student-image {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+
+.section-right {
+    text-align: left;
+    flex-grow: 1;
+    height: 100%;
+    margin-left: -7mm;
+
+    .top-part {
+        margin-bottom: 2mm;
+        padding-right: 10mm;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .design {
+            height: 15mm;
+            width: auto;
+            z-index: 100;
+            margin-left: -5mm;
+        }
+    }
+
+    .content {
+        padding: 8mm;
+        padding-left: 12mm;
+        z-index: 5;
+        position:sticky;
+        h1 {
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+    }
+}
+
+
+.separator {
+    -webkit-transform: skewX(-15deg);
+    -ms-transform: skewX(-15deg);
+    background-color: white;
+    width: 8mm;
+    height: 85mm;
+    position: absolute;
+    top: 0;
+    left: 80mm;
+    transform: skewX(-8deg);
+    z-index: 10;
+
+}

@@ -1,3 +1,4 @@
+import { Profile } from "./Profile"
 import { User } from "./User"
 
 export class CV {
@@ -80,6 +81,9 @@ export class CV {
         public isPublic?: Boolean,
         public niveau_etude?: string,
         public last_modified_at?: Date,
-        public source?: string
+        public source?: string,
+        public profil?: Profile,
+        public taux?: number,
+        public ecole?: string
     ) { }
 }

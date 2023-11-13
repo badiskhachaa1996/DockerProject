@@ -558,7 +558,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td>{{ prospect.date_naissance | date: 'mediumDate'}}</td>
+                    <td>{{ prospect.date_naissance | date: 'dd MMMM yy'}}</td>
                     <td>{{prospect.user_id.nationnalite}}</td>
                     <td>{{prospect.user_id.pays_adresse}}</td>
                     <td>{{prospect.user_id.email}}</td>
@@ -869,7 +869,7 @@
                         etudiant.user_id.pays_adresse }}
                     </td>
                     <td>
-                        {{ etudiant.date_naissance | date:'mediumDate' }}
+                        {{ etudiant.date_naissance | date:'dd MMMM yy' }}
                     </td>
                     <td>
                         {{ etudiant.user_id?.phone }}
