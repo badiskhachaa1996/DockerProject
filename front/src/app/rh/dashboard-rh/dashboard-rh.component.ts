@@ -134,18 +134,19 @@ export class DashboardRhComponent implements OnInit {
               workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
             let max = workingTiming - pauseTiming
             let worked = 0
-            dc?.cra.map((cra) => {
-              worked += cra.number_minutes;
-            });
+            if (dc?.cra && dc?.cra.length != 0)
+              dc?.cra.map((cra) => {
+                worked += cra.number_minutes;
+              });
             dc.taux_cra = ((worked * 100) / max)
           }
           this.rhService.getCollaborateurByUserId(dc?.user_id?._id)
             .then((collaborateur) => {
               let totalTimeCra = 0;
-
-              dc?.cra.map((cra) => {
-                totalTimeCra += cra.number_minutes;
-              });
+              if (dc?.cra && dc?.cra.length != 0)
+                dc?.cra.map((cra) => {
+                  totalTimeCra += cra.number_minutes;
+                });
 
               if (!collaborateur || !collaborateur.h_cra) {
                 collaborateur = { h_cra: 7 }
@@ -452,5 +453,81 @@ export class DashboardRhComponent implements OnInit {
     let year = date_str.substring(date_str.length - 4)
     return `${day}/${month}/${year}`
 
+  }
+
+  onFilterDate(date_str: string) {
+    if (date_str) {
+      this.dailyCheckService.getAllUsersDateChecks(date_str)
+        .then((dcs) => {
+          this.dailyChecks = [];
+          dcs.forEach(dc => {
+            this.rhService.getCollaborateurByUserId(dc?.user_id?._id)
+              .then((collaborateur) => {
+                let totalTimeCra = 0;
+                if (dc?.cra && dc?.cra.length != 0)
+                  dc?.cra.map((cra) => {
+                    totalTimeCra += cra.number_minutes;
+                  });
+
+                if (!collaborateur || !collaborateur.h_cra) {
+                  collaborateur = { h_cra: 7 }
+                }
+                // conversion du taux cra du collaborateur en minutes
+                collaborateur.h_cra *= 60;
+                // partie calcule du pourcentage en fonction du totalTimeCra
+                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+                dc.taux_cra = percent
+                if (dc && dc.user_id)
+                  this.dailyChecks.push(dc)
+              })
+              .catch((error) => { console.error(error); });
+
+          })
+          this.AuthService.getPopulate(this.token.id).subscribe(USER => {
+            let services_list = [];
+            let service_dic = {};
+            USER.roles_list.forEach((val) => {
+              if (!service_dic[val.module])
+                service_dic[val.module] = val.role
+            })
+            services_list = Object.keys(service_dic)
+            if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+              this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
+          })
+          // nombre de checks
+          this.numberOfChecks = this.dailyChecks.length;
+
+          // recuperation de la liste des collaborateurs
+          let listCIDS = []
+          this.dailyChecks.forEach((dc: any) => {
+            if (dc && dc.user_id)
+              listCIDS.push(dc.user_id._id)
+          })
+          this.collaborateurs.forEach((c, idx) => {
+            if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
+              console.log(c.user_id)
+              if (c.user_id.statut == 'Disponible' || !c.user_id?.statut)
+                c.user_id.statut = "Absent"
+              this.dailyChecks.push(new DailyCheck(new mongoose.Types.ObjectId().toString(), c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
+            }
+          })
+          this.defaultdailyChecks = this.dailyChecks
+          this.loading = false;
+          this.onUpdateStats()
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des présences' }); console.error(error) });
+    } else
+      this.onGetUsersDailyChecksAndCollaborateur()
+  }
+
+  getPlatform(auto: boolean, platform: string) {
+    if (auto)
+      return 'pi pi-android'
+    else if (platform == 'PC')
+      return 'pi pi-desktop'
+    else if (platform == 'Mob')
+      return 'pi pi-mobile'
+    else
+      return 'pi pi-exclamation-triangle'
   }
 }

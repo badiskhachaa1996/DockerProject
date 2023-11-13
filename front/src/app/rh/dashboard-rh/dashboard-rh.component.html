@@ -65,9 +65,10 @@
 								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
 								class="w-full" />
 						</span>
+						<p-calendar [style]="{'margin-bottom':'2px', 'margin-left': '3px'}"
+							(onSelect)="onFilterDate($event)" (onInput)="onFilterDate($event)"></p-calendar>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
-							(onChange)="chooseTeam($event.value);" placeholder="Equipe"
-							[showClear]="true"></p-dropdown>
+							(onChange)="chooseTeam($event.value);" placeholder="Equipe" [showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
 							[showClear]="true"></p-dropdown>
@@ -157,13 +158,16 @@
 						<td>
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
-							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera"
+							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera ml-2"
 								tooltipPosition="bottom" (click)="seePointage(check)" aria-hidden="true"></i>
-							<i pTooltip="Réinitialiser Pointage" style="margin-left: 2%; cursor: pointer;"
-								class="pi pi-clock" tooltipPosition="bottom" (click)="onReinitPointage(check)"
+							<i pTooltip="Réinitialiser Pointage" style=" cursor: pointer;" class="pi pi-clock ml-2"
+								tooltipPosition="bottom" (click)="onReinitPointage(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
 								aria-hidden="true"></i>
-							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-								tooltipPosition="bottom" (click)="takeNote(check)" aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -243,8 +247,12 @@
 						<td [ngClass]="{'valid-end':check?.validated,'non-valid-end':!check?.validated}">
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
-							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-								tooltipPosition="bottom" (click)="takeNote(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -394,7 +402,7 @@
 			</ng-template>
 		</p-table>
 		<p>&nbsp;</p>
-		<h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
+		<h3 style="text-align: center;width: 100%;">Durée totale : {{totalCalc(dataCHECK?.cra)}}</h3>
 	</div>
 
 </p-dialog>
