@@ -39,34 +39,34 @@ export class InscriptionComponent implements OnInit {
       { value: "Programme Français" },
       { value: "Programme Anglais" },
     ];
-  rythme_filtre=[
-    {label:"rythme", value:null},
-    { label: "Initiale", value: 'Initiale' },
-    { label: "Alternance", value:'Alternance' }
-  ]
+    rythme_filtre=[
+      {label:"Tous les rythmes", value:null},
+      { label: "Initiale", value: 'Initiale' },
+      { label: "Alternance", value:'Alternance' }
+    ];
   typeFormationDropdown = [
     { value: "Initiale" },
     { value: "Alternance" }
   ];
   campusfiltre =
-    [
-      { value: null, label: "campus" },
-      { value: "Paris", label: "Paris - France" },
-      { value: "Montpellier", label: "Montpellier - France" },
-      { value: "Brazzaville", label: "Brazzaville - Congo" },
-      { value: "Rabat", label: "Rabat - Maroc" },
-      { value: "La Valette", label: "La Valette - Malte" },
-      { value: "UAE", label: "UAE - Dubai" },
-      { value: "En ligne", label: "En ligne" },
-    ];
-    sourceFiltre = [
-      { label: "sources", value: null },
-      { label: "Partenaire", value: "Partenaire" },
-      { label: "Equipe commerciale", value: "Equipe commerciale" },
-      { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
-      { label: "Lead", value: "Lead" },
-      { label: "Spontané", value: "Spontané" } //Par défaut si Lead
-    ];
+  [
+    { value: null, label: "Tous les campus" },
+    { value: "Paris", label: "Paris - France" },
+    { value: "Montpellier", label: "Montpellier - France" },
+    { value: "Brazzaville", label: "Brazzaville - Congo" },
+    { value: "Rabat", label: "Rabat - Maroc" },
+    { value: "La Valette", label: "La Valette - Malte" },
+    { value: "UAE", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
+  ];
+  sourceFiltre = [
+    { label: "Toutes sources", value: null },
+    { label: "Partenaire", value: "Partenaire" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
+    { label: "Lead", value: "Lead" },
+    { label: "Spontané", value: "Spontané" } //Par défaut si Lead
+  ];
     sourceList = [
       { label: "Partenaire", value: "Partenaire" },
       { label: "Equipe commerciale", value: "Equipe commerciale" },
@@ -85,7 +85,9 @@ export class InscriptionComponent implements OnInit {
     EcoleFiltre = [{
       label: "Toutes les écoles", value:null
     }]
-    formationsFitre=[];
+    formationsFitre=[
+      {label:"Toutes les Formations ",value:null }
+    ];
     rentreeFiltere=[{label:"Toutes les rentrées ",value:null,_id:null}];
     EtapeFiltere = [
       {label:"Toutes les étapes",value:null},
