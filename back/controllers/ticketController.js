@@ -119,16 +119,28 @@ app.post("/create", (req, res) => {
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
                         let htmlemail = `
-                        <p>Bonjour,</p><br>
-
-                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
-                        
-                        <p>Cordialement,</p>
+                        Créé par : ${u.lastname} ${u.firstname}<br>
+                        Crée le  : ${day}/${month}/${year}<br>
+                        Service : ${sujet.service_id.label}<br>
+                        Sujet : ${sujet.label}<br>
+                        Résumé : ${ticket.resum}<br>
+                        Description : ${ticket.description}<br>
                         `
+                        let r = ''
+                        if (ticket.module)
+                            r = r + " - " + ticket.module
+                        if (ticket.type)
+                            r = r + " - " + ticket.type
+                        if (ticket.campus)
+                            r = r + " - " + ticket.campus
+                        if (ticket.filiere)
+                            r = r + " - " + ticket.filiere
+                        if (ticket.demande)
+                            r = r + " - " + ticket.demande
                         let mailOptions = {
                             from: 'ims@intedgroup.com',
                             to: 'ims.support@intedgroup.com',
-                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label + r,
                             html: htmlemail,
                             priority: 'high',
                             attachments: [{

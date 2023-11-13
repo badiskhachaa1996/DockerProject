@@ -962,10 +962,8 @@
         </div>
     </div>
     <p-tabView [(activeIndex)]="selectedTabIndex" (onClose)="onTabClose($event)">
-
-        <p-tabPanel header="Local">
-
-            <div *ngIf="shownewLeadForm" class="col-12 card">
+        <p-tabPanel header="Ajouter">
+            <div class="col-12">
                 <h4 style="text-align: center;">Ajouter un nouveau lead </h4>
                 <div style="text-align: center;">
                     <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
@@ -977,7 +975,7 @@
                     <div class="field col-12 md:col-12">
                         <label For="type">Type <span style="color:red"> *</span></label>
                         <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
-                            (onChange)="onSelectEcole()" formControlName="type"></p-dropdown>
+                           formControlName="type"></p-dropdown>
                     </div>
 
 
@@ -1032,18 +1030,18 @@
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>Numéro rue:<span style="color:red"> *</span></label>
-                        <input formControlName="rue" placeholder="rue" pInputText>
+                        <label>Rue:</label>
+                        <input formControlName="rue" placeholder="Ex: 20 Place de l'église" pInputText>
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>ville:<span style="color:red"> *</span></label>
-                        <input formControlName="ville" placeholder="ville" pInputText>
+                        <label>Ville:</label>
+                        <input formControlName="ville" placeholder="Ex: Paris" pInputText>
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>code postale:<span style="color:red"> *</span></label>
-                        <input formControlName="codep" placeholder="code postale" pInputText>
+                        <label>Code postale:</label>
+                        <input formControlName="codep" placeholder="Ex: 14950" pInputText>
                     </div>
 
 
@@ -1073,17 +1071,17 @@
                             placeholder="Choisissez un programme">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme?.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
                         <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme?.value=='Programme Français'">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
+                        <p-dropdown [options]="programeFrDropdown" placeholder="Choisissez un programme français"
                             [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
                             formControlName="formation"></p-dropdown>
                     </div>
@@ -1116,6 +1114,8 @@
                     </div>
                 </form>
             </div>
+        </p-tabPanel>
+        <p-tabPanel header="Local">
             <div *ngIf="showupdateLeadForm" class="col-12 card">
                 <h4 style="text-align: center;">Modifier </h4>
                 <div style="text-align: center;">
@@ -1268,22 +1268,17 @@
                 </form>
             </div>
             <div class="grid ">
-
-                <div class="md:col-1 col-6" style="text-align: center;">
+                <div class="md:col-2 col-6" style="text-align: center;">
                     <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                         (click)="displayFilter=true"></button>
                 </div>
-                <div class="md:col-1 col-6" style="text-align: center;">
+                <div class="md:col-2 col-6" style="text-align: center;">
                     <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                         (click)="clearFilter()"></button>
                 </div>
-                <div class="md:col-3 col-9" style="text-align: center;">
+                <div class="md:col-8 col-12" style="text-align: center;">
                     <input pInputText type="text" style="width: 100%;"
                         (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                </div>
-                <div class="md:col-5 col-9 "></div>
-                <div class="md:col-1 col-9 ">
-                    <button pButton pRipple (click)="shownewLeadForm=true" icon="pi pi-plus" class="mr-2 mb-2"></button>
                 </div>
             </div>
             <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
@@ -1549,139 +1544,7 @@
 
             </p-table>
         </p-tabPanel>
-        <p-tabPanel header="Internationale">
-            <div *ngIf="shownewLeadFormI" class="col-12 card">
-                <h4 style="text-align: center;">Ajouter un nouveau lead </h4>
-                <div style="text-align: center;">
-                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                        obligatoires</small><br>
-                </div>
-                <br>
-                <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="newLeadForm">
-                    <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
-                    <div class="field col-12 md:col-12">
-                        <label For="type">Type <span style="color:red"> *</span></label>
-                        <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
-                            (onChange)="onSelectEcole()" formControlName="type"></p-dropdown>
-                    </div>
-
-
-                    <div class="field col-12 md:col-2">
-                        <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
-                            placeholder="Choisissez une civilité" formControlName="civilite"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-5">
-                        <label For="nom">Nom <span style="color: red;"> * </span></label>
-                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
-                            formControlName="lastname" />
-                    </div>
-                    <div class="field col-12 md:col-5">
-                        <label For="prenom">Prénom <span style="color: red;"> * </span></label>
-                        <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
-                            formControlName="firstname" />
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label For="date_naissance">Date de naissance <span style="color: red;"> *
-                            </span></label>
-                        <input type="date" formControlName="date_naissance" pInputText />
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label>Pays de résidence :<span style="color:red"> *</span></label><br>
-                        <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
-                            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
-                            optionDisabled="actif"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
-                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
-                            filter="true"></p-dropdown>
-                    </div>
-                    <h5 class="col-12" style="text-align: center;">Contact</h5> <br>
-                    <div class="field col-12 md:col-3">
-                        <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
-                        <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
-                    </div>
-                    <div class="field col-12 md:col-9">
-                        <label For="telephone">Numéro de téléphone <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
-                            formControlName="phone" />
-                    </div>
-                    <div class="field col-12 md:col-6">
-
-                        <label>Adresse électronique :<span style="color:red"> *</span></label>
-                        <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
-                            pInputText>
-                    </div>
-
-
-                    <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
-                    <div class="field col-12 md:col-12">
-                        <label For="role">Ecole <span style="color:red"> *</span></label>
-                        <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
-                            (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
-                    </div>
-                    <div class="field col-12">
-                        <label>Choix du campus <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
-                            placeholder="Choisissez un campus">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-12">
-                        <label>Choix de la rentrée <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
-                            placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-4">
-                        <label>Choix du programme <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
-                            placeholder="Choisissez un programme">
-                        </p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
-                        <label For="formation">Choix de la formation <span style="color: red;">
-                                *</span></label>
-                        <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
-                            autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
-                            formControlName="formation"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
-                        <label For="programme_fr">Choix de la formation <span style="color: red;"> *
-                            </span></label>
-                        <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
-                            [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
-                            formControlName="formation"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-12">
-                        <label For="rythme">Rythme de la formation <span style="color: red;"> *
-                            </span></label>
-                        <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
-                            placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
-                            formControlName="rythme_formation"></p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
-                        <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
-                        <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
-                            (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne"> <!--SI INTERNE-->
-                        <label For="role">Commercial</label>
-                        <p-dropdown [options]="commercialList" filter="true"
-                            placeholder="Choisissez le commercial qui a ajouté le lead"
-                            formControlName="commercial"></p-dropdown>
-                    </div>
-                    <div style="justify-content: right;">
-                        <button pButton type="submit" label="Ajouter" (click)="shownewLeadFormI=true"
-                            [disabled]="(newLeadForm.invalid && !isPartenaireExterne) || (!newLeadForm.value.ecole)"></button>
-                    </div>
-                </form>
-            </div>
+        <p-tabPanel header="International">
             <div class="grid ">
 
                 <div class="md:col-1 col-6" style="text-align: center;">
@@ -2180,17 +2043,17 @@
                                 </div>
                             </form>
                         </p-dialog>
-                        <h4 style="text-align: center;color: green;" *ngIf="defaultEtatDossier === 'Complet'">Etat du
+                        <h4 style="text-align: center;color: green;" *ngIf="PROSPECT.etat_dossier === 'Complet'">Etat du
                             dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
+                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;color: orange;" *ngIf="defaultEtatDossier === 'En attente'">Etat
+                        <h4 style="text-align: center;color: orange;" *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier">Etat
                             du dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
+                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;color: red;" *ngIf="defaultEtatDossier === 'Manquant'">Etat du
+                        <h4 style="text-align: center;color: red;" *ngIf="PROSPECT.etat_dossier === 'Manquant'">Etat du
                             dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="defaultEtatDossier"
+                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
                             [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
