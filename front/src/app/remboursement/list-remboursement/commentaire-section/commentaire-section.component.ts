@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CommentaireSectionComponent implements OnInit {
 
 
-  @Input() userName
+  @Input() user
   @Input() demande
   @Output() saveDemande:EventEmitter<any> = new EventEmitter<any>();
 
@@ -55,11 +55,13 @@ export class CommentaireSectionComponent implements OnInit {
     this.commentaires.push(
       {
         note:'',
-        created_by: this.userName,
+        created_by: this.user.userName,
         created_on: new Date(), 
         isUpdating : true
       }
+     
     )
+    console.log(this.commentaires)
   }
 
   updateDemande(demande) {
@@ -71,3 +73,5 @@ export class CommentaireSectionComponent implements OnInit {
   }
   
 }
+
+

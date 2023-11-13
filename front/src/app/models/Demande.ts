@@ -19,12 +19,12 @@ export class Demande {
             email?: string,
         },
 
-        public payment?: [{
+        public payment?: {
             note?: string,
             montant?: string,
             method?: string,
             date?: Date,
-        }],
+        },
 
         public training?: {
 
@@ -43,7 +43,7 @@ export class Demande {
         public status?: string,
         public comments?: 
             [{
-                note?: string,
+                note?: string, 
                 created_by?: string,
                 created_on?: Date,
             }],

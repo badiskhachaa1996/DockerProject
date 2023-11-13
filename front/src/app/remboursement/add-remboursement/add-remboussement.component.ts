@@ -143,6 +143,7 @@ availableStatus = environment.availableStatus
       formation: [''],
       motif_refus: [''],
       montant: [''],
+      payment_date:['']
     })
 
 
@@ -201,6 +202,7 @@ availableStatus = environment.availableStatus
       formation: [ demande.training?.name],
       motif_refus: [demande.motif],
       montant: [demande.refund?.montant],
+      payment_date:[demande.payment?.date]
     })
 
       for (let key in demande.docs) {

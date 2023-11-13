@@ -11,7 +11,7 @@ export class InformationRemboursementComponent implements OnInit {
   @Output() saveDemande:EventEmitter<any> = new EventEmitter<any>();
 
 infoRefunds=[{
-  refund_date:Date(),
+  refund_date:'',
   refund_method:'choisir',
   montant:'',
   payment_attestation:'',

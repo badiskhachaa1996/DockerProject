@@ -43,8 +43,6 @@ export class DataCleComponent implements OnInit {
   }
   updateKeyDates(){
    this.isUpdating = true 
-
-
   }
   saveKeyDates(){
     this.demande.motif= this.keyDates[0].motif

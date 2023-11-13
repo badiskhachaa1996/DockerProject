@@ -33,14 +33,14 @@ const remboursementSchema = new Schema({
     note:{type: String},
 }
 },
-   payment: [
+   payment: 
     {
     note:{type: String},
     montant: {type: String},
     method:{type: String},
     date: {type: Date},
 }
-],
+,
 motif: {
     type: mongoose.Schema.Types.Mixed,
     required: true,

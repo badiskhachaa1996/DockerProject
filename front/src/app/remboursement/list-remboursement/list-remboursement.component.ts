@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ListRemboursementComponent implements OnInit {
   selectedDemande: Demande | null = null; 
 
 
-  constructor(private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
+  constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
 
   showUpdateForm = false
 
@@ -53,9 +54,12 @@ export class ListRemboursementComponent implements OnInit {
     docs:[''],
 
 })
+modePaiement = environment.paymentType
+annesSchols =  []
+ecolesList = []
 
-
-
+annesScolaires = []
+modesPaiement = []
   currentDemande
 
   refundRequests: Demande[] = [];
@@ -64,7 +68,10 @@ export class ListRemboursementComponent implements OnInit {
 
   token:any
   loading = true
-  userName=''
+  curentUserObject = {
+    userName: '',
+    id: ''
+  }
   user: any
 
   
@@ -73,10 +80,22 @@ export class ListRemboursementComponent implements OnInit {
 
     this.getDemandList()
 
-    
+    this.modePaiement.forEach(d => {
+      this.modesPaiement.push(d)
+      this.modesPaiement[d.value] = d.label
+    })
+
+    this.formationService.EAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.ecolesList.push(d)
+        this.ecolesList[d.url_form] = d.titre
+      })
+      
+    })    
     this.token = jwt_decode(localStorage.getItem('token'));
     this.userServise.getInfoById(this.token.id).subscribe((user: any) => {
-      this.userName = user.firstname + ' ' + user.lastname
+      this.curentUserObject.userName = user.firstname + ' ' + user.lastname
+      this.curentUserObject.id = user._id
       this.user = user
     });
 
@@ -90,28 +109,50 @@ export class ListRemboursementComponent implements OnInit {
     this.demandeService.getAll() 
     .then((response: Demande[]) => {
       this.refundRequests = response;
+
+      
+
+      this.refundRequests.forEach(d => {
+        d.training.school 
+      }  
+        )
       this.loading = false;
+      this.formationService.RAgetAll().subscribe(data =>{
+        data.forEach(d => {
+          this.annesScolaires.push( { label: d.nom, id: d._id })
+          this.annesSchols.push(d)
+        this.annesSchols[d._id] = d.nom
+        })
+      })
     })
     .catch((error) => { console.error(error); })
   }
-  
+
+
   search() {
-    console.log('Before Search:', this.refundRequests);
-
     if (this.searchQuery) {
-      console.log('Search Query:', this.searchQuery);
+        this.refundRequests = this.refundRequests.filter((demande) => {
+            const searchLower = this.searchQuery.toLowerCase();
+            return (
+                demande._id.toString().toLowerCase().includes(searchLower) ||
+                demande.student.last_name.toLowerCase().includes(searchLower) ||
+                demande.student.first_name.toLowerCase().includes(searchLower)
+            );
+        });
+    } else {
+        this.getDemandList();
+    }
+}
+schoolFilter: string = '';
 
-      this. refundRequests = this. refundRequests.filter((demande) => {
-        const searchLower = this.searchQuery.toLowerCase();
-        return (
-          demande._id.toString().toLowerCase().includes(searchLower) ||
-         demande.student.last_name.toLowerCase().includes(searchLower) ||
-          demande.student.first_name.toLowerCase().includes(searchLower)
-        );
-      });
+filterBySchool() {
+  if (this.schoolFilter) {
+      this.refundRequests = this.refundRequests.filter((demande) => demande.training.school.toLowerCase().includes(this.schoolFilter.toLowerCase()));
+  } else {
+      this.getDemandList();
+  }
+}
 
-    }console.log('After Search:', this.refundRequests);
- }
   
  showDemande(demande: Demande) {
   this.selectedDemande = this.selectedDemande === demande ? null : demande;

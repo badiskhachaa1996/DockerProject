@@ -402,6 +402,8 @@ import { CommentaireSectionComponent } from './remboursement/list-remboursement/
 import { PayementInformationComponent } from './remboursement/list-remboursement/payement-information/payement-information.component';
 import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
 import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
+import { LabelPipe } from './directives/label.pipe';
+
 @NgModule({
   imports: [
     TableModule,
@@ -815,6 +817,8 @@ import { UploadRemboursementDocComponent } from './remboursement/add-rembourseme
     PayementInformationComponent,
     InformationRemboursementComponent,
     UploadRemboursementDocComponent,
+    LabelPipe
+  
 // >>>>>>> 
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,

@@ -15,9 +15,9 @@
                 <td>{{commentaire.created_on | date: 'dd/MM/yyyy'}}</td>
             
                 <td class="text-right" style="min-width: 8rem">
-                    <i class="pi pi-pencil" *ngIf="!commentaire.isUpdating" (click)="updateKeyDates(commentaire)"></i>
-                    <i class="pi pi-check" *ngIf="commentaire.isUpdating" (click)="saveKeyDates(commentaire)"></i>
-                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteCommentaire(commentaire)"></i>
+                    <i class="pi pi-pencil clickable-element" *ngIf="!commentaire.isUpdating" (click)="updateKeyDates(commentaire)"></i>
+                    <i class="pi pi-check clickable-element" *ngIf="commentaire.isUpdating" (click)="saveKeyDates(commentaire)"></i>
+                    <i class="pi pi-trash clickable-element" title="supprimer" (click)="deleteCommentaire(commentaire)"></i>
 
                 </td>
             </tr>

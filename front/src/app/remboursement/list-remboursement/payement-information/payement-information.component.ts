@@ -13,7 +13,7 @@ export class PayementInformationComponent implements OnInit {
 
  
   infoPays=[{
-    date:Date().toString(),
+    date:'',
     montant:'',
     method:'',
     note:'',
@@ -23,7 +23,7 @@ export class PayementInformationComponent implements OnInit {
   payementMethods = environment.paymentType.slice(1)
 
   constructor() {}
-  isUpdating=false
+  isUpdating=true
   ngOnInit(): void {
     if (this.demande && this.demande.payment ){
       this.infoPays=this.demande.payment
@@ -35,18 +35,18 @@ export class PayementInformationComponent implements OnInit {
     infoPay.isUpdating = true 
 
    }
-   addPay() {
-    this.infoPays.push(
-      {
-      date: '',
-      montant:'',
-      method:'',
-      note:'',
-      isUpdating : true
+  //  addPay() {
+  //   this.infoPays.push(
+  //     {
+  //     date: '',
+  //     montant:'',
+  //     method:'',
+  //     note:'',
+  //     isUpdating : true
 
-      }
-    )
-  }
+  //     }
+  //   )
+  // }
    saveKeyDates(infoPay){
     this.demande.payment=this.infoPays
     this.updateDemande(this.demande) 

@@ -85,6 +85,10 @@
                 <p-dropdown [options]="modePaiement" formControlName="paymentType"
                             placeholder="Choisissez une modalité de paiement"></p-dropdown>
             </div>
+            <div class="field col-12 md:col-4">
+                <label>Date de paiement</label>
+                <input pInputText type="date" formControlName="payment_date"/>
+            </div>
 
             <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm">
                 <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
