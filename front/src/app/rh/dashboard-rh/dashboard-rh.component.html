@@ -50,9 +50,8 @@
 			</div>
 		</div>
 
-		<!-- tableau d'affichage des données en temps réel -->
+		<!-- tableau d'affichage des données en temps réel Activités-->
 		<div class="card">
-			<h1 class="text-center">Activités</h1>
 			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
 				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true" rowExpandMode="single"
 				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
@@ -65,7 +64,7 @@
 								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
 								class="w-full" />
 						</span>
-						<p-calendar [style]="{'margin-bottom':'2px', 'margin-left': '3px'}"
+						<p-calendar [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" placeholder="Date"
 							(onSelect)="onFilterDate($event)" (onInput)="onFilterDate($event)"></p-calendar>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
 							(onChange)="chooseTeam($event.value);" placeholder="Equipe" [showClear]="true"></p-dropdown>
@@ -77,16 +76,16 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th></th>
-						<th>Collaborateur</th>
+						<th pSortableColumn="user_id.lastname">Collaborateur  <p-sortIcon field="user_id?.lastname"></p-sortIcon></th>
 						<th>Site</th>
 						<th>Checkin</th>
 						<th>Pause</th>
 						<th>Checkout</th>
-						<th style="width: 8rem">
-							Taux CRA
+						<th style="width: 8rem" pSortableColumn="taux_cra">
+							Taux CRA <p-sortIcon field="taux_cra"></p-sortIcon>
 						</th>
-						<th style="width: 8rem">
-							Statut
+						<th style="width: 8rem"  pSortableColumn="user_id.statut">
+							Statut <p-sortIcon field="user_id.statut"></p-sortIcon>
 						</th>
 						<th>
 							Action
