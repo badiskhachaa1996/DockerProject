@@ -37,6 +37,17 @@ export class DailyCheckService {
       });
     });
   }
+  getAllUsersDateChecks(date): Promise<DailyCheck[]> {
+    const url = `${this.endPoint}/get-all-users-date-checks`;
+
+    return new Promise<DailyCheck[]>((resolve, reject) => {
+      this.httpClient.post<DailyCheck[]>(url, { date }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la liste des présences exécuté') }
+      });
+    });
+  }
 
   // recuperation de la liste des présences d'un utilisateur
   getUserChecks(userId: string): Promise<DailyCheck[]> {

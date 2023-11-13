@@ -489,7 +489,9 @@ export class CalenderComponent implements OnInit {
 
     // initialisation du formulaire d'ajout de cra
     this.formAddCra = this.formBuilder.group({
-      cras: this.formBuilder.array([this.onCreateCraField()]),
+      number_minutes: [null, Validators.required],
+      task: [null, Validators.required],
+      mode_type: ['/min', Validators.required]
     });
     //initialisation du formulaire d'ajout de cra ticket
     this.formAddCraTicket = this.formBuilder.group({
@@ -572,9 +574,12 @@ export class CalenderComponent implements OnInit {
         }
       }];
   }
+  dateFilterHistorique = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString()
   showHistorique() {
     if (this.visible == false) {
       this.visible = true
+      this.dateFilterHistorique = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString()
+      this.getHistoPointage(this.dateFilterHistorique)
     }
     else { this.visible = false }
   }
@@ -829,7 +834,8 @@ export class CalenderComponent implements OnInit {
           .subscribe(datatache => {
             this.ticketListe = datatache.map(ticket => ({
               ...ticket,
-              label: ` ${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
+              label: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`,
+              value: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
             }))
           });
         // recupere la liste des congés
@@ -1090,40 +1096,25 @@ export class CalenderComponent implements OnInit {
       })
     );
   }
-
-  // récupère les compétences
-  getCras(): FormArray {
-    return this.formAddCra.get('cras') as FormArray;
-    return this.formAddCraTicket.get('cras') as FormArray;
-  }
-
-  // ajoute de nouveaux champs au formulaire
-  onAddCraField(): void {
-    const newCraControl = this.onCreateCraField();
-    this.getCras().push(newCraControl);
-  }
-
-  // suppression d'un champ de compétence
-  onDeleteCraField(i: number): void {
-    this.getCras().removeAt(i);
-  }
-
   // ajout de CRA
   onAddCra(): void {
-    const formValue = this.formAddCra.value;
     // ajout des données formulaire au dailycheck
+    let number_minutes = this.formAddCra.value.number_minutes
+    if (this.formAddCra.value.mode_type == '/H')
+      number_minutes = number_minutes * 60
 
-    formValue.cras.forEach((cra) => {
-      this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
-    });
+    if (this.dailyCheck.cra)
+      this.dailyCheck.cra.push({ ... this.formAddCra.value, number_minutes });
+    else
+      this.dailyCheck.cra = [{ ... this.formAddCra.value, number_minutes }]
 
     this.dailyCheckService.patchCheckIn({ _id: this.dailyCheck._id, cra: this.dailyCheck.cra })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
         this.formAddCra.reset();
+        this.formAddCra.patchValue({ mode_type: '/min' })
         this.showFormAddCra = false;
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
+        this.onCheckDailyCheck(response.user_id)
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
@@ -1343,6 +1334,7 @@ export class CalenderComponent implements OnInit {
   }
 
   getHistoPointage(value) {
+    console.log(value)
     if (value)
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
@@ -1866,7 +1858,10 @@ export class CalenderComponent implements OnInit {
       this.dataEvent = null
     })
   }
-
+  modeType = [
+    { label: '/min', value: '/min' },
+    { label: '/H', value: '/H' }
+  ]
 }
 
 

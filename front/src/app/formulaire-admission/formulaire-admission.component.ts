@@ -598,10 +598,8 @@ export class FormulaireAdmissionComponent implements OnInit {
       { label: 'Partenaires' },
       { label: 'Dernière étape' },
     ];
-    console.log(this.route.snapshot.paramMap.get('code_commercial'))
     if (this.route.snapshot.paramMap.get('code_commercial'))
       this.hideCC = true
-    console.log(this.hideCC)
   }
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({

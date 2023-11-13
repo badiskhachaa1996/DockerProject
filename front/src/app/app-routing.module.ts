@@ -291,6 +291,7 @@ import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.compo
 import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
 import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
+import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 const routes: Routes = [
     {
         path: '',
@@ -1258,6 +1259,11 @@ const routes: Routes = [
             {
                 path: 'admission/lead-paiements/:id',
                 component: LeadPaiementsComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'admission/lead-documents/:id',
+                component: LeadDocumentsComponent,
                 canActivate: [AuthGuardService],
             },
             {

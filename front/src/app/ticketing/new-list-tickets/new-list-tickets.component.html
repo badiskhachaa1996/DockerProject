@@ -356,9 +356,9 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{ticket?.createur_id?.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
-                        <td>{{ticket?.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
-                        <td>{{ticket?.agent_id?.firstname|titlecase}} {{ticket.agent_id?.lastname|uppercase}}</td>
+                        <td>{{ticket?.createur_id?.firstname|titlecase}} {{ticket?.createur_id?.lastname|uppercase}}</td>
+                        <td>{{ticket?.assigne_by?.firstname|titlecase}} {{ticket?.assigne_by?.lastname|uppercase}}</td>
+                        <td>{{ticket?.agent_id?.firstname|titlecase}} {{ticket?.agent_id?.lastname|uppercase}}</td>
                         <td>{{(ticket?.priorite)?'Urgent':'Pas Urgent'}}</td>
                         <td>{{ticket?.date_limite |date:"dd MMMM yy"}}</td>
                         <td>

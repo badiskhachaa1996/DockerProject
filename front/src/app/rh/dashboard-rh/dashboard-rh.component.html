@@ -50,11 +50,10 @@
 			</div>
 		</div>
 
-		<!-- tableau d'affichage des données en temps réel -->
+		<!-- tableau d'affichage des données en temps réel Activités-->
 		<div class="card">
-			<h1 class="text-center">Activités</h1>
 			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
-				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true"
+				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true" rowExpandMode="single"
 				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
 				responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
@@ -65,9 +64,10 @@
 								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
 								class="w-full" />
 						</span>
+						<p-calendar [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" placeholder="Date"
+							(onSelect)="onFilterDate($event)" (onInput)="onFilterDate($event)"></p-calendar>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
-							(onChange)="chooseTeam($event.value);" placeholder="Equipe"
-							[showClear]="true"></p-dropdown>
+							(onChange)="chooseTeam($event.value);" placeholder="Equipe" [showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
 							[showClear]="true"></p-dropdown>
@@ -76,16 +76,16 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th></th>
-						<th>Collaborateur</th>
+						<th pSortableColumn="user_id.lastname">Collaborateur  <p-sortIcon field="user_id?.lastname"></p-sortIcon></th>
 						<th>Site</th>
 						<th>Checkin</th>
 						<th>Pause</th>
 						<th>Checkout</th>
-						<th style="width: 8rem">
-							Taux CRA
+						<th style="width: 8rem" pSortableColumn="taux_cra">
+							Taux CRA <p-sortIcon field="taux_cra"></p-sortIcon>
 						</th>
-						<th style="width: 8rem">
-							Statut
+						<th style="width: 8rem"  pSortableColumn="user_id.statut">
+							Statut <p-sortIcon field="user_id.statut"></p-sortIcon>
 						</th>
 						<th>
 							Action
@@ -106,7 +106,7 @@
 							{{dicCollaborateurs[check?.user_id._id]?.localisation}}
 						</td>
 						<td style="min-width: 14rem;">
-							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} {{check?.platform_in}}<br>
+							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_in).logo' [pTooltip]="getPlatform(check.auto,check?.platform_in).text"></i><br>
 							<!--<strong>IP:{{check?.localisation_in}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
 						</td>
@@ -115,8 +115,7 @@
 								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td style="min-width: 10rem;">
-							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} {{check?.platform_out}} <span
-								*ngIf="check.auto">AUTOMATIQUE</span><br>
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_out).logo' [pTooltip]="getPlatform(check.auto,check?.platform_out).text"></i><br>
 							<!--<strong>IP:{{check?.localisation_out}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
 						</td>
@@ -148,7 +147,7 @@
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
 							<p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
 						</td>
-						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
+						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent' || !check.user_id?.statut">
 							<p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
@@ -157,13 +156,16 @@
 						<td>
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
-							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera"
+							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera ml-2"
 								tooltipPosition="bottom" (click)="seePointage(check)" aria-hidden="true"></i>
-							<i pTooltip="Réinitialiser Pointage" style="margin-left: 2%; cursor: pointer;"
-								class="pi pi-clock" tooltipPosition="bottom" (click)="onReinitPointage(check)"
+							<i pTooltip="Réinitialiser Pointage" style=" cursor: pointer;" class="pi pi-clock ml-2"
+								tooltipPosition="bottom" (click)="onReinitPointage(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
 								aria-hidden="true"></i>
-							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-								tooltipPosition="bottom" (click)="takeNote(check)" aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -188,7 +190,7 @@
 								<h3 class="text-center">
 									Historique
 								</h3>
-								<p-table #dtHisto [value]="userChecksHistorique" dataKey="_id" [rows]="10"
+								<p-table #dtHisto [value]="userChecksHistorique" dataKey="_id" [rows]="10" rowExpandMode="single"
 									[loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines"
 									[paginator]="true"
 									[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
@@ -243,8 +245,12 @@
 						<td [ngClass]="{'valid-end':check?.validated,'non-valid-end':!check?.validated}">
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
-							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-								tooltipPosition="bottom" (click)="takeNote(check)" aria-hidden="true"></i>
+							<i *ngIf="!check.commentaire" pTooltip="Note" style="cursor: pointer;"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
+							<i *ngIf="check.commentaire" pTooltip="Note" style="cursor: pointer;" pBadge value="1"
+								class="pi pi-pencil ml-2" tooltipPosition="bottom" (click)="takeNote(check)"
+								aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -394,7 +400,7 @@
 			</ng-template>
 		</p-table>
 		<p>&nbsp;</p>
-		<h3 style="text-align: center;width: 100%;">Total durée : {{totalCalc(dataCHECK?.cra)}}</h3>
+		<h3 style="text-align: center;width: 100%;">Durée totale : {{totalCalc(dataCHECK?.cra)}}</h3>
 	</div>
 
 </p-dialog>

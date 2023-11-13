@@ -5,7 +5,8 @@
         style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 </div>
 <div class="card grid" *ngIf="PROSPECT">
-    <h3 class="col-12">Documents Requis</h3>
+    <h3 class="col-8">Documents Requis</h3>
+    <p class="col-4" style="text-align: center;padding: 2px; border:1px lightgray solid;">Etat du dossier : {{PROSPECT.etat_dossier}}</p>
     <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">

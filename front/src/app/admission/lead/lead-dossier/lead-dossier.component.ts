@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
   styleUrls: ['./lead-dossier.component.scss']
 })
 export class LeadDossierComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernier années ( 1er année )", "Relevé de note des deux dernier années ( 2ème année )"]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
   ID = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService) { }

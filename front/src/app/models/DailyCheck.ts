@@ -21,6 +21,7 @@ export class DailyCheck {
             public platform_out?: string,
             public platform_in?: string,
             public localisation_out?: string,
-            public localisation_in?: string
+            public localisation_in?: string,
+            public auto?: boolean
         ) { }
 }

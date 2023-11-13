@@ -31,6 +31,14 @@ app.get("/get-all-users-daily-checks", (req, res) => {
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
 });
+// recuperation de la liste des présences du jour de tous les utilisateurs
+app.post("/get-all-users-date-checks", (req, res) => {
+    const today = new Date(req.body.date).toLocaleDateString();
+
+    DailyCheck.find({ today: today }).populate('user_id').populate('commented_by')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
+});
 
 
 // recuperation de la liste des présences d'un utilisateur
@@ -90,8 +98,11 @@ app.patch("/patch-check-in", (req, res) => {
     console.log(req.body)
     DailyCheck.findByIdAndUpdate(req.body._id, { ...req.body })
         .then((response) => {
-            if (response)
+            if (response){
+                console.log(response,response.commentaire);
                 res.status(201).send(response);
+            }
+
             else {
                 const dailyCheck = new DailyCheck({ ...req.body });
                 dailyCheck.today = new Date().toLocaleDateString();

@@ -30,6 +30,7 @@ if (process.argv[2]) {
       "https://ims.adgeducation.com",
       "https://ims.intedgroup.com",
       "https://t.dev.estya.com",
+      "https://wio.fr/"
     ];
 }
 app.use(cors({ origin: origin }));
