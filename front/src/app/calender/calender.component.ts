@@ -1114,6 +1114,7 @@ export class CalenderComponent implements OnInit {
         this.formAddCra.reset();
         this.formAddCra.patchValue({ mode_type: '/min' })
         this.showFormAddCra = false;
+        this.onCheckDailyCheck(response.user_id)
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }

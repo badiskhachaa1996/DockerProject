@@ -54,7 +54,7 @@
 		<div class="card">
 			<h1 class="text-center">Activités</h1>
 			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
-				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true"
+				[totalRecords]="dailyChecks.length" styleClass="p-datatable-gridlines" [paginator]="true" rowExpandMode="single"
 				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
 				responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
@@ -107,7 +107,7 @@
 							{{dicCollaborateurs[check?.user_id._id]?.localisation}}
 						</td>
 						<td style="min-width: 14rem;">
-							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} {{check?.platform_in}}<br>
+							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_in).logo' [pTooltip]="getPlatform(check.auto,check?.platform_in).text"></i><br>
 							<!--<strong>IP:{{check?.localisation_in}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
 						</td>
@@ -116,8 +116,7 @@
 								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td style="min-width: 10rem;">
-							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} {{check?.platform_out}} <span
-								*ngIf="check.auto">AUTOMATIQUE</span><br>
+							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}} <i [class]='getPlatform(check.auto,check?.platform_out).logo' [pTooltip]="getPlatform(check.auto,check?.platform_out).text"></i><br>
 							<!--<strong>IP:{{check?.localisation_out}} </strong><br>-->
 							<strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
 						</td>
@@ -192,7 +191,7 @@
 								<h3 class="text-center">
 									Historique
 								</h3>
-								<p-table #dtHisto [value]="userChecksHistorique" dataKey="_id" [rows]="10"
+								<p-table #dtHisto [value]="userChecksHistorique" dataKey="_id" [rows]="10" rowExpandMode="single"
 									[loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines"
 									[paginator]="true"
 									[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
