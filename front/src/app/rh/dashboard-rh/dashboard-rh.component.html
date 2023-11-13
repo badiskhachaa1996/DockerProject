@@ -148,7 +148,7 @@
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
 							<p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
 						</td>
-						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
+						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent' || !check.user_id?.statut">
 							<p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
