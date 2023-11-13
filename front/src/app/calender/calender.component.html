@@ -365,57 +365,49 @@
                             </div>
                         </form>
                     </div>
-                    <div *ngIf="showFormAddCra">
-                        <div class="add-button-div mb-2">
-                            <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
-                                style="color: red; font-size: 20px; float: right; cursor: pointer;"></i>
-                        </div>
-                        <div style="clear: both;"></div>
-
-                        <form class="p-fluid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
-                            <div formArrayName="cras"
-                                *ngFor="let cra of getCras().controls; let i = index; let c = count">
-                                <div class="p-formgrid grid" [formGroupName]="i">
-                                    <div class="field col-12 md:col-5">
-                                        <input pInputText type="text" id="tache" formControlName="tache"
-                                            placeholder="Veuillez décrire l'activité">
-                                    </div>
-                                    <div class="field col-12 md:col-5">
-                                        <input pInputText type="number" id="duration" formControlName="duration"
-                                            placeholder="Durée en minute">
-                                    </div>
-                                    <div class="field col-12 md:col-2" *ngIf="c > 1">
-                                        <button pButton pRipple pTooltip="Supprimer la ligne" type="button"
-                                            icon="pi pi-trash" class="p-button-outlined p-button-danger mb-2"
-                                            (click)="onDeleteCraField()"></button>
-                                    </div>
-                                </div>
+                    <div *ngIf="dailyCheck">
+                        <form class="p-fluid grid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
+                            <div class="field col-12 md:col-5">
+                                <p-dropdown [options]="ticketListe" placeholder="Veuillez décrire l'activité"
+                                    [editable]="true" formControlName="task"></p-dropdown>
+                                <!--<input pInputText type="text" id="tache" formControlName="task"
+                                    placeholder="Veuillez décrire l'activité">-->
                             </div>
-                            <button pButton pRipple type="button" icon="pi pi-plus"
-                                class="p-button-outlined p-button-success mb-2" (click)="onAddCraField()"></button>
-
-                            <div class="col-2">
-                                <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2"
+                            <div class="field col-8 md:col-4" *ngIf="formAddCra.value.mode_type=='/H'">
+                                <input pInputText type="number" id="duration" formControlName="number_minutes"
+                                    placeholder="Durée en heures">
+                            </div>
+                            <div class="field col-8 md:col-4" *ngIf="formAddCra.value.mode_type!='/H'">
+                                <input pInputText type="number" id="duration" formControlName="number_minutes"
+                                    placeholder="Durée en minutes" step="15">
+                            </div>
+                            <div class="field col-4 md:col-2">
+                                <p-dropdown [options]="modeType" formControlName="mode_type"
+                                    placeholder="Choisissez une mesure"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-1">
+                                <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2 "
                                     [disabled]="formAddCra.invalid"></button>
                             </div>
                         </form>
                     </div>
-                    <p-splitButton label="Ajouter" [model]="itemsCra" style="float: right;"
+                    <!--<p-splitButton label="Ajouter" [model]="itemsCra" style="float: right;"
                         *ngIf="dailyCheck != null && !showFormAddCra"
-                        styleClass="p-button-outlined p-button-secondary mr-2 mb-2"></p-splitButton>
+                        styleClass="p-button-outlined p-button-secondary mr-2 mb-2"></p-splitButton>-->
 
                     <div style="clear: both;"></div>
 
-                    <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true"
-                        styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <p-table [value]="dailyCheck?.cra" [totalRecords]="dailyCheck?.cra" dataKey="_id" editMode="row"
+                        [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
+                        responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th
                                     [ngClass]="{'valid-begin':dailyCheck?.validated,'non-valid-begin':!dailyCheck?.validated}">
-                                    Durée</th>
+                                    Activité</th>
                                 <th
                                     [ngClass]="{'valid-middle':dailyCheck?.validated,'non-valid-middle':!dailyCheck?.validated}">
-                                    Activité</th>
+                                    Durée</th>
                                 <th
                                     [ngClass]="{'valid-end':dailyCheck?.validated,'non-valid-end':!dailyCheck?.validated}">
                                     Action</th>
@@ -426,20 +418,20 @@
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="number" [(ngModel)]="cra.number_minutes">
+                                            <input pInputText type="text" [(ngModel)]="cra.task">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{cra.number_minutes}} mn
+                                            {{cra.task}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
                                 <td>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="cra.task">
+                                            <input pInputText type="number" [(ngModel)]="cra.number_minutes">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{cra.task}}
+                                            {{cra.number_minutes}} mn
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -459,6 +451,26 @@
                                 </td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="flex align-items-center justify-content-between">
+                                <div>
+
+                                    <p *ngIf="!isNaN(craPercent) && !isInfinity(craPercent)" style="font-weight:400px">
+                                        <strong>Taux de CRA &nbsp;</strong>{{craPercent|number:'1.0-2'}}%
+                                    </p>
+                                    <p *ngIf="isNaN(craPercent) || isInfinity(craPercent)" style="font-weight:400px">
+                                        <strong>Taux de CRA &nbsp;</strong>0%
+                                    </p>
+                                </div>
+                                <div>
+
+                                    <p style="font-weight:400px"><strong>Durée
+                                            totale &nbsp;</strong>{{totalCalc(dailyCheck?.cra)}}</p>
+
+                                </div>
+
+                            </div>
+                        </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
                                 <td colspan="3">Aucun CRA pour le moment.</td>
@@ -470,16 +482,14 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                    <p>&nbsp;</p>
-                    <h3 style="text-align: center;width: 100%;">Durée totale : {{totalCalc(dailyCheck?.cra)}}</h3>
                     <br><br>
-                    <p-button style="width: 100px; height: 50px;" styleClass="p-button-info"
-                        (click)="showHistorique()">Historique</p-button>
+                    <a style="width: 100px; height: 50px;" (click)="showHistorique()">Voir l'historique -></a>
                     <div class="col-12" *ngIf="visible">
 
                         <div class="m-2">
-                            <label htmlFor="">Choisissez un mois et une année</label>
-                            <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
+                            <label htmlFor="">Choisissez un mois et une année &nbsp;&nbsp;&nbsp;</label>
+                            <input pInputText type="month" [(ngModel)]=dateFilterHistorique
+                                (input)="getHistoPointage($event.target.value)">
                         </div>
                         <p-table [value]="historiqueCraHisto" dataKey="_id" [rows]="4" [rowHover]="true"
                             styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
@@ -547,9 +557,6 @@
                                 </tr>
                             </ng-template>
                         </p-table>
-                        <p>&nbsp;</p>
-                        <h3 style="text-align: center;width: 100%;">Durée totale :
-                            {{totalCalc(historiqueCraSelected?.cra)}}</h3>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Calendrier">
@@ -655,9 +662,8 @@
                         </p-table>
                         <br>
                         <p>&nbsp;</p>
-                        <p-table *ngIf="DataCRA.length!=0" [value]="DataCRA[0].cra" dataKey="_id"
-                            [rowHover]="true" styleClass="p-datatable-gridlines"
-                            responsiveLayout="scroll">
+                        <p-table *ngIf="DataCRA.length!=0" [value]="DataCRA[0].cra" dataKey="_id" [rowHover]="true"
+                            styleClass="p-datatable-gridlines" responsiveLayout="scroll">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Durée</th>
@@ -961,8 +967,8 @@
     <button pButton label="Déclarez comme un jour de cours" (click)="onAddJourDeCours()"></button>
 </p-dialog>
 
-<p-dialog class="grid" header="Cours du {{dataEvent?.date | date: 'dd MM YYYY'}}" [(visible)]="displayData" [modal]="true"
-    [style]="{width: '75vw'}">
+<p-dialog class="grid" header="Cours du {{dataEvent?.date | date: 'dd MM YYYY'}}" [(visible)]="displayData"
+    [modal]="true" [style]="{width: '75vw'}">
     <div class="col-12 grid">
         <div class="col-12" *ngIf="dataEvent?._id">
             <p-button icon="pi pi-trash" [style]="{'width':'100%'}" label="Supprimer le cours"

@@ -878,10 +878,10 @@ export class DashboardComponent implements OnInit {
             this.rhService.getCollaborateurByUserId(this.userConnected._id)
               .then((collaborateur) => {
                 let totalTimeCra = 0;
-
-                this.dailyCheck?.cra.map((cra) => {
-                  totalTimeCra += cra.number_minutes;
-                });
+                if (this.dailyCheck?.cra && this.dailyCheck?.cra.length != 0)
+                  this.dailyCheck?.cra.map((cra) => {
+                    totalTimeCra += cra.number_minutes;
+                  });
 
                 if (collaborateur != null) {
                   // conversion du taux cra du collaborateur en minutes
@@ -1415,7 +1415,7 @@ export class DashboardComponent implements OnInit {
     } else if (event.type == "Absence Non Justifié") {
       backgroundColor = '#E74C3C'
       borderColor = '#7B241C'
-    }else if (event.type == "Cours") {
+    } else if (event.type == "Cours") {
       backgroundColor = '#c82df7'
       borderColor = '#9300bf'
     }
