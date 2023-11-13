@@ -1,0 +1,30 @@
+
+<p-table [value]="infoRefunds" styleClass="p-datatable-gridlines" >
+    <ng-template pTemplate="caption"><h3 class="title">Information de remboursement</h3></ng-template>
+    <ng-template pTemplate="header">
+        <tr>           
+            <th >Date de remboursement</th>
+            <th >Modalité de remboursement</th>
+            <th >Montant</th>
+            <th >Ordre de virement(ou équivalent)</th>
+            <th >Note</th>
+            <th>Action</th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-infoRefund >
+        <tr>
+            <td><input type="date" [disabled]="!isUpdating" [(ngModel)]="infoRefund.refund_date" /></td>
+            <td><p-dropdown [disabled]="!isUpdating" placeholder="Choisir Méthode" [options]="refundMethods" [(ngModel)]="infoRefund.refund_method"></p-dropdown></td>
+            <td><input type="text" [disabled]="!isUpdating" [(ngModel)]="infoRefund.montant"/></td>
+            <td><input class="filePlace" type="file" [disabled]="!isUpdating" [(ngModel)]="infoRefund.payment_attestation"></td>
+            <td><textarea [disabled]="!isUpdating" type="text" [(ngModel)]="infoRefund.note"></textarea></td>
+           
+            <td class="text-right" style="min-width: 8rem">
+                <i class="pi pi-pencil" *ngIf="!isUpdating" (click)="updateKeyDates()"></i>
+                <i class="pi pi-check" *ngIf="isUpdating" (click)="saveKeyDates()"></i>
+
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

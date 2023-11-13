@@ -1,0 +1,29 @@
+<p-table [value]="keyDates" styleClass="p-datatable-gridlines" >
+    <ng-template pTemplate="caption"><h3 class="title">Dates clés</h3></ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th >Motif</th>
+            <th >Date de refus</th>
+            <th >Date de demande</th>
+            <th >Date de remboursement</th>
+            <th style="width: 10px;">Action</th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-keyDate let-demande>
+        <tr>
+            <td >
+                <p-dropdown placeholder="Choisir Méthode" [options]="Motif" [disabled]="!isUpdating" [(ngModel)]="keyDate.motif.value"></p-dropdown>
+            </td>
+            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_refus | date:'yyyy-MM-dd'" (ngModelChange)="keyDate.date_refus = $event" /></td>
+            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_demande | date:'yyyy-MM-dd'" (ngModelChange)="keyDate.date_demande = $event"/></td>
+            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_remboursement | date:'yyyy-MM-dd'" (ngModelChange)="keyDate.date_remboursement = $event"/></td>
+            <td class="text-right" style="min-width: 8rem">
+                <i class="pi pi-pencil" *ngIf="!isUpdating" (click)="updateKeyDates()"></i>
+                <i class="pi pi-check" *ngIf="isUpdating" (click)="saveKeyDates()"></i>
+
+            </td>
+        
+        </tr>
+    </ng-template>
+</p-table>
