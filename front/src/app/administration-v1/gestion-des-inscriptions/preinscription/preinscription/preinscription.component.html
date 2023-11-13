@@ -508,22 +508,15 @@
                             <label>Date de délivrance</label>
                             <input type="date" formControlName="date" pInputText />
                         </div>
-                        <div class="field col-6">
-                            <label>Nom du Fichier</label>
-                            <input type="text" formControlName="nom" pInputText />
-                        </div>
+                        
                         <div class="field col-6">
                             <label>Note :</label>
                             <textarea pInputTextarea formControlName="note"></textarea>
                         </div>
-                        <div class="field col-6">
-                            <label>Traité par :</label>
-                            <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
-                                optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
-                        </div>
+                        
                         <div class="field col-12">
                             <label>Type de document :</label>
-                            <p-dropdown [options]="documentDropdown" formControlName="type" placeholder="Choisissez un type"
+                            <p-dropdown [options]="documentDropdownc" formControlName="type" placeholder="Choisissez un type"
                                 filter="true"></p-dropdown>
                         </div>
                         <div class="field col-12">
@@ -546,7 +539,7 @@
                 </ng-template>
                 
                             <div class="col-4">
-                                <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
+                                <p-button [style]="{'width':'100%'}" (click)="addDoc();visibleC=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
                                     autoWidth="false" label="Ajouter un autre document"></p-button>
                             </div>
                             <p-table  #dt1 dataKey="_id" [rows]="8"
@@ -672,12 +665,54 @@
                 </div>
             </p-accordionTab>
             <p-accordionTab>
+                <p-dialog header="Documents de Candidature" [(visible)]="visibleADM" >
+                    <div class="col-12" *ngIf="showUploadFile!=null">
+                        <div class="card">
+                            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                                (click)="showUploadFile = null" aria-hidden="true"> </i>
+                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                                showUploadFile.user_id?.firstname }} {{
+                                showUploadFile.user_id?.lastname | uppercase }}
+                            </h3>
+                
+                            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                                <div class="field col-6">
+                                    <label>Date de délivrance</label>
+                                    <input type="date" formControlName="date" pInputText />
+                                </div>
+                                
+                                <div class="field col-6">
+                                    <label>Note :</label>
+                                    <textarea pInputTextarea formControlName="note"></textarea>
+                                </div>
+                                
+                                <div class="field col-12">
+                                    <label>Type de document :</label>
+                                    <p-dropdown [options]="documentDropdowna" formControlName="type" placeholder="Choisissez un type"
+                                        filter="true"></p-dropdown>
+                                </div>
+                                <div class="field col-12">
+                                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
+                                        maxFileSize="10000000" [auto]="true" #fileInput>
+                                    </p-fileUpload>
+                                </div>
+                
+                            </form>
+                        </div>
+                    </div>
+                </p-dialog>
                 <ng-template pTemplate="header">
                     <div>
                         <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
                         
                     </div>
                 </ng-template>
+                <div class="col-4">
+                    <p-button [style]="{'width':'100%'}" (click)="addDoc();visibleADM=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
+                        autoWidth="false" label="Ajouter un autre document"></p-button>
+                </div>
                 <p-table  #dt1 dataKey="_id" [rows]="8"
                                 rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
                                 [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
@@ -727,6 +762,48 @@
                        
                     </div>
                 </ng-template>
+                <p-dialog header="Documents de Candidature" [(visible)]="visiblep" >
+                    <div class="col-12" *ngIf="showUploadFile!=null">
+                        <div class="card">
+                            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                                (click)="showUploadFile = null" aria-hidden="true"> </i>
+                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                                showUploadFile.user_id?.firstname }} {{
+                                showUploadFile.user_id?.lastname | uppercase }}
+                            </h3>
+                
+                            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                                <div class="field col-6">
+                                    <label>Date de délivrance</label>
+                                    <input type="date" formControlName="date" pInputText />
+                                </div>
+                                
+                                <div class="field col-6">
+                                    <label>Note :</label>
+                                    <textarea pInputTextarea formControlName="note"></textarea>
+                                </div>
+                                
+                                <div class="field col-12">
+                                    <label>Type de document :</label>
+                                    <p-dropdown [options]="documentDropdownpro" formControlName="type" placeholder="Choisissez un type"
+                                        filter="true"></p-dropdown>
+                                </div>
+                                <div class="field col-12">
+                                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
+                                        maxFileSize="10000000" [auto]="true" #fileInput>
+                                    </p-fileUpload>
+                                </div>
+                
+                            </form>
+                        </div>
+                    </div>
+                </p-dialog>
+                <div class="col-4">
+                    <p-button [style]="{'width':'100%'}" (click)="addDoc();visiblep=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
+                        autoWidth="false" label="Ajouter un autre document"></p-button>
+                </div>
                 <p-table  #dt1 dataKey="_id" [rows]="8"
                                 rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
                                 [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"

@@ -4485,6 +4485,11 @@ export class AppMenuComponent implements OnInit {
                                                 label: 'Local - International',
                                                 icon: 'pi pi-prime',
                                                 routerLink: ['/administration/preinscription']
+                                            },
+                                            {
+                                                label: 'Inscription',
+                                                icon: 'pi pi-prime',
+                                                routerLink: ['/administration/inscription']
                                             }
                                         ]
                                     },
@@ -6585,9 +6590,14 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-users',
                                     items: [
                                         {
-                                            label: 'Local - International',
+                                            label: 'Préinscription Local - International',
                                             icon: 'pi pi-prime',
                                             routerLink: ['/administration/preinscription']
+                                        },
+                                        {
+                                            label: 'Inscription',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/administration/inscription']
                                         }
                                     ]
                                 },
