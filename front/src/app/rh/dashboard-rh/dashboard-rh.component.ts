@@ -522,12 +522,12 @@ export class DashboardRhComponent implements OnInit {
 
   getPlatform(auto: boolean, platform: string) {
     if (auto)
-      return 'pi pi-android'
+      return { logo: 'pi pi-android', text: 'Automatique' }
     else if (platform == 'PC')
-      return 'pi pi-desktop'
+      return { logo: 'pi pi-desktop', text: 'Ordinateur' }
     else if (platform == 'Mob')
-      return 'pi pi-mobile'
+      return { logo: 'pi pi-mobile', text: 'Mobile' }
     else
-      return 'pi pi-exclamation-triangle'
+      return { logo: 'pi pi-exclamation-triangle', text: 'Inconnu' }
   }
 }
