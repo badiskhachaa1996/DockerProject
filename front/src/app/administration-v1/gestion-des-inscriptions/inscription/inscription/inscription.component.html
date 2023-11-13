@@ -475,21 +475,27 @@
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
 	<h3>Filtres</h3>
 	<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-		    <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
-                (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
-                filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
-            <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
-                <p-dropdown [style]="{'width':'27em'}" [options]="rentreeList" filter="true"
-                (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
-                <p-dropdown [style]="{'width':'27em'}" [options]="EcoleListRework" filter="true"
-                (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
-                <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
-                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
+        (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
+        filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
+    <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
+        (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
+        (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
+        (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="formationsFitre" filter="true"
+        (onChange)="dt1.filter($event.value,'formation', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="EtapeFiltere" filter="true"
+        (onChange)="dt1.filter($event.value,'etat_traitement', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
+        (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
+        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
                 <label>Teams</label>
                 <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onTeamsCheckboxChange($event)">
                    

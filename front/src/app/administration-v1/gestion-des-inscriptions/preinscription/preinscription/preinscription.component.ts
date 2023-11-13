@@ -865,6 +865,8 @@ export class PreinscriptionComponent implements OnInit {
     })
 
   }
+  
+  
 
   addDoc() {
     this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
@@ -899,6 +901,19 @@ export class PreinscriptionComponent implements OnInit {
 
     })
   }
+  deleteDocument(doc: { date: Date, nom: string, path: string, _id: string },ri) {
+    this.PROSPECT.documents_administrative.splice(ri+1, 1)
+    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+      console.log(a)
+    })
+    this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+    this.initDocument(this.PROSPECT);
+  }
+  
+  
 
   downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe((data) => {
@@ -1254,9 +1269,17 @@ export class PreinscriptionComponent implements OnInit {
     this.PROSPECT=prospect;
     this.showDocAdmin = prospect
     this.scrollToTop()
-    this.PROSPECT.documents_administrative.forEach(document => {
-      
-    })
+    this.DocumentsCandidature = this.PROSPECT.documents_administrative.filter(document =>
+      ["Formulaire de candidature", "Test de Sélection", "Attente"].includes(document.type)
+    );
+    
+    this.DocumentsAdministratif = this.PROSPECT.documents_administrative.filter(document =>
+      ["Attestation inscription", "Certificat de scolarité","Attestation de présence / assiduité","Réglement intérieur","Livret d'accueil","Livret d'accueil","Autorisation de diffusion et d'utilisation de photographie et vidéos"].includes(document.type)
+    );
+    this.DoccumentProfessionel= this.PROSPECT.documents_administrative.filter(document =>
+      ["Convention de stage", "Attestation de stage","Satisfaction de stage","Contrat d'apprentisage","Convention de formation","Livret de suivi","Convocation d'examen","Bulletin de note","Suivi post formation-orientation"].includes(document.type)
+    );
+
   }
   convertTime(date) {
     const d = new Date(date);
@@ -1290,7 +1313,7 @@ export class PreinscriptionComponent implements OnInit {
       formData.append('nom', this.uploadAdminFileForm.value.nom)
       formData.append('type', this.uploadAdminFileForm.value.type)
       formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
-      formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
+      formData.append('traited_by', this.userConnected?.firstname+' '+this.userConnected?.lastname)
       formData.append('path', event.files[0].name)
       formData.append('file', event.files[0])
       this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
@@ -1324,17 +1347,19 @@ export class PreinscriptionComponent implements OnInit {
               }).subscribe(() => { })
             }
           })
+          this.initDocument(this.PROSPECT);
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         if (res.documents_administrative)
           this.showDocAdmin.documents_administrative = res.documents_administrative
         event.target = null;
         this.showUploadFile = null;
-
+        this.initDocument(this.PROSPECT);
         this.fileInput.clear()
       }, error => {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+    
   }
 
   generateCustomID(nom) {
