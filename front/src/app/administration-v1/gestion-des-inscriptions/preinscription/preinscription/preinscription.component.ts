@@ -179,7 +179,10 @@ export class PreinscriptionComponent implements OnInit {
   ]
 
   commercialList = []
-  EcoleListRework = []
+  EcoleListRework = [];
+  DocumentsCandidature:any[]= [];
+  DocumentsAdministratif:any[]= [];
+  DoccumentProfessionel:any[]=[];
   EcoleFiltre = [{
     label: "Toutes les écoles", value:null
   }]
@@ -1251,6 +1254,9 @@ export class PreinscriptionComponent implements OnInit {
     this.PROSPECT=prospect;
     this.showDocAdmin = prospect
     this.scrollToTop()
+    this.PROSPECT.documents_administrative.forEach(document => {
+      
+    })
   }
   convertTime(date) {
     const d = new Date(date);
@@ -1264,9 +1270,9 @@ export class PreinscriptionComponent implements OnInit {
   uploadAdminFileForm: FormGroup = new FormGroup({
     //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
     date: new FormControl(this.convertTime(new Date), Validators.required),
-    nom: new FormControl("", Validators.required),
+    nom: new FormControl("",),
     note: new FormControl(""),
-    traited_by: new FormControl("", Validators.required),
+    traited_by: new FormControl("",),
     type: new FormControl(""),
   })
   showUploadFile = null
@@ -1342,6 +1348,34 @@ export class PreinscriptionComponent implements OnInit {
 
     return 'DOC' + nom + date + random;
   }
+  visibleADM:boolean = false;
+  visiblep:boolean = false;
+  documentDropdownc = [
+    { label: "Formulaire de candidature", value: "Formulaire de candidature" },
+    { label: "Test de Sélection", value: "Test de Sélection" },
+    { label: "Attente", value: "Attente" },
+  ]
+  documentDropdowna = [
+    { label: "Attestation inscription", value: "Attestation inscription" },
+    { label: "Certificat de scolarité", value: "Certificat de scolarité" },
+    { label: "Attestation de présence / assiduité", value: "Attestation de présence / assiduité" },
+    { label: "Réglement intérieur", value: "Réglement intérieur" },
+    { label: "Livret d'accueil", value: "Livret d'accueil" },
+    { label: "Autorisation de diffusion et d'utilisation de photographie et vidéos", value:"Autorisation de diffusion et d'utilisation de photographie et vidéos"}
+  ];
+  documentDropdownpro = [
+    { label: "Convention de stage", value: "Convention de stage" },
+    { label: "Attestation de stage", value: "Attestation de stage" },
+    { label: "Satisfaction de stage", value: "Satisfaction de stage" },
+    { label: "Contrat d'apprentisage", value: "Contrat d'apprentisage" },
+    { label: "Convention de formation", value: "Convention de formation" },
+    { label: "Livret de suivi", value:"Livret de suivi"},
+    { label: "Convocation d'examen", value: "Convocation d'examen" },
+    { label: "Bulletin de note", value: "Bulletin de note" },
+    { label: "Suivi post formation-orientation", value:"Suivi post formation-orientation"}
+
+  ];
+
   documentDropdown = [
     { label: "Inscription", value: "inscription" },
     { label: "Préinscription", value: "preinscription" },
