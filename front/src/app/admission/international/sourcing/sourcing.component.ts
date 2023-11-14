@@ -388,7 +388,7 @@ export class SourcingComponent implements OnInit {
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
       })*/
-      this.admissionService.getAllSourcing().subscribe(dataP => {
+      this.admissionService.get100Sourcing().subscribe(dataP => {
         this.ecoleList = []
         data.forEach(d => {
           this.dropdownEcole.push({ label: d.titre, value: d.url_form })
@@ -399,6 +399,24 @@ export class SourcingComponent implements OnInit {
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!dataP[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
+      }, error => { console.error(error) }, () => {
+        this.admissionService.getAllSourcing().subscribe(newSourcing => {
+          console.log(newSourcing,new Date())
+          newSourcing.forEach(val => {
+            if (this.prospects[val.type_form])
+              this.prospects[val.type_form].push(val)
+            else
+              this.prospects[val.type_form] = [val]
+          })
+          this.ecoleList = []
+          data.forEach(d => {
+            this.ecoleList.push(d)
+          })
+          Object.keys(this.dicEcole).forEach((val, idx) => {
+            if (!this.prospects[val])
+              this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+          })
         })
       })
 
