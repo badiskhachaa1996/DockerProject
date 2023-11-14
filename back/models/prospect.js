@@ -66,7 +66,7 @@ const prospect_schema = new mongoose.Schema({
     code_commercial: { type: String, required: false },
     statut_dossier: { type: String, default: "En attente de traitement" },
     date_traitement: { type: Date },
-    etat_dossier: { type: String, default: "En cours de traitement" },
+    etat_dossier: { type: String, default: "En attente" },
     tcf: { type: String },
     agent_id: {
         type: mongoose.Schema.Types.ObjectId,
