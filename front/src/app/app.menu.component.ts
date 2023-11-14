@@ -6574,6 +6574,22 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
+                                    label: 'Remboursement',
+                                    icon: 'pi pi-dollar',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un remboursement',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-remboursement'],
+                                        },
+                                        {
+                                            label: 'Remboursements',
+                                            icon: 'pi pi-fw pi-tags',
+                                            routerLink: ['/remboursements'],
+                                        },
+                                    ]
+                                },
+                                {
                                     label: "Pointeuse",
                                     icon: 'pi pi-camera',
                                     items: [
