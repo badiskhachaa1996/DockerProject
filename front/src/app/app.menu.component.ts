@@ -30,7 +30,7 @@ import { CandidatureLeadService } from './services/candidature-lead.service';
             </a>
         </div>
         <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
-        <!-- <div class="layout-menu-container">  
+        <!-- <div class="layout-menu-container">
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
                     <div class="layout-menuitem-root-text" [attr.aria-label]="item.label">{{item.label}}</div>
@@ -71,7 +71,7 @@ export class AppMenuComponent implements OnInit {
             icon: 'pi pi-fw pi-exclamation-triangle',
             routerLink: ['/ticketing-igs'],
         },*/
-    ];
+    ]
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
@@ -986,7 +986,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         } /*
-                        
+
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -4107,7 +4107,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },*/
                         /*
-                        
+
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -4477,6 +4477,22 @@ export class AppMenuComponent implements OnInit {
                                 label: "Admin IMS",
                                 icon: 'pi pi-star',
                                 items: [
+                                    {
+                                        label: 'Remboursement',
+                                        icon: 'pi pi-dollar',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un remboursement',
+                                                icon: 'pi pi-plus-circle',
+                                                routerLink: ['/ajout-remboursement'],
+                                            },
+                                            {
+                                                label: 'Remboursements',
+                                                icon: 'pi pi-fw pi-tags',
+                                                routerLink: ['/remboursements'],
+                                            },
+                                        ]
+                                    },
                                     {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',

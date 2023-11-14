@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { AuthenticationResult, EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html'
@@ -79,4 +80,3 @@ export class AppComponent {
     }
 
 }
-

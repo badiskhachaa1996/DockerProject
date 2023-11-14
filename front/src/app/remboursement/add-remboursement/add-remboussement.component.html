@@ -1,0 +1,112 @@
+<div class=" col-12 grid">
+
+    <!-- <p>Bonjour {{user?.firstname}},</p>
+
+    <p>Votre demande de remboursement a été soumise avec succès. L'identifiant de la demande est : [ID de la demande]. Vous serez contacté(e) dès que la demande aura été validée par l'équipe. </p>
+        
+    <p>Si nous avons besoin de plus d'informations, nous vous contacterons à cette adresse e-mail. </p>
+         -->
+        <!-- <p>Bien à vous </p> -->
+        <div   style="justify-content: end; display: flex; width: 100%;" *ngIf="showUpdateForm"><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
+        </div>
+    <div class="col-12 grid">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement">
+            <h3 class="col-12" style="text-align: start;"> Etudiant</h3>
+            <div class="field col-12 md:col-4">
+                <label for="civilite" >Civilité:</label>
+                <p-dropdown formControlName="civilite" [options]="civilitySelect"
+                            placeholder="Select Civilité"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Nom</label>
+                <input pInputText type="text" formControlName="nom" placeholder="Ex: Smith"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Prénom</label>
+                <input pInputText type="text" formControlName="prenom" placeholder="Ex: John"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Date de naissance</label>
+                <input pInputText type="date" formControlName="date_naissance"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Nationalité</label>
+                <p-dropdown [options]="pays_residence" formControlName="nationalite"
+                            placeholder="Choisissez un service"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-4">
+                <label>Pays de résidence <span style="color: red">  </span></label>
+                <p-dropdown [options]="pays_residence" formControlName="pays_resid"
+                            placeholder="Choisissez un service"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-2">
+                <label>Indicatif</label>
+                <input pInputText type="text" formControlName="indicatif_phone" placeholder="Ex: +33"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Téléphone</label>
+                <input pInputText type="text" formControlName="phone" placeholder="Ex: +33 612341518"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Email</label>
+                <input pInputText type="text" formControlName="email" placeholder="Ex: example.email@mail.com"/>
+            </div>
+
+            <h3 class="col-12" style="text-align: start;"> Formation</h3>
+            <div class="field col-12 md:col-4">
+                <label>Année scolaire</label>
+                <p-dropdown [options]="annescolaires" formControlName="annee_scolaire"
+                placeholder="Choisissez un service"></p-dropdown>            </div>
+            <div class="field col-12 md:col-4">
+                    <label>Ecole</label>
+                    <p-dropdown [options]="ecoles" formControlName="ecole"
+                                placeholder="Choisissez un service"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Formation</label>
+                <p-dropdown [options]="formations" formControlName="formation"
+                            placeholder="Choisissez une formation"></p-dropdown>
+            </div>
+
+
+            <h3 class="col-12" style="text-align: start;"> Demande</h3>
+            <div class="field col-12 md:col-4">
+                <label>Motif de demande</label>
+                <p-dropdown [options]="motif" optionLabel="value" formControlName="motif_refus"
+                            placeholder="Choisissez une motif"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Montant</label>
+                <input pInputText type="text" formControlName="montant" placeholder="Ex: 1000€"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Modalité de paiement</label>
+                <p-dropdown [options]="modePaiement" formControlName="paymentType"
+                            placeholder="Choisissez une modalité de paiement"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Date de paiement</label>
+                <input pInputText type="date" formControlName="payment_date"/>
+            </div>
+
+            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm">
+                <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
+                <div style="width: 100%;">
+                    <app-upload-remboursement-doc *ngFor="let doc of docList" [document]="doc" [user]="user" (uploadDoc)="uploadDoc($event)"  (removeDoc)="removeDoc($event)"></app-upload-remboursement-doc>
+                </div>
+            </div>
+            <div style="width: 100%;" *ngIf="showUpdateForm">
+                <app-dossier-remboursement [demande]="currentDemande" [user]="user"></app-dossier-remboursement>
+            </div>
+
+            <div class="col-12  flex align-items-center justify-content-center ">
+                <br>
+                <span class="p-buttonset">
+                    <button [disabled]="formRembourssement.invalid" pButton pRipple (click)=" onSubmitRemboussementForm()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                </span>
+            </div>
+        </form>
+        
+    </div>
+</div>
