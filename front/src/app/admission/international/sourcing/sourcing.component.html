@@ -843,22 +843,23 @@
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
                                 <th style="width: 3rem" scope="col"></th>
-                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                                    Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
-                                </th>
+                                
                                 <th pSortableColumn="customid" scope="col" style="text-align: center;">
                                     ID Lead <p-sortIcon field="customid"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="source" scope="col" style="text-align: center;">
+                                <!--<th pSortableColumn="source" scope="col" style="text-align: center;">
                                     Source <p-sortIcon field="source"></p-sortIcon>
-                                </th>
+                                </th>-->
                                 <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                                     Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
-                                    Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
+                                <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                                    Choix académique<p-sortIcon field="rentree_scolaire"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
+                                <!--<th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
+                                    Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
+                                </th>-->
+                                <!--<th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                                     Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="formation" scope="col" style="text-align: center;">
@@ -866,12 +867,22 @@
                                 </th>
                                 <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                                     Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
-                                </th>
+                                </th>-->
                                 <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
-                                    Initial/Alternant <p-sortIcon field="rythme_formation"></p-sortIcon>
+                                    Rythme <p-sortIcon field="rythme_formation"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="programme" scope="col" style="text-align: center;">
+                                <!--<th pSortableColumn="programme" scope="col" style="text-align: center;">
                                     Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
+                                </th>-->
+                                <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
+                                    Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                                </th>
+                                
+                                <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
+                                    Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
+                                    Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
                                     Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
@@ -879,23 +890,20 @@
                                 <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
                                     Decision Orientation<p-sortIcon field="decision_orientation"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
-                                    Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
-                                </th>
+                                
                                 <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
                                     Dossier Lead <p-sortIcon field="haveDoc"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
-                                    Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
-                                </th>
+                                
                                 <th pSortableColumn="avancement_visa" scope="col" style="text-align: center;">
                                     Visa <p-sortIcon field="avancement_visa"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
-                                    Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
-                                </th>
+                                
                                 <th scope="col" style="text-align: center;">
                                     Etat de Candidature
+                                </th>
+                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                    Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                                 </th>
                                 <th *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'" pSortableColumn="action"
                                     scope="col" style="text-align: center;">
@@ -915,35 +923,38 @@
                                         (click)="expand(prospect)"></button>
                                 </td>
 
-                                <td>
-                                    {{prospect.date_creation | date :'dd MMMM yy' }}
-                                </td>
+                               
                                 <td>
                                     {{ prospect.customid }}
                                 </td>
 
-                                <td>
+                                <!--<td>
                                     {{ prospect.source }}
-                                </td>
+                                </td>-->
 
                                 <td>
                                     {{ prospect?.user_id?.firstname | titlecase }}
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
-                                <td>
+                                <!--<td>
                                     {{ prospect?.user_id?.pays_adresse }}
-                                </td>
+                                </td>-->
                                 <td>
-                                    {{ prospect.campus_choix_1 }}
-                                </td>
-                                <td>
-                                    {{ prospect.formation | titlecase }}
-                                </td>
-                                <td>
-                                    {{ prospect.rentree_scolaire }}
+                                    {{ prospect.campus_choix_1 }},
+                                
+                                    {{ prospect.formation | titlecase }},
+                                
+                                    {{ prospect.rentree_scolaire }},
                                 </td>
                                 <td>
                                     {{ prospect.rythme_formation }}
+                                </td>
+                                <td>
+                                    {{ prospect.phase_candidature }}
+                                </td>
+                                <td>
+                                    {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de
+                                    traitement" }}
                                 </td>
                                 <td>
                                     {{ prospect.programme }}
@@ -955,10 +966,7 @@
                                 <td>
                                     {{ prospect.decision_orientation }}
                                 </td>
-                                <td>
-                                    {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de
-                                    traitement" }}
-                                </td>
+                                
                                 <td *ngIf="prospect.haveDoc">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
@@ -978,15 +986,16 @@
                                 <td *ngIf="!prospect.avancement_visa">
                                     Non
                                 </td>
-                                <td>
-                                    {{ prospect.phase_candidature }}
-                                </td>
+                                
                                 <td *ngIf="candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
                                 <td *ngIf="!candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'En attente'"></p-tag>
+                                </td>
+                                <td>
+                                    {{prospect.date_creation | date :'dd MMMM yy' }}
                                 </td>
                                 <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                                     <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"

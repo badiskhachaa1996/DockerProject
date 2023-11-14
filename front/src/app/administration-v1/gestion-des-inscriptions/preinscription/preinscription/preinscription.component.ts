@@ -67,6 +67,7 @@ export class PreinscriptionComponent implements OnInit {
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
+  Frythme:String;Fcampus:String;Frentree:String;Fecoles:String;Fformation:String;Fetape:String;Fsource:String;
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
   ];
@@ -904,7 +905,7 @@ export class PreinscriptionComponent implements OnInit {
     })
   }
   deleteDocument(doc: { date: Date, nom: string, path: string, _id: string },ri) {
-    this.PROSPECT.documents_administrative.splice(ri+1, 1)
+    this.PROSPECT.documents_administrative.splice(ri, 1)
     this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
@@ -1266,7 +1267,8 @@ export class PreinscriptionComponent implements OnInit {
       });
     }
   }
-
+  ListDocuments: String[] = []
+  ListPiped: String[] = []
   initDocument(prospect) {
     this.PROSPECT = prospect;
     this.showDocAdmin = prospect
@@ -1281,7 +1283,20 @@ export class PreinscriptionComponent implements OnInit {
     this.DoccumentProfessionel= this.PROSPECT.documents_administrative.filter(document =>
       ["Convention de stage", "Attestation de stage","Satisfaction de stage","Contrat d'apprentisage","Convention de formation","Livret de suivi","Convocation d'examen","Bulletin de note","Suivi post formation-orientation"].includes(document.type)
     );
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        if (data) {
+          this.ListDocuments = data
+          this.ListPiped = []
+          data.forEach(doc => {
+            let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+            this.ListPiped.push(docname)
+          })
+        }
 
+      },
+      (error) => { console.error(error) }
+    );
   }
   convertTime(date) {
     const d = new Date(date);
@@ -1428,7 +1443,9 @@ export class PreinscriptionComponent implements OnInit {
     })
 
   }
-  clearFilter() { };
+  clearFilter() {
+    this.Frythme=null;this.Fcampus=null;this.Frentree=null;this.Fecoles=null;this.Fformation=null;this.Fetape=null;this.Fsource=null;
+   };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
     if (event.checked) {
