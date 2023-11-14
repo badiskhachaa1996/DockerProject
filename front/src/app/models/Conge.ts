@@ -18,7 +18,8 @@ export class Conge {
         public valided_date?: Date,
         public commented_by?: User,
         public commented_date?: Date,
-        public urgent?: boolean
+        public urgent?: boolean,
+        public customid_ticket?: string
 
     ) { }
 }

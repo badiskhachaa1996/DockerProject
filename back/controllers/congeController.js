@@ -4,13 +4,41 @@ app.disable("x-powered-by");
 const { Conge } = require('./../models/Conge');
 const multer = require('multer');
 const fs = require('fs');
-
+const { Ticket } = require('../models/ticket');
+const { User } = require('../models/user');
+const jwt = require("jsonwebtoken");
+const { Sujet } = require('../models/sujet');
+function entierAleatoire(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 // méthode de demande de congés
 app.post("/post-conge", (req, res) => {
     const conge = new Conge({ ...req.body });
+    let IDTicket = "IGTR" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
+    conge.customid_ticket = IDTicket
     //Enregistrement du congé dans la base de données
     conge.save()
-        .then((response) => { res.status(201).send(response); })
+        .then((response) => {
+            Sujet.findOne({ label: req.body.type_conge }).then(sujet => {
+                if (sujet) {
+                    let token = jwt.decode(req.header("token"))
+                    let ticket = new Ticket({
+                        createur_id: token.id,
+                        sujet_id: sujet._id,
+                        date_ajout: new Date(),
+                        customid: IDTicket,
+                        resum: `${new Date(req.body.date_debut).toLocaleDateString('fr-FR')} - ${new Date(req.body.date_fin).toLocaleDateString('fr-FR')}; Nombre de jours: ${response.nombre_jours}`,
+                        description: req.body.motif,
+                        priorite: req.body.urgent
+                    })
+                    ticket.save()
+                } else
+                    console.error('Impossible de créer un ticket pour la demande de congé de type' + req.body?.type_conge)
+
+            })
+
+            res.status(201).send(response);
+        })
         .catch((error) => { res.status(500).send("Impossible de prendre en compte votre demande de congés"); })
 })
 

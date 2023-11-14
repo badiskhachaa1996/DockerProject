@@ -30,7 +30,8 @@ const congeSchema = mongoose.Schema({
     valided_date: { type: Date, required: false },
     commented_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
     commented_date: { type: Date, required: false },
-    urgent: { type: Boolean, default: false }
+    urgent: { type: Boolean, default: false },
+    customid_ticket: { type: String, }
 
 });
 
