@@ -1232,6 +1232,7 @@ const routes: Routes = [
             { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
             /* Ticketing V3 */
             { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/mes-tickets/:ticket_id', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',

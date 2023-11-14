@@ -245,7 +245,7 @@ export class TicketService {
     return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  sendMailUpdateStatut(data: { createur_email, statut, id }) {
+  sendMailUpdateStatut(data: { createur_id, statut, id }) {
     let registreUrl = this.apiUrl + "sendMailUpdateStatut"
     return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
