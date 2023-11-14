@@ -38,8 +38,9 @@ export class NewListTicketsComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
-  modeOptions = [{ label: 'Personnel' },
-  { label: 'Service' }
+  modeOptions = [
+    { label: 'Personnel' },
+    { label: 'Service' }
   ]
   TicketMode = "Personnel"
   onChangeMode(e) {
@@ -213,7 +214,11 @@ export class NewListTicketsComponent implements OnInit {
   @ViewChild('dt1', { static: true }) dt1: Table;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
-
+    if (this.router.url == '/ticketing/mes-tickets-services') {
+      this.TicketMode = 'Service'
+      this.onChangeMode({ value: 'Service' })
+      this.filterType = ['Non Assigne']
+    }
 
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
