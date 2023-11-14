@@ -8,6 +8,20 @@ const { Ticket } = require('../models/ticket');
 const { User } = require('../models/user');
 const jwt = require("jsonwebtoken");
 const { Sujet } = require('../models/sujet');
+const nodemailer = require('nodemailer');
+const { Etudiant } = require("../models/etudiant");
+
+//creation d'un transporter smtperrFile
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
 function entierAleatoire(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -19,19 +33,60 @@ app.post("/post-conge", (req, res) => {
     //Enregistrement du congé dans la base de données
     conge.save()
         .then((response) => {
-            Sujet.findOne({ label: req.body.type_conge }).then(sujet => {
+            Sujet.findOne({ label: req.body.type_conge }).populate('service_id').then(sujet => {
                 if (sujet) {
                     let token = jwt.decode(req.header("token"))
-                    let ticket = new Ticket({
-                        createur_id: token.id,
-                        sujet_id: sujet._id,
-                        date_ajout: new Date(),
-                        customid: IDTicket,
-                        resum: `${new Date(req.body.date_debut).toLocaleDateString('fr-FR')} - ${new Date(req.body.date_fin).toLocaleDateString('fr-FR')}; Nombre de jours: ${response.nombre_jours}`,
-                        description: req.body.motif,
-                        priorite: req.body.urgent
+                    User.findById(token.id).then(u => {
+                        let ticket = new Ticket({
+                            createur_id: token.id,
+                            sujet_id: sujet._id,
+                            date_ajout: new Date(),
+                            customid: IDTicket,
+                            resum: `${new Date(req.body.date_debut).toLocaleDateString('fr-FR')} - ${new Date(req.body.date_fin).toLocaleDateString('fr-FR')}; Nombre de jours: ${response.nombre_jours}`,
+                            description: req.body.motif,
+                            priorite: req.body.urgent
+                        })
+                        ticket.save((err, doc) => {
+                            let d = new Date()
+                            let month = (d.getUTCMonth() + 1).toString()
+                            if (d.getUTCMonth() + 1 < 10)
+                                month = "0" + month
+                            let day = (d.getUTCDate()).toString()
+                            if (d.getUTCDate() < 10)
+                                day = "0" + day
+                            let year = d.getUTCFullYear().toString().slice(-2);
+
+                            let htmlemail = `
+                            ID: ${doc.customid}<br>
+                            Créé par : ${u.lastname} ${u.firstname}<br>
+                            Crée le  : ${day}/${month}/${year}<br>
+                            Service : ${sujet.service_id.label}<br>
+                            Sujet : ${sujet.label}<br>
+                            Résumé : ${doc.resum}<br>
+                            Description : ${doc.description}<br>
+                            `
+                            let mailOptions = {
+                                from: 'ims@intedgroup.com',
+                                to: 'ims.support@intedgroup.com',
+                                subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label,
+                                html: htmlemail,
+                                priority: 'high',
+                                attachments: [{
+                                    filename: 'signature.png',
+                                    path: 'assets/ims-intedgroup-logo.png',
+                                    cid: 'red' //same cid value as in the html img src
+                                }]
+                            };
+
+
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.error(error);
+                                }
+                            });
+                        })
                     })
-                    ticket.save()
+
                 } else
                     console.error('Impossible de créer un ticket pour la demande de congé de type' + req.body?.type_conge)
 
