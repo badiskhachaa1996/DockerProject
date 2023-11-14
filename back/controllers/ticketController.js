@@ -583,6 +583,7 @@ app.post("/AccAff/:id", (req, res) => {
                             <hr>
                             Assigné à: ${userFromDb?.lastname} ${userFromDb?.firstname}<br>
                             Date de l'attribution: ${day}/${month}/${year}<br>
+                            Lien: <a href='https://ims.intedgroup.com/#/ticketing/mes-tickets-services'>Ticketing Service</a>
                             `
                             let r = ''
                             if (ticket.module)
