@@ -63,8 +63,8 @@ export class NewListTicketsComponent implements OnInit {
   ticketsOnglets = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
-    sujet_id: new FormControl('', Validators.required),
-    service_id: new FormControl('', Validators.required),
+    sujet_id: new FormControl(null, Validators.required),
+    service_id: new FormControl(null, Validators.required),
     description: new FormControl('',),
     resum: new FormControl(''),
     priorite: new FormControl("false"),
@@ -72,8 +72,8 @@ export class NewListTicketsComponent implements OnInit {
     type: new FormControl('',),
     statut: new FormControl('',),
     documents: new FormControl([]),
-    agent_id: new FormControl('',),
-    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl(null,),
+    _id: new FormControl(null, Validators.required),
     demande: new FormControl('',),
     campus: new FormControl('',),
     filiere: new FormControl('',),

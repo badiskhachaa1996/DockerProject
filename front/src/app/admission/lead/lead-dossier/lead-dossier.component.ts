@@ -21,6 +21,8 @@ export class LeadDossierComponent implements OnInit {
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
+        if(!this.PROSPECT.etat_dossier)
+          this.PROSPECT.etat_dossier = "En attente"
       })
   }
 
