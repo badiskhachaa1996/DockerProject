@@ -282,7 +282,15 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+// <<<<<<< HEAD
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { RemboursementListComponent } from './remboursement/remboursement-list/remboursement-list.component';
+import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
+
+// =======
+// import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
+// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
@@ -643,6 +651,24 @@ const routes: Routes = [
             {
                 path: 'inscription-entreprise',
                 component: InscriptionEntrepriseComponent,
+            },
+
+
+            {
+                path: 'ajout-remboursement',
+                component: AddRemboussementComponent,
+                canActivate: [AuthGuardService],
+            }, //Remboursement
+
+            // {
+            //     path: 'list-remboursement',
+            //     component: RemboursementListComponent,
+            //     canActivate: [AuthGuardService],  
+            // },
+            {
+                path: 'remboursements',
+                component: ListRemboursementComponent,
+                canActivate: [AuthGuardService],  
             },
             /** Paths Lemon Way */
 
@@ -1206,6 +1232,8 @@ const routes: Routes = [
             { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
             /* Ticketing V3 */
             { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/mes-tickets-services', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/mes-tickets/:ticket_id', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
@@ -1310,6 +1338,8 @@ const routes: Routes = [
             { path: 'mes-disponibilites', component: CalendrierEtudiantComponent, canActivate: [AuthGuardService], },
             { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
+
+            // Generateur de Doc
             { path: 'imatch/entreprise', component: NewEntreprisesComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/annonce/entreprise/:entreprise_id', component: AnnonceViewerComponent, canActivate: [AuthGuardService], },
             // Generateur de Doc 
@@ -1390,6 +1420,12 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+// <<<<<<< HEAD
+    
+// =======
+
+
+// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 ]
 
 

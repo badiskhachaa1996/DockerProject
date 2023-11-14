@@ -1941,7 +1941,42 @@ export const environment = {
     { value: "Coordinateur BIM du Bâtiment" },
     { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
     { value: "Formations continues IPERIA" }
-  ]
+  ],
+  motif :[
+    {label: 'Refus de visa', value: 'Refus de visa'},
+    {label: 'Alternance',value: 'Alternance'},
+    {label: 'Dossier rejeté par capmus France',value: 'Dossier rejeté par capmus France'},
+    {label: 'Paiement en double',value: 'Paiement en double'},
+    {label: 'Autre',value: 'Autre'},
+
+  ],
+  paymentType : [
+    { label: 'Virement', value: 'Virement' },
+    { label: 'Chèque', value: 'Chèque' },
+    { label: 'Compensation', value: 'Compensation' },
+    { label:'Autre', value: 'Autre'},
+
+  ], 
+
+  availableStatus : [
+    {
+      label: "Nouvelle",
+      value: 'new'
+    },
+    {
+      label: "En cours de traiement",
+      value: 'in-progress'
+    },
+    {
+      label: "Refusée",
+      value: 'declined'
+    },
+    {
+      label: "Acceptée",
+      value: 'accepted'
+    },
+  
+  ],
 };
 /*
  * For easier debugging in development mode, you can import the following file

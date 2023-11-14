@@ -1,32 +1,36 @@
 <p-toast></p-toast>
 <div class="grid card" *ngIf="showPDF">
     <div class="grid col-12">
-        <div class="col-2">
+        <div class="col-4">
             <label>Date de début et de fin de l'attestation :</label><br>
             <p-calendar [(ngModel)]="dateValue" [disabledDates]="invalidDates" selectionMode="range"
                 [disabledDays]="[0,6]"></p-calendar>
         </div>
 
-        <div class="col-2">
+        <div class="col-4">
             <label>Choix de la couleur de la bande :</label><br>
             <p-colorPicker class="mr-1" [(ngModel)]="colorBande"></p-colorPicker>
             <p-button label="Sauvegarder la couleur" icon="pi pi-save" iconPos="left" (click)="saveColor()"></p-button>
         </div>
-        <div class="col-2">
+        <div class="col-4">
             <label>Choix de l'école :</label><br>
             <p-dropdown [options]="dropdownEcoles" [(ngModel)]="ECOLE" (onChange)="loadEcoleImage()"></p-dropdown>
         </div>
-        <div class="col-2">
+        <div class="col-4">
             <label>Temps de la phrase :</label><br>
-            <p-dropdown [options]="dropdownTimes" [(ngModel)]="PHRASE"></p-dropdown>
+            <p-dropdown [options]="dropdownTimes" [(ngModel)]="PHRASE" (onChange)="updatePhrase()"></p-dropdown>
         </div>
-        <div class="col-2">
+        <div class="col-4">
             <label>Année scolaire :</label><br>
             <input pInputText [(ngModel)]="annee_scolaire" />
         </div>
+        <div class="col-4">
+            <label> Afficher le taux d'assiduité ?</label><br>
+            <p-selectButton [options]="selectAssidu" [(ngModel)]="tauxAssiduite" (onChange)="updatePhrase()"></p-selectButton>
+        </div>
 
 
-        <div class="col-2">
+        <div class="col-4">
             <p-button label="Télécharger l'attestation" icon="pi pi-download" iconPos="left"
                 (click)="exportToPDF()"></p-button>
         </div>
@@ -39,17 +43,17 @@
                 style="position: absolute;top:25%;width: 110%;z-index: 0;height: 25%; left:-2vh"></p>
         </div>
         <h2 class="col-8 col-offset-2 text-center" style="font-weight: bold;border: solid;">Attestation d'assiduité</h2>
-        <h6 class="col-10 col-offset-1 text-center">Nous soussignés, "{{ECOLE.libelle}}", Établissement d'Enseignement
+        <h6 class="col-10 col-offset-1 text-center">Nous soussignés, "{{ECOLE?.libelle}}", Établissement d'Enseignement
             Supérieur
             privé, attestons par la présente que :</h6>
         <h4 class="col-12 text-center" style="font-weight: bold;">
-            {{Etudiant_userdata.civilite}}
-            {{Etudiant_userdata.lastname | uppercase}}
-            {{Etudiant_userdata.firstname | titlecase}}
+            {{Etudiant_userdata?.civilite}}
+            {{Etudiant_userdata?.lastname | uppercase}}
+            {{Etudiant_userdata?.firstname | titlecase}}
         </h4>
-        <h4 class="col-12 text-center" style="font-weight: bold;">Né(e) le {{EtudiantDetail.date_naissance|
+        <h4 class="col-12 text-center" style="font-weight: bold;">Né(e) le {{EtudiantDetail?.date_naissance|
             date:'dd/MM/YYYY'}}</h4><!-- Nationalité: {{EtudiantDetail.nationalite}} -->
-        <h6 class="col-12 text-center">{{PHRASE}}</h6>
+        <h6 class="col-12 text-center" [innerHTML]="newPhrase"></h6>
         <h5 class="text-center col-10 col-offset-1" style="font-weight: bold;">{{diplome_libelle}}</h5>
         <h4 class="text-center col-10 col-offset-1" style="font-weight: 500;">Durant l'année universitaire :
             {{annee_scolaire}}</h4>
@@ -98,8 +102,8 @@
         <h4>Listes des présences</h4>
         <p-button *ngIf="isNotEtudiant" label="Générer l'attestation" icon="pi pi-file" iconPos="left" class="mr-2"
             (click)="initGenerer()"></p-button>
-        <p-button *ngIf="isNotEtudiant" label="Sauvegarder les graphiques" icon="pi pi-chart" iconPos="left" class="mr-2"
-            (click)="saveGraph()"></p-button>
+        <p-button *ngIf="isNotEtudiant" label="Sauvegarder les graphiques" icon="pi pi-chart" iconPos="left"
+            class="mr-2" (click)="saveGraph()"></p-button>
         <p-button *ngIf="isNotEtudiant" label="Générer un document Excel" icon="pi pi-file-excel" iconPos="left"
             (click)="initExportExcel()"></p-button>
         <!-- && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant) -->

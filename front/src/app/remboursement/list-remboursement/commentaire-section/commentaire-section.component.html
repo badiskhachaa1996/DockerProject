@@ -1,0 +1,27 @@
+    <p-table [value]="commentaires" styleClass="p-datatable-gridlines" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th >Note</th>
+                <th >Commenté par</th>
+                <th >Commenté le</th>
+                <th style="width: 10px;">Action</th>
+            
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-commentaire >
+            <tr>
+                <td><textarea  rows="5" cols="90"  [disabled]="!commentaire.isUpdating" [(ngModel)]="commentaire.note" > </textarea></td>
+                <td>{{commentaire.created_by }} </td>
+                <td>{{commentaire.created_on | date: 'dd/MM/yyyy'}}</td>
+            
+                <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-pencil clickable-element" *ngIf="!commentaire.isUpdating" (click)="updateKeyDates(commentaire)"></i>
+                    <i class="pi pi-check clickable-element" *ngIf="commentaire.isUpdating" (click)="saveKeyDates(commentaire)"></i>
+                    <i class="pi pi-trash clickable-element" title="supprimer" (click)="deleteCommentaire(commentaire)"></i>
+
+                </td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+    <button  class="btn pi pi-plus" (click)="addComment()"></button>

@@ -1,9 +1,10 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy, DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TableModule } from 'primeng/table';
 import { AppRoutingModule } from './app-routing.module';
 import { registerLocaleData } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -73,7 +74,6 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { SplitterModule } from 'primeng/splitter';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { TerminalModule } from 'primeng/terminal';
@@ -391,6 +391,18 @@ import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
+import { NgModule } from '@angular/core';
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
+import { DataCleComponent } from './remboursement/list-remboursement/data-cle/data-cle.component';
+import { DetailsCandidatComponent } from './remboursement/list-remboursement/details-candidat/details-candidat.component';
+import { ContactRemboursementComponent } from './remboursement/list-remboursement/contact/contact.component';
+import { DossierRemboursementComponent } from './remboursement/list-remboursement/dossier-remboursement/dossier-remboursement.component';
+import { CommentaireSectionComponent } from './remboursement/list-remboursement/commentaire-section/commentaire-section.component';
+import { PayementInformationComponent } from './remboursement/list-remboursement/payement-information/payement-information.component';
+import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
+import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
+import { LabelPipe } from './directives/label.pipe';
 import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
@@ -420,6 +432,7 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
 
 @NgModule({
   imports: [
+    TableModule,
     SignaturePadModule,
     BrowserModule,
     FormsModule,
@@ -819,6 +832,20 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
     NewListTicketsComponent,
     ReadMoreComponent,
     NewCvthequeInterneComponent,
+// ======= Remboursement
+    AddRemboussementComponent,
+    ListRemboursementComponent,
+    ContactRemboursementComponent,
+    DataCleComponent,
+    DetailsCandidatComponent,
+    DossierRemboursementComponent,
+    CommentaireSectionComponent,
+    PayementInformationComponent,
+    InformationRemboursementComponent,
+    UploadRemboursementDocComponent,
+    LabelPipe,
+  
+// >>>>>>> 
     MatchingViewerComponent,
     NewEntreprisesComponent,
     AnnonceViewerComponent,
@@ -855,6 +882,8 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
     useClass: MsalInterceptor,
     multi: true,
   },
+  [CountryService]
+
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })

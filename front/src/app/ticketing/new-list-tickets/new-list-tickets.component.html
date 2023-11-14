@@ -1,3 +1,4 @@
+
 <div class="col-12 card grid" *ngIf="ticketUpdate">
     <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
         (click)="ticketUpdate=null" aria-hidden="true"> </i>
@@ -139,7 +140,7 @@
             <div class="grid">
                 <div class="col-12" *ngIf="isAgent && roleAccess!='Spectateur'">
                     <p-selectButton [options]="modeOptions" [(ngModel)]="TicketMode" optionLabel="label"
-                        [disabled]=" roleAccess=='Agent'" (onChange)="onChangeMode($event)"
+                        [disabled]="roleAccess=='Agent'" (onChange)="onChangeMode($event)"
                         optionValue="label"></p-selectButton>
                 </div>
                 <div class="col-6 md:col-3 field-checkbox"

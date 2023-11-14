@@ -2313,7 +2313,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   border-radius: 0;
 }
 .p-datatable .p-datatable-header {
-  background: #f8f9fa;
+  background: white;
   color: #343a40;
   border: 1px solid #dee2e6;
   border-width: 1px 0 1px 0;
