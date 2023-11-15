@@ -31,6 +31,7 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { FileUpload } from 'primeng/fileupload';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { Table } from 'primeng/table';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -67,7 +68,7 @@ export class PreinscriptionComponent implements OnInit {
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  Frythme:String;Fcampus:String;Frentree:String;Fecoles:String;Fformation:String;Fetape:String;Fsource:String;
+  Frythme: String; Fcampus: String; Frentree: String; Fecoles: String; Fformation: String; Fetape: String; Fsource: String;
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
   ];
@@ -79,16 +80,34 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
+
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
-  EtapeFiltere = [
-    { label: "Toutes les étapes", value: null },
-    { label: "Etape 1", value: "Etape 1" },
-    { label: "Etape 2", value: "Etape 2" },
-    { label: "Etape 3", value: "Etape 3" },
-    { label: "Etape 4", value: "Etape 4" },
+  filterPhase = [
+    { value: null, label: "Toutes les phases de candidature" },
+    { value: 'Non traité', label: "Non traité" },
+    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
+    { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
+    { value: "Paiement", label: "Paiement" },
+    { value: "Visa", label: "Visa" },
+    { value: "Inscription en cours", label: "Inscription en cours" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+    { value: "Recours", label: "Recours" },
+  ]
 
-  ];
+  phaseDropdown = [
+    { value: 'Non traité', label: "Non traité" },
+    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
+    { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
+    { value: "Paiement", label: "Paiement" },
+    { value: "Visa", label: "Visa" },
+    { value: "Inscription en cours", label: "Inscription en cours" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+    { value: "Recours", label: "Recours" },
+  ]
   visiblecon: boolean = false;
   etat_dossierDropdown = [
     { value: "En attente", label: "En attente" },
@@ -638,7 +657,7 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-
+  docProspectList = []
 
   onshowDossier(student: Prospect) {
     this.defaultEtatDossier = student.etat_dossier;
@@ -671,9 +690,8 @@ export class PreinscriptionComponent implements OnInit {
     })
 
     setTimeout(() => {
-      console.log(2 + this.proscteList.length)
-      this.selectedTabIndex = 2 + this.proscteList.length; // Définir l'indice après un délai
-    }, 100); // Réglez le délai en millisecondes selon vos besoins
+      this.selectedTabIndex = 3 + this.proscteList.length; // Définir l'indice après un délai
+    }, 5); // Réglez le délai en millisecondes selon vos besoins
     console.log(student);
 
     this.DecisionForm.setValue({
@@ -688,15 +706,6 @@ export class PreinscriptionComponent implements OnInit {
       niveau: this.prospect_acctuelle.entretien.niveau,
       parcour: this.prospect_acctuelle.entretien.parcours
     })
-    if (this.prospect_acctuelle.decision.expliquation == "En attente de traitement") {
-      if (this.prospect_acctuelle.entretien.niveau == "0") {
-
-      } else {
-        this.prospect_acctuelle.etat_traitement == "ETAPE 3"
-      }
-    } else {
-      this.prospect_acctuelle.etat_traitement = "ETAPE 4"
-    }
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data => console.log(data))
   }
   conersiondate(a) {
@@ -868,11 +877,14 @@ export class PreinscriptionComponent implements OnInit {
     })
 
   }
-  
-  
+
+
 
   addDoc() {
-    this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    if (this.PROSPECT.documents_autre)
+      this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    else
+      this.PROSPECT.documents_autre = [{ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() }]
   }
 
   uploadOtherFile(event: File[]) {
@@ -904,7 +916,7 @@ export class PreinscriptionComponent implements OnInit {
 
     })
   }
-  deleteDocument(doc: { date: Date, nom: string, path: string, _id: string },ri) {
+  deleteDocument(doc: { date: Date, nom: string, path: string, _id: string }, ri) {
     this.PROSPECT.documents_administrative.splice(ri, 1)
     this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
@@ -915,8 +927,8 @@ export class PreinscriptionComponent implements OnInit {
     })
     this.initDocument(this.PROSPECT);
   }
-  
-  
+
+
 
   downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe((data) => {
@@ -945,9 +957,19 @@ export class PreinscriptionComponent implements OnInit {
   }
   initalPayement = []
   showPaiement: Prospect = null
+  seePaiements = false
   partenaireOwned: string = null
+  commercialOwned: CommercialPartenaire
+  rowExpand(prospect: Prospect) {
+    if (prospect?.code_commercial)
+      this.commercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        if (commercial && commercial.user_id)
+          this.commercialOwned = commercial
+      })
+  }
   initPaiement(prospect: Prospect) {
     this.showPaiement = prospect
+    this.seePaiements = true
     this.payementList = prospect?.payement
     this.payementProgramList = prospect?.payement_programme
     if (!this.payementList) { this.payementList = [] }
@@ -993,7 +1015,7 @@ export class PreinscriptionComponent implements OnInit {
       this.ToastService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.showPaiement = data
       //this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
-      this.showPaiement = null
+      this.seePaiements = false
     })
   }
   payementList = []
@@ -1269,19 +1291,32 @@ export class PreinscriptionComponent implements OnInit {
   }
   ListDocuments: String[] = []
   ListPiped: String[] = []
+  AddDocumentOnglet(prospect) {
+    this.docProspectList.push(prospect)
+    console.log(this.docProspectList)
+    setTimeout(() => {
+      this.selectedTabIndex = 3 + this.proscteList.length + this.docProspectList.length
+    }, 5)
+
+  }
+  handleChange(event) {
+    console.log(event)
+    if (this.selectedTabIndex > (3 + this.proscteList.length)) {
+      this.initDocument(this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)])
+    }
+  }
   initDocument(prospect) {
     this.PROSPECT = prospect;
     this.showDocAdmin = prospect
-    this.scrollToTop()
     this.DocumentsCandidature = this.PROSPECT.documents_administrative.filter(document =>
       ["Formulaire de candidature", "Test de Sélection", "Attente"].includes(document.type)
     );
-    
+
     this.DocumentsAdministratif = this.PROSPECT.documents_administrative.filter(document =>
-      ["Attestation inscription", "Certificat de scolarité","Attestation de présence / assiduité","Réglement intérieur","Livret d'accueil","Livret d'accueil","Autorisation de diffusion et d'utilisation de photographie et vidéos"].includes(document.type)
+      ["Attestation inscription", "Certificat de scolarité", "Attestation de présence / assiduité", "Réglement intérieur", "Livret d'accueil", "Livret d'accueil", "Autorisation de diffusion et d'utilisation de photographie et vidéos"].includes(document.type)
     );
-    this.DoccumentProfessionel= this.PROSPECT.documents_administrative.filter(document =>
-      ["Convention de stage", "Attestation de stage","Satisfaction de stage","Contrat d'apprentisage","Convention de formation","Livret de suivi","Convocation d'examen","Bulletin de note","Suivi post formation-orientation"].includes(document.type)
+    this.DoccumentProfessionel = this.PROSPECT.documents_administrative.filter(document =>
+      ["Convention de stage", "Attestation de stage", "Satisfaction de stage", "Contrat d'apprentisage", "Convention de formation", "Livret de suivi", "Convocation d'examen", "Bulletin de note", "Suivi post formation-orientation"].includes(document.type)
     );
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
@@ -1330,7 +1365,7 @@ export class PreinscriptionComponent implements OnInit {
       formData.append('nom', this.uploadAdminFileForm.value.nom)
       formData.append('type', this.uploadAdminFileForm.value.type)
       formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
-      formData.append('traited_by', this.userConnected?.firstname+' '+this.userConnected?.lastname)
+      formData.append('traited_by', this.userConnected?.firstname + ' ' + this.userConnected?.lastname)
       formData.append('path', event.files[0].name)
       formData.append('file', event.files[0])
       this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
@@ -1364,7 +1399,6 @@ export class PreinscriptionComponent implements OnInit {
               }).subscribe(() => { })
             }
           })
-          this.initDocument(this.PROSPECT);
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         if (res.documents_administrative)
           this.showDocAdmin.documents_administrative = res.documents_administrative
@@ -1376,7 +1410,7 @@ export class PreinscriptionComponent implements OnInit {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
-    
+
   }
 
   generateCustomID(nom) {
@@ -1432,20 +1466,29 @@ export class PreinscriptionComponent implements OnInit {
     { label: "Contrat d'engagement", value: "contrat-engagement" },
     { label: "Candidature", value: "candidature" },
   ]
-  downloadAdminFile(path) {
-    this.admissionService.downloadFileAdmin(this.showDocAdmin._id, path).subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      var blob = new Blob([byteArray], { type: data.documentType });
+  downloadAdminFile(path, prospect: Prospect = null) {
+    if (!prospect)
+      this.admissionService.downloadFileAdmin(this.showDocAdmin._id, path).subscribe((data) => {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        var blob = new Blob([byteArray], { type: data.documentType });
 
-      importedSaveAs(blob, path)
-    }, (error) => {
-      console.error(error)
-    })
+        importedSaveAs(blob, path)
+      }, (error) => {
+        console.error(error)
+      })
+    else
+      this.admissionService.downloadFileAdmin(prospect._id, path).subscribe((data) => {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        var blob = new Blob([byteArray], { type: data.documentType });
 
+        importedSaveAs(blob, path)
+      }, (error) => {
+        console.error(error)
+      })
   }
   clearFilter() {
-    this.Frythme=null;this.Fcampus=null;this.Frentree=null;this.Fecoles=null;this.Fformation=null;this.Fetape=null;this.Fsource=null;
-   };
+    this.Frythme = null; this.Fcampus = null; this.Frentree = null; this.Fecoles = null; this.Fformation = null; this.Fetape = null; this.Fsource = null;
+  };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
     if (event.checked) {
@@ -1498,5 +1541,16 @@ export class PreinscriptionComponent implements OnInit {
       (error) => {
         return false
       })
+  }
+  calculPayement(prospect: Prospect) {
+    if (prospect.rythme_formation == 'Alternance') {
+      return "Alternant"
+    } else {
+      let total = 0
+      prospect?.payement.forEach(p => {
+        total += p.montant
+      })
+      return `${total}€`
+    }
   }
 }

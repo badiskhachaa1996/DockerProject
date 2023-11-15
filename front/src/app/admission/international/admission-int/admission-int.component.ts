@@ -289,6 +289,8 @@ export class AdmissionIntComponent implements OnInit {
     { value: "Alternance", label: "Alternance" },
     { value: "Initiale", label: "Initiale" },
   ]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
+   
   filterPhase = [
     { value: null, label: "Toutes les phases de candidature" },
     { value: 'Non affecté', label: "Non affecté" },
