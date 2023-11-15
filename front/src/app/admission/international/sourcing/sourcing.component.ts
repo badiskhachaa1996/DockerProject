@@ -28,14 +28,19 @@ import { VenteService } from 'src/app/services/vente.service';
 import { Notification } from 'src/app/models/notification';
 import { SocketService } from 'src/app/services/socket.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
   styleUrls: ['./sourcing.component.scss']
 })
 export class SourcingComponent implements OnInit {
+  @ViewChild('dt1') dt1: Table | undefined;
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
+  displayFilter: boolean = false;
+  Fpays:String;Fcampus:String;Fformation:String;Frythme:String;Flangue:String;Fstatus:String;Fsource:String;Forientation:String;
+  FDadmission:String;FSPayement:String;FSvisa:String;FphaseC:String;FRentree;
   DocTypes: any[] = [
     { value: null, label: "Choisissez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -1219,6 +1224,12 @@ export class SourcingComponent implements OnInit {
     this.dataTimeline.push({ status: "Inscription définitive", date: p.date_inscription_def })
     this.showTimeline = true
     console.log(this.dataTimeline)
+  }
+
+  clearFilter(){
+    this.Fpays=null;this.Fcampus=null;this.Fformation=null;this.Frythme=null;this.Flangue=null;this.Fstatus=null;this.Fsource=null;this.Forientation=null;
+    this.FDadmission=null;this.FSPayement=null;this.FSvisa=null;this.FphaseC=null;this.FRentree=null;
+
   }
 
 }

@@ -750,7 +750,132 @@
                             *ngIf="token && token.role!='user' && token.role!='Agent'">
                         </button>
                     </div>
+                    <div class="field col-12 grid ">
+                        <div *ngIf="Fpays" class="field col-4">
+                        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                        [ngModel]="Fpays"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                </div>
+                <div *ngIf="Fcampus" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                    [ngModel]="Fcampus"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fformation" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                    [ngModel]="Fformation"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
+                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="Frythme" class="field col-4">
+                    <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                    [ngModel]="Frythme"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Flangue" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                    [ngModel]="Flangue"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fstatus" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
+                    [ngModel]="Fstatus"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fsource" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                    [ngModel]="Fsource"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Forientation" class="field col-4">
 
+                    <p-dropdown filter="true" placeholder="Decision Orientation"
+                        [options]="dropdownDecisionOrientation"
+                        [ngModel]="Forientation"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="FDadmission" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Decision Admission"
+                        [options]="dropdownDecisionAdmission"
+                        [ngModel]="FDadmission"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FSPayement" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
+                    [ngModel]="FSPayement"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FSvisa" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                    [ngModel]="FSvisa"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FphaseC" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                    [ngModel]="FphaseC" [style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+                        emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    
+                    </div>
+                    <div class="field col-12 grid ">
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                            (click)="displayFilter=true"></button>
+                    </div>
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                            (click)="clearFilter()"></button>
+                    </div>
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <input pInputText type="text" style="width: 100%;"
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterCampus" filter="true" [ngModel]="Fcampus"
+                            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterFormation" filter="true"
+                            [ngModel]="Fformation"
+                            (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterRentreeScolaire" filter="true"
+                            (onChange)="dt1.filter($event.value,'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
+                            filterPlaceholder="Rôle"></p-dropdown>
+                    </div>
+                </div>
 
                     <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
                         [(selection)]="selectedLeads" [value]="prospects[ecole.url_form]" [paginator]="true"
@@ -759,91 +884,14 @@
                         [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                         responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-                        <ng-template pTemplate="caption">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter
-                                    (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                    class="w-full" />
-                            </span>
-                            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
-                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
-                                [style]="{'margin':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
-                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
-                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
-                                (onChange)="dt1.filter($event.value, 'formation','equals')"
-                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
-                                (onChange)="dt1.filter($event.value, 'rythme_formation','equals')"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
-                                (onChange)="dt1.filter($event.value, 'programme','equals')"
-                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
-                                (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
-                                (onChange)="dt1.filter($event.value, 'source','startsWith')"
-                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                                [style]="{'margin-left':'5px','margin-right':'5px'}">
-                            </p-dropdown>
-
-
-                            <p-dropdown filter="true" placeholder="Decision Orientation"
-                                [options]="dropdownDecisionOrientation"
-                                (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
-                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Decision Admission"
-                                [options]="dropdownDecisionAdmission"
-                                (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
-                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
-                                (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
-                                emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                                (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
-                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
-                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-
-                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                                (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-
-                        </ng-template>
+                        
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
                                 <th style="width: 3rem" scope="col"></th>
-                                
+
                                 <th pSortableColumn="customid" scope="col" style="text-align: center;">
                                     ID Lead <p-sortIcon field="customid"></p-sortIcon>
                                 </th>
@@ -877,14 +925,14 @@
                                 <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
                                     Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
                                 </th>
-                                
+
                                 <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
                                     Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
                                     Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
+                                <!--<th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
                                     Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
@@ -901,7 +949,7 @@
                                 
                                 <th scope="col" style="text-align: center;">
                                     Etat de Candidature
-                                </th>
+                                </th>-->
                                 <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                                     Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                                 </th>
@@ -917,13 +965,15 @@
                                     <p-tableCheckbox [value]="prospect"></p-tableCheckbox>
                                 </td>
                                 <td>
-                                    <button type="button" pButton pRipple
-                                        class="p-button-text p-button-rounded p-button-plain"
-                                        [icon]="selectedProspect==prospect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                        (click)="expand(prospect)"></button>
+                                    <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                        class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'"></button>
+                                    
                                 </td>
 
-                               
+
                                 <td>
                                     {{ prospect.customid }}
                                 </td>
@@ -941,9 +991,9 @@
                                 </td>-->
                                 <td>
                                     {{ prospect.campus_choix_1 }},
-                                
+
                                     {{ prospect.formation | titlecase }},
-                                
+
                                     {{ prospect.rentree_scolaire }},
                                 </td>
                                 <td>
@@ -956,7 +1006,7 @@
                                     {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de
                                     traitement" }}
                                 </td>
-                                <td>
+                                <!--<td>
                                     {{ prospect.programme }}
                                 </td>
                                 <td>
@@ -966,34 +1016,34 @@
                                 <td>
                                     {{ prospect.decision_orientation }}
                                 </td>
-                                
+
                                 <td *ngIf="prospect.haveDoc">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
                                 <td *ngIf="!prospect.haveDoc">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'Non'"></p-tag>
-                                </td>
+                                </td>-->
                                 <td *ngIf="prospect.statut_payement">
                                     {{ prospect.statut_payement }}
                                 </td>
                                 <td *ngIf="!prospect.statut_payement">
                                     Non
                                 </td>
-                                <td *ngIf="prospect.avancement_visa">
+                                <!--<td *ngIf="prospect.avancement_visa">
                                     Oui
                                 </td>
                                 <td *ngIf="!prospect.avancement_visa">
                                     Non
                                 </td>
-                                
+
                                 <td *ngIf="candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
                                 <td *ngIf="!candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'En attente'"></p-tag>
-                                </td>
+                                </td>-->
                                 <td>
                                     {{prospect.date_creation | date :'dd MMMM yy' }}
                                 </td>
@@ -1018,6 +1068,186 @@
                                 </td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-selectedProspect>
+                            <tr>
+                                <td colspan="11">
+                                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                                        Informations Lead
+                                    </h5>
+                                    <p-table responsiveLayout="scroll">
+                                        <ng-template pTemplate="header">
+                            <tr>
+
+                                <th>Civilité</th>
+                                <th>Prénom et Nom </th>
+                                <th>Date de naissance</th>
+                                <th>Nationalité</th>
+                                <th>Pays de résidence</th>
+                                <th>Adresse électronique</th>
+                                <th>Numéro de téléphone</th>
+
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{selectedProspect?.user_id?.civilite }}</td>
+                                <td>
+                                    {{ selectedProspect.user_id.firstname | titlecase }}
+                                    {{ selectedProspect.user_id.lastname | uppercase }}
+                                </td>
+                                <td>
+                                    {{
+                                    selectedProspect.date_naissance| date:'dd MMMM yy'
+                                    }}
+                                </td>
+                                <td>{{ selectedProspect?.user_id?.nationnalite }}</td>
+                                <td>
+                                    {{ selectedProspect?.user_id?.pays_adresse }}
+                                </td>
+
+                                <td>{{ selectedProspect?.user_id?.email_perso }}</td>
+                                <td>{{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}
+                                </td>
+                            </tr>
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Compétences et expériences
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Niveau en Français</th>
+                                <th>Niveau en Anglais</th>
+                                <th>Expériences professionnelles</th>
+                                <th>Description de l’expérience</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.languages_fr }}</td>
+                                <td>
+                                    {{ selectedProspect?.languages_en }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect.professional_experience?'Oui':'Non' }}
+                                </td>
+                                <td>{{ selectedProspect?.professional_experience }}
+                                </td>
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Choix académique
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Rentrée scolaire</th>
+                                <th>Campus</th>
+                                <th>Formation</th>
+                                <th>Programme</th>
+                                <th>Rythme</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.rentree_scolaire }}</td>
+                                <td>
+                                    {{ selectedProspect?.campus_choix_1}}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.formation }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.programme }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.rythme_formation }}
+                                </td>
+
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Source
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Source</th>
+                                <th>Commercial </th>
+                                <th>Adresse mail</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.source }}</td>
+                                <td>
+                                    {{infoCommercial?.user_id?.lastname}}
+                                    {{infoCommercial?.user_id?.firstname}}
+                                </td>
+                                <td>
+                                    {{infoCommercial?.user_id?.email_perso}}
+
+                                </td>
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Démarches 
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date d’inscription</th>
+                                <th>Date de contact </th>
+                                <th>Phase de la candidature</th>
+                                <th>Montant payé</th>
+                                <th>Visa</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.date_creation | date :'dd MMMM yy'}}</td>
+                                <td>
+                                    {{ selectedProspect?.contact_date| date :'dd MMMM yy' }}
+                                </td>
+                                <td>{{ selectedProspect?.phase_candidature }}
+                                </td>
+                                <td>{{ selectedProspect?.statut_payement }}
+                                </td>
+
+
+                                <td>{{ selectedProspect?.avancement_visa }}</td>
+
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+
+
+                    </td>
+                    </tr>
+                    </ng-template>
 
                     </p-table>
                 </div>
@@ -1030,54 +1260,76 @@
         <p-skeleton width="100%" height="100vh"></p-skeleton>
     </div>
     <!-- Expand SideBar -->
-    <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-        <div *ngIf="selectedProspect">
-            <h5>Informations Lead</h5>
-            <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
-            <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
-                selectedProspect?.user_id?.lastname |
-                uppercase }}</p>
-            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'dd MMMM yy' }}</p>
-            <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
-            <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
-            <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
-            <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}
-            </p>
-            <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
-            <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
+    <p-sidebar [(visible)]="displayFilter" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
+        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                                [style]="{'margin':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
+                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                                (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
+                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                                (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                                (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
+                                (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                                (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                                [style]="{'margin-left':'5px','margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
-            <h5>Compétences et expériences</h5>
-            <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
-            <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
-            <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
-            <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
 
-            <h5>Choix académique</h5>
-            <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
-            <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
-            <!--<p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
-            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>-->
-            <p>Formation : {{ selectedProspect?.formation }}</p>
-            <p>Programme : {{ selectedProspect?.programme }}</p>
-            <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
+                            <p-dropdown filter="true" placeholder="Decision Orientation"
+                                [options]="dropdownDecisionOrientation"
+                                (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Decision Admission"
+                                [options]="dropdownDecisionAdmission"
+                                (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
+                                (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+                                emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                                (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
-            <h5>Source </h5>
-            <p>Source du lead: {{ selectedProspect?.source }}</p>
-            <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
-                {{infoCommercial?.user_id?.firstname}}
-            </p>
-            <p>
-                Nom du Partenaire : {{infoPartenaire?.nom}}
-            </p>
-            <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
-
-            <h5>Démarches </h5>
-            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'dd MMMM yy'}}</p>
-            <p>Date de contact: {{ selectedProspect?.contact_date| date :'dd MMMM yy' }}</p>
-            <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
-            <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
-            <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
-        </div>
+                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                                (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals');FRentree=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
     </p-sidebar>
 </div>
