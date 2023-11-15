@@ -300,6 +300,7 @@ import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard
 import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
+import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 const routes: Routes = [
     {
         path: '',
@@ -1311,6 +1312,7 @@ const routes: Routes = [
             },
             { path: 'administration/preinscription', component: PreinscriptionComponent,canActivate: [AuthGuardService], },
             { path: 'administration/inscription',component: InscriptionComponent,canActivate: [AuthGuardService],},
+            {path:'administration/evaluation',component: EvaluationComponent,canActivate: [AuthGuardService],},
             //Module Mail Type
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },

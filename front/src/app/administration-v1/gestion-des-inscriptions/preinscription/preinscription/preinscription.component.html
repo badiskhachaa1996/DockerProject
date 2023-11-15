@@ -1619,8 +1619,8 @@
                     <div *ngIf="Frythme" class="field col-4">
                         <label for="rythme">Rythme</label> <br>
                         <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true"
-                            [ngModel]="Frythme"
-                            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                            [(ngModel)]="Frythme"
+                            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')"
                             emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                     </div>
                     <div *ngIf="Frentree" class="field col-4">
@@ -2614,8 +2614,9 @@
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
     <h3>Filtres</h3>
     <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
-            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" 
+        [(ngModel)]="Frythme"
+            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')"
             emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
             (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
