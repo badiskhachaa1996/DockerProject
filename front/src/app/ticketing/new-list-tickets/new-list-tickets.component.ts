@@ -240,14 +240,16 @@ export class NewListTicketsComponent implements OnInit {
       }
       this.ticketsOnglets = r.savedTicket
       if (this.TICKETID)
-        this.TicketService.getById(this.TICKETID).subscribe(ticket => {
-          this.ticketsOnglets.push(ticket.dataTicket)
-          this.MessageService.getAllByTicketID(ticket.dataTicket._id).subscribe(messages => {
-            this.messageList = messages
-          })
-          setTimeout(() => {
-            this.activeIndex1 = 1 + this.ticketsOnglets.length
-          }, 2)
+        this.TicketService.getPopulate(this.TICKETID).subscribe(ticket => {
+          if(ticket.agent_id._id == this.token.id){
+            this.ticketsOnglets.push(ticket)
+            this.MessageService.getAllByTicketID(ticket._id).subscribe(messages => {
+              this.messageList = messages
+            })
+            setTimeout(() => {
+              this.activeIndex1 = 1 + this.ticketsOnglets.length
+            }, 2)
+          }
         })
       this.updateTicketList()
     })
