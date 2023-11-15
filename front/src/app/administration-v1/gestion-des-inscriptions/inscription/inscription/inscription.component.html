@@ -180,47 +180,68 @@
             <div class="field col-12"></div>
         </form>
     </p-dialog>
-    <div class="col-12 grid" style="text-align: right;">
-        <div class="md:col-1 col-6" style="text-align: center;">
-            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
-                (click)="displayFilter=true"></button>
+    <div class="col-12 grid" >
+        <div class="field col-12 grid ">
+            <div *ngIf="Frythme" class="field col-4">
+                <label for="rythme">Rythme</label> <br>
+                <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true" [ngModel]="Frythme"
+                    (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                    emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+            </div>
+            <div *ngIf="Frentree" class="field col-4">
+                <label for="rythme">Rentrée</label> <br>
+                <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true" [ngModel]="Frentree"
+                    (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+                    emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+            </div>
+            <div *ngIf="Fetape" class="field col-4">
+                <label for="rythme">Etape</label> <br>
+                <p-dropdown [style]="{'width':'17em'}" [options]="EtapeFiltere" filter="true" [ngModel]="Fetape"
+                    (onChange)="dt1.filter($event.value, 'etat_traitement', 'equals');Fetape=$event.value"
+                    emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+            </div>
+            <div *ngIf="Fsource" class="field col-4">
+                <label for="rythme">Etape</label> <br>
+                <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true" [ngModel]="Fsource"
+                    (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+                    emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+            </div>
+            <!--<div *ngIf="FYpareo" class="field col-4">
+                <label>Ypareo</label>
+                <p-checkbox [style]="{'width':'5em'}" value="NON" [ngModel]="FYpareo" (onChange)="onYpareoCheckboxChange($event);"></p-checkbox>:
+            </div>-->
         </div>
-        <div class="md:col-1 col-6" style="text-align: center;">
+        <div class="md:col-1 col-12" style="text-align: center;">
+            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter" (click)="displayFilter=true"></button>
+        </div>
+        <div class="md:col-1 col-12" style="text-align: center;">
             <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                 (click)="clearFilter()"></button>
         </div>
-        <div class="md:col-3 col-9" style="text-align: center;">
+        <div class="md:col-2 col-12" style="text-align: center;">
             <input pInputText type="text" style="width: 100%;"
-            (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                placeholder="Recherche" />
+                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+        </div>
+        <div class="col-12 md:col-2">
+            <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
+                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+        </div>
+        <div class="md:col-2 col-12">
+            <p-dropdown [style]="{'width':'17em'}" [options]="formationsFitre" filter="true" [ngModel]="Fformation"
+                (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+        </div>
+        <div class="md:col-2 col-12">
+            <p-dropdown [style]="{'width':'17em'}" [options]="EcoleFiltre" filter="true"
+                (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
+                filterPlaceholder="Rôle"></p-dropdown>
         </div>
     </div>
     <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
         [globalFilterFields]="['customid', 'user_id.lastname', 'user_id.firstname']" [rows]="8" [pageLinks]="5"
         [paginator]="true" rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
-        <ng-template pTemplate="caption">
-            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                placeholder="Recherche" />
-
-            <p-dropdown [style]="{'margin':'5px'}" [options]="rythme_filtre" filter="true" s
-                (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
-                filterPlaceholder="Type"></p-dropdown>
-                
-            <p-dropdown [style]="{'margin':'5px'}" [options]="campusfiltre" filter="true"
-                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown>
-                <p-dropdown [style]="{'margin':'5px'}" [options]="rentreeList" filter="true"
-                (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown>
-                <p-dropdown [style]="{'margin':'5px'}" [options]="sourceFiltre" filter="true"
-                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle"></p-dropdown>
-                <p-checkbox [style]="{'margin':'5px'}" filter="true"
-                (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
-                filterPlaceholder="Rôle">Teams</p-checkbox>
-            <div class="flex table-header">
-            </div>
-        </ng-template>
+        
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 5em"></th>
@@ -473,47 +494,47 @@
     </p-table>
 </div>
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
-	<h3>Filtres</h3>
-	<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
+    <h3>Filtres</h3>
+    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
         <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
-        (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
-        filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
-    <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-        (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
+            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
-        (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
-        (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value,'type_form', 'equals');Fecoles=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="formationsFitre" filter="true"
-        (onChange)="dt1.filter($event.value,'formation', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value,'formation', 'equals');Fformation=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EtapeFiltere" filter="true"
-        (onChange)="dt1.filter($event.value,'etat_traitement', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value,'etat_traitement', 'equals');Fetape=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
-        (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
-        filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
-                <label>Teams</label>
-                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onTeamsCheckboxChange($event)">
-                   
-                </p-checkbox><br><br><br><br>
-                <label>Ypareo</label>
-                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onYpareoCheckboxChange($event)">
-                    
-                </p-checkbox><br><br><br><br>
-                <label>Groupe</label>
-                <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onGroupeCheckboxChange($event)">
-                    
-                </p-checkbox>
-                <div ></div>
-		<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
+            (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+        <label>Teams</label>
+        <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onTeamsCheckboxChange($event)">
+
+        </p-checkbox><br><br><br><br>
+        <label>Ypareo</label>
+        <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onYpareoCheckboxChange($event);">
+
+        </p-checkbox><br><br><br><br>
+        <label>Groupe</label>
+        <p-checkbox [style]="{'width':'5em'}" value="NON" (onChange)="onGroupeCheckboxChange($event)">
+
+        </p-checkbox>
+        <div></div>
+        <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
 			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
-		<button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
-			(click)="displayFilter = false"></button>
-		<button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
-			(click)="clearFilter()"></button>
-	</div>
+        <button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
+            (click)="displayFilter = false"></button>
+        <button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
+            (click)="clearFilter()"></button>
+    </div>
 </p-sidebar>

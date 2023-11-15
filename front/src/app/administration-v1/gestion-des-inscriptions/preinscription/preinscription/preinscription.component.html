@@ -491,102 +491,136 @@
             </p-tabPanel>
         </p-tabView>
     </div>
-    <div class="col-12 card"  *ngIf="showDocumentB">
+    <div class="col-12 card" *ngIf="showDocumentB">
         <p-accordion [(activeIndex)]="selectedTabIndex1">
-            <p-dialog header="Documents de Candidature" [(visible)]="visibleC" >
-            <div class="col-12" *ngIf="showUploadFile!=null">
-                <div class="card">
-                    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                        (click)="showUploadFile = null" aria-hidden="true"> </i>
-                    <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
-                        showUploadFile.user_id?.firstname }} {{
-                        showUploadFile.user_id?.lastname | uppercase }}
-                    </h3>
-        
-                    <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
-                        <div class="field col-6">
-                            <label>Date de délivrance</label>
-                            <input type="date" formControlName="date" pInputText />
-                        </div>
-                        
-                        <div class="field col-6">
-                            <label>Note :</label>
-                            <textarea pInputTextarea formControlName="note"></textarea>
-                        </div>
-                        
-                        <div class="field col-12">
-                            <label>Type de document :</label>
-                            <p-dropdown [options]="documentDropdownc" formControlName="type" placeholder="Choisissez un type"
-                                filter="true">
-                                <br><br><br><br><br><br>
-                            </p-dropdown>
-                        </div>
-                        <div class="field col-12">
-                            <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
-                                 customUpload="true" fileLimit="1"
-                                accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
-                                maxFileSize="10000000" [auto]="true" #fileInput>
-                            </p-fileUpload>
-                        </div>
-        
-                    </form>
+            <p-dialog header="Documents de Candidature" [(visible)]="visibleC">
+                <div class="col-12" *ngIf="showUploadFile!=null">
+                    <div class="card">
+                        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                            (click)="showUploadFile = null" aria-hidden="true"> </i>
+                        <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un
+                            document à : {{
+                            showUploadFile.user_id?.firstname }} {{
+                            showUploadFile.user_id?.lastname | uppercase }}
+                        </h3>
+
+                        <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                            <div class="field col-6">
+                                <label>Date de délivrance</label>
+                                <input type="date" formControlName="date" pInputText />
+                            </div>
+
+                            <div class="field col-6">
+                                <label>Note :</label>
+                                <textarea pInputTextarea formControlName="note"></textarea>
+                            </div>
+
+                            <div class="field col-12">
+                                <label>Type de document :</label>
+                                <p-dropdown [options]="documentDropdownc" formControlName="type"
+                                    placeholder="Choisissez un type" filter="true">
+                                    <br><br><br><br><br><br>
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12">
+                                <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic" customUpload="true"
+                                    fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                    [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000" [auto]="true"
+                                    #fileInput>
+                                </p-fileUpload>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </p-dialog>
+            </p-dialog>
             <p-accordionTab>
                 <ng-template pTemplate="header">
                     <div>
                         <span style="font-weight: bold;">CANDIDATURE</span> &nbsp;
                     </div>
                 </ng-template>
-                
-                            <div class="col-4">
-                                <p-button [style]="{'width':'10%'}" (click)="addDoc();visibleC=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
-                                    autoWidth="false" ></p-button>
-                            </div>
-                            <p-table  #dt1 dataKey="_id" [rows]="8" [value]="DocumentsCandidature"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Type</th>
-                                        <th>Date</th>
-                                        <th>Lien</th>
-                                        <th>Traité par</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr >
-                                        <td>{{doc?.custom_id}}</td>
-                                        <td>{{doc?.type}}</td>
-                                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
-                                        <td>
-                                            <a (click)="downloadAdminFile(doc.path)">Télécharger</a>
-                                        </td>
-                                        <td>{{doc?.traited_by}}</td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                
+
+                <div class="col-4">
+                    <p-button [style]="{'width':'10%'}" (click)="addDoc();visibleC=true;showUploadFile=showDocAdmin;"
+                        icon="pi pi-plus" autoWidth="false"></p-button>
+                </div>
+                <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsCandidature" rowExpandMode="single" [rows]="8"
+                    [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                    [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Lien</th>
+                            <th>Traité par</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                        <tr>
+                            <td>{{doc?.custom_id}}</td>
+                            <td>{{doc?.type}}</td>
+                            <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                            <td>
+                                <a (click)="downloadAdminFile(doc.path)">Télécharger</a>
+                            </td>
+                            <td>{{doc?.traited_by}}</td>
+                            <td>
+                                <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                    *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                    (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                    aria-hidden="true"></i>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
             </p-accordionTab>
             <p-accordionTab>
                 <ng-template pTemplate="header">
                     <div>
                         <span style="font-weight: bold;">ADMISSIONS</span> &nbsp;
-                        
+
                     </div>
                 </ng-template>
+                <div class="col-12">
+                    <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile
+                        style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                    <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
+                        #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                </div>
+                <div class="card grid">
+                    <h3 class="col-12">Documents Requis</h3>
+                    <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12"
+                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Document</th>
+                                <th>Lien</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc>
+                            <tr>
+                                <td>{{doc.nom}}</td>
+                                <td>
+                                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                                </td>
+                                <td>
+                                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                        class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
                 <div class="card grid" *ngIf="PROSPECT ">
                     <h3 class="col-12">Documents</h3>
                     <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12"
@@ -606,8 +640,7 @@
                                 </td>
                                 <td>
                                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                        (click)="initUpload(doc)" style="margin-left: 2%;"
-                                        aria-hidden="true"></i>
+                                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
                                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
                                         class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
                                 </td>
@@ -616,13 +649,13 @@
                     </p-table>
                     <h3 class="col-8">Autre documents</h3>
                     <div class="col-4">
-                        <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
-                            autoWidth="false" label="Ajouter un autre document"></p-button>
+                        <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
+                            label="Ajouter un autre document"></p-button>
                     </div>
-                    <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8"
-                        rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                        [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                        responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
+                    <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single"
+                        [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                        [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                        styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Document</th>
@@ -660,41 +693,42 @@
                 </div>
             </p-accordionTab>
             <p-accordionTab>
-                <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM" >
+                <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM">
                     <div class="col-12" *ngIf="showUploadFile!=null">
                         <div class="card">
                             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                                 (click)="showUploadFile = null" aria-hidden="true"> </i>
-                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un
+                                document à : {{
                                 showUploadFile.user_id?.firstname }} {{
                                 showUploadFile.user_id?.lastname | uppercase }}
                             </h3>
-                
+
                             <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
                                 <div class="field col-6">
                                     <label>Date de délivrance</label>
                                     <input type="date" formControlName="date" pInputText />
                                 </div>
-                                
+
                                 <div class="field col-6">
                                     <label>Note :</label>
                                     <textarea pInputTextarea formControlName="note"></textarea>
                                 </div>
-                                
+
                                 <div class="field col-12">
                                     <label>Type de document :</label>
-                                    <p-dropdown [options]="documentDropdowna" formControlName="type" placeholder="Choisissez un type"
-                                        filter="true"></p-dropdown>
-                                        <br><br><br><br><br><br>
+                                    <p-dropdown [options]="documentDropdowna" formControlName="type"
+                                        placeholder="Choisissez un type" filter="true"></p-dropdown>
+                                    <br><br><br><br><br><br>
                                 </div>
                                 <div class="field col-12">
                                     <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
-                                         customUpload="true" fileLimit="1"
-                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
-                                        maxFileSize="10000000" [auto]="true" #fileInput>
+                                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                        [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000" [auto]="true"
+                                        #fileInput>
                                     </p-fileUpload>
                                 </div>
-                
+
                             </form>
                         </div>
                     </div>
@@ -702,133 +736,134 @@
                 <ng-template pTemplate="header">
                     <div>
                         <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
-                        
+
                     </div>
                 </ng-template>
                 <div class="col-4">
-                    <p-button [style]="{'width':'10%'}" (click)="addDoc();visibleADM=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
-                        autoWidth="false" ></p-button>
+                    <p-button [style]="{'width':'10%'}" (click)="addDoc();visibleADM=true;showUploadFile=showDocAdmin;"
+                        icon="pi pi-plus" autoWidth="false"></p-button>
                 </div>
-                <p-table  #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Type</th>
-                                        <th>Date</th>
-                                        <th>Lien</th>
-                                        <th>Traité par</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr >
-                                        <td>{{doc?.custom_id}}</td>
-                                        <td>{{doc?.type}}</td>
-                                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
-                                        <td>
-                                            <a (click)="downloadAdminFile(doc?.path)">Télécharger</a>
-                                        </td>
-                                        <td>{{doc?.traited_by}}</td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
+                    [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                    [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Lien</th>
+                            <th>Traité par</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                        <tr>
+                            <td>{{doc?.custom_id}}</td>
+                            <td>{{doc?.type}}</td>
+                            <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                            <td>
+                                <a (click)="downloadAdminFile(doc?.path)">Télécharger</a>
+                            </td>
+                            <td>{{doc?.traited_by}}</td>
+                            <td>
+                                <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                    *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                    (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                    aria-hidden="true"></i>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p-accordionTab>
             <p-accordionTab>
                 <ng-template pTemplate="header">
                     <div>
                         <span style="font-weight: bold;">DOSSIER PROFESSIONNEL</span> &nbsp;
-                       
+
                     </div>
                 </ng-template>
-                <p-dialog header="Documents du dossier professionel" [(visible)]="visiblep" >
+                <p-dialog header="Documents du dossier professionel" [(visible)]="visiblep">
                     <div class="col-12" *ngIf="showUploadFile!=null">
                         <div class="card">
                             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                                 (click)="showUploadFile = null" aria-hidden="true"> </i>
-                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un
+                                document à : {{
                                 showUploadFile.user_id?.firstname }} {{
                                 showUploadFile.user_id?.lastname | uppercase }}
                             </h3>
-                
+
                             <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
                                 <div class="field col-6">
                                     <label>Date de délivrance</label>
                                     <input type="date" formControlName="date" pInputText />
                                 </div>
-                                
+
                                 <div class="field col-6">
                                     <label>Note :</label>
                                     <textarea pInputTextarea formControlName="note"></textarea>
                                 </div>
-                                
+
                                 <div class="field col-12">
                                     <label>Type de document :</label>
-                                    <p-dropdown [options]="documentDropdownpro" formControlName="type" placeholder="Choisissez un type"
-                                        filter="true"></p-dropdown>
-                                        <br><br><br><br><br><br>
+                                    <p-dropdown [options]="documentDropdownpro" formControlName="type"
+                                        placeholder="Choisissez un type" filter="true"></p-dropdown>
+                                    <br><br><br><br><br><br>
                                 </div>
                                 <br><br><br><br><br><br>
                                 <div class="field col-12">
                                     <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
-                                         customUpload="true" fileLimit="1"
-                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
-                                        maxFileSize="10000000" [auto]="true" #fileInput>
+                                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                        [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000" [auto]="true"
+                                        #fileInput>
                                     </p-fileUpload>
                                 </div>
-                
+
                             </form>
                         </div>
                     </div>
                 </p-dialog>
                 <div class="col-4">
-                    <p-button [style]="{'width':'10%'}" (click)="addDoc();visiblep=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
-                        autoWidth="false" ></p-button>
+                    <p-button [style]="{'width':'10%'}" (click)="addDoc();visiblep=true;showUploadFile=showDocAdmin;"
+                        icon="pi pi-plus" autoWidth="false"></p-button>
                 </div>
-                <p-table  #dt1 dataKey="_id" [rows]="8"  [value]="DoccumentProfessionel"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Type</th>
-                                        <th>Date</th>
-                                        <th>Lien</th>
-                                        <th>Traité par</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr >
-                                        <td>{{doc?.custom_id}}</td>
-                                        <td>{{doc?.type}}</td>
-                                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
-                                        <td>
-                                            <a (click)="downloadAdminFile(doc.path)">Télécharger</a>
-                                        </td>
-                                        <td>{{doc?.traited_by}}</td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                <p-table #dt1 dataKey="_id" [rows]="8" [value]="DoccumentProfessionel" rowExpandMode="single" [rows]="8"
+                    [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                    [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Lien</th>
+                            <th>Traité par</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                        <tr>
+                            <td>{{doc?.custom_id}}</td>
+                            <td>{{doc?.type}}</td>
+                            <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                            <td>
+                                <a (click)="downloadAdminFile(doc.path)">Télécharger</a>
+                            </td>
+                            <td>{{doc?.traited_by}}</td>
+                            <td>
+                                <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                    *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                    (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                    aria-hidden="true"></i>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p-accordionTab>
         </p-accordion>
     </div>
@@ -959,7 +994,7 @@
                     <div class="field col-12 md:col-12">
                         <label For="type">Type <span style="color:red"> *</span></label>
                         <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
-                           formControlName="type"></p-dropdown>
+                            formControlName="type"></p-dropdown>
                     </div>
 
 
@@ -1252,19 +1287,69 @@
                 </form>
             </div>
             <div class="grid ">
-                <div class="md:col-2 col-6" style="text-align: center;">
+                <div class="field col-12 grid ">
+                    <div *ngIf="Frythme" class="field col-4">
+                        <label for="rythme">Rythme</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true"
+                            [ngModel]="Frythme"
+                            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Frentree" class="field col-4">
+                        <label for="rythme">Rentrée</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true"
+                            [ngModel]="Frentree"
+                            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Fetape" class="field col-4">
+                        <label for="rythme">Etape</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="EtapeFiltere" filter="true" [ngModel]="Fetape"
+                            (onChange)="dt1.filter($event.value, 'etat_traitement', 'equals');Fetape=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Fsource" class="field col-4">
+                        <label for="rythme">Etape</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true"
+                            [ngModel]="Fsource"
+                            (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+
+
+                </div>
+
+                <div class="md:col-1 col-12" style="text-align: center;">
                     <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                         (click)="displayFilter=true"></button>
                 </div>
-                <div class="md:col-2 col-6" style="text-align: center;">
+                <div class="md:col-1 col-12" style="text-align: center;">
                     <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                         (click)="clearFilter()"></button>
                 </div>
-                <div class="md:col-8 col-12" style="text-align: center;">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <input pInputText type="text" style="width: 100%;"
                         (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                 </div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                </div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="formationsFitre" filter="true"
+                        [ngModel]="Fformation"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                </div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="EcoleFiltre" filter="true"
+                        (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
+                        filterPlaceholder="Rôle"></p-dropdown>
+                </div>
             </div>
+
+
             <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
@@ -1342,9 +1427,9 @@
                         </td>
                         <td>
                             <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
-                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
-                                value="1" pTooltip="Candidature" aria-hidden="true"
-                                (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge value="1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
+                                tooltipPosition="bottom"></i>
                             <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
                                 style="padding-left: 3%" aria-hidden="true"
                                 (click)="initSendEmail(prospect);scrollToTop()"> </i>
@@ -1356,7 +1441,8 @@
                                 (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <i pTooltip="Documents " tooltipPosition="bottom" class="pi pi-file m-1"
-                                (click)="initDocument(prospect);scrollToTop();showDocumentB=true;" aria-hidden="true"></i>
+                                (click)="initDocument(prospect);scrollToTop();showDocumentB=true;"
+                                aria-hidden="true"></i>
                             <i style="padding-left: 3%;" class="pi pi-building m-1" pTooltip="Admission"
                                 (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -1530,7 +1616,37 @@
         </p-tabPanel>
         <p-tabPanel header="International">
             <div class="grid ">
+                <div class="field col-12 grid ">
+                    <div *ngIf="Frythme" class="field col-4">
+                        <label for="rythme">Rythme</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true"
+                            [ngModel]="Frythme"
+                            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Frentree" class="field col-4">
+                        <label for="rythme">Rentrée</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true"
+                            [ngModel]="Frentree"
+                            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Fetape" class="field col-4">
+                        <label for="rythme">Etape</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="EtapeFiltere" filter="true" [ngModel]="Fetape"
+                            (onChange)="dt1.filter($event.value, 'etat_traitement', 'equals');Fetape=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div *ngIf="Fsource" class="field col-4">
+                        <label for="rythme">Etape</label> <br>
+                        <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true"
+                            [ngModel]="Fsource"
+                            (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
 
+
+                </div>
                 <div class="md:col-1 col-6" style="text-align: center;">
                     <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                         (click)="displayFilter=true"></button>
@@ -1543,7 +1659,22 @@
                     <input pInputText type="text" style="width: 100%;"
                         (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                 </div>
-                <div class="md:col-5 col-9 "></div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                </div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="formationsFitre" filter="true"
+                        [ngModel]="Fformation"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                </div>
+                <div class="md:col-2 col-12">
+                    <p-dropdown [style]="{'width':'17em'}" [options]="EcoleFiltre" filter="true"
+                        (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
+                        filterPlaceholder="Rôle"></p-dropdown>
+                </div>
                 <div class="md:col-1 col-9 ">
                     <button pButton pRipple (click)="shownewLeadForm=true" icon="pi pi-plus" class="mr-2 mb-2"></button>
                 </div>
@@ -1625,9 +1756,9 @@
                         </td>
                         <td>
                             <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
-                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
-                                value="1" pTooltip="Candidature" aria-hidden="true"
-                                (click)="goToCandidature(prospect._id)" tooltipPosition="bottom"></i>
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge value="1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect._id)"
+                                tooltipPosition="bottom"></i>
                             <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
                                 style="padding-left: 3%" aria-hidden="true"
                                 (click)="initSendEmail(prospect);scrollToTop()"> </i>
@@ -2031,7 +2162,8 @@
                             dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;color: orange;" *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier">Etat
+                        <h4 style="text-align: center;color: orange;"
+                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier">Etat
                             du dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
@@ -2168,7 +2300,7 @@
                             <h3 class="col-8">Autre documents</h3>
                             <div class="col-4">
                                 <p-button [style]="{'width':'10%'}" (click)="addDoc()" icon="pi pi-plus"
-                                    autoWidth="false" ></p-button>
+                                    autoWidth="false"></p-button>
                             </div>
                             <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8"
                                 rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
@@ -2486,14 +2618,14 @@
     <h3>Filtres</h3>
     <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
         <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" s
-            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
-            filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals')" emptyFilterMessage="Role non trouvé"
-            filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Frythme=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
-            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
-            filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');;Frentree=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
             (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
             filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
@@ -2501,11 +2633,11 @@
             (onChange)="dt1.filter($event.value,'formation', 'equals')" emptyFilterMessage="Role non trouvé"
             filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EtapeFiltere" filter="true"
-            (onChange)="dt1.filter($event.value,'etat_traitement', 'equals')" emptyFilterMessage="Role non trouvé"
-            filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value,'etat_traitement', 'equals');Fetape=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'source', 'equals')" emptyFilterMessage="Role non trouvé"
-            filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
+            (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+            emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
 
         <div></div>
         <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"

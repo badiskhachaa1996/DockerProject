@@ -23,6 +23,8 @@ export class InscriptionComponent implements OnInit {
   civiliteList = environment.civilite;
   paysList = environment.pays;
   nationList = environment.nationalites;
+  Frythme:String;Fcampus:String;Frentree:String;Fecoles:String;
+  Fformation:String;Fetape:String;Fsource:String;FYpareo:boolean;FTeams:boolean;Fgroupe:Boolean;
   EcoleListRework = [];
   campusDropdown = [];
   programeFrDropdown = [];
@@ -356,8 +358,7 @@ export class InscriptionComponent implements OnInit {
     return new_date
   }
   clearFilter() {
-    //this.filter_value = {
-     // statut: null,
+    this.Frythme=null;this.Fcampus=null;this.Frentree=null;this.Fecoles=null;this.Fformation=null;this.Fetape=null;this.Fsource=null;
      
   }
   onTeamsCheckboxChange(event: any) {
@@ -366,12 +367,14 @@ export class InscriptionComponent implements OnInit {
     console.log(event.checked)
     // Checkbox est coché, appliquer le filtre
     this.dt1?.filter('NON', 'teams', 'equals');
-    
+    this.FTeams=true;
   } 
   if(event.checked.length <1) {
     console.log("notchecked")
     // Checkbox est décoché, réinitialiser le filtre
     this.dt1?.filter('', 'teams', 'equals');
+    this.FTeams=false;
+
   }
 }
 onYpareoCheckboxChange(event: any) {
@@ -380,12 +383,13 @@ if (event.checked) {
   console.log(event.checked)
   // Checkbox est coché, appliquer le filtre
   this.dt1?.filter('NON', 'Ypareo', 'equals');
-  
+  this.FYpareo=true;
 } 
 if(event.checked.length <1) {
   console.log("notchecked")
   // Checkbox est décoché, réinitialiser le filtre
   this.dt1?.filter('', 'Ypareo', 'equals');
+  this.FYpareo=false;
 }
 }
 onGroupeCheckboxChange(event: any) {
@@ -394,12 +398,14 @@ if (event.checked) {
   console.log(event.checked)
   // Checkbox est coché, appliquer le filtre
   this.dt1?.filter('NON', 'groupe', 'equals');
+  this.Fgroupe=true;
   
 } 
 if(event.checked.length <1) {
   console.log("notchecked")
   // Checkbox est décoché, réinitialiser le filtre
   this.dt1?.filter('', 'groupe', 'equals');
+  this.Fgroupe=false;
 }
 }
   
