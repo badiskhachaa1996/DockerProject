@@ -4497,6 +4497,43 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
                                         items: [
+                                            
+                                            {
+                                                label: 'Paramètre',
+                                                icon: 'pi pi-prime',
+                                                items: [
+                                                    {
+                                                        label: 'Session',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Ecole',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Campus',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Formation',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Groupes',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/groupes']
+                                                    },
+                                                    {
+                                                        label: 'Evaluations',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                ]
+                                            },
                                             {
                                                 label: 'Local - International',
                                                 icon: 'pi pi-prime',
@@ -6625,6 +6662,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Administration V2',
                                     icon: 'pi pi-users',
                                     items: [
+                                        
                                         {
                                             label: 'Préinscription - Admission',
                                             icon: 'pi pi-prime',
@@ -6634,7 +6672,43 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Inscription',
                                             icon: 'pi pi-prime',
                                             routerLink: ['/administration/inscription']
-                                        }
+                                        },
+                                        {
+                                            label: 'Paramètre',
+                                            icon: 'pi pi-cog',
+                                            items: [
+                                                {
+                                                    label: 'Session',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/admission/rentree']
+                                                },
+                                                {
+                                                    label: 'Ecole',
+                                                    icon: 'pi pi-list',
+                                                    routerLink: ['/ecole']
+                                                },
+                                                {
+                                                    label: 'Campus',
+                                                    icon: 'pi pi-map-marker',
+                                                    routerLink: ['/campus']
+                                                },
+                                                {
+                                                    label: 'Formation',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/admission/formations']
+                                                },
+                                                {
+                                                    label: 'Groupes',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/administration/preinscription']
+                                                },
+                                                {
+                                                    label: 'Evaluations',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/administration/evaluation']
+                                                },
+                                            ]
+                                        },
                                     ]
                                 },
                                 {
