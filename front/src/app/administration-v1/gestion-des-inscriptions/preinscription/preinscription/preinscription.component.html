@@ -1286,7 +1286,6 @@
                     </div>
                 </form>
             </div>
-            <div class="grid ">
                 <div class="field col-12 grid ">
                     <div *ngIf="Frythme" class="field col-4">
                         <label for="rythme">Rythme</label> <br>
@@ -1318,12 +1317,12 @@
 
 
                 </div>
-
-                <div class="md:col-1 col-12" style="text-align: center;">
+                <div class="field col-12 grid ">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                         (click)="displayFilter=true"></button>
                 </div>
-                <div class="md:col-1 col-12" style="text-align: center;">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                         (click)="clearFilter()"></button>
                 </div>
@@ -1332,18 +1331,18 @@
                         (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
                         (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
                         emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="formationsFitre" filter="true"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="formationsFitre" filter="true"
                         [ngModel]="Fformation"
                         (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
                         emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="EcoleFiltre" filter="true"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="EcoleFiltre" filter="true"
                         (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
                         filterPlaceholder="Rôle"></p-dropdown>
                 </div>
@@ -1647,37 +1646,35 @@
 
 
                 </div>
-                <div class="md:col-1 col-6" style="text-align: center;">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                         (click)="displayFilter=true"></button>
                 </div>
-                <div class="md:col-1 col-6" style="text-align: center;">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                         (click)="clearFilter()"></button>
                 </div>
-                <div class="md:col-3 col-9" style="text-align: center;">
+                <div class="md:col-2 col-12" style="text-align: center;">
                     <input pInputText type="text" style="width: 100%;"
                         (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
                         (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
                         emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="formationsFitre" filter="true"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="formationsFitre" filter="true"
                         [ngModel]="Fformation"
                         (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
                         emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                 </div>
                 <div class="md:col-2 col-12">
-                    <p-dropdown [style]="{'width':'17em'}" [options]="EcoleFiltre" filter="true"
+                    <p-dropdown [style]="{'width':'11em'}" [options]="EcoleFiltre" filter="true"
                         (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
                         filterPlaceholder="Rôle"></p-dropdown>
                 </div>
-                <div class="md:col-1 col-9 ">
-                    <button pButton pRipple (click)="shownewLeadForm=true" icon="pi pi-plus" class="mr-2 mb-2"></button>
-                </div>
+                
             </div>
             <p-table #dt1 [value]="prospectI" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
@@ -2621,10 +2618,10 @@
             (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
             emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Frythme=$event.value"
+            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
-            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');;Frentree=$event.value"
+            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
             (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
