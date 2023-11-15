@@ -16,12 +16,13 @@ export class LeadDossierComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService) { }
-
+  resideFr = false
+  alternance = false
   ngOnInit(): void {
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
-        if(!this.PROSPECT.etat_dossier)
+        if (!this.PROSPECT.etat_dossier)
           this.PROSPECT.etat_dossier = "En attente"
       })
   }

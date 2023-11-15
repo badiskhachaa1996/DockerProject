@@ -8,7 +8,20 @@
     <h3 class="col-8">Documents Requis</h3>
     <p class="col-4"
         [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
-        style="text-align: center;padding: 9px;">Etat du dossier : {{PROSPECT.etat_dossier}}</p>
+        style="text-align: center;padding: 9px;">
+        Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+        Etat du dossier : {{PROSPECT.etat_dossier}}
+    </p>
+    <div class="card col-12 grid">
+        <div class="col-6">
+            Je réside en France
+            <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"></p-checkbox>
+        </div>
+        <div class="col-6">
+            Je cherche une alternance
+            <p-checkbox [(ngModel)]="alternance" [binary]="true" inputId="binary"></p-checkbox>
+        </div>
+    </div>
     <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
@@ -20,15 +33,14 @@
         </ng-template>
         <ng-template pTemplate="body" let-doc>
             <tr>
-                <td>
+                <td *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
                     {{doc.nom}}
-                    <span *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
-                    <span *ngIf="doc.nom=='TCF'">(Obligatoire pour les étudiants des pays non francophone)</span>
-                    <span *ngIf="doc.nom=='Carte de séjour'">(Obligatoire pour les étudiants qui résident en
-                        France)</span>
+                    <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
+                    <span style="color: red;" *ngIf="doc.nom=='Carte de séjour'">(Obligatoire)</span>
                 </td>
-                <td>
-                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                <td style="text-align: center;">
+                    <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                        (click)="downloadFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                 </td>
                 <td>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
@@ -68,7 +80,8 @@
                     </p-cellEditor>
                 </td>
                 <td>
-                    <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                    <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                    (click)="downloadOtherFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                 </td>
                 <td>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"

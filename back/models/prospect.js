@@ -196,7 +196,7 @@ const prospect_schema = new mongoose.Schema({
     },
     phase_candidature: {
         type: String,
-        default: "En attente d'affectation"
+        default: "Non traité"
     },
     agent_sourcing_id: {
         type: mongoose.Schema.Types.ObjectId,
