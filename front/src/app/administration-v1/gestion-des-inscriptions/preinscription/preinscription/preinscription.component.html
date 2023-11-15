@@ -2833,10 +2833,10 @@
             (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
             emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Frythme=$event.value"
+            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
-            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');;Frentree=$event.value"
+            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
             (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
