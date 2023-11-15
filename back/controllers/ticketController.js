@@ -269,6 +269,14 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
+
+app.get("/getPopulate/:id", (req, res) => {
+    Ticket.findById(req.params.id).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by').then((dataTicket) => {
+        res.status(200).send(dataTicket);
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
 //Récuperer tous les tickets
 app.get("/getAll", (req, res) => {
     Ticket.find()?.populate({ path: "task_id", populate: { path: "project_id" } })?.populate('agent_id')
