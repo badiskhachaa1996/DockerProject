@@ -241,7 +241,7 @@ export class NewListTicketsComponent implements OnInit {
       this.ticketsOnglets = r.savedTicket
       if (this.TICKETID)
         this.TicketService.getPopulate(this.TICKETID).subscribe(ticket => {
-          if(ticket.agent_id._id == this.token.id){
+          if(ticket?.agent_id?._id == this.token.id){
             this.ticketsOnglets.push(ticket)
             this.MessageService.getAllByTicketID(ticket._id).subscribe(messages => {
               this.messageList = messages
