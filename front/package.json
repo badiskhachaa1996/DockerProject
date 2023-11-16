@@ -5,6 +5,8 @@
         "ng": "ng",
         "start": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng serve",
         "build": "ng build --max_old_space_size=8384",
+        "build:stats": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng build --stats-json",
+        "analyze": "webpack-bundle-analyzer dist/sakai/stats.json",
         "commentignore": "--max_old_space_size=8384",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
@@ -80,6 +82,7 @@
         "protractor": "~7.0.0",
         "ts-node": "~8.3.0",
         "tslint": "~6.1.0",
-        "typescript": "~4.4.3"
+        "typescript": "~4.4.3",
+        "webpack-bundle-analyzer": "^4.10.1"
     }
 }

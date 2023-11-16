@@ -1547,9 +1547,10 @@ export class PreinscriptionComponent implements OnInit {
       return "Alternant"
     } else {
       let total = 0
-      prospect?.payement.forEach(p => {
-        total += p.montant
-      })
+      if (prospect?.payement)
+        prospect?.payement.forEach(p => {
+          total += p.montant
+        })
       return `${total}€`
     }
   }

@@ -128,12 +128,7 @@ import { PersonalComponent } from './components/menus/personal.component';
 import { SeatComponent } from './components/menus/seat.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { CountryService } from './dev-components/service-template/countryservice';
-import { CustomerService } from './dev-components/service-template/customerservice';
-import { EventService } from './dev-components/service-template/eventservice';
-import { IconService } from './dev-components/service-template/iconservice';
-import { NodeService } from './dev-components/service-template/nodeservice';
-import { PhotoService } from './dev-components/service-template/photoservice';
-import { ProductService } from './dev-components/service-template/productservice';
+
 import { MenuService } from './dev-components/service-template/app.menu.service';
 import { ConfigService } from './dev-components/service-template/app.config.service';
 import { LoginComponent } from './components/login/login.component';
@@ -152,11 +147,6 @@ import { ListDiplomeComponent } from './administration/diplomes/list-diplome/lis
 import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
 import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
 import { ListGroupeComponent } from './administration/groupes/list-groupe/list-groupe.component';
-import { AddAgentComponent } from './administration/agents/add-agent/add-agent.component';
-import { ListAgentComponent } from './administration/agents/list-agent/list-agent.component';
-import { GestionTicketsComponent } from './ticketing/gestion-tickets/gestion-tickets.component';
-import { SuiviTicketsComponent } from './ticketing/suivi-tickets/suivi-tickets.component';
-import { GestionServicesComponent } from './ticketing/gestion-services/gestion-services.component';
 import { MatieresComponent } from './pedagogie/matieres/matieres.component';
 import { AddFormateurComponent } from './pedagogie/formateurs/add-formateur/add-formateur.component';
 import { ListFormateursComponent } from './pedagogie/formateurs/list-formateurs/list-formateurs.component';
@@ -164,10 +154,7 @@ import { AddEtudiantComponent } from './pedagogie/etudiants/add-etudiant/add-etu
 import { ListEtudiantComponent } from './pedagogie/etudiants/list-etudiant/list-etudiant.component';
 import { AddEntrepriseComponent } from './pedagogie/entreprises/add-entreprise/add-entreprise.component';
 import { ListEntrepriseComponent } from './pedagogie/entreprises/list-entreprise/list-entreprise.component';
-import { GestionPreinscriptionsComponent } from './admission/gestion-preinscriptions/gestion-preinscriptions.component';
-import { FormulaireAdmissionComponent } from './formulaire-admission/formulaire-admission.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { NotesComponent } from './pedagogie/notes/notes.component';
 import { ExterneComponent } from './authentification/externe/externe.component';
 import { SuiviePreinscriptionComponent } from './admission/suivie-preinscription/suivie-preinscription.component';
 
@@ -189,34 +176,19 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ContactComponent } from './footer/contact/contact.component';
-import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
-import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { DemandeEventsComponent } from './demande-events/demande-events.component';
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 import { ArrToStrPipe } from './arr-to-str.pipe';
-import { CreateAccountComponent } from './support/create-account/create-account.component';
-import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
-import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
-import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
-import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
-import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
-import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
-import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
-import { LogementComponent } from './ims+/logement/logement.component';
-import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
-import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
-import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
@@ -231,7 +203,7 @@ import {
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
-import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
+
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
@@ -241,15 +213,12 @@ import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
-import { MyTaskComponent } from './projects/my-task/my-task.component';
-import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvSemestrielComponent } from './pedagogie/notes/pv-semestriel/pv-semestriel.component';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
-import { TeamComponent } from './projects/team/team.component';
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tutelle-ceo/contrats-tutelle-ceo.component';
@@ -320,16 +289,9 @@ import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
-import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
-import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
-import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
 import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.component';
 import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
-import { TicketNonAssignesComponent } from './ticketing/ticket-non-assignes/ticket-non-assignes.component';
-import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
-import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list-tickets-traite.component';
-import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
@@ -352,7 +314,7 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
-import { BookingV2Component } from './booking-v2/booking-v2.component';
+
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
@@ -368,7 +330,7 @@ import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
 import { GenformationComponent } from './gen_doc/genformation/genformation.component';
 import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { OutputpageComponent } from './gen_doc/gendoc/outputpage/outputpage.component';
-import { QRCodeModule  } from 'angularx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
 import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-intro.component';
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
@@ -402,7 +364,6 @@ import { CommentaireSectionComponent } from './remboursement/list-remboursement/
 import { PayementInformationComponent } from './remboursement/list-remboursement/payement-information/payement-information.component';
 import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
 import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
-import { LabelPipe } from './directives/label.pipe';
 import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
@@ -429,6 +390,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
 import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
+import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 
 
 @NgModule({
@@ -609,11 +571,6 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     AddDiplomeComponent,
     AddGroupeComponent,
     ListGroupeComponent,
-    AddAgentComponent,
-    ListAgentComponent,
-    GestionTicketsComponent,
-    SuiviTicketsComponent,
-    GestionServicesComponent,
     MatieresComponent,
     AddFormateurComponent,
     ListFormateursComponent,
@@ -621,9 +578,6 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     ListEtudiantComponent,
     AddEntrepriseComponent,
     ListEntrepriseComponent,
-    GestionPreinscriptionsComponent,
-    FormulaireAdmissionComponent,
-    NotesComponent,
     ExterneComponent,
     SuiviePreinscriptionComponent,
     ListSeancesComponent,
@@ -649,30 +603,17 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     ListEventsComponent,
     ListeContratsComponent,
     ArrToStrPipe,
-    CreateAccountComponent,
-    MyAccountComponent,
-    AddNewIndividualAccountComponent,
-    ListeDesComptesComponent,
-    AccountDetailsComponent,
-    ReturnUrlComponent,
-    CancelUrlComponent,
-    ErrorUrlComponent,
-    LogementComponent,
-    GestionLogementComponent,
     MatchingComponent,
     GestionEquipeComponent,
     DetailEquipeComponent,
     DemandeConseillerComponent,
     UsersSettingsComponent,
-    AnalyseDoublonComponent,
     GestionEtudiantsComponent,
-    DevoirsComponent,
-    DevoirsEtudiantsComponent,
     InfoImsComponent,
     FactureFormateurComponent,
     AnnoncesComponent,
     FormulaireIntunsComponent,
-    CvthequeComponent,
+    AjoutTicketComponent,
     MesOffresComponent,
     SkillsManagementComponent,
     ProgressionPedagogiqueComponent,
@@ -682,15 +623,12 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     QuestionnaireFinFormationComponent,
     ResultatQFFComponent,
     PovFormateurComponent,
-    MyTaskComponent,
-    TaskManagementComponent,
     PvSemestrielComponent,
     BulletinComponent,
     ListEntrepriseCeoComponent,
     PvAppreciationComponent,
     AppreciationInputComponent,
     PvAnnuelComponent,
-    TeamComponent,
     TuteurCeoComponent,
     EvenementsComponent,
     ContratsTutelleCeoComponent,
@@ -761,16 +699,9 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     LeadsPrequalifiesComponent,
     VentesCRMComponent,
     LeadsQualifiesComponent,
-    AjoutTicketComponent,
-    MesTicketsComponent,
-    TicketsAssignesComponent,
     AddAgentC,
     UpdateAgentComponent,
     ListAgentV2Component,
-    TicketNonAssignesComponent,
-    ListTicketsEnAttenteDeTraitementComponent,
-    ListTicketsTraiteComponent,
-    ListTicketsRefuseComponent,
     ConfigurationComponent,
     DashboardTicketingComponent,
     PaiementComponent,
@@ -792,7 +723,6 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     MytaskComponent,
     MyprojectComponent,
     DashboardProjectV2Component,
-    BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent,
     AjouterUnTicketProjetComponent,
@@ -833,7 +763,7 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     NewListTicketsComponent,
     ReadMoreComponent,
     NewCvthequeInterneComponent,
-// ======= Remboursement
+    // ======= Remboursement
     AddRemboussementComponent,
     ListRemboursementComponent,
     ContactRemboursementComponent,
@@ -844,9 +774,8 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     PayementInformationComponent,
     InformationRemboursementComponent,
     UploadRemboursementDocComponent,
-    LabelPipe,
-  
-// >>>>>>> 
+
+    // >>>>>>> 
     MatchingViewerComponent,
     NewEntreprisesComponent,
     AnnonceViewerComponent,
@@ -873,8 +802,8 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     PreviewCandidatureComponent,
     LeadDocumentsComponent,
     EvaluationComponent
-    
-    
+
+
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

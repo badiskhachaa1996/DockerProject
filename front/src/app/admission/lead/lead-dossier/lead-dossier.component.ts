@@ -73,7 +73,12 @@ export class LeadDossierComponent implements OnInit {
     this.PROSPECT.documents_dossier[this.PROSPECT.documents_dossier.indexOf(doc)].path = null
     this.ProspectService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
       this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
-        console.log(a)
+        this.checkIfDossierComplet()
+      })
+    }, error => {
+      console.error(error)
+      this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+        this.checkIfDossierComplet()
       })
     })
 
@@ -125,11 +130,15 @@ export class LeadDossierComponent implements OnInit {
   }
   checkIfDossierComplet() {
     let r = false
-    this.documentsObligatoires = ["Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+    this.documentsObligatoires = ["Diplôme baccaulauréat ou équivalent"]
     if (this.alternance) {
       this.documentsObligatoires.push('Carte de séjour')
       this.documentsObligatoires.push('Lettre de Motivation')
       this.documentsObligatoires.push('CV')
+      this.documentsObligatoires.push('Dernier diplôme supérieur obtenu')
+    } else {
+      this.documentsObligatoires.push("Passeport / Pièce d'identité")
+      this.documentsObligatoires.push("Relevés de note depuis le baccalauréat")
     }
     if (this.resideFr && !this.alternance) {
       this.documentsObligatoires.push('Carte de séjour')
