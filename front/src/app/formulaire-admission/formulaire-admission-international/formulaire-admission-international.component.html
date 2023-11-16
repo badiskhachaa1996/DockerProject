@@ -307,11 +307,11 @@
                                     </p-dropdown>
                                 </div>-->
 
-                                <div class="field col-12 md:col-4">
+                                <!--<div class="field col-12 md:col-4">
                                     <label>Programme <span style="color: red;"> * </span></label>
                                     <p-dropdown [options]="programList" optionLabel="value" formControlName="programme">
                                     </p-dropdown>
-                                </div>
+                                </div>-->
                                 <div class="field col-12 md:col-8"
                                     *ngIf="RegisterForm.value.programme.value=='Programme Anglais'">
                                     <label For="formation">Formation <span style="color: red;">
@@ -320,8 +320,7 @@
                                         autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                                         formControlName="formation"></p-dropdown>
                                 </div>
-                                <div class="field col-12 md:col-8"
-                                    *ngIf="RegisterForm.value.programme.value=='Programme Français'">
+                                <div class="field col-12 md:col-6">
                                     <label For="programme_fr">Formation <span style="color: red;"> *
                                         </span></label>
                                     <p-dropdown [options]="programeFrDropdown"
@@ -329,7 +328,7 @@
                                         [group]="true" [style]="{'width':'100%'}"
                                         formControlName="formation"></p-dropdown>
                                 </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
                                     <label For="rythme">Rythme de la formation <span style="color: red;"> *
                                         </span></label>
                                     <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
@@ -371,7 +370,7 @@
                                 (click)="previousPage()">
                             </button>
                             <button pButton type="button" label="Suivant"
-                                [disabled]="programme.invalid || formation.invalid || rythme_formation.invalid"
+                                [disabled]="formation.invalid || rythme_formation.invalid"
                                 style="float: right;" (click)="nextPage()"></button>
                         </div>
                     </div>

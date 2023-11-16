@@ -1954,13 +1954,12 @@
                         </div>
                         <a href="javascript:void(0)" (click)="onshowDocuments()">Afficher le dossier -></a>
                         <div class="card grid" *ngIf="PROSPECT && showDocuments">
-                            <h3 class="col-8">Documents Requis</h3>
-                            <p class="col-4"
+                            <h3 class="col-12">Documents</h3>
+                            <p class="col-12"
                                 [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
                                 style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
-                                l'équipe d'admission.<br>
-                                Etat du dossier : {{PROSPECT.etat_dossier}}
+                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+                                Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
                             </p>
                             <div class="card col-12 grid">
                                 <div class="col-6">
@@ -1982,8 +1981,8 @@
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-doc>
-                                    <tr>
-                                        <td *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
+                                    <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
+                                        <td>
                                             {{doc.nom}}
                                             <span style="color: red;"
                                                 *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
@@ -2005,7 +2004,7 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
-                            <h3 class="col-8">Autre documents</h3>
+                            <!--<h3 class="col-8">Autre documents</h3>
                             <div class="col-4">
                                 <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
                                     autoWidth="false" label="Ajouter un autre document"></p-button>
@@ -2049,7 +2048,7 @@
                                         </td>
                                     </tr>
                                 </ng-template>
-                            </p-table>
+                            </p-table>-->
                         </div>
                     </p-accordionTab>
                     <p-accordionTab>
@@ -2430,13 +2429,12 @@
                                 pInputFile />
                         </div>
                         <div class="card grid" *ngIf="PROSPECT ">
-                            <h3 class="col-8">Documents Requis</h3>
-                            <p class="col-4"
+                            <h3 class="col-12">Documents</h3>
+                            <p class="col-12"
                                 [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
                                 style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
-                                l'équipe d'admission.<br>
-                                Etat du dossier : {{PROSPECT.etat_dossier}}
+                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+                                Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
                             </p>
                             <div class="card col-12 grid">
                                 <div class="col-6">
@@ -2458,8 +2456,8 @@
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-doc>
-                                    <tr>
-                                        <td *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
+                                    <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
+                                        <td>
                                             {{doc.nom}}
                                             <span style="color: red;"
                                                 *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
@@ -2481,7 +2479,7 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
-                            <h3 class="col-8">Autre documents</h3>
+                            <!--<h3 class="col-8">Autre documents</h3>
                             <div class="col-4">
                                 <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
                                     autoWidth="false" label="Ajouter un autre document"></p-button>
@@ -2525,7 +2523,7 @@
                                         </td>
                                     </tr>
                                 </ng-template>
-                            </p-table>
+                            </p-table>-->
                         </div>
                     </p-accordionTab>
                     <p-accordionTab>

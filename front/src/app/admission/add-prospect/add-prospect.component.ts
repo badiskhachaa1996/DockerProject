@@ -112,7 +112,9 @@ export class AddProspectComponent implements OnInit {
     { label: "Partenaire", value: "Partenaire" },
     { label: "Equipe commerciale", value: "Equipe commerciale" },
     { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
-    { label: "Lead", value: "Lead" }, //Par défaut si Lead
+    { label: "Lead", value: "Lead" },//Par défaut si Lead
+    { label: "Site Web", value: "Site Web" },
+    { label: "Spontané", value: "Spontané" }
   ]
 
   commercialList = []
@@ -168,7 +170,6 @@ export class AddProspectComponent implements OnInit {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
           //this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
         })
-        this.sourceList.push({ label: "Site Web", value: "Site Web" })
         this.sourceList = this.sourceList.concat([
           { label: "Equipe communication", value: "Equipe communication" },
           { label: "Bureau Congo", value: "Bureau Congo" },

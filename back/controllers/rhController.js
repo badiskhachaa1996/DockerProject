@@ -110,9 +110,8 @@ app.delete('/delete-collaborateur/:id', (req, res) => {
 
     Collaborateur.findByIdAndRemove(id)
         .then((c) => {
-            User.findByIdAndRemove(c.user_id).then((u) => {
-                res.status(200).send('Collaborateur supprimé correctement')
-            })
+            res.status(200).send('Collaborateur supprimé correctement')
+            //User.findByIdAndRemove(c.user_id).then((u) => {})
         })
         .catch((error) => { res.status(500).send("Impossible de supprimer le collaborateur"); })
 });

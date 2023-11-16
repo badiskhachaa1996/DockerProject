@@ -286,8 +286,7 @@ const prospect_schema = new mongoose.Schema({
             { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
             { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
             { nom: "Relevé de note baccaulauréat", path: null, date: null },
-            { nom: "Relevé de note des deux dernières années ( 1er année )", path: null, date: null },
-            { nom: "Relevé de note des deux dernières années ( 2ème année )", path: null, date: null },
+            { nom: "Relevés de note depuis le baccalauréat", path: null, date: null },
             { nom: "TCF", path: null, date: null },
             { nom: 'Carte de séjour', path: null, date: null }
         ]
