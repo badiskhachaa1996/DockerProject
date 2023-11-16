@@ -20,6 +20,7 @@ import { AuthService } from 'src/app/services/auth.service';
 
 export class AddRemboussementComponent implements OnInit {
 
+  currentDemande = new Demande;
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
@@ -116,9 +117,11 @@ pays_residence = environment.pays
 @Output() doneUpdating = new EventEmitter<boolean>();
 
 
-@Input() currentDemande = new Demande;
+ 
 
 @Input() showUpdateForm = false;
+
+@Input() isNewDemande = false
 
 formRembourssement: FormGroup;
 
@@ -159,9 +162,10 @@ availableStatus = environment.availableStatus
           data.forEach(d => {
             this.ecoles.push({ label: d.titre, value: d.url_form }) 
           })
-          if(this.showUpdateForm ) {
+          if(this.showUpdateForm && !this.isNewDemande) {
             this.chargeFormDate(this.currentDemande)
           } else {
+            this.currentDemande = new Demande
             this.currentDemande.docs = {
               rib: null,
               attestation_payement: null,
@@ -244,9 +248,10 @@ availableStatus = environment.availableStatus
      method:this.formRembourssement.value.paymentType
    }
 
-     if (update) {
+     if (update && !this.isNewDemande) {
       this.updateDemande(demande)
      } else {
+      this.currentDemande = new Demande
       this.newDemande(demande)
      }
   }
@@ -263,6 +268,7 @@ availableStatus = environment.availableStatus
 
   updateDemande(demande) {
                // Use the service to make the POST request
+               demande.status =  demande.status == 'new' ? demande.status  = 'in-progress' : demande.status 
                this.demandeRemboursementService.updateRemboursement(demande).subscribe(
                 (response) => {
                   this.doneUpdating.emit(true)
@@ -294,6 +300,7 @@ availableStatus = environment.availableStatus
 
   newDemande(demande) {
               // Use the service to make the POST request
+              demande.status = 'new'
               this.demandeRemboursementService.addRemboursement(demande).subscribe(
                 (response) => {
                   // Handle success (show a success message)
@@ -302,6 +309,9 @@ availableStatus = environment.availableStatus
                     summary: 'Success',
                     detail: 'Remboursement added successfully.'
                   });
+
+                this.isNewDemande = false
+                this.showUpdateForm = false
 
                   for (let key in this.docList) {
                     let doc = this.docList[key]
@@ -340,6 +350,7 @@ availableStatus = environment.availableStatus
   cancelForm() {
     this.cancelFormOutPut.emit(true)
     this.showUpdateForm = false
+    this.isNewDemande = false
     this.ngOnInit()
   }
 

@@ -95,7 +95,7 @@ motif: {
              doc_number:{type: String},
         }, 
     },},
-    
+    rejection_date:{type:Date},
     created_on: {type: Date},
     created_by:{type:String}
 });
