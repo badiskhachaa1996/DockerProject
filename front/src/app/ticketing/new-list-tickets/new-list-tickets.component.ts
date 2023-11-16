@@ -659,6 +659,7 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Autre', value: "Autre" },
   ];
   moduleDropdown: any[] = [
+    { label: 'Espace Personnel', value: "Espace Personnel" },
     { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
     { label: 'Module Pédagogie', value: "Module Pédagogie" },
     { label: 'Module Administration', value: "Module Administration" },
@@ -675,7 +676,8 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
     { label: 'Module Ticketing', value: "Module Ticketing" },
-    { label: 'Espace Personnel', value: "Espace Personnel" },
+    { label: 'Module Remboursement', value: "Module Remboursement" },
+    { label: 'Autre', value: "Autre" },
   ];
 
   IMS_Type_Dropdown: any[] = [

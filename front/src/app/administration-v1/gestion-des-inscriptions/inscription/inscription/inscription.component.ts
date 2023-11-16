@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Prospect } from 'src/app/models/Prospect';
 import { environment } from 'src/environments/environment';
@@ -19,12 +19,12 @@ export class InscriptionComponent implements OnInit {
   prospect_acctuelle: Prospect;
   visible: boolean = false;
   showupdateLeadForm: boolean = false;
-  displayFilter:boolean = false;
+  displayFilter: boolean = false;
   civiliteList = environment.civilite;
   paysList = environment.pays;
   nationList = environment.nationalites;
-  Frythme:String;Fcampus:String;Frentree:String;Fecoles:String;
-  Fformation:String;Fetape:String;Fsource:String;FYpareo:boolean;FTeams:boolean;Fgroupe:Boolean;
+  Frythme: String; Fcampus: String; Frentree: String; Fecoles: String;
+  Fformation: String; Fetape: String; Fsource: String; FYpareo: boolean; FTeams: boolean; Fgroupe: Boolean;
   EcoleListRework = [];
   campusDropdown = [];
   programeFrDropdown = [];
@@ -41,65 +41,67 @@ export class InscriptionComponent implements OnInit {
       { value: "Programme Français" },
       { value: "Programme Anglais" },
     ];
-    rythme_filtre=[
-      {label:"Tous les rythmes", value:null},
-      { label: "Initiale", value: 'Initiale' },
-      { label: "Alternance", value:'Alternance' }
-    ];
+  rythme_filtre = [
+    { label: "Tous les rythmes", value: null },
+    { label: "Initiale", value: 'Initiale' },
+    { label: "Alternance", value: 'Alternance' }
+  ];
   typeFormationDropdown = [
     { value: "Initiale" },
     { value: "Alternance" }
   ];
   campusfiltre =
-  [
-    { value: null, label: "Tous les campus" },
-    { value: "Paris", label: "Paris - France" },
-    { value: "Montpellier", label: "Montpellier - France" },
-    { value: "Brazzaville", label: "Brazzaville - Congo" },
-    { value: "Rabat", label: "Rabat - Maroc" },
-    { value: "La Valette", label: "La Valette - Malte" },
-    { value: "UAE", label: "UAE - Dubai" },
-    { value: "En ligne", label: "En ligne" },
-  ];
+    [
+      { value: null, label: "Tous les campus" },
+      { value: "Paris", label: "Paris - France" },
+      { value: "Montpellier", label: "Montpellier - France" },
+      { value: "Brazzaville", label: "Brazzaville - Congo" },
+      { value: "Rabat", label: "Rabat - Maroc" },
+      { value: "La Valette", label: "La Valette - Malte" },
+      { value: "UAE", label: "UAE - Dubai" },
+      { value: "En ligne", label: "En ligne" },
+    ];
   sourceFiltre = [
     { label: "Toutes sources", value: null },
     { label: "Partenaire", value: "Partenaire" },
     { label: "Equipe commerciale", value: "Equipe commerciale" },
     { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
     { label: "Lead", value: "Lead" },
+    { label: "Site Web", value: "Site Web" },
     { label: "Spontané", value: "Spontané" } //Par défaut si Lead
   ];
-    sourceList = [
-      { label: "Partenaire", value: "Partenaire" },
-      { label: "Equipe commerciale", value: "Equipe commerciale" },
-      { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
-      { label: "Lead", value: "Lead" },
-      { label: "Spontané", value: "Spontané" } //Par défaut si Lead
-    ]
-    etapeFiltre = [
-      { label: "all", value: null },
-      { label: "", value: "Partenaire" },
-      { label: "Equipe commerciale", value: "Equipe commerciale" },
-      { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
-      { label: "Lead", value: "Lead" },
-      { label: "Spontané", value: "Spontané" } //Par défaut si Lead
-    ];
-    EcoleFiltre = [{
-      label: "Toutes les écoles", value:null
-    }]
-    formationsFitre=[
-      {label:"Toutes les Formations ",value:null }
-    ];
-    rentreeFiltere=[{label:"Toutes les rentrées ",value:null,_id:null}];
-    EtapeFiltere = [
-      {label:"Toutes les étapes",value:null},
-      {label:"Etape 1",value:"Etape 1"},
-      {label:"Etape 2",value:"Etape 2"},
-      {label:"Etape 3",value:"Etape 3"},
-      {label:"Etape 4",value:"Etape 4"},
-  
-    ];
-    filterValue: string | null = null;
+  sourceList = [
+    { label: "Partenaire", value: "Partenaire" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
+    { label: "Lead", value: "Lead" },
+    { label: "Site Web", value: "Site Web" },
+    { label: "Spontané", value: "Spontané" } //Par défaut si Lead
+  ]
+  etapeFiltre = [
+    { label: "all", value: null },
+    { label: "", value: "Partenaire" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
+    { label: "Lead", value: "Lead" },
+    { label: "Spontané", value: "Spontané" } //Par défaut si Lead
+  ];
+  EcoleFiltre = [{
+    label: "Toutes les écoles", value: null
+  }]
+  formationsFitre = [
+    { label: "Toutes les Formations ", value: null }
+  ];
+  rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
+  EtapeFiltere = [
+    { label: "Toutes les étapes", value: null },
+    { label: "Etape 1", value: "Etape 1" },
+    { label: "Etape 2", value: "Etape 2" },
+    { label: "Etape 3", value: "Etape 3" },
+    { label: "Etape 4", value: "Etape 4" },
+
+  ];
+  filterValue: string | null = null;
   updateLeadForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], Validators.required),
     lastname: new FormControl('',),
@@ -149,14 +151,17 @@ export class InscriptionComponent implements OnInit {
         this.FAService.RAgetByEcoleID(e._id).subscribe(dataEcoles => {
           dataEcoles.forEach(rentre => {
             this.rentreeFiltere.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
-          })})})});
+          })
+        })
+      })
+    });
     //RECUPERATION DES FORMATIONS
-    this.FAService.FAgetAll().subscribe(form=>{
-      form.forEach(f=>{
-        this.formationsFitre.push({ label:f.nom,value:f.nom})
+    this.FAService.FAgetAll().subscribe(form => {
+      form.forEach(f => {
+        this.formationsFitre.push({ label: f.nom, value: f.nom })
       })
     })
-     
+
     console.log(this.EcoleListRework);
   }
   //AFFICHER LES COMPTES
@@ -358,55 +363,55 @@ export class InscriptionComponent implements OnInit {
     return new_date
   }
   clearFilter() {
-    this.Frythme=null;this.Fcampus=null;this.Frentree=null;this.Fecoles=null;this.Fformation=null;this.Fetape=null;this.Fsource=null;
-     
+    this.Frythme = null; this.Fcampus = null; this.Frentree = null; this.Fecoles = null; this.Fformation = null; this.Fetape = null; this.Fsource = null;
+
   }
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
-  if (event.checked) {
-    console.log(event.checked)
-    // Checkbox est coché, appliquer le filtre
-    this.dt1?.filter('NON', 'teams', 'equals');
-    this.FTeams=true;
-  } 
-  if(event.checked.length <1) {
-    console.log("notchecked")
-    // Checkbox est décoché, réinitialiser le filtre
-    this.dt1?.filter('', 'teams', 'equals');
-    this.FTeams=false;
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'teams', 'equals');
+      this.FTeams = true;
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'teams', 'equals');
+      this.FTeams = false;
 
+    }
   }
-}
-onYpareoCheckboxChange(event: any) {
-  console.log('Checkbox changed', event);
-if (event.checked) {
-  console.log(event.checked)
-  // Checkbox est coché, appliquer le filtre
-  this.dt1?.filter('NON', 'Ypareo', 'equals');
-  this.FYpareo=true;
-} 
-if(event.checked.length <1) {
-  console.log("notchecked")
-  // Checkbox est décoché, réinitialiser le filtre
-  this.dt1?.filter('', 'Ypareo', 'equals');
-  this.FYpareo=false;
-}
-}
-onGroupeCheckboxChange(event: any) {
-  console.log('Checkbox changed', event);
-if (event.checked) {
-  console.log(event.checked)
-  // Checkbox est coché, appliquer le filtre
-  this.dt1?.filter('NON', 'groupe', 'equals');
-  this.Fgroupe=true;
-  
-} 
-if(event.checked.length <1) {
-  console.log("notchecked")
-  // Checkbox est décoché, réinitialiser le filtre
-  this.dt1?.filter('', 'groupe', 'equals');
-  this.Fgroupe=false;
-}
-}
-  
+  onYpareoCheckboxChange(event: any) {
+    console.log('Checkbox changed', event);
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'Ypareo', 'equals');
+      this.FYpareo = true;
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'Ypareo', 'equals');
+      this.FYpareo = false;
+    }
+  }
+  onGroupeCheckboxChange(event: any) {
+    console.log('Checkbox changed', event);
+    if (event.checked) {
+      console.log(event.checked)
+      // Checkbox est coché, appliquer le filtre
+      this.dt1?.filter('NON', 'groupe', 'equals');
+      this.Fgroupe = true;
+
+    }
+    if (event.checked.length < 1) {
+      console.log("notchecked")
+      // Checkbox est décoché, réinitialiser le filtre
+      this.dt1?.filter('', 'groupe', 'equals');
+      this.Fgroupe = false;
+    }
+  }
+
 }
