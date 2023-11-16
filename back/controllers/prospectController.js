@@ -1580,13 +1580,14 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
         prospectList.forEach(data => {
             if (data && data.payement)
                 data.payement.forEach(pay => {
+                    console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
                         if (pay.type == 'Lien de paiement')
                             stats_paiements.inscription.lien += 1
                         else if (pay.type == 'Compensation')
                             stats_paiements.inscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay?.type.includes('Virement'))
                             stats_paiements.inscription.virement += 1
                         else if (pay.type.includes('Espèce'))
                             stats_paiements.inscription.espece += 1

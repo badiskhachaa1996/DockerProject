@@ -3,25 +3,25 @@
       <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" [isNewDemande]="isNewDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
     </div>
   <p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
-  [globalFilterFields]="['student.first_name','student.last_name','_id' ]"  
+  [globalFilterFields]="['student.first_name','student.last_name','customid','student.email' ]"  
   rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
     responsiveLayout="scroll">
   
     <ng-template pTemplate="caption">
       <div class="flex">
-        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterEcole" [(ngModel)]="seletedEcoles" placeholder="ecole" (onChange)="updateFilter();" optionLabel="label">
+        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterEcole" [(ngModel)]="seletedEcoles" placeholder="Ecole" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
-        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterPays" [(ngModel)]="selectedPays" placeholder="pay de résidence" (onChange)="updateFilter();" optionLabel="label">
+        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterPays" [(ngModel)]="selectedPays" placeholder="PayS de résidence" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
         <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterFormation" [(ngModel)]="selectedFormation" placeholder="Formation" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
-        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selectedFormation" placeholder="status" (onChange)="updateFilter();" optionLabel="label">
+        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selected" placeholder="Status" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
 
        
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
     </span>
     <span class="p-buttonset ml-auto mr-3">
       <button [disabled]="formRembourssement.invalid" pButton pRipple (click)="isNewDemande=true; showUpdateForm = true" class="imen-btn" label="Ajouter" icon="pi pi-plus" type="submit"></button>
@@ -89,7 +89,7 @@
         <td style="width: 5rem;">
             <button type="button" pButton pRipple [pRowToggler]="demande" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
         </td>
-        <td> REM-{{demande._id | slice:demande._id.length-6:demande._id.length-1}}</td>
+        <td> {{demande?.customid}}</td>
         <td >{{demande.student?.last_name}}</td>
         <td >{{demande.student?.first_name}}</td>
         <td >{{ annesSchols[demande.training?.scholar_year]}}</td>
