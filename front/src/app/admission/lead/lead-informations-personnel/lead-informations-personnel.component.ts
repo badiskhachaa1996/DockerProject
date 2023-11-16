@@ -56,11 +56,19 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     nationnalite: new FormControl('', Validators.required),
     email_perso: new FormControl('', Validators.required),
     pays_adresse: new FormControl('', Validators.required),
+    sos_lastname: new FormControl(''),
+    sos_firstname: new FormControl(''),
+    sos_email: new FormControl(''),
+    sos_phone: new FormControl(''),
     _id: new FormControl("", Validators.required)
   })
   initEditForm() {
     let bypass: any = this.PROSPECT?.user_id
     this.editInfoForm.setValue({
+      sos_lastname: this.PROSPECT?.sos_lastname,
+      sos_firstname: this.PROSPECT?.sos_firstname,
+      sos_email: this.PROSPECT?.sos_email,
+      sos_phone: this.PROSPECT?.sos_phone,
       lastname: bypass?.lastname,
       firstname: bypass?.firstname,
       phone: bypass?.phone,

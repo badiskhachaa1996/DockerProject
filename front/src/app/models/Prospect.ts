@@ -104,7 +104,11 @@ export class Prospect {
         public groupe?:string,
         public ecole?:string,
         public payement_programme?: [{ type: string, montant: number, date: Date, ID: string, doc: string, motif: string, etat: string }],
-        public ville_adresse?:string
+        public ville_adresse?:string,
+        public sos_lastname?: string,
+        public sos_firstname?: string,
+        public sos_email?: string,
+        public sos_phone?: string,
     ) { }
 
 }
