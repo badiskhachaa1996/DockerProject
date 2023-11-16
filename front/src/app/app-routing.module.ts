@@ -2,30 +2,8 @@ import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudian
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FormLayoutComponent } from './components/formlayout/formlayout.component';
-import { PanelsComponent } from './components/panels/panels.component';
-import { OverlaysComponent } from './components/overlays/overlays.component';
-import { MediaComponent } from './components/media/media.component';
-import { MessagesComponent } from './components/messages/messages.component';
-import { MiscComponent } from './components/misc/misc.component';
-import { EmptyComponent } from './components/empty/empty.component';
-import { ChartsComponent } from './components/charts/charts.component';
-import { FileComponent } from './components/file/file.component';
-import { DocumentationComponent } from './components/documentation/documentation.component';
 import { AppMainComponent } from './app.main.component';
-import { InputComponent } from './components/input/input.component';
-import { ButtonComponent } from './components/button/button.component';
-import { TableComponent } from './components/table/table.component';
-import { ListComponent } from './components/list/list.component';
-import { TreeComponent } from './components/tree/tree.component';
-import { CrudComponent } from './components/crud/crud.component';
-import { BlocksComponent } from './components/blocks/blocks.component';
-import { FloatLabelComponent } from './components/floatlabel/floatlabel.component';
-import { InvalidStateComponent } from './components/invalidstate/invalidstate.component';
-import { TimelineComponent } from './components/timeline/timeline.component';
-import { IconsComponent } from './components/icons/icons.component';
 import { LandingComponent } from './components/landing/landing.component';
-import { LoginComponent } from './components/login/login.component';
 import { ErrorComponent } from './components/error/error.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AccessComponent } from './components/access/access.component';
@@ -42,11 +20,6 @@ import { ListDiplomeComponent } from './administration/diplomes/list-diplome/lis
 import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
 import { ListGroupeComponent } from './administration/groupes/list-groupe/list-groupe.component';
 import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
-import { ListAgentComponent } from './administration/agents/list-agent/list-agent.component';
-import { AddAgentComponent } from './administration/agents/add-agent/add-agent.component';
-import { GestionTicketsComponent } from './ticketing/gestion-tickets/gestion-tickets.component';
-import { SuiviTicketsComponent } from './ticketing/suivi-tickets/suivi-tickets.component';
-import { GestionServicesComponent } from './ticketing/gestion-services/gestion-services.component';
 import { MatieresComponent } from './pedagogie/matieres/matieres.component';
 import { AddFormateurComponent } from './pedagogie/formateurs/add-formateur/add-formateur.component';
 import { ListFormateursComponent } from './pedagogie/formateurs/list-formateurs/list-formateurs.component';
@@ -54,9 +27,6 @@ import { AddEtudiantComponent } from './pedagogie/etudiants/add-etudiant/add-etu
 import { ListEtudiantComponent } from './pedagogie/etudiants/list-etudiant/list-etudiant.component';
 import { AddEntrepriseComponent } from './pedagogie/entreprises/add-entreprise/add-entreprise.component';
 import { ListEntrepriseComponent } from './pedagogie/entreprises/list-entreprise/list-entreprise.component';
-import { GestionPreinscriptionsComponent } from './admission/gestion-preinscriptions/gestion-preinscriptions.component';
-import { FormulaireAdmissionComponent } from './formulaire-admission/formulaire-admission.component';
-import { NotesComponent } from './pedagogie/notes/notes.component';
 import { ExterneComponent } from './authentification/externe/externe.component';
 import { SuiviePreinscriptionComponent } from './admission/suivie-preinscription/suivie-preinscription.component';
 import { AddSeanceComponent } from './pedagogie/seances/add-seance/add-seance.component';
@@ -70,9 +40,6 @@ import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-exam
 import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
 import { AuthGuardService } from './dev-components/guards/auth-guard';
 import { AdminGuardService } from './dev-components/guards/admin-guard';
-import { AdmissionGuardService } from './dev-components/guards/admission-guard';
-import { PedagogieGuardService } from './dev-components/guards/pedagogie-guard';
-import { AdministrationGuardService } from './dev-components/guards/administration-guard';
 
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
@@ -91,11 +58,8 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 
 import {
-    MsalModule,
     MsalRedirectComponent,
-    MsalGuard,
 } from '@azure/msal-angular'; // MsalGuard added to imports
-import { AppComponent } from './app.component';
 
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 
@@ -103,31 +67,15 @@ import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/l
 import { TuteurEntrepriseGuard } from './dev-components/guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './dev-components/guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './dev-components/guards/completion-profil.guard';
-import { CreateAccountComponent } from './support/create-account/create-account.component';
-import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
-import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
-import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
-import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
-import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
-import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
-import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
-import { PaymentComponent } from './gestion-bancaire/gestion-des-transactions/payment/payment.component';
-import { LogementComponent } from './ims+/logement/logement.component';
-import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
-import { ResponsableCommercialGuard } from './dev-components/guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
-import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
-import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
-import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
-import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
@@ -136,15 +84,12 @@ import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/result
 import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
-import { MyTaskComponent } from './projects/my-task/my-task.component';
-import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvSemestrielComponent } from './pedagogie/notes/pv-semestriel/pv-semestriel.component';
 import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
-import { TeamComponent } from './projects/team/team.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
@@ -218,17 +163,12 @@ import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
-import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
-import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
-import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
+
 import { AddAgentComponent as AddAgentV2Component } from './agents/add-agent/add-agent.component';
 import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
-import { TicketNonAssignesComponent } from './ticketing/ticket-non-assignes/ticket-non-assignes.component';
-import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list-tickets-traite.component';
-import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
+
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
-import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
 import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
@@ -249,7 +189,6 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
-import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
@@ -282,15 +221,10 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
-// <<<<<<< HEAD
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
-import { RemboursementListComponent } from './remboursement/remboursement-list/remboursement-list.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 
-// =======
-// import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
-// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
@@ -317,19 +251,9 @@ const routes: Routes = [
                 canActivate: [AdminGuardService],
             },
             {
-                path: 'analyseur-doublons',
-                component: AnalyseDoublonComponent,
-                canActivate: [AdminGuardService],
-            },
-            {
                 path: 'notes',
                 component: BulletinComponent,
                 canActivate: [AuthGuardService],
-            },
-            {
-                path: 'notesDev',
-                component: NotesComponent,
-                canActivate: [AdminGuardService],
             },
             {
                 path: 'admin/partenaire',
@@ -422,31 +346,6 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'admin/agents',
-                component: ListAgentComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admin/ajout-agent',
-                component: AddAgentComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'gestion-tickets',
-                component: GestionTicketsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'suivi-ticket',
-                component: SuiviTicketsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admin/gestion-services',
-                component: GestionServicesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
                 path: 'matieres',
                 component: MatieresComponent,
                 canActivate: [AuthGuardService],
@@ -512,30 +411,10 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'gestion-preinscriptions',
-                component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService],
-            }, //Admission
-            {
                 path: 'ajout-lead',
                 component: AddProspectComponent,
                 canActivate: [AuthGuardService],
             }, //Admission
-            {
-                path: 'gestion-preinscriptions-filtered/:statut',
-                component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService],
-            }, //Admissio
-            {
-                path: 'gestion-preinscriptions-filter/:statut',
-                component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService],
-            }, //Admissio
-            {
-                path: 'gestion-preinscriptions/:code',
-                component: GestionPreinscriptionsComponent,
-                canActivate: [CollaborateurGuard],
-            }, //Collaborateur/Partenaire type:Commercial
             {
                 path: 'ajout-seance',
                 component: AddSeanceComponent,
@@ -585,21 +464,6 @@ const routes: Routes = [
             {
                 path: 'list-events',
                 component: ListEventsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'assign-ims',
-                component: CreateAccountComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'devoirs',
-                component: DevoirsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'rendu-devoirs',
-                component: DevoirsEtudiantsComponent,
                 canActivate: [AuthGuardService],
             },
             {
@@ -669,40 +533,12 @@ const routes: Routes = [
             {
                 path: 'remboursements',
                 component: ListRemboursementComponent,
-                canActivate: [AuthGuardService],  
+                canActivate: [AuthGuardService],
             },
-            /** Paths Lemon Way */
-
-            { path: 'mon-compte-bancaire', component: MyAccountComponent },
-            {
-                path: 'new-individual-account',
-                component: AddNewIndividualAccountComponent,
-            },
-            { path: 'list-accounts', component: ListeDesComptesComponent },
-            { path: 'account-details/:id', component: AccountDetailsComponent },
-            { path: 'payment', component: PaymentComponent },
-            { path: 'success', component: ReturnUrlComponent },
-            { path: 'error', component: ErrorUrlComponent },
-            { path: 'cancel', component: CancelUrlComponent },
 
             /** end */
 
             /** IMS Project */
-            {
-                path: 'my-tasks',
-                canActivate: [AuthGuardService],
-                component: MyTaskComponent,
-            },
-            {
-                path: 'task-management',
-                canActivate: [AuthGuardService],
-                component: TaskManagementComponent,
-            },
-            {
-                path: 'team',
-                canActivate: [AuthGuardService],
-                component: TeamComponent,
-            },
             /** end */
             /** IMS Project-V2 */
             { path: 'gestion-project', component: GestionComponent, canActivate: [AuthGuardService] },
@@ -717,26 +553,12 @@ const routes: Routes = [
             { path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
             { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
-            {
-                path: 'logements',
-                canActivate: [AuthGuardService],
-                component: LogementComponent,
-            },
-            {
-                path: 'gestion-reservations',
-                canActivate: [AuthGuardService],
-                component: GestionLogementComponent,
-            },
-            { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
-            { path: 'gestion-reservations', canActivate: [AuthGuardService], component: GestionLogementComponent },
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'old-cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque-interne', component: NewCvthequeInterneComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
@@ -769,16 +591,6 @@ const routes: Routes = [
             {
                 path: 'matching/:offre_id',
                 component: MatchingComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'cvtheque',
-                component: CvthequeComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'cvtheque/:id',
-                component: CvthequeComponent,
                 canActivate: [AuthGuardService],
             },
             {
@@ -1214,22 +1026,9 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             /*Ticketing V2*/
-            { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/gestion/ajout/:service_id', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/attente-de-traitement', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/attente-de-traitement/:service', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/traite', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/traite/:service', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/refuse/:service', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/suivi/non-assignes/:service', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
             /* Ticketing V3 */
             { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
@@ -1310,9 +1109,9 @@ const routes: Routes = [
                 component: LeadCandidatureComponent,
                 canActivate: [AuthGuardService],
             },
-            { path: 'administration/preinscription', component: PreinscriptionComponent,canActivate: [AuthGuardService], },
-            { path: 'administration/inscription',component: InscriptionComponent,canActivate: [AuthGuardService],},
-            {path:'administration/evaluation',component: EvaluationComponent,canActivate: [AuthGuardService],},
+            { path: 'administration/preinscription', component: PreinscriptionComponent, canActivate: [AuthGuardService], },
+            { path: 'administration/inscription', component: InscriptionComponent, canActivate: [AuthGuardService], },
+            { path: 'administration/evaluation', component: EvaluationComponent, canActivate: [AuthGuardService], },
             //Module Mail Type
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
@@ -1321,12 +1120,6 @@ const routes: Routes = [
             { path: 'pointage/configuration', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
             { path: 'pointage/archivage', component: ArchivagePointageComponent, canActivate: [AuthGuardService] },
 
-            //Module Booking V2
-            {
-                path: 'booking/configuration',
-                component: BookingV2Component,
-                canActivate: [AuthGuardService],
-            },
             //Module Formulaire MI
             { path: 'formulaireMI/configuration', component: ConfigurationMIComponent, canActivate: [AuthGuardService] },
             { path: 'formulaireMI/resultats', component: ResultatsMIComponent, canActivate: [AuthGuardService] },
@@ -1361,7 +1154,6 @@ const routes: Routes = [
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'formulaire-mi', component: FormulaireMIComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
-    { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
     { path: 'formulaire-admission-international/:ecole/:code_commercial', component: VersionNonIframeComponent },
     { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
@@ -1369,7 +1161,6 @@ const routes: Routes = [
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
-    { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
     {
@@ -1422,12 +1213,12 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
-// <<<<<<< HEAD
-    
-// =======
+    // <<<<<<< HEAD
+
+    // =======
 
 
-// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
+    // >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 ]
 
 

@@ -56,6 +56,10 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     nationnalite: new FormControl('', Validators.required),
     email_perso: new FormControl('', Validators.required),
     pays_adresse: new FormControl('', Validators.required),
+    _id: new FormControl("", Validators.required)
+  })
+  
+  editInfoFormSOS: FormGroup = new FormGroup({
     sos_lastname: new FormControl(''),
     sos_firstname: new FormControl(''),
     sos_email: new FormControl(''),
@@ -64,7 +68,7 @@ export class LeadInformationsPersonnelComponent implements OnInit {
   })
   initEditForm() {
     let bypass: any = this.PROSPECT?.user_id
-    this.editInfoForm.setValue({
+    this.editInfoForm.patchValue({
       sos_lastname: this.PROSPECT?.sos_lastname,
       sos_firstname: this.PROSPECT?.sos_firstname,
       sos_email: this.PROSPECT?.sos_email,
@@ -80,6 +84,18 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     })
     this.editInfo = true;
   }
+  editInfoSOS = false
+  initEditFormSOS() {
+    let bypass: any = this.PROSPECT?.user_id
+    this.editInfoFormSOS.patchValue({
+      sos_lastname: this.PROSPECT?.sos_lastname,
+      sos_firstname: this.PROSPECT?.sos_firstname,
+      sos_email: this.PROSPECT?.sos_email,
+      sos_phone: this.PROSPECT?.sos_phone,
+      _id: bypass._id
+    })
+    this.editInfoSOS = true;
+  }
 
   saveInfo() {
     this.UserService.patchById({ ...this.editInfoForm.value }).then(users => {
@@ -87,6 +103,15 @@ export class LeadInformationsPersonnelComponent implements OnInit {
         this.PROSPECT = doc
         this.ToastService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
         this.editInfo = false
+      })
+    })
+  }
+  saveInfoSOS() {
+    this.UserService.patchById({ ...this.editInfoFormSOS.value }).then(users => {
+      this.ProspectService.getPopulateByUserid(this.editInfoFormSOS.value._id).subscribe(doc => {
+        this.PROSPECT = doc
+        this.ToastService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
+        this.editInfoSOS = false
       })
     })
   }
