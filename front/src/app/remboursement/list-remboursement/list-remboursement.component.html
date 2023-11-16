@@ -3,7 +3,7 @@
       <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" [isNewDemande]="isNewDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
     </div>
   <p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
-  [globalFilterFields]="['student.first_name','student.last_name','_id' ]"  
+  [globalFilterFields]="['student.first_name','student.last_name','_id','student.email' ]"  
   rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
     responsiveLayout="scroll">
   
@@ -15,14 +15,14 @@
         </p-multiSelect>
         <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterFormation" [(ngModel)]="selectedFormation" placeholder="Formation" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
-        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selectedFormation" placeholder="status" (onChange)="updateFilter();" optionLabel="label">
+        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selectedStatus" placeholder="status" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
 
        
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
-    </span>
+        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Recherche " />
+       </span>
     <span class="p-buttonset ml-auto mr-3">
       <button [disabled]="formRembourssement.invalid" pButton pRipple (click)="isNewDemande=true; showUpdateForm = true" class="imen-btn" label="Ajouter" icon="pi pi-plus" type="submit"></button>
   </span>
@@ -103,8 +103,6 @@
         </span>
         </td>
         <td>
-
-
             <p-dropdown [options]="filterStatus" placeholder="Status" [(ngModel)]="demande.status" (onChange)="saveStatus(demande, $event.value)" >
             </p-dropdown>
 

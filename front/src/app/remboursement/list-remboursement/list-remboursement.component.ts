@@ -187,17 +187,17 @@ if (this.selectedFormation?.length != 0){
 //   filtage par status
 
 if (this.selectedStatus?.length != 0){
-  console.log('hello')
+  
   statusAdd = false
   this.selectedStatus.forEach(d => {
-    if (demande.status == d.value) {
+    if (demande?.status == d.value) {
       statusAdd = true
     }
   })
 }   
 
 
-      if (schoolAdd && paysAdd && formationAdd &&statusAdd) {
+      if (schoolAdd && paysAdd && formationAdd && statusAdd) {
         newFiltered.push(demande)
       }
     })
@@ -205,19 +205,20 @@ if (this.selectedStatus?.length != 0){
 
   }
 
-  // clearFilter() {
-  //   this.filteredOffres = this.offres
-  //   this.researchValue = ""
-  //   this.selectedSkills = []
-  //   this.selectedProfiles = []
-  //   this.selectedLocations = []
-  // }
+//    clearFilter() {
+//    this.seletedEcoles = [];
+//   this.selectedPays = [];
+//   this.selectedFormation = [];
+//   this.selectedStatus = [];
+//  this.updateFilter();
+
+//   }
 
   onDemandeUpdated() {
     this.getDemandList();
   }
 
-  getDemandList(){
+  getDemandList(){-
     this.demandeService.getAll() 
     .then((response: Demande[]) => {
       this.initialDemande = response

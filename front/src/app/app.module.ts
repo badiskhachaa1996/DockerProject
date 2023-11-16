@@ -428,6 +428,7 @@ import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
+import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 
 
 @NgModule({
@@ -870,7 +871,8 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
     GestionEquipeRhComponent,
     CvLoaderPreviewComponent,
     PreviewCandidatureComponent,
-    LeadDocumentsComponent
+    LeadDocumentsComponent,
+    UploadButtonComponent
     
     
   ],
