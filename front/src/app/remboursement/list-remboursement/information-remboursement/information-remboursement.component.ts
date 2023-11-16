@@ -53,4 +53,10 @@ refundMethods = environment.paymentType
     }
     this.saveDemande.emit(data)
   }
+
+  onUpload(event) {
+    let doc = event.target.files[0]
+    console.log(doc)
+  }
+  
 }

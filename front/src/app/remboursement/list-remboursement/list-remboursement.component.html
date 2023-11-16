@@ -15,14 +15,14 @@
         </p-multiSelect>
         <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterFormation" [(ngModel)]="selectedFormation" placeholder="Formation" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
-        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selected" placeholder="Status" (onChange)="updateFilter();" optionLabel="label">
+        <p-multiSelect class="mr-3" [ngModel]="value" [options]="filterStatus" [(ngModel)]="selectedStatus" placeholder="status" (onChange)="updateFilter();" optionLabel="label">
         </p-multiSelect>
 
        
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-    </span>
+        <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Recherche " />
+       </span>
     <span class="p-buttonset ml-auto mr-3">
       <button [disabled]="formRembourssement.invalid" pButton pRipple (click)="isNewDemande=true; showUpdateForm = true" class="imen-btn" label="Ajouter" icon="pi pi-plus" type="submit"></button>
   </span>
@@ -103,8 +103,6 @@
         </span>
         </td>
         <td>
-
-
             <p-dropdown [options]="filterStatus" placeholder="Status" [(ngModel)]="demande.status" (onChange)="saveStatus(demande, $event.value)" >
             </p-dropdown>
 

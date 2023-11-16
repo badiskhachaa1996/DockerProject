@@ -17,7 +17,9 @@
             <td><input type="date" [disabled]="!isUpdating" [(ngModel)]="infoRefund.refund_date" /></td>
             <td><p-dropdown [disabled]="!isUpdating" placeholder="Choisir Méthode" [options]="refundMethods" [(ngModel)]="infoRefund.refund_method"></p-dropdown></td>
             <td><input type="text" [disabled]="!isUpdating" [(ngModel)]="infoRefund.montant"/></td>
-            <td><input class="filePlace" type="file" [disabled]="!isUpdating" [(ngModel)]="infoRefund.payment_attestation"></td>
+            <td>
+                <app-upload-button (uploadFile)="onUpload($event)" [isDisable]="!isUpdating"></app-upload-button>
+            </td>
             <td><textarea [disabled]="!isUpdating" type="text" [(ngModel)]="infoRefund.note"></textarea></td>
            
             <td class="text-right" style="min-width: 8rem">

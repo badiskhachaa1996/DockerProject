@@ -429,6 +429,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
 import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
+import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 
 
 @NgModule({
@@ -872,7 +873,8 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
     CvLoaderPreviewComponent,
     PreviewCandidatureComponent,
     LeadDocumentsComponent,
-    EvaluationComponent
+    EvaluationComponent,
+    UploadButtonComponent
     
     
   ],
