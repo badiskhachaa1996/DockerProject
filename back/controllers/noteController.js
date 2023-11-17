@@ -185,7 +185,10 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: n?.examen_id?.formateur_id?.user_id?.lastname.toUpperCase() + " " + n?.examen_id?.formateur_id?.user_id?.firstname, coeff: mid.coeff })
+                            let f = n?.examen_id?.formateur_id?.user_id?.lastname.toUpperCase() + " " + n?.examen_id?.formateur_id?.user_id?.firstname
+                            if (f.toString().includes("undefined"))
+                                f = "HAMDAD Nadir"
+                            cols.push({ module: mid.nom, formateur: f, coeff: mid.coeff })
                         }
                     }
                 })
@@ -204,7 +207,10 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                         if (notes.length != 0 && notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: ex?.formateur_id?.user_id?.lastname.toUpperCase() + " " + ex?.formateur_id?.user_id?.firstname, coeff: mid.coeff })
+                            let f = ex?.formateur_id?.user_id?.lastname.toUpperCase() + " " + ex?.formateur_id?.user_id?.firstname
+                            if (f.toString().includes("undefined"))
+                                f = "HAMDAD Nadir"
+                            cols.push({ module: mid.nom, formateur: f, coeff: mid.coeff })
                         }
                     })
                 })

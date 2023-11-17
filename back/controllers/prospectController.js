@@ -662,7 +662,7 @@ app.get("/getAll", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
 app.get("/getAllLocal", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -670,7 +670,7 @@ app.get("/getAllLocal", (req, res, next) => {
 });
 app.get("/getAllInt", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -1583,9 +1583,9 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
                     console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
-                        if (pay.method== 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.inscription.lien += 1
-                        else if (pay.method== 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.inscription.compensation += 1
                         else if (pay?.method.includes('Virement'))
                             stats_paiements.inscription.virement += 1
@@ -1595,7 +1595,7 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
                             stats_paiements.inscription.cheque += 1
                     } else {
                         stats_paiements.preinscription.total += 1
-                        if (pay.method== 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.preinscription.lien += 1
                         else if (pay.method == 'Compensation')
                             stats_paiements.preinscription.compensation += 1
