@@ -4482,12 +4482,12 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-dollar',
                                         items: [
                                             {
-                                                label: 'Ajouter un remboursement',
+                                                label: 'Ajouter',
                                                 icon: 'pi pi-plus-circle',
                                                 routerLink: ['/ajout-remboursement'],
                                             },
                                             {
-                                                label: 'Remboursements',
+                                                label: 'Liste',
                                                 icon: 'pi pi-fw pi-tags',
                                                 routerLink: ['/remboursements'],
                                             },
@@ -6615,12 +6615,12 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-dollar',
                                     items: [
                                         {
-                                            label: 'Ajouter un remboursement',
+                                            label: 'Ajouter',
                                             icon: 'pi pi-plus-circle',
                                             routerLink: ['/ajout-remboursement'],
                                         },
                                         {
-                                            label: 'Remboursements',
+                                            label: 'Liste',
                                             icon: 'pi pi-fw pi-tags',
                                             routerLink: ['/remboursements'],
                                         },
