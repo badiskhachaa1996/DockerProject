@@ -58,7 +58,7 @@
                                     class="pi pi-sign-in"></i></button> <br>
 
                             <h6>Temps travail
-                                <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
+                                <strong>{{calculTravail()}}</strong>
                             </h6>
                         </div>
                         <div class="col-12 md:col-4">
@@ -73,7 +73,7 @@
                                     class=" mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"><i
                                         class="pi pi-play"></i></button>
                                 <br></span>
-                            <h6>Temps pause <strong>{{pauseTiming}}</strong>mn</h6>
+                            <h6>Temps pause <strong>{{calculPause()}}</strong></h6>
 
 
                         </div>

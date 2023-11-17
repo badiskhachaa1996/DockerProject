@@ -552,7 +552,7 @@
                     </div>
                 </form>
             </div>
-            <p-dataView [value]="['']">
+            <p-dataView [value]="['']" layout="grid">
                 <ng-template pTemplate="header">
                     <div class="grid ">
                         <div class="field col-12 grid">
@@ -568,13 +568,6 @@
                                 <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true"
                                     [ngModel]="Frentree"
                                     (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
-                                    emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
-                            </div>
-                            <div *ngIf="Fetape" class="field col-4">
-                                <label for="rythme">Etape</label> <br>
-                                <p-dropdown [style]="{'width':'17em'}" [options]="filterPhase" filter="true"
-                                    [(ngModel)]="Fetape"
-                                    (onChange)="dt1.filter($event.value, 'phase_candidature', 'equals')"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
                             <div *ngIf="Fsource" class="field col-4">
@@ -596,7 +589,7 @@
                             <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                                 (click)="clearFilter()"></button>
                         </div>
-                        <div class="md:col-2 col-12" style="text-align: center;">
+                        <div class="md:col-1 col-12" style="text-align: center;">
                             <input pInputText type="text" style="width: 100%;"
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
@@ -617,8 +610,13 @@
                                 [style]="{'width':'100%'}" (onChange)="dt1.filter($event.value,'type_form', 'equals')"
                                 emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
                         </div>
-
                         <div class="md:col-2 col-12">
+                            <p-dropdown [style]="{'width':'17em'}" [options]="filterPhase" filter="true"
+                                [(ngModel)]="Fetape"
+                                (onChange)="dt1.filter($event.value, 'phase_candidature', 'equals')"
+                                emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                        </div>
+                        <div class="md:col-1 col-12">
                             <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
                         </div>
                     </div>
@@ -1089,7 +1087,7 @@
             </p-dataView>
         </p-tabPanel>
         <p-tabPanel header="International">
-            <p-dataView [value]="['']">
+            <p-dataView [value]="['']" layout="grid">
                 <ng-template pTemplate="header">
                     <div class="grid ">
                         <div class="field col-12 grid ">
@@ -1958,7 +1956,8 @@
                             <p class="col-12"
                                 [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
                                 style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
+                                l'équipe d'admission.<br>
                                 Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
                             </p>
                             <div class="card col-12 grid">
@@ -2433,7 +2432,8 @@
                             <p class="col-12"
                                 [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
                                 style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
+                                l'équipe d'admission.<br>
                                 Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
                             </p>
                             <div class="card col-12 grid">
@@ -2827,10 +2827,9 @@
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
     <h3>Filtres</h3>
     <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" 
-        [(ngModel)]="Frythme"
-            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')"
-            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
+        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" [(ngModel)]="Frythme"
+            (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
+            filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
             (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>

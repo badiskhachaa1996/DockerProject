@@ -85,7 +85,7 @@ export class PreinscriptionComponent implements OnInit {
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
   filterPhase = [
-    { value: null, label: "Toutes les phases de candidature" },
+    { value: null, label: "Toutes les étapes" },
     { value: 'Non traité', label: "Non traité" },
     { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
     { value: "En phase d'admission", label: "En phase d'admission" },
