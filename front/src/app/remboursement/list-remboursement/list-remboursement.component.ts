@@ -170,7 +170,7 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
         if (this.selectedPays?.length != 0){
           paysAdd = false
           this.selectedPays.forEach(d => {
-            if (demande.student?.country_residence == d.value) {
+            if (demande.student?.nationality == d.value) {
               paysAdd = true
             }
           })
