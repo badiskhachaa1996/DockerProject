@@ -24,7 +24,7 @@ export class ListRemboursementComponent implements OnInit {
   
   searchQuery: string = '';
   selectedDemande: Demande | null = null; 
-  selectedStatus: any;
+  selectedStatus=[];
 
 
   constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, private AService: AdmissionService, )  { }
