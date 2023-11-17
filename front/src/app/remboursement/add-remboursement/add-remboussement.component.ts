@@ -20,7 +20,6 @@ import { AuthService } from 'src/app/services/auth.service';
 
 export class AddRemboussementComponent implements OnInit {
 
-  currentDemande = new Demande;
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
@@ -115,6 +114,7 @@ pays_residence = environment.pays
 @Output() cancelFormOutPut = new EventEmitter<boolean>();
 
 @Output() doneUpdating = new EventEmitter<boolean>();
+@Output()   currentDemande = new Demande;
 
 
  
@@ -198,6 +198,7 @@ availableStatus = environment.availableStatus
 // Mis à jour de la demande 
 
   chargeFormDate(demande) {
+    console.log(demande);
     this.formRembourssement =  this.formBuilder.group({
       civilite: [demande.student?.civility],
       nom: [demande.student?.last_name],

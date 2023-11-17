@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,} from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { DemandeRemboursementService } from '../../services/demande-remboursement.service';
@@ -24,7 +24,7 @@ export class ListRemboursementComponent implements OnInit {
   
   searchQuery: string = '';
   selectedDemande: Demande | null = null; 
-  selectedStatus: any;
+  selectedStatus=[];
 
 
   constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, private AService: AdmissionService, )  { }
@@ -148,6 +148,7 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
   }
 
   updateFilter() {
+    
     this.refundRequests = []
 
     let newFiltered = []
@@ -158,10 +159,10 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
       let statusAdd = true
 
       // filtre ecole
-      if (this.seletedEcoles.length != 0) {
+      if (this.seletedEcoles?.length != 0) {
         schoolAdd = false
         this.seletedEcoles.forEach(d => {
-          if (demande.training?.school == d.value) {
+          if (demande?.training?.school == d.value) {
             schoolAdd = true
           }
         })
@@ -170,24 +171,23 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
         if (this.selectedPays?.length != 0){
           paysAdd = false
           this.selectedPays.forEach(d => {
-            if (demande.student?.nationality == d.value) {
+            if (demande?.student?.country_residence == d.value) {
               paysAdd = true
             }
           })
         } ;
         // filtrage par formation 
         
-    if (this.selectedFormation?.length != 0){
-      formationAdd = false
-        this.selectedFormation.forEach( d =>{
-        if (demande.training?.name == d.value)
-          formationAdd = true
+if (this.selectedFormation?.length != 0){
+  formationAdd = false
+  this.selectedFormation.forEach( d =>{
+    if (demande?.training?.name == d.value)
+    formationAdd = true
   })
 }
 //   filtage par status
 
 if (this.selectedStatus?.length != 0){
-  
   statusAdd = false
   this.selectedStatus.forEach(d => {
     if (demande?.status == d.value) {
@@ -277,10 +277,14 @@ deleteDemande(demandeId: string ) {
     }
   );
 }
-showFUpdateForm(demande){
+showFUpdateForm(demande) {
+  console.log('showFUpdateForm method called');
+  console.log('Selected Demande:', demande);
   this.showUpdateForm = true;
   this.currentDemande = demande;
+  console.log('currentDemande:', this.currentDemande);
 }
+
 updateStatus(demande) {
   this.selectedStatus = demande.status;
   this.isUpdating = true;
