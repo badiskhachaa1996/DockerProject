@@ -80,9 +80,10 @@ export class Demande {
                 doc_number?: string;
             }
         },
-        
+        public rejection_date?:Date,
         public created_on?: Date,
         public created_by?: string,
+        public customid?:string,
 
     ){};
 

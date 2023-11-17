@@ -28,6 +28,29 @@ export class EvaluationService {
         const response = await this.httpClient.get<Evaluation[]>(`${this.apiUrl}/recuperation`, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).toPromise();
         return response || [];
     }
+    delete(id: string): Promise<any> {
+        const url = `${this.apiUrl}/delete/${id}`
+
+        return new Promise<any>((resolve, reject) => {
+            this.httpClient.delete<Evaluation>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+                next: (response) => resolve(response),
+                error: (error) => reject(error),
+                complete: () => console.log('Project supprimé')
+            });
+        });
+    }
+    putEvaluation(evaluation: Evaluation): Promise<any> 
+  {
+    const url = `${this.apiUrl}/put-evaluation`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.put<Evaluation>(url, evaluation, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('evaluation modifié')
+      });
+    });
+  }
 
 
 }

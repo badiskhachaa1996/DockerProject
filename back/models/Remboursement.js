@@ -95,9 +95,11 @@ motif: {
              doc_number:{type: String},
         }, 
     },},
-    
+    rejection_date:{type:Date},
     created_on: {type: Date},
-    created_by:{type:String}
+    created_by:{type:String},
+    customid:{type:String},
+    
 });
 const Remboursement = mongoose.model('remboursement', remboursementSchema);
 module.exports = { Remboursement }; 

@@ -1,16 +1,16 @@
-import { Component, OnInit,} from '@angular/core';
+import { Component, OnInit, ViewChild,} from '@angular/core';
 import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { DemandeRemboursementService } from '../../services/demande-remboursement.service';
 import { Demande } from '../../models/Demande';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { saveAs as importedSaveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 
 @Component({
@@ -20,14 +20,17 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 })
 
 export class ListRemboursementComponent implements OnInit {
+
+  
   searchQuery: string = '';
   selectedDemande: Demande | null = null; 
+  selectedStatus: any;
 
 
-  constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
+  constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, private AService: AdmissionService, )  { }
 
   showUpdateForm = false
-
+  selectedPays=[]
   motif = environment.motif
 
   formRembourssement = this.formBuilder.group({
@@ -52,17 +55,32 @@ export class ListRemboursementComponent implements OnInit {
     document_inscription: [''],
     notification_ou_autre_justificatif: [''],
     docs:[''],
+    status:[]
 
 })
+filterPays = environment.pays
+filterStatus = environment.availableStatus
+
+isNewDemande = false
+
+seletedEcoles=[]
 modePaiement = environment.paymentType
 annesSchols =  []
 ecolesList = []
-
+statusList= []
+selectedFormation=[]
 annesScolaires = []
 modesPaiement = []
   currentDemande
+  formation = [];
+  filterEcole = []
+  ecole = [];
+  pays = [];
+  availableStatus=[]
 
   refundRequests: Demande[] = [];
+
+  initialDemande: Demande[] = [];
   items: any[];
   // selectedDemande
 
@@ -80,6 +98,28 @@ modesPaiement = []
 
     this.getDemandList()
 
+this.formationService.FAgetAll().subscribe(data => {
+  this.filterFormation = [];
+
+  data.forEach(d => {
+ 
+    this.filterFormation.push({ label: d.nom, value: d.nom });
+  });
+  console.log(data, this.filterFormation);
+});
+this.formationService.EAgetAll().subscribe(data => {
+  data.forEach(d => {
+    this.filterEcole.push({ label: d.titre, value: d.url_form })
+  })
+});
+
+this.messageService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
+this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
+
+  this.messageService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })
+ 
+})
+
     this.modePaiement.forEach(d => {
       this.modesPaiement.push(d)
       this.modesPaiement[d.value] = d.label
@@ -91,7 +131,11 @@ modesPaiement = []
         this.ecolesList[d.url_form] = d.titre
       })
       
-    })    
+    }) 
+      this.filterStatus.forEach(d => {
+        this.statusList.push(d)
+        this.statusList[d.value] = d.label
+      })
     this.token = jwt_decode(localStorage.getItem('token'));
     this.userServise.getInfoById(this.token.id).subscribe((user: any) => {
       this.curentUserObject.userName = user.firstname + ' ' + user.lastname
@@ -99,15 +143,85 @@ modesPaiement = []
       this.user = user
     });
 
+
+
   }
+
+  updateFilter() {
+    this.refundRequests = []
+
+    let newFiltered = []
+    this.initialDemande.forEach((demande: Demande) => {
+      let schoolAdd = true
+      let paysAdd = true
+      let formationAdd = true
+      let statusAdd = true
+
+      // filtre ecole
+      if (this.seletedEcoles.length != 0) {
+        schoolAdd = false
+        this.seletedEcoles.forEach(d => {
+          if (demande.training?.school == d.value) {
+            schoolAdd = true
+          }
+        })
+        }
+// filtre pays
+        if (this.selectedPays?.length != 0){
+          paysAdd = false
+          this.selectedPays.forEach(d => {
+            if (demande.student?.country_residence == d.value) {
+              paysAdd = true
+            }
+          })
+        } 
+        // filtrage par formation 
+        
+if (this.selectedFormation?.length != 0){
+  formationAdd = false
+  this.selectedFormation.forEach( d =>{
+    if (demande.training?.name == d.value)
+    formationAdd = true
+  })
+}
+//   filtage par status
+
+if (this.selectedStatus?.length != 0){
+  
+  statusAdd = false
+  this.selectedStatus.forEach(d => {
+    if (demande?.status == d.value) {
+      statusAdd = true
+    }
+  })
+}   
+
+
+      if (schoolAdd && paysAdd && formationAdd && statusAdd) {
+        newFiltered.push(demande)
+      }
+    })
+    this.refundRequests = newFiltered
+
+  }
+
+//    clearFilter() {
+//    this.seletedEcoles = [];
+//   this.selectedPays = [];
+//   this.selectedFormation = [];
+//   this.selectedStatus = [];
+//  this.updateFilter();
+
+//   }
 
   onDemandeUpdated() {
     this.getDemandList();
   }
 
-  getDemandList(){
+  getDemandList(){-
     this.demandeService.getAll() 
     .then((response: Demande[]) => {
+      this.initialDemande = response
       this.refundRequests = response;
 
       
@@ -128,30 +242,11 @@ modesPaiement = []
     .catch((error) => { console.error(error); })
   }
 
+  isUpdating = false
+filterFormation = [
+]
 
-  search() {
-    if (this.searchQuery) {
-        this.refundRequests = this.refundRequests.filter((demande) => {
-            const searchLower = this.searchQuery.toLowerCase();
-            return (
-                demande._id.toString().toLowerCase().includes(searchLower) ||
-                demande.student.last_name.toLowerCase().includes(searchLower) ||
-                demande.student.first_name.toLowerCase().includes(searchLower)
-            );
-        });
-    } else {
-        this.getDemandList();
-    }
-}
-schoolFilter: string = '';
 
-filterBySchool() {
-  if (this.schoolFilter) {
-      this.refundRequests = this.refundRequests.filter((demande) => demande.training.school.toLowerCase().includes(this.schoolFilter.toLowerCase()));
-  } else {
-      this.getDemandList();
-  }
-}
 
   
  showDemande(demande: Demande) {
@@ -185,6 +280,16 @@ deleteDemande(demandeId: string ) {
 showFUpdateForm(demande){
   this.showUpdateForm = true;
   this.currentDemande = demande;
+}
+updateStatus(demande) {
+  this.selectedStatus = demande.status;
+  this.isUpdating = true;
+}
+
+saveStatus(demande, status) {
+  demande.status = status;
+  this.isUpdating = true;
+  this.updateDemande({ demande, message: 'Status updated successfully.' });
 }
 
 closeForm() {
@@ -221,6 +326,7 @@ updateDemande(data) {
      });
    }
  );
+ 
 }
 
 }

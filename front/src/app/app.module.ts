@@ -390,6 +390,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
 import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
+import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 
 
@@ -801,9 +802,10 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
     CvLoaderPreviewComponent,
     PreviewCandidatureComponent,
     LeadDocumentsComponent,
-    EvaluationComponent
-
-
+    EvaluationComponent,
+    UploadButtonComponent
+    
+    
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

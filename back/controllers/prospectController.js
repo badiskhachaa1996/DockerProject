@@ -1580,29 +1580,30 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
         prospectList.forEach(data => {
             if (data && data.payement)
                 data.payement.forEach(pay => {
+                    console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method== 'Lien de paiement')
                             stats_paiements.inscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method== 'Compensation')
                             stats_paiements.inscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay?.method.includes('Virement'))
                             stats_paiements.inscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method.includes('Espèce'))
                             stats_paiements.inscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method.includes('Chèque'))
                             stats_paiements.inscription.cheque += 1
                     } else {
                         stats_paiements.preinscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method== 'Lien de paiement')
                             stats_paiements.preinscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.preinscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay.method?.includes('Virement'))
                             stats_paiements.preinscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method?.includes('Espèce'))
                             stats_paiements.preinscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method?.includes('Chèque'))
                             stats_paiements.preinscription.cheque += 1
                     }
                 })

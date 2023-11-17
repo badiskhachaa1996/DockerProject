@@ -20,6 +20,7 @@ import { AuthService } from 'src/app/services/auth.service';
 
 export class AddRemboussementComponent implements OnInit {
 
+  currentDemande = new Demande;
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
@@ -116,9 +117,11 @@ pays_residence = environment.pays
 @Output() doneUpdating = new EventEmitter<boolean>();
 
 
-@Input() currentDemande = new Demande;
+ 
 
 @Input() showUpdateForm = false;
+
+@Input() isNewDemande = false
 
 formRembourssement: FormGroup;
 
@@ -159,8 +162,17 @@ availableStatus = environment.availableStatus
           data.forEach(d => {
             this.ecoles.push({ label: d.titre, value: d.url_form }) 
           })
-          if(this.showUpdateForm ) {
+          if(this.showUpdateForm && !this.isNewDemande) {
             this.chargeFormDate(this.currentDemande)
+          } else if (this.showUpdateForm && this.isNewDemande) { 
+            this.currentDemande = new Demande
+            this.currentDemande.docs = {
+              rib: null,
+              attestation_payement: null,
+              autres_doc: null,
+              preuve_payement: null,
+              document_inscription: null
+            }
           } else {
             this.currentDemande.docs = {
               rib: null,
@@ -219,7 +231,9 @@ availableStatus = environment.availableStatus
 
   updateDemandeObject(demande, update) {
     demande.created_on = !update ? new Date() : demande.created_on
-    demande.created_by = this.token.id
+    if(this.token?.id){
+      console.log(this.token);
+    demande.created_by = this.token.id}
     demande.motif = this.formRembourssement.value.motif_refus
     demande.student = {
      civility: this.formRembourssement.value.civilite,
@@ -244,9 +258,10 @@ availableStatus = environment.availableStatus
      method:this.formRembourssement.value.paymentType
    }
 
-     if (update) {
+     if (update && !this.isNewDemande) {
       this.updateDemande(demande)
      } else {
+      this.currentDemande = new Demande
       this.newDemande(demande)
      }
   }
@@ -263,6 +278,7 @@ availableStatus = environment.availableStatus
 
   updateDemande(demande) {
                // Use the service to make the POST request
+               demande.status =  demande.status == 'new' ? demande.status  = 'in-progress' : demande.status 
                this.demandeRemboursementService.updateRemboursement(demande).subscribe(
                 (response) => {
                   this.doneUpdating.emit(true)
@@ -293,7 +309,9 @@ availableStatus = environment.availableStatus
  
 
   newDemande(demande) {
+    
               // Use the service to make the POST request
+              demande.status = 'new'
               this.demandeRemboursementService.addRemboursement(demande).subscribe(
                 (response) => {
                   // Handle success (show a success message)
@@ -303,20 +321,26 @@ availableStatus = environment.availableStatus
                     detail: 'Remboursement added successfully.'
                   });
 
+                
+
                   for (let key in this.docList) {
                     let doc = this.docList[key]
                     if (doc.doc) {
                       const formData = new FormData();
                       formData.append('id', response._id)
-                      formData.append('name', doc.slug)
+                      formData.append('docname', doc.slug)
                       formData.append('file', doc.doc)
                       this.demandeRemboursementService.postDoc(formData)
                       .then((response) => {})
                       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: "Le document " + doc.name + " n'a pas pu être ajouté" }); });
                     }
                 }
-
-                  this.router.navigate(['remboursements']);
+                this.showUpdateForm = false
+                if (this.isNewDemande) {
+                  this.cancelForm()
+                }
+        
+                this.router.navigateByUrl("/remboursements")
                 },
                 (error) => {
                   // Handle error (show an error message)
@@ -340,13 +364,19 @@ availableStatus = environment.availableStatus
   cancelForm() {
     this.cancelFormOutPut.emit(true)
     this.showUpdateForm = false
+    this.isNewDemande = false
     this.ngOnInit()
   }
 
   uploadDoc(doc) {
+    console.log(doc)
+    const documentIndex = this.docList.findIndex(document => document.slug === doc.slug);
+    if (documentIndex !== -1) {
+        this.docList[documentIndex] = doc;
+    }
     this.currentDemande.docs[doc.slug] = {
         nom: doc.name,
-        added_on: new Date,
+        added_on: new Date(),
         added_by: this.user,
         doc_number: doc.doc_number,
     }
@@ -354,17 +384,15 @@ availableStatus = environment.availableStatus
 
   removeDoc(doc) {
     this.currentDemande.docs[doc] = null
-    this.docList.find(document => document.slug === doc).doc = null;
-  }
+    const documentIndex = this.docList.findIndex(document => document.slug === doc);
+    if (documentIndex !== -1) {
+        this.docList[documentIndex].doc = null;
+  }}
 
-  getUserNameById(id) {
-    console.log(id)
-    let added_by
-
-
-    console.log(added_by)
-    return ''
-  }
+ getUserNameById(id) {
+  const user = this.user.find(u => u.id === id);
+  return user ? `${user.firstname} ${user.lastname}` : 'User not found';
+}
 
 
 
