@@ -235,8 +235,8 @@ app.get("/deleteById/:id", (req, res) => {
     Ticket.findByIdAndRemove(req.params.id, (err, ticket) => {
         if (err) {
             res.send(err)
-        }
-        res.send(ticket)
+        } else
+            res.send(ticket)
     })
 });
 

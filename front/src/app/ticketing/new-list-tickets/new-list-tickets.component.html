@@ -182,9 +182,10 @@
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
-                (onFilter)="onFilter($event, dt1)" [paginator]="true" rowExpandMode="single" [pageLinks]="5"
-                selectionMode="single" class="col-12" [globalFilterFields]="['customid']" responsiveLayout="scroll"
-                styleClass="p-datatable-gridlines">
+                (onFilter)="onFilter($event, dt1)" [paginator]="true" rowExpandMode="single"
+                [globalFilterFields]="['customid', 'sujet_id?.service_id?.label', 'sujet_id?.label', 'module','createur_id?.firstname','createur_id?.lastname',
+                'type','campus','filiere','demande','resum','createur_id.email_perso','createur_id.email','description']" [pageLinks]="5" selectionMode="single" class="col-12"
+                [globalFilterFields]="['customid']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <input pInputText type="text" #filter [style]="{'width':'12em'}"
@@ -192,29 +193,28 @@
                         <p-dropdown *ngIf="TicketMode!='Personnel'" [style]="{'width':'12em'}" [options]="createurList"
                             filter="true" [showClear]="true"
                             (onChange)="dt1.filter($event.value, 'createur_id._id', 'equals');"
-                            (onClear)="dt1.filter('', 'createur_id._id', 'equals');"
-                            placeholder="Créateur" emptyFilterMessage="Pas de user trouvé"
+                            (onClear)="dt1.filter('', 'createur_id._id', 'equals');" placeholder="Créateur"
+                            emptyFilterMessage="Pas de user trouvé"
                             filterPlaceholder="Choisissez un créateur"></p-dropdown>
                         <p-dropdown *ngIf="TicketMode!='Personnel'" [style]="{'width':'12em'}" [options]="filterAgent"
                             filter="true" [group]="true" [showClear]="true"
                             (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
-                            (onClear)="dt1.filter('', 'agent_id._id', 'equals');"
-                            placeholder="Collaborateur"
+                            (onClear)="dt1.filter('', 'agent_id._id', 'equals');" placeholder="Collaborateur"
                             emptyFilterMessage="Pas de collaborateur trouvé"
                             filterPlaceholder="Choisissez un collaborateur"></p-dropdown>
-                        <input *ngIf="TicketMode!='Personnel'" type="date" [style]="{'width':'12em'}" (change)="filterDate(dt1,$event.target.value)"
-                            placeholder="Date" pInputText>
+                        <input *ngIf="TicketMode!='Personnel'" type="date" [style]="{'width':'12em'}"
+                            (change)="filterDate(dt1,$event.target.value)" placeholder="Date" pInputText>
 
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filterService" filter="true"
                             [(ngModel)]="serviceFiltered"
                             (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');"
-                            placeholder="Service" emptyFilterMessage="Pas de service trouvé"
-                            [showClear]="true" (onClear)="dt1.filter('', 'sujet_id.service_id._id', 'equals');"
+                            placeholder="Service" emptyFilterMessage="Pas de service trouvé" [showClear]="true"
+                            (onClear)="dt1.filter('', 'sujet_id.service_id._id', 'equals');"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
                         <p-dropdown [style]="{'width':'12em'}" [options]="filtreSujet" filter="true" [group]="true"
                             [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
-                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');"
-                            placeholder="Sujet" emptyFilterMessage="Pas de sujet trouvé"
+                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');" placeholder="Sujet"
+                            emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
 
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filterStatut" filter="true"
@@ -224,8 +224,7 @@
                             filterPlaceholder="Choisissez un statut"></p-multiSelect>
                         <p-multiSelect [style]="{'width':'12em'}" [options]="campusDropdown" filter="true"
                             *ngIf="showPedagogieFilter()" [showClear]="true" (onClear)="dt1.filter('', 'campus', 'in');"
-                            (onChange)="dt1.filter($event.value, 'campus', 'in');"
-                            placeholder="Campus"></p-multiSelect>
+                            (onChange)="dt1.filter($event.value, 'campus', 'in');" placeholder="Campus"></p-multiSelect>
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filiereDropdown" filter="true"
                             *ngIf="showPedagogieFilter()" [showClear]="true"
                             (onClear)="dt1.filter('', 'filiere', 'in');"
@@ -271,7 +270,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ticket let-expanded="expanded" let-ri="rowIndex">
-                    <tr>
+                    <tr *ngIf="!hideTicket">
                         <td [ngClass]="{'urgent-begin':ticket.priorite}">
                             <button type="button" pButton pRipple [pRowToggler]="ticket"
                                 class="p-button-text p-button-rounded p-button-plain" (click)="loadCommentaires(ticket)"
@@ -317,7 +316,7 @@
                             <i pTooltip="Modifier" style="cursor: pointer;" class="pi pi-pencil mr-2"
                                 tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                                tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
@@ -331,7 +330,7 @@
                             <i pTooltip="Assigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user-plus"
                                 tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                                tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="ticket.origin=='Assigne Service'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
@@ -339,7 +338,7 @@
                             <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
                                 tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                                tooltipPosition="bottom" (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -462,6 +461,7 @@
 
             </ng-template>
             </p-table>
+            <p-skeleton *ngIf="hideTicket" width="100%" height="40vh"></p-skeleton>
         </p-tabPanel>
 
         <p-tabPanel [header]="ticket?.customid" *ngFor="let ticket of ticketsOnglets" [closable]="true">

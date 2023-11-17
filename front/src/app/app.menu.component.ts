@@ -6941,6 +6941,26 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
+                if (services_list.includes('Remboursement')) {
+                    this.items.push(
+                        {
+                            label: 'Remboursement',
+                            icon: 'pi pi-dollar',
+                            items: [
+                                {
+                                    label: 'Ajouter un remboursement',
+                                    icon: 'pi pi-plus-circle',
+                                    routerLink: ['/ajout-remboursement'],
+                                },
+                                {
+                                    label: 'Remboursements',
+                                    icon: 'pi pi-fw pi-tags',
+                                    routerLink: ['/remboursements'],
+                                },
+                            ]
+                        },
+                    )
+                }
                 setTimeout(() => {
                     this.items = Object.assign([], this.items);
                     this.showMenu = true

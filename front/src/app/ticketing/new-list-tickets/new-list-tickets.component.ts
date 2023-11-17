@@ -21,6 +21,7 @@ import { Sujet } from 'src/app/models/Sujet';
 import { Service } from 'src/app/models/Service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Table } from 'primeng/table';
+import { error } from 'console';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -212,6 +213,7 @@ export class NewListTicketsComponent implements OnInit {
   roleAccess = 'Spectateur'
   filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: Table;
+  hideTicket = true
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     if (this.router.url == '/ticketing/mes-tickets-services') {
@@ -241,7 +243,7 @@ export class NewListTicketsComponent implements OnInit {
       this.ticketsOnglets = r.savedTicket
       if (this.TICKETID)
         this.TicketService.getPopulate(this.TICKETID).subscribe(ticket => {
-          if(ticket && ticket?.agent_id?._id == this.token.id){
+          if (ticket && ticket?.agent_id?._id == this.token.id) {
             this.ticketsOnglets.push(ticket)
             this.MessageService.getAllByTicketID(ticket._id).subscribe(messages => {
               this.messageList = messages
@@ -346,10 +348,15 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
 
-  delete(id, ri) {
+  delete(ticket: Ticket, ri) {
     if (confirm("Êtes-vous sur de vouloir supprimer ce ticket ?")) {
-      this.TicketService.delete(id).subscribe(data => {
-        this.tickets.splice(ri, 1)
+      this.TicketService.delete(ticket._id).subscribe(data => {
+        this.tickets.splice(this.tickets.indexOf(ticket), 1)
+        this.defaultTicket.splice(this.defaultTicket.indexOf(ticket), 1)
+        this.ToastService.add({ severity: 'success', summary: `Ticket ${ticket.customid} supprimé` })
+      }, error => {
+        console.error(error)
+        this.ToastService.add({ severity: 'error', summary: `Ticket ${ticket.customid} n'a pas été supprimé`, detail: error.error })
       })
     }
   }
@@ -636,8 +643,12 @@ export class NewListTicketsComponent implements OnInit {
           this.createurList.push({ label: `${t.createur_id.firstname} ${t.createur_id.lastname}`, value: t.createur_id._id })
         }
       }
-
     })
+    setTimeout(() => {
+      this.filteredValues = this.dt1._value
+    }, 5)
+
+    this.hideTicket = false
   }
   YpareoDropdown: any[] = [
     { label: 'Accés', value: "Acces" },
@@ -764,6 +775,16 @@ export class NewListTicketsComponent implements OnInit {
     this.dt1.filter(d1.toISOString(), 'date_ajout', "gte")
     /*d1.setHours(23,59,0)
     this.dt1.filter(d1.toISOString(), 'date_ajout', "lte")*/
+  }
+
+  customIndexOf(list: Ticket[], id: string) {
+    let r = -1
+    list.forEach((u, index) => {
+      if (u._id == id)
+        r = index
+    })
+    console.log(r)
+    return r
   }
 }
 

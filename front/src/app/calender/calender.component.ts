@@ -939,7 +939,53 @@ export class CalenderComponent implements OnInit {
       })
       .catch((error) => { console.error(error) });
   }
-
+  calculTravail() {
+    let timeP = 0
+    if (this.dailyCheck && this.dailyCheck.pause && this.dailyCheck.pause.length != 0) {
+      this.dailyCheck.pause.forEach(val => {
+        let ds2 = new Date(val.in).getTime()
+        let df2 = new Date().getTime()
+        if (val.out)
+          df2 = new Date(val.out).getTime()
+        timeP = timeP + (df2 - ds2)
+      })
+    }
+    this.pauseTiming = Math.trunc(timeP / 60000)
+    if (this.dailyCheck) {
+      let ds = new Date(this.dailyCheck.check_in).getTime()
+      let df: any = new Date()
+      if (this.dailyCheck.check_out)
+        df = new Date(this.dailyCheck.check_out).getTime()
+      else {
+        df.setHours(df.getHours() + 1)
+        df = df.getTime()
+      }
+      let calc = (df - ds) - timeP
+      let hours = Math.trunc(calc / 3600000)
+      let minutes = Math.trunc((calc - (hours * 3600000)) / 60000)
+      return `${hours}H ${minutes}min`
+    } else {
+      return "Pas de CheckIn"
+    }
+  }
+  calculPause() {
+    if (this.dailyCheck && this.dailyCheck.pause && this.dailyCheck.pause.length != 0) {
+      let p = 0
+      console.log(this.dailyCheck.pause)
+      this.dailyCheck.pause.forEach(val => {
+        let ds = new Date(val.in).getTime()
+        let df = new Date().getTime()
+        if (val.out)
+          df = new Date(val.out).getTime()
+        p = p + (df - ds)
+      })
+      let hours = Math.trunc(p / 3600000)
+      let minutes = Math.trunc((p - hours * 3600000) / 60000)
+      return `${hours}H ${minutes}min`
+    } else {
+      return "Pas de Pause"
+    }
+  }
   // méthode de checkin
   onCheckIn(): void {
 
