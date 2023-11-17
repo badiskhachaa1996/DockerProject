@@ -16,7 +16,6 @@ export class DemandeRemboursementService {
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-      'token': localStorage.getItem('token')
     });
 
     return this.http.post(registerUrl, demande, { headers });
