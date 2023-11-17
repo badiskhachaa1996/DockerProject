@@ -198,6 +198,7 @@ availableStatus = environment.availableStatus
 // Mis à jour de la demande 
 
   chargeFormDate(demande) {
+    console.log(demande);
     this.formRembourssement =  this.formBuilder.group({
       civilite: [demande.student?.civility],
       nom: [demande.student?.last_name],
