@@ -174,14 +174,14 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
               paysAdd = true
             }
           })
-        } 
+        } ;
         // filtrage par formation 
         
-if (this.selectedFormation?.length != 0){
-  formationAdd = false
-  this.selectedFormation.forEach( d =>{
-    if (demande.training?.name == d.value)
-    formationAdd = true
+    if (this.selectedFormation?.length != 0){
+      formationAdd = false
+        this.selectedFormation.forEach( d =>{
+        if (demande.training?.name == d.value)
+          formationAdd = true
   })
 }
 //   filtage par status
@@ -197,7 +197,7 @@ if (this.selectedStatus?.length != 0){
 }   
 
 
-      if (schoolAdd && paysAdd && formationAdd && statusAdd) {
+      if (schoolAdd && paysAdd && formationAdd &&statusAdd) {
         newFiltered.push(demande)
       }
     })
