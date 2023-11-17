@@ -26,7 +26,9 @@ export class PayementInformationComponent implements OnInit {
   isUpdating=true
   ngOnInit(): void {
     if (this.demande && this.demande.payment ){
-      this.infoPays=this.demande.payment
+      this.infoPays=[this.demande.payment];
+      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$");
+      console.log(this.demande);
       console.log(this.infoPays)
  
   }

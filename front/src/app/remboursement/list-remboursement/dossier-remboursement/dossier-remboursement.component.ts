@@ -154,7 +154,7 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
   updateDemande(slug, docName){
     this.demandeService.updateRemboursement(this.demande).subscribe(
       (response) => {
-        this.messageService.add({ severity: "success", summary: 'Document ' + docName + 'Ajouté avec Succés' })
+        this.messageService.add({ severity: "success", summary: 'Document '+" " + docName +" "+ 'Ajouté avec Succés' })
         this.updateDocList(slug, response)
       },
       (error) => {
