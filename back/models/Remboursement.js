@@ -31,6 +31,7 @@ const remboursementSchema = new Schema({
     date_estimated: {type:Date,required:true},
     montant:{type: Number,required:true},
     note:{type: String},
+    doc_number:{type: String},
 }
 },
    payment: 

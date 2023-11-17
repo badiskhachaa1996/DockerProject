@@ -1,7 +1,7 @@
 
   <div *ngIf="showUpdateForm">
-      <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" [isNewDemande]="isNewDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
-    </div>
+    <app-add-remboussement *ngIf="showUpdateForm" [showUpdateForm]="showUpdateForm" [currentDemande]="currentDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)"></app-add-remboussement>
+  </div>
   <p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
   [globalFilterFields]="['student.first_name','student.last_name','_id','student.email' ]"  
   rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
@@ -23,9 +23,9 @@
         <i class="pi pi-search"></i>
         <input pInputText type="text" (input)="demande.filterGlobal($event.target.value, 'contains')" placeholder="Recherche " />
        </span>
-    <span class="p-buttonset ml-auto mr-3">
+    <!-- <span class="p-buttonset ml-auto mr-3">
       <button [disabled]="formRembourssement.invalid" pButton pRipple (click)="isNewDemande=true; showUpdateForm = true" class="imen-btn" label="Ajouter" icon="pi pi-plus" type="submit"></button>
-  </span>
+  </span> -->
       </div>
   </ng-template>
   
@@ -140,7 +140,7 @@
             <app-payement-information (saveDemande)="updateDemande($event)" [demande]="demande"></app-payement-information>
           </div>
           <div class="details-element">
-            <app-information-remboursement (saveDemande)="updateDemande($event)" [demande]="demande"></app-information-remboursement>
+            <app-information-remboursement (saveDemande)="updateDemande($event)" [demande]="demande" (uploadFile)="onUpload($event)"></app-information-remboursement>
           </div>
         </td>
       </tr>
