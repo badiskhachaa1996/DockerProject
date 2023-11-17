@@ -231,7 +231,9 @@ availableStatus = environment.availableStatus
 
   updateDemandeObject(demande, update) {
     demande.created_on = !update ? new Date() : demande.created_on
-    demande.created_by = this.token.id
+    if(this.token?.id){
+      console.log(this.token);
+    demande.created_by = this.token.id}
     demande.motif = this.formRembourssement.value.motif_refus
     demande.student = {
      civility: this.formRembourssement.value.civilite,
@@ -307,6 +309,7 @@ availableStatus = environment.availableStatus
  
 
   newDemande(demande) {
+    
               // Use the service to make the POST request
               demande.status = 'new'
               this.demandeRemboursementService.addRemboursement(demande).subscribe(
