@@ -522,7 +522,7 @@ const routes: Routes = [
             {
                 path: 'ajout-remboursement',
                 component: AddRemboussementComponent,
-                canActivate: [AuthGuardService],
+                
             }, //Remboursement
 
             // {

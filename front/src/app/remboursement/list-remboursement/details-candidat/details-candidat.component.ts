@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class DetailsCandidatComponent implements OnInit {
   @Input() demande
-
+  @Input() annesSchols;
   students = [
     {
       civility:'civilité',
@@ -21,6 +21,7 @@ export class DetailsCandidatComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
     if(this.demande && this.demande.student && this.demande.training){
     this.students[0].civility = this.demande?.student?.civility
     this.students[0].date_naissance = this.demande?.student?.date_naissance
@@ -29,6 +30,8 @@ export class DetailsCandidatComponent implements OnInit {
     this.students[0].scholar_year= this.demande?.training?.scholar_year
     this.students[0].formation = this.demande?.training?.name
   }
+  console.log('Scholar Year:', this.demande?.training?.scholar_year);
+
 }
 
 }

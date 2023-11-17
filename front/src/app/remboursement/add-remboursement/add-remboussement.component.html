@@ -7,7 +7,7 @@
     <p>Si nous avons besoin de plus d'informations, nous vous contacterons à cette adresse e-mail. </p>
          -->
         <!-- <p>Bien à vous </p> -->
-        <div   style="justify-content: end; display: flex; width: 100%;" *ngIf="showUpdateForm"><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
+        <div   style="justify-content: end; display: flex; width: 100%;" *ngIf="showUpdateForm ||isNewDemande"><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
         </div>
     <div class="col-12 grid">
         <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement">
@@ -90,13 +90,13 @@
                 <input pInputText type="date" formControlName="payment_date"/>
             </div>
 
-            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm">
+            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm || isNewDemande">
                 <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
                 <div style="width: 100%;">
                     <app-upload-remboursement-doc *ngFor="let doc of docList" [document]="doc" [user]="user" (uploadDoc)="uploadDoc($event)"  (removeDoc)="removeDoc($event)"></app-upload-remboursement-doc>
                 </div>
             </div>
-            <div style="width: 100%;" *ngIf="showUpdateForm">
+            <div style="width: 100%;" *ngIf="showUpdateForm && !isNewDemande">
                 <app-dossier-remboursement [demande]="currentDemande" [user]="user"></app-dossier-remboursement>
             </div>
 

@@ -1,5 +1,42 @@
 <div class="card">
+    <div *ngIf="showUpdateForm" class="col-12 card">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="showupdateForm = false" aria-hidden="true"> </i>
+        <form class="p-fluid p-formgrid grid" (ngSubmit)="UpdateEvaluation() " [formGroup]="updateForm">
+            <div class="field col-12 md:col-6">
+                <label For="label">Label <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text"  formControlName="label" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="lien">Lien <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text"  formControlName="lien" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="duree">Durée <span style="color: red;"> * </span></label>
+                <input pInputText  type="number"  formControlName="duree" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="score">Score <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="number"  formControlName="score" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="Condition_admission">Condition d'admission <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text"  formControlName="Condition_admission" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="description">Description <span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text"  formControlName="description" />
+            </div>
+            <div style="justify-content: right;">
+                <button pButton type="submit" label="Modifier"
+                    [disabled]="updateForm.invalide"></button>
+            </div>
+
+        </form>
+    </div>
     <div *ngIf="showEvaluationForm" class="col-12 card">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="showEvaluationForm = false" aria-hidden="true"> </i>
         <form class="p-fluid p-formgrid grid" (ngSubmit)="addEvaluation() " [formGroup]="evaluationForm">
             <div class="field col-12 md:col-6">
                 <label For="label">Label <span style="color: red;"> * </span></label>
@@ -78,12 +115,13 @@
             <td>
                 {{evaluation?.label}}
             </td>
-            <td>
+            <td><a [href]="evaluation?.lien" target="_blank">
                 {{evaluation?.lien}}
+              </a>
 
             </td>
             <td>
-                {{evaluation?.duree}}
+                {{evaluation?.duree}}mn
             </td>
 
 
@@ -96,15 +134,15 @@
 
 
                 <i style="padding-left: 3%;color: rgb(72, 72, 255);
-                                " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
+                                " class="pi pi-pencil m-1" (click)="initupdateLeadForm(evaluation); scrollToTop()"
                     pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
 
-                <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1" (click)="deletePro(prospect)"
+                <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1" (click)="delete(evaluation)"
                     pTooltip="Supprimer" aria-hidden="true" tooltipPosition="bottom"></i>
             </td>
         </tr>
     </ng-template>
-    <ng-template pTemplate="rowexpansion" let-user>
+    <ng-template pTemplate="rowexpansion" let-evaluation>
         <tr>
             <td colspan="10">
 
@@ -112,28 +150,18 @@
                 <p-table responsiveLayout="scroll">
                     <ng-template pTemplate="header">
         <tr>
-
             <th>Condition d'admission</th>
-
-
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-
-
             <td>{{evaluation?.Condition_admission}}</td>
         </tr>
-
-
     </ng-template>
-
 </p-table>
-
 <p-table responsiveLayout="scroll">
     <ng-template pTemplate="header">
         <tr>
-
             <th>Déscription</th>
         </tr>
     </ng-template>
@@ -141,12 +169,8 @@
         <tr>
             <td>{{evaluation?.description}}</td>
         </tr>
-
-
     </ng-template>
-
 </p-table>
-
 </td>
 </tr>
 </ng-template>
