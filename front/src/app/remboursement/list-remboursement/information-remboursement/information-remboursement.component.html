@@ -18,7 +18,7 @@
             <td><p-dropdown [disabled]="!isUpdating" placeholder="Choisir Méthode" [options]="refundMethods" [(ngModel)]="infoRefund.refund_method"></p-dropdown></td>
             <td><input type="text" [disabled]="!isUpdating" [(ngModel)]="infoRefund.montant"/></td>
             <td>
-                <app-upload-button (uploadFile)="onUpload($event)" [isDisable]="!isUpdating"></app-upload-button>
+                <app-upload-button (downloadDoc)="downloadDoc($event)" (uploadFile)="onUpload($event)" [doc_number]="infoRefund.doc_number" [isDisable]="!isUpdating"></app-upload-button>
             </td>
             <td><textarea [disabled]="!isUpdating" type="text" [(ngModel)]="infoRefund.note"></textarea></td>
            

@@ -38,6 +38,7 @@ export class Demande {
             date_estimated?: Date,
             montant?: number,
             note?: string,
+            doc_number?: string,
         },
         public motif?: string,
         public status?: string,
