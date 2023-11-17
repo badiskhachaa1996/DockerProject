@@ -195,6 +195,7 @@ export class PreinscriptionComponent implements OnInit {
     { label: "Equipe commerciale", value: "Equipe commerciale" },
     { label: "Etudiant interne", value: "Etudiant interne" },// Par défaut si Etudiant ou Alternant
     { label: "Lead", value: "Lead" },
+    { label: "Site Web", value: "Site Web" },
     { label: "Spontané", value: "Spontané" } //Par défaut si Lead
   ]
 
@@ -359,13 +360,13 @@ export class PreinscriptionComponent implements OnInit {
         this.commercialService.getAllPopulate().subscribe(commercials => {
           commercials.forEach(commercial => {
             let { user_id }: any = commercial
-            if (user_id && commercial.isAdmin)
+            if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire)
               this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
           })
           this.rhService.getCollaborateurs()
             .then((response) => {
               response.forEach((c: Collaborateur) => {
-                if (c.user_id)
+                if (c.user_id && c.matricule)
                   this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
               })
             })
@@ -373,7 +374,8 @@ export class PreinscriptionComponent implements OnInit {
           this.PService.getAll().subscribe(commercials => {
             this.commercialList = []
             commercials.forEach(commercial => {
-              this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
+              if (commercial.code_partenaire)
+                this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
             })
           })
         })
@@ -447,20 +449,23 @@ export class PreinscriptionComponent implements OnInit {
         let dicFilEn = {}
         let fEnList = []
         data.formations.forEach(f => {
+          let value = f?.code
+          if (!value)
+            value = f.nom
           if (f.langue.includes('Programme Français')) {
             if (dicFilFr[f.filiere]) {
-              dicFilFr[f.filiere].push({ label: f.nom, value: f.nom })
+              dicFilFr[f.filiere].push({ label: f.nom, value })
             } else {
-              dicFilFr[f.filiere] = [{ label: f.nom, value: f.nom }]
+              dicFilFr[f.filiere] = [{ label: f.nom, value }]
               fFrList.push(f.filiere)
             }
           }
           //this.programeFrDropdown.push({ label: f.nom, value: f.nom })
           if (f.langue.includes('Programme Anglais'))
             if (dicFilEn[f.filiere]) {
-              dicFilEn[f.filiere].push({ label: f.nom, value: f.nom })
+              dicFilEn[f.filiere].push({ label: f.nom, value })
             } else {
-              dicFilEn[f.filiere] = [{ label: f.nom, value: f.nom }]
+              dicFilEn[f.filiere] = [{ label: f.nom, value }]
               fEnList.push(f.filiere)
             }
         })
@@ -773,26 +778,83 @@ export class PreinscriptionComponent implements OnInit {
     })
   }
 
-  initupdateLeadForm(prospect) {
-    console.log(prospect.user_id.numero_adresse);
+  initupdateLeadForm(prospect: Prospect) {
+    console.log(prospect)
+    this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
+      this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
+        let dicFilFr = {}
+        let fFrList = []
+
+        let dicFilEn = {}
+        let fEnList = []
+        data.formations.forEach(f => {
+          let value = f?.code
+          if (!value)
+            value = f.nom
+          if (f.langue.includes('Programme Français')) {
+            if (dicFilFr[f.filiere]) {
+              dicFilFr[f.filiere].push({ label: f.nom, value })
+            } else {
+              dicFilFr[f.filiere] = [{ label: f.nom, value }]
+              fFrList.push(f.filiere)
+            }
+          }
+          //this.programeFrDropdown.push({ label: f.nom, value: f.nom })
+          if (f.langue.includes('Programme Anglais'))
+            if (dicFilEn[f.filiere]) {
+              dicFilEn[f.filiere].push({ label: f.nom, value })
+            } else {
+              dicFilEn[f.filiere] = [{ label: f.nom, value }]
+              fEnList.push(f.filiere)
+            }
+        })
+        this.programeFrDropdown = []
+        fFrList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programeFrDropdown.push(
+            { label: f, value: f, items: dicFilFr[ft] }
+          )
+        })
+        this.programEnDropdown = []
+        fEnList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programEnDropdown.push(
+            { label: f, value: f, items: dicFilEn[ft] }
+          )
+        })
+        this.rentreeList = []
+        dataEcoles.forEach(rentre => {
+          this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+        })
+
+      })
+      this.campusDropdown = []
+      data.campus.forEach(c => {
+        this.campusDropdown.push({ label: c, value: c })
+      })
+    })
     this.updateLeadForm.patchValue({
-      type: prospect?.traited_by,
+      type: prospect?.lead_type,
       ecole: prospect?.type_form,
       //commercial:
-      //source:
+      source: prospect.source,
       lastname: prospect.user_id.lastname,
       firstname: prospect.user_id.firstname,
       civilite: prospect.user_id.civilite,
-      date_naissance: prospect.date_naissance,
-      //nationalite: 
+      date_naissance: new Date(prospect.date_naissance),
+      nationalite: prospect.user_id.nationnalite,
       pays: prospect.user_id.pays_adresse,
       email_perso: prospect.user_id.email_perso,
       indicatif: prospect.user_id.indicatif,
       phone: prospect.user_id.phone,
-      //campus:
+      campus: prospect.campus_choix_1,
       rentree_scolaire: prospect?.rentree_scolaire,
       programme: prospect?.programme,
-      //formation:
+      formation: prospect.formation,
       rythme_formation: prospect.rythme_formation,
       //nomlead:
       rue: prospect.user_id.numero_adresse,
@@ -800,6 +862,7 @@ export class PreinscriptionComponent implements OnInit {
       codep: prospect.user_id.postal_adresse
 
     })
+
     this.showupdateLeadForm = true
   }
   initEvaluation() {

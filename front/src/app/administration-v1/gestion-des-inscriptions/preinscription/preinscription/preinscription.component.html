@@ -402,6 +402,8 @@
         </p-tabPanel>
         <p-tabPanel header="Local">
             <div *ngIf="showupdateLeadForm" class="col-12 card">
+                <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                    (click)="showupdateLeadForm = null" aria-hidden="true"> </i>
                 <h4 style="text-align: center;">Modifier </h4>
                 <div style="text-align: center;">
                     <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
@@ -419,8 +421,8 @@
 
                     <div class="field col-12 md:col-2">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
-                            placeholder="Choisissez une civilité" formControlName="civilite"></p-dropdown>
+                        <p-dropdown [options]="civiliteList" placeholder="Choisissez une civilité"
+                            formControlName="civilite"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-5">
                         <label For="nom">Nom <span style="color: red;"> * </span></label>
@@ -439,13 +441,13 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label>Pays de résidence :<span style="color:red"> *</span></label><br>
-                        <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
+                        <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays"
                             emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
                             optionDisabled="actif"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                        <p-dropdown formControlName="nationalite" [options]="nationList"
                             emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
                             filter="true"></p-dropdown>
                     </div>
@@ -468,18 +470,18 @@
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>Numéro rue:<span style="color:red"> *</span></label>
-                        <input formControlName="rue" placeholder="rue" pInputText>
+                        <label>Numéro de rue:<span style="color:red"> *</span></label>
+                        <input formControlName="rue" placeholder="Ex: 20 Place de l'église" pInputText>
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>ville:<span style="color:red"> *</span></label>
-                        <input formControlName="ville" placeholder="ville" pInputText>
+                        <label>Ville:<span style="color:red"> *</span></label>
+                        <input formControlName="ville" placeholder="Ex: Paris" pInputText>
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>code postale:<span style="color:red"> *</span></label>
-                        <input formControlName="codep" placeholder="code postale" pInputText>
+                        <label>Code postale:<span style="color:red"> *</span></label>
+                        <input formControlName="codep" placeholder="Ex: 15555" pInputText>
                     </div>
 
 
@@ -491,7 +493,7 @@
                     </div>
                     <div class="field col-12">
                         <label>Choix du campus <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
+                        <p-dropdown [options]="campusDropdown" formControlName="campus"
                             placeholder="Choisissez un campus">
                         </p-dropdown>
                     </div>
@@ -505,18 +507,20 @@
 
                     <div class="field col-12 md:col-4">
                         <label>Choix du programme <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
-                            placeholder="Choisissez un programme">
+                        <p-dropdown [options]="programList" optionLabel="value" optionValue="value"
+                            formControlName="programme" placeholder="Choisissez un programme">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
+                    <div class="field col-12 md:col-8"
+                        *ngIf="updateLeadForm.value.programme.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
                         <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
+                    <div class="field col-12 md:col-8"
+                        *ngIf="updateLeadForm.value.programme.value=='Programme Français'">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
@@ -526,7 +530,7 @@
                     <div class="field col-12 md:col-12">
                         <label For="rythme">Rythme de la formation <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
+                        <p-dropdown [options]="typeFormationDropdown" optionLabel="value" optionValue="value" autoWidth="false"
                             placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
                             formControlName="rythme_formation"></p-dropdown>
                     </div>
@@ -679,7 +683,8 @@
                                     {{ prospect.user_id.lastname | uppercase }}
                                 </td>
                                 <td>
-                                    {{prospect.rentree_scolaire}},{{ prospect.formation}},{{prospect.campus_choix_1}}
+                                    {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
+                                    {{prospect.type_form|titlecase}}
                                 </td>
                                 <td>
                                     {{prospect?.rythme_formation}}
@@ -1215,7 +1220,8 @@
                                     {{ prospect.user_id.lastname | uppercase }}
                                 </td>
                                 <td>
-                                    {{prospect.rentree_scolaire}},{{ prospect.formation}},{{prospect.campus_choix_1}}
+                                    {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
+                                    {{prospect.type_form|titlecase}}
                                 </td>
                                 <td>
                                     {{prospect.rythme_formation}}
@@ -1769,7 +1775,7 @@
                     </div>
                     <div *ngIf="itslead" class="field col-12 md:col-6">
                         <label>Nom et prénom :<span style="color:red"> *</span></label>
-                        <input formControlName="nomlead" placeholder="nom et pénom" pInputText>
+                        <input formControlName="nomlead" placeholder="Nom et Prénom" pInputText>
                     </div> <br>
                     <div style="justify-content: right;">
                         <button pButton type="submit" label="Ajouter"

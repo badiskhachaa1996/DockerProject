@@ -953,13 +953,9 @@ export class CalenderComponent implements OnInit {
     this.pauseTiming = Math.trunc(timeP / 60000)
     if (this.dailyCheck) {
       let ds = new Date(this.dailyCheck.check_in).getTime()
-      let df: any = new Date()
+      let df = new Date().getTime()
       if (this.dailyCheck.check_out)
         df = new Date(this.dailyCheck.check_out).getTime()
-      else {
-        df.setHours(df.getHours() + 1)
-        df = df.getTime()
-      }
       let calc = (df - ds) - timeP
       let hours = Math.trunc(calc / 3600000)
       let minutes = Math.trunc((calc - (hours * 3600000)) / 60000)
