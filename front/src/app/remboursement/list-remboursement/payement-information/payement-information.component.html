@@ -14,7 +14,7 @@
     <ng-template pTemplate="body" let-demande  let-infoPay>
         <tr>
             <td><input [disabled]="!infoPay.isUpdating" type="date" [ngModel]="infoPay.date | date:'yyyy-MM-dd'" (ngModelChange)="infoPay.date = $event" />{{ demande.payment?.date}}</td>
-            <td><input [disabled]="!infoPay.isUpdating" type="text" [(ngModel)]="infoPay.montant"/>{{ demande.payment?.montant}}</td>
+            <td>{{infoPay.montant}}{{ demande.payment?.montant}}</td>
             <td><p-dropdown [disabled]="!infoPay.isUpdating" placeholder="Choisir Méthode" [options]="payementMethods" [(ngModel)]="infoPay.method">{{ demande.payment?.method}}</p-dropdown></td>
             <td><textarea  rows="4" cols="50" [disabled]="!infoPay.isUpdating" type="text" [(ngModel)]="infoPay.note"></textarea>{{ demande.payment?.note}}</td>
            
