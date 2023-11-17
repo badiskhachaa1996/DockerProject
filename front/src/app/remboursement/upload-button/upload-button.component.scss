@@ -25,3 +25,16 @@ input[type="file"] {
     cursor: pointer;
     color: red;
 }
+
+
+.file-name {
+  cursor: pointer;
+  color: #37BAD4;
+
+
+  &:hover {
+
+      color: #1E526C;
+      text-decoration: underline;
+  }
+}

@@ -1,7 +1,22 @@
-<label *ngIf="!isDisable" class="upload-doc" (click)="doc.click()">
-    <i class="pi pi-cloud-upload"></i> Joindre
-</label>
-<span class="file-name">{{doc?.files?.item(0)?.name | slice: 0:50}} <span *ngIf="doc?.files?.item(0)?.name.length > 50 ">...</span></span>
-<input #doc multiple type="file" accept="application/pdf" maxFileSize="10000000"
-    (change)="onUpload($event)" chooseLabel="Browse"/>
-<i class="pi pi-times cancel-icon" *ngIf="doc?.files?.item(0)" (click)="reset(doc)"></i>
+<div *ngIf="!doc_number">
+    <label *ngIf="!isDisable" class="upload-doc" (click)="doc.click()">
+        <i class="pi pi-cloud-upload"></i> Joindre
+    </label>
+    <span class="file-name">{{doc?.files?.item(0)?.name | slice: 0:50}} <span *ngIf="doc?.files?.item(0)?.name.length > 50 ">...</span></span>
+    <input #doc multiple type="file" accept="application/pdf" maxFileSize="10000000"
+        (change)="onUpload($event)" chooseLabel="Browse"/>
+    <i class="pi pi-times cancel-icon" *ngIf="doc?.files?.item(0)" (click)="reset(doc)"></i>
+</div>
+
+
+
+<div *ngIf="doc_number">
+<span class="file-name" (click)='downloadDocument("ordre_virement")'> {{doc_number}}</span>
+
+    <div *ngIf="!isDisable">
+        <input #docUpdate type="file" accept="application/pdf" maxFileSize="10000000"
+                    (change)="onUpload($event)" chooseLabel="Browse" inputId="docUpdate"/> 
+        <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="docUpdate.click()"  ></i>
+        <!-- <i class="pi pi-trash mr-2 clickable-element" (click)=" deleteDoc($event)" title="supprimer"></i> -->
+    </div>
+</div>
