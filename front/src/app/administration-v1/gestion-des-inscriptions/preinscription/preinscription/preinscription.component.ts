@@ -232,8 +232,8 @@ export class PreinscriptionComponent implements OnInit {
     codep: new FormControl(''),
   });
   updateLeadForm: FormGroup = new FormGroup({
-    type: new FormControl('', Validators.required),
-    ecole: new FormControl('', [Validators.required]),
+    lead_type: new FormControl('', Validators.required),
+    type_form: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
@@ -245,15 +245,17 @@ export class PreinscriptionComponent implements OnInit {
     email_perso: new FormControl('', Validators.required),
     indicatif: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
-    campus: new FormControl(this.campusDropdown[0]),
+    campus_choix_1: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
     programme: new FormControl(this.programList[0], Validators.required),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
-    rue: new FormControl(''),
-    ville: new FormControl(''),
-    codep: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    _id: new FormControl('', Validators.required),
+    user_id: new FormControl('', Validators.required),
   })
   formAffectation = new FormGroup({
     _id: new FormControl('', Validators.required),
@@ -441,7 +443,7 @@ export class PreinscriptionComponent implements OnInit {
     });
   }
   onSelectEcole() {
-    this.FAService.EAgetByParams(this.newLeadForm.value.ecole).subscribe(data => {
+    this.FAService.EAgetByParams(this.newLeadForm.value.ecole || this.updateLeadForm.value.type_form).subscribe(data => {
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         let dicFilFr = {}
         let fFrList = []
@@ -548,10 +550,15 @@ export class PreinscriptionComponent implements OnInit {
 
 
     )
+    newProspect.rentree_scolaire = this.newLeadForm?.value.rentree_scolaire
     newProspect.lead_type = this.newLeadForm?.value.type
-    newUser.rue_adresse = this.newLeadForm?.value.rue
-    newUser.ville_adresse = this.newLeadForm?.value.ville
-    newUser.postal_adresse = this.newLeadForm?.value.codep
+    if (this.newLeadForm?.value?.pays?.value == 'France')
+      newProspect.lead_type = "Local"
+    else
+      newProspect.lead_type = "International"
+    newUser.rue_adresse = this.newLeadForm?.value.rue_adresse
+    newUser.ville_adresse = this.newLeadForm?.value.ville_adresse
+    newUser.postal_adresse = this.newLeadForm?.value.postal_adresse
     this.admissionService.create({
       newUser, newProspect
     }).subscribe(
@@ -608,20 +615,22 @@ export class PreinscriptionComponent implements OnInit {
         this.commercialList = []
         commercials.forEach(commercial => {
           let { user_id }: any = commercial
-          if (user_id && commercial.isAdmin)
+          if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire)
             this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
         })
         this.rhService.getCollaborateurs()
           .then((response) => {
             response.forEach((c: Collaborateur) => {
-              this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+              if (c.user_id && c.matricule)
+                this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
             })
           })
           .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
         this.PService.getAll().subscribe(commercials => {
           this.commercialList = []
           commercials.forEach(commercial => {
-            this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
+            if (commercial.code_partenaire)
+              this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
           })
         })
       })
@@ -629,7 +638,8 @@ export class PreinscriptionComponent implements OnInit {
       this.etudiantService.getAllEtudiantPopulate().subscribe(etudiants => {
         this.commercialList = [];
         etudiants.forEach(etudiant => {
-          this.commercialList.push({ label: `${etudiant?.user_id}`, value: etudiant.user_id })
+          if (etudiant.user_id)
+            this.commercialList.push({ label: `${etudiant?.user_id}`, value: etudiant.user_id })
 
         })
       })
@@ -745,14 +755,10 @@ export class PreinscriptionComponent implements OnInit {
     this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => { console.log(res) });
   }
   adddicision(prospect: Prospect) {
-    console.log(prospect);
-    console.log(this.DecisionForm.value.date_d);
-    console.log(this.prospect_acctuelle);
     this.prospect_acctuelle.decision.date_decision = this.DecisionForm.value.date_d;
     this.prospect_acctuelle.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
     this.prospect_acctuelle.decision.expliquation = this.DecisionForm.value.explication;
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
-    console.log(this.prospect_acctuelle)
 
 
   }
@@ -762,8 +768,6 @@ export class PreinscriptionComponent implements OnInit {
     this.prospect_acctuelle.entretien.date_entretien = this.entretienForm.value.date_e;
     this.prospect_acctuelle.entretien.niveau = this.entretienForm.value.niveau;
     this.prospect_acctuelle.entretien.parcours = this.entretienForm.value.parcour;
-    console.log("***************************************************************");
-    console.log(this.prospect_acctuelle);
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
   }
   showDialog(ticket: any) {
@@ -779,7 +783,6 @@ export class PreinscriptionComponent implements OnInit {
   }
 
   initupdateLeadForm(prospect: Prospect) {
-    console.log(prospect)
     this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         let dicFilFr = {}
@@ -837,39 +840,48 @@ export class PreinscriptionComponent implements OnInit {
         this.campusDropdown.push({ label: c, value: c })
       })
     })
+
     this.updateLeadForm.patchValue({
-      type: prospect?.lead_type,
-      ecole: prospect?.type_form,
+      lead_type: prospect?.lead_type,
+      type_form: prospect?.type_form,
       //commercial:
       source: prospect.source,
       lastname: prospect.user_id.lastname,
       firstname: prospect.user_id.firstname,
       civilite: prospect.user_id.civilite,
-      date_naissance: new Date(prospect.date_naissance),
+      date_naissance: this.convertTime(prospect.date_naissance),
       nationalite: prospect.user_id.nationnalite,
       pays: prospect.user_id.pays_adresse,
       email_perso: prospect.user_id.email_perso,
       indicatif: prospect.user_id.indicatif,
       phone: prospect.user_id.phone,
-      campus: prospect.campus_choix_1,
+      campus_choix_1: prospect.campus_choix_1,
       rentree_scolaire: prospect?.rentree_scolaire,
       programme: prospect?.programme,
       formation: prospect.formation,
       rythme_formation: prospect.rythme_formation,
       //nomlead:
-      rue: prospect.user_id.numero_adresse,
-      ville: prospect.user_id.ville_adresse,
-      codep: prospect.user_id.postal_adresse
-
+      rue_adresse: prospect.user_id.rue_adresse,
+      ville_adresse: prospect.user_id.ville_adresse,
+      postal_adresse: prospect.user_id.postal_adresse,
+      _id: prospect._id,
+      user_id: prospect.user_id._id
     })
-
+    console.log(prospect, this.updateLeadForm.invalid, this.updateLeadForm.status)
     this.showupdateLeadForm = true
   }
   initEvaluation() {
     this.visible_evaluation = true;
   }
-  UpadateProspect() {
-
+  UpdateProspect() {
+    this.admissionService.update({ prospect: { ...this.updateLeadForm.value }, user: { ...this.updateLeadForm.value, _id: this.updateLeadForm.value.user_id } }).subscribe(p => {
+      console.log(p)
+      this.showupdateLeadForm = false
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour du prospect avec succès' })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Mis à jour du prospect impossible', detail: error.error })
+    })
   }
   onAffectation() {
     this.ticketService.update({ ...this.formAffectation.value, statut: "En cours de traitement", assigne_by: this.token.id }).subscribe(data => {
@@ -1015,8 +1027,24 @@ export class PreinscriptionComponent implements OnInit {
       }
     }, 15);
   }
-  goToCandidature(id) {
-    this.router.navigate(['admission/lead-candidature/', id])
+  candidatureList: Prospect[] = []
+  goToCandidature(prospect: Prospect) {
+    let id = []
+    this.candidatureList.forEach(v => {
+      id.push(v._id)
+    })
+    if (!id.includes(prospect._id)) {
+      this.candidatureList.push(prospect)
+      setTimeout(() => {
+        this.selectedTabIndex = 3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length
+      }, 100)
+
+    } else {
+      setTimeout(() => {
+        this.selectedTabIndex = 4 + this.proscteList.length + this.docProspectList.length + id.indexOf(prospect._id)
+      }, 5)
+    }
+
   }
   initalPayement = []
   showPaiement: Prospect = null
@@ -1617,4 +1645,6 @@ export class PreinscriptionComponent implements OnInit {
       return `${total}€`
     }
   }
+
+
 }
