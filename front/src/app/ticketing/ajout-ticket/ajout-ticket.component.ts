@@ -84,6 +84,7 @@ export class AjoutTicketComponent implements OnInit {
   ];
 
   moduleDropdown: any[] = [
+    { label: 'Espace Personnel', value: "Espace Personnel" },
     { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
     { label: 'Module Pédagogie', value: "Module Pédagogie" },
     { label: 'Module Administration', value: "Module Administration" },
@@ -100,7 +101,9 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
     { label: 'Module Ticketing', value: "Module Ticketing" },
-    { label: 'Espace Personnel', value: "Espace Personnel" },
+    { label: 'Module CRA', value: "Module CRA" },
+    { label: 'Accès/Connexion', value: "Accès/Connexion" },
+    { label: 'Autre', value: "Autre" },
   ];
   IMS_Type_Dropdown: any[] = [
     { label: 'Création', value: "Création" },
@@ -163,6 +166,7 @@ export class AjoutTicketComponent implements OnInit {
   serviceDicTrue = {}
   sujetDic = {}
   USER: User
+
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(data => {

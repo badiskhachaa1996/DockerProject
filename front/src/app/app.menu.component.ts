@@ -4478,22 +4478,6 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
-                                        label: 'Remboursement',
-                                        icon: 'pi pi-dollar',
-                                        items: [
-                                            {
-                                                label: 'Ajouter un remboursement',
-                                                icon: 'pi pi-plus-circle',
-                                                routerLink: ['/ajout-remboursement'],
-                                            },
-                                            {
-                                                label: 'Remboursements',
-                                                icon: 'pi pi-fw pi-tags',
-                                                routerLink: ['/remboursements'],
-                                            },
-                                        ]
-                                    },
-                                    {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
                                         items: [
@@ -6610,22 +6594,7 @@ export class AppMenuComponent implements OnInit {
                             label: "Admin IMS",
                             icon: 'pi pi-star',
                             items: [
-                                {
-                                    label: 'Remboursement',
-                                    icon: 'pi pi-dollar',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un remboursement',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-remboursement'],
-                                        },
-                                        {
-                                            label: 'Remboursements',
-                                            icon: 'pi pi-fw pi-tags',
-                                            routerLink: ['/remboursements'],
-                                        },
-                                    ]
-                                },
+
                                 {
                                     label: "Pointeuse",
                                     icon: 'pi pi-camera',
@@ -6939,6 +6908,26 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         }
+                    )
+                }
+                if (services_list.includes('Remboursement')) {
+                    this.items.push(
+                        {
+                            label: 'Remboursement',
+                            icon: 'pi pi-dollar',
+                            items: [
+                                {
+                                    label: 'Ajouter un remboursement',
+                                    icon: 'pi pi-plus-circle',
+                                    routerLink: ['/ajout-remboursement'],
+                                },
+                                {
+                                    label: 'Remboursements',
+                                    icon: 'pi pi-fw pi-tags',
+                                    routerLink: ['/remboursements'],
+                                },
+                            ]
+                        },
                     )
                 }
                 setTimeout(() => {

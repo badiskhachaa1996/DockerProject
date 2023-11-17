@@ -61,7 +61,8 @@ export class UpdateAgentComponent implements OnInit {
     { value: "Questionnaire", label: "Questionnaire" },
     { value: "Intuns", label: "Intuns" },
     { value: "Gestions des emails", label: "Gestions des emails" },
-    { value: "Links", label: "Links" }
+    { value: "Links", label: "Links" },
+    { value: "Remboursement", label: "Remboursement" }
   ]
 
   dropdownRole = [
