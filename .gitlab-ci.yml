@@ -36,7 +36,6 @@ node_dependencies_dev:
     - cd back
     - npm install
   only:
-    - develop
     changes:
       - back/package-lock.json
 
@@ -55,7 +54,6 @@ angular_dependencies_dev:
     - npm uninstall angular2-signaturepad
     - npm install angular2-signaturepad@3.0.4
   only:
-    - develop
     changes:
       - front/package-lock.json
 
@@ -124,10 +122,10 @@ spotbugs-sast:
     reports:
       sast: gl-sast-report.json
 
-dast:
-  dast_configuration:
-    site_profile: "Inted Group"
-    scanner_profile: "Quick Passive Test"
+# dast:
+  # dast_configuration:
+    # site_profile: "Inted Group"
+    # scanner_profile: "Quick Passive Test"
 
 #======================================================
 
