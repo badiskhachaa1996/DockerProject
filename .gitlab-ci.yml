@@ -1,10 +1,30 @@
 stages:
-   - install_dependencies
-   - test
-   - build
-   - deploy
+  - install_dependencies
+  - test
+  - build
+  - sast
+  - dast
+  - docker
+  - deploy
 
-node_dependencies:
+variables:
+  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+  SAST_IMAGE_SUFFIX: '-fips'
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+semgrep-sast:
+  variables:
+    SAST_ANALYZER_IMAGE_TAG: "3.7"
+
+brakeman-sast:
+  variables:
+    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
+
+#========================================================
+
+node_dependencies_dev:
   stage: install_dependencies
   tags:
   - dev-shell
@@ -19,8 +39,7 @@ node_dependencies:
     changes:
       - back/package-lock.json
 
-  
-angular_dependencies:
+angular_dependencies_dev:
   stage: install_dependencies
   tags:
   - dev-shell
@@ -34,64 +53,17 @@ angular_dependencies:
     - npm install
     - npm uninstall angular2-signaturepad
     - npm install angular2-signaturepad@3.0.4
-  # only:
-  #   - dev
   only:
     changes:
       - front/package-lock.json
+
+# FIXME QA
+# FIXME PROD
+
 #========================================================
-build_angular:
-  stage: build
-  tags:
-    - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - front/node_modules/
-    policy: pull
-
-  script:
-      - cd front
-      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
-  only:
-    - Version1-2
-  artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
-    paths:
-      - front/dist
-    expire_in: 1 hour
-#  when: manual
- #======================================================
-deploy_angular_todev:
-  stage: deploy
-  dependencies: 
-    - build_angular
-  tags:
-    - dev-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - Version1-2
-  # when: manual
-#===========================================================
-deploy_node_todev:
-  stage: deploy
-
-  tags:
-    - dev-shell
-  script:
-    - cd back
-    - ln -s ~/storage storage
-    - npm install
-    - pm2 delete index
-    - pm2 start index.js -- --dev
-   # - pm2 logs index
-  only:
-    - Version1-2
-  # when: manual
 
 sonarqube-check:
+  stage: test
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -114,5 +86,170 @@ sonarqube-check:
   allow_failure: true
   tags:
     - dev-docker
+
+#========================================================
+
+build_angular:
+  stage: build
+  tags:
+    - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
-    - Version1-2
+    - develop
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+#  when: manual
+
+spotbugs-sast:
+  stage: sast
+  dependencies:
+    - build_angular
+  variables:
+    FAIL_NEVER: 1
+  allow_failure: true
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+
+# dast:
+  # dast_configuration:
+    # site_profile: "Inted Group"
+    # scanner_profile: "Quick Passive Test"
+
+#======================================================
+
+angular_docker_build:
+  stage: docker
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker info
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - front/Dockerfile
+      when: manual
+      allow_failure: true # FIXME
+
+node_docker_build:
+  stage: docker
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker info
+  script: 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - back/Dockerfile
+      when: manual
+      allow_failure: true # FIXME
+#======================================================
+
+deploy_angular_to_dev:
+  stage: deploy
+  dependencies: 
+    - build_angular
+  tags:
+    - dev-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - develop
+  
+deploy_node_to_dev:
+  stage: deploy
+
+  tags:
+    - dev-shell
+  script:
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js -- --dev
+   # - pm2 logs index
+  only:
+    - develop
+
+#======================================================
+
+deploy_angular_to_qa:
+  stage: deploy
+  dependencies: 
+    - build_angular
+  tags:
+    - dev-docker # FIXME
+  script:
+    - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+    - mkdir -p "$MOUNT_POINT"
+    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+  only:
+    - develop
+  when: manual
+
+deploy_node_to_qa:
+  stage: deploy
+
+  tags:
+    - dev-docker # FIXME
+  script:
+    - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+    - mkdir -p "$MOUNT_POINT"
+    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+  only:
+    - develop
+  when: manual
+
+#======================================================
+
+deploy_angular_to_prod:
+  stage: deploy
+  dependencies: 
+    - build_angular
+  tags:
+    - dev-docker # FIXME
+  script:
+    - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+    - mkdir -p "$MOUNT_POINT"
+    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+  only:
+    - main
+  when: manual
+  #environment: production
+  
+deploy_node_to_prod:
+  stage: deploy
+
+  tags:
+    - dev-docker # FIXME
+  script:
+    - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+    - mkdir -p "$MOUNT_POINT"
+    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+  only:
+    - main
+  when: manual
+  #environment: production
+
