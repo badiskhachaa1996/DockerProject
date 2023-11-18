@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  mongodb:
+    image: :latest
+    environment:
+      MONGODB_USER: 
+      MONGODB_PASSWORD: 
+    ports: 
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/sql/data
+
+  back:
+    build:
+      context: .
+    environment:
+      DB_SCHEMA: 
+      DB_USER: 
+      DB_PASSWORD: 
+      DB_HOST: 
+    depends_on:
+      - 
+    ports:
+      - '3000:3000'
+    
+  front:    
+    ports:
+      - '80:80'
+
+volumes:
+  db:
