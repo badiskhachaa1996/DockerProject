@@ -392,6 +392,7 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
+import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 
 
 @NgModule({
@@ -803,7 +804,8 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
     PreviewCandidatureComponent,
     LeadDocumentsComponent,
     EvaluationComponent,
-    UploadButtonComponent
+    UploadButtonComponent,
+    LeadEvaluationComponent
     
     
   ],

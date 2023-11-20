@@ -1376,13 +1376,15 @@ export class CalenderComponent implements OnInit {
   }
 
   getHistoPointage(value) {
-    console.log(value)
-    if (value)
-      this.dailyCheckService.getUserChecksByDate(this.token.id, value)
-        .then((response) => {
-          this.historiqueCraHisto = response.reverse();
-        })
-        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+
+    if (!value)
+      value = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString()
+    this.dailyCheckService.getUserChecksByDate(this.token.id, value)
+      .then((response) => {
+        this.historiqueCraHisto = response.reverse();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+
   }
 
   actualites: ActualiteRH[]

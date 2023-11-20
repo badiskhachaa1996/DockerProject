@@ -17,13 +17,13 @@
 				</div>
 				<div class="field col-12 md:col-4">
 					<label htmlFor="date_demarrage">Date de démarrage</label>
-					<p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage" 
+					<p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage"
 						formControlName="date_demarrage"></p-calendar>
 				</div>
 				<div class="field col-12">
 					<label>Collaborateur<span class="obligatory"> *</span></label>
-					<p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true" [virtualScroll]="true" itemSize="30"
-						formControlName="user_id"></p-dropdown>
+					<p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true"
+						[virtualScroll]="true" itemSize="30" formControlName="user_id"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-4">
 					<label htmlFor="date_naissance">Date de naissance</label>
@@ -829,10 +829,9 @@
 								Matricule
 							</div>
 						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Collaborateur
-							</div>
+						<th pSortableColumn="user_id.lastname" style="text-align:center"> Collaborateur
+							<p-sortIcon field="user_id.lastname">
+							</p-sortIcon>
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
@@ -962,9 +961,9 @@
 	[modal]="true">
 	<div class="field col-12" *ngIf="dataConge">
 		<label htmlFor="firstname">Solde de congé</label><br>
-		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}" suffix="/mois"
-			mode="decimal" [showButtons]="true" [step]="0.25" [minFractionDigits]="1" [maxFractionDigits]="2"
-			autoWidth="false"> </p-inputNumber>
+		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}"
+			suffix="/mois" mode="decimal" [showButtons]="true" [step]="0.25" [minFractionDigits]="1"
+			[maxFractionDigits]="2" autoWidth="false"> </p-inputNumber>
 	</div>
 	<div class="field col-12" *ngIf="dataConge">
 		<label htmlFor="firstname">Plafond</label><br>

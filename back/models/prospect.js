@@ -283,12 +283,14 @@ const prospect_schema = new mongoose.Schema({
             { nom: "CV", path: null, date: null },
             { nom: "Lettre de Motivation", path: null, date: null },
             { nom: "Passeport - Pièce d'identité", path: null, date: null },
-            { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
+            { nom: "Diplôme baccalauréat ou équivalent", path: null, date: null },
             { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
-            { nom: "Relevé de note baccaulauréat", path: null, date: null },
+            { nom: "Relevé de note baccalauréat", path: null, date: null },
             { nom: "Relevés de note depuis le baccalauréat", path: null, date: null },
             { nom: "Test de niveau en Français - TCF (pour les étudiants des pays non francophones)", path: null, date: null },
-            { nom: 'Carte de séjour', path: null, date: null }
+            { nom: 'Carte de séjour', path: null, date: null },
+            { nom: "Copie Visa", path: null, date: null },
+            { nom: "Carte vitale ou attestation provisoire", path: null, date: null },
         ]
     },
     documents_autre: {
@@ -381,7 +383,11 @@ const prospect_schema = new mongoose.Schema({
     ecole: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ecoleadmissions",
-    }
+    },
+    sos_lastname: { type: String },
+    sos_firstname: { type: String },
+    sos_email: { type: String },
+    sos_phone: { type: String },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

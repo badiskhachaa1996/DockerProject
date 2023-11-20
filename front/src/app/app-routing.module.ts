@@ -235,6 +235,7 @@ import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
+import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 const routes: Routes = [
     {
         path: '',
@@ -522,7 +523,7 @@ const routes: Routes = [
             {
                 path: 'ajout-remboursement',
                 component: AddRemboussementComponent,
-                
+
             }, //Remboursement
 
             // {
@@ -1107,6 +1108,11 @@ const routes: Routes = [
             {
                 path: 'admission/lead-candidature/:id',
                 component: LeadCandidatureComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'admission/lead-evaluation',
+                component: LeadEvaluationComponent,
                 canActivate: [AuthGuardService],
             },
             { path: 'administration/preinscription', component: PreinscriptionComponent, canActivate: [AuthGuardService], },

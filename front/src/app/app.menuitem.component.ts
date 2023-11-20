@@ -81,7 +81,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
                 this.active = false;
             }
         });
-
         this.menuResetSubscription = this.menuService.resetSource$.subscribe(() => {
             this.active = false;
         });
@@ -97,10 +96,8 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (this.item.routerLink) {
+        if (this.item.routerLink)
             this.updateActiveStateFromRoute();
-        }
-
         this.key = this.parentKey ? this.parentKey + '-' + this.index : String(this.index);
     }
 
@@ -121,7 +118,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
         // execute command
         if (this.item.command) {
-            this.item.command({originalEvent: event, item: this.item});
+            this.item.command({ originalEvent: event, item: this.item });
         }
 
         // toggle active state
