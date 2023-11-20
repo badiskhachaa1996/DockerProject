@@ -4478,22 +4478,6 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
-                                        label: 'Remboursement',
-                                        icon: 'pi pi-dollar',
-                                        items: [
-                                            {
-                                                label: 'Ajouter',
-                                                icon: 'pi pi-plus-circle',
-                                                routerLink: ['/ajout-remboursement'],
-                                            },
-                                            {
-                                                label: 'Liste',
-                                                icon: 'pi pi-fw pi-tags',
-                                                routerLink: ['/remboursements'],
-                                            },
-                                        ]
-                                    },
-                                    {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
                                         items: [
@@ -6610,22 +6594,6 @@ export class AppMenuComponent implements OnInit {
                             label: "Admin IMS",
                             icon: 'pi pi-star',
                             items: [
-                                {
-                                    label: 'Remboursement',
-                                    icon: 'pi pi-dollar',
-                                    items: [
-                                        {
-                                            label: 'Ajouter',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-remboursement'],
-                                        },
-                                        {
-                                            label: 'Liste',
-                                            icon: 'pi pi-fw pi-tags',
-                                            routerLink: ['/remboursements'],
-                                        },
-                                    ]
-                                },
                                 {
                                     label: "Pointeuse",
                                     icon: 'pi pi-camera',
