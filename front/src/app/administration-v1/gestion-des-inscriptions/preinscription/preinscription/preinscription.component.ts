@@ -80,7 +80,7 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Dernier diplôme supérieur obtenu", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
 
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
@@ -1491,8 +1491,11 @@ export class PreinscriptionComponent implements OnInit {
             }
           })
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        if (res.documents_administrative)
-          this.showDocAdmin.documents_administrative = res.documents_administrative
+        if (res.documents_administrative) {
+          if (this.showDocAdmin.documents_administrative)
+            this.showDocAdmin.documents_administrative.push()
+        }
+        this.showDocAdmin.documents_administrative = res.documents_administrative
         event.target = null;
         this.showUploadFile = null;
         this.initDocument(this.PROSPECT);
@@ -1645,6 +1648,5 @@ export class PreinscriptionComponent implements OnInit {
       return `${total}€`
     }
   }
-
 
 }
