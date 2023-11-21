@@ -1,4 +1,4 @@
-<div class="card grid col-12">
+<div class="grid col-12 m-2">
     <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
         <div class="field col-12 md:col-6">
             <label>Nom <span style="color: red;"> * </span></label>
@@ -39,7 +39,7 @@
             <label>Message</label>
             <textarea rows="5" cols="30" pInputTextarea formControlName="note_choix"></textarea>
         </div>
-        <div class="col-12">
+        <div class=" md:col-2  md:col-offset-5 col-4  col-offset-4">
             <button pButton type="submit" label="Ajouter" (click)="onAdd()"></button>
         </div>
     </form>
