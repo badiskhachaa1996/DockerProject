@@ -4,7 +4,7 @@
         <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
             obligatoires</small><br>
     </div>
-    <form class="p-fluid p-formgrid grid" [formGroup]="addForm" (ngSubmit)="onAdd()">
+    <form class="p-fluid p-formgrid grid" [formGroup]="addForm" >
         <div class="field col-12 md:col-6">
             <label>Source Lead</label>
             <p-dropdown filter="true" placeholder="Choisissez une source" [options]="sourceDropdown" autoWidth="false"
@@ -116,7 +116,10 @@
             </p-dropdown>
         </div>
         <div class="col-12">
-            <button pButton type="submit" label="Ajouter un lead"></button>
+            <!-- ngif updating show updating -->
+            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour le lead" (click)="onUpdate()" ></button>
+            <!-- ngif adding show adding -->
+            <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter le lead" (click)="onAdd()"></button>
         </div>
     </form>
 </div>

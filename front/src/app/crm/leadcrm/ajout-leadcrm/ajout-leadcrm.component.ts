@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { environment } from 'src/environments/environment';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-ajout-leadcrm',
@@ -66,6 +66,7 @@ export class AjoutLeadcrmComponent implements OnInit {
       { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
     ]
   addForm: FormGroup = new FormGroup({
+      _id: new FormControl(''),
     source: new FormControl(''),
     operation: new FormControl(''),
     civilite: new FormControl(''),
@@ -118,14 +119,18 @@ export class AjoutLeadcrmComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router) { }
 
+    isUpdate = false
+    paramID = ""
   ngOnInit(): void {
       this.route.params.subscribe(params => {
           const id = params['id']; // Récupérez l'ID à partir de l'URL
+          this.paramID = id
           if (id) {
               // Si un ID est fourni, chargez les données du lead pour la mise à jour
               this.loadLeadData(id);
+                this.isUpdate = true
           }
       });
 
@@ -138,4 +143,13 @@ export class AjoutLeadcrmComponent implements OnInit {
             this.addForm.patchValue({...data})
         })
     }
+
+
+    onUpdate() {
+        this.LCS.update({...this.addForm.value}).subscribe(data => {
+            this.ToastService.add({severity: "success", summary: "Mise à jour du lead"})
+        })
+        this.router.navigate(['/crm/leads/liste']);
+    }
+
 }

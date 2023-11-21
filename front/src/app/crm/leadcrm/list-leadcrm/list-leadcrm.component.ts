@@ -362,7 +362,6 @@ export class ListLeadcrmComponent implements OnInit {
 
 
     updateLead(id: string) {
-
         this.router.navigate(['/crm/leads/update', id]);
     }
 
