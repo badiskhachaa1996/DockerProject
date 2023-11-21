@@ -329,6 +329,7 @@ app.post("/update/:id", (req, res) => {
         {
             ...req.body
         }, (err, oldTicket) => {
+            console.log(oldTicket,req.params.id)
             if (err) {
                 console.error(err)
                 res.status(500).send(err)
