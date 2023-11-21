@@ -7,7 +7,7 @@
             {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
         </h3>
         <p-tabView class="col-12">
-            <p-tabPanel header="Contact">
+                <p-tabPanel header="Echanges">
                 <div class="col-12">
                     <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
                 </div>
@@ -102,7 +102,7 @@
                     </ng-template>
                 </p-table>
             </p-tabPanel>
-            <p-tabPanel header="Document Prospects">
+            <p-tabPanel header="Document">
                 <div class="col-12">
                     <button pButton label="Ajouter un document" (click)="onAddDocuments()"></button>
                 </div>
@@ -243,11 +243,7 @@
                         <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false"
                             [style]="{'width':'100%'}" placeholder="Choisissez un campus"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label>Produit Eduhorizons</label>
-                        <p-dropdown [options]="ehList" formControlName="eduhorizon" autoWidth="false"
-                            [style]="{'width':'100%'}" placeholder="Choisissez un produit"></p-dropdown>
-                    </div>
+
                     <div class="field col-12 md:col-6">
                         <label>Note</label>
                         <textarea pInputTextarea formControlName="note_choix"></textarea>
@@ -262,7 +258,7 @@
                             [style]="{'width':'100%'}" placeholder="Choisissez un produit"></p-multiSelect>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label>Critères de qualification valides</label>
+                        <label>Critères</label>
                         <p-multiSelect [options]="critereList" formControlName="criteres_qualification"
                             autoWidth="false" [style]="{'width':'100%'}"
                             placeholder="Choisissez un critère"></p-multiSelect>
@@ -278,7 +274,7 @@
                     </div>
                 </form>
             </p-tabPanel>
-            <p-tabPanel header="Ventes">
+            <p-tabPanel header="Paiement">
                 <div class="col-12">
                     <button pButton label="Ajouter un paiement" (click)="onAddPaiement()"></button>
                 </div>
@@ -528,7 +524,10 @@
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
-
+                        <i style="padding-left: 3%;" class="pi pi-pencil" (click)="updateLead(lead._id)"
+                           pTooltip="Modifier le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                        <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
+                           pTooltip="Supprimer le membre" aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>
             </ng-template>

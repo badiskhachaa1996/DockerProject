@@ -2776,7 +2776,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
@@ -5614,7 +5614,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
