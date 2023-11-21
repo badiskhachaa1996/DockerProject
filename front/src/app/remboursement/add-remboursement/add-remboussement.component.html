@@ -90,7 +90,7 @@
                 <input pInputText type="date" formControlName="payment_date"/>
             </div>
 
-            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm || isNewDemande">
+            <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm ">
                 <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
                 <div style="width: 100%;">
                     <app-upload-remboursement-doc *ngFor="let doc of docList" [document]="doc" [user]="user" (uploadDoc)="uploadDoc($event)"  (removeDoc)="removeDoc($event)"></app-upload-remboursement-doc>

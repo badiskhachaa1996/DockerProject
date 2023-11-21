@@ -114,7 +114,7 @@ pays_residence = environment.pays
 @Output() cancelFormOutPut = new EventEmitter<boolean>();
 
 @Output() doneUpdating = new EventEmitter<boolean>();
-@Output()   currentDemande = new Demande;
+@Input()   currentDemande = new Demande;
 
 
  
@@ -146,7 +146,8 @@ availableStatus = environment.availableStatus
       formation: [''],
       motif_refus: [''],
       montant: [''],
-      payment_date:['']
+      payment_date:[''],
+   
     })
 
 
@@ -213,8 +214,9 @@ availableStatus = environment.availableStatus
       ecole: [ demande.training?.school],
       formation: [ demande.training?.name],
       motif_refus: [demande.motif],
-      montant: [demande.refund?.montant],
-      payment_date:[demande.payment?.date]
+      montant: [demande.payment?.montant],
+      payment_date:[demande.payment?.date],
+
     })
 
       for (let key in demande.docs) {
@@ -251,9 +253,11 @@ availableStatus = environment.availableStatus
      name:this.formRembourssement.value.formation,
    }
 
-   demande.refund ={
-     montant:this.formRembourssement.value.montant,
-     method:this.formRembourssement.value.paymentType
+   demande.payment = {
+    montant : this.formRembourssement.value.montant,
+    date : this.formRembourssement.value.payment_date,
+    method : this.formRembourssement.value.paymentType
+
    }
 
      if (update && !this.isNewDemande) {

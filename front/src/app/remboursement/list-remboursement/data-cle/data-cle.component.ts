@@ -21,10 +21,10 @@ export class DataCleComponent implements OnInit {
 
   keyDates = [{
     motif: 'Motif',
-    date_refus: 'date de refus',
+    date_refus: null,
     date_demande: new Date,
-    date_remboursement:'date de remboursement',
-    date_estime:'date estimé'
+    date_remboursement: null,
+    date_estime:null
   }]
 
 
@@ -33,11 +33,11 @@ export class DataCleComponent implements OnInit {
  
 
   ngOnInit(): void {
-    if (this.demande){
+    if (this.demande && this.demande.refund){
     this.keyDates[0].motif = this.demande?.motif
     this.keyDates[0].date_refus=this.demande?.rejection_date
     this.keyDates[0].date_demande = this.demande?.created_on
-    this.keyDates[0].date_remboursement=this.demande?.refund.date
+    this.keyDates[0].date_remboursement=this.demande?.refund?.date
   }
 
   }
@@ -45,6 +45,7 @@ export class DataCleComponent implements OnInit {
    this.isUpdating = true 
   }
   saveKeyDates(){
+    
     this.demande.motif= this.keyDates[0].motif
     this.demande.rejection_date=this.keyDates[0].date_refus
     this.demande.created_on= this.keyDates[0].date_demande

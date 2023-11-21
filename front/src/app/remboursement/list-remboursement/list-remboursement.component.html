@@ -96,10 +96,10 @@
         <td >
           <span *ngIf="demande.training?.school">{{ ecolesList[demande.training?.school]}}</span>
         </td>
-        <td >{{demande.refund?.montant}}</td>
+        <td >{{demande.payment?.montant}}</td>
         <td >
-          <span *ngIf="demande.refund?.method" >
-          {{modesPaiement[demande.refund?.method]}}
+          <span *ngIf="demande.payment?.method" >
+          {{modesPaiement[demande.payment?.method]}}
         </span>
         </td>
         <td>
@@ -127,9 +127,6 @@
           <div class="details-element">
             <app-data-cle (saveDemande)="updateDemande($event)" [demande]="demande" [annesSchols]="annesSchols"></app-data-cle>
           </div>
-          <!-- <div class="details-element">
-            <app-details-candidat [demande]="demande"></app-details-candidat>
-          </div> -->
           <div class="details-element">
             <app-dossier-remboursement [demande]="demande" [user]="curentUserObject.id" (demandeUpdated)="onDemandeUpdated($event)"></app-dossier-remboursement>
           </div>
@@ -137,7 +134,7 @@
             <app-commentaire-section (saveDemande)="updateDemande($event)" [demande]="demande" [user]="curentUserObject"></app-commentaire-section>
           </div>
           <div class="details-element">
-            <app-payement-information (saveDemande)="updateDemande($event)" [demande]="demande"></app-payement-information>
+            <app-payement-information (saveDemande)="updateDemande($event)" [demande]="demande" [modesPaiement]="modesPaiement"></app-payement-information>
           </div>
           <div class="details-element">
             <app-information-remboursement (saveDemande)="updateDemande($event)" [demande]="demande" (uploadFile)="onUpload($event)"></app-information-remboursement>
