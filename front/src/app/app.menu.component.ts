@@ -2628,27 +2628,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: ['crm/leads/liste'],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/6474bd8044e14520f9dd5f38',
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -4497,7 +4477,7 @@ export class AppMenuComponent implements OnInit {
                                             },
                                         ]
                                     },
-    
+
                                     {
                                         label: 'Evaluation Lead',
                                         icon: 'pi pi-pencil',
@@ -5461,30 +5441,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [
-                                                        'crm/leads/liste',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/' +
-                                                        member?._id,
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -5672,30 +5629,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Liste des leads',
                                         icon: 'pi pi-users',
-                                        items: [
-                                            {
-                                                label: 'Tout les leads',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'crm/leads/liste',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Leads non attribués',
-                                                icon: 'pi pi-user-edit',
-                                                routerLink: [
-                                                    'crm/leads/liste-non-attribue',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Mes Leads',
-                                                icon: 'pi pi-user',
-                                                routerLink: [
-                                                    'crm/mes-leads/liste/' +
-                                                    member?._id,
-                                                ],
-                                            },
-                                        ],
+                                        routerLink: ['crm/liste'],
                                     },
                                     {
                                         label: 'Qualification',

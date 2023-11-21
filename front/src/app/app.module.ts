@@ -394,6 +394,8 @@ import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-e
 import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
 import {GestionProduitsComponent} from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
+import { CrmListComponent } from './crm/crm-list/crm-list.component';
 
 @NgModule({
   imports: [
@@ -808,7 +810,9 @@ import { AddRemboussementComponent } from './remboursement/add-remboursement/add
     LeadEvaluationComponent,
     DocumentsCandidatureViewerComponent,
     GestionProduitsComponent,
-    AddRemboussementComponent
+    AddRemboussementComponent,
+    FormCrmExtComponent,
+    CrmListComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

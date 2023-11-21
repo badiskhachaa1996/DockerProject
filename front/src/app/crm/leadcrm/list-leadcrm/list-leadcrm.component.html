@@ -7,7 +7,7 @@
             {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
         </h3>
         <p-tabView class="col-12">
-                <p-tabPanel header="Echanges">
+            <p-tabPanel header="Echanges">
                 <div class="col-12">
                     <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
                 </div>
@@ -389,7 +389,7 @@
         <p-toast></p-toast>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
             [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
-            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            rowExpandMode="single" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="d-flex flex-wrap align-items-center justify-content-center">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -427,6 +427,9 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th>
+
+                    </th>
                     <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                         Date d'insertion <p-sortIcon field="date_creation"></p-sortIcon>
                     </th>
@@ -454,8 +457,13 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-lead>
+            <ng-template pTemplate="body" let-lead let-expanded="expanded">
                 <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="lead"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right' "></button>
+                    </td>
                     <td>
                         {{lead.date_creation | date:'dd MMMM yy'}}
                     </td>
@@ -478,17 +486,50 @@
                     <td>
                         {{lead.decision_qualification}}
                     </td>
-                    <td *ngIf="AccessLevel!='Spectateur'" >
+                    <td *ngIf="AccessLevel!='Spectateur'">
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
                         <i style="padding-left: 3%;" class="pi pi-pencil" (click)="updateLead(lead._id)"
-                           pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
+                            pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                         <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
-                           pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
+                            pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="rowexpansion" let-lead>
+                <tr>
+                    <td colspan="9">
+                        <h5>Informations supplémentaire</h5>
+                        <p-table [value]="['']" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                <tr>
+                    <th>Civilité</th>
+                    <th>Pays de résidence</th>
+                    <th>Email</th>
+                    <th>Nationalité</th>
+                    <th>Date de naissance</th>
+                    <th>Numéro de téléphone</th>
+                    <th>Numéro WhatsApp</th>
+                    <th>Dernier niveau académique</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body">
+                <tr>
+                    <td>{{lead?.civilite}}</td>
+                    <td>{{lead?.pays_residence}}</td>
+                    <td>{{lead?.email}}</td>
+                    <td>{{lead?.nationalite}}</td>
+                    <td>{{lead?.date_naissance | date: 'dd MMMM YYYY'}}</td>
+                    <td>{{lead?.indicatif_phone}} {{lead?.numero_phone}}</td>
+                    <td>{{lead?.indicatif_whatsapp}} {{lead?.numero_whatsapp}}</td>
+                    <td>{{lead?.dernier_niveau_academique}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </td>
+        </tr>
+        </ng-template>
         </p-table>
     </div>

@@ -237,6 +237,8 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
+import { CrmListComponent } from './crm/crm-list/crm-list.component';
 const routes: Routes = [
     {
         path: '',
@@ -944,6 +946,11 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
+                path: 'crm/liste',
+                component: CrmListComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
                 path: 'crm/leads/liste-non-attribue',
                 component: LeadsNonAttribuesComponent,
                 canActivate: [AuthGuardService],
@@ -1171,6 +1178,10 @@ const routes: Routes = [
     {
         path: 'formulaire-entreprise/:code',
         component: InscriptionEntrepriseComponent,
+    },
+    {
+        path: 'formulaire-crm/:ecole',
+        component: FormCrmExtComponent,
     },
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'formulaire-mi', component: FormulaireMIComponent },
