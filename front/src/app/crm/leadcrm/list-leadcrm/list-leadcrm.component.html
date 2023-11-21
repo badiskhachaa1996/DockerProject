@@ -322,9 +322,9 @@
             [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <div class="flex justify-content-between flex-column sm:flex-row">
+                <div class="d-flex flex-wrap align-items-center justify-content-center">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" />
+                        placeholder="Recherche" class="h-auto" />
 
                     <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                         (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
@@ -340,7 +340,7 @@
                         emptyFilterMessage="Pas d'opération trouvé"
                         filterPlaceholder="Choisissez une operation"></p-dropdown>
                 </div>
-                <div class="flex justify-content-between flex-column sm:flex-row">
+                <div class="d-flex flex-wrap align-items-center justify-content-center">
                     <p-dropdown [style]="{'margin':'5px'}" [options]="filterAffecte" filter="true"
                         (onChange)="dt1.filter($event.value, 'affected_to_member', 'equals');"
                         emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Choisissez un membre"></p-dropdown>
@@ -361,9 +361,7 @@
                     <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                         Date d'insertion <p-sortIcon field="date_creation"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="custom_id" scope="col" style="text-align: center;">
-                        ID <p-sortIcon field="custom_id"></p-sortIcon>
-                    </th>
+
                     <th pSortableColumn="operation" scope="col" style="text-align: center;">
                         Opération <p-sortIcon field="operation"></p-sortIcon>
                     </th>
@@ -376,29 +374,11 @@
                     <th pSortableColumn="pays_residence" scope="col" style="text-align: center;">
                         Pays de résidence <p-sortIcon field="pays_residence"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="email" scope="col" style="text-align: center;">
-                        Adresse Mail <p-sortIcon field="email"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="numero_phone" scope="col" style="text-align: center;">
-                        Numéro de téléphone <p-sortIcon field="numero_phone"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="numero_whatsapp" scope="col" style="text-align: center;">
-                        Numéro WhatsApp <p-sortIcon field="numero_whatsapp"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="produit" scope="col" style="text-align: center;">
-                        Produit <p-sortIcon field="produit"></p-sortIcon>
-                    </th>
                     <th pSortableColumn="affected_to_member" scope="col" style="text-align: center;">
                         Affecté à <p-sortIcon field="affected_to_member"></p-sortIcon>
                     </th>
                     <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
                         Decision Qualification <p-sortIcon field="decision_qualification"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="modalite_paiement" scope="col" style="text-align: center;">
-                        Paiement <p-sortIcon field="modalite_paiement"></p-sortIcon>
-                    </th>
-                    <th>
-                        Documents Prospect
                     </th>
                     <th *ngIf="AccessLevel!='Spectateur'">
                         Action
@@ -409,9 +389,6 @@
                 <tr>
                     <td>
                         {{lead.date_creation | date:'mediumDate'}}
-                    </td>
-                    <td>
-                        {{lead.custom_id}}
                     </td>
                     <td>
                         {{lead.operation}}
@@ -426,39 +403,21 @@
                         {{lead.pays_residence}}
                     </td>
                     <td>
-                        {{lead.email}}
-                    </td>
-                    <td>
-                        {{lead.indicatif_phone}} {{lead.numero_phone}}
-                    </td>
-                    <td>
-                        {{lead.indicatif_whatsapp}} {{lead.numero_whatsapp}}
-                    </td>
-                    <td>
-                        {{lead.produit}}
-                    </td>
-                    <td>
                         {{lead?.affected_to_member?.user_id?.firstname | titlecase}}
                         {{lead?.affected_to_member?.user_id?.lastname | uppercase}}
                     </td>
                     <td>
                         {{lead.decision_qualification}}
                     </td>
-                    <td>
-                        {{lead.modalite_paiement}}
-                    </td>
-                    <td>
-                        {{lead?.documents?.length}}
-                    </td>
-                    <td *ngIf="AccessLevel!='Spectateur'">
+                    <td *ngIf="AccessLevel!='Spectateur'" >
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
                         <i style="padding-left: 3%;" class="pi pi-pencil" (click)="updateLead(lead._id)"
-                           pTooltip="Modifier le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                           pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                         <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
-                           pTooltip="Supprimer le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                           pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>
             </ng-template>
