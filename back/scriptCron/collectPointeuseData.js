@@ -64,10 +64,10 @@ mongoose
                 if (data) {
                     let uidList = []
                     data.users.forEach(u => {
-                        uidList.push(u.UID)
+                        uidList.push(u.UID.toString())
                     })
                     users.forEach(u => {
-                        if (uidList.includes(u.UID) == false)
+                        if (uidList.includes(u.UID.toString()) == false)
                             data.users.push(u)
                     })
                     PointeuseData.findByIdAndUpdate(data._id, {
