@@ -12,15 +12,19 @@ import mongoose from 'mongoose';
   styleUrls: ['./lead-dossier.component.scss']
 })
 export class LeadDossierComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
   ID = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService) { }
-
+  resideFr = false
+  alternance = false
   ngOnInit(): void {
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
+        this.checkIfDossierComplet()
+        if (!this.PROSPECT.etat_dossier)
+          this.PROSPECT.etat_dossier = "En attente"
       })
   }
 
@@ -36,8 +40,13 @@ export class LeadDossierComponent implements OnInit {
   }
   docToUpload: { date: Date, nom: string, path: string, _id: string }
   initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
-    this.docToUpload = doc
-    document.getElementById(id).click();
+    if (!this.docToUpload) {
+      this.docToUpload = doc
+      document.getElementById(id).click();
+    } else
+      this.ToastService.add({ severity: 'info', summary: 'Un autre fichier est entrain d\'être uploadé', detail: `${this.docToUpload} est en train d'être uploadé merci de patientez avant d'uploadé un autre fichier` })
+
+
   }
 
   uploadFile(event: File[]) {
@@ -46,10 +55,12 @@ export class LeadDossierComponent implements OnInit {
     formData.append('document', `${this.docToUpload.nom}`);
     formData.append('file', event[0]);
     this.ProspectService.uploadFile(formData, this.PROSPECT._id).subscribe(res => {
-      this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+
       this.PROSPECT.documents_dossier.splice(this.PROSPECT.documents_dossier.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
       this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Affectation du dossier Lead-Dossier").subscribe(a => {
-        console.log(a)
+        this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+        this.docToUpload = null
+        this.checkIfDossierComplet()
       })
     },
       (error) => {
@@ -62,7 +73,12 @@ export class LeadDossierComponent implements OnInit {
     this.PROSPECT.documents_dossier[this.PROSPECT.documents_dossier.indexOf(doc)].path = null
     this.ProspectService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
       this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
-        console.log(a)
+        this.checkIfDossierComplet()
+      })
+    }, error => {
+      console.error(error)
+      this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+        this.checkIfDossierComplet()
       })
     })
 
@@ -112,7 +128,25 @@ export class LeadDossierComponent implements OnInit {
       console.error(error)
     })
   }
-
+  checkIfDossierComplet() {
+    let r = false
+    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu", 
+    "Relevés de note depuis le baccalauréat", "Passeport / Pièce d'identité", 
+    "Diplôme baccalauréat ou équivalent","Relevé de note baccalauréat"]
+    if (this.resideFr && this.alternance) {
+      this.documentsObligatoires.push('Copie Visa')
+      this.documentsObligatoires.push('Carte de séjour')
+      this.documentsObligatoires.push('Carte vitale ou attestation provisoire')
+    }
+    this.PROSPECT.documents_dossier.forEach(val => {
+      if (this.documentsObligatoires.includes(val.nom) && !val.path)
+        r = true
+    })
+    if (r)
+      this.PROSPECT.etat_dossier = 'Manquant'
+    else
+      this.PROSPECT.etat_dossier = 'Complet'
+  }
 
 
 }

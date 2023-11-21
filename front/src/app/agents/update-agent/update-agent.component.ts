@@ -61,7 +61,8 @@ export class UpdateAgentComponent implements OnInit {
     { value: "Questionnaire", label: "Questionnaire" },
     { value: "Intuns", label: "Intuns" },
     { value: "Gestions des emails", label: "Gestions des emails" },
-    { value: "Links", label: "Links" }
+    { value: "Links", label: "Links" },
+    { value: "Remboursement", label: "Remboursement" }
   ]
 
   dropdownRole = [
@@ -163,6 +164,12 @@ export class UpdateAgentComponent implements OnInit {
       services.forEach(val => { this.serviceList.push({ label: val.label, value: val._id }) })
       this.UserService.getPopulate(this.ID).subscribe(data => {
         this.USER = data
+
+        if (this.USER?.role == 'Admin')
+          this.dropdownModule.splice(11, 1) //Supprimer Admin-IMS
+        if (this.USER?.type == 'Responsable')
+          this.dropdownModule.splice(10, 1) //Supprimer RH
+        
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
         this.onSelectRole()

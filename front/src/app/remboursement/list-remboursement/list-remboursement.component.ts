@@ -175,7 +175,7 @@ this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
               paysAdd = true
             }
           })
-        } 
+        } ;
         // filtrage par formation 
         
 if (this.selectedFormation?.length != 0){
@@ -197,7 +197,7 @@ if (this.selectedStatus?.length != 0){
 }   
 
 
-      if (schoolAdd && paysAdd && formationAdd && statusAdd) {
+      if (schoolAdd && paysAdd && formationAdd &&statusAdd) {
         newFiltered.push(demande)
       }
     })

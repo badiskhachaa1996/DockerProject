@@ -47,8 +47,8 @@ export class DetailsEtudiantComponent implements OnInit {
   colorBande = "#ffffff"
   filterModule = [{ label: "Tous les modules", value: null }]
   dropdownTimes = [
-    { label: "Passé", value: "A suivi avec assiduité la formation intitulée:" },
-    { label: "Présent", value: "Suit avec assiduité la formation intitulée:" }
+    { label: "Passé", value: "Passé" },
+    { label: "Présent", value: "Présent" }
   ]
   PHRASE = this.dropdownTimes[0].value
   barDataHor: any = {
@@ -167,8 +167,7 @@ export class DetailsEtudiantComponent implements OnInit {
       this.userService.getPopulate(token.id).subscribe(userConnected => {
         this.seanceService.getAllFinishedByClasseId(this.EtudiantDetail.classe_id, this.EtudiantDetail.user_id).subscribe((seanceData) => {
           this.ListeSeance = seanceData
-          this.isNotEtudiant = (userConnected.role == "Agent" || userConnected.role == "Admin" || userConnected.role == "Responsable")
-          console.log(userConnected.type != "Initial" && userConnected.type != "Alternant", this.isNotEtudiant)
+          this.isNotEtudiant = (userConnected.role == "Agent" || userConnected.role == "Admin" || userConnected.role == "Responsable" || userConnected.type == 'Collaborateur' || userConnected.type_supp.includes('Collaborateur'))
           this.isNotEntreprise = userConnected.type != 'CEO Entreprise'
           let type = "Agent"
           if ((userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'CEO Entreprise') && userConnected.role != "Agent" && userConnected.role != "Admin" && userConnected.role != "Responsable")
@@ -403,5 +402,23 @@ export class DetailsEtudiantComponent implements OnInit {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
     FileSaver.saveAs(data, "assiduite_" + this.Etudiant_userdata.lastname + "_" + this.Etudiant_userdata.firstname + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+  }
+  tauxAssiduite = false
+  selectAssidu = [
+    { label: 'Oui', value: true },
+    { label: 'Non', value: false }
+  ]
+  newPhrase = "A suivi avec assiduité la formation intitulée:"
+  updatePhrase() {
+    if (!this.tauxAssiduite) {
+      if (this.PHRASE == 'Passé')
+        this.newPhrase = "A suivi avec assiduité la formation intitulée:"
+      else
+        this.newPhrase = "Suit avec assiduité la formation intitulée:"
+    } else
+      if (this.PHRASE == 'Passé')
+        this.newPhrase = `A suivi avec un taux d'assiduité de <strong>${this.pourcentageAssiduite}%</strong> la formation intitulée:`
+      else
+        this.newPhrase = `Suit avec un taux d'assiduité de <strong>${this.pourcentageAssiduite}%</strong> la formation intitulée:`
   }
 }

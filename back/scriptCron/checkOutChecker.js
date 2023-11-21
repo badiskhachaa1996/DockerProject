@@ -56,9 +56,13 @@ mongoose
                     let minutes = new Date(dc.check_in).getMinutes() + (pauseTiming - Math.trunc(pauseTiming % 60))
                     dc.check_out.setHours(hours, minutes, 0, 0)
                     DailyCheck.findByIdAndUpdate(dc._id, { ...dc }).then(r => {
-                        console.log("YEAH")
                         if (dc._id == dcs[dcs.length - 1]._id) {
                             console.log("DONE")
+                            process.exit()
+                        }
+                    }, error => {
+                        if (dc._id == dcs[dcs.length - 1]._id) {
+                            console.error(error)
                             process.exit()
                         }
                     })

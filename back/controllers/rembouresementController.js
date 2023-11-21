@@ -122,10 +122,14 @@ app.delete('/delete-doc/:id/:file', async (req, res) => {
     res.status(500).send('Failed to delete the file.');
   }
 });
-
+function entierAleatoire(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+id = "REM" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
 app.post("/newremb", async (req, res) => {
   const remboussement = await Remboursement.findOne({
     "student.email": req.body.student.email,
+    
   });
   if (remboussement) {
     res
@@ -134,6 +138,7 @@ app.post("/newremb", async (req, res) => {
   } else {
     try {
       const newRemboursement = new Remboursement(req.body);
+      newRemboursement.customid=id;
       const savedRemboursement = await newRemboursement.save();
       res.status(201).json(savedRemboursement);
     } catch (error) {

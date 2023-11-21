@@ -66,7 +66,7 @@ const prospect_schema = new mongoose.Schema({
     code_commercial: { type: String, required: false },
     statut_dossier: { type: String, default: "En attente de traitement" },
     date_traitement: { type: Date },
-    etat_dossier: { type: String, default: "En cours de traitement" },
+    etat_dossier: { type: String, default: "En attente" },
     tcf: { type: String },
     agent_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -196,7 +196,7 @@ const prospect_schema = new mongoose.Schema({
     },
     phase_candidature: {
         type: String,
-        default: "En attente d'affectation"
+        default: "Non traité"
     },
     agent_sourcing_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -282,14 +282,15 @@ const prospect_schema = new mongoose.Schema({
         default: [
             { nom: "CV", path: null, date: null },
             { nom: "Lettre de Motivation", path: null, date: null },
-            { nom: "Passeport / Pièce d'identité", path: null, date: null },
-            { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
+            { nom: "Passeport - Pièce d'identité", path: null, date: null },
+            { nom: "Diplôme baccalauréat ou équivalent", path: null, date: null },
             { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
-            { nom: "Relevé de note baccaulauréat", path: null, date: null },
-            { nom: "Relevé de note des deux dernières années ( 1er année )", path: null, date: null },
-            { nom: "Relevé de note des deux dernières années ( 2ème année )", path: null, date: null },
-            { nom: "TCF", path: null, date: null },
-            { nom: 'Carte de séjour', path: null, date: null }
+            { nom: "Relevé de note baccalauréat", path: null, date: null },
+            { nom: "Relevés de note depuis le baccalauréat", path: null, date: null },
+            { nom: "Test de niveau en Français - TCF (pour les étudiants des pays non francophones)", path: null, date: null },
+            { nom: 'Carte de séjour', path: null, date: null },
+            { nom: "Copie Visa", path: null, date: null },
+            { nom: "Carte vitale ou attestation provisoire", path: null, date: null },
         ]
     },
     documents_autre: {
@@ -382,7 +383,11 @@ const prospect_schema = new mongoose.Schema({
     ecole: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ecoleadmissions",
-    }
+    },
+    sos_lastname: { type: String },
+    sos_firstname: { type: String },
+    sos_email: { type: String },
+    sos_phone: { type: String },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

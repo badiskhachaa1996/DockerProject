@@ -56,6 +56,23 @@
             </form>
         </div>
 
+        <div class="card" *ngIf="showFormCommentaireConge">
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                (click)="showFormCommentaireConge = false;"></i>
+            <div style="float: right"></div>
+
+            <h3 class="text-center">Modification du commentaire</h3>
+            <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateConge" (ngSubmit)="onUpdateConge()">
+                <div class="field col-12">
+                    <label htmlFor="note_decideur">Commentaire <span style="color: red">*</span></label>
+                    <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4"
+                        cols="30"></textarea>
+                </div>
+
+                <button pButton pRipple type="submit" class="my-2" label="Envoyer"></button>
+            </form>
+        </div>
+
 
 
         <div class="card">
@@ -70,14 +87,12 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
-                        <div>
-                            <label class="mb-1">Urgent&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);" [binary]="true"></p-checkbox></label>
-                            
-                        </div>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterStatut"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Statut"
                             [showClear]="true"></p-dropdown>
-
+                        <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+                            [(ngModel)]="siteSelected" autoWidth="false" (onChange)="onFilterSite($event.value)"
+                            [style]="{'width':'13em','margin-bottom':'2px', 'margin-left': '3px'}"></p-multiSelect>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterType"
                             (onChange)="dt1.filter($event.value, 'type_conge', 'equals');" placeholder="Type"
                             [showClear]="true"></p-dropdown>
@@ -86,6 +101,11 @@
                             [options]="collaborateursFilter" filter="true"
                             (onChange)="dt1.filter($event.value, 'user_id._id', 'equals');" placeholder="Collaborateur"
                             [showClear]="true"></p-dropdown>
+                        <div>
+                            <label class="mb-1">Urgent&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);"
+                                    [binary]="true"></p-checkbox></label>
+
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -168,6 +188,9 @@
                             <i style="margin-right: 2%;cursor: pointer;" class="pi pi-pencil"
                                 pTooltip="Mettre à jour la demande" (click)="onFillFormUpdate(conge)"
                                 aria-hidden="true"></i>
+                            <i style="margin-right: 2%;cursor: pointer;" class="pi pi-comment"
+                                pTooltip="Mettre à jour le commentaire" (click)="onFillFormCommentaire(conge)"
+                                aria-hidden="true"></i>
                             <i style="margin-right: 2%;cursor: pointer;" class="pi pi-trash"
                                 pTooltip="Supprimer la demande" (click)="onDeleteConge(conge._id)"
                                 aria-hidden="true"></i>
@@ -184,6 +207,7 @@
                         <th>Motif</th>
                         <th>Validé le</th>
                         <th>Validé par</th>
+                        <th>N° Ticket</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -192,6 +216,7 @@
                         <td>{{conge.valided_date|date:'dd MMMM yy'}}</td>
                         <td>{{conge?.valided_by?.firstname | titlecase}} {{conge?.valided_by?.lastname | uppercase}}
                         </td>
+                        <td>{{conge?.customid_ticket}}</td>
                     </tr>
                 </ng-template>
             </p-table>

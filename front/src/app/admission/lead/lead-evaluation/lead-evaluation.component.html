@@ -1,0 +1,53 @@
+<p-fieldset legend="Test" style="width: 100%;" class="mb-2">
+    <div style="width: 100%;">
+        <p>
+            En cliquant sur passer le test, un compteur se décleche pour calculer le temps mis pour effectuer
+            l'évaluation, la page se ferme si le délai de la passation dépasse la durée de l'examen.<br>
+            Si vous finissez avant, cliquez sur 'Soumettre'.
+        </p>
+    </div>
+    <p-table #dt1 [value]="evaluations" dataKey="_id" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Evaluation</th>
+                <th>Score</th>
+                <th>Durée</th>
+                <th>Etat</th>
+                <th>Date de passation</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-eval>
+            <tr>
+                <td>{{eval.label}}</td>
+                <td>X/{{eval.score}}</td>
+                <td>
+                    <strong>Durée du test</strong> 30 min<br>
+                    <strong>Durée mise</strong>{{eval.duree}} min
+                </td>
+                <td>XXX</td>
+                <td>XXX</td>
+                <td>
+                    <a (click)="onStartEval(eval)">Passer le test</a>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-fieldset>
+<p-fieldset legend="Evaluation" style="width: 100%;" class="mb-2" *ngIf="EvaluationOnGoing">
+    <div class="grid" style="width: 100%;">
+        <div class="col-12" style="text-align: right;padding: 9px;" *ngIf="DateStart">
+            Reste {{seeTimer()}}
+        </div>
+        <div class="col-12">
+            <iframe [src]="EvaluationOnGoing.lien" width="100%" height="100%">
+
+            </iframe>
+        </div>
+        <div class="col-4 col-offset-8" style="text-align: center;">
+            <button [style]="{'width':'100%'}" autoWidth="false" pButton type="button" (click)="onCloseEval()"
+                label="Soumettre"></button>
+        </div>
+    </div>
+
+</p-fieldset>

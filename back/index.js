@@ -158,7 +158,7 @@ const { User } = require("./models/user");
 const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
 // const documentsController = require('./controllers/documentsController');
 const { Remboursement } = require("./models/Remboursement");
-
+const {evaluation } = require("./controllers/evaluationController");
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
   if (token && token["prospectFromDb"]) {
@@ -263,7 +263,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl === "/soc/entreprise/createEntrepriseRepresentant" ||
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
-      req.originalUrl === '/soc/ticket/getAllPopulate'
+      req.originalUrl === '/soc/ticket/getAllPopulate' ||
+      req.originalUrl==='/soc/demanderemboursement/newremb'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
@@ -422,9 +423,11 @@ app.use('/soc/demanderemboursement',require('./controllers/rembouresementControl
 // app.use('/soc/docremb',require('./controllers/documentsController'));
 
 //app.use('/soc/demanderemboursement', rembouresementController )
-app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
-app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
-app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
+app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'));
+app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'));
+app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'));
+//evaluation
+app.use('/soc/evaluation',require('./controllers/evaluationController'));
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

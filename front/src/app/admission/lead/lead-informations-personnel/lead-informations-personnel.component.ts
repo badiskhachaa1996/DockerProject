@@ -58,9 +58,21 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     pays_adresse: new FormControl('', Validators.required),
     _id: new FormControl("", Validators.required)
   })
+  
+  editInfoFormSOS: FormGroup = new FormGroup({
+    sos_lastname: new FormControl(''),
+    sos_firstname: new FormControl(''),
+    sos_email: new FormControl(''),
+    sos_phone: new FormControl(''),
+    _id: new FormControl("", Validators.required)
+  })
   initEditForm() {
     let bypass: any = this.PROSPECT?.user_id
-    this.editInfoForm.setValue({
+    this.editInfoForm.patchValue({
+      sos_lastname: this.PROSPECT?.sos_lastname,
+      sos_firstname: this.PROSPECT?.sos_firstname,
+      sos_email: this.PROSPECT?.sos_email,
+      sos_phone: this.PROSPECT?.sos_phone,
       lastname: bypass?.lastname,
       firstname: bypass?.firstname,
       phone: bypass?.phone,
@@ -72,6 +84,17 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     })
     this.editInfo = true;
   }
+  editInfoSOS = false
+  initEditFormSOS() {
+    this.editInfoFormSOS.patchValue({
+      sos_lastname: this.PROSPECT?.sos_lastname,
+      sos_firstname: this.PROSPECT?.sos_firstname,
+      sos_email: this.PROSPECT?.sos_email,
+      sos_phone: this.PROSPECT?.sos_phone,
+      _id: this.PROSPECT._id
+    })
+    this.editInfoSOS = true;
+  }
 
   saveInfo() {
     this.UserService.patchById({ ...this.editInfoForm.value }).then(users => {
@@ -79,6 +102,15 @@ export class LeadInformationsPersonnelComponent implements OnInit {
         this.PROSPECT = doc
         this.ToastService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
         this.editInfo = false
+      })
+    })
+  }
+  saveInfoSOS() {
+    this.ProspectService.updateV2({ ...this.editInfoFormSOS.value },'saveInfoSOS').subscribe(user => {
+      this.ProspectService.getPopulateByUserid(this.PROSPECT.user_id._id).subscribe(doc => {
+        this.PROSPECT = doc
+        this.ToastService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
+        this.editInfoSOS = false
       })
     })
   }

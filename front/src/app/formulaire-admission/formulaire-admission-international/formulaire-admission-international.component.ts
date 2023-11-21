@@ -64,7 +64,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   formSteps: any[] = [
     "Infos",
     "Choix",
-    "Créer mon compte"
+    "Portail"
   ];
 
   rentreeList = [
@@ -194,7 +194,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       this.formSteps = [
         "Infos",
         "Choix",
-        "Créer mon compte"
+        "Portail"
       ];
 
       this.nationList = environment.nationalities;
@@ -246,7 +246,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       this.formSteps = [
         "Infos",
         "Choix",
-        "Créer mon compte",
+        "Portail",
       ];
 
       this.nationList = environment.nationalites;
@@ -633,6 +633,11 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, customid, null, null, null, null, false, null,
       nir, mobilite_reduite, sportif_hn,
       hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire, null, numeroAgence, languages_fr, languages_en, numero_telegram, indicatif_telegram);
+    if (user.pays_adresse == 'France')
+      prospect.lead_type = 'Local'
+    else
+      prospect.lead_type = 'International'
+    prospect.source = 'Site Web'
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {

@@ -662,7 +662,7 @@ app.get("/getAll", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
 app.get("/getAllLocal", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -670,7 +670,7 @@ app.get("/getAllLocal", (req, res, next) => {
 });
 app.get("/getAllInt", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -680,24 +680,23 @@ app.get("/getAllInt", (req, res, next) => {
 
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
-
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id').skip(4000)
         .then((prospectsFromDb) => {
-            let dic = {}
+            /*let dic = {}
             prospectsFromDb.forEach(val => {
                 if (dic[val.type_form])
                     dic[val.type_form].push(val)
                 else
                     dic[val.type_form] = [val]
-            })
-            res.status(201).send(dic)
+            })*/
+            res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/get100Sourcing", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(500).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(4000).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             let dic = {}
             prospectsFromDb.forEach(val => {
@@ -936,13 +935,12 @@ app.put("/updateV2", (req, res, next) => {
                         detail,
                         date_creation: new Date()
                     })
-                    console.log(hl)
                     hl.save().then(h => { console.log(h) })
                     res.status(201).send(prospectsFromDb)
                 })
-                .catch((error) => { res.status(500).send(error.message); });
+                .catch((error) => { res.status(500).send(error); });
         })
-        .catch((error) => { res.status(400).send(error.message); })
+        .catch((error) => { res.status(400).send(error); })
 });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()
@@ -1581,29 +1579,30 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
         prospectList.forEach(data => {
             if (data && data.payement)
                 data.payement.forEach(pay => {
+                    console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.inscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.inscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay?.method.includes('Virement'))
                             stats_paiements.inscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method.includes('Espèce'))
                             stats_paiements.inscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method.includes('Chèque'))
                             stats_paiements.inscription.cheque += 1
                     } else {
                         stats_paiements.preinscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.preinscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.preinscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay.method?.includes('Virement'))
                             stats_paiements.preinscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method?.includes('Espèce'))
                             stats_paiements.preinscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method?.includes('Chèque'))
                             stats_paiements.preinscription.cheque += 1
                     }
                 })

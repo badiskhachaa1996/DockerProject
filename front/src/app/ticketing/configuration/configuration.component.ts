@@ -33,34 +33,42 @@ export class ConfigurationComponent implements OnInit {
           this.sujetDic[element.service_id] = element.label
       });
     })
-    this.UserService.getAllAgent().subscribe(data => {
+    this.refreshMemberDic()
+  }
+  refreshMemberDic() {
+    this.UserService.getAllAgentPopulate().subscribe(data => {
+      this.memberDic = {}
+      this.responsableDic = {}
       data.forEach(user => {
+
         let dicRoles = {}
         if (user.roles_ticketing_list && user.roles_ticketing_list.length != 0) {
 
           user.roles_ticketing_list.forEach(roleTicket => {
             let buffer: any = roleTicket.module
-            dicRoles[buffer] = roleTicket.role
+            if (buffer)
+              dicRoles[buffer._id] = roleTicket.role
           })
         }
-
         if (user.service_list) {
           user.service_list.forEach(service => {
-            if (this.memberDic[service]) {
-              this.memberDic[service] = this.memberDic[service] + ", " + user.firstname + " " + user.lastname.toUpperCase()
-            }
-            else {
-              this.memberDic[service] = user.firstname + " " + user.lastname.toUpperCase()
-            }
-            if (dicRoles[service] && dicRoles[service] == 'Responsable') {
-              if (this.responsableDic[service])
-                this.responsableDic[service].push(user)
+            if (this.memberDic[service._id])
+              this.memberDic[service._id] = this.memberDic[service._id] + ", " + user.firstname + " " + user.lastname.toUpperCase()
+            else
+              this.memberDic[service._id] = user.firstname + " " + user.lastname.toUpperCase()
+
+            if (dicRoles[service._id] && dicRoles[service._id] == 'Responsable')
+              if (this.responsableDic[service._id])
+                this.responsableDic[service._id].push(user)
               else
-                this.responsableDic[service] = [user]
-            }
+                this.responsableDic[service._id] = [user]
+
           })
         }
       })
+      if(this.addMemberOfService){
+        this.AddMember(this.addMemberOfService)
+      }
     })
   }
   //Ajout Service
@@ -167,14 +175,14 @@ export class ConfigurationComponent implements OnInit {
     agent.roles_ticketing_list.push({ module: this.addMemberOfService, role: 'Agent' })
     this.UserService.update({ _id: agent._id, service_list: agent.service_list, roles_ticketing_list: agent.roles_ticketing_list }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: "Le membre a été ajouté au service avec succès" })
-      this.memberList.push(data)
+      this.UserService.getPopulate(data._id).subscribe(r => {
+        this.memberList.push(data)
+      })
+
       this.memberDropdown.splice(this.customIndexOfDropdown(this.memberDropdown, agent), 1)
       this.addMember = null
       this.MemberForm.reset()
-      if (this.memberDic[this.addMemberOfService._id])
-        this.memberDic[this.addMemberOfService._id] = this.memberDic[this.addMemberOfService._id] + ", " + agent.firstname + " " + agent.lastname.toUpperCase()
-      else
-        this.memberDic[this.addMemberOfService._id] = agent.firstname + " " + agent.lastname.toUpperCase()
+      this.refreshMemberDic()
     })
   }
   addMemberOfService: Service = null
@@ -190,7 +198,7 @@ export class ConfigurationComponent implements OnInit {
       this.responsableList = []
     this.UserService.getAllByServiceFromList(service._id).subscribe(data => {
       this.memberList = data
-      this.UserService.getAllPopulate().then(dataAgent => {
+      this.UserService.getAllAgentPopulate().subscribe(dataAgent => {
         dataAgent.forEach(agent => {
           if (!this.customIncludes(data, agent) && (agent.type == 'Collaborateur' || agent.type_supp.includes('Collaborateur') || (agent.type == 'Formateur' && agent.haveNewAccess))) {
             this.memberDropdown.push({ label: `${agent.lastname} ${agent.firstname}`, value: agent })
@@ -229,29 +237,7 @@ export class ConfigurationComponent implements OnInit {
       this.ToastService.add({ severity: 'success', summary: "Le membre a été supprimé du service avec succès" })
       this.memberList.splice(ri, 1)
       this.memberDropdown.push(this.memberDropdown.indexOf({ label: `${data.lastname} ${data.firstname}`, value: data }))
-      this.UserService.getAllAgent().subscribe(data => {
-        this.memberDic = {}
-        data.forEach(user => {
-          let dicRoles = {}
-          if (user.roles_ticketing_list) {
-            user.roles_ticketing_list.forEach(roleTicket => {
-              dicRoles[roleTicket.module._id] = roleTicket.role
-            })
-          }
-          if (user.service_list)
-            user.service_list.forEach(service => {
-              if (this.memberDic[service]) this.memberDic[service] = this.memberDic[service] + ", " + user.firstname + " " + user.lastname.toUpperCase()
-              else this.memberDic[service] = user.firstname + " " + user.lastname.toUpperCase()
-              if (dicRoles[service] && dicRoles[service] == 'Responsable') {
-                if (this.responsableDic[service])
-                  this.responsableDic[service].push(user)
-                else
-                  this.responsableDic[service] = [user]
-              }
-            })
-
-        })
-      })
+      this.refreshMemberDic()
     })
   }
 
@@ -315,21 +301,18 @@ export class ConfigurationComponent implements OnInit {
       })
     }
     else {
-      if (this.responsableList)
-        this.responsableList.push(user)
-      else
-        this.responsableList = [user]
-      if (this.responsableDic[service._id])
-        this.responsableDic[service._id].push(user)
-      else
-        this.responsableDic[service._id] = [user]
+      let r = false
       user.roles_ticketing_list.forEach((roleTicket, idx) => {
         if (roleTicket.module._id == service._id) {
           user.roles_ticketing_list[idx].role = 'Responsable'
+          r = true
         }
       })
+      if (!r)
+        user.roles_ticketing_list.push({ module: service, role: 'Responsable' })
     }
     this.UserService.update({ _id: user._id, roles_ticketing_list: user.roles_ticketing_list }).subscribe(r => {
+      this.refreshMemberDic()
       this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
     })
 

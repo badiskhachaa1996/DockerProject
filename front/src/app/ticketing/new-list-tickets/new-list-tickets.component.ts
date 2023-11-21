@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { Notification } from 'src/app/models/notification';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'src/app/services/message.service';
 import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
@@ -21,12 +21,14 @@ import { Sujet } from 'src/app/models/Sujet';
 import { Service } from 'src/app/models/Service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Table } from 'primeng/table';
+import { error } from 'console';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
   styleUrls: ['./new-list-tickets.component.scss']
 })
 export class NewListTicketsComponent implements OnInit {
+  TICKETID = this.route.snapshot.paramMap.get('ticket_id');
   campusDropdown: any[] = [
     { value: 'Paris', label: "Paris" },
     { value: "Marne", label: "Marne" },
@@ -37,8 +39,9 @@ export class NewListTicketsComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
-  modeOptions = [{ label: 'Personnel' },
-  { label: 'Service' }
+  modeOptions = [
+    { label: 'Personnel' },
+    { label: 'Service' }
   ]
   TicketMode = "Personnel"
   onChangeMode(e) {
@@ -55,7 +58,7 @@ export class NewListTicketsComponent implements OnInit {
   }
   USER: User
   isAgent = false
-  constructor(private TicketService: TicketService, private ToastService: ToastService,
+  constructor(private route: ActivatedRoute, private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
     private NotifService: NotificationService, private Socket: SocketService, private router: Router,
     private MessageService: MessageService, private diplomeService: DiplomeService) { }
@@ -63,8 +66,8 @@ export class NewListTicketsComponent implements OnInit {
   ticketsOnglets = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
-    sujet_id: new FormControl('', Validators.required),
-    service_id: new FormControl('', Validators.required),
+    sujet_id: new FormControl(null, Validators.required),
+    service_id: new FormControl(null, Validators.required),
     description: new FormControl('',),
     resum: new FormControl(''),
     priorite: new FormControl("false"),
@@ -72,8 +75,8 @@ export class NewListTicketsComponent implements OnInit {
     type: new FormControl('',),
     statut: new FormControl('',),
     documents: new FormControl([]),
-    agent_id: new FormControl('',),
-    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl(null,),
+    _id: new FormControl(null, Validators.required),
     demande: new FormControl('',),
     campus: new FormControl('',),
     filiere: new FormControl('',),
@@ -140,7 +143,6 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            console.log(this.USER?.service_list, nonassigne, role, serviceList)
             this.tickets = this.tickets.concat(nonassigne)
             this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
@@ -211,8 +213,15 @@ export class NewListTicketsComponent implements OnInit {
   roleAccess = 'Spectateur'
   filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: Table;
+  hideTicket = true
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
+    if (this.router.url == '/ticketing/mes-tickets-services') {
+      this.TicketMode = 'Service'
+      this.onChangeMode({ value: 'Service' })
+      this.filterType = ['Non Assigne']
+    }
+
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
       this.isAgent = (r.role != 'user')
@@ -232,6 +241,18 @@ export class NewListTicketsComponent implements OnInit {
           this.roleAccess = service_dic['Ticketing']
       }
       this.ticketsOnglets = r.savedTicket
+      if (this.TICKETID)
+        this.TicketService.getPopulate(this.TICKETID).subscribe(ticket => {
+          if (ticket && ticket?.agent_id?._id == this.token.id) {
+            this.ticketsOnglets.push(ticket)
+            this.MessageService.getAllByTicketID(ticket._id).subscribe(messages => {
+              this.messageList = messages
+            })
+            setTimeout(() => {
+              this.activeIndex1 = 1 + this.ticketsOnglets.length
+            }, 2)
+          }
+        })
       this.updateTicketList()
     })
 
@@ -324,14 +345,18 @@ export class NewListTicketsComponent implements OnInit {
           items: itemsService[s._id]
         })
       })
-      console.log(this.filterAgent)
     })
   }
 
-  delete(id, ri) {
+  delete(ticket: Ticket, ri) {
     if (confirm("Êtes-vous sur de vouloir supprimer ce ticket ?")) {
-      this.TicketService.delete(id).subscribe(data => {
-        this.tickets.splice(ri, 1)
+      this.TicketService.delete(ticket._id).subscribe(data => {
+        this.tickets.splice(this.tickets.indexOf(ticket), 1)
+        this.defaultTicket.splice(this.defaultTicket.indexOf(ticket), 1)
+        this.ToastService.add({ severity: 'success', summary: `Ticket ${ticket.customid} supprimé` })
+      }, error => {
+        console.error(error)
+        this.ToastService.add({ severity: 'error', summary: `Ticket ${ticket.customid} n'a pas été supprimé`, detail: error.error })
       })
     }
   }
@@ -514,46 +539,6 @@ export class NewListTicketsComponent implements OnInit {
     }
 
   }
-  onUpdateTraiter() {
-    let date_fin_traitement = null
-    if (this.TicketForm.value.statut == 'Traité')
-      date_fin_traitement = new Date()
-
-    let documents_service = this.TicketForm.value.documents_service
-    if (!documents_service)
-      documents_service = []
-    this.uploadedFiles.forEach(element => {
-      documents_service.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
-    });
-    this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents_service }).subscribe(data => {
-      if (this.TicketForm.value.statut != this.ticketTraiter.statut) {
-        this.Socket.NewNotifV2('Ticketing - Super-Admin', `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`)
-        this.NotifService.createV2(new Notification(null, null, false, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`, new Date(), null, this.ticketTraiter?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
-        this.Socket.NewNotifV2(this.ticketTraiter.createur_id, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`)
-        this.NotifService.create(new Notification(null, null, false, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`, new Date(), this.ticketTraiter.createur_id, this.ticketTraiter?.sujet_id?.service_id?._id)).subscribe(test => { })
-        this.AuthService.getPopulate(this.ticketTraiter.createur_id).subscribe(userCreator => {
-          this.TicketService.sendMailUpdateStatut({ id: this.ticketTraiter.customid, statut: this.TicketForm.value.statut, createur_email: userCreator.email }).subscribe(() => { })
-        })
-
-      }
-
-      this.TicketForm.reset()
-      this.updateTicketList()
-      this.ticketTraiter = null
-      this.ToastService.add({ severity: 'success', summary: 'Mis à jour du Ticket avec succès' })
-      this.uploadedFiles.forEach((element, idx) => {
-        let formData = new FormData()
-        formData.append('ticket_id', this.TicketForm.value._id)
-        formData.append('document_id', documents_service[idx + this.TicketForm.value.documents_service.length]._id)
-        formData.append('file', element)
-        formData.append('path', element.name)
-        this.TicketService.addFile(formData).subscribe(data => {
-          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
-        })
-      });
-    })
-  }
-
   goToAddTicket() {
     this.router.navigate(['ticketing/gestion/ajout'])
   }
@@ -579,11 +564,10 @@ export class NewListTicketsComponent implements OnInit {
     if (event._id) {
       this.MessageService.getAllByTicketID(event._id).subscribe(messages => {
         this.messageList = messages
-        console.log(this.messageList)
       })
     }
-    else if (event.index != 0)
-      this.MessageService.getAllByTicketID(this.ticketsOnglets[event.index - 1]._id).subscribe(messages => {
+    else if (event.index > 1)
+      this.MessageService.getAllByTicketID(this.ticketsOnglets[event.index - 2]._id).subscribe(messages => {
         this.messageList = messages
       })
   }
@@ -613,6 +597,8 @@ export class NewListTicketsComponent implements OnInit {
     this.TicketService.update({ ...ticket }).subscribe(t => {
       this.updateTicketList()
     })
+    console.log(ticket)
+    this.TicketService.sendMailUpdateStatut({ id: ticket.customid, statut: ticket.statut, createur_id: ticket.createur_id }).subscribe(() => { })
   }
   deleteTicket(ticket: Ticket) {
     this.ticketsOnglets.splice(this.ticketsOnglets.indexOf(ticket), 1)
@@ -657,8 +643,12 @@ export class NewListTicketsComponent implements OnInit {
           this.createurList.push({ label: `${t.createur_id.firstname} ${t.createur_id.lastname}`, value: t.createur_id._id })
         }
       }
-
     })
+    setTimeout(() => {
+      this.filteredValues = this.dt1._value
+    }, 5)
+
+    this.hideTicket = false
   }
   YpareoDropdown: any[] = [
     { label: 'Accés', value: "Acces" },
@@ -680,6 +670,7 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Autre', value: "Autre" },
   ];
   moduleDropdown: any[] = [
+    { label: 'Espace Personnel', value: "Espace Personnel" },
     { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
     { label: 'Module Pédagogie', value: "Module Pédagogie" },
     { label: 'Module Administration', value: "Module Administration" },
@@ -696,7 +687,8 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
     { label: 'Module Ticketing', value: "Module Ticketing" },
-    { label: 'Espace Personnel', value: "Espace Personnel" },
+    { label: 'Module Remboursement', value: "Module Remboursement" },
+    { label: 'Autre', value: "Autre" },
   ];
 
   IMS_Type_Dropdown: any[] = [
@@ -721,15 +713,15 @@ export class NewListTicketsComponent implements OnInit {
       this.TicketForm.get('module').setValidators([Validators.required]);
       this.TicketForm.get('module').updateValueAndValidity();
     } else if (selectedSubject === "Ypareo") {
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
       this.showDemandeDropdown = true;
       this.demandeDropdown = this.YpareoDropdown;
     } else if (selectedSubject === "Microsoft") {
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
       this.showDemandeDropdown = true;
       this.demandeDropdown = this.MicrosoftDropdown
     } else if (selectedSubject === "Site internet") {
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
       this.showDemandeDropdown = true;
       this.demandeDropdown = this.SiteinternetDropdown;
     }
@@ -778,14 +770,21 @@ export class NewListTicketsComponent implements OnInit {
     return r
   }
   filterDate(tab, val) {
-    console.log(val)
-    console.log(new Date(val))
     let d1 = new Date(val)
     d1.setHours(0, 0, 0)
-    console.log(d1, d1.toISOString())
     this.dt1.filter(d1.toISOString(), 'date_ajout', "gte")
     /*d1.setHours(23,59,0)
     this.dt1.filter(d1.toISOString(), 'date_ajout', "lte")*/
+  }
+
+  customIndexOf(list: Ticket[], id: string) {
+    let r = -1
+    list.forEach((u, index) => {
+      if (u._id == id)
+        r = index
+    })
+    console.log(r)
+    return r
   }
 }
 

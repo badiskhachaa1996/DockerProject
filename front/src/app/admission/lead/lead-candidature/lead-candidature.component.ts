@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad';
@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 })
 export class LeadCandidatureComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
+  @Input() PROSPECTID
   constructor(private route: ActivatedRoute, private LeadService: AdmissionService, private CandidatureService: CandidatureLeadService, private ToastService: MessageService) { }
   pageNumber = 1
   PROSPECT: Prospect
@@ -88,6 +89,8 @@ export class LeadCandidatureComponent implements OnInit {
   signature: any = "../assets/images/avatar.PNG";
   reader: FileReader = new FileReader();
   ngOnInit(): void {
+    if (!this.ID)
+      this.ID = this.PROSPECTID
     this.LeadService.getPopulate(this.ID).subscribe(p => {
       this.PROSPECT = p
       this.CandidatureService.getByLead(this.ID).subscribe(c => {

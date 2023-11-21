@@ -20,6 +20,7 @@ import { MemberCRM } from './models/memberCRM';
 import { TeamsCrmService } from './services/crm/teams-crm.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CandidatureLeadService } from './services/candidature-lead.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -75,12 +76,15 @@ export class AppMenuComponent implements OnInit {
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
-        private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService, private CandidatureService: CandidatureLeadService) { }
+        private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService, private CandidatureService: CandidatureLeadService,
+        private router: Router) { }
 
     ngOnInit() {
         //Decoder le token
         this.showMenu = false;
         this.token = jwt_decode(localStorage.getItem('token'));
+        if (localStorage.getItem('parentSelected'))
+            this.parentSelected = JSON.parse(localStorage.getItem("parentSelected"));
         // Récupération du user connecter
         this.userService.getPopulate(this.token.id).subscribe({
             next: (response: User) => {
@@ -95,27 +99,6 @@ export class AppMenuComponent implements OnInit {
                             label: 'Espace Personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },
-                        {
-                            label: 'Remboursement',
-                            icon: 'pi pi-dollar',
-                            items: [
-                                {
-                                    label: 'Ajouter un remboursement',
-                                    icon: 'pi pi-plus-circle',
-                                    routerLink: ['/ajout-remboursement'],
-                                },
-                                // {
-                                //     label: 'Liste des remboursements',
-                                //     icon: 'pi pi-fw pi-tags',
-                                //     routerLink: ['/list-remboursement'],
-                                // },
-                                {
-                                    label: 'Remboursements',
-                                    icon: 'pi pi-fw pi-tags',
-                                    routerLink: ['/remboursements'],
-                                },
-                            ]
                         },
                     ];
                 }
@@ -4499,9 +4482,51 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
+                                        label: 'Evaluation Lead',
+                                        icon: 'pi pi-pencil',
+                                        routerLink: ['/admission/lead-evaluation']
+                                    },
+                                    {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
                                         items: [
+
+                                            {
+                                                label: 'Paramètre',
+                                                icon: 'pi pi-prime',
+                                                items: [
+                                                    {
+                                                        label: 'Session',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Ecole',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Campus',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Formation',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                    {
+                                                        label: 'Groupes',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/groupes']
+                                                    },
+                                                    {
+                                                        label: 'Evaluations',
+                                                        icon: 'pi pi-prime',
+                                                        routerLink: ['/administration/preinscription']
+                                                    },
+                                                ]
+                                            },
                                             {
                                                 label: 'Local - International',
                                                 icon: 'pi pi-prime',
@@ -6579,6 +6604,11 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
+                                    label: 'Evaluation Lead',
+                                    icon: 'pi pi-pencil',
+                                    routerLink: ['/admission/lead-evaluation']
+                                },
+                                {
                                     label: "Pointeuse",
                                     icon: 'pi pi-camera',
                                     items: [
@@ -6614,6 +6644,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Administration V2',
                                     icon: 'pi pi-users',
                                     items: [
+
                                         {
                                             label: 'Préinscription - Admission',
                                             icon: 'pi pi-prime',
@@ -6623,7 +6654,43 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Inscription',
                                             icon: 'pi pi-prime',
                                             routerLink: ['/administration/inscription']
-                                        }
+                                        },
+                                        {
+                                            label: 'Paramètres',
+                                            icon: 'pi pi-cog',
+                                            items: [
+                                                {
+                                                    label: 'Session',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/admission/rentree']
+                                                },
+                                                {
+                                                    label: 'Ecole',
+                                                    icon: 'pi pi-list',
+                                                    routerLink: ['/ecole']
+                                                },
+                                                {
+                                                    label: 'Campus',
+                                                    icon: 'pi pi-map-marker',
+                                                    routerLink: ['/campus']
+                                                },
+                                                {
+                                                    label: 'Formation',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/admission/formations']
+                                                },
+                                                {
+                                                    label: 'Groupes',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/administration/preinscription']
+                                                },
+                                                {
+                                                    label: 'Evaluations',
+                                                    icon: 'pi pi-prime',
+                                                    routerLink: ['/administration/evaluation']
+                                                },
+                                            ]
+                                        },
                                     ]
                                 },
                                 {
@@ -6856,10 +6923,32 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
+                if (services_list.includes('Remboursement')) {
+                    this.items.push(
+                        {
+                            label: 'Remboursement',
+                            icon: 'pi pi-dollar',
+                            items: [
+                                {
+                                    label: 'Ajouter un remboursement',
+                                    icon: 'pi pi-plus-circle',
+                                    routerLink: ['/ajout-remboursement'],
+                                },
+                                {
+                                    label: 'Remboursements',
+                                    icon: 'pi pi-fw pi-tags',
+                                    routerLink: ['/remboursements'],
+                                },
+                            ]
+                        },
+                    )
+                }
                 setTimeout(() => {
+                    this.commandMaker(this.items)
+                    this.boldMenu(this.items, true)
                     this.items = Object.assign([], this.items);
                     this.showMenu = true
-                }, 0);
+                }, 1);
                 //this.showMenu=true
             },
             error: (error: any) => {
@@ -6870,10 +6959,72 @@ export class AppMenuComponent implements OnInit {
             },
         });
     }
+    treeNavigation: MenuItem[] = []
+    childSelect: string = this.router.url;
+    parentSelected = []
+    commandMaker(items) {
+        items.forEach(item => {
+            if (item.routerLink) {
+                item.command = (event) => {
+                    this.clickMenu(event, 'CHILD')
+                }
+            } else if (item.items) {
+                item.command = (event) => {
+                    this.clickMenu(event, 'PARENT')
+                }
+                this.commandMaker(item.items)
+            }
+        })
+        return items
+    }
+    clickMenu(event, position) {
+        if (position == 'CHILD') {
+            this.childSelect = event.item.routerLink[0]
+            this.parentSelected = []
+            this.treeNavigation.forEach(item => {
+                if (item.items && this.cleanParents(item.items))
+                    this.parentSelected.push(item.label)
+            })
+            localStorage.setItem('parentSelected', JSON.stringify(this.parentSelected))
+            this.boldMenu(this.items, true)
+            this.treeNavigation = []
+        } else
+            this.treeNavigation.push(event.item)
+        //console.log(event, position)
+    }
+    cleanParents(items: MenuItem[]): boolean {
+        let r = false
+        items.forEach(item => {
+            if (item.routerLink && item.routerLink[0] == this.childSelect) {
+                r = true
+            }
+            else if (item.items)
+                r = this.cleanParents(item.items)
+        })
+        return r
+    }
+    boldMenu(items: MenuItem[], first = false) {
+        items.forEach(item => {
+            if (item.routerLink && item.routerLink[0] == this.childSelect) {
+                item.style = { 'font-weight': 700 };
+            } else if (item.items) {
+                if (this.parentSelected.includes(item.label)) {
+                    item.style = { 'font-weight': 900 };
+                } else
+                    if (first)
+                        item.style = { 'font-weight': 700 };
+                    else
+                        item.style = { 'font-weight': 400 };
+                this.boldMenu(item.items)
+            } else
+                item.style = { 'font-weight': 400 };
+        })
+    }
 }
+
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevé de note des deux dernières années ( 1er année )", "Relevé de note des deux dernières années ( 2ème année )"]
+    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

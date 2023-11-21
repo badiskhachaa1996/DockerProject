@@ -68,7 +68,7 @@ mongoose
                     })
                     users.forEach(u => {
                         if (uidList.includes(u.UID) == false)
-                            this.data.users.push(u)
+                            data.users.push(u)
                     })
                     PointeuseData.findByIdAndUpdate(data._id, {
                         nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, users: data.users
