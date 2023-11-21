@@ -222,7 +222,6 @@ import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
-import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
@@ -236,6 +235,8 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 const routes: Routes = [
     {
         path: '',
@@ -930,6 +931,13 @@ const routes: Routes = [
                 component: AjoutLeadcrmComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm/leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
+                component: AjoutLeadcrmComponent,
+                canActivate: [AuthGuardService],
+            },
+
             {
                 path: 'crm/leads/liste',
                 component: ListLeadcrmComponent,
@@ -980,6 +988,7 @@ const routes: Routes = [
                 component: LeadsNonQualifiesComponent,
                 canActivate: [AuthGuardService],
             },
+
             {
                 path: 'crm/mes-leads/pre-qualifies/:id',
                 component: LeadsPrequalifiesComponent,
@@ -1010,6 +1019,12 @@ const routes: Routes = [
                 component: DashboardTargetComponent,
                 canActivate: [AuthGuardService],
             },
+            {
+                path: 'crm/gestion-produits',
+                component: GestionProduitsComponent,
+                canActivate: [AuthGuardService],
+            },
+
             /* Intuns */
             {
                 path: 'intuns/employabilite',

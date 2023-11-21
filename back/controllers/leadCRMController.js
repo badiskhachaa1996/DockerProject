@@ -15,6 +15,12 @@ app.post("/create", (req, res) => {
         .catch((error) => { res.status(400).send(error); });
 })
 
+app.get("/getOneByID/:id", (req, res, next) => {
+    LeadCRM.findById(req.params.id)
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+});
+
 app.get("/getAll", (req, res, next) => {
     LeadCRM.find().populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })

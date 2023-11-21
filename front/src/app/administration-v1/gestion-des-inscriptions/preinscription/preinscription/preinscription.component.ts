@@ -913,7 +913,6 @@ export class PreinscriptionComponent implements OnInit {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
-
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
     }, (error) => {
       console.error(error)

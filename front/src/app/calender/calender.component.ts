@@ -1374,7 +1374,23 @@ export class CalenderComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
+  calculCra(dc: DailyCheck) {
+    this.rhService.getCollaborateurByUserId(this.userConnected._id).then(collab => {
+      let totalTimeCra = 0;
 
+      dc?.cra.map((cra) => {
+        totalTimeCra += cra.number_minutes;
+      });
+
+      if (!collab || !collab.h_cra) {
+        collab.h_cra = 7
+      }
+      // conversion du taux cra du collaborateur en minutes
+      collab.h_cra *= 60;
+      // partie calcule du pourcentage en fonction du totalTimeCra
+      return (totalTimeCra * 100) / collab.h_cra;
+    })
+  }
   getHistoPointage(value) {
 
     if (!value)
