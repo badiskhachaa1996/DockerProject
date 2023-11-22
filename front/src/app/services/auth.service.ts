@@ -4,7 +4,6 @@ import { User } from '../models/User';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 import { Etudiant } from '../models/Etudiant';
-import { Inscription } from '../models/Inscription';
 
 
 @Injectable({
@@ -99,7 +98,7 @@ export class AuthService {
 
   getPopulate(id: string) {
     let url = this.apiUrl + 'getPopulate/' + id;
-    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getByEmail(email: string) {

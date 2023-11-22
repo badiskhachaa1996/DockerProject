@@ -168,11 +168,6 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
     );
   }
 
-
-
-
-
-
   // Updating the Visualization
 
   updateDocList(doc, demande) {
@@ -195,9 +190,14 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
 
   
   getDocOwner(index, id) {
-    this.userService.getPopulate(id).subscribe(u => {
-      this.docList[index].added_by =  u.firstname + ' ' + u.lastname
-    })
+    if (id) {
+      this.userService.getPopulate(id).subscribe(u => {
+        this.docList[index].added_by =  u.firstname + ' ' + u.lastname
+      })
+    } else {
+      this.docList[index].added_by = 'Annonyme'
+    }
+
   }
 
 }

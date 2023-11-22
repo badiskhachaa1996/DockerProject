@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { DemandeRemboursementService } from 'src/app/services/demande-remboursement.service';
@@ -20,6 +20,7 @@ import { AuthService } from 'src/app/services/auth.service';
 
 export class AddRemboussementComponent implements OnInit {
 
+
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
@@ -29,8 +30,6 @@ export class AddRemboussementComponent implements OnInit {
     private formationService: FormulaireAdmissionService,
     private userService: AuthService
   ) { }
-
-
 
 
   docList = [
@@ -113,27 +112,27 @@ export class AddRemboussementComponent implements OnInit {
 
   @Output() cancelFormOutPut = new EventEmitter<boolean>();
 
-<<<<<<< HEAD
 @Output() doneUpdating = new EventEmitter<boolean>();
 @Input()   currentDemande = new Demande;
-=======
-  @Output() doneUpdating = new EventEmitter<boolean>();
-  @Input() currentDemande = new Demande;
->>>>>>> 4617839acb22e13e8aaf23a2e9ed8da3b3745b4f
 
 
-
+Successfull = false
 
   @Input() showUpdateForm = false;
 
   @Input() isNewDemande = false
 
   formRembourssement: FormGroup;
+  aFormGroup: FormGroup;
 
   availableStatus = environment.availableStatus
 
 
   ngOnInit(): void {
+    this.aFormGroup = this.formBuilder.group({
+      recaptcha: ['', Validators.required]
+    });
+  
 
     this.formRembourssement = this.formBuilder.group({
       civilite: [''],
@@ -151,12 +150,8 @@ export class AddRemboussementComponent implements OnInit {
       formation: [''],
       motif_refus: [''],
       montant: [''],
-<<<<<<< HEAD
       payment_date:[''],
    
-=======
-      payment_date: [''],
->>>>>>> 4617839acb22e13e8aaf23a2e9ed8da3b3745b4f
     })
 
 
@@ -199,9 +194,11 @@ export class AddRemboussementComponent implements OnInit {
 
     this.token = jwt_decode(localStorage.getItem('token'));
     this.user = this.token.id
+
   }
 
 
+  siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 
@@ -223,14 +220,9 @@ export class AddRemboussementComponent implements OnInit {
       ecole: [demande.training?.school],
       formation: [demande.training?.name],
       motif_refus: [demande.motif],
-<<<<<<< HEAD
       montant: [demande.payment?.montant],
       payment_date:[demande.payment?.date],
 
-=======
-      montant: [demande.refund?.montant],
-      payment_date: [demande.payment?.date]
->>>>>>> 4617839acb22e13e8aaf23a2e9ed8da3b3745b4f
     })
 
     for (let key in demande.docs) {
@@ -270,15 +262,12 @@ export class AddRemboussementComponent implements OnInit {
         name: this.formRembourssement.value.formation,
       }
 
-<<<<<<< HEAD
    demande.payment = {
     montant : this.formRembourssement.value.montant,
     date : this.formRembourssement.value.payment_date,
     method : this.formRembourssement.value.paymentType
 
    }
-=======
->>>>>>> 4617839acb22e13e8aaf23a2e9ed8da3b3745b4f
 
     demande.payment={
       date: this.formRembourssement.value.payment_date,
@@ -370,7 +359,7 @@ export class AddRemboussementComponent implements OnInit {
           this.cancelForm()
         }
 
-        this.router.navigateByUrl("/remboursements")
+        this.Successfull = true
       },
       (error) => {
         // Handle error (show an error message)
@@ -388,6 +377,7 @@ export class AddRemboussementComponent implements OnInit {
 
 
   onSubmitRemboussementForm() {
+    
     this.updateDemandeObject(this.currentDemande, this.showUpdateForm)
   }
 
@@ -407,7 +397,7 @@ export class AddRemboussementComponent implements OnInit {
     this.currentDemande.docs[doc.slug] = {
       nom: doc.name,
       added_on: new Date(),
-      added_by: this.user,
+      added_by: this.user ? this.user : 'Annonyme',
       doc_number: doc.doc_number,
     }
   }

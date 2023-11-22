@@ -1,4 +1,17 @@
-<div class=" col-12 grid">
+<!-- 
+<header>
+    <form [formGroup]="aFormGroup">
+        <ngx-invisible-recaptcha #captchaElem
+          [siteKey]="siteKey"
+          formControlName="recaptcha">
+        </ngx-invisible-recaptcha>
+      </form>
+</header> -->
+
+
+
+
+<div *ngIf="!Successfull" class=" col-12 grid">
 
     <!-- <p>Bonjour {{user?.firstname}},</p>
 
@@ -110,3 +123,4 @@
         
     </div>
 </div>
+<div *ngIf="Successfull" class="center" ><h1 class="thanks"> <b>Demande envoyée </b></h1></div>

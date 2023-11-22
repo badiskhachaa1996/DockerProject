@@ -26,7 +26,6 @@ export class PayementInformationComponent implements OnInit {
   isUpdating=false
   ngOnInit(): void {
     if (this.demande && this.demande.payment ){
-<<<<<<< HEAD
       this.infoPays = [
         {
           date: this.demande.payment.date,
@@ -38,13 +37,10 @@ export class PayementInformationComponent implements OnInit {
       ]
       console.log('infoPays:', this.infoPays);
       console.log('demande.payment:', this.demande.payment);
-      
-=======
       this.infoPays=[this.demande.payment];
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$");
       console.log(this.demande);
       console.log(this.infoPays)
->>>>>>> 4617839acb22e13e8aaf23a2e9ed8da3b3745b4f
  
   }
 }

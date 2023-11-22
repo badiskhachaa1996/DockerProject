@@ -206,6 +206,12 @@ app.use("/", function (req, res, next) {
     });
   } else {
     if (
+      req.originalUrl == "/soc/formulaireAdmission/FA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/RA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/EA/getAll" ||
+      req.originalUrl.startsWith("/soc/user/getPopulate/")  ||
+      req.originalUrl == "/soc/demanderemboursement//upload-docs" ||
+    
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
@@ -522,4 +528,18 @@ io.on("connection", (socket) => {
 
 httpServer.listen(3000, () => {
   console.log("SERVEUR START");
+});
+
+
+
+// captcha 
+app.post('/verify-recaptcha', async (req, res) => {
+  try {
+    const { token, recaptchaAction } = req.body;
+    const score = await createAssessment({ token, recaptchaAction });
+    res.json({ score });
+  } catch (error) {
+    console.error('Error during reCAPTCHA assessment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
