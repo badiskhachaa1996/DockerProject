@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -115,9 +115,10 @@ export class MesLeadsComponent implements OnInit {
   })
 
 
+  @Output() suivreLead = new EventEmitter<LeadCRM>();
+
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({ ...lead })
-    this.showFollow = lead
+    this.suivreLead.emit(lead)
   }
 
   onUpdateFollow() {
