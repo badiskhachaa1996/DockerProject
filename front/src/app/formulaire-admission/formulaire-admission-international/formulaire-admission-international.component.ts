@@ -35,7 +35,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   routeItems: MenuItem[] = [
     { label: 'Infos' },
     { label: 'Parcours' },
-    { label: 'Programme' },
+    { label: 'Choix' },
     { label: 'Autres' },
     { label: 'Dernière étape' },
   ];;
@@ -63,10 +63,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   formSteps: any[] = [
     "Infos",
-    "Parcours",
-    "Programme",
-    "Partenaires",
-    "Fin",
+    "Choix",
+    "Portail"
   ];
 
   rentreeList = [
@@ -194,11 +192,9 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
           { label: 'Other', value: 'Other' },
         ];
       this.formSteps = [
-        "Information",
-        "Background",
-        "School program",
-        "Partners",
-        "End",
+        "Infos",
+        "Choix",
+        "Portail"
       ];
 
       this.nationList = environment.nationalities;
@@ -249,10 +245,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         ];
       this.formSteps = [
         "Infos",
-        "Parcours",
-        "Programme",
-        "Partenaires",
-        "Fin",
+        "Choix",
+        "Portail",
       ];
 
       this.nationList = environment.nationalites;
@@ -409,14 +403,26 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   nextPage() {
     this.ActiveIndex++
+    if (this.ActiveIndex == 1) {
+      //A la demande de Haithem caché la page Parocurs
+      this.ActiveIndex = 2
+    }
     if (this.ActiveIndex == 3) {
-      //A la demande de Haithem caché la page Accompagnement
+      //A la demande de Haithem caché la page Accompagnement et Autre
       this.ActiveIndex = 4
     }
   }
 
   previousPage() {
     this.ActiveIndex--
+    if (this.ActiveIndex == 1) {
+      //A la demande de Haithem caché la page Parocurs
+      this.ActiveIndex = 0
+    }
+    if (this.ActiveIndex == 3) {
+      //A la demande de Haithem caché la page Accompagnement
+      this.ActiveIndex = 2
+    }
   }
 
   partenaireFound: Partenaire = null;
@@ -564,8 +570,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     let code_commercial = this.RegisterForm.get('code_commercial').value;
 
     //******* Parcours académiques et professionnel *******
-    let validated_academic_level = this.RegisterForm.get('validated_academic_level').value.value;
-    let statut_actuel = this.RegisterForm.get('statut_actuel').value.value;
+    let validated_academic_level = this.RegisterForm.get('validated_academic_level').value?.value;
+    let statut_actuel = this.RegisterForm.get('statut_actuel').value?.value;
     let other = this.RegisterForm.get('other').value;
     let languages_fr = this.RegisterForm.get('languages_fr').value;
     let languages_en = this.RegisterForm.get('languages_en').value;
@@ -627,6 +633,11 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, customid, null, null, null, null, false, null,
       nir, mobilite_reduite, sportif_hn,
       hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire, null, numeroAgence, languages_fr, languages_en, numero_telegram, indicatif_telegram);
+    if (user.pays_adresse == 'France')
+      prospect.lead_type = 'Local'
+    else
+      prospect.lead_type = 'International'
+    prospect.source = 'Site Web'
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {

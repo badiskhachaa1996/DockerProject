@@ -148,7 +148,7 @@
                         {{target?.custom_id}}
                     </td>
                     <td>
-                        {{target?.date_creation | date:'mediumDate'}}
+                        {{target?.date_creation | date:'dd MMMM yy'}}
                     </td>
                     <td>
                         <ng-container *ngIf="target?.equipe_id">{{target?.equipe_id?.nom}}</ng-container>
@@ -167,10 +167,10 @@
                         {{calcDuree(target)}}
                     </td>
                     <td>
-                        {{target?.date_commencement | date:'mediumDate'}}
+                        {{target?.date_commencement | date:'dd MMMM yy'}}
                     </td>
                     <td>
-                        {{target?.deadline | date:'mediumDate'}}
+                        {{target?.deadline | date:'dd MMMM yy'}}
                     </td>
                     <td>
                         {{calcAvancement(target)}}

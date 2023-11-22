@@ -148,7 +148,7 @@
                                 {{idPartenaireToUpdate?.contribution}}
                             </p>
                             <p class="col-12 md:col-4 text-center"><strong>Date d'ajout:</strong><br>
-                                {{idPartenaireToUpdate?.date_creation | date:'mediumDate'}}</p>
+                                {{idPartenaireToUpdate?.date_creation | date:'dd MMMM yy'}}</p>
                             <p class="col-12 md:col-4 text-center"><strong>Type de partenaire:</strong><br>
                                 {{idPartenaireToUpdate?.typePartenaire}}</p>
                             <p class="col-12 md:col-4 text-center"><strong>Groupe WhatsApp:</strong><br>
@@ -356,7 +356,7 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>-->
                         <td style="min-width: 12rem;">
-                            {{ rowData.date_creation | date:'mediumDate' }}
+                            {{ rowData.date_creation | date:'dd MMMM yy' }}
                         </td>
                         <td style="min-width: 12rem;">
                             {{ rowData.code_partenaire }}

@@ -107,6 +107,10 @@
             <label>Année :</label><br>
             <input pInputText type="text" [(ngModel)]="exInfoDiplome">
         </div>
+        <div>
+            <label>Type :</label><br>
+            <input pInputText type="text" [(ngModel)]="typeBulletin">
+        </div>
     </div>
     <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
@@ -123,7 +127,7 @@
             </div>
 
             <div class="col-3" style="margin-bottom:20% ;">
-                <h4><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
+                <h4><strong>{{ typeBulletin }} </strong></h4>
                 <p style="font-size: 2vh;">
                     <strong><!--{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}}--> {{
                         ETUDIANT.user_id?.lastname | uppercase }} {{
@@ -264,7 +268,27 @@
                 </p-table>
                 <p style="font-size: 1.8vh;">AUCUN DUPLICATA NE SERA DELIVRE</p>
             </div>
-            <div class="col-6" style="margin-top:25%" *ngIf="!showAnnuel">
+            <div class="col-6" style="margin-top:25%" *ngIf="!showAnnuel && SEMESTRE=='Annuel'">
+                <p-table styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th colspan="2">Décision du conseil de classe</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Année académique validée</th>
+                            <th *ngIf="calculMoyenne() >= 10">X</th>
+                            <th *ngIf="calculMoyenne() < 10"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Année académique non validée</th>
+                            <th *ngIf="calculMoyenne() >= 10"></th>
+                            <th *ngIf="calculMoyenne() < 10">X</th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <p style="font-size: 1.8vh;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+            </div>
+            <div class="col-6" style="margin-top:25%" *ngIf="!showAnnuel && SEMESTRE!='Annuel'">
                 <p-table styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>

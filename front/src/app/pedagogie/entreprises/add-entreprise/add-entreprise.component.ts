@@ -24,7 +24,28 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Oui', value: true },
     { label: 'Non', value: false },
   ];
+  secteurs = [
+    { label: 'Industrie manufacturière', value: 'Industrie manufacturière' },
+    { label: "Technologie de l'information et de la communication", value: "Technologie de l'information et de la communication" },
+    { label: "Finance et services bancaires", value: "Finance et services bancaires" },
+    { label: "Commerce de détail", value: "Commerce de détail" },
+    { label: "Énergie", value: "Énergie" },
+    { label: "Santé et pharmaceutique", value: "Santé et pharmaceutique" },
+    { label: "Transport et logistique", value: "Transport et logistique" },
+    { label: "Tourisme et hôtellerie", value: "Tourisme et hôtellerie" },
+    { label: "Construction et immobilier", value: "Construction et immobilier" },
+    { label: "Éducation", value: "Éducation" },
+    { label: "Industrie automobile", value: "Industrie automobile" },
+    { label: "Aérospatiale et défense", value: "Aérospatiale et défense" },
+    { label: "Médias et divertissement", value: "Médias et divertissement" },
+    { label: "Environnement et développement durable", value: "Environnement et développement durable" },
+    { label: "Chimie", value: "Chimie" },
+    { label: "Artisanat et design", value: "Artisanat et design" },
+    { label: "Télécommunications", value: "Télécommunications" },
+    { label: "Services professionnels", value: "Services professionnels" },
+    { label: "Services publics", value: "Services publics" }
 
+  ]
   commercials: any[] = [{ label: 'Choisir le commercial référent', value: null }];
 
   civiliteList = environment.civilite;
@@ -46,7 +67,7 @@ export class AddEntrepriseComponent implements OnInit {
   userConnected: User;
   token: any;
 
-  constructor(private entrepriseService: EntrepriseService, private userService: AuthService ,private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
+  constructor(private entrepriseService: EntrepriseService, private userService: AuthService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     // décodage du token
@@ -54,7 +75,7 @@ export class AddEntrepriseComponent implements OnInit {
 
     // recuperation de la liste des commercials
     this.userService.getAllCommercial().subscribe({
-      next: (response) => { 
+      next: (response) => {
         response.forEach((commercial: User) => {
           this.commercials.push({ label: `${commercial.firstname} ${commercial.lastname}`, value: commercial._id });
         });
@@ -67,7 +88,7 @@ export class AddEntrepriseComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
       error: (error) => { console.error(error) },
-      complete: () => { console.log('Utilisateur connecté récupéré')}
+      complete: () => { console.log('Utilisateur connecté récupéré') }
     });
 
     //Initialisation du formulaire d'ajout d'une entreprisei
@@ -78,15 +99,16 @@ export class AddEntrepriseComponent implements OnInit {
   onInitFormAddEntreprise() {
     this.formAddEntreprise = this.formBuilder.group({
       r_sociale: ['', Validators.required],
+      secteur_activite: ['', Validators.required],
       // fm_juridique: [''],
       activite: ['', Validators.required],
       // type_ent: [''],
       categorie: [[], Validators.required],
-      isInterne: [false, Validators.required],
-      crc: [''], 
+      isInterne: [false],
+      crc: [''],
       nb_salarie: [''],
       convention: [''],
-      idcc: [''], 
+      idcc: [''],
       indicatif_ent: ['', Validators.required],
       phone_ent: ['', Validators.required],
       adresse_ent: ['', Validators.required],
@@ -94,7 +116,7 @@ export class AddEntrepriseComponent implements OnInit {
       ville_ent: ['', Validators.required],
       adresse_ec: [''],
       postal_ec: [''],
-      ville_ec: [''],  
+      ville_ec: [''],
       siret: [''],
       code_ape_naf: [''],
       // num_tva: [''],
@@ -102,6 +124,8 @@ export class AddEntrepriseComponent implements OnInit {
       OPCO: [''],
       // organisme_prevoyance: [''],
       commercial: [this.commercials[0].value],
+      site_web: "",
+      email: ['', Validators.email],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: [''],
@@ -131,7 +155,7 @@ export class AddEntrepriseComponent implements OnInit {
     let isInterne = this.formAddEntreprise.get('isInterne')?.value;
     let crc = this.formAddEntreprise.get('crc')?.value;
     let nb_salarie = this.formAddEntreprise.get('nb_salarie')?.value;
-    
+
     let convention = this.formAddEntreprise.get('convention')?.value;
     let idcc = this.formAddEntreprise.get('idcc')?.value;
     let indicatif_ent = this.formAddEntreprise.get('indicatif_ent')?.value;
@@ -142,7 +166,7 @@ export class AddEntrepriseComponent implements OnInit {
     let adresse_ec = this.formAddEntreprise.get('adresse_ec')?.value;
     let postal_ec = this.formAddEntreprise.get('postal_ec')?.value;
     let ville_ec = this.formAddEntreprise.get('ville_ec')?.value;
-    let siret = this.formAddEntreprise.get('siret')?.value; 
+    let siret = this.formAddEntreprise.get('siret')?.value;
     let code_ape_naf = this.formAddEntreprise.get('code_ape_naf')?.value;
     // let num_tva = this.formAddEntreprise.get('num_tva')?.value;
     // let telecopie = this.formAddEntreprise.get('telecopie')?.value;
@@ -179,16 +203,21 @@ export class AddEntrepriseComponent implements OnInit {
     entreprise.code_ape_naf = code_ape_naf;
     entreprise.OPCO = opco;
     entreprise.commercial_id = commercial_id;
-    
+    entreprise.secteur_activite = this.formAddEntreprise.value.secteur_activite;
+    entreprise.email = this.formAddEntreprise.value.email;
+    entreprise.site_web = this.formAddEntreprise.value.site_web;
+    entreprise.date_creation = new Date()
+    entreprise.created_by = this.token.id
+
 
     let representant = new User(
       null,
       prenom_rep,
-      nom_rep, 
+      nom_rep,
       indicatif_rep,
       phone_rep,
       null,
-      email_rep, 
+      email_rep,
       null,
       'user',
       false,
@@ -209,16 +238,16 @@ export class AddEntrepriseComponent implements OnInit {
       null,
       null,
     );
-    
-    this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
+
+    this.entrepriseService.createEntrepriseRepresentant({ 'newEntreprise': entreprise, 'newRepresentant': representant }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Entreprise', detail: "Entreprise ajouté" });
         this.formAddEntreprise.reset();
         this.ActiveIndex = 0;
       }),
-      ((error) => { 
+      ((error) => {
         this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, ou que les données sont bien saisies. Si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
-        console.error(error); 
+        console.error(error);
       })
     );
   }

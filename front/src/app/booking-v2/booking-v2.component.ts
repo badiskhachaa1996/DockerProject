@@ -95,8 +95,7 @@ export class BookingV2Component implements OnInit {
       titre_sujet:    ['', Validators.required],
       duree:          [this.dureeSujet[0], Validators.required],
       canal:          new FormControl([], Validators.required),
-      description:    ['', Validators.required],
-      disponibilite:  new FormControl('', Validators.required), 
+      description:    ['', Validators.required]
     });
 
     // Initialisation du formulaire de modification d'un sujet 
@@ -105,7 +104,6 @@ export class BookingV2Component implements OnInit {
       duree:          [this.dureeSujet[0], Validators.required],
       canal:          new FormControl([], Validators.required),
       description:    ['', Validators.required],
-      disponibilite:  new FormControl('', Validators.required), 
     });
 
     // Récuperation de la liste des sujets

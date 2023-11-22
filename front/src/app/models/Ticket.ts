@@ -40,8 +40,11 @@ export class Ticket {
         public module?: string,
         public resum?: string,
         public type?: string,
-        public origin?: boolean,
-        public assigne_by?: User
+        public origin?: string,
+        public assigne_by?: User,
+        public demande?: String,
+        public campus?: String,
+        public filiere?: String,
     ) { }
 
 

@@ -255,7 +255,7 @@
                   <td>{{sujetDetails._id}}</td>
                   <td>{{sujetDetails.description}}</td>
                   <td>
-                    <ng-container *ngFor="let date of sujetDetails.disponibilite">{{ date | date:'mediumDate':'':'fr' }}<br></ng-container>
+                    <ng-container *ngFor="let date of sujetDetails.disponibilite">{{ date | date:'dd MMMM yy':'':'fr' }}<br></ng-container>
                   </td>
               </tr>
             </ng-template>

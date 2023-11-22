@@ -38,7 +38,7 @@ export class ExterneComponent implements OnInit {
       this.logo = "assets/images/logo_adg.png"
   }
 
-  gAfterViewInit() {
+/*ngAfterViewInit() {
 
     if (localStorage.getItem('errorToken')) {
       let tokenError: { name: string, message: string, expiredAt: number } = JSON.parse(localStorage.getItem('errorToken'))
@@ -51,27 +51,22 @@ export class ExterneComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: "N'essayer pas d'usurper l'identité de quelqu'un s'il vous plaît", detail: tokenError.message })
       }
     }
+    console.log(this.msalService.instance)
     if (this.msalService.instance.getActiveAccount()) {
       let response = this.msalService.instance.getActiveAccount()
       if (response)
         this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
+          console.log(response, data)
           localStorage.setItem("token", data.token)
-          //this.socket.isAuth()
-          if (data.message) {
-            localStorage.setItem("modify", "true")
-            this.router.navigate(['completion-profil'])
-          } else {
-            this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-              this.ss.connected()
-            });
-
-          }
-
+          this.socket.isAuth()
+          this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+            this.ss.connected()
+          });
         }, (error) => {
           console.error(error)
         })
     }
-  }
+  }*/
 
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
@@ -84,19 +79,6 @@ export class ExterneComponent implements OnInit {
         } else {
           this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
             this.router.navigateByUrl('/#/', { skipLocationChange: true })
-            /*if (pData && pData.token) {
-  localStorage.setItem('ProspectConected', pData.token)
-  localStorage.removeItem('token')
-  this.router.navigate(['/suivre-ma-preinscription'])
-} else {
-  this.router.navigateByUrl('/#/', { skipLocationChange: true })
-}
-}, error => {
-if (error.status == 404) {
-  this.router.navigateByUrl('/#/', { skipLocationChange: true })
-} else {
-  console.error(error)
-}*/
           })
         }
       })

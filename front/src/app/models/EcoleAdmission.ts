@@ -11,7 +11,13 @@ export class EcoleAdmission {
         public url_form?: string,
         public formations?: FormationAdmission[],
         public campus?: string[],
-        public langue?: string
+        public langue?: string,
+        public NDA?: string,
+        public campusinfo?:[ {
+            campus: string,
+            adresse?: string,
+            UAI?: string,
+        }],
     ) { }
 
 }

@@ -3,6 +3,8 @@ const app = express();
 app.disabled("x-powered-by");
 const { Prospect } = require('../models/prospect');
 const { User } = require('./../models/user');
+const { Ticket } = require('../models/ticket');
+const { Sujet } = require('../models/sujet');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
 const path = require('path');
@@ -22,6 +24,17 @@ const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
 const { DocumentInternational } = require('../models/documentInternational');
 const { HistoriqueLead } = require('../models/HistoriqueLead');
+//creation d'un transporter smtperrFile
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -138,8 +151,22 @@ app.post("/create", (req, res, next) => {
                             res.status(201).json({ error: 'Ce lead existe déjà !', prospect: prospectFromDb });
                         } else {
                             prospect.user_id = userFromDb._id;
+                            const etudiantId = userFromDb._id;
+                            const sujetid = "65156ff28c5d6b6e4ce982cb";
+                            const ticket = new Ticket({
+                                etudiant_id: etudiantId,
+                                sujet_id: sujetid,
+                                // Utilisez l'ID de l'utilisateur du prospect ici
+                                // Autres champs du ticket
+                            });
+                            //ticket.save()
+                            //.then((suc) => {res.status(201).json({ 
+                            //  success: 'ticket ajouté dans la BD'})})
+                            //.catch((er) => { res.status(400).json({ err:"impossible de cree le ticket" }) });
+                            prospect.date_creation = new Date()
                             prospect.save()
                                 .then((prospectSaved) => {
+
                                     let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                                     res.status(201).json({ success: 'Lead ajouté dans la BD', dataUser: userFromDb, token, prospect });
                                 })
@@ -154,6 +181,15 @@ app.post("/create", (req, res, next) => {
                     .then((userCreated) => {
 
                         prospect.user_id = userCreated._id;
+                        const etudiantId = userCreated._id;
+                        const ticket = new Ticket({
+                            etudiant_id: etudiantId,
+
+                            // Utilisez l'ID de l'utilisateur du prospect ici
+                            // Autres champs du ticket
+                        });
+                        //ticket.save()
+                        prospect.date_creation = new Date()
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
@@ -468,7 +504,138 @@ app.post("/create", (req, res, next) => {
         res.status(404).send(error);
     })
 });
+//Création d'un nouveau ticket
+app.post("/createticket", (req, res) => {
+    console.log("heeeeeeeeeeeeeeeeeeeeeeeeee");
+    Ticket.find({ sujet_id: req.body.sujet_id }).then(tkt => {
+        var lengTicket = tkt.length + 1
+        Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+            User.findById(req.body.createur_id).then(u => {
+                //Generation Custom ID
+                let id = ""
+                let d = new Date()
+                let month = (d.getUTCMonth() + 1).toString()
+                if (d.getUTCMonth() + 1 < 10)
+                    month = "0" + month
+                let day = (d.getUTCDate()).toString()
+                if (d.getUTCDate() < 10)
+                    day = "0" + day
+                let year = d.getUTCFullYear().toString().slice(-2);
+                while (lengTicket > 1000)
+                    lengTicket - 1000
+                let nb = (lengTicket).toString()
+                if (lengTicket < 10)
+                    nb = "00" + nb
+                if (lengTicket < 100)
+                    nb = "0" + nb
 
+
+                id = "IGTP" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
+
+                const ticket = new Ticket({
+                    ...req.body,
+                    createur_id: req.body.createur_id,
+                    sujet_id: req.body.sujet_id,
+                    description: req.body.description,
+                    date_ajout: d,
+                    customid: id,
+                    etudiant_id: req.body.etudiant_id,
+                    priorite: req.body.priorite,
+                    documents: req.body.documents,
+                    module: req.body.module,
+                });
+
+                let htmlemail = `
+                <p>Bonjour,</p><br>
+
+<p>Nous confirmons la création de votre ticket ${id}, Le sujet de ce ticket est "${sujet.label}". Il a été créé le ${day}/${month}/${year} , dès que le ticket sera traité, vous aurez une notification par email et sur votre compte IMS</p><br>
+
+<p>Cordialement,</p>
+                `
+                let mailOptions = {
+                    from: 'ims@intedgroup.com',
+                    to: u.email,
+                    subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                    html: htmlemail
+                };
+
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
+                ticket.save((err, doc) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(404).send(err)
+                    }
+                    else
+                        res.send({ message: "Votre ticket a été crée!", doc });
+                    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
+                        //console.log(users)
+                        let emailList = []
+                        users.forEach(u => {
+                            emailList.push(u.email)
+                        })
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: emailList,
+                            subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                            html: htmlemail
+                        };
+
+
+                        /*transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });*/
+                    })
+                    Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: 'ims.support@intedgroup.com',
+                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            html: htmlemail,
+                            priority: 'high',
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
+
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
+                    })
+                });
+            })
+        })
+    })
+});
+function entierAleatoire(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 app.get('/getAllEtudiant', (req, res, next) => {
     let u = []
     Etudiant.find({ user_id: { $ne: null } }).then(data => {
@@ -492,26 +659,53 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
+app.get("/getAllLocal", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+app.get("/getAllInt", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllInsDef", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: 'Inscription définitive' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
-
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id').skip(4000)
         .then((prospectsFromDb) => {
-            let dic = {}
+            /*let dic = {}
             prospectsFromDb.forEach(val => {
                 if (dic[val.type_form])
                     dic[val.type_form].push(val)
                 else
                     dic[val.type_form] = [val]
-            })
-            res.status(201).send(dic)
+            })*/
+            res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/get100Sourcing", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(500).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(4000).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             let dic = {}
             prospectsFromDb.forEach(val => {
@@ -729,13 +923,13 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
+    console.log(req.body)
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
         }, { new: true })
         .then((prospectUpdated) => {
-            console.log('NAN')
-            Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
+            Prospect.findById(prospectUpdated._id).populate("user_id")?.populate('agent_id')
                 .then((prospectsFromDb) => {
                     let detail = "Mise à jour des informations"
                     if (req.body.detail)
@@ -750,13 +944,12 @@ app.put("/updateV2", (req, res, next) => {
                         detail,
                         date_creation: new Date()
                     })
-                    console.log(hl)
                     hl.save().then(h => { console.log(h) })
                     res.status(201).send(prospectsFromDb)
                 })
-                .catch((error) => { res.status(500).send(error.message); });
+                .catch((error) => { res.status(500).send(error); });
         })
-        .catch((error) => { res.status(400).send(error.message); })
+        .catch((error) => { res.status(400).send(error); })
 });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()
@@ -869,7 +1062,42 @@ app.get("/deleteFile/:id/:directory/:filename", (req, res) => {
 
 });
 
+const storagepaiement = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        if (!fs.existsSync('storage/prospect/paiement/' + req.body.id + "/")) {
+            fs.mkdirSync('storage/prospect/paiement/' + req.body.id + "/", { recursive: true })
+        }
+        callBack(null, 'storage/prospect/paiement/' + req.body.id + "/")
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})
 
+app.post('/uploadFilePaiement/:id', multer({ storage: storagepaiement, limits: { fileSize: 20000000 } }).single('file'), (req, res, next) => {
+
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+        res.status(200).send('')
+    }
+
+}, (error) => { res.status(500).send(error); })
+
+app.get("/downloadFilePaiement/:id/:filename", (req, res) => {
+    let pathFile = "storage/prospect/paiement/" + req.params.id + "/" + req.params.filename
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+
+});
 
 
 const storage = multer.diskStorage({
@@ -926,7 +1154,6 @@ app.post('/uploadAdminFile/:id', uploadAdmin.single('file'), (req, res, next) =>
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
-        console.log({ ...req.body }, 0)
         Prospect.findById(req.body.id, ((err, newProspect) => {
             newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note.toString(), traited_by: req.body.traited_by.toString(), path: req.body.path.toString(), nom: req.body.nom.toString(), type: req.body.type.toString(), custom_id: req.body.custom_id.toString() })
             Prospect.findByIdAndUpdate(req.body.id, { documents_administrative: newProspect.documents_administrative }, { new: true }, (err, doc) => {
@@ -1012,7 +1239,8 @@ app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
     let p = Prospect({
         user_id: req.params.user_id,
         archived: true,
-        etat_traitement: "Fini"
+        etat_traitement: "Fini",
+        date_creation: new Date()
     })
     p.save().then(data => {
         res.status(201).send(data)
@@ -1360,29 +1588,30 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
         prospectList.forEach(data => {
             if (data && data.payement)
                 data.payement.forEach(pay => {
+                    console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.inscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.inscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay?.method.includes('Virement'))
                             stats_paiements.inscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method.includes('Espèce'))
                             stats_paiements.inscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method.includes('Chèque'))
                             stats_paiements.inscription.cheque += 1
                     } else {
                         stats_paiements.preinscription.total += 1
-                        if (pay.type == 'Lien de paiement')
+                        if (pay.method == 'Lien de paiement')
                             stats_paiements.preinscription.lien += 1
-                        else if (pay.type == 'Compensation')
+                        else if (pay.method == 'Compensation')
                             stats_paiements.preinscription.compensation += 1
-                        else if (pay.type.includes('Virement'))
+                        else if (pay.method?.includes('Virement'))
                             stats_paiements.preinscription.virement += 1
-                        else if (pay.type.includes('Espèce'))
+                        else if (pay.method?.includes('Espèce'))
                             stats_paiements.preinscription.espece += 1
-                        else if (pay.type.includes('Chèque'))
+                        else if (pay.method?.includes('Chèque'))
                             stats_paiements.preinscription.cheque += 1
                     }
                 })

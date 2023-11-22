@@ -23,7 +23,7 @@
 				<div class="field col-12">
 					<label>Collaborateur<span class="obligatory"> *</span></label>
 					<p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true"
-						formControlName="user_id"></p-dropdown>
+						[virtualScroll]="true" itemSize="30" formControlName="user_id"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-4">
 					<label htmlFor="date_naissance">Date de naissance</label>
@@ -31,9 +31,9 @@
 						formControlName="date_naissance"></p-calendar>
 				</div>
 				<div class="field col-12 md:col-8">
-					<label htmlFor="localisation">Localisation</label>
-					<p-dropdown [options]="localisationList" placeholder="Paris, Tunis..."
-						formControlName="localisation"></p-dropdown>
+					<label htmlFor="localisation">Site</label>
+					<p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+						formControlName="localisation"></p-multiSelect>
 				</div>
 				<div class="field col-12">
 					<label htmlFor="poste">Intitulé du poste</label>
@@ -95,9 +95,9 @@
 						formControlName="date_naissance"></p-calendar>
 				</div>
 				<div class="field col-12 md:col-8">
-					<label htmlFor="localisation">Localisation</label>
-					<p-dropdown [options]="localisationList" placeholder="Paris, Tunis..."
-						formControlName="localisation"></p-dropdown>
+					<label htmlFor="localisation">Site</label>
+					<p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+						formControlName="localisation"></p-multiSelect>
 				</div>
 				<div class="field col-12">
 					<label htmlFor="poste">Intitulé du poste</label>
@@ -312,6 +312,9 @@
 
 	<!-- Affichage du cra -->
 	<div class="col-12" *ngIf="showCra">
+		<div class="add-button-div">
+			<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showCra = false;"></i>
+		</div>
 		<div class="card">
 			<p-sidebar [(visible)]="showCra" [fullScreen]="true" [baseZIndex]="10000">
 				<h3 class="header">C.R.A</h3>
@@ -319,7 +322,7 @@
 					styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
 					<ng-template pTemplate="header">
 						<tr>
-							<th>Cra du {{historiqueCraSelected.today}}</th>
+							<th>Cra du {{dateParseur(historiqueCraSelected.today)}}</th>
 						</tr>
 						<tr>
 							<th>Tâche</th>
@@ -349,6 +352,9 @@
 
 	<!-- Affichage de la list des CRA de l'utilisateur -->
 	<div class="col-12" *ngIf="showHistoriqueCra">
+		<div class="add-button-div">
+			<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showHistoriqueCra = false;"></i>
+		</div>
 		<div class="card">
 			<i class="pi pi-times-circle mb-2" style="color: red; font-size: 20px; cursor: pointer; float: right;"
 				(click)="showHistoriqueCra = false"></i>
@@ -368,11 +374,11 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-cra>
 					<tr>
-						<td>{{cra.today}}</td>
+						<td>{{dateParseur(cra.today)}}</td>
 						<td>{{cra.check_in | date:'H:mm'}}</td>
-						<td>{{cra.check_out | date:'H:mm'}}</td>
+						<td>{{cra.check_out | date:'H:mm'}} <span *ngIf="cra.auto">AUTOMATIQUE</span></td>
 						<td>{{cra.pause_timing}}mn</td>
-						<td>{{cra.taux_cra}}%</td>
+						<td>{{cra.taux_cra | number:'1.0-2'}}%</td>
 						<td>
 							<button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2"
 								(click)="historiqueCraSelected = cra; showCra = true"></button>
@@ -395,6 +401,9 @@
 
 	<!-- Job description -->
 	<div class="col-12" *ngIf="showJobDescription">
+		<div class="add-button-div">
+			<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showJobDescription = false;"></i>
+		</div>
 		<div class="card">
 			<p-sidebar [(visible)]="showJobDescription" [fullScreen]="true" [baseZIndex]="10000">
 				<!-- formulaire de mise à jour de la description du poste du collaborateur -->
@@ -486,7 +495,7 @@
 								<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 									<tr>
 										<td>
-											{{rowData.date | date:'mediumDate'}}
+											{{rowData.date | date:'dd MMMM yy'}}
 										</td>
 										<td
 											*ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
@@ -523,11 +532,14 @@
 							</p-table>
 							<div class="mt-2 col-12" style="text-align: center;">
 								<button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
-									autoWidth="false" [style]="{'width':'80%'}"></button>
+									autoWidth="false" [style]="{'width':'30%'}"></button>
 							</div>
 						</div>
-						<button pButton [disabled]="formEmailPerso.invalid" (click)="onEmailPerso()"
-							label="Envoyer l'email"></button>
+						<div style="width: 100%;text-align: center;">
+							<button pButton [disabled]="formEmailPerso.invalid" (click)="onEmailPerso()"
+								[style]="{'width':'30%'}" label="Envoyer l'email"></button>
+						</div>
+
 					</form>
 				</p-tabPanel>
 
@@ -588,7 +600,7 @@
 								<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 									<tr>
 										<td>
-											{{rowData.date | date:'mediumDate'}}
+											{{rowData.date | date:'dd MMMM yy'}}
 										</td>
 										<td
 											*ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
@@ -625,11 +637,14 @@
 							</p-table>
 							<div class="mt-2 col-12" style="text-align: center;">
 								<button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
-									autoWidth="false" [style]="{'width':'80%'}"></button>
+									autoWidth="false" [style]="{'width':'30%'}"></button>
 							</div>
 						</div>
-						<button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
-							(click)="onEmailType()"></button>
+						<div style="width: 100%;text-align: center;">
+							<button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
+								[style]="{'width':'30%'}" (click)="onEmailType()"></button>
+						</div>
+
 					</form>
 				</p-tabPanel>
 
@@ -666,7 +681,7 @@
 										[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 								</td>
 								<td>
-									{{email.date_creation|date:'mediumDate'}}
+									{{email.date_creation|date:'dd MMMM yy'}}
 								</td>
 								<td>
 									{{email.objet}}
@@ -695,6 +710,9 @@
 
 	<!-- Voir la liste des documents -->
 	<div class="field col-12 card grid" *ngIf="seeFile">
+		<div class="add-button-div">
+			<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="seeFile = null;"></i>
+		</div>
 		<input type="file" (change)="FileUploadRH($event.target.files)" id="selectedFileRH" #selectedFileRH
 			style="display: none;" pInputFile />
 		<p-table styleClass="p-datatable-gridlines" [value]="seeFile.documents_rh" responsiveLayout="scroll"
@@ -721,7 +739,7 @@
 			<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 				<tr>
 					<td>
-						{{rowData.date | date:'mediumDate'}}
+						{{rowData.date | date:'dd MMMM yy'}}
 					</td>
 					<td pEditableColumn>
 						<p-cellEditor>
@@ -780,8 +798,6 @@
 			</div>
 			<div class="clear-float"></div>
 
-			<h2 class="header">Liste des collaborateurs</h2>
-
 			<p-table #dt1 [value]="collaborateurs" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
 				styleClass="p-datatable-gridlines" [paginator]="true"
 				[globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email', 'matricule']"
@@ -794,6 +810,16 @@
 								(input)="dt1.filterGlobal($event.target.value, 'contains')"
 								placeholder="Rechercher un collaborateur" class="w-full" />
 						</span>
+						<p-multiSelect [options]="serviceFilter" filter="true" autoWidth='false'
+							[style]="{'width':'20em'}" [showClear]="true"
+							(onChange)="dt1.filter($event.value, 'user_id.service_id._id', 'in')"
+							placeholder="Choisissez un Service"></p-multiSelect>
+						<p-multiSelect [options]="statutFilter" filter="true" autoWidth='false'
+							[style]="{'width':'20em'}" (onChange)="dt1.filter($event.value, 'statut', 'in')"
+							[showClear]="true" placeholder="Choisissez un statut"></p-multiSelect>
+						<p-multiSelect [options]="siteFilter" filter="true" autoWidth='false' [style]="{'width':'20em'}"
+							(onChange)="dt1.filter($event.value, 'localisation', 'contains')" [showClear]="true"
+							placeholder="Choisissez un site"></p-multiSelect>
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">
@@ -803,74 +829,28 @@
 								Matricule
 							</div>
 						</th>
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Date de démarrage
-							</div>
-						</th>-->
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Civilité
-							</div>
-						</th>-->
+						<th pSortableColumn="user_id.lastname" style="text-align:center"> Collaborateur
+							<p-sortIcon field="user_id.lastname">
+							</p-sortIcon>
+						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Nom et prénom
-							</div>
-						</th>
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Date de naissance
-							</div>
-						</th>-->
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Email travail
-							</div>
-						</th>
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Email personnelle
+								Email
 							</div>
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Téléphone personnelle
+								Site
 							</div>
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Adresse
-							</div>
-						</th>-->
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Localisation
+								Poste
 							</div>
 						</th>
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Taux horaire
-							</div>
-						</th>-->
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Nom du poste
-							</div>
-						</th>
-						<!--<th>
-							<div class="flex justify-content-between align-items-center">
-								Mention
-							</div>
-						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Service
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Ancienneté
 							</div>
 						</th>
 						<th>
@@ -887,74 +867,51 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-collaborateur>
 					<tr>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-begin':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.matricule}}
 						</td>
-						<!--<td style="min-width: 10rem;">
-							{{collaborateur.date_demarrage | date: 'MM/dd/yyyy'}}
-						</td>-->
-						<!--<td style="min-width: 10rem;">
-							{{collaborateur.user_id?.civilite}}
-						</td>-->
-						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}
 						</td>
-						<!--<td style="min-width: 10rem;">
-							{{collaborateur?.date_naissance | date: 'MM/dd/yyyy'}}
-						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.email}}
 						</td>
-						<!--<td style="min-width: 12rem;">
-							{{collaborateur.user_id?.email_perso}}
-						</td>
-						<td style="min-width: 10rem;">
-							{{collaborateur.user_id?.indicatif}} {{collaborateur.user_id?.phone}}
-						</td>
-						<td style="min-width: 10rem;">
-							{{collaborateur.user_id?.numero_adresse}} {{collaborateur.user_id?.rue_adresse}} <br>
-							{{collaborateur.user_id?.postal_adresse}}, {{collaborateur.user_id?.ville_adresse}}/
-							{{collaborateur.user_id?.pays_adresse}}
-						</td>-->
-						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.localisation}}
 						</td>
-						<!--<td style="min-width: 12rem;">
-							{{collaborateur?.h_cra}}<span *ngIf="collaborateur?.h_cra == 1"> heure</span><span
-								*ngIf="collaborateur?.h_cra > 1"> heures</span>
-						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.intitule_poste}}
 						</td>
-						<!--<td style="min-width: 10rem;">
-							{{collaborateur.user_id.mention}}
-						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.user_id?.service_id?.label}}
 						</td>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
-							style="cursor: pointer;"
-							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
-							{{afficherAnciennete(collaborateur)}} jours
-						</td>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+						<td [ngClass]="{'periode-middle':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
 							style="cursor: pointer;"
 							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.statut}}
 						</td>
-						<td class="text-center" style="min-width: 8rem;">
+						<td [ngClass]="{'periode-end':(collaborateur?.statut=='Période d\'essai' && testDate(collaborateur.date_demarrage))}"
+							class="text-center" style="min-width: 8rem;">
 							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" tooltipPosition="bottom"
 								style="cursor: pointer; color: #3B82F6"
 								(click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
@@ -964,23 +921,24 @@
 							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles"
 								tooltipPosition="bottom" style="cursor: pointer;"
 								(click)="onFillFormUpdatePersonalData(collaborateur)"></i>
-							<i class="pi pi-align-center m-1" pTooltip="Job description" tooltipPosition="bottom"
+							<!--<i class="pi pi-align-center m-1" pTooltip="Job description" tooltipPosition="bottom"
 								style="cursor: pointer; color: #3B82F6"
-								(click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
+								(click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>-->
 							<i class="pi pi-file m-1" pTooltip="Insérer un document" tooltipPosition="bottom"
 								style="cursor: pointer; color: #F59E0B"
 								(click)="clickUploadFile(collaborateur.user_id)"></i>
 							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444"
 								tooltipPosition="bottom" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
-							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7"
+							<!--<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7"
 								tooltipPosition="bottom"
 								(click)="onGetHistoriqueCra(collaborateur.user_id?._id); showHistoriqueCra = true;"></i>
+
+							<i pTooltip="Voir l'emploi du temps du salarié" (click)="seeCalendar(collaborateur)"
+								tooltipPosition="bottom" class="pi pi-calendar m-1" style="color: #00326b"></i>-->
 							<i pTooltip="Envoyer un mail" (click)="onInitEmailView(collaborateur)"
 								tooltipPosition="bottom" class="pi pi-envelope m-1" style="color: #C0C0C0"></i>
 							<i pTooltip="Voir le résumé des congés" (click)="onInitConge(collaborateur)"
 								tooltipPosition="bottom" class="pi pi-calendar-minus m-1" style="color: #469cff"></i>
-							<i pTooltip="Voir l'emploi du temps du salarié" (click)="seeCalendar(collaborateur)"
-								tooltipPosition="bottom" class="pi pi-calendar m-1" style="color: #00326b"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -998,20 +956,27 @@
 		</div>
 	</div>
 </div>
-
-<p-dialog header="Nombre de jours de congés" [(visible)]="displayConge" [modal]="true">
+<p-dialog *ngIf="dataConge?.user_id"
+	header="Fiche congé de {{dataConge?.user_id.firstname}} {{dataConge?.user_id.lastname}}" [(visible)]="displayConge"
+	[modal]="true">
 	<div class="field col-12" *ngIf="dataConge">
-		<label htmlFor="firstname">Définir le nombre des jours de congé payé / mois pour le collaborateur
-			(CP)</label><br>
+		<label htmlFor="firstname">Solde de congé</label><br>
 		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}"
+			suffix="/mois" mode="decimal" [showButtons]="true" [step]="0.25" [minFractionDigits]="1"
+			[maxFractionDigits]="2" autoWidth="false"> </p-inputNumber>
+	</div>
+	<div class="field col-12" *ngIf="dataConge">
+		<label htmlFor="firstname">Plafond</label><br>
+		<p-inputNumber [(ngModel)]="dataConge.plafond" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}"
+			mode="decimal" [showButtons]="true" [step]="0.25" [minFractionDigits]="1" [maxFractionDigits]="2"
 			autoWidth="false"> </p-inputNumber>
 	</div>
 	<div *ngIf="dataConge">
-		Le nombre de jours de congés payés acquis : {{calcCPA()}}<br>
+		Accumulé : {{calcCPA()}}<br>
 
-		Le nombre de jours de congés payés pris = {{calcCPA()-nbrConge}}<br>
+		Pris : {{nbrConge}}<br>
 
-		Le nombre de jours de congés payés restants = {{calcCPA()-(calcCPA()-nbrConge)}}<br>
+		Reste : {{calcCPA()-nbrConge}}<br>
 	</div>
 
 </p-dialog>
@@ -1021,7 +986,7 @@
 	<p *ngIf="dataCollab && dataCollab.user_id">
 		Civilité : {{dataCollab?.user_id?.civilite}} <br>
 		Nom et prénom : {{dataCollab.user_id?.lastname | uppercase}} {{dataCollab.user_id?.firstname}}<br>
-		Date de naissance : {{dataCollab?.date_naissance | date: 'mediumDate'}}<br>
+		Date de naissance : {{dataCollab?.date_naissance | date: 'dd MMMM yy'}}<br>
 		Email travail : {{dataCollab.user_id?.email}}<br>
 		Email personnelle : {{dataCollab.user_id?.email_perso}}<br>
 		Téléphone personnelle : {{dataCollab.user_id?.indicatif}} {{dataCollab.user_id?.phone}}<br>
@@ -1037,7 +1002,7 @@
 		Nom du poste : {{dataCollab?.intitule_poste}} <br>
 		Service : {{dataCollab?.user_id?.service_id?.label}}<br>
 		Mention : {{dataCollab.user_id.mention}}<br>
-		Date de démarrage : {{dataCollab?.date_demarrage | date: 'mediumDate'}}<br>
+		Date de démarrage : {{dataCollab?.date_demarrage | date: 'dd MMMM yy'}}<br>
 		Ancienneté : {{afficherAnciennete(dataCollab)}} jours<br>
 		Type de contrat : {{dataCollab?.contrat_type}}<br>
 		Taux horaire : {{dataCollab?.h_cra}}<br>

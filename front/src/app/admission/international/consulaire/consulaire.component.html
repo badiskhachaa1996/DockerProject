@@ -69,7 +69,7 @@
                         </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'dd MMMM yy'}}</p>
                         </div>
                     </div>
                 </form>
@@ -115,9 +115,25 @@
                         #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
                 </div>
                 <div class="card grid" >
-                    <h3 class="col-12">Documents Requis</h3>
-                    <p-table [value]="showDetails.documents_dossier" #dt1 dataKey="_id" class="col-12"
-                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <h3 class="col-12">Documents</h3>
+                    <p class="col-12"
+                        [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
+                        style="text-align: center;padding: 9px;">
+                        Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
+                        Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
+                    </p>
+                    <div class="card col-12 grid">
+                        <div class="col-6">
+                            Je réside en France
+                            <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"></p-checkbox>
+                        </div>
+                        <div class="col-6">
+                            Je cherche une alternance
+                            <p-checkbox [(ngModel)]="alternance" [binary]="true" inputId="binary"></p-checkbox>
+                        </div>
+                    </div>
+                    <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Document</th>
@@ -126,27 +142,32 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-doc>
-                            <tr>
-                                <td>{{doc.nom}}</td>
+                            <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
                                 <td>
-                                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                                    {{doc.nom}}
+                                    <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
+                                    <span style="color: red;" *ngIf="doc.nom=='Carte de séjour'">(Obligatoire)</span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                                        (click)="downloadFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                                 </td>
                                 <td>
                                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
                                         (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
-                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                        class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                        (click)="delete(doc)" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
-                    <h3 class="col-8">Autre documents</h3>
+                    <!--<h3 class="col-8">Autre documents</h3>
                     <div class="col-4">
                         <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
                             label="Ajouter un autre document"></p-button>
                     </div>
-                    <p-table [value]="showDetails.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single"
-                        [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                    <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8"
+                        [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
                         [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
                         styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
@@ -169,19 +190,19 @@
                                     </p-cellEditor>
                                 </td>
                                 <td>
-                                    <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                                    <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                                    (click)="downloadOtherFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                                 </td>
                                 <td>
                                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
                                         *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                        aria-hidden="true"></i>
-                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                        class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
+                                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                        (click)="deleteOther(doc)" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
-                    </p-table>
+                    </p-table>-->
                 </div>
             </p-tabPanel>
             <p-tabPanel header="Paiements">
@@ -245,7 +266,7 @@
                                                 [(value)]="paiement.date">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{paiement.date | date:mediumDate}}
+                                            {{paiement.date | date:'dd MMMM yy'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -344,7 +365,7 @@
                                         {{rowData.type}}
                                     </td>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td>
                                         {{rowData.nom}}
@@ -424,7 +445,7 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
@@ -517,7 +538,7 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
@@ -588,7 +609,7 @@
                                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
                             <td>
-                                {{email.date_creation|date:'mediumDate'}}
+                                {{email.date_creation|date:'dd MMMM yy'}}
                             </td>
                             <td>
                                 {{email.objet}}
@@ -783,7 +804,7 @@
                                 {{rowData.type}}
                             </td>
                             <td>
-                                {{rowData.date | date:'mediumDate'}}
+                                {{rowData.date | date:'dd MMMM yy'}}
                             </td>
                             <td>
                                 {{rowData.nom}}
@@ -1024,7 +1045,7 @@
                         </td>
 
                         <td>
-                            {{prospect.date_creation | date :'mediumDate' }}
+                            {{prospect.date_creation | date :'dd MMMM yy' }}
                         </td>
                         <td>
                             {{ prospect.customid }}
@@ -1108,7 +1129,7 @@
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
                 uppercase }}</p>
-            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
+            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'dd MMMM yy' }}</p>
             <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
             <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
             <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
@@ -1143,8 +1164,8 @@
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 
             <h5>Démarches </h5>
-            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
-            <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
+            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'dd MMMM yy'}}</p>
+            <p>Date de contact: {{ selectedProspect?.contact_date| date :'dd MMMM yy' }}</p>
             <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
             <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
             <p>Visa : {{ selectedProspect?.avancement_visa }}</p>

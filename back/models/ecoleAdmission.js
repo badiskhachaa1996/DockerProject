@@ -10,6 +10,12 @@ const schema = new mongoose.Schema({
     formations: { type: [mongoose.Schema.Types.ObjectId], ref: 'formationAdmission', default: [] },
     campus: { type: [String], default: [] },
     langue: { type: String, default: 'Français' },
+    NDA:{ type: String},
+    campusinfo:[{
+        campus: String,
+        adresse: String,
+        UAI: String,
+    }],
 });
 
 //Creation de la table ecole et export du model Ecole

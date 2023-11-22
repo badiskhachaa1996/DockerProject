@@ -604,7 +604,7 @@ export class PaiementsComponent implements OnInit {
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
     if (!this.payementList) { this.payementList = [] }
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     this.scrollToTop()
     if (prospect.code_commercial)
       this.CService.getByCode(prospect.code_commercial).subscribe(commercial => {

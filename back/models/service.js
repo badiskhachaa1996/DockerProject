@@ -13,6 +13,17 @@ const service_schema = new mongoose.Schema({
     index: {
         type: Number,
         default: 0
+    },
+    extra1: {
+        type: [String],
+        default: []
+    }, extra2: {
+        type: [String],
+        default: []
+    },
+    extraInfo: {
+        type: { title1: { type: String, default: "Extra 1" }, placeholder1: { type: String, default: "Choisissez une information" }, title2: { type: String, default: "Extra 2" }, placeholder2: { type: String, default: "Choisissez une information" }, },
+        default: { title1: "Extra 1", title2: "Extra 2", placeholder1: "Choisissez une information", placeholder2: "Choisissez une information" }
     }
 });
 //creation de la table avec le nom Service ( model/classe) à l'aide de la biblio mongoose et son schema

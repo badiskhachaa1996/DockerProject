@@ -1,0 +1,31 @@
+
+<p-table [value]="infoPays" styleClass="p-datatable-gridlines" >
+    <ng-template pTemplate="caption"><h3 class="title">Information de paiement</h3></ng-template>
+    <ng-template pTemplate="header">
+        <tr>           
+            <th >Date de paiement</th>
+            <th >Montant</th>
+            <th >Modalité de paiement</th>
+            <th >Autres détails</th>
+            <th style="width: 10px;">Action</th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-demande  let-infoPay>
+        <tr>
+            <td><input [disabled]="!infoPay.isUpdating" type="date" [ngModel]="infoPay.date | date:'yyyy-MM-dd'" (ngModelChange)="infoPay.date = $event" />{{ demande.payment?.date}}</td>
+            <td>{{infoPay.montant}}{{ demande.payment?.montant}}</td>
+            <td><p-dropdown [disabled]="!infoPay.isUpdating" placeholder="Choisir Méthode" [options]="payementMethods" [(ngModel)]="infoPay.method">{{ demande.payment?.method}}</p-dropdown></td>
+            <td><textarea  rows="4" cols="50" [disabled]="!infoPay.isUpdating" type="text" [(ngModel)]="infoPay.note"></textarea>{{ demande.payment?.note}}</td>
+           
+            <td class="text-right" style="min-width: 8rem">
+                <i class="pi pi-pencil" *ngIf="!infoPay.isUpdating" (click)="updateKeyDates(infoPay)"></i>
+                <i class="pi pi-check" *ngIf="infoPay.isUpdating" (click)="saveKeyDates(infoPay)"></i>
+                <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deletePay(infoPay)"></i>
+
+            </td>
+        </tr>
+            
+    </ng-template>
+   
+</p-table>

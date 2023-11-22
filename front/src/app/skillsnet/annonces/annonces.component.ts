@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { Matching } from 'src/app/models/Matching';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-annonces',
@@ -24,14 +25,17 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
   styleUrls: ['./annonces.component.scss']
 })
 export class AnnoncesComponent implements OnInit {
-
+  activeIndex1 = 1
   annonces: Annonce[] = [];
+  annoncesFiltered: Annonce[] = [];
 
   entreprises: Entreprise[] = [];
   entreprisesWithCEO: Entreprise[] = [];
   entreprisesList: any = [{ label: 'Veuillez choisir une entreprise', value: null }];
 
   tuteurs: Tuteur[] = [];
+
+  isEtudiant = false
 
   form: FormGroup;
   showForm: boolean = false;
@@ -100,6 +104,7 @@ export class AnnoncesComponent implements OnInit {
   isEntreprise = false
 
   token: any;
+  matchDic = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService,
     private entrepriseService: EntrepriseService, private messageService: MessageService,
@@ -113,8 +118,19 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      if (!this.canAddOrEdit)
-        this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
+      if (this.isEtudiant) {
+        this.activeIndex1 = 0
+        this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {
+          matchings.forEach(m => {
+            this.matchDic[m.offre_id._id] = m
+          })
+        })
+      } else
+        this.activeIndex1 = 1
+
+      if (user.savedAnnonces)
+        this.matchingList = user.savedAnnonces
       this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
     })
 
@@ -171,43 +187,76 @@ export class AnnoncesComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe(
       ((response) => {
         this.userConnected = response;
+
+        //Recuperation de la liste des annonces
+        if (response.type != 'CEO Entreprise') {
+          this.annonceService.getAnnonces()
+            .then((response: Annonce[]) => {
+              this.annonces = response;
+              this.annoncesFiltered = response
+              let agent_id = []
+              response.forEach(annonce => {
+                this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+                  let t = []
+                  matchs.forEach(m => { t.push(m) })
+                  this.dicOffreNB[annonce._id] = t.length
+                })
+                if (annonce && annonce.user_id) {
+                  let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
+                  if (!agent_id.includes(annonce.user_id._id) && annonce.user_id.email && !annonce.user_id.email_perso) {
+                    //this.userFilter.push(temp)
+                    this.entrepriseFilter.push(temp)
+                    agent_id.push(annonce.user_id._id)
+                  }
+
+                }
+
+              })
+              this.updateFilter()
+
+            })
+            .catch((error) => console.error(error));
+        } else {
+          this.annonceService.getAnnoncesByUserId(this.userConnected._id).then((response: Annonce[]) => {
+            this.annonces = response;
+            this.annoncesFiltered = response
+            let agent_id = []
+            response.forEach(annonce => {
+              this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+                let t = []
+                matchs.forEach(m => { t.push(m) })
+                this.dicOffreNB[annonce._id] = t.length
+              })
+              if (annonce && annonce.user_id) {
+                let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
+                if (!agent_id.includes(annonce.user_id._id)) {
+                  //this.userFilter.push(temp)
+                  this.entrepriseFilter.push(temp)
+                  agent_id.push(annonce.user_id._id)
+                }
+
+              }
+
+            })
+            this.updateFilter()
+          })
+        }
+
       }),
       ((error) => { console.error(error); })
     );
 
-    //Recuperation de la liste des annonces
-    this.annonceService.getAnnonces()
-      .then((response: Annonce[]) => {
-        this.annonces = response;
-        let agent_id = []
-        response.forEach(annonce => {
-          this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
-            let t = []
-            matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
-            this.dicOffreNB[annonce._id] = t.length
-          })
-          if (annonce && annonce.user_id) {
-            let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
-            if (!agent_id.includes(annonce.user_id._id)){
-              this.userFilter.push(temp)
-              agent_id.push(annonce.user_id._id)
-            }
-              
-          }
 
-        })
-
-      })
-      .catch((error) => console.error(error));
 
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
-          this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
+          this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
+          this.updateFilter()
         });
       }),
       ((error) => console.error(error))
@@ -320,7 +369,22 @@ export class AnnoncesComponent implements OnInit {
     this.annonceService.postAnnonce(annonce)
       .then((response) => {
         this.messageService.add({ severity: "success", summary: "L'annonce a été ajouté" })
-        this.form.reset();
+        if (!annonce.is_interne) {
+          let t: Entreprise = {
+            r_sociale: this.form.value.entreprise_name,
+            ville_ent: this.form.value.entreprise_ville,
+            email: this.form.value.entreprise_mail,
+            indicatif_ent: this.form.value.entreprise_phone_indicatif,
+            phone_ent: this.form.value.entreprise_phone,
+            date_creation: new Date(),
+            created_by: this.token.id
+          }
+          this.entrepriseService.create(t).subscribe(ent => {
+            this.form.reset();
+          })
+        }
+        else
+          this.form.reset();
         this.showForm = false;
 
         //Recuperation de la liste des classes
@@ -372,7 +436,7 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.source = this.formUpdate.get('source')?.value;
     annonce.isClosed = false;
-
+    annonce.modified_at = new Date()
     //Envoi de l'annonce en BD
     this.annonceService.putAnnonce(annonce)
       .then((response) => {
@@ -387,7 +451,9 @@ export class AnnoncesComponent implements OnInit {
   }
 
   // methode de remplissage du formulaire de modification
-  onFillForm() {
+  onFillForm(annonce = null) {
+    if (annonce)
+      this.annonceSelected = annonce
     this.formUpdate.patchValue({
       is_interne: this.annonceSelected.is_interne,
       // entreprise_id:                this.annonceSelected.entreprise_id,
@@ -409,9 +475,40 @@ export class AnnoncesComponent implements OnInit {
     this.formUpdate.patchValue({ profil: { label: profile.libelle, value: profile._id } })
     this.chargeCompetence({ value: { label: profile.libelle, value: profile._id } })
   }
-
+  matchingList = []
   InitMatching(annonce: Annonce) {
-    this.router.navigate(['matching', annonce._id])
+    let ids = []
+    this.matchingList.forEach(m => {
+      ids.push(m._id)
+    })
+    if (!ids.includes(annonce._id)) {
+      this.matchingList.push(annonce)
+      this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+        this.activeIndex1 = this.matchingList.length + 1
+      })
+    } else {
+      this.activeIndex1 = ids.indexOf(annonce._id) + 2
+    }
+  }
+
+  deleteOnglet(annonce: Annonce) {
+    this.matchingList.splice(this.matchingList.indexOf(annonce), 1)
+    this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+
+    })
+  }
+
+  handleClose(e) {
+    if (e.index > this.matchingList.length - 1) {
+      this.matchingList.splice(e.index - 2, 1)
+      this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+
+      })
+      if (!this.isEtudiant)
+        this.activeIndex1 = 1
+    }
+
+    //this.deleteOnglet(this.matchingList[e.index - 1])
   }
 
   InitPostulate(annonce: Annonce) {
@@ -421,8 +518,9 @@ export class AnnoncesComponent implements OnInit {
           offre_id: annonce._id,
           matcher_id: this.token.id,
           cv_id: cv._id,
-          type_matching: "MA",
-          date_creation: new Date()
+          type_matching: "Candidat",
+          date_creation: new Date(),
+          accepted: true
         }
         this.MatchingService.create(matching).subscribe(match => {
           this.messageService.add({ summary: "Matching enregistré", severity: "success" })
@@ -448,7 +546,8 @@ export class AnnoncesComponent implements OnInit {
 
   statutFilter = [
     { label: "Choisissez un statut", value: null },
-    { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: "Active", value: "Active" },
+    { label: "Expiré", value: "Expiré" },
     { label: 'Clôturée', value: "Clôturée" },
   ]
   typeMissionFilter = [
@@ -460,13 +559,17 @@ export class AnnoncesComponent implements OnInit {
     { label: 'CDI', value: 'CDI' }
   ]
   profilFilter = [
-    { label: "Choisissez un profil", value: null },
+    //{ label: "Choisissez un profil", value: null },
   ]
   entrepriseFilter = [
-    { label: "Choisissez une entreprise", value: null },
+    { label: "Choisissez l'auteur", value: null },
+    { label: "Entreprise", value: "Entreprise" },
+  ]
+  entrepriseFilter2 = [
+    { label: 'Choisissez une entreprise', value: null }
   ]
   locations = [
-    { label: "Choisissez une ville", value: null },
+    //{ label: "Choisissez une ville", value: null },
     { label: "100% Télétravail", value: "100% Télétravail" },
     { label: "Aix-Marseille", value: "Aix-Marseille" },
     { label: "Amiens", value: "Amiens" },
@@ -531,9 +634,215 @@ export class AnnoncesComponent implements OnInit {
     { label: "Choisissez la personne qui a crée l'offre", value: null }
   ]
 
-  updateFilter() {
-
+  filter_value = {
+    statut: null,
+    typeMission: null,
+    profil: [],
+    entreprise: null,
+    locations: [],
+    user: null,
+    date: '',
+    search: '',
+    entreprise_id: null,
+    archived: false
   }
 
+  updateFilter() {
+    this.annoncesFiltered = []
+    this.annonces.forEach(val => {
+      let r = true
+      if (this.filter_value.statut && this.filter_value.statut != this.getStatut(val))
+        r = false
+      else if (this.filter_value.typeMission && this.filter_value.typeMission != val.missionType)
+        r = false
+      else if (this.filter_value.profil.length != 0 && (!val.profil || !this.filter_value.profil.includes(val.profil._id)))
+        r = false
+      else if (this.filter_value.entreprise) {
+        if (this.filter_value.entreprise == "Entreprise") {
+          if (val.user_id != null)
+            r = false
+        } else {
+          if (this.filter_value.entreprise != val.user_id._id)
+            r = false
+        }
 
+      } else if (this.filter_value.entreprise_id && this.filter_value.entreprise_id != val.entreprise_id._id) {
+        r = false
+      }
+      else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
+        r = false
+      else if (this.filter_value.user && this.filter_value.user != val.user_id._id)
+        r = false
+      else if (this.filter_value.date && new Date(this.filter_value.date).getTime() >= new Date(val.debut).getTime())
+        r = false, console.log("date")
+      else if (this.filter_value.search) {
+        this.filter_value.search = this.filter_value.search.toLocaleLowerCase()
+        if (!val.custom_id.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_name.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionDesc.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionName.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
+          r = false
+      }
+      if (!this.filter_value.archived && val.archived)
+        r = false
+
+      if (r)
+        this.annoncesFiltered.push(val)
+    })
+
+  }
+  displayFilter = false
+  clearFilter() {
+    this.filter_value = {
+      statut: null,
+      typeMission: null,
+      profil: [],
+      entreprise: null,
+      locations: [],
+      user: null,
+      date: '',
+      search: '',
+      entreprise_id: null,
+      archived: false
+    }
+    this.annoncesFiltered = this.annonces
+  }
+  getStatut(annonce: Annonce) {
+    let d = new Date(annonce.debut).getTime() + (2628000000 * 3)
+    if (d > new Date().getTime() && annonce.statut == "Active") {
+      return 'Active'
+    } else if (d < new Date().getTime() && annonce.statut != "Clôturée")
+      return 'Expiré'
+    else
+      return "Clôturée"
+  }
+
+  onArchive(annonce: Annonce) {
+    annonce.archived = !annonce.archived
+    this.annonceService.putAnnonce({ _id: annonce._id, archived: annonce.archived }).then()
+  }
+
+  onDeleteOffre(annonce: Annonce) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?'))
+      this.annonceService.delete(annonce._id).then(r => {
+
+      })
+  }
+
+  rdvList: { label: string, ID: string, offer_id: string }[] = []
+
+  takeRDV(element) {
+    let base = 0
+    if (!this.isEtudiant)
+      base = 1
+    let ids = []
+    console.log(element)
+    this.rdvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.rdvList.push(element)
+      setTimeout(() => {
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = base + this.matchingList.length + ids.indexOf(element.ID)
+  }
+  cvList: { label: string, ID: string }[] = []
+  seeCV(element) {
+    let base = 0
+    if (!this.isEtudiant)
+      base = 1
+    let ids = []
+    this.cvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.cvList.push(element)
+
+      setTimeout(() => {
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + this.cvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + ids.indexOf(element.ID)
+  }
+  offreList = []
+  seeDetails(annonce: Annonce) {
+    let ids = []
+    let base = 0
+    if (!this.isEtudiant)
+      base = 1
+    this.offreList.forEach(o => {
+      ids.push(o._id)
+    })
+    if (!ids.includes(annonce._id)) {
+      this.offreList.push(annonce)
+      setTimeout(() => {
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + this.cvList.length + this.offreList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length + ids.indexOf(annonce._id)
+
+  }
+  refresh = true
+  refreshORDER: Subject<void> = new Subject<void>();
+  formExit(e: { ID: string, offre_id: string }) {
+    this.refresh = false
+    this.rdvList.forEach((rdv, idx) => {
+      if (rdv.offer_id == e.offre_id && rdv.ID == e.ID)
+        this.rdvList.splice(idx, 1)
+    })
+    this.matchingList.forEach((offre, idx2) => {
+      if (offre._id == e.offre_id) {
+        this.refresh = true
+        this.activeIndex1 = 2 + idx2
+      }
+      this.refreshORDER.next();
+    })
+
+  }
+  onMatchingAnnonce(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
+      let base = 0
+      if (!this.isEtudiant)
+        base = 1
+      let ids = []
+      this.matchingList.forEach(m => {
+        ids.push(m._id)
+      })
+      if (!ids.includes(annonce._id)) {
+        this.matchingList.push(annonce)
+        this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+          this.activeIndex1 = 0
+          setTimeout(() => {
+            this.activeIndex1 = base + this.matchingList.length
+          }, 1)
+
+        })
+      } else {
+        this.activeIndex1 = ids.indexOf(annonce._id) + 2
+      }
+    })
+
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+  InitFormUpdate(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
+      this.onFillForm(annonce)
+      this.showFormUpdate = true
+      this.scrollToTop()
+    })
+  }
 }

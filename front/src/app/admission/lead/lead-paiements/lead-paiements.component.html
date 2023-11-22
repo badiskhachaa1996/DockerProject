@@ -1,6 +1,6 @@
 <div class="grid card col-12">
-    <p-fieldset legend="Paiement et documents administratives" *ngIf="PROSPECT" style="width: 100%;">
-        <div class="col-12 grid">
+    <p-fieldset legend="Paiements" *ngIf="PROSPECT" style="width: 100%;">
+        <!--<div class="col-12 grid">
             <div class="col-6">
                 <strong>Effectuer un paiement:</strong>
             </div>
@@ -8,67 +8,125 @@
             <p class="col-6"><a
                     href="https://elitechgroupe-my.sharepoint.com/:w:/g/personal/h_elkadhi_intedgroup_com/EYxI2p3lWoBMmXcePJ3cYIMB9Y0-S8ej4gvAlEpUvo8jZQ?e=EL4GsT">Lien
                     en cours de dévéloppement</a></p>
-        </div>
+        </div>-->
         <div class="col-12 grid">
+            <p-table #dt2 dataKey="ID" [value]="PROSPECT.payement" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                field="montant"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="text-align: center;"> Modalité <p-sortIcon field="type">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="motif" style="text-align: center;"> Motif <p-sortIcon field="motif">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date" style="text-align: center;"> Date d'encaissement <p-sortIcon
+                                field="date"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="doc" style="text-align: center;">
+                            Lien
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                    <tr>
+                        <td>
+                            {{paiement?.ID}}
+                        </td>
+                        <td>
+                            {{paiement.montant}}€
+                        </td>
+                        <td>
+                            {{paiement.type}}
+                        </td>
+                        <td>
+                            {{paiement.motif}}
+                        </td>
+                        <td>
+                            {{paiement.date | date:'dd MMMM yy'}}
+                        </td>
+                        <td>
+                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
+                                fichier</a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p class="col-12" style="text-align: center;"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
+        </div>
+    </p-fieldset>
+    <p-fieldset legend="Paiements programmé" *ngIf="PROSPECT" style="width: 100%;">
+        <!--<div class="col-12 grid">
             <div class="col-6">
-                <strong>Montant payé:</strong>
-                <ul>
-                    <li *ngFor="let pay of PROSPECT.payement">
-                        <span>{{pay.type}} : {{pay.montant}}€</span>
-                    </li>
-                </ul>
+                <strong>Effectuer un paiement:</strong>
             </div>
     
-            <p class="col-6"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
-        </div>
+            <p class="col-6"><a
+                    href="https://elitechgroupe-my.sharepoint.com/:w:/g/personal/h_elkadhi_intedgroup_com/EYxI2p3lWoBMmXcePJ3cYIMB9Y0-S8ej4gvAlEpUvo8jZQ?e=EL4GsT">Lien
+                    en cours de dévéloppement</a></p>
+        </div>-->
         <div class="col-12 grid">
-            <div class="col-12">
-                <strong>Mes attestations disponibles:</strong>
-            </div>
-            <div class="col-12">
-                <p-table styleClass="p-datatable-gridlines" [value]="PROSPECT.documents_administrative"
-                    responsiveLayout="scroll" responsiveLayout="scroll">
-                    <ng-template pTemplate="header" let-columns>
-                        <tr>
-                            <th>
-                                ID
-                            </th>
-                            <th>
-                                Type
-                            </th>
-                            <th>
-                                Date de délivrance
-                            </th>
-                            <th>
-                                Nom du document
-                            </th>
-                            <th>
-                                Lien de téléchargement
-                            </th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-rowData>
-                        <tr>
-                            <td>
-                                {{rowData.custom_id}}
-                            </td>
-                            <td>
-                                {{rowData.type}}
-                            </td>
-                            <td>
-                                {{rowData.date | date:'mediumDate'}}
-                            </td>
-                            <td>
-                                {{rowData.nom}}
-                            </td>
-                            <td>
-                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-    
+            <p-table #dt2 dataKey="ID" [value]="PROSPECT.payement_programme" class="col-12"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                            </p-sortIcon>
+                        </th>-->
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                field="montant"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="text-align: center;"> Modalité <p-sortIcon field="type">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="motif" style="text-align: center;"> Motif <p-sortIcon field="motif">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date" style="text-align: center;"> Date d'encaissement <p-sortIcon
+                                field="date"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="etat" style="text-align: center;">
+                            Etat<p-sortIcon field="etat"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="doc" style="text-align: center;">
+                            Lien
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                    <tr>
+                        <td>
+                            {{paiement.montant}}€
+                        </td>
+                        <td>
+                            {{paiement.type}}
+                        </td>
+                        <td>
+                            {{paiement.motif}}
+                        </td>
+
+                        <td>
+                            {{paiement.date | date:'dd MMMM yy'}}
+                        </td>
+                        <td>
+                            {{paiement.etat}}
+                        </td>
+                        <td>
+                            <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
+                                fichier</a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p class="col-12" style="text-align: center;"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
         </div>
     </p-fieldset>
 </div>

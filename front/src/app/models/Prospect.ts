@@ -93,6 +93,22 @@ export class Prospect {
         public date_cf?: Date,
         public date_visa?: Date,
         public date_inscription_def?: Date,
+        public lead_type?: String,
+        public rue_adresse?: String,
+        public numero_adresse?: String,
+        public evaluation?: [{ name: string, Score: string, duree: number, date_envoi: Date, date_passage: Date }],
+        public entretien?: { date_entretien: Date, Duree: number, niveau: string, parcours: string, choix: string },
+        public decision?: { decision_admission: string, expliquation: string, date_decision: Date },
+        public teams?:String,
+        public Ypareo?:string,
+        public groupe?:string,
+        public ecole?:string,
+        public payement_programme?: [{ type: string, montant: number, date: Date, ID: string, doc: string, motif: string, etat: string }],
+        public ville_adresse?:string,
+        public sos_lastname?: string,
+        public sos_firstname?: string,
+        public sos_email?: string,
+        public sos_phone?: string,
     ) { }
 
 }

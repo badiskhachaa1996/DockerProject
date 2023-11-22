@@ -210,7 +210,7 @@
                                             (onChange)="onUpdateDate('contacts',ri,'date_contact',$event.target.value)">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{contact?.date_contact | date:'mediumDate'}} &nbsp;
+                                        {{contact?.date_contact | date:'dd MMMM yy'}} &nbsp;
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -350,7 +350,7 @@
                                             (onChange)="onUpdateDate('mailing',ri,'date_envoie',$event.target.value)">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{mail?.date_envoie | date:'mediumDate'}} &nbsp;
+                                        {{mail?.date_envoie | date:'dd MMMM yy'}} &nbsp;
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -480,7 +480,7 @@
                                             (onChange)="onUpdateDate('paiements',ri,'date_paiement',$event.target.value)">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{paiement?.date_paiement | date:'mediumDate'}} &nbsp;
+                                        {{paiement?.date_paiement | date:'dd MMMM yy'}} &nbsp;
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -634,7 +634,7 @@
             <ng-template pTemplate="body" let-lead>
                 <tr>
                     <td>
-                        {{lead.date_creation | date:'mediumDate'}}
+                        {{lead.date_creation | date:'dd MMMM yy'}}
                     </td>
                     <td>
                         {{lead.custom_id}}

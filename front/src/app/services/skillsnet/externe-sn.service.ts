@@ -12,7 +12,7 @@ export class ExterneSNService {
   constructor(private httpClient: HttpClient) { }
   create(tbObj: any, id: string) {
     let url = this.apiUrl + 'create/' + id;
-    return this.httpClient.post<ExterneSkillsnet>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<ExterneSkillsnet>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
   update(id: string, obj: any) {
     let url = this.apiUrl + 'update/' + id;

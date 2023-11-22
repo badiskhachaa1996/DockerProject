@@ -65,20 +65,15 @@ app.post("/create", (req, res) => {
                 let htmlemail = `
                 <p>Bonjour,</p><br>
 
-<p>Nous confirmons la création de votre ticket ${id}, Le sujet de ce ticket est "${sujet.label}". Il a été créé le ${day}/${month}/${year} , dès que le ticket sera traité, vous aurez une notification par email et sur votre compte IMS</p><br>
+                <p>Nous confirmons la création de votre ticket ${id}, Le sujet de ce ticket est "${sujet.label}". Il a été créé le ${day}/${month}/${year} , dès que le ticket sera traité, vous aurez une notification par email et sur votre compte IMS</p><br>
 
-<p>Cordialement,</p>
+                <p>Cordialement,</p>
                 `
                 let mailOptions = {
                     from: 'ims@intedgroup.com',
                     to: u.email,
                     subject: '[IMS - Ticketing] - Création d\'un ticket ',
-                    html: htmlemail,
-                    attachments: [{
-                        filename: 'signature.png',
-                        path: 'assets/ims-intedgroup-logo.png',
-                        cid: 'red' //same cid value as in the html img src
-                    }]
+                    html: htmlemail
                 };
 
 
@@ -95,50 +90,33 @@ app.post("/create", (req, res) => {
                     }
                     else
                         res.send({ message: "Votre ticket a été crée!", doc });
-                    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-                        //console.log(users)
-                        let emailList = []
-                        users.forEach(u => {
-                            emailList.push(u.email)
-                        })
-                        let htmlemail = `
-                        <p>Bonjour,</p><br>
 
-                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
-                        
-                        <p>Cordialement,</p>
-                        `
-                        let mailOptions = {
-                            from: 'ims@intedgroup.com',
-                            to: emailList,
-                            subject: '[IMS - Ticketing] - Création d\'un ticket ',
-                            html: htmlemail,
-                            attachments: [{
-                                filename: 'signature.png',
-                                path: 'assets/ims-intedgroup-logo.png',
-                                cid: 'red' //same cid value as in the html img src
-                            }]
-                        };
-
-
-                        transporter.sendMail(mailOptions, function (error, info) {
-                            if (error) {
-                                console.error(error);
-                            }
-                        });
-                    })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
-                        let htmlemail = `
-                        <p>Bonjour,</p><br>
 
-                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
-                        
-                        <p>Cordialement,</p>
+                        let htmlemail = `
+                        ID: ${ticket.customid}<br>
+                        Créé par : ${u.lastname} ${u.firstname}<br>
+                        Crée le  : ${day}/${month}/${year}<br>
+                        Service : ${sujet.service_id.label}<br>
+                        Sujet : ${sujet.label}<br>
+                        Résumé : ${ticket.resum}<br>
+                        Description : ${ticket.description}<br>
                         `
+                        let r = ''
+                        if (ticket.module)
+                            r = r + " - " + ticket.module
+                        if (ticket.type)
+                            r = r + " - " + ticket.type
+                        if (ticket.campus)
+                            r = r + " - " + ticket.campus
+                        if (ticket.filiere)
+                            r = r + " - " + ticket.filiere
+                        if (ticket.demande)
+                            r = r + " - " + ticket.demande
                         let mailOptions = {
                             from: 'ims@intedgroup.com',
                             to: 'ims.support@intedgroup.com',
-                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label + r,
                             html: htmlemail,
                             priority: 'high',
                             attachments: [{
@@ -257,8 +235,8 @@ app.get("/deleteById/:id", (req, res) => {
     Ticket.findByIdAndRemove(req.params.id, (err, ticket) => {
         if (err) {
             res.send(err)
-        }
-        res.send(ticket)
+        } else
+            res.send(ticket)
     })
 });
 
@@ -287,6 +265,14 @@ app.post("/updateAllById/:id", (req, res) => {
 app.get("/getById/:id", (req, res) => {
     Ticket.findOne({ _id: req.params.id }).then((dataTicket) => {
         res.status(200).send({ dataTicket });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
+
+app.get("/getPopulate/:id", (req, res) => {
+    Ticket.findById(req.params.id).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by').then((dataTicket) => {
+        res.status(200).send(dataTicket);
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
     })
@@ -339,16 +325,142 @@ app.get("/getAccAff/:id", (req, res) => {
 
 //Update d'un ticket
 app.post("/update/:id", (req, res) => {
-    console.log("****************************")
     Ticket.findByIdAndUpdate(req.params.id,
         {
             ...req.body
-        }, { new: true }, (err, ticket) => {
+        }, (err, oldTicket) => {
+            console.log(oldTicket,req.params.id)
             if (err) {
                 console.error(err)
                 res.status(500).send(err)
             }
-            res.send(ticket);
+            Ticket.findById(oldTicket._id).then(newTicket => {
+                if (req.body?.assigne_by != !oldTicket?.assigne_by && oldTicket?.assigne_by == null && req.body?.assigne_by != undefined) {
+                    //Mail Attribution
+                    User.findById(newTicket.assigne_by).then((ASSIGNED_BY) => {
+                        User.findById(newTicket.agent_id).then((AGENT) => {
+                            Sujet.findById(newTicket.sujet_id).populate('service_id').then(sujet => {
+                                let d = new Date()
+                                let month = (d.getUTCMonth() + 1).toString()
+                                if (d.getUTCMonth() + 1 < 10)
+                                    month = "0" + month
+                                let day = (d.getUTCDate()).toString()
+                                if (d.getUTCDate() < 10)
+                                    day = "0" + day
+                                let year = d.getUTCFullYear().toString().slice(-2);
+
+                                let htmlemail = `
+                                ID: ${newTicket.customid}<br>
+                                Service : ${sujet.service_id.label}<br>
+                                Sujet : ${sujet.label}<br>
+                                Résumé : ${newTicket.resum}<br>
+                                Description : ${newTicket.description}<br>
+                                <hr>
+                                Assigné par : ${ASSIGNED_BY?.lastname} ${ASSIGNED_BY?.firstname}<br>
+                                Assigné à : ${AGENT?.lastname} ${AGENT?.firstname}<br>
+                                Date de l'attribution : ${day}/${month}/${year}<br>
+                                Lien vers le ticket : <a href='https://ims.intedgroup.com/#/ticketing/mes-tickets/${newTicket._id}'>Ticket ${newTicket.customid}</a>
+                                `
+                                let r = ''
+                                if (newTicket.module)
+                                    r = r + " - " + newTicket.module
+                                if (newTicket.type)
+                                    r = r + " - " + newTicket.type
+                                if (newTicket.campus)
+                                    r = r + " - " + newTicket.campus
+                                if (newTicket.filiere)
+                                    r = r + " - " + newTicket.filiere
+                                if (newTicket.demande)
+                                    r = r + " - " + newTicket.demande
+                                let mailOptions = {
+                                    from: 'ims@intedgroup.com',
+                                    to: ['ims.support@intedgroup.com', AGENT?.email],
+                                    subject: 'Attribution -' + sujet.service_id.label + " - " + sujet.label + r,
+                                    html: htmlemail,
+                                    priority: 'high',
+                                    attachments: [{
+                                        filename: 'signature.png',
+                                        path: 'assets/ims-intedgroup-logo.png',
+                                        cid: 'red' //same cid value as in the html img src
+                                    }]
+                                };
+
+
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.error(error);
+                                    }
+                                });
+                            })
+                        }).catch((error) => {
+                            console.error(error)
+                            res.status(404).send(error);
+                        })
+                    })
+                } else if (oldTicket?.statut != 'Traité' && newTicket?.statut == 'Traité') {
+                    //Mail Ticket Traité
+                    Message.find({ ticket_id: newTicket._id }).then((messages) => {
+                        User.findById(newTicket.createur_id).then((CREATED_BY) => {
+                            User.findById(newTicket.agent_id).then((AGENT) => {
+                                Sujet.findById(newTicket.sujet_id).populate('service_id').then(sujet => {
+                                    let htmlemail = `
+                                    ID: ${newTicket.customid}<br>
+                                    Service : ${sujet.service_id.label}<br>
+                                    Sujet : ${sujet.label}<br>
+                                    Résumé : ${newTicket.resum}<br>
+                                    Description : ${newTicket.description}<br>
+                                    <hr>
+                                    Traité par : ${AGENT?.lastname} ${AGENT?.firstname}<br>
+                                    Délai de traitement : ${getDelaiTraitement(new Date(newTicket.date_ajout))}<br>
+                                    `
+                                    if (messages && messages.length != 0) {
+                                        htmlemail = htmlemail + `Commentaires:<br>`
+                                        messages.forEach((m, idx) => {
+                                            htmlemail = htmlemail + `${idx + 1}: ${m.description}<br>`
+                                        })
+                                    }
+
+                                    let r = ''
+                                    if (newTicket.module)
+                                        r = r + " - " + newTicket.module
+                                    if (newTicket.type)
+                                        r = r + " - " + newTicket.type
+                                    if (newTicket.campus)
+                                        r = r + " - " + newTicket.campus
+                                    if (newTicket.filiere)
+                                        r = r + " - " + newTicket.filiere
+                                    if (newTicket.demande)
+                                        r = r + " - " + newTicket.demande
+                                    let mailOptions = {
+                                        from: 'ims@intedgroup.com',
+                                        to: ['ims.support@intedgroup.com'],
+                                        subject: 'Ticket traité -' + sujet.service_id.label + " - " + sujet.label + r,
+                                        html: htmlemail,
+                                        priority: 'high',
+                                        attachments: [{
+                                            filename: 'signature.png',
+                                            path: 'assets/ims-intedgroup-logo.png',
+                                            cid: 'red' //same cid value as in the html img src
+                                        }]
+                                    };
+
+
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.error(error);
+                                        }
+                                    });
+                                })
+                            }).catch((error) => {
+                                console.error(error)
+                                res.status(404).send(error);
+                            })
+                        })
+                    })
+
+                }
+                res.send(newTicket);
+            })
         })
 });
 
@@ -450,7 +562,7 @@ app.post("/AccAff/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             agent_id: req.body.agent_id,
-            statut: "En cours de traitement",
+            statut: "En attente de traitement",
             date_affec_accep: Date.now(),
             isAffected: req.body?.isAffected || false
         },
@@ -459,27 +571,60 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(err)
             } else {
                 res.send(ticket);
-                if (ticket.isAffected) {
+                if (req.body?.isAffected) {
                     User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
-                        let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                        let html2 = '<p style="color:black">Bonjour ' + gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + '</strong> et qui a pour description <b> ' + ticket.description + ' </strong> vous a été affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
-                        let mailOptions = {
-                            from: 'ims@intedgroup.com',
-                            to: userFromDb.email,
-                            subject: '[IMS - Ticketing] - Notification',
-                            html: html2,
-                            attachments: [{
-                                filename: 'signature.png',
-                                path: 'assets/ims-intedgroup-logo.png',
-                                cid: 'red' //same cid value as in the html img src
-                            }]
-                        };
+                        Sujet.findById(ticket.sujet_id).populate('service_id').then(sujet => {
+                            let d = new Date()
+                            let month = (d.getUTCMonth() + 1).toString()
+                            if (d.getUTCMonth() + 1 < 10)
+                                month = "0" + month
+                            let day = (d.getUTCDate()).toString()
+                            if (d.getUTCDate() < 10)
+                                day = "0" + day
+                            let year = d.getUTCFullYear().toString().slice(-2);
 
-                        transporter.sendMail(mailOptions, function (error, info) {
-                            if (error) {
-                                console.error(error);
-                            }
-                        });
+                            let htmlemail = `
+                            ID: ${ticket.customid}<br>
+                            Service : ${sujet.service_id.label}<br>
+                            Sujet : ${sujet.label}<br>
+                            Résumé : ${ticket.resum}<br>
+                            Description : ${ticket.description}<br>
+                            <hr>
+                            Assigné à: ${userFromDb?.lastname} ${userFromDb?.firstname}<br>
+                            Date de l'attribution: ${day}/${month}/${year}<br>
+                            Lien: <a href='https://ims.intedgroup.com/#/ticketing/mes-tickets-services'>Ticketing Service</a>
+                            `
+                            let r = ''
+                            if (ticket.module)
+                                r = r + " - " + ticket.module
+                            if (ticket.type)
+                                r = r + " - " + ticket.type
+                            if (ticket.campus)
+                                r = r + " - " + ticket.campus
+                            if (ticket.filiere)
+                                r = r + " - " + ticket.filiere
+                            if (ticket.demande)
+                                r = r + " - " + ticket.demande
+                            let mailOptions = {
+                                from: 'ims@intedgroup.com',
+                                to: ['ims.support@intedgroup.com', userFromDb?.email],
+                                subject: 'Attribution -' + sujet.service_id.label + " - " + sujet.label + r,
+                                html: htmlemail,
+                                priority: 'high',
+                                attachments: [{
+                                    filename: 'signature.png',
+                                    path: 'assets/ims-intedgroup-logo.png',
+                                    cid: 'red' //same cid value as in the html img src
+                                }]
+                            };
+
+
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.error(error);
+                                }
+                            });
+                        })
                     }).catch((error) => {
                         console.error(error)
                         res.status(404).send(error);
@@ -622,6 +767,16 @@ app.get("/getAllAccAff", (req, res) => {
             console.error(err);
         })
 })
+//recuperation d'un ticket par 'identifiant d'un etudiant
+app.get("/getByIdEtudiant/:id", (req, res) => {
+    Ticket.findOne({ etudiant_id: req.params.id }).then((dataTicket) => {
+        res.status(200).send({ dataTicket });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
+
+
 
 //Renvoie un ticket dans la queue d'entrée
 app.post("/revertTicket/:id", (req, res) => {
@@ -772,44 +927,69 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
 
 app.get("/getAllAssigne/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id })
-    .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+        .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllNonAssigne", (req, res) => {
-    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.post("/getAllNonAssigneV2", (req, res) => {
-    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Sujet.find({ service_id: { $in: req.body.service_list } }).then(sujets => {
+        let ids = []
+        sujets.forEach(s => {
+            ids.push(s._id)
+        })
+        Ticket.find({ agent_id: null, sujet_id: { $in: ids } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+            .then((ticket) => { res.status(200).send(ticket); })
+            .catch((error) => { res.status(400).send(error); })
+    })
+
+});
+
+app.post("/getAllAssigneV2", (req, res) => {
+    Sujet.find({ service_id: { $in: req.body.service_list } }).then(sujets => {
+        let ids = []
+        sujets.forEach(s => {
+            ids.push(s._id)
+        })
+        Ticket.find({ agent_id: { $ne: null }, sujet_id: { $in: ids } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+            .then((ticket) => { res.status(200).send(ticket); })
+            .catch((error) => { res.status(400).send(error); })
+    })
+});
+
+app.get("/getAllAssigneAdmin", (req, res) => {
+    Ticket.find({ agent_id: { $ne: null } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllRefuse", (req, res) => {
-    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('user_revert')
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by').populate('user_revert')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllTraite", (req, res) => {
-    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllAttenteDeTraitement", (req, res) => {
-    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 //Récupérer tous les tickets d'un User
 app.get("/getAllMine/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
-    .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
+        .populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -819,7 +999,6 @@ app.get("/getAllMine/:id", (req, res) => {
 });
 
 app.post('/getStats', (req, res) => {
-    console.log(req.body)
     if (req.body.service_id && !req.body.sujet_id) {
         Sujet.find({ service_id: req.body.service_id }).then(data => {
             let temp = []
@@ -842,6 +1021,7 @@ const multer = require('multer');
 const fs = require("fs")
 var mime = require('mime-types')
 const path = require('path');
+const { Message } = require("../models/message");
 const st = multer.diskStorage({
     destination: (req, file, callback) => {
         let storage = `storage/ticket/${req.body.ticket_id}/${req.body.document_id}`;
@@ -1001,7 +1181,6 @@ app.post('/sendMailAff', (req, res) => {
 
 app.post('/sendMailRefus', (req, res) => {
     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-        console.log(users)
         let emailList = []
         users.forEach(u => {
             emailList.push(u.email)
@@ -1039,12 +1218,10 @@ app.post('/sendMailRefus', (req, res) => {
 })
 
 app.post('/sendMailUpdateStatut', (req, res) => {
-    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-        console.log(users)
-        let emailList = [req.body.createur_email]
-        users.forEach(u => {
-            emailList.push(u.email)
-        })
+    User.findById(req.body.createur_id).then(CREATOR => {
+        let EMAIL = CREATOR?.email
+        if (!EMAIL)
+            EMAIL = CREATOR?.email_perso
         let htmlemail = `
         <p>Bonjour,</p><br>
         
@@ -1053,10 +1230,11 @@ app.post('/sendMailUpdateStatut', (req, res) => {
         
         <p>Cordialement</p><br>
         `
+
         let mailOptions = {
             from: 'ims@intedgroup.com',
-            to: emailList,
-            subject: '[IMS - Ticketing] - Changement de statut d\'un ticket ',
+            to: EMAIL,
+            subject: `${req.body.id} - Etat d'avancement`,
             html: htmlemail,
             attachments: [{
                 filename: 'signature.png',
@@ -1070,7 +1248,7 @@ app.post('/sendMailUpdateStatut', (req, res) => {
             if (error) {
                 console.error(error);
             }
-            res.send(emailList)
+            res.send(mailOptions)
         });
     })
 
@@ -1105,6 +1283,10 @@ app.get('/getAllByServiceAndCreateurID/:service_id/:createur_id', (req, res) => 
             console.error(err);
         })
 })
-
+function getDelaiTraitement(date) {
+    const diffTime = Math.abs(new Date() - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return `${diffDays} jour(s)`
+}
 
 module.exports = app;

@@ -13,7 +13,8 @@ export class Ecole {
         public logo?: string,
         public cachet?: string,
         public pied_de_page?: string,
-        public color?: string
+        public color?: string,
+        
     ) { }
 
 }

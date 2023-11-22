@@ -4,19 +4,23 @@
 
         <!-- formulaire de modification d'une demande de congé -->
         <div class="card" *ngIf="showFormUpdateConge">
-            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showFormUpdateConge = false; showOtherTextArea = false"></i>
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                (click)="showFormUpdateConge = false; showOtherTextArea = false"></i>
             <div style="float: right"></div>
-            
+
             <h3 class="text-center">Modification de la demande de congé</h3>
             <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateConge" (ngSubmit)="onUpdateConge()">
                 <div class="field col-12">
                     <label>Type de congé <span style="color: red">*</span></label>
-                    <p-dropdown formControlName="type" [options]="congeTypeList" filter="true" placeholder="type du congé" [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                    <p-dropdown formControlName="type" [options]="congeTypeList" filter="true"
+                        placeholder="type du congé" [showClear]="true"
+                        (onChange)="onShowOtherTextArea($event)"></p-dropdown>
                 </div>
 
                 <div class="field col-12" *ngIf="showOtherTextArea">
                     <label htmlFor="other"></label>
-                    <textarea formControlName="other" pInputTextarea placeholder="Préciser le motif" autoResize rows="4" cols="30"></textarea>
+                    <textarea formControlName="other" pInputTextarea placeholder="Préciser le motif" autoResize rows="4"
+                        cols="30"></textarea>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -33,138 +37,214 @@
                 </div>
                 <div class="field col-12 md:col-8">
                     <label htmlFor="motif">Motif de la demande <span style="color: red">*</span></label>
-                    <textarea formControlName="motif" pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
+                    <textarea formControlName="motif" pInputTextarea
+                        placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4"
+                        cols="30"></textarea>
                 </div>
                 <div class="field col-12">
-                    <label htmlFor="note_decideur">Note décideur <span style="color: red">*</span></label>
-                    <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4" cols="30"></textarea>
+                    <label htmlFor="note_decideur">Commentaire <span style="color: red">*</span></label>
+                    <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4"
+                        cols="30"></textarea>
+                </div>
+                <div class="field col-12">
+                    <label>Urgent</label><br>
+                    <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
                 </div>
 
-                <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formUpdateConge.invalid"></button>
+                <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                    [disabled]="formUpdateConge.invalid"></button>
             </form>
         </div>
 
-        
+        <div class="card" *ngIf="showFormCommentaireConge">
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                (click)="showFormCommentaireConge = false;"></i>
+            <div style="float: right"></div>
+
+            <h3 class="text-center">Modification du commentaire</h3>
+            <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateConge" (ngSubmit)="onUpdateConge()">
+                <div class="field col-12">
+                    <label htmlFor="note_decideur">Commentaire <span style="color: red">*</span></label>
+                    <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4"
+                        cols="30"></textarea>
+                </div>
+
+                <button pButton pRipple type="submit" class="my-2" label="Envoyer"></button>
+            </form>
+        </div>
+
+
 
         <div class="card">
-            <h2 class="text-center">Gestion des congés, autorisations et absences</h2>
-
-            <p-table #dt1 [value]="conges" dataKey="_id" editMode="row" responsiveLayout="scroll" 
-                    [rows]="8" [rowHover]="true" [paginator]="true"
-                    [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email', 'statut']">
-				<ng-template pTemplate="caption">
-					<div class="flex table-header">
+            <p-table #dt1 [value]="conges" dataKey="_id" editMode="row" responsiveLayout="scroll" [rows]="8"
+                [rowHover]="true" [paginator]="true"
+                [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email', 'statut']">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterStatut"
-                        (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Statut" [showClear]="true"></p-dropdown>
-
+                            (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Statut"
+                            [showClear]="true"></p-dropdown>
+                        <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
+                            [(ngModel)]="siteSelected" autoWidth="false" (onChange)="onFilterSite($event.value)"
+                            [style]="{'width':'13em','margin-bottom':'2px', 'margin-left': '3px'}"></p-multiSelect>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterType"
-                        (onChange)="dt1.filter($event.value, 'type_conge', 'equals');" placeholder="Type" [showClear]="true"></p-dropdown>
+                            (onChange)="dt1.filter($event.value, 'type_conge', 'equals');" placeholder="Type"
+                            [showClear]="true"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="collaborateursFilter" filter="true"
-                        (onChange)="dt1.filter($event.value, 'user_id._id', 'equals');" placeholder="Nom du demandeur" [showClear]="true"></p-dropdown>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th style="width: 3rem"></th>
-						<th>ID</th>
-						<th>Date</th>
-						<th>Collaborateur</th>
-						<th pSortableColumn="type_conge">Type <p-sortIcon field="type_conge"></p-sortIcon></th>
-						<th>Période</th>
-						<th>Nombre de jours</th>
-						<th>Justificatif</th>
-						<th>Statut</th>
-						<th>Action</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-conge let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
-					<tr [pEditableRow]="conge">
-						<td>
-							<button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-						</td>
-						
-						<td>{{conge._id.substring(conge._id.length-6, conge._id.length)}}</td>
-						<td>{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
-                        <td>{{conge.user_id.lastname}} {{conge.user_id.firstname}}</td>
+                        <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}"
+                            [options]="collaborateursFilter" filter="true"
+                            (onChange)="dt1.filter($event.value, 'user_id._id', 'equals');" placeholder="Collaborateur"
+                            [showClear]="true"></p-dropdown>
+                        <div>
+                            <label class="mb-1">Urgent&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);"
+                                    [binary]="true"></p-checkbox></label>
 
-                        <td *ngIf="conge.type_conge == 'Autre motif'">{{ conge.other_motif}}</td>
-                        <td *ngIf="conge.type_conge != 'Autre motif'">{{ conge.type_conge}}</td>
-
-                        <td>du {{conge.date_debut | date: 'd/MM/YYYY'}} <br> au {{conge.date_fin | date: 'd/MM/YYYY'}}</td>
-
-                        <td *ngIf="conge.nombre_jours > 1">{{conge.nombre_jours}} jours</td>
-                        <td *ngIf="conge.nombre_jours <= 1">{{conge.nombre_jours}} jour</td>
-
-                        <td *ngIf="conge.justificatif == null">--</td>
-                        <td *ngIf="conge.justificatif != null">
-                            <i class="pi pi-file" pTooltip="Télécharger le justificatif" (click)="onDonwloadJustificatif(conge._id)" style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Collaborateur</th>
+                        <th pSortableColumn="type_conge">Type <p-sortIcon field="type_conge"></p-sortIcon></th>
+                        <th>Période</th>
+                        <th>Nombre de jours</th>
+                        <th>Justificatif</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-conge let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="conge">
+                        <td [ngClass]="{'urgent-begin':conge.urgent}">
+                            <button type="button" pButton pRipple [pRowToggler]="conge"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
 
-                        <td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge._id.substring(conge._id.length-6,
+                            conge._id.length)|uppercase}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge.user_id.firstname | titlecase}}
+                            {{conge.user_id.lastname | uppercase}}</td>
+
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.type_conge == 'Autre motif'">{{
+                            conge.other_motif}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.type_conge != 'Autre motif'">{{
+                            conge.type_conge}}</td>
+
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">du {{conge.date_debut | date: 'd/MM/YYYY'}} <br>
+                            au {{conge.date_fin | date: 'd/MM/YYYY'}}
+                        </td>
+
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.nombre_jours > 1">
+                            {{conge.nombre_jours}} jours</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.nombre_jours <= 1">
+                            {{conge.nombre_jours}} jour</td>
+
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.justificatif == null">--</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.justificatif != null">
+                            <i class="pi pi-file" pTooltip="Télécharger le justificatif"
+                                (click)="onDonwloadJustificatif(conge._id)"
+                                style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
+                        </td>
+
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown [options]="filterStatut" appendTo="body" [(ngModel)]="conge.statut" [style]="{'width':'100%'}"></p-dropdown>
+                                    <p-dropdown [options]="filterStatut" appendTo="body" [(ngModel)]="conge.statut"
+                                        [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    <span *ngIf="conge.statut == 'En attente'"><p-tag icon="pi pi-spin pi-spinner" severity="warning" value={{conge.statut}}></p-tag></span>
-                                    <span *ngIf="conge.statut == 'Refusé'"><p-tag icon="pi pi-times" severity="danger" value={{conge.statut}}></p-tag></span>
-                                    <span *ngIf="conge.statut == 'Validé'"><p-tag icon="pi pi-check" severity="success" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'En attente'"><p-tag icon="pi pi-spin pi-spinner"
+                                            severity="warning" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Refusé'"><p-tag icon="pi pi-times" severity="danger"
+                                            value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Validé'"><p-tag icon="pi pi-check" severity="success"
+                                            value={{conge.statut}}></p-tag></span>
                                 </ng-template>
                             </p-cellEditor>
                         </td>
 
-                        <td>
-                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(conge)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(conge, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                        <td [ngClass]="{'urgent-end':conge.urgent}">
 
-                            <button *ngIf="!editing" pButton pRipple pInitEditableRow icon="pi pi-flag" (click)="onRowEditInit(conge)" pTooltip="Mettre à jour le status" class="p-button-warning p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" class="p-button-primary p-button-rounded p-button-outlined ml-2 mb-2" (click)="onFillFormUpdate(conge);"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" (click)="onDeleteConge(conge._id)" icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                            <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-check"
+                                pTooltip="Sauvegarder les modifications" pSaveEditableRow (click)="onRowEditSave(conge)"
+                                aria-hidden="true"></i>
+                            <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-times"
+                                pCancelEditableRow pTooltip="Annuler les modifications"
+                                (click)="onRowEditCancel(conge, ri)" aria-hidden="true"></i>
+                            <i *ngIf="!editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-flag"
+                                pTooltip="Mettre à jour le status" (click)="onRowEditInit(conge)" pInitEditableRow
+                                aria-hidden="true"></i>
+                            <i style="margin-right: 2%;cursor: pointer;" class="pi pi-pencil"
+                                pTooltip="Mettre à jour la demande" (click)="onFillFormUpdate(conge)"
+                                aria-hidden="true"></i>
+                            <i style="margin-right: 2%;cursor: pointer;" class="pi pi-comment"
+                                pTooltip="Mettre à jour le commentaire" (click)="onFillFormCommentaire(conge)"
+                                aria-hidden="true"></i>
+                            <i style="margin-right: 2%;cursor: pointer;" class="pi pi-trash"
+                                pTooltip="Supprimer la demande" (click)="onDeleteConge(conge._id)"
+                                aria-hidden="true"></i>
                         </td>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="rowexpansion" let-conge>
-					<tr>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-conge>
+                    <tr>
                         <td colspan="10">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Motif</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td>{{conge.motif}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-
-                            <div class="p-3">
-                                <p-table responsiveLayout="scroll">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Note decideur</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td>{{conge.note_decideur}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
+                    <tr>
+                        <th>Motif</th>
+                        <th>Validé le</th>
+                        <th>Validé par</th>
+                        <th>N° Ticket</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{conge.motif}}</td>
+                        <td>{{conge.valided_date|date:'dd MMMM yy'}}</td>
+                        <td>{{conge?.valided_by?.firstname | titlecase}} {{conge?.valided_by?.lastname | uppercase}}
                         </td>
+                        <td>{{conge?.customid_ticket}}</td>
                     </tr>
                 </ng-template>
             </p-table>
         </div>
+
+        <div class="p-3">
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Commentaire</th>
+                        <th>Commenté par</th>
+                        <th>Commenté le</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{conge.note_decideur}}</td>
+                        <td>{{conge?.commented_by?.firstname | titlecase}} {{conge?.commented_by?.lastname | uppercase}}
+                        </td>
+                        <td>{{conge.commented_date|date:'dd MMMM yy'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
     </div>
+</div>
 </div>

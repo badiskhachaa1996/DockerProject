@@ -1,0 +1,139 @@
+.main-content {
+    width: 100%;
+    height: 100%;
+    padding-left: 5mm;
+    white-space: pre;
+    h2 {
+        font-size: 14pt;
+        font-weight: 700;
+    }
+
+    h3 {
+        font-size: 12pt;
+        font-weight: 700;
+    }
+
+    p {
+        font-size: 11pt;
+    }
+
+    .section:not(:first-child) {
+        margin-top: 20mm;
+    }
+
+    .inner-content {
+        padding: 5mm;
+        padding-top: 0;
+        height: 100%;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+
+        p {
+            font-weight: 600;
+        }
+    }
+
+    .section-main {
+        font-weight: 600;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .section-content {
+        margin-bottom: 3mm;
+    }
+}
+
+
+
+.btech {
+    .section-content {
+        border-left: 1pt solid #E38D26;
+        padding:  1mm 3mm;
+
+        h3 {
+            margin: 0;
+            color: #E38D26;
+        }
+    }
+}
+
+
+.espic {
+
+    h2 {
+        color: white;
+        background-color: #E0252F;
+        padding-left: 5mm;
+        border-radius: 0 2mm 2mm 2mm;
+    }
+    .section-content {
+        padding:  1mm 3mm;
+
+        h3 {
+            margin: 0;
+            color: #1D1D1B;
+        }
+    }
+}
+
+
+.studinfo {
+    h2 {
+        padding: 5mm;
+        padding-bottom: 1mm;
+        border-bottom: 2px solid #E8AC09;
+        width: 10mm;
+    }
+
+    .section-content {
+        padding-left: 5mm;
+        h3 {
+            margin: 0;
+        }
+    }
+}
+
+
+.adg {
+
+    h2 {
+        color: white;
+        background-color: #BB945F;
+        padding-left: 5mm;
+    }
+
+    .section-content {
+        padding:  1mm 3mm;
+
+        h3 {
+            margin: 0;
+            color: #1D1D1B;
+        }
+    }
+}
+
+
+.medasup {
+
+    h2 {
+        color: #653686;
+        border-bottom: 0.5mm solid #653686;
+    }
+    
+    .section-content {
+        padding:  1mm 3mm;
+        h3 {
+            margin: 0;
+            color: #1DA5DB;
+        }
+    }
+}
+
+.section-details{
+    max-width: 1000px;
+    white-space: "pre-line";
+}

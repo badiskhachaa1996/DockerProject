@@ -1,0 +1,134 @@
+<h4 style="width: 100%;text-align: center;">Tableau Matching</h4>
+<p-table #dt3 [value]="matchingToSee" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
+    style="width: 100%;" [paginator]="true" rowExpandMode="single"
+    [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+    responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem" scope="col"></th>
+            <th style="width: 3rem" scope="col">Offre</th>
+            <th style="width: 3rem" scope="col">Type</th>
+            <th style="width: 3rem" scope="col">Commercial</th>
+            <th style="width: 3rem" scope="col">Statut</th>
+            <th style="width: 3rem" scope="col">Taux</th>
+            <th style="width: 3rem" scope="col">Entretien</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-match let-expanded="expanded">
+        <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="match"
+                    class="p-button-text p-button-rounded p-button-plain"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>
+                {{match.offre_id.custom_id}}
+            </td>
+            <td>
+                {{match.type_matching}}
+            </td>
+            <td *ngIf="match.type_matching!='Candidat'">
+                {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+            </td>
+            <td *ngIf="match.type_matching=='Candidat'">
+                Non
+            </td>
+            <td>
+                {{match.statut}}
+            </td>
+            <td>
+                {{match.taux |number:'1.0-0'}}%
+            </td>
+            <td *ngIf="rdvDic[match.offre_id._id]">
+                <i class="pi true-icon pi-check-circle" tooltipPosition="bottom" style="color: green;cursor: pointer;"
+                    pTooltip="Voir l'entretien" (click)="seeRDV(rdvDic[match.offre_id._id])"></i>
+            </td>
+            <td *ngIf="!rdvDic[match.offre_id._id]">
+                <i class="pi false-icon pi-times-circle" tooltipPosition="bottom" style="color: red;"
+                    pTooltip="Pas d'entretien"></i>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-match>
+        <tr>
+            <td colspan="9">
+                <div class="competences-block" *ngIf="match.offre_id.competences.length!=0">
+                    <h4 class="mb-2">Compétences</h4>
+                    <div class="grid gx-5 competence">
+                        <div class="col-12 md:col-4" *ngFor="let c of match.offre_id.competences">
+                            <p>{{c?.libelle | titlecase}}</p>
+                        </div>
+                    </div>
+                </div>
+                <h4>Description</h4>
+                <p>
+                    {{match.offre_id.missionDesc}}
+                </p>
+                <p-table responsiveLayout="scroll" [value]="['sq']" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+        <tr>
+            <th scope="col">Entreprise</th>
+            <th scope="col">Déroulement</th>
+            <th scope="col">Crée le</th>
+            <th scope="col">Auteur</th>
+            <th scope="col">Modifié le</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+        <tr>
+            <td>{{match.offre_id?.entreprise_id?.r_sociale || match.offre_id?.entreprise_name}}</td>
+            <td>{{match.offre_id?.workplaceType}}</td>
+            <td>{{match.offre_id?.date_creation | date:'dd MMMM yy'}}</td>
+            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{match.offre_id?.user_id?.lastname |
+                titlecase}}</td>
+            <td>
+                {{match?.offre_id?.modified_at| date:'dd MMMM yy'}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+</td>
+</tr>
+</ng-template>
+</p-table>
+
+
+<p-dialog header="Informations du Rendez-Vous" [(visible)]="displayRDV" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+    <p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                    ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                    Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+                    Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+                </th>
+                <th pSortableColumn="statut" scope="col" style="text-align: center;">
+                    Statut <p-sortIcon field="statut"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rdv>
+            <tr>
+                <td>
+                    {{rdv?.offre_id?.custom_id }}
+                </td>
+                <td>
+                    {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+                </td>
+                <td>
+                    {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+                </td>
+                <td>
+                    {{rdv?.statut}}
+                </td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+</p-dialog>

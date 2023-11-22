@@ -1,0 +1,61 @@
+<div class="col-12 grid">
+    <p-fieldset legend="Mes attestations disponibles" *ngIf="PROSPECT" style="width: 100%;">
+        <div class="col-12">
+            <p-table styleClass="p-datatable-gridlines" [value]="PROSPECT.documents_administrative"
+                responsiveLayout="scroll" responsiveLayout="scroll">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Date de délivrance
+                        </th>
+                        <th>
+                            Nom du document
+                        </th>
+                        <th>
+                            Traité par
+                        </th>
+                        <th>
+                            Lien de téléchargement
+                        </th>
+                        <th>
+                            Note
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{rowData.custom_id}}
+                        </td>
+                        <td>
+                            {{rowData.type}}
+                        </td>
+                        <td>
+                            {{rowData.date | date:'dd MMMM yy'}}
+                        </td>
+                        <td>
+                            {{rowData.nom}}
+                        </td>
+                        <td>
+                            {{rowData.traited_by}}
+                        </td>
+                        <td>
+                            <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                        </td>
+                        <td>
+                            {{rowData.note}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-fieldset>
+
+
+</div>

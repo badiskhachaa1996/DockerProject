@@ -1,3 +1,6 @@
+import { Annonce } from "./Annonce";
+import { Matching } from "./Matching";
+import { Prospect } from "./Prospect";
 import { Service } from "./Service";
 import { Ticket } from "./Ticket";
 
@@ -51,7 +54,14 @@ export class User {
             path?: string,
             note?: string
         }[],
-        public savedTicket?: Ticket[]
+        public savedTicket?: Ticket[],
+        public savedAnnonces?: Annonce[],
+        public savedMatching?: Matching[],
+        public linksnames?: string[],
+        public last_connection?: Date,
+        public haveNewAccess?: Boolean,
+        public type_supp?: string[],
+        public savedAdministration?: Prospect[]
     ) { }
 
 

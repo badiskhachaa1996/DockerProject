@@ -30,6 +30,12 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'Marne', value: 'Marne' },
     { label: 'En ligne', value: 'En ligne' }
   ]
+  dropdownCampus= [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
   campusFilter = [
     { label: 'Tous les campus', value: null },
     ...this.campusList
@@ -55,12 +61,20 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
+    NDA:new FormControl(''),
+    UAI:new FormControl(''),
     langue: new FormControl('Français')
   })
 
   initUpdate(rowData: EcoleAdmission) {
     this.selectedEcole = rowData
     this.updateForm.patchValue({ ...rowData })
+  }
+  onAddRentreeScolaire() {
+  
+    
+    this.selectedEcole.campusinfo.push({ campus: "", adresse: "", UAI: "" })
+
   }
 
   onUpdate() {
@@ -79,13 +93,39 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
+    NDA:new FormControl(''),
+    UAI:new FormControl(''),
     langue: new FormControl('Français')
   })
 
   addForm = false
 
+  
+  
   initCreate() {
     this.addForm = true
+  }
+  createFormRA: FormGroup = new FormGroup({
+    campus: new FormControl(''),
+    annee: new FormControl(''),
+    UAI: new FormControl(''),
+  })
+  onCreateRA() {
+    
+   
+    if(this.createFormRA.value.campus.length > 3){
+      this.selectedEcole.campus=this.createFormRA.value.campus;
+    this.selectedEcole.campus.push(this.createFormRA.value.campus)}
+  this.FAService.EAupdate(this.selectedEcole).subscribe(data => {
+    console.log(data)
+  })
+    
+  }
+  onDeleteRentreeScolaire(id: number): void {
+    console.log("*********************");
+    this.selectedEcole.campusinfo.splice(id, 1);
+    this.FAService.EAupdate(this.selectedEcole);
+      
   }
 
   onCreate() {

@@ -289,6 +289,8 @@ export class AdmissionIntComponent implements OnInit {
     { value: "Alternance", label: "Alternance" },
     { value: "Initiale", label: "Initiale" },
   ]
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+   
   filterPhase = [
     { value: null, label: "Toutes les phases de candidature" },
     { value: 'Non affecté', label: "Non affecté" },
@@ -349,7 +351,8 @@ export class AdmissionIntComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.CandidatureLeadService.getAll().subscribe(candidatures => {
       candidatures.forEach(v => {
-        this.candidatureDic[v.lead_id._id] = v
+        if (v.lead_id)
+          this.candidatureDic[v.lead_id._id] = v
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -366,7 +369,8 @@ export class AdmissionIntComponent implements OnInit {
       listTeam.forEach(team => {
         let items = []
         dic[team].forEach(element => {
-          items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+          if (element.user_id)
+            items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
         })
         this.agentSourcingList.push({
           label: team,
@@ -551,7 +555,7 @@ export class AdmissionIntComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
@@ -922,7 +926,7 @@ export class AdmissionIntComponent implements OnInit {
         this.partenaireOwned = commercial.partenaire_id
       })
     this.lengthPaiement = prospect?.payement?.length
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList

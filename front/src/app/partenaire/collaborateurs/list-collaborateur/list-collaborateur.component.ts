@@ -75,7 +75,7 @@ export class ListCollaborateurComponent implements OnInit {
   formGestion: FormGroup = new FormGroup({
     contribution: new FormControl(),
     pays_prospections: new FormControl([]),
-    localisation: new FormControl(),
+    localisation: new FormControl(''),
     etat_contrat: new FormControl(),
     commissions: new FormControl([])
   })

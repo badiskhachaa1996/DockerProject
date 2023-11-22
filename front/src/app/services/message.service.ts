@@ -6,8 +6,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class MessageService {
-  add(arg0: { severity: string; summary: string; }) {
-    throw new Error('Method not implemented.');
+
+  add(arg0: { severity: string; summary: string; detail:any }) {
+    throw new Error(arg0.detail);
   }
 
   httpOptions1 = { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) };

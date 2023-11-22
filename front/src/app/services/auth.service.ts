@@ -72,7 +72,7 @@ export class AuthService {
   getAllPopulate() {
     let url = this.apiUrl + "getAllPopulate";
 
-    return new Promise((resolve, reject) => {
+    return new Promise<User[]>((resolve, reject) => {
       this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         ((response) => { resolve(response) }),
         ((error) => { reject(error); })
@@ -373,6 +373,11 @@ export class AuthService {
   nstuget(id) {
     let url = `${this.apiUrl}nstuget/${id}`;
     return this.http.get<{ cv_id, lastname, firstname, email, email_perso, winner_email, winner_lastname, civilite, profile, winner_firstname, winner_id, profilePic }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllAgentByTicketing(service_id){
+    let url = `${this.apiUrl}getAllAgentByTicketing/${service_id}`;
+    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });   
   }
 
 }

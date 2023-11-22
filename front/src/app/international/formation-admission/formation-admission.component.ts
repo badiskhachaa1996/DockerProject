@@ -18,22 +18,41 @@ import { ActivatedRoute } from '@angular/router';
 export class FormationAdmissionComponent implements OnInit {
   seeAction = true
   formations: FormationAdmission[] = []
-  selectedFormation: FormationAdmission
-  dropdownCampus: any[] = []
+  rentres:RentreeAdmission[] = [];
+  rentresList:[] = [];
+  formationtoShow:FormationAdmission;
+  selectedFormation: FormationAdmission;
+  rentreeAdmissionList :any;
+  dropdownCampus= [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Congo Brazzaville', value: 'Congo Brazzaville' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Malte', value: 'Malte' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
   rentreeScolaire = []
   showFormRentreeScolaire: boolean = false
-
+  campusFilter: string | null = null;
+  Filtercompuse =
+    [
+      { label: "Tous les campus", value: null },
+      ...this.dropdownCampus
+    ]
   bacList =
     [
-      { label: "Bac +2", value: "Bac +2" },
-      { label: "Bac +3", value: "Bac +3" },
-      { label: "Bac +4", value: "Bac +4" },
-      { label: "Bac +5", value: "Bac +5" }
+      { label: "BAC +2", value: "BAC +2" },
+      { label: "BAC +3", value: "BAC +3" },
+      { label: "BAC +4", value: "BAC +4" },
+      { label: "BAC +5", value: "BAC +5" }
     ]
 
   bacFilter =
     [
-      { label: "Tous les bac", value: null },
+      { label: "Tous les BAC", value: null },
       ...this.bacList
     ]
 
@@ -41,31 +60,51 @@ export class FormationAdmissionComponent implements OnInit {
     [
       { label: "Année 1", value: "Année 1" },
       { label: "Année 2", value: "Année 2" },
-      { label: "Année 3", value: "Année 3" },
-      { label: "Année 4", value: "Année 4" },
-      { label: "Année 5", value: "Année 5" },
-    ]
 
+    ]
+    filiereList = [
+      { value: "Informatique", label: "Informatique" },
+      { value: "Commerce", label: "Commerce" },
+      { value: "Communication", label: "Communication" },
+      { value: "Comptabilité", label: "Comptabilité" },
+      { value: "Ressources Humaines", label: "Ressources Humaines" },
+      { value: "Bâtiment BIM", label: "Bâtiment BIM" },
+      { value: "Programme anglais", label: "Programme anglais" },
+      { value: "Logistique", label: "Logistique" },
+      { value: "Hôtellerie", label: "Hôtellerie" },
+      { value: "Médical", label: "Médical" },
+      { value: "Service aux particuliers", label: "Service aux particuliers" },
+      { value: "Petite enfance", label: "Petite enfance" },
+      
+    ]
+  
   anneeFilter =
     [
-      { label: "Toutes les années", value: null },
-      ...this.anneesList
+      { label: "Toutes les filières", value: null },
+      ...this.filiereList
     ]
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
     private MessageService: MessageService, private CampusService: CampusService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.FAService.FAgetAll().subscribe(data => {
+      
       this.formations = data
+      this.formations.sort((a, b) => {
+      if (a.filiere < b.filiere) return -1;
+      if (a.filiere > b.filiere) return 1;
+      return 0;
+    });
     })
+    this.FAService.RAgetAll().subscribe(data1 =>{
+      
+      this.rentres=data1;
+      console.log(data1);
+    }
+      );
+      
 
-    // permet de récupérer la liste des campus
-    this.CampusService.getAll().subscribe(campus => {
-      console.log(campus)
-      campus.forEach(c => {
-        this.dropdownCampus.push({ label: c.libelle, value: c._id })
-      })
-    })
+   
 
     // permet de récupérer la liste des rentrées scolaire
     this.RAService.RAgetAll().subscribe(rentrees => {
@@ -108,27 +147,12 @@ export class FormationAdmissionComponent implements OnInit {
     note: new FormControl(''),
   })
 
-  filiereList = [
-    { value: "Informatique", label: "Informatique" },
-    { value: "Commerce et Marketing", label: "Commerce et Marketing" },
-    { value: "Comptabilité Gestion et Finance", label: "Comptabilité Gestion et Finance" },
-    { value: "Ressources Humaines", label: "Ressources Humaines" },
-    { value: "BIM", label: "BIM" },
-    { value: "Programme anglais", label: "Programme anglais" },
-    { value: "Logistique", label: "Logistique" },
-    { value: "Hôtellerie", label: "Hôtellerie" },
-    { value: "Médical", label: "Médical" },
-    { value: "Service à la personne", label: "Service à la personne" },
-    { value: "Petite enfance", label: "Petite enfance" },
-  ]
-
+ 
   anneeList =
     [
       { label: "Année 1", value: "Anneé 1" },
       { label: "Année 2", value: "Anneé 2" },
-      { label: "Année 3", value: "Anneé 3" },
-      { label: "Année 4", value: "Anneé 4" },
-      { label: "Année 5", value: "Anneé 5" },
+
     ];
 
   initUpdate(rowData: FormationAdmission) {
@@ -150,9 +174,10 @@ export class FormationAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteRentreeScolaire(id: string): void {
-    this.FAService.RAdelete(id)
-      .then((response) => {
+  onDeleteRentreeScolaire(id: number): void {
+    this.formationtoShow.rentree.splice(id, 1);
+    this.FAService.FAupdate(this.formationtoShow)
+      .subscribe((response) => {
         this.FAService.RAgetAll().subscribe(data => {
           this.rentreeScolaire = data
         })
@@ -160,17 +185,25 @@ export class FormationAdmissionComponent implements OnInit {
   }
 
   onAddRentreeScolaire() {
-    if (this.formations == null) {
-      this.formations = []
-    }
-    this.formations.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
+  
+    
+    this.formationtoShow.rentree.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
 
   }
 
   onCreateRA() {
+  
+  this.FAService.FAupdate(this.formationtoShow).subscribe(data => {
+    console.log(data)
+  })
     this.FAService.RAcreate({ ...this.createFormRA.value }).subscribe(data => {
       console.log(data)
     })
+  }
+  rScolaire(formation:FormationAdmission){
+    this.showFormRentreeScolaire = true;
+    this.formationtoShow=formation;
+
   }
 
   createFormRA: FormGroup = new FormGroup({
@@ -198,6 +231,7 @@ export class FormationAdmissionComponent implements OnInit {
     deroulement: new FormControl(''),
     filiere: new FormControl(''),
     bac: new FormControl(''),
+    campus: new FormControl(''),
     code: new FormControl(''),
     annee: new FormControl(''),
     code_france_competence: new FormControl(''),

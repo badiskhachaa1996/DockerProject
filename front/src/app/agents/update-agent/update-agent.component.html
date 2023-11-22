@@ -68,7 +68,26 @@
             <p-dropdown [options]="serviceList" placeholder="Choisissez un service"
                 formControlName="service_id"></p-dropdown>
         </div>
+        <div class="field col-12 md:col-6">
+            <label For="phone">Rôle<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="role" [options]="roleList" placeholder="Choisissez un role"
+                (onSelect)="onSelectRole()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="service">Type<span style="color:red"> *</span></label>
+            <p-dropdown [options]="typeList" placeholder="Choisissez un type" formControlName="type"></p-dropdown>
+        </div>
+        <div class="field col-12" *ngIf="addForm.value.role=='Etudiant'">
+            <label For="service">Type supplémentaire<span style="color:red"> *</span></label>
+            <p-multiSelect [options]="typeList2" placeholder="Choisissez un type"
+                formControlName="type_supp"></p-multiSelect>
+        </div>
     </form>
+    <div class="field col-12" style="width: 100%;" *ngIf="addForm.value.type || addForm.value.type_supp.length!=0">
+        <label htmlFor="localisation">Site</label><br>
+        <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"
+            [style]="{'width':'100%'}" [(ngModel)]="SITE"></p-multiSelect>
+    </div>
     <div class="col-12 grid">
         <p-table #dtrole dataKey="_id" [value]="roles_list" class="col-12" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">

@@ -4,7 +4,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleService } from 'src/app/services/ecole.service';
 import * as html2pdf from 'html2pdf.js';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +22,7 @@ import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Annonce } from 'src/app/models/Annonce';
 import { Matching } from 'src/app/models/Matching';
 import { sub } from 'date-fns';
+import { Profile } from 'src/app/models/Profile';
 
 
 
@@ -31,6 +32,8 @@ import { sub } from 'date-fns';
   styleUrls: ['./ajout-cv.component.scss', '../../../../../assets/css/bootstrap.min.css']
 })
 export class AjoutCvComponent implements OnInit {
+  @Input() CV_USER_ID
+  @Output() PRINTING = new EventEmitter<any>();
   cv: CV
   ID = this.route.snapshot.paramMap.get('id');
   // partie dedié aux CV
@@ -38,6 +41,15 @@ export class AjoutCvComponent implements OnInit {
   showFormAddCV: boolean = true;
   formAddCV: FormGroup;
   showFormUpdateCV: boolean = false;
+  typeContratList = [
+    { label: 'Temps plein', value: 'Temps plein' },
+    { label: 'Temps partiel', value: 'Temps partiel' },
+    { label: 'Freelance', value: 'Freelance' },
+    { label: 'Saisonnière', value: 'Saisonnière' },
+    { label: 'Contrat', value: 'Contrat' },
+    { label: 'Alternance', value: 'Alternance' },
+    { label: 'Stage', value: 'Stage' }
+  ]
   languesList: any[] = [
     { label: 'Français' },
     { label: 'Anglais' },
@@ -81,7 +93,7 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
   ];
 
-  selectedMultiCpt: { label: string, value: string, profile: any }[] = [];
+  selectedMultiCpt: any[] = [];
   selectedMultiOutils: string[] = [];
   selectedMultilang: { label: string }[] = [];
   locations: any[] = [
@@ -162,10 +174,28 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
-  ecolesImage = [
-    { label: "Espic", value: 'espic' }
+  ecoleImage = 'espic'
+
+  pdfPreviewSchools = [
+    {
+      label: "Espic", value: 'espic'
+    },
+    {
+      label: "Studinfo", value: 'studinfo'
+    },
+    {
+      label: "ADG Education", value: 'adg'
+    },
+    {
+      label: "MedaSup", value: 'medasup'
+    },
+    {
+      label: "BTECH", value: 'btech'
+    },
+
   ]
-  ecoleImage = "espic"
+
+  pdfPreviewChosenSchool = "btech"
 
   etudes = [
     { label: 'Baccalauréat', value: 'Baccalauréat' },
@@ -175,9 +205,13 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Master 2ème année', value: 'Master 2ème année' },
   ]
 
+
+  userName = 'Nom et Prénom'
+
   @ViewChild('filter') filter: ElementRef;
-
-
+  isEtudiant = false
+  profilsList = []
+  profilSelected: Profile
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
@@ -185,46 +219,14 @@ export class AjoutCvComponent implements OnInit {
     private MatchingService: MatchingService, private AnnonceService: AnnonceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // decodage du token
-    this.token = jwt_decode(localStorage.getItem("token"));
-
-    // initialisation de la methode de recuperation des données
-    this.onGetAllClasses();
-
-    this.userService.getAllCommercialV2().subscribe(users => {
-      users.forEach(user => {
-        this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id })
-      })
-    })
-
-    if (this.ID) {
-      this.onGetUserById(this.ID)
-      this.cvService.getCvbyUserId(this.ID).subscribe(c => {
-        this.onLoadFile(c._id)
-        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
-
-        this.selectedMultiCpt = []
-        c.competences.forEach(val => {
-          this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
+    //Récupération de la liste des profiles
+    this.skillsService.getProfiles()
+      .then((response: Profile[]) => {
+        response.forEach((profile: Profile) => {
+          this.profilsList.push({ label: profile.libelle, value: profile });
         })
-        this.selectedMultilang = []
-        c.langues.forEach(val => {
-          this.selectedMultilang.push({ label: val })
-        })
-        this.experiences_pro = c.experiences_pro
-        this.education = c.education
-        this.experiences_associatif = c.experiences_associatif
-        this.informatique = c.informatique
-        setTimeout(() => {
-          if (c.user_id.type.startsWith('Externe'))
-            this.formAddCV.patchValue({ user_create_type: 'Externe' })
-          else
-            this.formAddCV.patchValue({ user_create_type: 'Interne' })
-        }, 1000);
-
       })
-    }
-
+      .catch((error) => { console.error(error); });
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
@@ -237,10 +239,64 @@ export class AjoutCvComponent implements OnInit {
       a_propos: [''],
       disponibilite: [''],
       user_create_type: ['Externe'],
-      winner_id: [''],
+      winner_id: [null],
       isPublic: [true],
-      niveau_etude: ['']
+      niveau_etude: [''],
+      profil: ['']
     });
+    this.reader.addEventListener("load", () => {
+      this.imgPDP = this.reader.result;
+    }, false);
+    // decodage du token
+    this.token = jwt_decode(localStorage.getItem("token"));
+    if (this.CV_USER_ID)
+      this.ID = this.CV_USER_ID
+    // initialisation de la methode de recuperation des données
+    this.onGetAllClasses();
+
+    this.userService.getAllCommercialV2().subscribe(users => {
+      users.forEach(user => {
+        this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id })
+      })
+    })
+    this.userService.getPopulate(this.token.id).subscribe(user => {
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
+      if (this.isEtudiant) {
+        this.formAddCV.patchValue({ user_id: this.token.id })
+      }
+    })
+    if (this.ID) {
+      this.onGetUserById(this.ID)
+      this.cvService.getCvbyUserId(this.ID).subscribe(c => {
+        this.onLoadFile(this.ID)
+        console.log(c)
+        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
+        this.pdfPreviewChosenSchool = c.ecole
+        this.selectedMultiCpt = []
+        c.competences.forEach(val => {
+          this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
+        })
+        if (c.competences.length == 0)
+          this.selectedMultiCpt = ['']
+        this.selectedMultilang = []
+        c.langues.forEach(val => {
+          this.selectedMultilang.push({ label: val })
+        })
+        this.experiences_pro = c.experiences_pro
+        this.education = c.education
+        this.experiences_associatif = c.experiences_associatif
+        this.informatique = c.informatique
+        setTimeout(() => {
+          if (c?.user_id?.type?.startsWith('Externe'))
+            this.formAddCV.patchValue({ user_create_type: 'Externe' })
+          else
+            this.formAddCV.patchValue({ user_create_type: 'Interne' })
+        }, 1000);
+
+      })
+    }
+
+
 
     this.EcoleService.getAll().subscribe(ecoles => {
       ecoles.forEach(ecole => {
@@ -288,7 +344,20 @@ export class AjoutCvComponent implements OnInit {
   onGetUserById(id) {
     if (id) {
       this.userService.getPopulate(id).subscribe(user => {
-        return this.user = user
+        this.user = user
+        this.userName = `${user.firstname} ${user.lastname}`
+      })
+      this.userService.getProfilePicture(id).subscribe((data) => {
+        if (data.error) {
+          this.imgPDP = null
+        } else {
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([byteArray], { type: data.documentType })
+          if (blob) {
+            this.imgPDP = null
+            this.reader.readAsDataURL(blob);
+          }
+        }
       })
     }
   }
@@ -303,7 +372,7 @@ export class AjoutCvComponent implements OnInit {
         // remplissage de la dropdown des users pour ajouter le CV
         response.forEach((user: User) => {
           if (user.firstname && user.lastname && user.type) {
-            let username = `${user.firstname} ${user.lastname} | ${user.type}`;
+            let username = `${user.firstname} ${user.lastname}`;
             if (user.type == 'Externe' || user.type == 'Externe-InProgress')
               this.dropdownUserExterne.push({ label: username, value: user._id });
             else
@@ -326,7 +395,7 @@ export class AjoutCvComponent implements OnInit {
 
 
   //Traitement des formArray
-  pdfSrc = ""
+  pdfSrc: any = ""
   // upload du cv brute
   onUpload(event: any) {
     if (event.target.files.length > 0) {
@@ -335,20 +404,36 @@ export class AjoutCvComponent implements OnInit {
       reader.onload = () => {
         this.pdfSrc = reader.result as string;
       }
-      console.log(event.target.files[0])
+      let formData = new FormData();
+      let id = this.ID
+      if (!id)
+        id = this.formAddCV.value.user_id
+      formData.append('id', id);
+      formData.append('file', this.uploadedFiles);
+      this.cvService.postCVBrute(formData)
+        .then(() => {
+          this.messageService.add({ severity: 'Ajout du CV PDF avec succès' })
+        })
+        .catch((error) => {
+          console.error(error)
+        });
       reader.readAsDataURL(event.target.files[0])
     }
   }
 
   onLoadFile(cv_id) {
     this.cvService.downloadCV(cv_id).then(r => {
+      console.log(r)
+      const byteArray = new Uint8Array(atob(r.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: r.extension });
+      /*var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);*/
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        this.pdfSrc = new Uint8Array(fileReader.result as ArrayBuffer);
+      };
+      fileReader.readAsArrayBuffer(blob);
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.pdfSrc = reader.result as string;
-      }
-      //console.log(r, new Blob([r.file], { type: r.extension }), new File(new Blob([r.file], { type: r.extension }), "test.pdf"))
-      reader.readAsDataURL(new Blob([r.file], { type: r.extension }))
     })
   }
 
@@ -373,7 +458,6 @@ export class AjoutCvComponent implements OnInit {
     cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
 
-    console.log(this.formAddCV)
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
@@ -391,17 +475,17 @@ export class AjoutCvComponent implements OnInit {
     formValue.langues?.forEach(langue => {
       cv.langues.push(langue.label);
     });
-
+    cv.profil = this.formAddCV.value.profil._id
 
     //cv.video_lien = formValue.video_lien;
-
+    cv.ecole = this.pdfPreviewChosenSchool
     // si un cv brute à été ajouté
     if (this.uploadedFiles) {
       cv.filename = this.uploadedFiles.name;
       let formData = new FormData();
       formData.append('id', cv.user_id);
       formData.append('file', this.uploadedFiles);
-
+      cv.source = 'Interne'
       //ajout du cv
       this.cvService.postCv(cv)
         .then((response: CV) => {
@@ -413,7 +497,8 @@ export class AjoutCvComponent implements OnInit {
 
             })
             .catch((error) => {
-              this.formAddCV.reset();
+              if (!this.isEtudiant)
+                this.formAddCV.reset();
               this.showFormAddCV = false;
               this.onGetAllClasses();
             });
@@ -425,10 +510,13 @@ export class AjoutCvComponent implements OnInit {
 
     } else {
       //ajout du cv
+
+      cv.source = 'Interne'
       this.cvService.postCv(cv)
         .then((response: CV) => {
           this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
-          this.formAddCV.reset();
+          if (!this.isEtudiant)
+            this.formAddCV.reset();
           this.showFormAddCV = false;
           this.onGetAllClasses();
         })
@@ -488,6 +576,8 @@ export class AjoutCvComponent implements OnInit {
     //this.selectedMultiOutils = cv_outils
     this.selectedMultilang = cv_langues
     this.selectedMultiCpt = cv_competences
+    if (cv_competences.length == 0)
+      this.selectedMultiCpt = ['']
     this.formUpdateCV.patchValue({
       competences: cv_competences,
       //outils: cv_outils,
@@ -515,7 +605,7 @@ export class AjoutCvComponent implements OnInit {
       cv.langues.push(langue.label);
     });
     //cv.video_lien = formValue.video_lien
-
+    cv.source = 'Interne'
     this.cvService.putCv(cv).then(data => {
       this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
       this.messageService.add({ severity: 'success', summary: "Mis à jour du CV avec succès" })
@@ -620,8 +710,13 @@ export class AjoutCvComponent implements OnInit {
   })
 
   onAssignOffer() {
+    let type_matching = "Commercial"
+    if (this.token.type == "CEO Entreprise" || this.token.type == "Entreprise" || this.token.type == "Tuteur")
+      type_matching = "Entreprise"
+    else if (this.token.type == "Initial" || this.token.type == "Alternant" || this.token.type == null)
+      type_matching = "Candidat"
     this.selectedCVs.forEach((cv: any) => {
-      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En Cours", "Etudiant", new Date())).subscribe(match => {
+      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En cours", type_matching, new Date(), null, null, null, true)).subscribe(match => {
         this.messageService.add({ severity: 'success', summary: "Création du Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname })
       }, error => {
         this.messageService.add({ severity: 'error', summary: "Error sur le Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname, detail: error.toString() })
@@ -649,7 +744,6 @@ export class AjoutCvComponent implements OnInit {
     this.onGetUserById(val)
     this.cvService.getCvbyUserId(val).subscribe(c => {
       this.cv = c
-      console.log(c)
     })
   }
 
@@ -692,6 +786,36 @@ export class AjoutCvComponent implements OnInit {
     html2pdf().from(element).toPdf().get('pdf').then(function (pdf) {
       window.open(pdf.output('bloburl'), '_blank');
     });*/
-    window.print()
+    this.PRINTING.emit(true)
+    setTimeout(() => {
+      window.print()
+    }, 5)
+
   }
+  imgPDP;
+  reader: FileReader = new FileReader();
+  FileUploadPDP(event) {
+    console.log(this.formAddCV.value.user_id, event)
+    if (event.target.files.length > 0 && this.formAddCV.value.user_id) {
+      const formData = new FormData();
+      formData.append('id', this.formAddCV.value.user_id)
+      formData.append('file', event.target.files[0])
+
+      this.userService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de votre photo de profil avec succès' });
+        this.imgPDP = null
+        this.reader.readAsDataURL(event.target.files[0]);
+        let avoidError: any = document.getElementById('selectedFile')
+        avoidError.value = ""
+        //this.UserService.reloadImage(this.token.id)
+      }, (error) => {
+        console.error(error)
+      })
+    }
+  }
+
+
+  // labelByValue(array, val) {
+  //   for i)
+  // }
 }

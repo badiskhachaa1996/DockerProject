@@ -37,6 +37,17 @@ export class DailyCheckService {
       });
     });
   }
+  getAllUsersDateChecks(date): Promise<DailyCheck[]> {
+    const url = `${this.endPoint}/get-all-users-date-checks`;
+
+    return new Promise<DailyCheck[]>((resolve, reject) => {
+      this.httpClient.post<DailyCheck[]>(url, { date }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la liste des présences exécuté') }
+      });
+    });
+  }
 
   // recuperation de la liste des présences d'un utilisateur
   getUserChecks(userId: string): Promise<DailyCheck[]> {
@@ -121,6 +132,18 @@ export class DailyCheckService {
 
     return new Promise<DailyCheck>((resolve, reject) => {
       this.httpClient.patch<DailyCheck>(url, dailyCheck, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de mise à jour du check in exécuté') }
+      });
+    });
+  }
+
+  deleteCheck(id: string): Promise<DailyCheck> {
+    const url = `${this.endPoint}/delete/${id}`;
+
+    return new Promise<DailyCheck>((resolve, reject) => {
+      this.httpClient.delete<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de mise à jour du check in exécuté') }

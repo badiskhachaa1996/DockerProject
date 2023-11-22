@@ -33,6 +33,6 @@ export class CalendrierEtudiantService {
 
   getAllByUSERID(user_id) {
     let registreUrl = this.apiUrl + "getAllByUSERID/" + user_id;
-    return this.httpClient.get<DisponibiliteEtudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<DisponibiliteEtudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 }

@@ -3,7 +3,7 @@
     <!-- partie affectation de l'agent-->
     <div class="col-12 card" *ngIf="showAffectation">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showAffectation = null"
-           aria-hidden="true"> </i>
+            aria-hidden="true"> </i>
         <h3 *ngIf="showAffectation?.user_id" class="text-center" style="font-weight: bold;"> Affecter le lead : {{
             showAffectation?.user_id?.firstname }} {{
             showAffectation?.user_id?.lastname | uppercase }}
@@ -12,16 +12,16 @@
             <div class="field col-6">
                 <label>Affecté à un membre:</label>
                 <p-dropdown [options]="agentSourcingList" formControlName="agent_sourcing_id"
-                            placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                    placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
             </div>
             <div class="field col-6">
                 <label>Affecté à une équipe:</label>
                 <p-dropdown [options]="equipeSourcingList" placeholder="Choisissez une équipe"
-                            formControlName="team_sourcing_id" filter="true"></p-dropdown>
+                    formControlName="team_sourcing_id" filter="true"></p-dropdown>
             </div>
             <div class="field col-12">
                 <label>Affecté le:</label>
-                <p>{{affectationForm.value.date_sourcing | date:'mediumDate'}}</p>
+                <p>{{affectationForm.value.date_sourcing | date:'dd MMMM yy'}}</p>
             </div>
             <div class="col-12">
                 <button pButton label="Changer l'affectation" (click)="saveAffectation()"></button>
@@ -30,23 +30,23 @@
     </div>
     <div class="col-12 card" *ngIf="showAffectationList">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-           (click)="showAffectationList = null" aria-hidden="true"> </i>
+            (click)="showAffectationList = null" aria-hidden="true"> </i>
         <h3 class="text-center" style="font-weight: bold;"> Affecter les leads
         </h3>
         <form class="p-fluid p-formgrid grid" [formGroup]="affectationFormList">
             <div class="field col-6">
                 <label>Affecté à un membre:</label>
                 <p-dropdown [options]="agentSourcingList" formControlName="agent_sourcing_id"
-                            placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                    placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
             </div>
             <div class="field col-6">
                 <label>Affecté à une équipe:</label>
                 <p-dropdown [options]="equipeSourcingList" placeholder="Choisissez une équipe"
-                            formControlName="team_sourcing_id" filter="true"></p-dropdown>
+                    formControlName="team_sourcing_id" filter="true"></p-dropdown>
             </div>
             <div class="field col-12">
                 <label>Affecté le:</label>
-                <p>{{affectationFormList.value.date_sourcing | date:'mediumDate'}}</p>
+                <p>{{affectationFormList.value.date_sourcing | date:'dd MMMM yy'}}</p>
             </div>
             <div class="col-6">
                 <button pButton label="Changer l'affectation" (click)="saveAffectationList()"></button>
@@ -74,19 +74,19 @@
                     <div class="field col-6">
                         <label>Email de l'envoyeur: </label>
                         <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
-                                    [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
                         <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
                         <p-chips formControlName="cc" separator=","
-                                 placeholder="email1@email.com,email2.email.com"></p-chips>
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
-                               style="display: none;" pInputFile/>
+                            style="display: none;" pInputFile />
                         <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
-                                 dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>
@@ -106,17 +106,17 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
                                     </td>
                                     <td
-                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
                                         {{rowData?.path}}
                                     </td>
                                     <td
-                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
                                         Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
@@ -128,11 +128,11 @@
                                     </td>
                                     <td>
                                         <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
-                                           class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
-                                           (click)="onUploadPJ(rowData)">
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
                                         </i>
                                         <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
-                                           class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
                                         </i>
                                     </td>
                                 </tr>
@@ -140,11 +140,11 @@
                         </p-table>
                         <div class="mt-2 col-12" style="text-align: center;">
                             <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
-                                    autoWidth="false" [style]="{'width':'80%'}"></button>
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
                     <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email"
-                            (click)="onEmailPerso()"></button>
+                        (click)="onEmailPerso()"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Depuis un mail type">
@@ -152,8 +152,8 @@
                     <div class="field col-12">
                         <label>Email Type: </label>
                         <p-dropdown placeholder="Choisissez un mail type" filter="true"
-                                    (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
-                                    [style]="{'width':'100%'}">
+                            (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
+                            [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
@@ -170,19 +170,19 @@
                     <div class="field col-6">
                         <label>Email de l'envoyeur: </label>
                         <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
-                                    [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
                         <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
                         <p-chips formControlName="cc" separator=","
-                                 placeholder="email1@email.com,email2.email.com"></p-chips>
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
-                               style="display: none;" pInputFile/>
+                            style="display: none;" pInputFile />
                         <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
-                                 dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>
@@ -202,17 +202,17 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
                                     </td>
                                     <td
-                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
                                         {{rowData?.path}}
                                     </td>
                                     <td
-                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
                                         Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
@@ -224,11 +224,11 @@
                                     </td>
                                     <td>
                                         <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
-                                           class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
-                                           (click)="onUploadPJ(rowData)">
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
                                         </i>
                                         <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
-                                           class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
                                         </i>
                                     </td>
                                 </tr>
@@ -236,40 +236,34 @@
                         </p-table>
                         <div class="mt-2 col-12" style="text-align: center;">
                             <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
-                                    autoWidth="false" [style]="{'width':'80%'}"></button>
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
                     <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
-                            (click)="onEmailPerso()"></button>
+                        (click)="onEmailPerso()"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Historique des emails">
                 <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="historiqueEmails"
-                         [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12"
-                         responsiveLayout="scroll"
-                         styleClass="p-datatable-gridlines">
+                    [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 3rem" scope="col"></th>
                             <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                                Date de l'envoie
-                                <p-sortIcon field="date_creation"></p-sortIcon>
+                                Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
                             </th>
                             <th pSortableColumn="objet" scope="col" style="text-align: center;">
-                                Objet du mail
-                                <p-sortIcon field="objet"></p-sortIcon>
+                                Objet du mail <p-sortIcon field="objet"></p-sortIcon>
                             </th>
                             <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
-                                Envoyé par
-                                <p-sortIcon field="send_by.firstname"></p-sortIcon>
+                                Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
                             </th>
                             <th pSortableColumn="cc" scope="col" style="text-align: center;">
-                                Envoyé à
-                                <p-sortIcon field="cc"></p-sortIcon>
+                                Envoyé à <p-sortIcon field="cc"></p-sortIcon>
                             </th>
                             <th pSortableColumn="send_from" scope="col" style="text-align: center;">
-                                Envoyé depuis
-                                <p-sortIcon field="send_from"></p-sortIcon>
+                                Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
                             </th>
                         </tr>
                     </ng-template>
@@ -278,11 +272,11 @@
 
                             <td>
                                 <button type="button" pButton pRipple [pRowToggler]="email"
-                                        class="p-button-text p-button-rounded p-button-plain"
-                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                    class="p-button-text p-button-rounded p-button-plain"
+                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
                             <td>
-                                {{email.date_creation|date:'mediumDate'}}
+                                {{email.date_creation|date:'dd MMMM yy'}}
                             </td>
                             <td>
                                 {{email.objet}}
@@ -310,7 +304,7 @@
     <!-- partie Modification des informations du prospect -->
     <div class="col-12 card" *ngIf="showDetails">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDetails = null"
-           aria-hidden="true"> </i>
+            aria-hidden="true"> </i>
         <h3 *ngIf="showDetails?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
             showDetails?.user_id?.firstname }} {{
             showDetails?.user_id?.lastname | uppercase }}
@@ -325,31 +319,31 @@
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="lastname">Nom</label>
-                            <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom"/>
+                            <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom" />
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="firstname">Prénom</label>
                             <input pInputText id="firstname" formControlName="firstname" type="text"
-                                   placeholder="Prénom"/>
+                                placeholder="Prénom" />
                         </div>
                         <div class="field col-12 md:col-4">
                             <label For="indicatif">Indicatif</label>
                             <input pInputText id="indicatif" formControlName="indicatif" type="text"
-                                   placeholder="0033"/>
+                                placeholder="0033" />
                         </div>
                         <div class="field col-12 md:col-8">
                             <label For="phone">Téléphone</label>
-                            <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887"/>
+                            <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
                             <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
-                                   placeholder="s.hue@gmail.com"/>
+                                placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
                             <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
-                                        optionLabel="value"></p-dropdown>
+                                optionLabel="value"></p-dropdown>
                         </div>
                         <!--<div class="field col-12 md:col-5">
                                 <label For="ville">Ville</label>
@@ -373,7 +367,7 @@
                             </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'dd MMMM yy'}}</p>
                         </div>
                     </div>
                 </form>
@@ -384,18 +378,18 @@
                         <div class="field md:col-6 col-12">
                             <label For="formation">Formation</label>
                             <p-dropdown [options]="dropdownFormation" placeholder="Choisissez une formation"
-                                        formControlName="formation"></p-dropdown>
+                                formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_1">Campus</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                        formControlName="campus_choix_1"></p-dropdown>
+                                formControlName="campus_choix_1"></p-dropdown>
 
                         </div>
                         <div class="field col-12">
                             <label For="formation">Ecole</label>
                             <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
-                                        formControlName="type_form"></p-dropdown>
+                                formControlName="type_form"></p-dropdown>
                         </div>
                     </div>
                 </form>
@@ -403,14 +397,14 @@
             <p-tabPanel header="Dossier d'admission">
                 <div class="col-12">
                     <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile
-                           style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile/>
+                        style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
                     <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
-                           #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile/>
+                        #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
                 </div>
                 <div class="card grid">
                     <h3 class="col-12">Documents Requis</h3>
                     <p-table [value]="showDetails.documents_dossier" #dt1 dataKey="_id" class="col-12"
-                             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Document</th>
@@ -426,9 +420,9 @@
                                 </td>
                                 <td>
                                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                       (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
                                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                       class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
+                                        class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
@@ -436,13 +430,12 @@
                     <h3 class="col-8">Autre documents</h3>
                     <div class="col-4">
                         <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
-                                  label="Ajouter un autre document"></p-button>
+                            label="Ajouter un autre document"></p-button>
                     </div>
                     <p-table [value]="showDetails.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single"
-                             [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
-                             [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
-                             [filterDelay]="0"
-                             styleClass="p-datatable-gridlines">
+                        [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                        [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                        styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Document</th>
@@ -467,11 +460,11 @@
                                 </td>
                                 <td>
                                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                       *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                       (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                       aria-hidden="true"></i>
+                                        *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                        aria-hidden="true"></i>
                                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                       class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
+                                        class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
@@ -484,7 +477,7 @@
                         <div class="field md:col-6 col-12">
                             <label For="formation">Décision orientation</label>
                             <p-multiSelect [options]="orientationList"
-                                           formControlName="decision_orientation"></p-multiSelect>
+                                formControlName="decision_orientation"></p-multiSelect>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                         <div class="field md:col-6 col-12">
@@ -495,7 +488,7 @@
                         <div class="field col-12">
                             <label For="formation">Phase de candidature</label>
                             <p-dropdown [options]="dropdownPhase" placeholder="Choisissez une phase"
-                                        formControlName="phase_candidature"></p-dropdown>
+                                formControlName="phase_candidature"></p-dropdown>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                     </div>
@@ -521,7 +514,7 @@
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="formation">Finance</label>
-                            <input pInputText formControlName="finance"/>
+                            <input pInputText formControlName="finance" />
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                         <div class="field col-12">
@@ -537,22 +530,18 @@
                     <p-table #dt2 dataKey="ID" [value]="payementList" class="col-12" styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th pSortableColumn="ID" style="text-align: center;"> ID
-                                    <p-sortIcon field="ID">
+                                <th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
                                     </p-sortIcon>
                                 </th>
-                                <th pSortableColumn="type" style="text-align: center;"> Type de Paiement
-                                    <p-sortIcon
-                                            field="type">
+                                <th pSortableColumn="type" style="text-align: center;"> Type de Paiement <p-sortIcon
+                                        field="type">
                                     </p-sortIcon>
                                 </th>
-                                <th pSortableColumn="montant" style="text-align: center;"> Montant
-                                    <p-sortIcon
-                                            field="montant"></p-sortIcon>
+                                <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                        field="montant"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="date" style="text-align: center;"> Date du réglement
-                                    <p-sortIcon
-                                            field="date"></p-sortIcon>
+                                <th pSortableColumn="date" style="text-align: center;"> Date du réglement <p-sortIcon
+                                        field="date"></p-sortIcon>
                                 </th>
 
                                 <th>
@@ -571,8 +560,8 @@
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
-                                                        placeholder="Choisissez la méthode de paiement"
-                                                        (onChange)="changeMontant(ri,$event,'type')"></p-dropdown>
+                                                placeholder="Choisissez la méthode de paiement"
+                                                (onChange)="changeMontant(ri,$event,'type')"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{paiement.type}}
@@ -583,7 +572,7 @@
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="number" (change)="changeMontant(ri,$event,'montant')"
-                                                   [(value)]="paiement.montant" placeholder="20" value="0" pInputText>
+                                                [(value)]="paiement.montant" placeholder="20" value="0" pInputText>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{paiement.montant}}€
@@ -594,16 +583,16 @@
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="date" pInputText (change)="changeMontant(ri,$event,'date')"
-                                                   [(value)]="paiement.date">
+                                                [(value)]="paiement.date">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{paiement.date | date:mediumDate}}
+                                            {{paiement.date | date:'dd MMMM yy'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
                                 <td>
                                     <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
-                                       aria-hidden="true" (click)="deletePayement(ri)"> </i>
+                                        aria-hidden="true" (click)="deletePayement(ri)"> </i>
                                 </td>
                             </tr>
                         </ng-template>
@@ -620,7 +609,7 @@
                     </div>
                     <div class="col-12">
                         <p-table styleClass="p-datatable-gridlines" [value]="showDetails.documents_administrative"
-                                 responsiveLayout="scroll" responsiveLayout="scroll">
+                            responsiveLayout="scroll" responsiveLayout="scroll">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>
@@ -655,7 +644,7 @@
                                         {{rowData.type}}
                                     </td>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td>
                                         {{rowData.nom}}
@@ -689,20 +678,19 @@
     </div>
     <div class="col-12 card" *ngIf="leadHistorique">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="leadHistorique = null"
-           aria-hidden="true"> </i>
+            aria-hidden="true"> </i>
         <h3 *ngIf="leadHistorique?.user_id" class="text-center" style="font-weight: bold;"> Historique de : {{
             leadHistorique?.user_id?.firstname }} {{
             leadHistorique?.user_id?.lastname | uppercase }}
         </h3>
         <p-table #dthisto dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="listHistorique"
-                 [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12"
-                 [globalFilterFields]="['detail']"
-                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" [globalFilterFields]="['detail']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <span class="p-input-icon-left mb-2">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                           placeholder="Recherche" class="w-full"/>
+                        placeholder="Recherche" class="w-full" />
                 </span>
             </ng-template>
             <ng-template pTemplate="header">
@@ -715,7 +703,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-histo>
                 <tr>
-                    <td>{{histo.date_creation | date:"mediumDate"}}</td>
+                    <td>{{histo.date_creation | date:"dd MMMM yy"}}</td>
                     <td>{{histo.detail}}</td>
                     <td>{{getDiff(histo)}}</td>
                     <td>{{histo?.user_id?.lastname|uppercase}} {{histo?.user_id?.firstname|titlecase}}</td>
@@ -727,7 +715,7 @@
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-               (click)="showUploadFile = null" aria-hidden="true"> </i>
+                (click)="showUploadFile = null" aria-hidden="true"> </i>
             <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
                 showUploadFile.user_id?.firstname }} {{
                 showUploadFile.user_id?.lastname | uppercase }}
@@ -740,8 +728,8 @@
                 </div>
                 <div class="field col-12">
                     <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
-                                  customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-                                  maxFileSize="10000000" [auto]="true" #fileInput>
+                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
                     </p-fileUpload>
                 </div>
 
@@ -756,178 +744,214 @@
                 <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
                     <h5 class="col-8">Liste des leads Sourcing de {{ecole.titre}}</h5>
                     <div class="col-4" style="text-align: right;"
-                         *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
+                        *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                         <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel(ecole.url_form)"
-                                type="button" style="margin-left: 2px;"
-                                *ngIf="token && token.role!='user' && token.role!='Agent'">
+                            type="button" style="margin-left: 2px;"
+                            *ngIf="token && token.role!='user' && token.role!='Agent'">
                         </button>
                     </div>
+                    <div class="field col-12 grid ">
+                        <div *ngIf="Fpays" class="field col-4">
+                        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                        [ngModel]="Fpays"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                </div>
+                <div *ngIf="Fcampus" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                    [ngModel]="Fcampus"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fformation" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                    [ngModel]="Fformation"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
+                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="Frythme" class="field col-4">
+                    <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                    [ngModel]="Frythme"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Flangue" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                    [ngModel]="Flangue"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fstatus" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
+                    [ngModel]="Fstatus"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Fsource" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                    [ngModel]="Fsource"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="Forientation" class="field col-4">
 
+                    <p-dropdown filter="true" placeholder="Decision Orientation"
+                        [options]="dropdownDecisionOrientation"
+                        [ngModel]="Forientation"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                </div>
+                    <div *ngIf="FDadmission" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Decision Admission"
+                        [options]="dropdownDecisionAdmission"
+                        [ngModel]="FDadmission"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FSPayement" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
+                    [ngModel]="FSPayement"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FSvisa" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                    [ngModel]="FSvisa"[style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    <div *ngIf="FphaseC" class="field col-4">
+                    <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                    [ngModel]="FphaseC" [style]="{'width':'17em'}"
+                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+                        emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown></div>
+                    
+                    </div>
+                    <div class="field col-12 grid ">
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                            (click)="displayFilter=true"></button>
+                    </div>
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                            (click)="clearFilter()"></button>
+                    </div>
+                    <div class="md:col-2 col-12" style="text-align: center;">
+                        <input pInputText type="text" style="width: 100%;"
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterCampus" filter="true" [ngModel]="Fcampus"
+                            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterFormation" filter="true"
+                            [ngModel]="Fformation"
+                            (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                    </div>
+                    <div class="md:col-2 col-12">
+                        <p-dropdown [style]="{'width':'11em'}" [options]="filterRentreeScolaire" filter="true"
+                            (onChange)="dt1.filter($event.value,'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
+                            filterPlaceholder="Rôle"></p-dropdown>
+                    </div>
+                </div>
 
                     <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
-                             [(selection)]="selectedLeads" [value]="prospects[ecole.url_form]" [paginator]="true"
-                             [pageLinks]="5" selectionMode="single" class="col-12" (onRowSelect)="onRowSelect($event)"
-                             (onHeaderCheckboxToggle)="onRowSelect($event)"
-                             [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
-                             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                        [(selection)]="selectedLeads" [value]="prospects[ecole.url_form]" [paginator]="true"
+                        [pageLinks]="5" selectionMode="single" class="col-12" (onRowSelect)="onRowSelect($event)"
+                        (onHeaderCheckboxToggle)="onRowSelect($event)"
+                        [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
+                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-                        <ng-template pTemplate="caption">
-                            <span class="p-input-icon-left mb-2">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter
-                                       (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                                       placeholder="Recherche"
-                                       class="w-full"/>
-                            </span>
-                            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
-                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
-                                        [style]="{'margin':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
-                                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
-                                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
-                                        (onChange)="dt1.filter($event.value, 'formation','equals')"
-                                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
-                                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals')"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
-                                        (onChange)="dt1.filter($event.value, 'programme','equals')"
-                                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
-                                        (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
-                                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
-                                        (onChange)="dt1.filter($event.value, 'source','startsWith')"
-                                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                                        [style]="{'margin-left':'5px','margin-right':'5px'}">
-                            </p-dropdown>
-
-
-                            <p-dropdown filter="true" placeholder="Decision Orientation"
-                                        [options]="dropdownDecisionOrientation"
-                                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
-                                        emptyFilterMessage="Pas de decision trouvé"
-                                        filterPlaceholder="Decision Orientation"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Decision Admission"
-                                        [options]="dropdownDecisionAdmission"
-                                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
-                                        emptyFilterMessage="Pas de decision trouvé"
-                                        filterPlaceholder="Decision Admission"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
-                                        (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
-                                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
-                                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
-                                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
-                                        emptyFilterMessage="Pas de phase trouvé"
-                                        filterPlaceholder="Phase de la candidature"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-
-                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
-                                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
-                                        [style]="{'margin-right':'5px'}">
-                            </p-dropdown>
-
-                        </ng-template>
+                        
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
                                 <th style="width: 3rem" scope="col"></th>
-                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                                    Date Inscr.
-                                    <p-sortIcon field="date_creation"></p-sortIcon>
-                                </th>
+
                                 <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                                    ID Lead
-                                    <p-sortIcon field="customid"></p-sortIcon>
+                                    ID Lead <p-sortIcon field="customid"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="source" scope="col" style="text-align: center;">
-                                    Source
-                                    <p-sortIcon field="source"></p-sortIcon>
-                                </th>
+                                <!--<th pSortableColumn="source" scope="col" style="text-align: center;">
+                                    Source <p-sortIcon field="source"></p-sortIcon>
+                                </th>-->
                                 <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                                    Prénom & Nom
-                                    <p-sortIcon field="firstname"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
-                                    Pays de résidence
-                                    <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
-                                    Campus
-                                    <p-sortIcon field="campus_choix_1"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="formation" scope="col" style="text-align: center;">
-                                    Formation
-                                    <p-sortIcon field="formation"></p-sortIcon>
+                                    Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
-                                    Rentrée scolaire
-                                    <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                                    Choix académique<p-sortIcon field="rentree_scolaire"></p-sortIcon>
                                 </th>
+                                <!--<th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
+                                    Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
+                                </th>-->
+                                <!--<th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
+                                    Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="formation" scope="col" style="text-align: center;">
+                                    Formation <p-sortIcon field="formation"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                                    Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                                </th>-->
                                 <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
-                                    Initial/Alternant
-                                    <p-sortIcon field="rythme_formation"></p-sortIcon>
+                                    Rythme <p-sortIcon field="rythme_formation"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="programme" scope="col" style="text-align: center;">
-                                    Anglais/Français
-                                    <p-sortIcon field="programme"></p-sortIcon>
+                                <!--<th pSortableColumn="programme" scope="col" style="text-align: center;">
+                                    Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
+                                </th>-->
+                                <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
+                                    Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
-                                    Etat de dossier
-                                    <p-sortIcon field="statut_dossier"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
-                                    Decision Orientation
-                                    <p-sortIcon field="decision_orientation"></p-sortIcon>
-                                </th>
+
                                 <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
-                                    Decision Admission
-                                    <p-sortIcon field="decision_admission"></p-sortIcon>
-                                </th>
-                                <th scope="col" style="text-align: center;">
-                                    Dossier Lead
+                                    Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
-                                    Paiement
-                                    <p-sortIcon field="statut_payement"></p-sortIcon>
+                                    Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
                                 </th>
+                                <!--<th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
+                                    Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
+                                    Decision Orientation<p-sortIcon field="decision_orientation"></p-sortIcon>
+                                </th>
+                                
+                                <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
+                                    Dossier Lead <p-sortIcon field="haveDoc"></p-sortIcon>
+                                </th>
+                                
                                 <th pSortableColumn="avancement_visa" scope="col" style="text-align: center;">
-                                    Visa
-                                    <p-sortIcon field="avancement_visa"></p-sortIcon>
+                                    Visa <p-sortIcon field="avancement_visa"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
-                                    Phase de Candidature
-                                    <p-sortIcon field="phase_candidature"></p-sortIcon>
-                                </th>
+                                
                                 <th scope="col" style="text-align: center;">
                                     Etat de Candidature
+                                </th>-->
+                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                    Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                                 </th>
                                 <th *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'" pSortableColumn="action"
                                     scope="col" style="text-align: center;">
@@ -941,43 +965,48 @@
                                     <p-tableCheckbox [value]="prospect"></p-tableCheckbox>
                                 </td>
                                 <td>
-                                    <button type="button" pButton pRipple
-                                            class="p-button-text p-button-rounded p-button-plain"
-                                            [icon]="selectedProspect==prospect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                            (click)="expand(prospect)"></button>
+                                    <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                        class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'"></button>
+                                    
                                 </td>
 
-                                <td>
-                                    {{prospect.date_creation | date :'mediumDate' }}
-                                </td>
+
                                 <td>
                                     {{ prospect.customid }}
                                 </td>
 
-                                <td>
+                                <!--<td>
                                     {{ prospect.source }}
-                                </td>
+                                </td>-->
 
                                 <td>
                                     {{ prospect?.user_id?.firstname | titlecase }}
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
-                                <td>
+                                <!--<td>
                                     {{ prospect?.user_id?.pays_adresse }}
-                                </td>
+                                </td>-->
                                 <td>
-                                    {{ prospect.campus_choix_1 }}
-                                </td>
-                                <td>
-                                    {{ prospect.formation | titlecase }}
-                                </td>
-                                <td>
-                                    {{ prospect.rentree_scolaire }}
+                                    {{ prospect.campus_choix_1 }},
+
+                                    {{ prospect.formation | titlecase }},
+
+                                    {{ prospect.rentree_scolaire }},
                                 </td>
                                 <td>
                                     {{ prospect.rythme_formation }}
                                 </td>
                                 <td>
+                                    {{ prospect.phase_candidature }}
+                                </td>
+                                <td>
+                                    {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de
+                                    traitement" }}
+                                </td>
+                                <!--<td>
                                     {{ prospect.programme }}
                                 </td>
                                 <td>
@@ -987,59 +1016,238 @@
                                 <td>
                                     {{ prospect.decision_orientation }}
                                 </td>
-                                <td>
-                                    {{ (prospect.decision_admission) ? prospect.decision_admission : "En attente detraitement" }}
-                                </td>
+
                                 <td *ngIf="prospect.haveDoc">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
                                 <td *ngIf="!prospect.haveDoc">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'Non'"></p-tag>
-                                </td>
+                                </td>-->
                                 <td *ngIf="prospect.statut_payement">
                                     {{ prospect.statut_payement }}
                                 </td>
                                 <td *ngIf="!prospect.statut_payement">
                                     Non
                                 </td>
-                                <td *ngIf="prospect.avancement_visa">
+                                <!--<td *ngIf="prospect.avancement_visa">
                                     Oui
                                 </td>
                                 <td *ngIf="!prospect.avancement_visa">
                                     Non
                                 </td>
-                                <td>
-                                    {{ prospect.phase_candidature }}
-                                </td>
+
                                 <td *ngIf="candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
                                 <td *ngIf="!candidatureDic[prospect._id]">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'En attente'"></p-tag>
+                                </td>-->
+                                <td>
+                                    {{prospect.date_creation | date :'dd MMMM yy' }}
                                 </td>
                                 <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                                     <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"
-                                       (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
+                                        (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
                                     <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit mr-2"
-                                       (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
+                                        (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
                                     <i pTooltip="Supprimer le Lead" tooltipPosition="bottom" class="pi pi-trash mr-2"
-                                       aria-hidden="true" (click)="delete(prospect)"> </i>
+                                        aria-hidden="true" (click)="delete(prospect)"> </i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-envelope mr-2"
-                                       aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
+                                        aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
                                     <i pTooltip="Voir l'historique des modifications" tooltipPosition="bottom"
-                                       class="pi pi-align-center mr-2" (click)="initHistorique(prospect);scrollToTop()"
-                                       aria-hidden="true"></i>
+                                        class="pi pi-align-center mr-2" (click)="initHistorique(prospect);scrollToTop()"
+                                        aria-hidden="true"></i>
                                     <i pTooltip="Voir la candidature" tooltipPosition="bottom"
-                                       class="pi pi-briefcase mr-2" (click)="goToCandidature(prospect._id)"
-                                       aria-hidden="true"></i>
+                                        class="pi pi-briefcase mr-2" (click)="goToCandidature(prospect._id)"
+                                        aria-hidden="true"></i>
                                     <i pTooltip="Suivre l'avancement" tooltipPosition="bottom"
-                                       class="pi pi-chart-line mr-2" (click)="onShowTimeline(prospect)"
-                                       aria-hidden="true"></i>
+                                        class="pi pi-chart-line mr-2" (click)="onShowTimeline(prospect)"
+                                        aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-selectedProspect>
+                            <tr>
+                                <td colspan="11">
+                                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                                        Informations Lead
+                                    </h5>
+                                    <p-table responsiveLayout="scroll">
+                                        <ng-template pTemplate="header">
+                            <tr>
+
+                                <th>Civilité</th>
+                                <th>Prénom et Nom </th>
+                                <th>Date de naissance</th>
+                                <th>Nationalité</th>
+                                <th>Pays de résidence</th>
+                                <th>Adresse électronique</th>
+                                <th>Numéro de téléphone</th>
+
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{selectedProspect?.user_id?.civilite }}</td>
+                                <td>
+                                    {{ selectedProspect.user_id.firstname | titlecase }}
+                                    {{ selectedProspect.user_id.lastname | uppercase }}
+                                </td>
+                                <td>
+                                    {{
+                                    selectedProspect.date_naissance| date:'dd MMMM yy'
+                                    }}
+                                </td>
+                                <td>{{ selectedProspect?.user_id?.nationnalite }}</td>
+                                <td>
+                                    {{ selectedProspect?.user_id?.pays_adresse }}
+                                </td>
+
+                                <td>{{ selectedProspect?.user_id?.email_perso }}</td>
+                                <td>{{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}
+                                </td>
+                            </tr>
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Compétences et expériences
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Niveau en Français</th>
+                                <th>Niveau en Anglais</th>
+                                <th>Expériences professionnelles</th>
+                                <th>Description de l’expérience</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.languages_fr }}</td>
+                                <td>
+                                    {{ selectedProspect?.languages_en }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect.professional_experience?'Oui':'Non' }}
+                                </td>
+                                <td>{{ selectedProspect?.professional_experience }}
+                                </td>
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Choix académique
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Rentrée scolaire</th>
+                                <th>Campus</th>
+                                <th>Formation</th>
+                                <th>Programme</th>
+                                <th>Rythme</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.rentree_scolaire }}</td>
+                                <td>
+                                    {{ selectedProspect?.campus_choix_1}}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.formation }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.programme }}
+                                </td>
+                                <td>
+                                    {{ selectedProspect?.rythme_formation }}
+                                </td>
+
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Source
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Source</th>
+                                <th>Commercial </th>
+                                <th>Adresse mail</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.source }}</td>
+                                <td>
+                                    {{infoCommercial?.user_id?.lastname}}
+                                    {{infoCommercial?.user_id?.firstname}}
+                                </td>
+                                <td>
+                                    {{infoCommercial?.user_id?.email_perso}}
+
+                                </td>
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                        Démarches 
+                    </h5>
+                    <p-table responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date d’inscription</th>
+                                <th>Date de contact </th>
+                                <th>Phase de la candidature</th>
+                                <th>Montant payé</th>
+                                <th>Visa</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ selectedProspect?.date_creation | date :'dd MMMM yy'}}</td>
+                                <td>
+                                    {{ selectedProspect?.contact_date| date :'dd MMMM yy' }}
+                                </td>
+                                <td>{{ selectedProspect?.phase_candidature }}
+                                </td>
+                                <td>{{ selectedProspect?.statut_payement }}
+                                </td>
+
+
+                                <td>{{ selectedProspect?.avancement_visa }}</td>
+
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+
+
+                    </td>
+                    </tr>
+                    </ng-template>
 
                     </p-table>
                 </div>
@@ -1052,54 +1260,76 @@
         <p-skeleton width="100%" height="100vh"></p-skeleton>
     </div>
     <!-- Expand SideBar -->
-    <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-        <div *ngIf="selectedProspect">
-            <h5>Informations Lead</h5>
-            <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
-            <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
-                selectedProspect?.user_id?.lastname |
-                    uppercase }}</p>
-            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
-            <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
-            <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
-            <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
-            <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}
-            </p>
-            <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
-            <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
+    <p-sidebar [(visible)]="displayFilter" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
+        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                                [style]="{'margin':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
+                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                                (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
+                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                                (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                                (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
+                                (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                                (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                                [style]="{'margin-left':'5px','margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
-            <h5>Compétences et expériences</h5>
-            <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
-            <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
-            <p>Expériences professionnelles: {{ selectedProspect.professional_experience ? 'Oui' : 'Non' }}</p>
-            <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
 
-            <h5>Choix académique</h5>
-            <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
-            <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
-            <!--<p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
-            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>-->
-            <p>Formation : {{ selectedProspect?.formation }}</p>
-            <p>Programme : {{ selectedProspect?.programme }}</p>
-            <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
+                            <p-dropdown filter="true" placeholder="Decision Orientation"
+                                [options]="dropdownDecisionOrientation"
+                                (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Decision Admission"
+                                [options]="dropdownDecisionAdmission"
+                                (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
+                                (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+                                emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                                (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
+                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
-            <h5>Source </h5>
-            <p>Source du lead: {{ selectedProspect?.source }}</p>
-            <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
-                {{infoCommercial?.user_id?.firstname}}
-            </p>
-            <p>
-                Nom du Partenaire : {{infoPartenaire?.nom}}
-            </p>
-            <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
-
-            <h5>Démarches </h5>
-            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
-            <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
-            <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
-            <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
-            <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
-        </div>
+                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                                (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals');FRentree=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown><br><br><br>
 
     </p-sidebar>
 </div>

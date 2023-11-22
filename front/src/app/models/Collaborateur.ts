@@ -7,7 +7,7 @@ export class Collaborateur {
         public matricule?: string,
         public date_demarrage?: string,
         public date_naissance?: Date,
-        public localisation?: string,
+        public localisation?: string[],
         public intitule_poste?: string,
         public contrat_type?: string,
         public statut?: string,
@@ -28,6 +28,7 @@ export class Collaborateur {
             _id?: string,
             title?: string,
             description?: string,
-        }[]
+        }[],
+        public plafond?: number
     ) { }
 }

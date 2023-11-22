@@ -50,14 +50,9 @@
                     {{event}}
                 </ng-template>
             </p-timeline>
-
             <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
                 <div *ngIf="ActiveIndex==0">
-                    <div style="text-align: center;">
-                        <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
-                            minutes.</small><br>
-                    </div>
-                    <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="card" [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
                                 <div class="field col-12 md:col-2">
@@ -158,7 +153,7 @@
                                             chiffres sont acceptés</span>
                                     </div>
                                 </div>
-                                <div class="field col-12 md:col-3">
+                                <!--<div class="field col-12 md:col-3">
                                     <label For="indicatif">Indicatif WhatsApp</label>
                                     <input pInputText id="indicatif" type="text" placeholder="+33"
                                         formControlName="indicatif_whatsapp" />
@@ -215,7 +210,7 @@
                                             *ngIf="numero_telegram.errors?.pattern">*
                                             Seul les chiffres sont acceptés</span>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div>
@@ -224,7 +219,7 @@
                             pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid || emailExist || numero_telegram.invalid || indicatif_telegram.invalid "
                                 (click)="nextPage();verifEmailInBD()"></button>
                         </div>
-                    </p-fieldset>
+                    </div>
                 </div>
 
                 <div *ngIf="ActiveIndex==1">
@@ -232,7 +227,7 @@
                         <small>Pour mieux évaluer votre candidature, nous avons besoins de connaître votre parcours
                             académique.</small><br>
                     </div>
-                    <p-fieldset legend="Parcours académique et professionnel"
+                    <div class="card"
                         [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
@@ -289,55 +284,51 @@
                                 [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid ||languages_en.invalid || languages_fr.invalid  || is_professional_experience.invalid"
                                 style="float: right;" (click)="nextPage()"></button>
                         </div>
-                    </p-fieldset>
+                    </div>
                 </div>
 
                 <div *ngIf="ActiveIndex==2">
-                    <div style="text-align: center;">
-                        <small>Maintenant, l'étape la plus importante, que voulez-vous étudiez avec nous ?</small><br>
-                    </div>
-                    <p-fieldset class="col-12" legend="Choix du pays de destination, du programme et de la formation"
+                    <div class="col-12 card"
                         [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
 
                                 <div class="field col-12">
-                                    <label>Choix du campus <span style="color: red;"> * </span></label>
+                                    <label>Campus <span style="color: red;"> * </span></label>
                                     <p-dropdown [options]="campusDropdown" optionLabel="value"
                                         formControlName="campusChoix1">
                                     </p-dropdown>
                                 </div>
 
-                                <div class="field col-12 md:col-12">
+                                <!--<div class="field col-12 md:col-12">
                                     <label>Choix de la rentrée <span style="color: red;"> * </span></label>
                                     <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
                                         placeholder="Choisissez la rentrée scolaire">
                                     </p-dropdown>
-                                </div>
+                                </div>-->
 
-                                <div class="field col-12 md:col-4">
-                                    <label>Choix du programme <span style="color: red;"> * </span></label>
+                                <!--<div class="field col-12 md:col-4">
+                                    <label>Programme <span style="color: red;"> * </span></label>
                                     <p-dropdown [options]="programList" optionLabel="value" formControlName="programme">
                                     </p-dropdown>
-                                </div>
+                                </div>-->
                                 <div class="field col-12 md:col-8"
                                     *ngIf="RegisterForm.value.programme.value=='Programme Anglais'">
-                                    <label For="formation">Choix de la formation <span style="color: red;">
+                                    <label For="formation">Formation <span style="color: red;">
                                             *</span></label>
                                     <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                                         autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                                         formControlName="formation"></p-dropdown>
                                 </div>
-                                <div class="field col-12 md:col-8"
-                                    *ngIf="RegisterForm.value.programme.value=='Programme Français'">
-                                    <label For="programme_fr">Choix de la formation <span style="color: red;"> *
+                                <div class="field col-12 md:col-6">
+                                    <label For="programme_fr">Formation <span style="color: red;"> *
                                         </span></label>
                                     <p-dropdown [options]="programeFrDropdown"
-                                        placeholder="Choissiez un programme français" autoWidth="false" [filter]="true"
+                                        placeholder="Choissiez une formation français" autoWidth="false" [filter]="true"
                                         [group]="true" [style]="{'width':'100%'}"
                                         formControlName="formation"></p-dropdown>
                                 </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
                                     <label For="rythme">Rythme de la formation <span style="color: red;"> *
                                         </span></label>
                                     <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
@@ -379,10 +370,10 @@
                                 (click)="previousPage()">
                             </button>
                             <button pButton type="button" label="Suivant"
-                                [disabled]="programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
+                                [disabled]="formation.invalid || rythme_formation.invalid"
                                 style="float: right;" (click)="nextPage()"></button>
                         </div>
-                    </p-fieldset>
+                    </div>
                 </div>
 
                 <div *ngIf="ActiveIndex==3">
@@ -485,13 +476,10 @@
                 </div>
 
                 <div *ngIf="ActiveIndex==4">
-                    <div style="text-align: center;">
-                        <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
-                    </div>
-                    <p-fieldset legend="Autre" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="card" [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div class="grid" style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
-                                <div class="field col-12 md:col-12">
+                                <!--<div class="field col-12 md:col-12">
                                     <label For="agence">Faites vous vos procédures d'admission avec une agence
                                         intermédiaire
                                         ? <span style="color: red;"> *
@@ -499,7 +487,7 @@
                                     <p-selectButton formControlName="agence"
                                         [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
                                     </p-selectButton>
-                                </div>
+                                </div>-->
                                 <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                     <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
                                             style="color: red;"> * </span></label>
@@ -547,10 +535,10 @@
                             <button pButton type="button" label="Précedent" style="float: left;"
                                 (click)="previousPage()"></button>
                             <button pButton type="button" label="Suivant"
-                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
+                                [disabled]="donneePerso.value==false"
                                 type="submit" style="float: right;"></button>
                         </div>
-                    </p-fieldset>
+                    </div>
                 </div>
 
                 <div *ngIf="ActiveIndex==5">

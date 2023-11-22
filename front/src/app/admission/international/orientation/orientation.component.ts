@@ -31,7 +31,8 @@ import { Notification } from 'src/app/models/notification';
   styleUrls: ['./orientation.component.scss']
 })
 export class OrientationComponent implements OnInit {
-
+  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+   
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
   DocTypes: any[] = [
@@ -544,7 +545,7 @@ export class OrientationComponent implements OnInit {
     if (!this.payementList) { this.payementList = [] }
     this.lengthPaiement = prospect?.payement?.length
     this.scrollToTop()
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
         this.partenaireOwned = commercial.partenaire_id

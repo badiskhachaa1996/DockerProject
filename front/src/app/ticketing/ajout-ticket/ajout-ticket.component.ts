@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
@@ -14,28 +14,63 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { Task} from 'src/app/models/project/Task';
+import { Task } from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
   styleUrls: ['./ajout-ticket.component.scss']
 })
 export class AjoutTicketComponent implements OnInit {
-
+  @Output() ADD = new EventEmitter()
   receivedTask: Task;
-  itsTask:boolean = false;
-  taskID:string;
+  itsTask: boolean = false;
+  taskID: string;
+  demandeDropdown: any;
+  showDemandeDropdown: boolean = false;
+  showCampusDropdown: boolean = false;
+  showFiliereDropdown: boolean = false;
+  filiereDropdown: any[] = [];
+  campusDropdown: any[] = [
+    { value: 'Paris', label: "Paris" },
+    { value: "Marne", label: "Marne" },
+    { value: 'Montpelier', label: "Montpelier" },
+  ];
+  YpareoDropdown: any[] = [
+    { label: 'Accés', value: "Acces" },
+    { label: "Ajout d'un étudiant", value: "Ajout" },
+    { label: 'Autre', value: "Autre" },
+  ];
+  MicrosoftDropdown: any[] = [
+    { label: 'Réinitialisation du mot de passe', value: "Réinitialisation du mot de passe" },
+    { label: 'Création du compte Microsoft 365', value: "Création du compte Microsoft 365" },
+    { label: "Problème d'accès à Microsoft 365", value: "Problème d'accès à Microsoft 365" },
+    { label: "Problème TEAMS", value: "Problème TEAMS" },
+    { label: "Problème Outlook", value: "Problème Outlook" },
+    { label: "Problème OneDrive", value: "Problème OneDrive" },
+  ];
+  SiteinternetDropdown: any[] = [
+    { label: 'Contenu', value: "Contenu" },
+    { label: "Formulaire d'admission", value: "Formulaire d'admission" },
+    { label: 'Beug', value: "Beug" },
+    { label: 'Autre', value: "Autre" },
+  ];
 
+  serviceSelected: Service
   service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
     description: new FormControl('',),
     resum: new FormControl('', Validators.required),
-    priorite: new FormControl("false" ),
-    module : new FormControl('', ),
-    type : new FormControl('',),
+    priorite: new FormControl("false"),
+    module: new FormControl('',),
+    type: new FormControl('',),
+    demande: new FormControl('',),
+    campus: new FormControl('',),
+    filiere: new FormControl('',),
   })
   token;
   sujetDropdown: any[] = [
@@ -49,6 +84,7 @@ export class AjoutTicketComponent implements OnInit {
   ];
 
   moduleDropdown: any[] = [
+    { label: 'Espace Personnel', value: "Espace Personnel" },
     { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
     { label: 'Module Pédagogie', value: "Module Pédagogie" },
     { label: 'Module Administration', value: "Module Administration" },
@@ -65,7 +101,9 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
     { label: 'Module Ticketing', value: "Module Ticketing" },
-    { label: 'Espace Personnel', value: "Espace Personnel" },
+    { label: 'Module CRA', value: "Module CRA" },
+    { label: 'Accès/Connexion', value: "Accès/Connexion" },
+    { label: 'Autre', value: "Autre" },
   ];
   IMS_Type_Dropdown: any[] = [
     { label: 'Création', value: "Création" },
@@ -73,14 +111,13 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Correction', value: "Correction" },
   ]
   showModuleDropdown: boolean = false;
-  showTypeDropdown:boolean = false;
+  showTypeDropdown: boolean = false;
   onAdd() {
     let documents = []
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    console.log(this.TicketForm.value.priorite)
-    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id,priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
+    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id, priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
       let d = new Date()
@@ -97,19 +134,21 @@ export class AjoutTicketComponent implements OnInit {
           this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
       });
-    if(this.itsTask){
-      
-      this.projectService.getTask(this.taskID).then((datat) => {
-        datat.ticketId=data.doc._id;
-        this.projectService.putTask(datat)  ; 
-        
-        }) 
+      this.ADD.emit(data)
+      if (this.itsTask) {
+
+        this.projectService.getTask(this.taskID).then((datat) => {
+          datat.ticketId = data.doc._id;
+          this.projectService.putTask(datat);
+
+        })
         this.router.navigate(['/gestion-project'])
-    }
+      }
     })
   }
   onSelectService() {
     this.sujetDropdown = []
+    this.serviceSelected = this.serviceDicTrue[this.TicketForm.value.service_id]
     this.SujetService.getAllByServiceID(this.TicketForm.value.service_id).subscribe(data => {
       data.forEach(val => {
         this.sujetDropdown.push({ label: val.label, value: val._id })
@@ -121,11 +160,13 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute,
-    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService,private projectService: ProjectService) { }
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute, private diplomeService: DiplomeService,
+    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService) { }
   serviceDic = {}
+  serviceDicTrue = {}
   sujetDic = {}
   USER: User
+
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
@@ -143,6 +184,7 @@ export class AjoutTicketComponent implements OnInit {
           if (val.label.startsWith('IGS')) {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
+            this.serviceDicTrue[val._id] = val
           }
         })
       })
@@ -158,49 +200,94 @@ export class AjoutTicketComponent implements OnInit {
         })
       })
     } else {
-        this.ServService.getAll().subscribe(data => {
+      this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-            this.serviceDropdown.push({ label: val.label, value: val._id })
-            this.serviceDic[val._id] = val.label
+          this.serviceDropdown.push({ label: val.label, value: val._id })
+          this.serviceDic[val._id] = val.label
+          this.serviceDicTrue[val._id] = val
         })
       })
     }
     this.route.queryParams.subscribe(params => {
       if (params && params.data) {
         this.receivedTask = JSON.parse(params.data);
-        this.itsTask=true;
-        this.taskID = this.receivedTask._id; 
+        this.itsTask = true;
+        this.taskID = this.receivedTask._id;
         this.TicketForm.patchValue({
-          description: this.receivedTask.libelle + ' :'+ this.receivedTask.description_task,
+          description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
           priorite: this.receivedTask.priorite,
-          
+
         })
-         
+
       }
     });
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.filiereDropdown.push({ value: d._id, label: d.titre })
+      })
+    })
 
   }
 
   onSubjectChange() {
-    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
-    
-    if (this.serviceDic[this.TicketForm.get('service_id').value]==="Support informatique"){
-      this.showTypeDropdown=true;
-    }else {
-      this.showTypeDropdown=false;
-    }
-    if(selectedSubject === "IMS") {
-        this.showModuleDropdown = true;
-        this.showTypeDropdown=true;
-        this.TicketForm.get('module').setValidators([Validators.required]);
-        this.TicketForm.get('module').updateValueAndValidity();
+    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value];
+
+    if (this.serviceDic[this.TicketForm.get('service_id').value] === "Support informatique") {
+      this.showTypeDropdown = false;
+      this.showCampusDropdown = false;
+
+    } else if (this.serviceDic[this.TicketForm.get('service_id').value] === "Pédagogie") {
+      console.log("*****************************")
+      this.showTypeDropdown = false;
+      this.showCampusDropdown = true;
+      this.showModuleDropdown = false;
+      this.showFiliereDropdown = true;
+    } else if (this.serviceDic[this.TicketForm.get('service_id').value] === "Administration") {
+      this.showTypeDropdown = false;
+      this.showCampusDropdown = true;
+      this.showModuleDropdown = false;
+      this.showFiliereDropdown = false;
     }
     else {
-        
-        this.TicketForm.get('module').clearValidators();
-        this.TicketForm.get('module').updateValueAndValidity();
-        this.TicketForm.get('module').reset();
-        this.showModuleDropdown = false;
+      this.showFiliereDropdown = false;
+      this.showTypeDropdown = false;
+      this.showCampusDropdown = false
+      this.showModuleDropdown = false;
+    }
+    if (selectedSubject === "IMS") {
+      this.showTypeDropdown = true;
+      this.showFiliereDropdown = false;
+      this.showModuleDropdown = true;
+      this.showCampusDropdown = false;
+      this.showDemandeDropdown = false;
+      this.showTypeDropdown = true;
+      this.TicketForm.get('module').setValidators([Validators.required]);
+      this.TicketForm.get('module').updateValueAndValidity();
+    } else if (selectedSubject === "Ypareo") {
+      this.showFiliereDropdown = false;
+      this.showDemandeDropdown = true;
+      this.showModuleDropdown = false;
+      this.showCampusDropdown = false;
+      this.demandeDropdown = this.YpareoDropdown;
+    } else if (selectedSubject === "Microsoft") {
+      this.showFiliereDropdown = false;
+      this.showDemandeDropdown = true;
+      this.showModuleDropdown = false;
+      this.showCampusDropdown = false;
+      this.demandeDropdown = this.MicrosoftDropdown
+    } else if (selectedSubject === "Site internet") {
+      this.showFiliereDropdown = false;
+      this.showDemandeDropdown = true;
+      this.showModuleDropdown = false;
+      this.showCampusDropdown = false;
+      this.demandeDropdown = this.SiteinternetDropdown;
+    }
+    else {
+
+      this.TicketForm.get('module').clearValidators();
+      this.TicketForm.get('module').updateValueAndValidity();
+      this.TicketForm.get('module').reset();
+      this.showModuleDropdown = false;
     }
   };
 

@@ -28,14 +28,19 @@ import { VenteService } from 'src/app/services/vente.service';
 import { Notification } from 'src/app/models/notification';
 import { SocketService } from 'src/app/services/socket.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
   styleUrls: ['./sourcing.component.scss']
 })
 export class SourcingComponent implements OnInit {
+  @ViewChild('dt1') dt1: Table | undefined;
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
+  displayFilter: boolean = false;
+  Fpays:String;Fcampus:String;Fformation:String;Frythme:String;Flangue:String;Fstatus:String;Fsource:String;Forientation:String;
+  FDadmission:String;FSPayement:String;FSvisa:String;FphaseC:String;FRentree;
   DocTypes: any[] = [
     { value: null, label: "Choisissez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -338,7 +343,8 @@ export class SourcingComponent implements OnInit {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.CandidatureLeadService.getAll().subscribe(candidatures => {
       candidatures.forEach(v => {
-        this.candidatureDic[v.lead_id._id] = v
+        if (v.lead_id)
+          this.candidatureDic[v.lead_id._id] = v
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -387,7 +393,7 @@ export class SourcingComponent implements OnInit {
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
       })*/
-      this.admissionService.getAllSourcing().subscribe(dataP => {
+      this.admissionService.get100Sourcing().subscribe(dataP => {
         this.ecoleList = []
         data.forEach(d => {
           this.dropdownEcole.push({ label: d.titre, value: d.url_form })
@@ -398,6 +404,24 @@ export class SourcingComponent implements OnInit {
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!dataP[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
+      }, error => { console.error(error) }, () => {
+        this.admissionService.getAllSourcing().subscribe(newSourcing => {
+          console.log(newSourcing,new Date())
+          newSourcing.forEach(val => {
+            if (this.prospects[val.type_form])
+              this.prospects[val.type_form].push(val)
+            else
+              this.prospects[val.type_form] = [val]
+          })
+          this.ecoleList = []
+          data.forEach(d => {
+            this.ecoleList.push(d)
+          })
+          Object.keys(this.dicEcole).forEach((val, idx) => {
+            if (!this.prospects[val])
+              this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+          })
         })
       })
 
@@ -596,16 +620,19 @@ export class SourcingComponent implements OnInit {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
-        this.ListDocuments = data
-        this.ListPiped = []
-        data.forEach(doc => {
-          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
-          this.ListPiped.push(docname)
-        })
+        if (data) {
+          this.ListDocuments = data
+          this.ListPiped = []
+          data.forEach(doc => {
+            let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+            this.ListPiped.push(docname)
+          })
+        }
+
       },
       (error) => { console.error(error) }
     );
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
@@ -1197,6 +1224,12 @@ export class SourcingComponent implements OnInit {
     this.dataTimeline.push({ status: "Inscription définitive", date: p.date_inscription_def })
     this.showTimeline = true
     console.log(this.dataTimeline)
+  }
+
+  clearFilter(){
+    this.Fpays=null;this.Fcampus=null;this.Fformation=null;this.Frythme=null;this.Flangue=null;this.Fstatus=null;this.Fsource=null;this.Forientation=null;
+    this.FDadmission=null;this.FSPayement=null;this.FSvisa=null;this.FphaseC=null;this.FRentree=null;
+
   }
 
 }

@@ -23,17 +23,17 @@
 .old-cv {
   font-weight: bold;
   min-width: 21cm;
-  margin-right: -200px;
+  margin-right: -220px;
   height: 29.7cm;
   transform: scale(0.7);
   transform-origin: top left;
 }
 
 .new-cv {
-  min-width: 21cm;
-  height: 29.7cm;
+  min-width: 29.7cm;
+  height: 42cm;
   background-color: lightblue;
-  transform: scale(0.7);
+  transform: scale(0.5);
   transform-origin: top left;
 }
 
@@ -41,7 +41,8 @@
   border: 1px solid lightgray;
   padding: 20px;
   border-radius: 20px;
-  margin: 0 20px;
+  margin: 0;
+  margin-right: 10px;
   min-height: 100vh;
   flex-grow: 1;
   min-width: 500px;
@@ -51,8 +52,8 @@
 
 
 .page-container {
-  width: 210mm;
-  min-height: 297mm;
+  width: 297mm;
+  min-height: 420mm;
   display: flex;
   padding: 0mm;
   border: 1px #d3d3d3 solid;
@@ -60,28 +61,9 @@
   background: white;
 }
 
-.page-inner-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 31cm;
-  padding: 0;
-  width: 100%;
-}
 
 
-.header {
-  background: center center no-repeat;
-  background-size: cover;
-  height: 70mm;
-  padding: 10mm;
-  text-align: center;
-  font-size: 14px;
-  font-family: Calibri, 'Trebuchet MS', sans-serif;
-  font-weight: bolder;
-  display: flex;
-  align-items: center;
-}
+
 
 
 
@@ -188,66 +170,4 @@
 
 
 
-@page {
-  size: A4;
-  margin: 0;
-}
 
-@media print {
-
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: white;
-
-  }
-
-  .layout-sidebar {
-    display: none;
-  }
-
-  .layout-topbar {
-    display: none;
-  }
-
-
-  .main-page {
-    padding: 0;
-  }
-
-  .display-top {
-    width: 21cm;
-    min-height: 29.7cm;
-    margin: 0;
-  }
-
-  .old-cv,
-  .input-form-cv {
-    display: none;
-  }
-
-
-  .new-cv {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 21cm !important;
-    min-height: 29.7cm !important;
-    margin-top: 0 !important;
-    transform: scale(1) !important;
-    overflow: hidden;
-  }
-
-  .page-container {
-    padding: 0;
-    padding-bottom: 30px;
-    margin: 0;
-    max-height: 29.7cm !important;
-    width: 21cm !important;
-  }
-
-  .logo-image {
-    bottom: 30px;
-    right: 25px;
-  }
-}

@@ -1,0 +1,28 @@
+<p-table [value]="students" styleClass="p-datatable-gridlines" >
+    <ng-template pTemplate="caption"> <h3 class="title">Détails candidat</h3> </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Civilité</th>
+            <th >Date de naissance</th>
+            <th >Pays de résidence</th>
+            <th >Nationalité</th>
+            <th >Année scolaire</th>
+            <th >Formation</th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-student >
+        <tr>
+          <td>{{student?.civility}}</td>
+          <td>{{student?.date_naissance}}</td>
+          <td>{{student?.pays_residence}}</td>
+          <td>{{student?.nationality}}</td>
+          <td>
+            <span *ngIf="demande.training?.scholar_year">
+            {{ annesSchols[demande.training?.scholar_year] }}
+        </span></td>
+          <td>{{student?.formation}}</td>
+        
+        </tr>
+    </ng-template>
+</p-table>

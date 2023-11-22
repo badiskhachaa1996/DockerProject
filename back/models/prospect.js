@@ -60,14 +60,13 @@ const prospect_schema = new mongoose.Schema({
         required: false,
     },
     date_creation: {
-        type: Date,
-        default: Date.now
+        type: Date
     },
     type_form: { type: String, required: false },
     code_commercial: { type: String, required: false },
     statut_dossier: { type: String, default: "En attente de traitement" },
     date_traitement: { type: Date },
-    etat_dossier: { type: String, default: "En cours de traitement" },
+    etat_dossier: { type: String, default: "En attente" },
     tcf: { type: String },
     agent_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -118,7 +117,7 @@ const prospect_schema = new mongoose.Schema({
 
     etat_traitement: {
         type: String,
-        default: "Nouvelle"
+        default: "Etape 1"
     },
     nir: {
         type: String,
@@ -197,7 +196,7 @@ const prospect_schema = new mongoose.Schema({
     },
     phase_candidature: {
         type: String,
-        default: "En attente d'affectation"
+        default: "Non traité"
     },
     agent_sourcing_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -283,13 +282,15 @@ const prospect_schema = new mongoose.Schema({
         default: [
             { nom: "CV", path: null, date: null },
             { nom: "Lettre de Motivation", path: null, date: null },
-            { nom: "Passeport / Pièce d'identité", path: null, date: null },
-            { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
+            { nom: "Passeport - Pièce d'identité", path: null, date: null },
+            { nom: "Diplôme baccalauréat ou équivalent", path: null, date: null },
             { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
-            { nom: "Relevé de note baccaulauréat", path: null, date: null },
-            { nom: "Relevé de note des deux dernier années ( 1er année )", path: null, date: null },
-            { nom: "Relevé de note des deux dernier années ( 2ème année )", path: null, date: null },
-            { nom: "TCF", path: null, date: null }
+            { nom: "Relevé de note baccalauréat", path: null, date: null },
+            { nom: "Relevés de note depuis le baccalauréat", path: null, date: null },
+            { nom: "Test de niveau en Français - TCF (pour les étudiants des pays non francophones)", path: null, date: null },
+            { nom: 'Carte de séjour', path: null, date: null },
+            { nom: "Copie Visa", path: null, date: null },
+            { nom: "Carte vitale ou attestation provisoire", path: null, date: null },
         ]
     },
     documents_autre: {
@@ -315,6 +316,78 @@ const prospect_schema = new mongoose.Schema({
     date_inscription_def: {
         type: Date,
     },
+    lead_type: { type: String, default: 'Ancien' },
+    ville_adresse: {
+        type: String,
+        required: false
+    },
+    rue_adresse: {
+        type: String,
+        required: false
+    },
+    numero_adresse: {
+        type: String,
+        required: false
+    },
+    evaluation: [{ name: String, Score: String, duree: Number, date_envoi: Date, date_passage: Date }],
+    entretien: {
+        date_entretien: {
+            type: Date,
+            default: Date.now
+        }, Duree: {
+            type: Number,
+            default: 0
+        }, niveau: {
+            type: String,
+            default: "0"
+        },
+        parcours: {
+            type: String,
+            default: "0"
+        },
+        choix: {
+            type: String,
+            default: " "
+        }
+    },
+    decision: {
+        decision_admission: {
+            type: String,
+            default: "En attente de traitement" // Valeur par défaut pour decision_admission
+        },
+        expliquation: {
+            type: String,
+            default: "En attente de traitement" // Valeur par défaut pour expliquation
+        },
+        date_decision: {
+            type: Date,
+            default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
+        }
+    },
+    teams: {
+        type: String,
+        default: "NON"
+    },
+    Ypareo: {
+        type: String,
+        default: "NON"
+    },
+    groupe: {
+        type: String,
+        default: "NON"
+    },
+    payement_programme: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    },
+    ecole: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ecoleadmissions",
+    },
+    sos_lastname: { type: String },
+    sos_firstname: { type: String },
+    sos_email: { type: String },
+    sos_phone: { type: String },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

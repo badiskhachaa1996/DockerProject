@@ -6,7 +6,6 @@ const app = express();
 const jwt = require("jsonwebtoken");
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
-
 app.use(bodyParser.json({ limit: "20mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
 let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
@@ -30,6 +29,7 @@ if (process.argv[2]) {
       "https://ims.adgeducation.com",
       "https://ims.intedgroup.com",
       "https://t.dev.estya.com",
+      "https://wio.fr/"
     ];
 }
 app.use(cors({ origin: origin }));
@@ -44,6 +44,10 @@ const options = {
   },
   allowEIO3: true,
 };
+//finding the demande by the docs id
+// function findDemandeByDocId (documentId){
+//   return Remboursement.findById(documentId).exec();
+// }
 const io = require("socket.io")(httpServer, options);
 console.log('URL Connection MONGODB:' + dblog)
 mongoose
@@ -140,6 +144,7 @@ const venteController = require('./controllers/venteCommissionController')
 const factureCommissionController = require('./controllers/factureCommissionController')
 const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
 const teamsIntController = require('./controllers/teamsIntController')
+const teamsRHController = require('./controllers/teamsRHController')
 const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const dailyCheckController = require('./controllers/dailyCheckController')
@@ -152,7 +157,10 @@ const gestionProduitsCrmController = require('./controllers/gestionProduitsCrmCo
 
 
 const { User } = require("./models/user");
-
+const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
+// const documentsController = require('./controllers/documentsController');
+const { Remboursement } = require("./models/Remboursement");
+const {evaluation } = require("./controllers/evaluationController");
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
   if (token && token["prospectFromDb"]) {
@@ -235,18 +243,31 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
       req.originalUrl === '/soc/cv/get-cvs-public' ||
+      req.originalUrl === '/soc/cv/upload-cv' ||
+      req.originalUrl === '/soc/cv/post-cv' ||
       req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
       req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
+      req.originalUrl.startsWith('/soc/extSkillsnet/create') ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl.startsWith("/soc/cv/get-picture-by-user/") ||
+      req.originalUrl.startsWith("/soc/cv/download-cv/") ||
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
+      req.originalUrl.startsWith('/soc/disponbiliteEtudiant/getAllByUSERID') ||
       req.originalUrl.startsWith("/soc/fIM") ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID') ||
       req.originalUrl.startsWith('/soc/docGenInt/download') ||
       req.originalUrl === '/soc/meetingTeams/create' ||
-      req.originalUrl.startsWith('/soc/genDoc/get-doc')
+      req.originalUrl.startsWith('/soc/genDoc/get-doc') ||
+      req.originalUrl === '/soc/annonce/post-annonce' ||
+      req.originalUrl === '/soc/matching/create' ||
+      req.originalUrl === "/soc/entreprise/createEntrepriseRepresentant" ||
+      req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
+      req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
+      req.originalUrl === '/soc/ticket/getAllPopulate' ||
+      req.originalUrl==='/soc/demanderemboursement/newremb' ||
+      req.originalUrl == '/soc/LeadCRM/create'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
@@ -375,22 +396,14 @@ app.use('/soc/stage', stageController)
 app.use('/soc/vente', venteController)
 app.use('/soc/factureCommission', factureCommissionController)
 
-app.use("/soc/progressionPeda", progressionPedaController);
-app.use("/soc/qs", QSController);
-app.use("/soc/project", projectController);
-app.use("/soc/links", linksController);
-app.use("/soc/projet", projetController);
-app.use("/soc/team", teamController);
-app.use("/soc/matching", MatchingController);
-app.use("/soc/stage", stageController);
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
+app.use('/soc/teamsRH', teamsRHController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
 app.use('/soc/rh', rhControlleur);
 app.use('/soc/sujet-booking', bookingController);
-
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
@@ -408,11 +421,14 @@ app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 app.use('/soc/pointage', require('./controllers/pointageController'))
 app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
+// app.use('/soc/demanderemboursement',rembouresementController)
+app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
+// app.use('/soc/docremb',require('./controllers/documentsController'));
 
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
-
+app.use('/soc/evaluation',require('./controllers/evaluationController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)

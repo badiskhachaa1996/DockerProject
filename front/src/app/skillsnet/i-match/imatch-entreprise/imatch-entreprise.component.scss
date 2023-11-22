@@ -55,3 +55,260 @@
     }
     
   }
+
+  
+  .header-top {
+    box-shadow: inset 0px 30px 0px 0px #F2F2F2;
+    padding: 30px 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.header-top img {
+
+    width: 100%;
+    
+}
+
+.page-title {
+    margin-top: 50px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title h1 {
+    font-weight: 900;
+    color: #0A2E40;
+    font-size: 2.4em;
+}
+
+hr.imatch-main {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: auto;
+    margin-left: auto;
+    border: 0;
+    width: 130px;
+    border-top: 2px solid #F28627;
+}
+
+.btn-cv {
+    border-radius: 30px;
+    padding: 7px 60px;
+    text-align: center;
+    margin-left: 15px;
+    margin-right: 15px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-cv p, .btn-cv i {
+    margin: 0;
+}
+
+.btn-cv-1 {
+    /*color: #D95525;
+    background-color: white;
+    border: 1px solid #D95525;*/
+    color: #6b6b6b;
+    cursor: default;
+    background-color: white;
+    border: 1px solid #6b6b6b;
+}
+
+/*.btn-cv-1:hover {
+    color: white;
+    background-color: #D95525;
+    text-decoration: none;
+}*/
+
+
+.btn-cv-2 {
+    color: white !important;
+    background-color: #37BAD4;
+
+    cursor: pointer;
+}
+
+
+.btn-cv-2:hover {
+    color: white !important;
+    background-color: #159BB6;
+    text-decoration: none;
+}
+
+.btn-cv-3 {
+    color: white;
+    background-color: #1E526C;
+    border: 1px solid white;
+}
+
+.btn-cv-3:hover {
+    color: white;
+    background-color: #D95525;
+    border: none;
+    text-decoration: none;
+}
+
+
+
+@media screen and (max-width: 835px) {
+    .btn-cv {
+        width: 100%;
+    }
+
+    .margin-both {
+        margin: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .header-top-container {
+        flex-direction: column;
+    }
+}
+
+/* The Modal (background) */
+.offre-details-card {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+
+  }
+
+   /* Modal Content/Box */
+   .modal-content {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #fefefe;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 50px 100px;
+    border: 1px solid #888;
+    border-radius: 80px;
+    filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.178));
+    max-width: 700px;
+
+    .information {
+        color: #777777;
+        font-size: 14px;
+        margin-top: 30px;
+
+        a {
+            font-weight: 700;
+            color: #777777;
+        }
+        a:hover {
+            text-decoration: none;
+            color: #3d3d3d;
+        }
+    }
+
+    h4 {
+        font-weight: 700;
+        font-size: 14px;
+    }
+    p {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-weight: 900;
+        font-size: 24px;
+        text-transform: uppercase;
+        color: #1E526C;
+    }
+
+    h3 {
+        color: #37BAD4;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+  }
+  
+  /* The Close Button */
+   .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #aaa;
+    font-size: 45px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+  .img-modal {
+    width: 150px;
+    margin-bottom: 30px;
+  }
+
+
+  .btns-postuler {
+    padding-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .btn {
+        padding-left: 60px;
+        padding-right: 60px;
+        border-radius: 6px;
+    }
+
+    .btn-retour {
+        color: #1E526C;
+        border: 1px  solid #1E526C;
+    }
+    .btn-retour:hover {
+        background-color: #1E526C;
+        color: white;
+    }
+
+    .btn-envoyer {
+        background-color: #F28627;
+    }
+
+    .btn-postuler {
+        background-color: #37BAD4;
+        color: white;
+    }
+
+    .btn-postuler:hover {
+        background-color: #159BB6;
+    }
+}
+.pdf-viewer-here .page {
+    width: auto;
+  }
+
+
+
+  .upload-cv {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+
+
+  }
+
+input[type="file"] {
+    display: none;
+}

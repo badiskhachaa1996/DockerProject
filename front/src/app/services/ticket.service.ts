@@ -52,6 +52,14 @@ export class TicketService {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getPopulate(id: string) {
+    let registreUrl = this.apiUrl + "getPopulate/" + id;
+    return this.http.get<Ticket>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getByIdEtudiant(id: string) {
+    let registreUrl = this.apiUrl + "getByIdEtudiant/" + id;
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   //Avoir tous les tickets d'un User via son ID
   getAllByUser(id: string) {
     let registreUrl = this.apiUrl + "getAllbyUser/" + id;
@@ -171,6 +179,15 @@ export class TicketService {
     let registreUrl = this.apiUrl + "getAllNonAssigneV2";
     return this.http.post<Ticket[]>(registreUrl, { service_list }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllAssigneAdmin() {
+    let registreUrl = this.apiUrl + "getAllAssigneAdmin";
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllAssigneV2(service_list) {
+    let registreUrl = this.apiUrl + "getAllAssigneV2";
+    return this.http.post<Ticket[]>(registreUrl, { service_list }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   getAllRefuse() {
     let registreUrl = this.apiUrl + "getAllRefuse";
@@ -232,7 +249,7 @@ export class TicketService {
     return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  sendMailUpdateStatut(data: { createur_email, statut, id }) {
+  sendMailUpdateStatut(data: { createur_id, statut, id }) {
     let registreUrl = this.apiUrl + "sendMailUpdateStatut"
     return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

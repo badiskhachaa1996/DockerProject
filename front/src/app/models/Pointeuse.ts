@@ -6,6 +6,7 @@ export class Pointeuse {
         public localisation?: string,
         public pointageType?: string[],
         public modele?: string,
+        public emplacement?: string,
 
     ) { }
 

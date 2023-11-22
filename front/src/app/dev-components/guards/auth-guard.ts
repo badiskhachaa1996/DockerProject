@@ -99,7 +99,8 @@ export class AuthGuardService implements CanActivate {
                                 return true
                             }
                             else if (stateOfUser.name == "Profil incomplet") {
-                                this.router.navigate(['/completion-profil']);
+                                return true
+                                //this.router.navigate(['/completion-profil']);
                             } else if (stateOfUser.name == "JsonWebTokenError" || stateOfUser.name == "TokenExpiredError") {
                                 localStorage.setItem('errorToken', JSON.stringify(stateOfUser))
                                 localStorage.removeItem('token')
@@ -109,7 +110,8 @@ export class AuthGuardService implements CanActivate {
                                 this.router.navigate(['/login']);
                             }
                         }else{
-                            this.router.navigate(['/formulaire-externe']);
+                            return true
+                            //this.router.navigate(['/formulaire-externe']);
                         }
 
                     }),

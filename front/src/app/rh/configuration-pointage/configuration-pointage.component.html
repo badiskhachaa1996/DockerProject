@@ -1,13 +1,13 @@
 <div class="grid col-12">
     <p-toast></p-toast>
     <div class="card grid col-12">
-        <h5 class="col-12" style="text-align: center;">Liste des pointages</h5>
+        <h5 class="col-12" style="text-align: center;">Activité de la journée</h5>
         <div class="col-12">
             <h3 *ngIf="date_dernier_maj!=dateAjr">
-                Dernier Mis à jour : {{date_dernier_maj | date : "short"}}
+                <strong>Dernière mise à jour</strong> : {{date_dernier_maj | date : "shortTime"}}
             </h3>
             <h3>
-                Date : {{ dateAjr | date : "mediumDate"}}
+                <strong>Date :</strong> {{ dateAjr | date : "dd MMMM yy"}}
             </h3>
         </div>
         <p-tabView class="col-12 " style="max-width: 100%;">
@@ -28,7 +28,7 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th pSortableColumn="date" scope="col" style="text-align: center;">
-                                Time <p-sortIcon field="date"></p-sortIcon>
+                                Heure <p-sortIcon field="date"></p-sortIcon>
                             </th>
                             <th pSortableColumn="uid" scope="col" style="text-align: center;">
                                 UID <p-sortIcon field="uid"></p-sortIcon>
@@ -37,7 +37,7 @@
                                 Collaborateur <p-sortIcon field="user_id"></p-sortIcon>
                             </th>
                             <th pSortableColumn="type" scope="col" style="text-align: center;">
-                                Type de Pointage disponible <p-sortIcon field="type"></p-sortIcon>
+                                Type <p-sortIcon field="type"></p-sortIcon>
                             </th>
                         </tr>
                     </ng-template>

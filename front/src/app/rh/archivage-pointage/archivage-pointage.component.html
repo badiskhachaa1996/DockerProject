@@ -1,7 +1,7 @@
 <div class="grid col-12">
     <p-toast></p-toast>
     <div class="card grid col-12">
-        <h5 class="col-12" style="text-align: center;">Archivage des pointages</h5>
+        <h5 class="col-12" style="text-align: center;">Historique pointage</h5>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="datePointageArray"
             class="col-12" [paginator]="true" [pageLinks]="5" selectionMode="single"
             [globalFilterFields]="['uid', 'machine']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
@@ -14,24 +14,27 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="date" scope="col" style="text-align: center;">
-                        Date <p-sortIcon field="date"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="machine" scope="col" style="text-align: center;">
-                        Numéro de série <p-sortIcon field="machine"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="machine" scope="col" style="text-align: center;">
-                        Localisation <p-sortIcon field="machine"></p-sortIcon>
+                    <th>
+                        Date
                     </th>
                     <th>
-                        Nombre des pointages
+                        Numéro de série
                     </th>
                     <th>
+                        Site
+                    </th>
+                    <th>
+                        Emplacement
+                    </th>
+                    <th>
+                        Nbr d'enregistrement
+                    </th>
+                    <!--<th>
                         Heure du premier pointage
                     </th>
                     <th>
                         Heure du dernier pointage
-                    </th>
+                    </th>-->
                     <th>
                         Action
                     </th>
@@ -40,10 +43,13 @@
             <ng-template pTemplate="body" let-point>
                 <tr>
                     <td>
-                        {{dicPointages[point][0].date | date:'mediumDate' }}
+                        {{dicPointages[point][0].date | date:'dd MMMM yy' }}
                     </td>
                     <td>
                         {{dicPointages[point][0].machine }}
+                    </td>
+                    <td>
+                        {{dicPointages[point][0].emplacement }}
                     </td>
                     <td>
                         {{machineDic[dicPointages[point][0]?.machine]?.localisation }}
@@ -51,12 +57,12 @@
                     <td>
                         {{dicPointages[point].length}}
                     </td>
-                    <td>
+                    <!--<td>
                         {{dicPointages[point][0].date| date:'short' }}
                     </td>
                     <td>
                         {{dicPointages[point][dicPointages[point].length-1].date| date:'short' }}
-                    </td>
+                    </td>-->
 
                     <td>
                         <i class="pi pi-file-excel" pTooltip="Exporter"
@@ -70,13 +76,13 @@
         </p-table>
     </div>
 </div>
-<p-dialog header="Historique des pointages" [(visible)]="display" [modal]="true">
+<p-dialog [(visible)]="display" [modal]="true">
     <div class="col-12">
         <h3 *ngIf="date_dernier_maj">
-            Dernier Mis à jour : {{date_dernier_maj | date : "short"}}
+            <strong>Dernière mise à jour</strong> : {{date_dernier_maj | date : "shortTime"}}
         </h3>
         <h3 *ngIf="date_dernier_maj">
-            Date : {{ date_dernier_maj | date : "mediumDate"}}
+            <strong>Date :</strong> {{ date_dernier_maj | date : "dd MMMM yy"}}
         </h3>
     </div>
     <p-tabView class="col-12 " style="max-width: 100%;" *ngIf="dataHisto">
@@ -96,7 +102,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="date" scope="col" style="text-align: center;">
-                            Time <p-sortIcon field="date"></p-sortIcon>
+                            Heure <p-sortIcon field="date"></p-sortIcon>
                         </th>
                         <th pSortableColumn="uid" scope="col" style="text-align: center;">
                             UID <p-sortIcon field="uid"></p-sortIcon>

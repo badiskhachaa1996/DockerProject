@@ -6,14 +6,17 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./read-more.component.scss']
 })
 export class ReadMoreComponent implements OnInit {
-  @Input() string?: String;
+  @Input() string?: any;
   seeAllString = false
+  @Input() size_max?: number = 20
   constructor() { }
   onClick() {
     this.seeAllString = !this.seeAllString
   }
 
   ngOnInit(): void {
+    if (this.string)
+      this.string = this.string.toString()
   }
 
 }

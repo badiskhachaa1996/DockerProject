@@ -25,10 +25,10 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<span style="color:#878787" >{{task.date_ajout | date:'mediumDate'}} </span><br></th>
+                                        <th>Assigné le:<span style="color:#878787" >{{task.date_ajout | date:'dd MMMM yy'}} </span><br></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
@@ -140,10 +140,10 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le: <span style="color:#878787" > {{task?.date_ajout | date:'mediumDate'}}</span></th>
+                                        <th>Assigné le: <span style="color:#878787" > {{task?.date_ajout | date:'dd MMMM yy'}}</span></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
@@ -241,10 +241,10 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.date_ajout | date:'dd MMMM yy'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
-                                            date:'mediumDate'}} </th>
+                                            date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
                                         <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>

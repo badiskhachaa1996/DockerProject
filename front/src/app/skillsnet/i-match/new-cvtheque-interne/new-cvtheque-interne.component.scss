@@ -1,0 +1,261 @@
+.cv-card-title h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0;
+}
+
+.cv-card-title h5 {
+    margin-top: 1rem;
+}
+
+.cv-list {
+    background-color: #F2F2F2;
+    min-height: 400px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+
+
+@media screen and (max-width: 1500px) {
+    .cv-list {
+        grid-template-columns: 50% 50%;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .cv-list {
+        grid-template-columns: auto;
+    }
+
+    .steps-imatch {
+        width: 100%;
+    }
+
+}
+
+.lightgray-bg {
+    background-color: #F2F2F2;
+}
+
+.cv-card {
+    height: 95%;
+    width: 95%;
+    padding: 20px;
+    border-radius: 7px;
+    filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.178));
+    background-color: white;
+}
+
+.cv-card:hover {
+    filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.300));
+}
+
+
+
+.cv-card-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cv-card-footer a {
+    padding: 10px 40px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+
+.cv-card-footer .cv {
+    background-color: #D95525;
+}
+
+
+.cv-card-footer .meeting {
+    background-color: #1E526C;
+    border-radius: 0 0 0 20px;
+    color: white;
+}
+
+
+.cv-card-footer .cv:hover {
+    background-color: #1E526C;
+    cursor: pointer;
+}
+
+
+.cv-card-footer .meeting:hover {
+    background-color: #D95525;
+    color: white;
+    cursor: pointer;
+
+}
+
+
+.card-competences {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.card-competences p {
+    color: white;
+    background-color: #37BAD4;
+    padding: 10px 30px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.cv-card-main {
+    padding: 0px 20px;
+}
+
+.card-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.card-main-info h3 {
+    margin: 0;
+}
+
+.card-main-info .card-age {
+    font-size: 24px;
+    color: #D95525;
+}
+
+.cv-card-information {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.cv-clear-button {
+    background: none;
+    color: #AAAAAA;
+    border: none !important;
+
+}
+
+
+.cv-clear-button:hover,
+.cv-clear-button:focus,
+.cv-clear-button:active {
+    background: none;
+    color: #D95525;
+    border: none !important;
+}
+
+
+.cv-search {
+    left: 1.75rem !important;
+    color: #9D9D9D !important;
+}
+
+.cv-input-text {
+    padding-left: 3.5rem;
+    border-radius: 100px;
+
+}
+
+.cv-card-information .img-card {
+    width: 80px;
+    height: 80px;
+    border-radius: 150px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.cv-card-information .cv-card-details {
+    padding-left: 20px;
+}
+
+.card-main-data p {
+    margin: 0;
+}
+
+.header-top img {
+    width: 100%;
+}
+
+.bg-red{
+    background-color: rgb(253, 64, 64);
+}
+
+.bg-green{
+    background-color: rgb(0, 177, 0);
+}
+
+.bg-orange{
+    background-color: rgb(255, 183, 48);
+}
+
+.red-begin {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-left: 2px solid red !important;
+}
+
+.red-middle {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+}
+
+.red-end {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-right: 2px solid red !important;
+}
+
+.orange-begin {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+    border-left: 2px solid orange !important;
+}
+
+.orange-middle {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+}
+
+.orange-end {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+    border-right: 2px solid orange !important;
+}
+
+.red-begin {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-left: 2px solid red !important;
+}
+
+.red-middle {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+}
+
+.red-end {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-right: 2px solid red !important;
+}
+
+.green-begin {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+    border-left: 2px solid green !important;
+}
+
+.green-middle {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+}
+
+.green-end {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+    border-right: 2px solid green !important;
+}
+

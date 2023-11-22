@@ -1,0 +1,51 @@
+<ng-container>
+    <ng-container *ngIf="!seeAllString">
+        <p (click)="onClick()" tooltipPosition="bottom" pTooltip="Voir le détails"
+            style="margin-left:1rem">
+            Total: {{  pausemin |  number:'1.0-0' }}mn
+        </p>
+    </ng-container>
+
+    <ul *ngIf="seeAllString" (click)="onClick()" tooltipPosition="bottom" pTooltip="Voir moins">
+        <li *ngFor="let pause of pauseList; let i = index">
+            De {{pause?.in | date: 'H:mm'}} à {{pause?.out | date: 'H:mm'}} <span *ngIf="pause?.motif">Motif:
+                {{pause?.motif}}</span>
+        </li>
+    </ul>
+</ng-container>
+<p-dialog [(visible)]="seeAllString" [modal]="true" [style]="{width: '40vw',height:'75vw'}" header="Pauses">
+    <p-table class="col-12" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th> Pauses </th>
+                <th>Motif</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td *ngIf="pauseList && pauseList.length!=0">
+                    <ul>
+                        <li *ngFor="let pause of pauseList; let i = index">
+                            de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
+                        </li>
+                    </ul>
+                    <br> &nbsp;&nbsp;&nbsp; {{ pause_timing | number:'1.0-0' }}mn
+                </td>
+                <td *ngIf="pauseList && pauseList.length!=0">
+                    <ul>
+                        <li *ngFor="let pause of pauseList; let i = index">
+                            -{{ pause?.motif }}
+                        </li>
+                    </ul>
+                    <br> &nbsp;&nbsp;&nbsp;
+                </td>
+                <td colspan="2" *ngIf="!pauseList">
+                    0mn
+                </td>
+
+
+            </tr>
+
+        </ng-template>
+    </p-table>
+</p-dialog>

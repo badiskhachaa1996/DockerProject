@@ -55,7 +55,7 @@
                             {{resultat.name}}
                         </td>
                         <td>
-                            {{resultat.date_naissance | date: 'mediumDate'}}
+                            {{resultat.date_naissance | date: 'dd MMMM yy'}}
                         </td>
                         <td>
                             {{resultat.telephone.dialCode}} {{resultat.telephone.nationalNumber}}
@@ -83,7 +83,7 @@
                             {{resultat.avantage}}
                         </td>
                         <td>
-                            {{resultat.date_creation | date: 'mediumDate'}}
+                            {{resultat.date_creation | date: 'dd MMMM yy'}}
                         </td>
                         <td>
                             <i pTooltip="Supprimé cette entrée" tooltipPosition="bottom" class="pi pi-trash mr-2"

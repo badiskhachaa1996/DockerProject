@@ -219,7 +219,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
   User.findOne({ _id: req.params.id })
-    .populate("service_id").populate('savedTicket')
+    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate('service_list').populate("roles_ticketing_list.module").populate("savedAdministration").populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
@@ -238,7 +238,7 @@ app.get("/nstuget/:id", (req, res, next) => {
 
         let my_cv = w[0]
         let fileOne
-        let cv_id = my_cv._id
+        let cv_id = my_cv?._id
         if (cv_id !== undefined) {
           try {
             let filenames = fs.readdirSync("storage/cvPicture/" + cv_id)
@@ -280,6 +280,12 @@ app.get("/nstuget/:id", (req, res, next) => {
         .send("Impossible de recuperer ce utilisateur: " + error.message);
     });
 });
+
+app.get('/getAllAgentByService/:service_id', (req, res) => {
+  User.find({ service_list: { $in: req.params.service_id } }).then(r => {
+    res.send(r)
+  })
+})
 
 //Recuperation de la liste des users pour la cv theque
 app.get("/get-all-for-cv", (_, res) => {
@@ -364,9 +370,8 @@ app.post("/updateById/:id", (req, res) => {
   if (user.password_clear) {
     user["password"] = bcrypt.hashSync(user.password_clear, 8);
   }
-  User.findOneAndUpdate(
-    { _id: req.params.id },
-    user,
+  delete user._id
+  User.findByIdAndUpdate(req.params.id, user,
     { new: true },
     (err, user) => {
       if (err) {
@@ -632,7 +637,7 @@ app.get("/getAllAgent/", (req, res) => {
 });
 
 app.get("/getAllAgentPopulate", (req, res) => {
-  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id')
+  User.find({ $or: [{ role: ["Responsable", "Agent", "Admin"] }, { type: ['Collaborateur', 'Responsable', null, 'Formateur'], haveNewAccess: true }, { type_supp: { $in: ['Collaborateur', 'Responsable'] } }] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
 
     .then((result) => {
       res.send(result.length > 0 ? result : []);
@@ -642,6 +647,7 @@ app.get("/getAllAgentPopulate", (req, res) => {
       console.error(err);
     });
 });
+
 
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id", (req, res) => {
@@ -814,8 +820,10 @@ app.post("/AuthMicrosoft", (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: req.body.email,
-        role: "user",
+        role: 'Etudiant',
+        type: 'Externe-InProgress',
         service_id: null,
+        haveNewAccess: true
       });
       newUser.save().then(
         (userFromDb) => {
@@ -1424,11 +1432,21 @@ app.patch("/recovery-password", (req, res) => {
 
 app.post('/create', (req, res) => {
   let user = new User({ ...req.body })
+
   user.save().then(data => {
     res.send(data)
   }, error => {
     res.status(500).send(error)
   })
+  /*
+  User.findOne({ email: req.body.email }).then(u => {
+    if (!u || !req.body.email)
+
+    else {
+      res.status(500).send('Email déjà existant')
+    }
+  })*/
+
 })
 
 app.get('/getAllByServiceFromList/:service_id', (req, res) => {

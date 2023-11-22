@@ -2,54 +2,9 @@
     <input type="file" (change)="FileUploadPDP($event.target.files)" id="selectedFile" #selectedFile
         style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 </div>
-<div class="grid card col-12">
-    <p-fieldset legend="Informations personelles" style="width: 100%;">
-        <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfo">
-            <div class="col-12 md:col-3">
-                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
-                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
-                        style="border-radius: 50px;" /></a>
-            </div>
-            <div class="col-12 md:col-6 grid">
-                <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
-                    {{PROSPECT?.user_id?.firstname|titlecase}}
-                    {{PROSPECT?.user_id?.lastname|uppercase}}</p>
-                <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
-                    {{PROSPECT.date_naissance|date:'dd/MM/YYYY'}}</p>
-                <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br>
-                    {{PROSPECT?.user_id?.nationnalite}}
-                </p>
-                <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br>
-                    {{PROSPECT?.user_id?.phone}}
-                </p>
-            </div>
-            <div class="col-12 md:col-3">
-                <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier mes informations</a></p>
-                <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a>
-                </p>
-            </div>
-        </div>
-        <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
-            <form class="col-12 grid" [formGroup]="editInfoForm">
-                <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
-                    <input type="text" pInputText placeholder="Prénom" formControlName="firstname" /><br>
-                    <input type="text" pInputText placeholder="Nom" formControlName="lastname" />
-                </p>
-                <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
-                    <p-calendar formControlName="date_naissance" placeholder="31/12/2000"></p-calendar>
-                </p>
-                <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br> <input type="text" pInputText
-                        placeholder="Française" formControlName="nationnalite" />
-                </p>
-                <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br> <input type="text" pInputText
-                        placeholder="+33 0123456789" formControlName="phone" /></p>
-                <button class="col-12" pButton type="button" (click)="saveInfo()" label="Enregistrer mes informations"
-                    [disabled]="editInfoForm.invalid"></button>
-            </form>
-        </div>
-    </p-fieldset>
-</div>
 <div class="col-12" *ngIf="showUpdatePassword">
+    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showUpdatePassword = false"
+        aria-hidden="true"> </i>
     <div class="card">
         <h3 style="text-align: center;">Formulaire de modification du mot de passe</h3>
         <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
@@ -71,4 +26,139 @@
             </div>
         </form>
     </div>
+</div>
+<div class="grid card col-12">
+    <div class="col-12" style="text-align: right;">
+        <button pButton type="button" class="mr-2" (click)="initEditForm()" pTooltip="Modifier mes informations"
+            tooltipPosition="bottom" icon="pi pi-cog"></button>
+        <button pButton type="button" (click)="showUpdatePassword=true" pTooltip="Modifier le mot de passe"
+            tooltipPosition="bottom" icon="pi pi-lock"></button>
+    </div>
+    <p-fieldset legend="Informations" style="width: 100%;" class="mb-1">
+        <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfo">
+
+            <div class="col-12 md:col-3">
+                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
+                        style="border-radius: 50px;" /></a>
+            </div>
+            <div class="col-12 md:col-9 grid">
+                <p class="col-12 md:col-4"><strong>Nom:</strong><br>
+                    {{PROSPECT?.user_id?.lastname|uppercase}}</p>
+                <p class="col-12 md:col-4"><strong>Prénom:</strong><br>
+                    {{PROSPECT?.user_id?.firstname|titlecase}}</p>
+                <p class="col-12 md:col-4"><strong>Date de naissance:</strong><br>
+                    {{PROSPECT?.date_naissance|date:'dd/MM/YYYY'}}</p>
+                <p class="col-12 md:col-4"><strong>Nationalité:</strong><br>
+                    {{PROSPECT?.user_id?.nationnalite}}
+                </p>
+                <p class="ccol-12 md:col-4"><strong>Pays de résidence:</strong><br>
+                    {{PROSPECT?.user_id?.pays_adresse}}
+                </p>
+                <p class="col-12 md:col-4"><strong>Téléphone:</strong><br>
+                    {{PROSPECT?.user_id?.phone}}
+                </p>
+                <p class="col-12"><strong>Email:</strong><br>
+                    {{PROSPECT?.user_id?.email_perso}}
+                </p>
+            </div>
+        </div>
+        <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
+            <form class="col-12 grid" [formGroup]="editInfoForm">
+                <p class="col-12 md:col-4"><strong>Nom:</strong><br>
+                    <input type="text" pInputText placeholder="Nom" formControlName="lastname" style="width: 100%;" />
+                </p>
+                <p class="col-12 md:col-4"><strong>Prénom:</strong><br>
+                    <input type="text" pInputText placeholder="Prénom" formControlName="firstname"
+                        style="width: 100%;" /><br>
+                </p>
+                <p class="col-12 md:col-4"><strong>Date de naissance:</strong><br>
+                    <p-calendar formControlName="date_naissance" placeholder="31/12/2000"
+                        style="width: 100%;"></p-calendar>
+                </p>
+                <p class="col-12 md:col-4"><strong>Nationalité:</strong><br> <input type="text" pInputText
+                        style="width: 100%;" placeholder="Française" formControlName="nationnalite" />
+                </p>
+                <p class="col-12 md:col-4"><strong>Pays de résidence:</strong><br> <input type="text" pInputText
+                        style="width: 100%;" placeholder="France" formControlName="pays_adresse" />
+                </p>
+                <p class="col-12 md:col-4"><strong>Téléphone:</strong><br> <input type="text" pInputText
+                        style="width: 100%;" placeholder="+33 0123456789" formControlName="phone" /></p>
+                <p class="col-12 md:col-4"><strong>Email:</strong><br> <input type="text" pInputText
+                        style="width: 100%;" placeholder="+33 0123456789" formControlName="email_perso" /></p>
+            </form>
+
+            <div class="col-4 col-offset-4" style="text-align: center;">
+                <button [style]="{'width':'100%'}" autoWidth="false" pButton type="button" (click)="saveInfo()"
+                    label="Enregistrer" [disabled]="editInfoForm.invalid"></button>
+            </div>
+        </div>
+    </p-fieldset>
+    <p-fieldset legend="Programme d'étude" style="width: 100%;" class="mb-1">
+        <p-table [value]="['']" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Session</th>
+                    <th>Ecole</th>
+                    <th>Campus</th>
+                    <th>Formation</th>
+                    <th>Année</th>
+                    <th>Décision pédagogique</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doc>
+                <tr>
+                    <td>{{PROSPECT?.rentree_scolaire}}</td>
+                    <td>{{PROSPECT?.type_form | titlecase}}</td>
+                    <td>{{PROSPECT?.campus_choix_1 | titlecase}}</td>
+                    <td>{{PROSPECT?.formation}}</td>
+                    <td>{{FORMATION?.annee || 'Année 1' }}</td>
+                    <td>{{PROSPECT?.decision?.decision_admission}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-fieldset>
+    <p-fieldset legend="Personne à contacter en cas d'urgence" style="width: 100%;">
+        <div *ngIf="!editInfoSOS" class="col-12" style="text-align: right;">
+            <button pButton type="button" class="mr-2" (click)="initEditFormSOS()"
+                pTooltip="Modifier les informations de la personne à contacter en cas d'urgence"
+                tooltipPosition="bottom" icon="pi pi-cog"></button>
+        </div>
+        <div *ngIf="!editInfoSOS" class="col-12 grid">
+            <p class="col-12 md:col-6"><strong>Nom:</strong><br>
+                {{PROSPECT?.sos_lastname|uppercase}}</p>
+            <p class="col-12 md:col-6"><strong>Prénom:</strong><br>
+                {{PROSPECT?.sos_firstname|titlecase}}</p>
+            <p class="col-12 md:col-6"><strong>Email:</strong><br>
+                {{PROSPECT?.sos_email}}</p>
+            <p class="col-12 md:col-6"><strong>Téléphone:</strong><br>
+                {{PROSPECT?.sos_phone}}
+            </p>
+        </div>
+        <form *ngIf="editInfoSOS" [formGroup]="editInfoFormSOS" class="col-12 grid">
+            <p class="col-12 md:col-6"><strong>Nom:</strong><br>
+                <input type="text" style="width: 100%;" pInputText placeholder="Ex: Smith"
+                    formControlName="sos_lastname" />
+            </p>
+            <p class="col-12 md:col-6"><strong>Prénom:</strong><br>
+                <input type="text" style="width: 100%;" pInputText placeholder="Ex: John"
+                    formControlName="sos_firstname" />
+            </p>
+            <p class="col-12 md:col-6"><strong>Email:</strong><br>
+                <input type="text" style="width: 100%;" pInputText placeholder="Ex: email@gmail.com"
+                    formControlName="sos_email" />
+            </p>
+            <p class="col-12 md:col-6"><strong>Téléphone:</strong><br>
+                <input type="text" style="width: 100%;" pInputText placeholder="Ex: +33 612345678"
+                    formControlName="sos_phone" />
+            </p>
+            <div class="col-4 col-offset-4" style="text-align: center;">
+                <button [style]="{'width':'100%'}" autoWidth="false" pButton type="button" (click)="saveInfoSOS()"
+                    label="Enregistrer" [disabled]="editInfoFormSOS.invalid"></button>
+            </div>
+        </form>
+
+
+    </p-fieldset>
 </div>

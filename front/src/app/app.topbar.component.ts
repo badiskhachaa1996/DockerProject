@@ -15,6 +15,7 @@ import { User } from './models/User';
 import { CommonModule } from '@angular/common';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { OnInit } from '@angular/core';
+import { EtudiantService } from './services/etudiant.service';
 
 
 
@@ -35,6 +36,11 @@ export class AppTopBarComponent implements OnInit {
   isCEO = false
   isEtudiant = false
   isExterne = false
+  isAgent = false
+  isProspect = false
+  isAdmin = false
+  isReinscrit = false
+  seeCRA = false
   userConnected: User;
   token: any;
   user = true;
@@ -46,7 +52,8 @@ export class AppTopBarComponent implements OnInit {
 
   constructor(public appMain: AppMainComponent, private CService: CommercialPartenaireService, private serv: ServService, private router: Router,
     private NotificationService: NotificationService, private msalService: MsalService,
-    private AuthService: AuthService, private ToastService: MessageService, private UserService: AuthService, private messageService: MessageService,) { }
+    private AuthService: AuthService, private ToastService: MessageService, private UserService: AuthService, private messageService: MessageService,
+    private EtuService: EtudiantService) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -184,9 +191,21 @@ export class AppTopBarComponent implements OnInit {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
+      this.isAgent = userconnected.role == 'Agent' || userconnected.role == 'Responsable'
+      this.isAdmin = userconnected.role == 'Admin'
+      this.isProspect = userconnected.type == 'Prospect'
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
+      this.seeCRA = (this.isAdmin || this.isAgent)
+      if (userconnected.haveNewAccess) {
+        this.seeCRA = (userconnected.type == 'Collaborateur' || userconnected.type == 'Responsable' || userconnected.type_supp.includes('Responsable') || userconnected.type == 'Formateur' || userconnected.type_supp.includes('Formateur') || userconnected.type_supp.includes('Collaborateur'))
+      }
+      this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
+        this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
+      })
+
       this.isExterne = userconnected?.type?.includes('Externe')
+
       this.items = [
         {
           label: this.userConnected?.statut || "Disponible",
@@ -237,6 +256,14 @@ export class AppTopBarComponent implements OnInit {
               icon: 'pi pi-circle-fill',
               command: () => {
                 this.onUpdateStatus('En réunion');
+
+              }
+
+            }, {
+              label: 'Ecole',
+              icon: 'pi pi-book',
+              command: () => {
+                this.onUpdateStatus('Ecole');
 
               }
 

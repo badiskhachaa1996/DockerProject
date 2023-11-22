@@ -27,7 +27,8 @@ export class CompletionProfilGuard implements CanActivate {
       if (!localStorage.getItem('token') && !localStorage.getItem('ProspectConected')) {
         this.router.navigate(['/login']);
         return false
-      }
+      } else
+        return true
       return this.authService.HowIsIt(currenttoken.id).pipe(
         map(stateOfUser => {
           if (stateOfUser.name == 'Profil complet') {

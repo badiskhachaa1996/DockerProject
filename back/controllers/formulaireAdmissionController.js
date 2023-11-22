@@ -42,7 +42,7 @@ app.get("/RA/getAllByEcoleID/:id", (req, res) => {
 })
 
 app.get("/RA/getAll", (req, res, next) => {
-    RentreeAdmission.find().populate('ecoles')
+    RentreeAdmission.find()?.populate('ecoles')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
@@ -78,7 +78,7 @@ app.put("/FA/update", (req, res) => {
 })
 
 app.get("/FA/getAll", (req, res, next) => {
-    FormationAdmission.find().populate('campus').populate('annee_scolaire')
+    FormationAdmission.find()
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });

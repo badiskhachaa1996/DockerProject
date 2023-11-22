@@ -281,7 +281,7 @@ export class IMatchComponent implements OnInit {
   }
 
   disponible(d: Date) {
-    return d <= new Date()
+    return new Date(d).getTime() <= new Date().getTime()
   }
 
   onClickCV(cv: any) {
