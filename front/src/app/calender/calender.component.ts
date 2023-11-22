@@ -1377,7 +1377,7 @@ export class CalenderComponent implements OnInit {
   }
   calculCra(dc: DailyCheck) {
     let totalTimeCra = 0;
-
+    //console.log(dc?.cra)
     dc?.cra.map((cra) => {
       totalTimeCra += cra.number_minutes;
     });
@@ -1386,9 +1386,9 @@ export class CalenderComponent implements OnInit {
       this.userSelected.h_cra = 7
     }
     // conversion du taux cra du collaborateur en minutes
-    this.userSelected.h_cra *= 60;
+    let nb = this.userSelected.h_cra * 60;
     // partie calcule du pourcentage en fonction du totalTimeCra
-    return (totalTimeCra * 100) / this.userSelected.h_cra;
+    return (Math.floor((totalTimeCra * 100) / nb)).toString();
   }
   getHistoPointage(value) {
 

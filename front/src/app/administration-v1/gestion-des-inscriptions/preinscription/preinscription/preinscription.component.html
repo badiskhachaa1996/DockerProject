@@ -663,7 +663,7 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-prospect>
+                        <ng-template pTemplate="body" let-prospect let-expanded="expanded">
                             <tr [pEditableRow]="prospect">
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="prospect"
@@ -1805,15 +1805,15 @@
                 <p-accordion [(activeIndex)]="selectedTabIndex1">
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 1</span> &nbsp;
-                                <span style="font-weight: normal;">Dossier <i style="padding-left: 3%;color: red;"
-                                        class="pi pi-times"
-                                        *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
-                                    <!-- Si Ticket n'est pas traité-->
-                                    <i style="padding-left: 3%;color: green;" class="pi pi-check"
-                                        *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i></span>
-
+                                <span style="font-weight: normal;">Dossier 
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-dialog header="Affecter un agent à ce ticket" [(visible)]="visible"
@@ -2056,10 +2056,10 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 2</span> &nbsp;
-                                <span style="font-weight: normal;">Evaluation <i style="padding-left: 3%;color: red;"
-                                        class="pi pi-times"></i></span>
+                                <span style="font-weight: normal;">Evaluation </span>
+                                <i style="color: red;" class="pi pi-times"></i>
                                 <!-- Dépend du Score -->
                             </div>
                         </ng-template>
@@ -2102,7 +2102,7 @@
                             </form>
                         </p-dialog>
 
-                        <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+                        <p-table #dt1 [value]="['']" dataKey="_id" responsiveLayout="scroll"
                             [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
                             [paginator]="true" rowExpandMode="single" [totalRecords]=""
                             styleClass="p-datatable-gridlines">
@@ -2156,16 +2156,16 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 3</span> &nbsp;
                                 <span style="font-weight: normal;">Entretien
-                                    <i style="padding-left: 3%;color: red;" class="pi pi-times"
-                                        *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
-                                    <!-- Si Ticket n'est pas traité-->
-                                    <i style="padding-left: 3%;color: green;" class="pi pi-check"
-                                        *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
-                                </span>
 
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
@@ -2294,13 +2294,14 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 4</span> &nbsp;
-                                <span style="font-weight: normal;">Décision</span>
-                                <i style="padding-left: 3%;color: red;" class="pi pi-times"
+                                <span style="font-weight: normal;">Décision&nbsp;
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
                                     *ngIf="PROSPECT?.decision_admission!='Accepté'"></i>
                                 <!-- depend du changement de la decision admission -->
-                                <i style="padding-left: 3%;color: green;" class="pi pi-check"
+                                <i style="color: green;" class="pi pi-check"
                                     *ngIf="PROSPECT?.decision_admission=='Accepté'"></i>
                             </div>
                         </ng-template>
