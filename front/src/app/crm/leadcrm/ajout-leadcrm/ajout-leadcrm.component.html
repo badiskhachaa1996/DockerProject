@@ -1,10 +1,17 @@
 <div class="card grid col-12">
-    <h4 class="col-12" style="text-align: center;">Insérer un lead dans le CRM</h4>
-    <div class="col-12" style="text-align: center;">
-        <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-            obligatoires</small><br>
+    <div class="col-6">
+        <h4 class="col-12" style="text-align: center;">Insérer un lead dans le CRM</h4>
+        <div class="col-12" style="text-align: center;">
+            <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
     </div>
-    <form class="p-fluid p-formgrid grid" [formGroup]="addForm" >
+    <div class="col-6">
+        <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour le lead" (click)="onUpdate()"></button>
+        <!-- ngif adding show adding -->
+        <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter le lead" (click)="onAdd()"></button>
+    </div>
+    <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
         <div class="field col-12 md:col-6">
             <label>Source Lead</label>
             <p-dropdown filter="true" placeholder="Choisissez une source" [options]="sourceDropdown" autoWidth="false"
@@ -117,7 +124,7 @@
         </div>
         <div class="col-12">
             <!-- ngif updating show updating -->
-            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour le lead" (click)="onUpdate()" ></button>
+            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour le lead" (click)="onUpdate()"></button>
             <!-- ngif adding show adding -->
             <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter le lead" (click)="onAdd()"></button>
         </div>

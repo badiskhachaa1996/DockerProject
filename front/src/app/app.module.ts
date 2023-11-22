@@ -399,6 +399,7 @@ import { CrmListComponent } from './crm/crm-list/crm-list.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
 
 @NgModule({
   imports: [
@@ -818,7 +819,8 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
     CrmListComponent,
     LogementComponent,
     GestionLogementComponent,
-    BookingV2Component
+    BookingV2Component,
+    SuivreLeadComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
