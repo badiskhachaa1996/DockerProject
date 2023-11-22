@@ -672,7 +672,7 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-  docProspectList = []
+  docProspectList: Prospect[] = []
 
   onshowDossier(student: Prospect) {
     this.defaultEtatDossier = student.etat_dossier;
@@ -747,7 +747,11 @@ export class PreinscriptionComponent implements OnInit {
     }
   }
   onSelectEtat(event: any, procpect: Prospect) {
-    procpect.etat_dossier = event.value
+    if (event && event.value)
+      procpect.etat_dossier = event.value
+    else
+      procpect.etat_dossier = event
+    
     this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
   }
   deletePro(prospect: Prospect) {
@@ -1381,7 +1385,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   ListDocuments: String[] = []
   ListPiped: String[] = []
-  AddDocumentOnglet(prospect) {
+  AddDocumentOnglet(prospect: Prospect) {
     this.docProspectList.push(prospect)
     console.log(this.docProspectList)
     setTimeout(() => {
@@ -1390,9 +1394,12 @@ export class PreinscriptionComponent implements OnInit {
 
   }
   handleChange(event) {
-    console.log(event)
+    //console.log(event)
+
     if (this.selectedTabIndex > (3 + this.proscteList.length)) {
-      this.initDocument(this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)])
+      let p: Prospect = this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)]
+      this.initDocument(p)
+
     }
   }
   initDocument(prospect) {

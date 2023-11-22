@@ -689,7 +689,7 @@
                                     {{prospect?.rythme_formation}}
                                 </td>
                                 <td>
-                                    {{ prospect?.decision?.decision_admission}}
+                                    {{ prospect?.decision_admission}}
                                 </td>
                                 <td>
                                     {{ calculPayement(prospect)}}
@@ -1807,7 +1807,13 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">ETAPE 1</span> &nbsp;
-                                <span style="font-weight: normal;">Dossier</span>
+                                <span style="font-weight: normal;">Dossier <i style="padding-left: 3%;color: red;"
+                                        class="pi pi-times"
+                                        *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                    <!-- Si Ticket n'est pas traité-->
+                                    <i style="padding-left: 3%;color: green;" class="pi pi-check"
+                                        *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i></span>
+
                             </div>
                         </ng-template>
                         <p-dialog header="Affecter un agent à ce ticket" [(visible)]="visible"
@@ -2052,7 +2058,9 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">ETAPE 2</span> &nbsp;
-                                <span style="font-weight: normal;">Evaluation</span>
+                                <span style="font-weight: normal;">Evaluation <i style="padding-left: 3%;color: red;"
+                                        class="pi pi-times"></i></span>
+                                <!-- Dépend du Score -->
                             </div>
                         </ng-template>
                         <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation"
@@ -2150,7 +2158,14 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">ETAPE 3</span> &nbsp;
-                                <span style="font-weight: normal;">Entretien</span>
+                                <span style="font-weight: normal;">Entretien
+                                    <i style="padding-left: 3%;color: red;" class="pi pi-times"
+                                        *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                    <!-- Si Ticket n'est pas traité-->
+                                    <i style="padding-left: 3%;color: green;" class="pi pi-check"
+                                        *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
+                                </span>
+
                             </div>
                         </ng-template>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
@@ -2282,6 +2297,11 @@
                             <div>
                                 <span style="font-weight: bold;">ETAPE 4</span> &nbsp;
                                 <span style="font-weight: normal;">Décision</span>
+                                <i style="padding-left: 3%;color: red;" class="pi pi-times"
+                                    *ngIf="PROSPECT?.decision_admission!='Accepté'"></i>
+                                <!-- depend du changement de la decision admission -->
+                                <i style="padding-left: 3%;color: green;" class="pi pi-check"
+                                    *ngIf="PROSPECT?.decision_admission=='Accepté'"></i>
                             </div>
                         </ng-template>
                         <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="DecisionForm">
