@@ -6555,6 +6555,27 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
+                                    label: 'Booking V2',
+                                    icon: 'pi pi-building',
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['booking/configuration'],
+                                        },
+                                        {
+                                            label: 'Liste des demandes des rendez-vous',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['gestion-reservations']
+                                        },
+                                        {
+                                            label: 'Logements',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['logements']
+                                        }
+                                    ]
+                                },
+                                {
                                     label: 'Remboursement',
                                     icon: 'pi pi-dollar',
                                     items: [

@@ -239,6 +239,9 @@ import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produit
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
 import { CrmListComponent } from './crm/crm-list/crm-list.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 const routes: Routes = [
     {
         path: '',
@@ -1170,6 +1173,22 @@ const routes: Routes = [
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
             { path: 'genDoc', component: GendocComponent, canActivate: [AuthGuardService] },
+            // Booking V2
+            {
+                path: 'booking/configuration',
+                component: BookingV2Component,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'logements',
+                canActivate: [AuthGuardService],
+                component: LogementComponent,
+            },
+            {
+                path: 'gestion-reservations',
+                canActivate: [AuthGuardService],
+                component: GestionLogementComponent,
+            },
             //Template
             { path: 'template/formulaire', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
             { path: 'template/formulaire/:ecole', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
