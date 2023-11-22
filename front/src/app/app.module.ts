@@ -392,10 +392,13 @@ import { UploadButtonComponent } from './remboursement/upload-button/upload-butt
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
-import {GestionProduitsComponent} from "./crm/gestion-produits/gestion-produits.component";
+import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
 import { CrmListComponent } from './crm/crm-list/crm-list.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 
 @NgModule({
   imports: [
@@ -812,7 +815,10 @@ import { CrmListComponent } from './crm/crm-list/crm-list.component';
     GestionProduitsComponent,
     AddRemboussementComponent,
     FormCrmExtComponent,
-    CrmListComponent
+    CrmListComponent,
+    LogementComponent,
+    GestionLogementComponent,
+    BookingV2Component
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
