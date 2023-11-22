@@ -322,8 +322,6 @@
     <!-- start Envoyer un mail, mail type et Historique des email envoyer  -->
 
     <div class="col-12 card" *ngIf="showEmail">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="onHideEmailForm()"
-           aria-hidden="true"> </i>
         <p-tabView>
             <p-tabPanel header="Email personnalisé">
                 <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">

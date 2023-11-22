@@ -205,43 +205,62 @@ export class ListLeadcrmComponent implements OnInit {
   onAddDocuments() {
     this.showFollow.documents.push({ nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
-  downloadFile(index) {
-    this.indexDocuments = index
-    this.LCS.downloadFile(this.showFollow._id, this.showFollow.documents[index]._id, this.showFollow.documents[index].path).subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      saveAs(new Blob([byteArray], { type: data.documentType }), this.showFollow.documents[index].path)
-    }, (error) => {
-      console.error(error)
-      this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
-    })
-  }
+    downloadFile(index: number): void {
+        this.indexDocuments = index;
+        const document = this.showFollow.documents[index];
+
+        if (!document) {
+            this.ToastService.add({ severity: 'error', summary: 'Erreur', detail: 'Document non trouvé' });
+            return;
+        }
+
+        this.LCS.downloadFile(this.showFollow._id, document._id, document.path).subscribe((data) => {
+            const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+            saveAs(new Blob([byteArray], { type: data.documentType }), document.path);
+        }, (error) => {
+            console.error(error);
+            this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenue' });
+        });
+    }
+
+
   uploadFile(index) {
     this.indexDocuments = index
     document.getElementById('selectedFile').click();
   }
-  deleteFile(index) {
-    this.showFollow.documents.splice(index, 1)
-  }
-
-  FileUpload(event: { target: { files: File[] } }) {
-    if (event.target.files != null) {
-      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
-      const formData = new FormData();
-      formData.append('document_id', this.showFollow.documents[this.indexDocuments]._id)
-      formData.append('lead_id', this.showFollow._id)
-      formData.append('file', event.target.files[0])
-      this.LCS.uploadFile(formData).subscribe(res => {
-        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        event.target.files = null;
-        this.showFollow.documents[this.indexDocuments].path = event.target.files[0].name
-        //this.fileInput.clear()
-      }, error => {
-        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
-      });
+    deleteFile(index: number): void {
+        if (index >= 0 && index < this.showFollow.documents.length) {
+            this.showFollow.documents.splice(index, 1);
+        } else {
+            this.ToastService.add({ severity: 'error', summary: 'Erreur', detail: 'Index de document invalide' });
+        }
     }
-  }
 
-  //Mail
+
+    FileUpload(event: { target: { files: File[] } }): void {
+        const selectedFile = event.target.files[0];
+
+        if (selectedFile) {
+            this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+            const formData = new FormData();
+            formData.append('document_id', this.showFollow.documents[this.indexDocuments]._id);
+            formData.append('lead_id', this.showFollow._id);
+            formData.append('file', selectedFile);
+
+            this.LCS.uploadFile(formData).subscribe(res => {
+                this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+                this.showFollow.documents[this.indexDocuments].path = selectedFile.name;
+            }, error => {
+                console.error(error);
+                this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est survenue' });
+            });
+        } else {
+            this.ToastService.add({ severity: 'warn', summary: 'Envoi de Fichier', detail: 'Aucun fichier sélectionné' });
+        }
+    }
+
+
+    //Mail
   onAddMail() {
     this.showFollow.mailing.push({ date_envoie: new Date(), objet_mail: "", note: "" })
   }
@@ -377,6 +396,9 @@ export class ListLeadcrmComponent implements OnInit {
     }
 
 
+
+
+
     // Gestion des emails envoyé un email, afficher les emails envoyés et les emails types
 
   showEmail = false
@@ -476,20 +498,19 @@ export class ListLeadcrmComponent implements OnInit {
     })
   }
 
-  onUploadPJ(uploadFilePJ) {
-    if (uploadFilePJ?.nom && uploadFilePJ.nom != 'Cliquer pour modifier le nom du document ici') {
-      document.getElementById('selectedFile').click();
-      this.uploadFilePJ = uploadFilePJ
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
-    }
+    onUploadPJ(uploadFilePJ) {
+        if (uploadFilePJ?.nom && uploadFilePJ.nom != 'Cliquer pour modifier le nom du document ici') {
+            document.getElementById('selectedFile').click();
+            this.uploadFilePJ = uploadFilePJ
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+        }
 
-  }
+    }
 
 
 
   FileUploadPJ(event: [File]) {
-    console.log(event)
     if (event != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
