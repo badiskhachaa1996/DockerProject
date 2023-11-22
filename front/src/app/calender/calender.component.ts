@@ -60,6 +60,7 @@ import { PointageData } from 'src/app/models/PointageData';
 import { PointageService } from 'src/app/services/pointage.service';
 import { PointeuseData } from 'src/app/models/PointeuseData';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
+import { Collaborateur } from '../models/Collaborateur';
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
@@ -335,7 +336,7 @@ export class CalenderComponent implements OnInit {
   reader: FileReader = new FileReader();
   machineDic = {}
   collaborateurList = []
-  userSelected
+  userSelected: Collaborateur
   collaborateurDic = {}
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
@@ -1375,21 +1376,19 @@ export class CalenderComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
   calculCra(dc: DailyCheck) {
-    this.rhService.getCollaborateurByUserId(this.userConnected._id).then(collab => {
-      let totalTimeCra = 0;
+    let totalTimeCra = 0;
 
-      dc?.cra.map((cra) => {
-        totalTimeCra += cra.number_minutes;
-      });
+    dc?.cra.map((cra) => {
+      totalTimeCra += cra.number_minutes;
+    });
 
-      if (!collab || !collab.h_cra) {
-        collab.h_cra = 7
-      }
-      // conversion du taux cra du collaborateur en minutes
-      collab.h_cra *= 60;
-      // partie calcule du pourcentage en fonction du totalTimeCra
-      return (totalTimeCra * 100) / collab.h_cra;
-    })
+    if (!this.userSelected || !this.userSelected.h_cra) {
+      this.userSelected.h_cra = 7
+    }
+    // conversion du taux cra du collaborateur en minutes
+    this.userSelected.h_cra *= 60;
+    // partie calcule du pourcentage en fonction du totalTimeCra
+    return (totalTimeCra * 100) / this.userSelected.h_cra;
   }
   getHistoPointage(value) {
 
