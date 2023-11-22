@@ -40,7 +40,8 @@ export class AjoutLeadcrmComponent implements OnInit {
   ];
 
 
-  addForm: FormGroup = new FormGroup({
+
+    addForm: FormGroup = new FormGroup({
       _id: new FormControl(''),
     source: new FormControl(''),
     civilite: new FormControl(''),
@@ -59,7 +60,7 @@ export class AjoutLeadcrmComponent implements OnInit {
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID() }).subscribe(data => {
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier:"Non contacté", decision_qualification:"En attente" }).subscribe(data => {
       this.addForm.reset()
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })

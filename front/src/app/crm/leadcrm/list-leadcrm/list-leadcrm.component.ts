@@ -334,11 +334,19 @@ export class ListLeadcrmComponent implements OnInit {
   ]
   //En attente de traitement ;Non qualifié, Pré-qualifié, Qualifié
   decisionList = [
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
+    { label: 'En attente', value: 'En attente' },
     { label: 'Non qualifié', value: 'Non qualifié' },
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
   ]
+
+    statutDossierList = [
+        { label: 'Non contacté', value: 'Non contacté' },
+        { label: 'Intéressé', value: 'Intéressé' },
+        { label: 'Non intéressé', value: 'Non intéressé' },
+        { label: 'En réflexion', value: 'En réflexion' },
+    ]
+
   //Affect Form
   showAffect: LeadCRM = null
   affectForm = new FormGroup({
@@ -446,7 +454,7 @@ export class ListLeadcrmComponent implements OnInit {
   initSendEmail(lead: LeadCRM) {
     this.showEmail = true
     this.leadSendTo = lead
-    console.log(this.leadSendTo)
+
     this.EmailTypeS.HEgetAllTo(this.leadSendTo._id).subscribe(data => {
       this.historiqueEmails = data
     })
@@ -548,5 +556,80 @@ export class ListLeadcrmComponent implements OnInit {
     this.formEmailPerso.reset()
     this.formEmailType.reset()
   }
+
+    onUpdateQualification(event: any, lead: LeadCRM) {
+        //mettre à jour le champs qualification du lead
+        lead.decision_qualification = event.value
+        this.LCS.update(lead).subscribe(data => {
+            this.leads.splice(this.leads.indexOf(lead), 1, data)
+            this.ToastService.add({ severity: "success", summary: "Mis à jour de la qualification avec succès" })
+        })
+
+    }
+    onUpdateStatutDossier(event: any, lead: LeadCRM) {
+        //mettre à jour le champs qualification du lead
+        lead.statut_dossier = event.value
+        this.LCS.update(lead).subscribe(data => {
+            this.leads.splice(this.leads.indexOf(lead), 1, data)
+            this.ToastService.add({ severity: "success", summary: "Mis à jour du statut du dossier avec succès" })
+        })
+    }
+
+
+    showAddEmailInput = false
+    showAddNumberlInput = false
+    showAddWhatNumberlInput = false
+
+
+    onInitAddEmailInput(type: string) {
+
+      if (!type){
+          return
+      }
+        if (type == "email") {
+            this.showAddEmailInput = true
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = true
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = true
+        }
+    }
+
+    onAddElseContact(event: any, lead: LeadCRM, type: string) {
+      // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            lead.email = lead.email + " ;" + event.target.value
+        }
+        if (type == "number") {
+            lead.numero_phone = lead.numero_phone + "; " + event.target.value
+        }
+        if (type == "whatsapp") {
+            lead.numero_whatsapp = lead.numero_whatsapp + " ;" + event.target.value
+        }
+        this.LCS.update(lead).subscribe(data => {
+            this.leads.splice(this.leads.indexOf(lead), 1, data)
+            this.ToastService.add({ severity: "success", summary: "Mise à jour avec succès" })
+        })
+    }
+
+    onHideAddEmailInput(type: string) {
+      if (!type){
+            return
+      }
+        if (type == "email") {
+            this.showAddEmailInput = false
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = false
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = false
+        }
+    }
 
 }
