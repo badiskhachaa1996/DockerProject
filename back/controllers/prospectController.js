@@ -677,6 +677,15 @@ app.get("/getAllInt", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.get("/getAllInsDef", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: 'Inscription définitive' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
