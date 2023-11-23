@@ -86,13 +86,12 @@ export class LeadInformationsPersonnelComponent implements OnInit {
   }
   editInfoSOS = false
   initEditFormSOS() {
-    let bypass: any = this.PROSPECT?.user_id
     this.editInfoFormSOS.patchValue({
       sos_lastname: this.PROSPECT?.sos_lastname,
       sos_firstname: this.PROSPECT?.sos_firstname,
       sos_email: this.PROSPECT?.sos_email,
       sos_phone: this.PROSPECT?.sos_phone,
-      _id: bypass._id
+      _id: this.PROSPECT._id
     })
     this.editInfoSOS = true;
   }
@@ -107,8 +106,8 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     })
   }
   saveInfoSOS() {
-    this.UserService.patchById({ ...this.editInfoFormSOS.value }).then(users => {
-      this.ProspectService.getPopulateByUserid(this.editInfoFormSOS.value._id).subscribe(doc => {
+    this.ProspectService.updateV2({ ...this.editInfoFormSOS.value },'saveInfoSOS').subscribe(user => {
+      this.ProspectService.getPopulateByUserid(this.PROSPECT.user_id._id).subscribe(doc => {
         this.PROSPECT = doc
         this.ToastService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
         this.editInfoSOS = false

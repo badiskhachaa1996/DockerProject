@@ -164,7 +164,6 @@ import { EmploiDuTempsComponent } from './pedagogie/seances/emploi-du-temps/empl
 import { EmergementComponent } from './pedagogie/seances/emergement/emergement.component';
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
-
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
@@ -354,7 +353,6 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { NgModule } from '@angular/core';
-import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 import { DataCleComponent } from './remboursement/list-remboursement/data-cle/data-cle.component';
 import { DetailsCandidatComponent } from './remboursement/list-remboursement/details-candidat/details-candidat.component';
@@ -392,7 +390,16 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
-
+import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
+import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
+import { CrmListComponent } from './crm/crm-list/crm-list.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
 
 @NgModule({
   imports: [
@@ -491,6 +498,7 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
     EditorModule,
     QRCodeModule,
     PdfViewerModule,
+
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -765,7 +773,6 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
     ReadMoreComponent,
     NewCvthequeInterneComponent,
     // ======= Remboursement
-    AddRemboussementComponent,
     ListRemboursementComponent,
     ContactRemboursementComponent,
     DataCleComponent,
@@ -803,9 +810,17 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
     PreviewCandidatureComponent,
     LeadDocumentsComponent,
     EvaluationComponent,
-    UploadButtonComponent
-    
-    
+    UploadButtonComponent,
+    LeadEvaluationComponent,
+    DocumentsCandidatureViewerComponent,
+    GestionProduitsComponent,
+    AddRemboussementComponent,
+    FormCrmExtComponent,
+    CrmListComponent,
+    LogementComponent,
+    GestionLogementComponent,
+    BookingV2Component,
+    SuivreLeadComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

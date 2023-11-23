@@ -39,7 +39,7 @@
         <div class="field col-12 md:col-4 ">
             <label For="sujet">Priorité :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <br>
-            <p-checkbox label="Urgent" formControlName="priorite" value='true' inputId="ny"></p-checkbox>
+            <p-checkbox label="Urgent" formControlName="priorite" [binary]="true" inputId="ny"></p-checkbox>
 
         </div>
         <div class="field col-12 ">
@@ -66,10 +66,9 @@
             </div>
         </div>
         <div class="col-12  flex align-items-center justify-content-center ">
-
             <br>
             <button class="ml-auto" [style]="{'width':'15%'}" autoWidth="false" pButton
-                label="Enregister les modifications" type="submit" [disabled]="TicketForm.invalid"></button>
+                label="Enregister les modifications" type="submit" [disabled]="!TicketForm.value.sujet_id || !TicketForm.value.service_id || !TicketForm.value._id"></button>
         </div>
     </form>
 </div>
@@ -247,10 +246,10 @@
                                 field="date_ajout">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="service" style="text-align:center;"> Service <p-sortIcon field="service">
+                        <th pSortableColumn="sujet_id.service_id.label" style="text-align:center;"> Service <p-sortIcon field="sujet_id.service_id.label">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="sujet" style="text-align:center"> Sujet <p-sortIcon field="sujet">
+                        <th pSortableColumn="sujet_id.label" style="text-align:center"> Sujet <p-sortIcon field="sujet_id.label">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="resum" style="text-align:center"> Résumé <p-sortIcon field="resum">
@@ -477,10 +476,10 @@
                                 field="date_ajout">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon field="service">
+                        <th pSortableColumn="sujet_id.service_id.label" style="text-align:center"> Service <p-sortIcon field="sujet_id.service_id.label">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="sujet" style="text-align:center"> Sujet <p-sortIcon field="sujet">
+                        <th pSortableColumn="sujet_id.label" style="text-align:center"> Sujet <p-sortIcon field="sujet_id.label">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="resum" style="text-align:center"> Résumé <p-sortIcon field="resum">

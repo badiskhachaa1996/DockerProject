@@ -222,7 +222,6 @@ import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
-import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
@@ -235,6 +234,14 @@ import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
+import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
+import { CrmListComponent } from './crm/crm-list/crm-list.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 const routes: Routes = [
     {
         path: '',
@@ -522,7 +529,7 @@ const routes: Routes = [
             {
                 path: 'ajout-remboursement',
                 component: AddRemboussementComponent,
-                
+
             }, //Remboursement
 
             // {
@@ -929,9 +936,21 @@ const routes: Routes = [
                 component: AjoutLeadcrmComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm/leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
+                component: AjoutLeadcrmComponent,
+                canActivate: [AuthGuardService],
+            },
+
             {
                 path: 'crm/leads/liste',
                 component: ListLeadcrmComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'crm/liste',
+                component: CrmListComponent,
                 canActivate: [AuthGuardService],
             },
             {
@@ -979,6 +998,7 @@ const routes: Routes = [
                 component: LeadsNonQualifiesComponent,
                 canActivate: [AuthGuardService],
             },
+
             {
                 path: 'crm/mes-leads/pre-qualifies/:id',
                 component: LeadsPrequalifiesComponent,
@@ -1009,6 +1029,12 @@ const routes: Routes = [
                 component: DashboardTargetComponent,
                 canActivate: [AuthGuardService],
             },
+            {
+                path: 'crm/gestion-produits',
+                component: GestionProduitsComponent,
+                canActivate: [AuthGuardService],
+            },
+
             /* Intuns */
             {
                 path: 'intuns/employabilite',
@@ -1109,6 +1135,11 @@ const routes: Routes = [
                 component: LeadCandidatureComponent,
                 canActivate: [AuthGuardService],
             },
+            {
+                path: 'admission/lead-evaluation',
+                component: LeadEvaluationComponent,
+                canActivate: [AuthGuardService],
+            },
             { path: 'administration/preinscription', component: PreinscriptionComponent, canActivate: [AuthGuardService], },
             { path: 'administration/inscription', component: InscriptionComponent, canActivate: [AuthGuardService], },
             { path: 'administration/evaluation', component: EvaluationComponent, canActivate: [AuthGuardService], },
@@ -1142,6 +1173,22 @@ const routes: Routes = [
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
             { path: 'genDoc', component: GendocComponent, canActivate: [AuthGuardService] },
+            // Booking V2
+            {
+                path: 'booking/configuration',
+                component: BookingV2Component,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'logements',
+                canActivate: [AuthGuardService],
+                component: LogementComponent,
+            },
+            {
+                path: 'gestion-reservations',
+                canActivate: [AuthGuardService],
+                component: GestionLogementComponent,
+            },
             //Template
             { path: 'template/formulaire', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
             { path: 'template/formulaire/:ecole', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
@@ -1150,6 +1197,10 @@ const routes: Routes = [
     {
         path: 'formulaire-entreprise/:code',
         component: InscriptionEntrepriseComponent,
+    },
+    {
+        path: 'formulaire-crm/:ecole',
+        component: FormCrmExtComponent,
     },
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'formulaire-mi', component: FormulaireMIComponent },
