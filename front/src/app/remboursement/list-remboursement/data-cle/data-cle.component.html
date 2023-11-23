@@ -15,9 +15,9 @@
             <td >
                 <p-dropdown placeholder="Choisir Méthode" [options]="Motif" [disabled]="!isUpdating" [(ngModel)]="keyDate.motif">{{keyDate.motif}}</p-dropdown>
             </td>
-            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_refus | date:'yyyy-MM-dd'" (ngModelChange)="keyDate.date_refus = $event" /></td>
-            <td > {{keyDate.date_demande | date:'yyyy-MM-dd'}}  </td>
-            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_remboursement | date:'yyyy-MM-dd'" (ngModelChange)="keyDate.date_remboursement = $event"/></td>
+            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_refus | date:'dd-MM-yyyy'" (ngModelChange)="keyDate.date_refus = $event" /></td>
+            <td > {{keyDate.date_demande | date:'dd-MM-yyyy'}}  </td>
+            <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_remboursement | date:'dd-MM-yyyy'" (ngModelChange)="keyDate.date_remboursement = $event"/></td>
             <td class="text-right" style="min-width: 8rem">
                 <i class="pi pi-pencil" *ngIf="!isUpdating" (click)="updateKeyDates(keyDate)"></i>
                 <i class="pi pi-check" *ngIf="isUpdating" (click)="saveKeyDates(keyDate)"></i>

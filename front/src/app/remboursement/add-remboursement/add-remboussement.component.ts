@@ -129,9 +129,9 @@ Successfull = false
 
 
   ngOnInit(): void {
-    this.aFormGroup = this.formBuilder.group({
-      recaptcha: ['', Validators.required]
-    });
+    // this.aFormGroup = this.formBuilder.group({
+    //   recaptcha: ['', Validators.required]
+    // });
   
 
     this.formRembourssement = this.formBuilder.group({
@@ -198,7 +198,7 @@ Successfull = false
   }
 
 
-  siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
+  // siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 

@@ -16,7 +16,7 @@ export class DataCleComponent implements OnInit {
 
   @Output() saveDemande:EventEmitter<any> = new EventEmitter<any>();
 
-  Motif = environment.motif
+  Motif = environment.motif.slice(1)
 
   keyDates = [
     {
@@ -39,13 +39,15 @@ export class DataCleComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.demande && this.demande.refund){
-      this.keyDates=[{
+      this.keyDates=[
+        {
         motif :  this.demande?.motif,
         date_refus : this.demande?.rejection_date,
         date_demande :this.demande?.created_on,
         date_remboursement : this.demande?.refund?.date,
         isUpdating : false
-      }]
+      }
+    ]
     
   }
 
