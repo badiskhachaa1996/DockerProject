@@ -14,6 +14,10 @@ import { ProductService } from "../../../dev-components/service-template/product
 import { GestionProduitsService } from "../../gestion-produits/gestion-produits.service";
 import { ProduitCRM } from "../../../models/produitCRM";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ServService } from 'src/app/services/service.service';
+import { TicketService } from 'src/app/services/ticket.service';
+import { Ticket } from 'src/app/models/Ticket';
+import { SujetService } from 'src/app/services/sujet.service';
 @Component({
   selector: 'app-list-leadcrm',
   templateUrl: './list-leadcrm.component.html',
@@ -87,7 +91,8 @@ export class ListLeadcrmComponent implements OnInit {
 
 
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
-    private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private router: Router, private route: ActivatedRoute) { }
+    private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService,
+    private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
@@ -103,12 +108,16 @@ export class ListLeadcrmComponent implements OnInit {
         this.formationList.push({ label: d.nom, value: d._id })
       })
     })
-    this.TeamCRMService.MIgetAll().subscribe(data => {
-      data.forEach(val => {
-        this.memberList.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
-        this.filterAffecte.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
-      })
-
+    this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
+      if (dataS)
+        this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+          data.forEach(val => {
+            this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+            this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+          })
+        })
+      else
+        console.error('Pas de service Commercial')
     })
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -324,10 +333,43 @@ export class ListLeadcrmComponent implements OnInit {
     this.showAffect = lead
   }
 
+  generateID() {
+    return "IGTP" + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1));
+  }
+
   onUpdateAffect() {
     this.LCS.update({ ...this.affectForm.value }).subscribe(data => {
-      this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
+      this.leads.splice(this.leads.indexOf(this.showAffect), 1,data)
       this.affectForm.reset()
+      this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
+        this.SujetService.getByLabel('Prospection').subscribe(sujet => {
+          let newTicket = new Ticket(
+            null,
+            u._id,
+            sujet._id,
+            new Date(),
+            this.affectForm.value.affected_to_member,
+            "En cours de traitement",
+            new Date(),
+          )
+          newTicket.customid = this.generateID()
+          newTicket.resum = "Contactez le lead"
+          newTicket.description = `
+          Nom: ${this.showAffect?.nom}\n
+          Prénom: ${this.showAffect?.prenom}\n
+          Email: ${this.showAffect?.email}\n
+          Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
+          Source: ${this.showAffect?.source}
+          `
+          this.TicketService.create(newTicket).subscribe(r => {
+            this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
+          }, error => {
+            console.error(error)
+          })
+        })
+
+      })
+
       this.showAffect = null
       this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })

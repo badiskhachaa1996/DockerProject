@@ -644,7 +644,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
           this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
             console.log(response, serviceAdmission)
 
-            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
+            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission.dataService._id)).pipe(map(notif => {
               this.NotifService.newNotif(notif)
             }, (error) => {
               console.error(error)

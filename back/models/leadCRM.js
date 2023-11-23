@@ -60,7 +60,7 @@ const schema = mongoose.Schema({
 
     //Affectation
     affected_date: { type: Date, required: false },
-    affected_to_member: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+    affected_to_member: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
 
     //Choix Prospects
     rythme: { type: String, required: false },

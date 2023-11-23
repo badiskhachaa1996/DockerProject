@@ -9,14 +9,16 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
-
+import { ServService } from 'src/app/services/service.service';
+import { AuthService } from 'src/app/services/auth.service';
+import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-mes-leads',
   templateUrl: './mes-leads.component.html',
   styleUrls: ['./mes-leads.component.scss']
 })
 export class MesLeadsComponent implements OnInit {
-
+  token;
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -78,10 +80,11 @@ export class MesLeadsComponent implements OnInit {
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAllByID(this.ID).subscribe(data => {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.LCS.getAllByID(this.token.id).subscribe(data => {
       this.leads = data
     })
     this.FAService.EAgetAll().subscribe(data => {
@@ -95,6 +98,17 @@ export class MesLeadsComponent implements OnInit {
       })
     })
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
+      if (dataS)
+        this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+          data.forEach(val => {
+            this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+            this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+          })
+        })
+      else
+        console.error('Pas de service Commercial')
+    })
   }
 
   //Follow Form

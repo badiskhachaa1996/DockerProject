@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export class LeadCRM {
     constructor(
         public source?: string,
@@ -55,7 +57,7 @@ export class LeadCRM {
 
         //Affectation
         public affected_date?: Date,
-        public affected_to_member?: any,
+        public affected_to_member?: User,
 
         //Choix Prospects
         public rythme?: string,
