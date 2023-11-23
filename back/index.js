@@ -154,6 +154,8 @@ const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
 const meetingTeamsController = require('./controllers/meetingTeamsController');
 const gestionProduitsCrmController = require('./controllers/gestionProduitsCrmController');
+const gestionOperationCrmController = require('./controllers/gestionPoerationCrmController');
+const gestionSourceCrmController = require('./controllers/gestionSourceCrmController');
 
 
 const { User } = require("./models/user");
@@ -432,7 +434,8 @@ app.use('/soc/evaluation',require('./controllers/evaluationController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)
-
+app.use('/soc/gestion-operation',gestionOperationCrmController)
+app.use('/soc/gestion-sources',gestionSourceCrmController)
 
 
 io.on("connection", (socket) => {

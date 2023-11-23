@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
+import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -20,11 +21,14 @@ import { HistoriqueEmail } from "../../../models/HistoriqueEmail";
 import { HistoriqueLead } from "../../../models/HistoriqueLead";
 import { FileUpload } from 'primeng/fileupload';
 import { AdmissionService } from "../../../services/admission.service";
+import { SourceCRM } from "../../../models/sourceCRM";
+import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
+import { OperationCRM } from "../../../models/operationCRM";
+import { GestionOperationService } from "../../gestion-operation/gestion-operation.service";
 import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Ticket } from 'src/app/models/Ticket';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-list-leadcrm',
@@ -37,28 +41,13 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Tous les pays', value: null }
   ]
   AccessLevel = "Spectateur"
-  filterSource = [
-    { label: 'Toutes les sources', value: null },
-    { label: 'Facebook', value: 'Facebook' },
-    { label: 'WhatsApp', value: 'WhatsApp' },
-    { label: 'Appel Telephonique', value: 'Appel Telephonique' },
-    { label: 'Mail', value: 'Mail' },
-    { label: 'Visite au site', value: 'Visite au site' },
-    { label: 'Online Meeting', value: 'Online Meeting' },
-    { label: 'Marketing', value: 'Marketing' },
-    { label: 'Recyclage', value: 'Recyclage' },
-  ]
+  filterSource = []
 
-  filterOperation = [
-    { label: 'Toutes les operations', value: null },
-    { label: 'Prospection FRP', value: 'Prospection FRP' },
-    { label: 'Prospection ENP', value: 'Prospection ENP' },
-    { label: 'Prospection ICBS Malte', value: 'Prospection ICBS Malte' },
-    { label: 'Prospection ICBS Dubai', value: 'Prospection ICBS Dubai' },
-  ]
+  filterOperation = []
+
 
   filterAffecte = [
-    { label: 'Tous les commercial', value: null }
+    { label: 'Tous les membres', value: null }
   ]
 
   filterQualification = [
@@ -92,7 +81,6 @@ export class ListLeadcrmComponent implements OnInit {
   ]
 
 
-
   //Qualification
   produitList = [];
   private selectedLead: LeadCRM;
@@ -100,7 +88,7 @@ export class ListLeadcrmComponent implements OnInit {
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
     private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private EmailTypeS: EmailTypeService,
     private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService,
-    private admissionService: AdmissionService) { }
+    private admissionService: AdmissionService, private OperationService: GestionOperationService) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
@@ -135,17 +123,52 @@ export class ListLeadcrmComponent implements OnInit {
           if (role.module == "CRM")
             this.AccessLevel = role.role
         })
-      if (data.role == "Admin")
-        this.AccessLevel = "Super-Admin"
-    })
+      this.OperationService.GetAllOperation().subscribe(data => {
+        console.log(data)
+      })
+      this.LCS.getAll().subscribe(data => {
+        this.leads = data
+      })
+      this.FAService.EAgetAll().subscribe(data => {
+        data.forEach(f => {
+          this.ecoleList.push({ label: f.titre, value: f._id })
+        })
+      })
+      this.FAService.FAgetAll().subscribe(data => {
+        data.forEach(d => {
+          this.formationList.push({ label: d.nom, value: d._id })
+        })
+      })
+      this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
+        if (dataS)
+          this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+            data.forEach(val => {
+              this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+              this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+            })
+          })
+        else
+          console.error('Pas de service Commercial')
+      })
 
-    this.Products.GetAllProduit().subscribe(data => {
-      data.forEach(val => {
-        this.produitList.push({ label: val.nom, value: val._id })
+      this.filterPays = this.filterPays.concat(environment.pays)
+      this.token = jwt_decode(localStorage.getItem('token'));
+      this.UserService.getPopulate(this.token.id).subscribe(data => {
+        if (data.roles_list)
+          data.roles_list.forEach(role => {
+            if (role.module == "CRM")
+              this.AccessLevel = role.role
+          })
+        if (data.role == "Admin")
+          this.AccessLevel = "Super-Admin"
+      })
+
+      this.Products.GetAllProduit().subscribe(data => {
+        data.forEach(val => {
+          this.produitList.push({ label: val.nom, value: val._id })
+        })
       })
     })
-
-
   }
 
   //Follow Form
@@ -164,14 +187,22 @@ export class ListLeadcrmComponent implements OnInit {
     note_qualification: new FormControl(''),
   })
 
-
-  initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({ ...lead })
-    this.showFollow = lead
+  @Output() suivreLead = new EventEmitter<LeadCRM>();
+  initFollow(lead
+    :
+    LeadCRM
+  ) {
+    this.suivreLead.emit(lead)
   }
 
   onUpdateFollow() {
-    this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents }).subscribe(data => {
+    this.LCS.update({
+      ...this.followForm.value,
+      contacts: this.showFollow.contacts,
+      ventes: this.showFollow.ventes,
+      mailing: this.showFollow.mailing,
+      documents: this.showFollow.documents
+    }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showFollow), 1, data)
       this.followForm.reset()
       this.showFollow = null
@@ -235,9 +266,11 @@ export class ListLeadcrmComponent implements OnInit {
     document.getElementById('selectedFile').click();
   }
   deleteFile(index: number): void {
-    if (index >= 0 && index < this.showFollow.documents.length) {
+    if (index >= 0 && index < this.showFollow.documents.length
+    ) {
       this.showFollow.documents.splice(index, 1);
-    } else {
+    }
+    else {
       this.ToastService.add({ severity: 'error', summary: 'Erreur', detail: 'Index de document invalide' });
     }
   }
@@ -247,14 +280,22 @@ export class ListLeadcrmComponent implements OnInit {
     const selectedFile = event.target.files[0];
 
     if (selectedFile) {
-      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      this.ToastService.add({
+        severity: 'info',
+        summary: 'Envoi de Fichier',
+        detail: 'Envoi en cours, veuillez patienter ...'
+      });
       const formData = new FormData();
       formData.append('document_id', this.showFollow.documents[this.indexDocuments]._id);
       formData.append('lead_id', this.showFollow._id);
       formData.append('file', selectedFile);
 
       this.LCS.uploadFile(formData).subscribe(res => {
-        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.ToastService.add({
+          severity: 'success',
+          summary: 'Envoi de Fichier',
+          detail: 'Le fichier a bien été envoyé'
+        });
         this.showFollow.documents[this.indexDocuments].path = selectedFile.name;
       }, error => {
         console.error(error);
@@ -308,11 +349,9 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Alternant', value: 'Alternant' },
   ]
 
-  ecoleList = [
-  ]
+  ecoleList = []
 
-  formationList = [
-  ]
+  formationList = []
 
   campusList = [
     { label: 'Paris', value: 'Paris' },
@@ -328,7 +367,6 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Contrat de bail', value: 'Contrat de bail' },
     { label: 'Attestation avec blocage', value: 'Attestation avec blocage' },
   ]
-
 
 
   critereList = [
@@ -363,7 +401,10 @@ export class ListLeadcrmComponent implements OnInit {
     affected_to_team: new FormControl(''),
   })
 
-  initAffect(lead: LeadCRM) {
+  initAffect(lead
+    :
+    LeadCRM
+  ) {
     this.affectForm.patchValue({ ...lead })
     this.showAffect = lead
   }
@@ -444,9 +485,6 @@ export class ListLeadcrmComponent implements OnInit {
   }
 
 
-
-
-
   // Gestion des emails envoyé un email, afficher les emails envoyés et les emails types
 
   showEmail = false
@@ -454,7 +492,10 @@ export class ListLeadcrmComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  @ViewChild('fileInput') fileInput: FileUpload;
+  @ViewChild('fileInput')
+  fileInput
+    :
+    FileUpload;
 
   formEmailPerso = new FormGroup({
     objet: new FormControl('', Validators.required),
@@ -470,9 +511,21 @@ export class ListLeadcrmComponent implements OnInit {
   })
   onEmailPerso() {
     console.log(this.formEmailPerso.value.cc)
-    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.leadSendTo.email, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.EmailTypeS.sendPerso({
+      ...this.formEmailPerso.value,
+      send_by: this.token.id,
+      send_to: this.leadSendTo.email,
+      send_from: this.formEmailPerso.value.send_from._id,
+      pieces_jointes: this.piece_jointes,
+      mailTypeSelected: this.mailTypeSelected
+    }).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
-      this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.leadSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+      this.EmailTypeS.HEcreate({
+        ...this.formEmailPerso.value,
+        send_by: this.token.id,
+        send_to: this.leadSendTo._id,
+        send_from: this.formEmailPerso.value.send_from.email
+      }).subscribe(data2 => {
         this.formEmailPerso.reset()
         this.historiqueEmails.push(data2)
         this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
@@ -481,9 +534,21 @@ export class ListLeadcrmComponent implements OnInit {
 
   }
   onEmailType() {
-    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.leadSendTo.email, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.EmailTypeS.sendPerso({
+      ...this.formEmailType.value,
+      send_by: this.token.id,
+      send_to: this.leadSendTo.email,
+      send_from: this.formEmailType.value.send_from._id,
+      pieces_jointes: this.piece_jointes,
+      mailTypeSelected: this.mailTypeSelected
+    }).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
-      this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.leadSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+      this.EmailTypeS.HEcreate({
+        ...this.formEmailType.value,
+        send_by: this.token.id,
+        send_to: this.leadSendTo._id,
+        send_from: this.formEmailType.value.send_from.email
+      }).subscribe(data2 => {
         this.formEmailType.reset()
         this.historiqueEmails.push(data2)
         this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
@@ -491,7 +556,10 @@ export class ListLeadcrmComponent implements OnInit {
     })
 
   }
-  initSendEmail(lead: LeadCRM) {
+  initSendEmail(lead
+    :
+    LeadCRM
+  ) {
     this.showEmail = true
     this.leadSendTo = lead
 
@@ -510,7 +578,10 @@ export class ListLeadcrmComponent implements OnInit {
     })
   }
 
-  onMailType(event: MailType) {
+  onMailType(event
+    :
+    MailType
+  ) {
     this.formEmailType.patchValue({
       ...event
     })
@@ -528,13 +599,25 @@ export class ListLeadcrmComponent implements OnInit {
 
   uploadFilePJ: {
     date: Date,
-    nom: string,
-    path: string,
-    _id: string
-  } = null
+    nom
+    :
+    string,
+    path
+    :
+    string,
+    _id
+    :
+    string
+  }
+    = null
 
   onAddPj() {
-    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.piece_jointes.push({
+      date: new Date(),
+      nom: "Téléverser le fichier s'il vous plaît",
+      path: '',
+      _id: new mongoose.Types.ObjectId().toString()
+    })
   }
   downloadPJFile(pj) {
     this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
@@ -551,16 +634,25 @@ export class ListLeadcrmComponent implements OnInit {
       document.getElementById('selectedFile').click();
       this.uploadFilePJ = uploadFilePJ
     } else {
-      this.ToastService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+      this.ToastService.add({
+        severity: 'error',
+        summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload'
+      });
     }
 
   }
 
 
-
-  FileUploadPJ(event: [File]) {
+  FileUploadPJ(event
+    :
+    [File]
+  ) {
     if (event != null) {
-      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      this.ToastService.add({
+        severity: 'info',
+        summary: 'Envoi de Fichier',
+        detail: 'Envoi en cours, veuillez patienter ...'
+      });
       const formData = new FormData();
       formData.append('nom', this.uploadFilePJ.nom)
       formData.append('pj_id', this.uploadFilePJ._id)
@@ -568,7 +660,11 @@ export class ListLeadcrmComponent implements OnInit {
       formData.append('_id', this.mailTypeSelected?._id)
       formData.append('file', event[0])
       this.EmailTypeS.uploadPJ(formData).subscribe(res => {
-        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.ToastService.add({
+          severity: 'success',
+          summary: 'Envoi de Fichier',
+          detail: 'Le fichier a bien été envoyé'
+        });
         this.piece_jointes[this.piece_jointes.indexOf(this.uploadFilePJ)].path = event[0].name
         this.uploadFilePJ = null;
         this.fileInput.clear()
@@ -579,7 +675,10 @@ export class ListLeadcrmComponent implements OnInit {
   }
   listHistorique: HistoriqueLead[] = []
   leadHistorique: Prospect
-  initHistorique(lead: Prospect) {
+  initHistorique(lead
+    :
+    Prospect
+  ) {
     this.leadHistorique = lead
     this.admissionService.getAllHistoriqueFromLeadID(lead._id).subscribe(data => {
       this.listHistorique = data
@@ -597,8 +696,14 @@ export class ListLeadcrmComponent implements OnInit {
     this.formEmailType.reset()
   }
 
-  onUpdateQualification(event: any, lead: LeadCRM) {
+  onUpdateQualification(event
+    :
+    any, lead
+      :
+      LeadCRM
+  ) {
     //mettre à jour le champs qualification du lead
+
     lead.decision_qualification = event.value
     this.LCS.update(lead).subscribe(data => {
       this.leads.splice(this.leads.indexOf(lead), 1, data)
@@ -606,7 +711,12 @@ export class ListLeadcrmComponent implements OnInit {
     })
 
   }
-  onUpdateStatutDossier(event: any, lead: LeadCRM) {
+  onUpdateStatutDossier(event
+    :
+    any, lead
+      :
+      LeadCRM
+  ) {
     //mettre à jour le champs qualification du lead
     lead.statut_dossier = event.value
     this.LCS.update(lead).subscribe(data => {
@@ -621,7 +731,10 @@ export class ListLeadcrmComponent implements OnInit {
   showAddWhatNumberlInput = false
 
 
-  onInitAddEmailInput(type: string) {
+  onInitAddEmailInput(type
+    :
+    string
+  ) {
 
     if (!type) {
       return
@@ -637,7 +750,14 @@ export class ListLeadcrmComponent implements OnInit {
     }
   }
 
-  onAddElseContact(event: any, lead: LeadCRM, type: string) {
+  onAddElseContact(event
+    :
+    any, lead
+      :
+      LeadCRM, type
+      :
+      string
+  ) {
     // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
     if (!type) {
       return
@@ -657,7 +777,10 @@ export class ListLeadcrmComponent implements OnInit {
     })
   }
 
-  onHideAddEmailInput(type: string) {
+  onHideAddEmailInput(type
+    :
+    string
+  ) {
     if (!type) {
       return
     }

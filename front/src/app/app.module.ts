@@ -400,6 +400,8 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
+import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
+import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
 
 @NgModule({
   imports: [
@@ -783,7 +785,7 @@ import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.comp
     InformationRemboursementComponent,
     UploadRemboursementDocComponent,
 
-    // >>>>>>> 
+    // >>>>>>>
     MatchingViewerComponent,
     NewEntreprisesComponent,
     AnnonceViewerComponent,
@@ -820,7 +822,9 @@ import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.comp
     LogementComponent,
     GestionLogementComponent,
     BookingV2Component,
-    SuivreLeadComponent
+    SuivreLeadComponent,
+    GestionOperationComponent,
+    GestionSrourcesComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
