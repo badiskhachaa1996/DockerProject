@@ -1,6 +1,5 @@
 stages:
   - Install
-  - Test
   - Build
   - sast
   - dast
@@ -67,7 +66,6 @@ angular_dependencies:
 #========================================================
 
 sonarqube-check:
-  stage: Test
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
