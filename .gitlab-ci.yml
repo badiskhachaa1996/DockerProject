@@ -1,11 +1,13 @@
 stages:
-  - install_dependencies
-  - test
-  - build
-  - sast
-  - dast
-  - docker
-  - deploy
+  - Install
+  - Test
+  - Build
+  - SAST
+  - DAST
+  - Docker
+  - DEV
+  - QA
+  - PROD
 
 variables:
   MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -24,10 +26,11 @@ brakeman-sast:
 
 #========================================================
 
-node_dependencies_dev:
-  stage: install_dependencies
+node_dependencies:
+  stage: Install
   tags:
-  - dev-shell
+    - dev-shell
+    - qa-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -39,10 +42,11 @@ node_dependencies_dev:
     changes:
       - back/package-lock.json
 
-angular_dependencies_dev:
-  stage: install_dependencies
+angular_dependencies:
+  stage: Install
   tags:
-  - dev-shell
+    - dev-shell
+    - qa-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -63,7 +67,7 @@ angular_dependencies_dev:
 #========================================================
 
 sonarqube-check:
-  stage: test
+  stage: Test
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -90,10 +94,10 @@ sonarqube-check:
 #========================================================
 
 build_angular:
-  stage: build
+  stage: Build
   tags:
     - dev-shell
-    - qa-shell
+    - qa-shell # FIXME
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -104,7 +108,7 @@ build_angular:
       - cd front
       - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
-    - develop
+    - develop # FIXME
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -113,7 +117,7 @@ build_angular:
 #  when: manual
 
 spotbugs-sast:
-  stage: sast
+  stage: SAST
   dependencies:
     - build_angular
   variables:
@@ -123,7 +127,7 @@ spotbugs-sast:
     reports:
       sast: gl-sast-report.json
 
-# dast:
+# DAST:
   # dast_configuration:
     # site_profile: "Inted Group"
     # scanner_profile: "Quick Passive Test"
@@ -131,7 +135,7 @@ spotbugs-sast:
 #======================================================
 
 angular_docker_build:
-  stage: docker
+  stage: Docker
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
@@ -149,7 +153,7 @@ angular_docker_build:
       allow_failure: true # FIXME
 
 node_docker_build:
-  stage: docker
+  stage: Docker
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
@@ -169,7 +173,7 @@ node_docker_build:
 #======================================================
 
 deploy_angular_to_dev:
-  stage: deploy
+  stage: DEV
   dependencies: 
     - build_angular
   tags:
@@ -181,7 +185,7 @@ deploy_angular_to_dev:
     - develop
   
 deploy_node_to_dev:
-  stage: deploy
+  stage: DEV
 
   tags:
     - dev-shell
@@ -198,7 +202,7 @@ deploy_node_to_dev:
 #======================================================
 
 deploy_angular_to_qa:
-  stage: deploy
+  stage: QA
   dependencies: 
     - build_angular
   tags:
@@ -211,7 +215,7 @@ deploy_angular_to_qa:
   when: manual
   
 deploy_node_to_qa:
-  stage: deploy
+  stage: QA
 
   tags:
     - qa-shell
@@ -229,7 +233,7 @@ deploy_node_to_qa:
 #======================================================
 
 deploy_angular_to_prod:
-  stage: deploy
+  stage: PROD
   dependencies: 
     - build_angular
   tags:
@@ -244,7 +248,7 @@ deploy_angular_to_prod:
   #environment: production
   
 deploy_node_to_prod:
-  stage: deploy
+  stage: PROD
 
   tags:
     - qa-docker # FIXME
