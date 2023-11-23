@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { CampusService } from 'src/app/services/campus.service';
@@ -73,11 +73,11 @@ export class AddDiplomeComponent implements OnInit {
 
   diplomes: Diplome[] = [];
 
-  formAddDiplome: FormGroup;
+  formAddDiplome: UntypedFormGroup;
 
   showFormAddDiplome: boolean = false;
 
-  formUpdateDiplome: FormGroup;
+  formUpdateDiplome: UntypedFormGroup;
   showFormUpdateDiplome: boolean = false;
   diplomeToUpdate: Diplome = new Diplome();
   idDiplomeToUpdate: string;
@@ -90,7 +90,7 @@ export class AddDiplomeComponent implements OnInit {
   display: boolean;
 
   dicMatiere: any
-  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
+  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: UntypedFormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
     private formateurService: FormateurService, private AuthService: AuthService) { }
 

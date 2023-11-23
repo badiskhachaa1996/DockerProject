@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { FileUpload } from 'primeng/fileupload';
 import { saveAs } from "file-saver";
 import { MessageService } from 'primeng/api';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Prospect } from 'src/app/models/Prospect';
 import { AuthService } from 'src/app/services/auth.service';
@@ -20,10 +20,10 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   showUpdatePassword = false
-  passwordForm = new FormGroup({
-    passwordactual: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    verifypassword: new FormControl('', Validators.required),
+  passwordForm = new UntypedFormGroup({
+    passwordactual: new UntypedFormControl('', Validators.required),
+    password: new UntypedFormControl('', Validators.required),
+    verifypassword: new UntypedFormControl('', Validators.required),
   });
   onUpdatePassword() {
     let passwordactual = this.passwordForm.get('passwordactual').value;
@@ -105,8 +105,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { label: "Pas de retour", value: "Pas de retour" },
   ]
 
-  uploadFileForm: FormGroup = new FormGroup({
-    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  uploadFileForm: UntypedFormGroup = new UntypedFormGroup({
+    typeDoc: new UntypedFormControl(this.DocTypes[0], Validators.required)
   })
   constructor(public activatedRoute: ActivatedRoute, private router: Router, private messageService: MessageService, private admissionService: AdmissionService, private UserService: AuthService) { }
 
@@ -248,8 +248,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: `Changement du statut du visa par: En attente` })
     })
   }
-  demandeConsultant: FormGroup = new FormGroup({
-    mail: new FormControl('', Validators.required)
+  demandeConsultant: UntypedFormGroup = new UntypedFormGroup({
+    mail: new UntypedFormControl('', Validators.required)
   })
   sendDemande() {
     this.admissionService.envoieMail(this.demandeConsultant.value.mail, this.ProspectConnected).subscribe(r => {
@@ -257,13 +257,13 @@ export class SuiviePreinscriptionComponent implements OnInit {
       this.demandeConsultant.reset()
     })
   }
-  editInfoForm: FormGroup = new FormGroup({
-    lastname: new FormControl('', Validators.required),
-    firstname: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
-    date_naissance: new FormControl('', Validators.required),
-    nationnalite: new FormControl('', Validators.required),
-    _id: new FormControl("", Validators.required)
+  editInfoForm: UntypedFormGroup = new UntypedFormGroup({
+    lastname: new UntypedFormControl('', Validators.required),
+    firstname: new UntypedFormControl('', Validators.required),
+    phone: new UntypedFormControl('', Validators.required),
+    date_naissance: new UntypedFormControl('', Validators.required),
+    nationnalite: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl("", Validators.required)
   })
   initEditForm() {
     let bypass: any = this.ProspectConnected?.user_id

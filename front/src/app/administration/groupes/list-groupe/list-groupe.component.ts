@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
@@ -23,7 +23,7 @@ import { saveAs } from 'file-saver';
 })
 export class ListGroupeComponent implements OnInit {
 
-  formUpdateClasse: FormGroup;
+  formUpdateClasse: UntypedFormGroup;
   showFormUpdateClasse: boolean = false;
 
   classes: Classe[] = [];
@@ -61,7 +61,7 @@ export class ListGroupeComponent implements OnInit {
   idGroupeToUpdate: string;
   calendarFile: any;
 
-  constructor(private campusService: CampusService, private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
+  constructor(private campusService: CampusService, private diplomeService: DiplomeService, private formBuilder: UntypedFormBuilder, private classeService: ClasseService, private messageService: MessageService
     , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService, private ExamenService: ExamenService) { }
 
   customIncludes(l: any, d: { label: string, value: string }) {
@@ -263,7 +263,7 @@ export class ListGroupeComponent implements OnInit {
     + "La signature par défaut sera celle d'espic\nCordialement,\nl'équipe IMS"
   semestreList = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }]
   showPV: Classe = null
-  formPV: FormGroup = this.formBuilder.group({
+  formPV: UntypedFormGroup = this.formBuilder.group({
     semestre: ['', Validators.required]
   });
   initPV(rowData) {
@@ -293,7 +293,7 @@ export class ListGroupeComponent implements OnInit {
     })
   }
 
-  formLiens: FormGroup = this.formBuilder.group({
+  formLiens: UntypedFormGroup = this.formBuilder.group({
     lien_programme: [''],
     lien_calendrier: [''],
   });

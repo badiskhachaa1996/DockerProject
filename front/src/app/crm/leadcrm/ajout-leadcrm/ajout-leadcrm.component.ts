@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { environment } from 'src/environments/environment';
@@ -62,26 +62,26 @@ export class AjoutLeadcrmComponent implements OnInit {
       { label: "Basique", value: "Basique" },
       { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
     ]
-  addForm: FormGroup = new FormGroup({
-    source: new FormControl(''),
-    operation: new FormControl(''),
-    civilite: new FormControl(''),
-    nom: new FormControl('', Validators.required),
-    prenom: new FormControl('', Validators.required),
-    pays_residence: new FormControl(''),
-    email: new FormControl(''),
-    indicatif_phone: new FormControl(''),
-    numero_phone: new FormControl(''),
-    date_naissance: new FormControl('', Validators.required),
-    nationalite: new FormControl('', Validators.required),
-    indicatif_whatsapp: new FormControl(''),
-    numero_whatsapp: new FormControl(''),
-    indicatif_telegram: new FormControl(''),
-    numero_telegram: new FormControl(''),
-    dernier_niveau_academique: new FormControl(''),
-    statut: new FormControl(''),
-    niveau_fr: new FormControl(''),
-    niveau_en: new FormControl(''),
+  addForm: UntypedFormGroup = new UntypedFormGroup({
+    source: new UntypedFormControl(''),
+    operation: new UntypedFormControl(''),
+    civilite: new UntypedFormControl(''),
+    nom: new UntypedFormControl('', Validators.required),
+    prenom: new UntypedFormControl('', Validators.required),
+    pays_residence: new UntypedFormControl(''),
+    email: new UntypedFormControl(''),
+    indicatif_phone: new UntypedFormControl(''),
+    numero_phone: new UntypedFormControl(''),
+    date_naissance: new UntypedFormControl('', Validators.required),
+    nationalite: new UntypedFormControl('', Validators.required),
+    indicatif_whatsapp: new UntypedFormControl(''),
+    numero_whatsapp: new UntypedFormControl(''),
+    indicatif_telegram: new UntypedFormControl(''),
+    numero_telegram: new UntypedFormControl(''),
+    dernier_niveau_academique: new UntypedFormControl(''),
+    statut: new UntypedFormControl(''),
+    niveau_fr: new UntypedFormControl(''),
+    niveau_en: new UntypedFormControl(''),
   })
 
   prospects = []

@@ -5,7 +5,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { Entreprise } from 'src/app/models/Entreprise';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
@@ -45,10 +45,10 @@ export class MatchingComponent implements OnInit {
 
   matchingsPotentiel: Matching[] = []
 
-  formUpdateStatut: FormGroup = new FormGroup({
-    statut: new FormControl('', [Validators.required]),
-    remarque: new FormControl('', []),
-    _id: new FormControl('', [Validators.required]),
+  formUpdateStatut: UntypedFormGroup = new UntypedFormGroup({
+    statut: new UntypedFormControl('', [Validators.required]),
+    remarque: new UntypedFormControl('', []),
+    _id: new UntypedFormControl('', [Validators.required]),
   })
 
   constructor(private MatchingService: MatchingService, private route: ActivatedRoute,

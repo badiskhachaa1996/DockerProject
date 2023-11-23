@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MailType } from 'src/app/models/MailType';
 import { EmailTypeService } from 'src/app/services/email-type.service';
@@ -26,10 +26,10 @@ export class MailTypeComponent implements OnInit {
     })
   }
   //Ajout
-  formAdd = new FormGroup({
-    objet: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    body: new FormControl(),
-    type: new FormControl('', Validators.required)
+  formAdd = new UntypedFormGroup({
+    objet: new UntypedFormControl('', [Validators.required, Validators.minLength(2)]),
+    body: new UntypedFormControl(),
+    type: new UntypedFormControl('', Validators.required)
   })
   onAdd() {
     this.EmailTypeService.MTcreate({ ...this.formAdd.value, custom_id: this.generateID() }).subscribe(data => {
@@ -41,11 +41,11 @@ export class MailTypeComponent implements OnInit {
   }
 
   //Update
-  formEdit = new FormGroup({
-    objet: new FormControl('', [Validators.required]),
-    body: new FormControl('', Validators.required),
-    type: new FormControl('', Validators.required),
-    _id: new FormControl('', Validators.required)
+  formEdit = new UntypedFormGroup({
+    objet: new UntypedFormControl('', [Validators.required]),
+    body: new UntypedFormControl('', Validators.required),
+    type: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl('', Validators.required)
   })
   onInitUpdate(email: MailType) {
     this.formEdit.patchValue({ ...email })

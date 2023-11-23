@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ProspectAlternable } from 'src/app/models/ProspectAlternable';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -13,15 +13,15 @@ import jwt_decode from "jwt-decode";
 export class ProspectsAlternablesComponent implements OnInit {
 
   prospects: ProspectAlternable[] = [];
-  formUpdate: FormGroup;
+  formUpdate: UntypedFormGroup;
   showFormUpdate: boolean = false;
 
-  formGenerateLink: FormGroup;
+  formGenerateLink: UntypedFormGroup;
   showFormGenerateLink: boolean = false;
 
   token: any;
 
-  constructor(private admissionService: AdmissionService, private messageService: MessageService, private formBuilder: FormBuilder) { }
+  constructor(private admissionService: AdmissionService, private messageService: MessageService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     // décodage du token

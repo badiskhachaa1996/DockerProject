@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { Etudiant } from 'src/app/models/Etudiant';
@@ -33,10 +33,10 @@ import { EcoleService } from 'src/app/services/ecole.service';
 })
 export class AddEtudiantComponent implements OnInit {
 
-  formAddEtudiant: FormGroup;
+  formAddEtudiant: UntypedFormGroup;
   showFormAddEtudiant: boolean = false;
 
-  formUpdateEtudiant: FormGroup;
+  formUpdateEtudiant: UntypedFormGroup;
   showFormUpdateEtudiant: boolean = false;
 
   nationList = environment.nationalites;
@@ -123,7 +123,7 @@ export class AddEtudiantComponent implements OnInit {
 
 
 
-  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
+  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: UntypedFormBuilder, private userService: AuthService,
     private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
     private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService) { }
 

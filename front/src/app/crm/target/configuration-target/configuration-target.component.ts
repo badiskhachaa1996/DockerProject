@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
@@ -21,24 +21,24 @@ export class ConfigurationTargetComponent implements OnInit {
   targets = []
   EditTarget: Target
   AddTarget = false
-  formEdit = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    equipe_id: new FormControl(''),
-    member_id: new FormControl(''),
-    type: new FormControl(''),
-    KPI: new FormControl(''),
-    date_commencement: new FormControl(''),
-    deadline: new FormControl(''),
-    description: new FormControl(''),
+  formEdit = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    equipe_id: new UntypedFormControl(''),
+    member_id: new UntypedFormControl(''),
+    type: new UntypedFormControl(''),
+    KPI: new UntypedFormControl(''),
+    date_commencement: new UntypedFormControl(''),
+    deadline: new UntypedFormControl(''),
+    description: new UntypedFormControl(''),
   })
-  formAdd = new FormGroup({
-    equipe_id: new FormControl(),
-    member_id: new FormControl(),
-    type: new FormControl(''),
-    KPI: new FormControl(''),
-    date_commencement: new FormControl(''),
-    deadline: new FormControl(''),
-    description: new FormControl(''),
+  formAdd = new UntypedFormGroup({
+    equipe_id: new UntypedFormControl(),
+    member_id: new UntypedFormControl(),
+    type: new UntypedFormControl(''),
+    KPI: new UntypedFormControl(''),
+    date_commencement: new UntypedFormControl(''),
+    deadline: new UntypedFormControl(''),
+    description: new UntypedFormControl(''),
   })
   memberCRMDropdown = []
   equipeCRMDropdown = []

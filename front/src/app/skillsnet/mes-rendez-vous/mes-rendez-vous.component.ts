@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
@@ -45,8 +45,8 @@ export class MesRendezVousComponent implements OnInit {
     })
   }
 
-  form = new FormGroup({
-    statut: new FormControl('', Validators.required)
+  form = new UntypedFormGroup({
+    statut: new UntypedFormControl('', Validators.required)
   })
 
   rdvToUpdate: MeetingTeams

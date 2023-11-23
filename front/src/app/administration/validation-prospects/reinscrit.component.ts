@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
@@ -86,7 +86,7 @@ export class ReinscritComponent implements OnInit {
   ];
   showAssignForm: Prospect = null;
 
-  AssignForm: FormGroup = this.formBuilder.group({
+  AssignForm: UntypedFormGroup = this.formBuilder.group({
     filiere: ["", Validators.required],
     statut: ["", Validators.required],
     numero_ine: [''],
@@ -155,13 +155,13 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
-  uploadFileForm: FormGroup = new FormGroup({
-    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  uploadFileForm: UntypedFormGroup = new UntypedFormGroup({
+    typeDoc: new UntypedFormControl(this.DocTypes[0], Validators.required)
   })
 
   groupeList = [];
   constructor(public etudiantService: EtudiantService, private messageService: MessageService, private campusService: CampusService, private diplomeService: DiplomeService, private commercialService: CommercialPartenaireService,
-    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService, private EcoleService: EcoleService) { }
+    private formBuilder: UntypedFormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService, private EcoleService: EcoleService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -368,7 +368,7 @@ export class ReinscritComponent implements OnInit {
   }
 
   showPayement: Prospect;
-  formUpdateDossier: FormGroup = this.formBuilder.group({
+  formUpdateDossier: UntypedFormGroup = this.formBuilder.group({
     statut_dossier: ['']
   });
 

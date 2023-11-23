@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ClasseService } from 'src/app/services/classe.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
@@ -32,29 +32,29 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
     { label: 'Ne sais pas', value: 'Ne sais pas' }
   ]
 
-  satisfactionsForm: FormGroup = new FormGroup({
-    formation: new FormControl('', Validators.required),
-    ecole: new FormControl('', Validators.required),
-    ecole_propositions: new FormControl(''),
-    ecoleInscrit: new FormControl('', [Validators.required]),
-    campus: new FormControl('', [Validators.required]),
-    age: new FormControl('', [Validators.required]),
-    annee_formation: new FormControl('', [Validators.required]),
-    horaire: new FormControl('', [Validators.required]),
-    charge: new FormControl('', [Validators.required]),
-    satisfait_nb_matiere: new FormControl('', [Validators.required]),
-    satisfait_programme: new FormControl('', [Validators.required]),
-    satisfait_pedagogie_enseignant: new FormControl('', [Validators.required]),
-    support: new FormControl(true, [Validators.required]),
-    satisfait_support: new FormControl(''),
-    satisfait_modes: new FormControl('', [Validators.required]),
-    satisfait_suivi: new FormControl('', [Validators.required]),
-    satisfait_locaux: new FormControl('', [Validators.required]),
-    teams: new FormControl('', [Validators.required]),
-    ims: new FormControl('', [Validators.required]),
-    ll: new FormControl('', [Validators.required]),
-    intuns: new FormControl('', [Validators.required]),
-    propositions: new FormControl(''),
+  satisfactionsForm: UntypedFormGroup = new UntypedFormGroup({
+    formation: new UntypedFormControl('', Validators.required),
+    ecole: new UntypedFormControl('', Validators.required),
+    ecole_propositions: new UntypedFormControl(''),
+    ecoleInscrit: new UntypedFormControl('', [Validators.required]),
+    campus: new UntypedFormControl('', [Validators.required]),
+    age: new UntypedFormControl('', [Validators.required]),
+    annee_formation: new UntypedFormControl('', [Validators.required]),
+    horaire: new UntypedFormControl('', [Validators.required]),
+    charge: new UntypedFormControl('', [Validators.required]),
+    satisfait_nb_matiere: new UntypedFormControl('', [Validators.required]),
+    satisfait_programme: new UntypedFormControl('', [Validators.required]),
+    satisfait_pedagogie_enseignant: new UntypedFormControl('', [Validators.required]),
+    support: new UntypedFormControl(true, [Validators.required]),
+    satisfait_support: new UntypedFormControl(''),
+    satisfait_modes: new UntypedFormControl('', [Validators.required]),
+    satisfait_suivi: new UntypedFormControl('', [Validators.required]),
+    satisfait_locaux: new UntypedFormControl('', [Validators.required]),
+    teams: new UntypedFormControl('', [Validators.required]),
+    ims: new UntypedFormControl('', [Validators.required]),
+    ll: new UntypedFormControl('', [Validators.required]),
+    intuns: new UntypedFormControl('', [Validators.required]),
+    propositions: new UntypedFormControl(''),
   })
 
   constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService: ClasseService) { }

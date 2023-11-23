@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { QSService } from 'src/app/services/qs.service';
 import { MessageService } from 'primeng/api';
 
@@ -15,20 +15,20 @@ export class QuestionnaireFinFormationComponent implements OnInit {
     { label: 'Non', value: false }
   ]
 
-  satisfactionsForm: FormGroup = new FormGroup({
-    assez_informations: new FormControl('', Validators.required),
-    contenu: new FormControl('', Validators.required),
-    locaux: new FormControl('', [Validators.required]),
-    equipments: new FormControl('', [Validators.required]),
-    outils: new FormControl('', [Validators.required]),
-    accueil: new FormControl('', [Validators.required]),
-    orga: new FormControl('', [Validators.required]),
-    horaires: new FormControl('', [Validators.required]),
-    rythme: new FormControl('', [Validators.required]),
-    methodes: new FormControl('', [Validators.required]),
-    contenu_peda: new FormControl('', [Validators.required]),
-    disponibilite: new FormControl('', [Validators.required]),
-    date_creation: new FormControl(new Date())
+  satisfactionsForm: UntypedFormGroup = new UntypedFormGroup({
+    assez_informations: new UntypedFormControl('', Validators.required),
+    contenu: new UntypedFormControl('', Validators.required),
+    locaux: new UntypedFormControl('', [Validators.required]),
+    equipments: new UntypedFormControl('', [Validators.required]),
+    outils: new UntypedFormControl('', [Validators.required]),
+    accueil: new UntypedFormControl('', [Validators.required]),
+    orga: new UntypedFormControl('', [Validators.required]),
+    horaires: new UntypedFormControl('', [Validators.required]),
+    rythme: new UntypedFormControl('', [Validators.required]),
+    methodes: new UntypedFormControl('', [Validators.required]),
+    contenu_peda: new UntypedFormControl('', [Validators.required]),
+    disponibilite: new UntypedFormControl('', [Validators.required]),
+    date_creation: new UntypedFormControl(new Date())
   })
 
   dropdownAttentes = [

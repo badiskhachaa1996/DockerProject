@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TeamsCRM } from 'src/app/models/TeamsCRM';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
@@ -21,10 +21,10 @@ export class TeamsCrmComponent implements OnInit {
     })
   }
 
-  updateForm: FormGroup = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    nom: new FormControl('', Validators.required),
-    description: new FormControl('')
+  updateForm: UntypedFormGroup = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    nom: new UntypedFormControl('', Validators.required),
+    description: new UntypedFormControl('')
   })
 
   initUpdate(etudiant) {
@@ -41,10 +41,10 @@ export class TeamsCrmComponent implements OnInit {
     })
   }
 
-  createForm: FormGroup = new FormGroup({
-    nom: new FormControl('', Validators.required),
-    description: new FormControl(''),
-    date_creation: new FormControl(new Date(), Validators.required)
+  createForm: UntypedFormGroup = new UntypedFormGroup({
+    nom: new UntypedFormControl('', Validators.required),
+    description: new UntypedFormControl(''),
+    date_creation: new UntypedFormControl(new Date(), Validators.required)
   })
 
   newTeam = false

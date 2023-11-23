@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
@@ -22,13 +22,13 @@ export class ImatchEntrepriseComponent implements OnInit {
     console.log("???")
   }
   showPostuler = false
-  form = new FormGroup({
-    civilite: new FormControl('', Validators.required),
-    lastname: new FormControl('', Validators.required),
-    firstname: new FormControl('', Validators.required),
-    email_perso: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
-    consent: new FormControl('', Validators.required),
+  form = new UntypedFormGroup({
+    civilite: new UntypedFormControl('', Validators.required),
+    lastname: new UntypedFormControl('', Validators.required),
+    firstname: new UntypedFormControl('', Validators.required),
+    email_perso: new UntypedFormControl('', Validators.required),
+    phone: new UntypedFormControl('', Validators.required),
+    consent: new UntypedFormControl('', Validators.required),
   })
   DepositCV() {
     this.showPostuler = true

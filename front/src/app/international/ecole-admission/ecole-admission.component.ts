@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
@@ -53,17 +53,17 @@ export class EcoleAdmissionComponent implements OnInit {
 
   }
 
-  updateForm: FormGroup = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    titre: new FormControl('', Validators.required),
-    adresse: new FormControl(''),
-    email: new FormControl(''),
-    site_web: new FormControl(''),
-    url_form: new FormControl('', Validators.required),
-    campus: new FormControl([], Validators.required),
-    NDA:new FormControl(''),
-    UAI:new FormControl(''),
-    langue: new FormControl('Français')
+  updateForm: UntypedFormGroup = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    titre: new UntypedFormControl('', Validators.required),
+    adresse: new UntypedFormControl(''),
+    email: new UntypedFormControl(''),
+    site_web: new UntypedFormControl(''),
+    url_form: new UntypedFormControl('', Validators.required),
+    campus: new UntypedFormControl([], Validators.required),
+    NDA:new UntypedFormControl(''),
+    UAI:new UntypedFormControl(''),
+    langue: new UntypedFormControl('Français')
   })
 
   initUpdate(rowData: EcoleAdmission) {
@@ -86,16 +86,16 @@ export class EcoleAdmissionComponent implements OnInit {
     })
   }
 
-  createForm: FormGroup = new FormGroup({
-    titre: new FormControl('', Validators.required),
-    adresse: new FormControl(''),
-    email: new FormControl(''),
-    site_web: new FormControl(''),
-    url_form: new FormControl('', Validators.required),
-    campus: new FormControl([], Validators.required),
-    NDA:new FormControl(''),
-    UAI:new FormControl(''),
-    langue: new FormControl('Français')
+  createForm: UntypedFormGroup = new UntypedFormGroup({
+    titre: new UntypedFormControl('', Validators.required),
+    adresse: new UntypedFormControl(''),
+    email: new UntypedFormControl(''),
+    site_web: new UntypedFormControl(''),
+    url_form: new UntypedFormControl('', Validators.required),
+    campus: new UntypedFormControl([], Validators.required),
+    NDA:new UntypedFormControl(''),
+    UAI:new UntypedFormControl(''),
+    langue: new UntypedFormControl('Français')
   })
 
   addForm = false
@@ -105,10 +105,10 @@ export class EcoleAdmissionComponent implements OnInit {
   initCreate() {
     this.addForm = true
   }
-  createFormRA: FormGroup = new FormGroup({
-    campus: new FormControl(''),
-    annee: new FormControl(''),
-    UAI: new FormControl(''),
+  createFormRA: UntypedFormGroup = new UntypedFormGroup({
+    campus: new UntypedFormControl(''),
+    annee: new UntypedFormControl(''),
+    UAI: new UntypedFormControl(''),
   })
   onCreateRA() {
     
@@ -150,9 +150,9 @@ export class EcoleAdmissionComponent implements OnInit {
     }, 15);
   }
 
-  affectedForm: FormGroup = new FormGroup({
-    _id: new FormControl(),
-    formations: new FormControl()
+  affectedForm: UntypedFormGroup = new UntypedFormGroup({
+    _id: new UntypedFormControl(),
+    formations: new UntypedFormControl()
   })
 
   affectedFormations: EcoleAdmission = null

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
@@ -24,7 +24,7 @@ export class MyprojectComponent implements OnInit {
   token: any;
   selectedTabIndex: number = 0;
   showproject: boolean = false;
-  formFindProject: FormGroup;
+  formFindProject: UntypedFormGroup;
   projectListe: any[] = [];
   tasktodo: any[] = [];
   taskdone: any[] = [];
@@ -50,11 +50,11 @@ export class MyprojectComponent implements OnInit {
   heur_total: number = 0;
   avancementp:number = 0;
   items: MenuItem[];
-  formAddConsigne : FormGroup;
+  formAddConsigne : UntypedFormGroup;
   icone:string="pi-pencil"
 
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private userService: AuthService,
     private messageService: MessageService,
     private projectService: ProjectService,

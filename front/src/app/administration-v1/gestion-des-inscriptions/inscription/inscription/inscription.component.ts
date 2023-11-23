@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { Prospect } from 'src/app/models/Prospect';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
@@ -102,33 +102,33 @@ export class InscriptionComponent implements OnInit {
 
   ];
   filterValue: string | null = null;
-  updateLeadForm: FormGroup = new FormGroup({
-    civilite: new FormControl(environment.civilite[0], Validators.required),
-    lastname: new FormControl('',),
-    firstname: new FormControl('',),
-    date_naissance: new FormControl('',),
-    pays: new FormControl(this.paysList[76], Validators.required),
-    nationalite: new FormControl('',),
-    indicatif: new FormControl('',),
-    phone: new FormControl('',),
-    email_perso: new FormControl('',),
-    rue: new FormControl('',),
-    ville: new FormControl('',),
-    codep: new FormControl('',),
-    ecole: new FormControl('',),
-    campus: new FormControl('',),
-    rentree_scolaire: new FormControl('',),
-    programme: new FormControl('',),
-    formation: new FormControl('',),
-    rythme_formation: new FormControl('',),
-    source: new FormControl('',),
-    commercial: new FormControl('',),
-    nomlead: new FormControl('',),
+  updateLeadForm: UntypedFormGroup = new UntypedFormGroup({
+    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
+    lastname: new UntypedFormControl('',),
+    firstname: new UntypedFormControl('',),
+    date_naissance: new UntypedFormControl('',),
+    pays: new UntypedFormControl(this.paysList[76], Validators.required),
+    nationalite: new UntypedFormControl('',),
+    indicatif: new UntypedFormControl('',),
+    phone: new UntypedFormControl('',),
+    email_perso: new UntypedFormControl('',),
+    rue: new UntypedFormControl('',),
+    ville: new UntypedFormControl('',),
+    codep: new UntypedFormControl('',),
+    ecole: new UntypedFormControl('',),
+    campus: new UntypedFormControl('',),
+    rentree_scolaire: new UntypedFormControl('',),
+    programme: new UntypedFormControl('',),
+    formation: new UntypedFormControl('',),
+    rythme_formation: new UntypedFormControl('',),
+    source: new UntypedFormControl('',),
+    commercial: new UntypedFormControl('',),
+    nomlead: new UntypedFormControl('',),
   })
-  compteForm: FormGroup = new FormGroup({
-    teams: new FormControl('',),
-    Ypareo: new FormControl('',),
-    groupe: new FormControl('',),
+  compteForm: UntypedFormGroup = new UntypedFormGroup({
+    teams: new UntypedFormControl('',),
+    Ypareo: new UntypedFormControl('',),
+    groupe: new UntypedFormControl('',),
   })
 
   constructor(private FAService: FormulaireAdmissionService, private admissionService: AdmissionService, private messageService: MessageService,) { }

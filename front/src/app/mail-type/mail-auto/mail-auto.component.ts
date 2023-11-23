@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MailAuto } from 'src/app/models/MailAuto';
 import { MailType } from 'src/app/models/MailType';
@@ -43,10 +43,10 @@ export class MailAutoComponent implements OnInit {
     })
   }
   //Ajout
-  formAdd = new FormGroup({
-    condition: new FormControl('', Validators.required),
-    mailType: new FormControl('', Validators.required),
-    mail: new FormControl('', Validators.required)
+  formAdd = new UntypedFormGroup({
+    condition: new UntypedFormControl('', Validators.required),
+    mailType: new UntypedFormControl('', Validators.required),
+    mail: new UntypedFormControl('', Validators.required)
   })
   onAdd() {
     this.EmailTypeService.MAcreate({ ...this.formAdd.value }).subscribe(data => {
@@ -58,12 +58,12 @@ export class MailAutoComponent implements OnInit {
   }
 
   //Update
-  formEdit = new FormGroup({
-    condition: new FormControl('', Validators.required),
-    mailType: new FormControl('', Validators.required),
-    mail: new FormControl('', Validators.required),
-    etat: new FormControl('', Validators.required),
-    _id: new FormControl('', Validators.required)
+  formEdit = new UntypedFormGroup({
+    condition: new UntypedFormControl('', Validators.required),
+    mailType: new UntypedFormControl('', Validators.required),
+    mail: new UntypedFormControl('', Validators.required),
+    etat: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl('', Validators.required)
   })
   onInitUpdate(email: MailAuto) {
     this.formEdit.patchValue({

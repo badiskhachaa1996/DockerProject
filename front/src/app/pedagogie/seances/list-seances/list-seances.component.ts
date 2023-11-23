@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
 import { Matiere } from 'src/app/models/Matiere';
@@ -41,7 +41,7 @@ export class ListSeancesComponent implements OnInit {
   dicDiplome: any = {}
   dicClasse: any = {}
 
-  seanceFormUpdate: FormGroup;
+  seanceFormUpdate: UntypedFormGroup;
   showFormUpdateSeance: Seance;
 
   salleNames = [
@@ -183,22 +183,22 @@ export class ListSeancesComponent implements OnInit {
     this.dicCampus[rowData.campus_id].salles.forEach(s => {
       this.salleNames.push({ value: s, label: s })
     })
-    this.seanceFormUpdate = new FormGroup({
-      classe: new FormControl(classeList),
-      matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
-      libelle: new FormControl(rowData.libelle),
-      date_debut: new FormControl(this.toDateString(new Date(rowData.date_debut)), Validators.required),
-      date_fin: new FormControl(this.toDateString(new Date(rowData.date_fin)), Validators.required),
-      formateur: new FormControl("", Validators.required),
-      isPresentiel: new FormControl(rowData.isPresentiel),
-      salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
-      campus_id: new FormControl({ libelle: this.dicCampus[rowData.campus_id]?.libelle, value: this.dicCampus[rowData.campus_id]?._id }),
-      isPlanified: new FormControl(rowData.isPlanified),
-      nbseance: new FormControl(rowData.nbseance),
-      time_max_sign: new FormControl(rowData.time_max_sign),
-      forcedAllowedByFormateur: new FormControl(rowData.forcedAllowedByFormateur),
-      isOptionnel: new FormControl(rowData.isOptionnel),
-      seance_type: new FormControl(rowData.seance_type)
+    this.seanceFormUpdate = new UntypedFormGroup({
+      classe: new UntypedFormControl(classeList),
+      matiere: new UntypedFormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
+      libelle: new UntypedFormControl(rowData.libelle),
+      date_debut: new UntypedFormControl(this.toDateString(new Date(rowData.date_debut)), Validators.required),
+      date_fin: new UntypedFormControl(this.toDateString(new Date(rowData.date_fin)), Validators.required),
+      formateur: new UntypedFormControl("", Validators.required),
+      isPresentiel: new UntypedFormControl(rowData.isPresentiel),
+      salle_name: new UntypedFormControl({ value: rowData.salle_name, label: rowData.salle_name }),
+      campus_id: new UntypedFormControl({ libelle: this.dicCampus[rowData.campus_id]?.libelle, value: this.dicCampus[rowData.campus_id]?._id }),
+      isPlanified: new UntypedFormControl(rowData.isPlanified),
+      nbseance: new UntypedFormControl(rowData.nbseance),
+      time_max_sign: new UntypedFormControl(rowData.time_max_sign),
+      forcedAllowedByFormateur: new UntypedFormControl(rowData.forcedAllowedByFormateur),
+      isOptionnel: new UntypedFormControl(rowData.isOptionnel),
+      seance_type: new UntypedFormControl(rowData.seance_type)
     });
     //{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }
     if (rowData.formateur_id && this.formateurs[rowData.formateur_id] && this.formateurs[rowData.formateur_id].firstname)

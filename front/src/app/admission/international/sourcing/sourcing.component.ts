@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { Prospect } from 'src/app/models/Prospect';
@@ -50,8 +50,8 @@ export class SourcingComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  uploadFileForm: FormGroup = new FormGroup({
-    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  uploadFileForm: UntypedFormGroup = new UntypedFormGroup({
+    typeDoc: new UntypedFormControl(this.DocTypes[0], Validators.required)
   })
 
   @ViewChild('fileInput') fileInput: FileUpload;
@@ -444,11 +444,11 @@ export class SourcingComponent implements OnInit {
   agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
   equipeSourcingList = [{ label: "Aucune", value: null }]
   dropdownFormation = []
-  affectationForm: FormGroup = new FormGroup({
-    agent_sourcing_id: new FormControl(null),
-    team_sourcing_id: new FormControl(null),
-    date_sourcing: new FormControl(new Date()),
-    phase_candidature: new FormControl("")
+  affectationForm: UntypedFormGroup = new UntypedFormGroup({
+    agent_sourcing_id: new UntypedFormControl(null),
+    team_sourcing_id: new UntypedFormControl(null),
+    date_sourcing: new UntypedFormControl(new Date()),
+    phase_candidature: new UntypedFormControl("")
   })
 
   initAffectation(prospect: Prospect) {
@@ -508,37 +508,37 @@ export class SourcingComponent implements OnInit {
   //Partie Details
   showDetails: Prospect = null
   dropdownEcole = []
-  detailsForm: FormGroup = new FormGroup({
+  detailsForm: UntypedFormGroup = new UntypedFormGroup({
     //Informations Personnelles
-    civilite: new FormControl('', Validators.required),
-    lastname: new FormControl('', Validators.required),
-    firstname: new FormControl('', Validators.required),
-    indicatif: new FormControl(''),
-    phone: new FormControl(''),
-    email_perso: new FormControl('', Validators.required),
-    pays_adresse: new FormControl(''),
-    numero_adresse: new FormControl(''),
-    postal_adresse: new FormControl(''),
-    rue_adresse: new FormControl(''),
-    ville_adresse: new FormControl(''),
-    date_creation: new FormControl(''),
+    civilite: new UntypedFormControl('', Validators.required),
+    lastname: new UntypedFormControl('', Validators.required),
+    firstname: new UntypedFormControl('', Validators.required),
+    indicatif: new UntypedFormControl(''),
+    phone: new UntypedFormControl(''),
+    email_perso: new UntypedFormControl('', Validators.required),
+    pays_adresse: new UntypedFormControl(''),
+    numero_adresse: new UntypedFormControl(''),
+    postal_adresse: new UntypedFormControl(''),
+    rue_adresse: new UntypedFormControl(''),
+    ville_adresse: new UntypedFormControl(''),
+    date_creation: new UntypedFormControl(''),
     //Programme d'étude
-    formation: new FormControl(''),
-    campus_choix_1: new FormControl(''),
-    campus_choix_2: new FormControl(''),
-    campus_choix_3: new FormControl(''),
+    formation: new UntypedFormControl(''),
+    campus_choix_1: new UntypedFormControl(''),
+    campus_choix_2: new UntypedFormControl(''),
+    campus_choix_3: new UntypedFormControl(''),
     //Orientation
-    decision_orientation: new FormControl(''),
-    decision_admission: new FormControl(''),
-    phase_candidature: new FormControl(''),
+    decision_orientation: new UntypedFormControl(''),
+    decision_admission: new UntypedFormControl(''),
+    phase_candidature: new UntypedFormControl(''),
     //Avancement consulaire
-    a_besoin_visa: new FormControl(''),
-    validated_cf: new FormControl(''),
-    avancement_cf: new FormControl(''),
-    logement: new FormControl(''),
-    finance: new FormControl(''),
-    avancement_visa: new FormControl(''),
-    type_form: new FormControl('', Validators.required)
+    a_besoin_visa: new UntypedFormControl(''),
+    validated_cf: new UntypedFormControl(''),
+    avancement_cf: new UntypedFormControl(''),
+    logement: new UntypedFormControl(''),
+    finance: new UntypedFormControl(''),
+    avancement_visa: new UntypedFormControl(''),
+    type_form: new UntypedFormControl('', Validators.required)
 
 
   })
@@ -991,17 +991,17 @@ export class SourcingComponent implements OnInit {
   mailDropdown = []
   mailTypeDropdown = []
 
-  formEmailPerso = new FormGroup({
-    objet: new FormControl('', Validators.required),
-    body: new FormControl('', Validators.required),
-    cc: new FormControl([]),
-    send_from: new FormControl('', Validators.required)
+  formEmailPerso = new UntypedFormGroup({
+    objet: new UntypedFormControl('', Validators.required),
+    body: new UntypedFormControl('', Validators.required),
+    cc: new UntypedFormControl([]),
+    send_from: new UntypedFormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
-    objet: new FormControl('', Validators.required),
-    body: new FormControl('', Validators.required),
-    cc: new FormControl([]),
-    send_from: new FormControl('', Validators.required)
+  formEmailType = new UntypedFormGroup({
+    objet: new UntypedFormControl('', Validators.required),
+    body: new UntypedFormControl('', Validators.required),
+    cc: new UntypedFormControl([]),
+    send_from: new UntypedFormControl('', Validators.required)
   })
   onEmailPerso() {
     console.log(this.formEmailPerso.value.cc)
@@ -1145,11 +1145,11 @@ export class SourcingComponent implements OnInit {
   selectedLeads: Prospect[] = []
   showAffectationList = false
 
-  affectationFormList: FormGroup = new FormGroup({
-    agent_sourcing_id: new FormControl(null),
-    team_sourcing_id: new FormControl(null),
-    date_sourcing: new FormControl(new Date()),
-    phase_candidature: new FormControl("")
+  affectationFormList: UntypedFormGroup = new UntypedFormGroup({
+    agent_sourcing_id: new UntypedFormControl(null),
+    team_sourcing_id: new UntypedFormControl(null),
+    date_sourcing: new UntypedFormControl(new Date()),
+    phase_candidature: new UntypedFormControl("")
   })
   onRowSelect(event) {
     if (this.selectedLeads.length != 0) {

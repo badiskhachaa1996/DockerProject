@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
@@ -114,19 +114,19 @@ export class ListLeadcrmComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    rythme: new FormControl(''),
-    ecole: new FormControl(''),
-    formation: new FormControl(''),
-    campus: new FormControl(''),
-    eduhorizon: new FormControl(''),
-    note_choix: new FormControl(''),
+  followForm = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    rythme: new UntypedFormControl(''),
+    ecole: new UntypedFormControl(''),
+    formation: new UntypedFormControl(''),
+    campus: new UntypedFormControl(''),
+    eduhorizon: new UntypedFormControl(''),
+    note_choix: new UntypedFormControl(''),
 
-    produit: new FormControl(''),
-    criteres_qualification: new FormControl(''),
-    decision_qualification: new FormControl(''),
-    note_qualification: new FormControl(''),
+    produit: new UntypedFormControl(''),
+    criteres_qualification: new UntypedFormControl(''),
+    decision_qualification: new UntypedFormControl(''),
+    note_qualification: new UntypedFormControl(''),
   })
 
 
@@ -296,11 +296,11 @@ export class ListLeadcrmComponent implements OnInit {
   ]
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    affected_date: new FormControl(''),
-    affected_to_member: new FormControl(''),
-    affected_to_team: new FormControl(''),
+  affectForm = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    affected_date: new UntypedFormControl(''),
+    affected_to_member: new UntypedFormControl(''),
+    affected_to_team: new UntypedFormControl(''),
   })
 
   initAffect(lead: LeadCRM) {

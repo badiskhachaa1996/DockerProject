@@ -8,7 +8,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/User';
 
 @Component({
@@ -25,9 +25,9 @@ export class TuteurCeoComponent implements OnInit {
   showTuteursForEnterprise: boolean = false;
 
   //Déclaration 
-  formAddTuteur: FormGroup;
+  formAddTuteur: UntypedFormGroup;
   showFormAddTuteur = false;
-  formUpdateTuteur: FormGroup;
+  formUpdateTuteur: UntypedFormGroup;
   showFormUpdateTuteur = false;
 
   civiliteList = environment.civilite;
@@ -39,7 +39,7 @@ export class TuteurCeoComponent implements OnInit {
 
   token: any;
   
-  constructor(private tuteurService: TuteurService, private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private tuteurService: TuteurService, private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     // decodage du token

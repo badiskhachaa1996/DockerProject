@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Service } from 'src/app/models/Service';
 import { ServService } from 'src/app/services/service.service';
@@ -10,8 +10,8 @@ import { ServService } from 'src/app/services/service.service';
   styleUrls: ['./gestion-mention-service.component.scss']
 })
 export class GestionMentionServiceComponent implements OnInit {
-  serviceForm: FormGroup = new FormGroup({
-    label: new FormControl('', [Validators.required]),
+  serviceForm: UntypedFormGroup = new UntypedFormGroup({
+    label: new UntypedFormControl('', [Validators.required]),
   });
 
   get label() { return this.serviceForm.get('label'); }

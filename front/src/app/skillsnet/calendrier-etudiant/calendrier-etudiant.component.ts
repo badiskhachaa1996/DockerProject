@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
@@ -111,12 +111,12 @@ export class CalendrierEtudiantComponent implements OnInit {
     datesSet: this.onChangeView.bind(this) // Version du FullCalendar Supérieur à 5
   }
   displayModal = false
-  form = new FormGroup({
-    user_id: new FormControl(''),
-    libelle: new FormControl('Indisponible'),
-    type: new FormControl('Indisponible', Validators.required),
-    from: new FormControl(new Date(), Validators.required),
-    to: new FormControl(new Date(), Validators.required),
+  form = new UntypedFormGroup({
+    user_id: new UntypedFormControl(''),
+    libelle: new UntypedFormControl('Indisponible'),
+    type: new UntypedFormControl('Indisponible', Validators.required),
+    from: new UntypedFormControl(new Date(), Validators.required),
+    to: new UntypedFormControl(new Date(), Validators.required),
   })
   eventClickFCRH(event) {
     this.displayModal = true

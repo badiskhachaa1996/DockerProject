@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { saveAs } from "file-saver";
 import { FactureCommission } from 'src/app/models/FactureCommission';
@@ -67,14 +67,14 @@ export class ReglementComponent implements OnInit {
 
   isPovPartenaire = false
 
-  formAddFacture: FormGroup = new FormGroup({
-    numero: new FormControl(this.factures.length + 1, Validators.required),
-    montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
-    statut: new FormControl('', Validators.required),
-    nature: new FormControl('', Validators.required),
-    date_paiement: new FormControl('', Validators.required),
-    partenaire_id: new FormControl('')
+  formAddFacture: UntypedFormGroup = new UntypedFormGroup({
+    numero: new UntypedFormControl(this.factures.length + 1, Validators.required),
+    montant: new UntypedFormControl('', Validators.required),
+    tva: new UntypedFormControl('', Validators.required),
+    statut: new UntypedFormControl('', Validators.required),
+    nature: new UntypedFormControl('', Validators.required),
+    date_paiement: new UntypedFormControl('', Validators.required),
+    partenaire_id: new UntypedFormControl('')
   })
 
   onAddFacture() {
@@ -235,13 +235,13 @@ export class ReglementComponent implements OnInit {
 
   showFormEditFacture = false
 
-  formEditFacture: FormGroup = new FormGroup({
-    numero: new FormControl(this.factures.length + 1, Validators.required),
-    montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
-    statut: new FormControl('', Validators.required),
-    nature: new FormControl('', Validators.required),
-    date_paiement: new FormControl('', Validators.required),
+  formEditFacture: UntypedFormGroup = new UntypedFormGroup({
+    numero: new UntypedFormControl(this.factures.length + 1, Validators.required),
+    montant: new UntypedFormControl('', Validators.required),
+    tva: new UntypedFormControl('', Validators.required),
+    statut: new UntypedFormControl('', Validators.required),
+    nature: new UntypedFormControl('', Validators.required),
+    date_paiement: new UntypedFormControl('', Validators.required),
   })
 
   onUpdateFacture() {

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { GenDoc } from 'src/app/models/gen_doc/GenDoc';
@@ -64,7 +64,7 @@ export class GendocComponent implements OnInit {
   token: any;
   selectedDocs = []
   showAddDoc: boolean = false;
-  formAddDoc: FormGroup;
+  formAddDoc: UntypedFormGroup;
   showUpdateDoc: GenDoc;
 
   schoolList: any[] = [];
@@ -170,7 +170,7 @@ export class GendocComponent implements OnInit {
 
   AccessLevel = "Spectateur"
 
-  constructor(private formBuilder: FormBuilder, private UserService: AuthService,
+  constructor(private formBuilder: UntypedFormBuilder, private UserService: AuthService,
     private messageService: MessageService, private genDocService: GenDocService, private genRentreService: GenRentreService, private genFormationService: GenFormationService, private genSchoolService: GenSchoolService, private genCampusService: GenCampusService, private router: Router) { }
 
   ngOnInit(): void {

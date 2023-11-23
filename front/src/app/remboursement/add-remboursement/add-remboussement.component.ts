@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { DemandeRemboursementService } from 'src/app/services/demande-remboursement.service';
@@ -22,7 +22,7 @@ export class AddRemboussementComponent implements OnInit {
 
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private http: HttpClient,
     private messageService: MessageService,
     private demandeRemboursementService: DemandeRemboursementService,
@@ -122,8 +122,8 @@ Successfull = false
 
   @Input() isNewDemande = false
 
-  formRembourssement: FormGroup;
-  aFormGroup: FormGroup;
+  formRembourssement: UntypedFormGroup;
+  aFormGroup: UntypedFormGroup;
 
   availableStatus = environment.availableStatus
 

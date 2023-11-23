@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { Etudiant } from 'src/app/models/Etudiant';
@@ -76,9 +76,9 @@ export class ListEtudiantComponent implements OnInit {
   campusList: any = [];
   /* end */
 
-  formUpdateEtudiant: FormGroup;
+  formUpdateEtudiant: UntypedFormGroup;
 
-  formLivret: FormGroup = this.formBuilder.group({
+  formLivret: UntypedFormGroup = this.formBuilder.group({
     lien_word_read: ['',],
     lien_word_edit: [''],
     lien_dossier_professionel: [''],
@@ -100,7 +100,7 @@ export class ListEtudiantComponent implements OnInit {
     { label: 'Tous les campus', value: null }
   ]
 
-  formUpdateDossier: FormGroup;
+  formUpdateDossier: UntypedFormGroup;
   showFormUpdateEtudiant: boolean = false;
 
   nationList = environment.nationalites;
@@ -127,7 +127,7 @@ export class ListEtudiantComponent implements OnInit {
   paysList = environment.pays;
 
   //Infos exportations
-  formExportEtudiant: FormGroup;
+  formExportEtudiant: UntypedFormGroup;
   showFormExportEtudiant: boolean = false;
 
   idEtudiantToExport: string;
@@ -270,7 +270,7 @@ export class ListEtudiantComponent implements OnInit {
 
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
-    private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
+    private formBuilder: UntypedFormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
     private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService,
     private notificationService: NotificationService) { }
@@ -760,7 +760,7 @@ export class ListEtudiantComponent implements OnInit {
     this.showFormUpdateUser = false;
   }
   showFormUpdateUser = false
-  formUpdateUser: FormGroup
+  formUpdateUser: UntypedFormGroup
 
   showFPersonalUpdate(response: User, etudiant: Etudiant) {
     this.etudiantToUpdate = etudiant

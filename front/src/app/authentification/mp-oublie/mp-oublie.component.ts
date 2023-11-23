@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, FormControl, Validators, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,8 +16,8 @@ export class MpOublieComponent implements OnInit {
   // logo intedgroup
   logo: string;
 
-  formSendLink: FormGroup;
-  formUpdatePwd: FormGroup;
+  formSendLink: UntypedFormGroup;
+  formUpdatePwd: UntypedFormGroup;
   userEmail: string;
 
   // id de l'utilisateur dans l'url
@@ -26,7 +26,7 @@ export class MpOublieComponent implements OnInit {
   showSuccessMessage: boolean;
   isPasswordUpdated: boolean;
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private activatedRoute: ActivatedRoute) { }
+  constructor(private messageService: MessageService, private formBuilder: UntypedFormBuilder, private userService: AuthService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.logo = "assets/images/logo-ims-new.png";

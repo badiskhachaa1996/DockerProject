@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Demande_events } from '../models/Demande_events';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { environment } from 'src/environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { sourceForm } from '../models/sourceForm';
 })
 export class DemandeEventsComponent implements OnInit {
   //Déclarations
-  addeventForm: FormGroup;
+  addeventForm: UntypedFormGroup;
   nationList = environment.nationalites;
   paysList = environment.pays;
   separateDialCode = false;
@@ -24,7 +24,7 @@ export class DemandeEventsComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.France, CountryISO.Tunisia];
 
-  constructor(private formBuilder: FormBuilder, private dEventService: DemandeEventsService,
+  constructor(private formBuilder: UntypedFormBuilder, private dEventService: DemandeEventsService,
     private messageService: MessageService) { }
 
   ngOnInit(): void {
@@ -53,10 +53,10 @@ export class DemandeEventsComponent implements OnInit {
 
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Zéèàêô -]+$")]],
       prenom: ['', [Validators.required, Validators.pattern("^[a-zA-Zéèàêô -]+$")]],
-      date_naissance: new FormControl('', [Validators.required]),
+      date_naissance: new UntypedFormControl('', [Validators.required]),
       pays_naissance: [this.paysList[0], Validators.required],
-      domaine:new FormControl(this.domaineListe[0].value,Validators.required),
-      nationalite: new FormControl(this.nationList[0], [Validators.required]),
+      domaine:new UntypedFormControl(this.domaineListe[0].value,Validators.required),
+      nationalite: new UntypedFormControl(this.nationList[0], [Validators.required]),
       email: ['', [Validators.email]],
       phone: [undefined, [Validators.required]],
       lvl_formation: ['', Validators.required],

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
@@ -26,10 +26,10 @@ export class ListCollaborateurComponent implements OnInit {
   paysList = environment.pays
   commercialPartenaires: CommercialPartenaire[] = [];
 
-  formAddCommercial: FormGroup;
+  formAddCommercial: UntypedFormGroup;
   showFormAddCommercial: boolean = false;
 
-  formUpdateCommercial: FormGroup;
+  formUpdateCommercial: UntypedFormGroup;
   showFormUpdateCommercial: boolean = false;
 
   idCommercialToUpdate: string;
@@ -72,17 +72,17 @@ export class ListCollaborateurComponent implements OnInit {
 
   canDelete = false
   gestionCommercial: CommercialPartenaire
-  formGestion: FormGroup = new FormGroup({
-    contribution: new FormControl(),
-    pays_prospections: new FormControl([]),
-    localisation: new FormControl(''),
-    etat_contrat: new FormControl(),
-    commissions: new FormControl([])
+  formGestion: UntypedFormGroup = new UntypedFormGroup({
+    contribution: new UntypedFormControl(),
+    pays_prospections: new UntypedFormControl([]),
+    localisation: new UntypedFormControl(''),
+    etat_contrat: new UntypedFormControl(),
+    commissions: new UntypedFormControl([])
   })
 
-  formCommission: FormGroup = new FormGroup({
-    description: new FormControl(''),
-    montant: new FormControl(0),
+  formCommission: UntypedFormGroup = new UntypedFormGroup({
+    description: new UntypedFormControl(''),
+    montant: new UntypedFormControl(0),
   })
 
   onAddCommission() {
@@ -105,7 +105,7 @@ export class ListCollaborateurComponent implements OnInit {
   AddCommission = false
 
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
-    private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
+    private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: UntypedFormBuilder, private router: Router) { }
 
   ngOnInit(): void {
 

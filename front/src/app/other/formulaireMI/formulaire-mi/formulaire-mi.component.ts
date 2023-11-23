@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DateSejourMI } from 'src/app/models/DateSejourMI';
 import { DestinationMI } from 'src/app/models/DestinationMI';
 import { FormulaireMIService } from 'src/app/services/formulaire-mi.service';
@@ -47,17 +47,17 @@ export class FormulaireMIComponent implements OnInit {
 
   dateSejours = []
 
-  RegisterForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    date_naissance: new FormControl('', Validators.required),
-    telephone: new FormControl('', Validators.required),
-    mail: new FormControl('', Validators.required),
-    ecole: new FormControl('', Validators.required),
-    domaine: new FormControl('', Validators.required),
-    destination: new FormControl([], Validators.required),
-    dateSejour: new FormControl([], Validators.required),
-    avantage: new FormControl('', Validators.required),
-    date_creation: new FormControl(new Date()),
+  RegisterForm = new UntypedFormGroup({
+    name: new UntypedFormControl('', Validators.required),
+    date_naissance: new UntypedFormControl('', Validators.required),
+    telephone: new UntypedFormControl('', Validators.required),
+    mail: new UntypedFormControl('', Validators.required),
+    ecole: new UntypedFormControl('', Validators.required),
+    domaine: new UntypedFormControl('', Validators.required),
+    destination: new UntypedFormControl([], Validators.required),
+    dateSejour: new UntypedFormControl([], Validators.required),
+    avantage: new UntypedFormControl('', Validators.required),
+    date_creation: new UntypedFormControl(new Date()),
   })
 
 

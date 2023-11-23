@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Seance } from 'src/app/models/Seance';
@@ -45,25 +45,25 @@ export class AddSeanceComponent implements OnInit {
   dropdownCampus: any[] = []
   dropdownClasse: any[] = [];
 
-  seanceForm: FormGroup = new FormGroup({
-    classe: new FormControl('', Validators.required),
-    matiere: new FormControl('', Validators.required),
-    libelle: new FormControl(''),
-    date_debut: new FormControl('', Validators.required),
-    date_fin: new FormControl('', Validators.required),
-    formateur: new FormControl('', Validators.required),
-    isPresentiel: new FormControl("Distanciel", Validators.required),
-    salle_name: new FormControl(this.salleNames[0]),
-    isPlanified: new FormControl(false),
-    campus_id: new FormControl("", Validators.required),
-    nbseance: new FormControl(""),
-    isUnique: new FormControl(true, Validators.required),
-    date_fin_plannification: new FormControl(''),
-    seance_type: new FormControl('Séance'),
-    periode_seance: new FormControl('', Validators.required),
-    time_max_sign: new FormControl(30, Validators.required),
-    forcedAllowedByFormateur: new FormControl(true, Validators.required),
-    isOptionnel: new FormControl(false, Validators.required)
+  seanceForm: UntypedFormGroup = new UntypedFormGroup({
+    classe: new UntypedFormControl('', Validators.required),
+    matiere: new UntypedFormControl('', Validators.required),
+    libelle: new UntypedFormControl(''),
+    date_debut: new UntypedFormControl('', Validators.required),
+    date_fin: new UntypedFormControl('', Validators.required),
+    formateur: new UntypedFormControl('', Validators.required),
+    isPresentiel: new UntypedFormControl("Distanciel", Validators.required),
+    salle_name: new UntypedFormControl(this.salleNames[0]),
+    isPlanified: new UntypedFormControl(false),
+    campus_id: new UntypedFormControl("", Validators.required),
+    nbseance: new UntypedFormControl(""),
+    isUnique: new UntypedFormControl(true, Validators.required),
+    date_fin_plannification: new UntypedFormControl(''),
+    seance_type: new UntypedFormControl('Séance'),
+    periode_seance: new UntypedFormControl('', Validators.required),
+    time_max_sign: new UntypedFormControl(30, Validators.required),
+    forcedAllowedByFormateur: new UntypedFormControl(true, Validators.required),
+    isOptionnel: new UntypedFormControl(false, Validators.required)
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }

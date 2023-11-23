@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
@@ -48,23 +48,23 @@ export class LeadInformationsPersonnelComponent implements OnInit {
     }, false);
   }
 
-  editInfoForm: FormGroup = new FormGroup({
-    lastname: new FormControl('', Validators.required),
-    firstname: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
-    date_naissance: new FormControl('', Validators.required),
-    nationnalite: new FormControl('', Validators.required),
-    email_perso: new FormControl('', Validators.required),
-    pays_adresse: new FormControl('', Validators.required),
-    _id: new FormControl("", Validators.required)
+  editInfoForm: UntypedFormGroup = new UntypedFormGroup({
+    lastname: new UntypedFormControl('', Validators.required),
+    firstname: new UntypedFormControl('', Validators.required),
+    phone: new UntypedFormControl('', Validators.required),
+    date_naissance: new UntypedFormControl('', Validators.required),
+    nationnalite: new UntypedFormControl('', Validators.required),
+    email_perso: new UntypedFormControl('', Validators.required),
+    pays_adresse: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl("", Validators.required)
   })
   
-  editInfoFormSOS: FormGroup = new FormGroup({
-    sos_lastname: new FormControl(''),
-    sos_firstname: new FormControl(''),
-    sos_email: new FormControl(''),
-    sos_phone: new FormControl(''),
-    _id: new FormControl("", Validators.required)
+  editInfoFormSOS: UntypedFormGroup = new UntypedFormGroup({
+    sos_lastname: new UntypedFormControl(''),
+    sos_firstname: new UntypedFormControl(''),
+    sos_email: new UntypedFormControl(''),
+    sos_phone: new UntypedFormControl(''),
+    _id: new UntypedFormControl("", Validators.required)
   })
   initEditForm() {
     let bypass: any = this.PROSPECT?.user_id
@@ -150,10 +150,10 @@ export class LeadInformationsPersonnelComponent implements OnInit {
 
 
   showUpdatePassword = false
-  passwordForm = new FormGroup({
-    passwordactual: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    verifypassword: new FormControl('', Validators.required),
+  passwordForm = new UntypedFormGroup({
+    passwordactual: new UntypedFormControl('', Validators.required),
+    password: new UntypedFormControl('', Validators.required),
+    verifypassword: new UntypedFormControl('', Validators.required),
   });
   onUpdatePassword() {
     let passwordactual = this.passwordForm.get('passwordactual').value;

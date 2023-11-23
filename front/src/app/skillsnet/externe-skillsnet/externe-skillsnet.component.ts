@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { ExterneSkillsnet } from 'src/app/models/ExterneSkillsnet';
 import jwt_decode from 'jwt-decode';
@@ -32,34 +32,34 @@ export class ExterneSkillsnetComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.France, CountryISO.Tunisia];
 
-  formAddExterne: FormGroup = new FormGroup({
-    lastname: new FormControl('', [Validators.required]),
-    firstname: new FormControl('', [Validators.required]),
-    phone: new FormControl(undefined),
-    email_perso: new FormControl('', [Validators.required, Validators.email]),
-    civilite: new FormControl('', Validators.required),
-    pays_adresse: new FormControl(),
-    ville_adresse: new FormControl(),
-    rue_adresse: new FormControl(),
-    numero_adresse: new FormControl(),
-    postal_adresse: new FormControl(),
-    date_naissance: new FormControl()
+  formAddExterne: UntypedFormGroup = new UntypedFormGroup({
+    lastname: new UntypedFormControl('', [Validators.required]),
+    firstname: new UntypedFormControl('', [Validators.required]),
+    phone: new UntypedFormControl(undefined),
+    email_perso: new UntypedFormControl('', [Validators.required, Validators.email]),
+    civilite: new UntypedFormControl('', Validators.required),
+    pays_adresse: new UntypedFormControl(),
+    ville_adresse: new UntypedFormControl(),
+    rue_adresse: new UntypedFormControl(),
+    numero_adresse: new UntypedFormControl(),
+    postal_adresse: new UntypedFormControl(),
+    date_naissance: new UntypedFormControl()
 
   })
 
-  formUpdateExterne: FormGroup = new FormGroup({
-    lastname: new FormControl('', [Validators.required]),
-    firstname: new FormControl('', [Validators.required]),
-    phone: new FormControl(undefined),
-    email_perso: new FormControl('', [Validators.required, Validators.email]),
-    civilite: new FormControl('', Validators.required),
-    pays_adresse: new FormControl(),
-    ville_adresse: new FormControl(),
-    rue_adresse: new FormControl(),
-    numero_adresse: new FormControl(),
-    postal_adresse: new FormControl(),
-    type: new FormControl('', Validators.required),
-    _id: new FormControl('', Validators.required)
+  formUpdateExterne: UntypedFormGroup = new UntypedFormGroup({
+    lastname: new UntypedFormControl('', [Validators.required]),
+    firstname: new UntypedFormControl('', [Validators.required]),
+    phone: new UntypedFormControl(undefined),
+    email_perso: new UntypedFormControl('', [Validators.required, Validators.email]),
+    civilite: new UntypedFormControl('', Validators.required),
+    pays_adresse: new UntypedFormControl(),
+    ville_adresse: new UntypedFormControl(),
+    rue_adresse: new UntypedFormControl(),
+    numero_adresse: new UntypedFormControl(),
+    postal_adresse: new UntypedFormControl(),
+    type: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl('', Validators.required)
   })
 
   externes: ExterneSkillsnet[] = []

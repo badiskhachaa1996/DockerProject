@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DemandeRemboursementService } from 'src/app/services/demande-remboursement.service';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +31,7 @@ export class DataCleComponent implements OnInit {
 ]
 
 
-  constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
+  constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: UntypedFormBuilder, )  { }
 
   isUpdating =false
 

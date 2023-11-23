@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import dayGridMonth from '@fullcalendar/timegrid';
 import jwt_decode from 'jwt-decode';
 import interactionPlugin from '@fullcalendar/interaction';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
 import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
 import { MessageService } from 'primeng/api';
@@ -42,15 +42,15 @@ export class CalendrierRhComponent implements OnInit {
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  formAdd = new FormGroup({
-    type: new FormControl('', Validators.required),
-    note: new FormControl(''),
+  formAdd = new UntypedFormGroup({
+    type: new UntypedFormControl('', Validators.required),
+    note: new UntypedFormControl(''),
   })
 
-  formUpdate = new FormGroup({
-    type: new FormControl('', Validators.required),
-    note: new FormControl(''),
-    _id: new FormControl('', Validators.required)
+  formUpdate = new UntypedFormGroup({
+    type: new UntypedFormControl('', Validators.required),
+    note: new UntypedFormControl(''),
+    _id: new UntypedFormControl('', Validators.required)
   })
   typeList = [
     { label: 'Jour férié Tunis', value: "Jour férié Tunis" },//BLUE

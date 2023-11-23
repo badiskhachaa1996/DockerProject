@@ -4,7 +4,7 @@ import { Conge } from 'src/app/models/Conge';
 import { CongeService } from 'src/app/services/conge.service';
 import { RhService } from 'src/app/services/rh.service';
 import { saveAs } from 'file-saver';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { EmailTypeService } from 'src/app/services/email-type.service';
 import { MailType } from 'src/app/models/MailType';
 import { FileUpload } from 'primeng/fileupload';
@@ -22,7 +22,7 @@ export class CongesAutorisationsComponent implements OnInit {
   conges: Conge[] = [];
   clonedConges: { [s: string]: Conge } = {};
   congeToUpdate: Conge;
-  formUpdateConge: FormGroup;
+  formUpdateConge: UntypedFormGroup;
   showFormUpdateConge: boolean = false;
   showOtherTextArea: boolean = false;
 
@@ -62,7 +62,7 @@ export class CongesAutorisationsComponent implements OnInit {
   collaborateursFilter: any[] = [];
   btnActions: MenuItem[] = [];
   token;
-  constructor(private formBuilder: FormBuilder, private congeService: CongeService, private rhService: RhService, private messageService: MessageService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private congeService: CongeService, private rhService: RhService, private messageService: MessageService) { }
   siteSelected = []
 
   localisationList: any[] = [

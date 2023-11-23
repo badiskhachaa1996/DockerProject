@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, UntypedFormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, PrimeIcons } from 'primeng/api';
 import { map } from 'rxjs';
@@ -50,7 +50,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   minDateCalendarC = new Date("01/01/" + this.minYearC)
   maxDateCalendarC = new Date("01/01/" + this.maxYearC)
   ActiveIndex = 0;
-  RegisterForm: FormGroup;
+  RegisterForm: UntypedFormGroup;
   paysList = environment.pays;
   civiliteList = environment.civilite;
   nationList = environment.nationalites;
@@ -61,7 +61,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   
 
 
-  constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
+  constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: UntypedFormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
 
@@ -159,62 +159,62 @@ export class InscriptionEntrepriseComponent implements OnInit {
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
       // ****** Informations de l'entreprise ****
-      raison_sociale: new FormControl('', Validators.required),//
-      activite: new FormControl('', Validators.required),//
-      adresse_ss: new FormControl('', Validators.required),//
-      postal_ss: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),//
-      ville_ss: new FormControl('', Validators.required),//
+      raison_sociale: new UntypedFormControl('', Validators.required),//
+      activite: new UntypedFormControl('', Validators.required),//
+      adresse_ss: new UntypedFormControl('', Validators.required),//
+      postal_ss: new UntypedFormControl('', [Validators.required, Validators.pattern('[0-9]+')]),//
+      ville_ss: new UntypedFormControl('', Validators.required),//
 
-      adresse_ec: new FormControl('', Validators.required),//
-      postal_ec: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //
-      ville_ec: new FormControl('', Validators.required), //
+      adresse_ec: new UntypedFormControl('', Validators.required),//
+      postal_ec: new UntypedFormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //
+      ville_ec: new UntypedFormControl('', Validators.required), //
 
-      crc: new FormControl('', Validators.required),   //
-      convention: new FormControl('', Validators.required),//
-      idcc: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //1486
-      siret: new FormControl('', [Validators.required, Validators.maxLength(15), Validators.minLength(15), Validators.pattern('[0-9]+')]),
-      nb_salarie: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
-      phone_ent: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      indicatif_ent: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      ape_naf: new FormControl('', [Validators.required]),
-      telecopie: new FormControl(''),
-      OPCO: new FormControl('', [Validators.required]),
-      organisme_prevoyance: new FormControl(''),
+      crc: new UntypedFormControl('', Validators.required),   //
+      convention: new UntypedFormControl('', Validators.required),//
+      idcc: new UntypedFormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //1486
+      siret: new UntypedFormControl('', [Validators.required, Validators.maxLength(15), Validators.minLength(15), Validators.pattern('[0-9]+')]),
+      nb_salarie: new UntypedFormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
+      phone_ent: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      indicatif_ent: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      ape_naf: new UntypedFormControl('', [Validators.required]),
+      telecopie: new UntypedFormControl(''),
+      OPCO: new UntypedFormControl('', [Validators.required]),
+      organisme_prevoyance: new UntypedFormControl(''),
       // ****** Informations du dirigeant *******
-      civilite: new FormControl(environment.civilite[0], [Validators.required]),
-      lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'),]),
-      indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
+      lastname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      firstname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      email: new UntypedFormControl('', [Validators.required, Validators.email]),
+      phone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      indicatif: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      numero_whatsapp: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'),]),
+      indicatif_whatsapp: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       // ****** Informations du tuteur 1 *******
-      civilite_t1: new FormControl(environment.civilite[0], [Validators.required]),
-      lastname_t1: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      firstname_t1: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      email_t1: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-      phone_t1: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      indicatif_t1: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      date_naissance_t1: new FormControl('', [Validators.required]),
-      fonction_t1: new FormControl('', [Validators.required]),
-      temps_fonction_t1: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
-      niv_formation_t1: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+')]),
+      civilite_t1: new UntypedFormControl(environment.civilite[0], [Validators.required]),
+      lastname_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      firstname_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      email_t1: new UntypedFormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+      phone_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      indicatif_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      date_naissance_t1: new UntypedFormControl('', [Validators.required]),
+      fonction_t1: new UntypedFormControl('', [Validators.required]),
+      temps_fonction_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
+      niv_formation_t1: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+')]),
       // ****** Informations de l'alternant ******
-      debut_contrat: new FormControl('', Validators.required),
-      fin_contrat: new FormControl('', Validators.required),
-      horaire: new FormControl(''),
-      alternant: new FormControl('', Validators.required),
-      intitule: new FormControl('', Validators.required),
-      classification: new FormControl(''),
-      niv: new FormControl(''),
-      coeff_hier: new FormControl(''),
-      form: new FormControl('', Validators.required),
-      code_commercial: new FormControl(this.Tok_code_commercial),
+      debut_contrat: new UntypedFormControl('', Validators.required),
+      fin_contrat: new UntypedFormControl('', Validators.required),
+      horaire: new UntypedFormControl(''),
+      alternant: new UntypedFormControl('', Validators.required),
+      intitule: new UntypedFormControl('', Validators.required),
+      classification: new UntypedFormControl(''),
+      niv: new UntypedFormControl(''),
+      coeff_hier: new UntypedFormControl(''),
+      form: new UntypedFormControl('', Validators.required),
+      code_commercial: new UntypedFormControl(this.Tok_code_commercial),
 
-      professionnalisation: new FormControl(''),
+      professionnalisation: new UntypedFormControl(''),
       // ****** Informations Données perso ******
-      donneePerso: new FormControl(''),
+      donneePerso: new UntypedFormControl(''),
 
     });
 

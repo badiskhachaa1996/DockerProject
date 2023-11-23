@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
@@ -21,9 +21,9 @@ export class ExterneComponent implements OnInit {
   logo = "assets/images/logo-ims-new.png"
   showLoginPage = false;
 
-  formLogin: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+  formLogin: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl('', [Validators.required, Validators.email]),
+    password: new UntypedFormControl('', [Validators.required, Validators.minLength(5)]),
   })
 
   token: any;

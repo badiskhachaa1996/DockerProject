@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Annonce } from 'src/app/models/Annonce';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
@@ -31,9 +31,9 @@ export class MesOffresComponent implements OnInit {
 
   tuteurs: Tuteur[] = [];
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   showForm: boolean = false;
-  formUpdate: FormGroup;
+  formUpdate: UntypedFormGroup;
   showFormUpdate: boolean = false;
 
   userConnected: User;
@@ -103,7 +103,7 @@ export class MesOffresComponent implements OnInit {
   dicOffreNB = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService,
-    private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService,
+    private messageService: MessageService, private formBuilder: UntypedFormBuilder, private userService: AuthService,
     private annonceService: AnnonceService, private router: Router, private MatchingService: MatchingService) { }
 
   ngOnInit(): void {

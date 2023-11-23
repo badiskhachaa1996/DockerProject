@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DateSejourMI } from 'src/app/models/DateSejourMI';
 import { DestinationMI } from 'src/app/models/DestinationMI';
@@ -14,8 +14,8 @@ export class ConfigurationMIComponent implements OnInit {
   destinations: DestinationMI[] = []
   dateSejours: DateSejourMI[] = []
   showFormAddDestination = false
-  destinationFormAdd = new FormGroup({
-    name: new FormControl('', Validators.required)
+  destinationFormAdd = new UntypedFormGroup({
+    name: new UntypedFormControl('', Validators.required)
   })
 
   saveDestination() {
@@ -34,9 +34,9 @@ export class ConfigurationMIComponent implements OnInit {
   }
 
   showFormUpdateDestination: DestinationMI
-  destinationFormUpdate = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required)
+  destinationFormUpdate = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    name: new UntypedFormControl('', Validators.required)
   })
   updateDestination() {
     this.FMIService.DEupdate({ ...this.destinationFormUpdate.value }).subscribe(d => {
@@ -48,8 +48,8 @@ export class ConfigurationMIComponent implements OnInit {
   }
 
   showFormAddDS = false
-  DSFormAdd = new FormGroup({
-    name: new FormControl('', Validators.required)
+  DSFormAdd = new UntypedFormGroup({
+    name: new UntypedFormControl('', Validators.required)
   })
 
   saveDS() {
@@ -66,9 +66,9 @@ export class ConfigurationMIComponent implements OnInit {
     this.scrollToTop()
   }
   showFormUpdateDS: DateSejourMI
-  DSFormUpdate = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required)
+  DSFormUpdate = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    name: new UntypedFormControl('', Validators.required)
   })
   updateDS() {
     this.FMIService.DSupdate({ ...this.DSFormUpdate.value }).subscribe(d => {

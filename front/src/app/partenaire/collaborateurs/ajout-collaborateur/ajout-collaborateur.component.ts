@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -27,17 +27,17 @@ export class AjoutCollaborateurComponent implements OnInit {
     { label: 'Agent', value: 'Agent' },
     { label: 'Admin', value: 'Admin' }
   ];
-  formAddCommercial: FormGroup = new FormGroup({
-    civilite: new FormControl(this.civiliteList[0]),
-    firstname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
-    lastname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
-    phone: new FormControl('', [Validators.required, Validators.pattern("^[0-9+]+$")]),
-    whatsapp: new FormControl('', [Validators.pattern("^[0-9+]+$")]),
-    email: new FormControl('', Validators.required),
-    statut: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    password_confirmed: new FormControl('', Validators.required),
-    pays: new FormControl([], Validators.required)
+  formAddCommercial: UntypedFormGroup = new UntypedFormGroup({
+    civilite: new UntypedFormControl(this.civiliteList[0]),
+    firstname: new UntypedFormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
+    lastname: new UntypedFormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
+    phone: new UntypedFormControl('', [Validators.required, Validators.pattern("^[0-9+]+$")]),
+    whatsapp: new UntypedFormControl('', [Validators.pattern("^[0-9+]+$")]),
+    email: new UntypedFormControl('', Validators.required),
+    statut: new UntypedFormControl('', Validators.required),
+    password: new UntypedFormControl('', Validators.required),
+    password_confirmed: new UntypedFormControl('', Validators.required),
+    pays: new UntypedFormControl([], Validators.required)
   });
   partenaire: Partenaire;
   commercialPartenaires: CommercialPartenaire[] = []

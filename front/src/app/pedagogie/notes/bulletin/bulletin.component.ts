@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { ClasseService } from 'src/app/services/classe.service';
 import { EcoleService } from 'src/app/services/ecole.service';
@@ -86,10 +86,10 @@ export class BulletinComponent implements OnInit {
   dropdownClasse = []
   dropdownSemestre = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }]
   dropdownPV: any = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]
-  formAGSPV: FormGroup = new FormGroup({
-    classe: new FormControl('', Validators.required),
-    semestre: new FormControl('', Validators.required),
-    pv: new FormControl('', Validators.required),
+  formAGSPV: UntypedFormGroup = new UntypedFormGroup({
+    classe: new UntypedFormControl('', Validators.required),
+    semestre: new UntypedFormControl('', Validators.required),
+    pv: new UntypedFormControl('', Validators.required),
   })
   exInfoDiplome = "2022-2023"// 1er année 2022-2023
 

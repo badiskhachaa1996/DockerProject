@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { saveAs } from 'file-saver';
 import { ClasseService } from 'src/app/services/classe.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-list-entreprise-ceo',
@@ -26,12 +26,12 @@ export class ListEntrepriseCeoComponent implements OnInit {
   // entreprise sélectionnée
   entrepriseSelected: Entreprise;
 
-  formRemarque: FormGroup;
+  formRemarque: UntypedFormGroup;
   showFormRemarque: boolean = false;
 
   token: any;
 
-  constructor(private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     // decodage du token

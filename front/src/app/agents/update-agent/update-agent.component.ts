@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -93,23 +93,23 @@ export class UpdateAgentComponent implements OnInit {
 
   ]
 
-  addForm = new FormGroup({
-    civilite: new FormControl(''),
-    lastname: new FormControl('', Validators.required),
-    firstname: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    rue_adresse: new FormControl(''),
-    postal_adresse: new FormControl(''),
-    ville_adresse: new FormControl(''),
-    pays_adresse: new FormControl(''),
-    indicatif: new FormControl(''),
-    phone: new FormControl(''),
-    mention: new FormControl('', Validators.required),
-    service_id: new FormControl(''),
-    role: new FormControl('user', Validators.required),
-    type: new FormControl(null),
-    _id: new FormControl('', Validators.required),
-    type_supp: new FormControl([])
+  addForm = new UntypedFormGroup({
+    civilite: new UntypedFormControl(''),
+    lastname: new UntypedFormControl('', Validators.required),
+    firstname: new UntypedFormControl('', Validators.required),
+    email: new UntypedFormControl('', [Validators.required, Validators.email]),
+    rue_adresse: new UntypedFormControl(''),
+    postal_adresse: new UntypedFormControl(''),
+    ville_adresse: new UntypedFormControl(''),
+    pays_adresse: new UntypedFormControl(''),
+    indicatif: new UntypedFormControl(''),
+    phone: new UntypedFormControl(''),
+    mention: new UntypedFormControl('', Validators.required),
+    service_id: new UntypedFormControl(''),
+    role: new UntypedFormControl('user', Validators.required),
+    type: new UntypedFormControl(null),
+    _id: new UntypedFormControl('', Validators.required),
+    type_supp: new UntypedFormControl([])
   })
   localisationList: any[] = [
     { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },

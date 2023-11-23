@@ -5,7 +5,7 @@ import { AnneeScolaire } from 'src/app/models/AnneeScolaire';
 import { DropdownModule } from 'primeng/dropdown';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { Ecole } from 'src/app/models/Ecole'
@@ -31,16 +31,16 @@ export class ListEcoleComponent implements OnInit {
   showFormAddImage: boolean = false;
   ecoleSelected: Ecole;
 
-  ecoleFormUpdate: FormGroup = new FormGroup({
+  ecoleFormUpdate: UntypedFormGroup = new UntypedFormGroup({
 
-    libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
-    site: new FormControl('', Validators.required),
-    annee_id: new FormControl('', Validators.required),
-    telephone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required, Validators.pattern('[^0-9]+')]),
-    pays: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    libelle: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    email: new UntypedFormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
+    site: new UntypedFormControl('', Validators.required),
+    annee_id: new UntypedFormControl('', Validators.required),
+    telephone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
+    adresse: new UntypedFormControl('', Validators.required),
+    ville: new UntypedFormControl('PARIS', [Validators.required, Validators.pattern('[^0-9]+')]),
+    pays: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
 
   })
 

@@ -3,7 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
@@ -28,15 +28,15 @@ export class ListCampusComponent implements OnInit {
 
   showFormUpdateCampus: boolean = false;
 
-  campusFormUpdate: FormGroup = new FormGroup({
+  campusFormUpdate: UntypedFormGroup = new UntypedFormGroup({
 
-    libelle: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),
-    ecole_id: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required, Validators.pattern('[^0-9]+')]),
-    pays: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
-    adresse: new FormControl('', Validators.required),
-    site: new FormControl(''),
+    libelle: new UntypedFormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),
+    ecole_id: new UntypedFormControl('', Validators.required),
+    ville: new UntypedFormControl('PARIS', [Validators.required, Validators.pattern('[^0-9]+')]),
+    pays: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    email: new UntypedFormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
+    adresse: new UntypedFormControl('', Validators.required),
+    site: new UntypedFormControl(''),
   })
   salles = []
 

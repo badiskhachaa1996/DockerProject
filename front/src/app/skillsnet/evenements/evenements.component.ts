@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Evenements } from 'src/app/models/Evenements';
 import jwt_decode from 'jwt-decode';
 import { EvenementsService } from 'src/app/services/skillsnet/evenements.service';
@@ -25,26 +25,26 @@ export class EvenementsComponent implements OnInit {
   showUpdate = false
   showInscrit: Evenements;
   dropdownInscrit = []
-  formAddEvent: FormGroup = new FormGroup({
-    nom: new FormControl('', [Validators.required]),
-    type: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    date_lieu: new FormControl(''),
-    autre: new FormControl('')
+  formAddEvent: UntypedFormGroup = new UntypedFormGroup({
+    nom: new UntypedFormControl('', [Validators.required]),
+    type: new UntypedFormControl('', [Validators.required]),
+    description: new UntypedFormControl('', [Validators.required]),
+    date_lieu: new UntypedFormControl(''),
+    autre: new UntypedFormControl('')
   })
 
-  formUpdateEvent: FormGroup = new FormGroup({
-    nom: new FormControl('', [Validators.required]),
-    type: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    date_lieu: new FormControl(''),
-    autre: new FormControl(''),
-    _id: new FormControl('', Validators.required)
+  formUpdateEvent: UntypedFormGroup = new UntypedFormGroup({
+    nom: new UntypedFormControl('', [Validators.required]),
+    type: new UntypedFormControl('', [Validators.required]),
+    description: new UntypedFormControl('', [Validators.required]),
+    date_lieu: new UntypedFormControl(''),
+    autre: new UntypedFormControl(''),
+    _id: new UntypedFormControl('', Validators.required)
   })
 
-  formInscritEvent: FormGroup = new FormGroup({
-    liste_inscrit: new FormControl('', [Validators.required]),
-    _id: new FormControl('', Validators.required)
+  formInscritEvent: UntypedFormGroup = new UntypedFormGroup({
+    liste_inscrit: new UntypedFormControl('', [Validators.required]),
+    _id: new UntypedFormControl('', Validators.required)
   })
   constructor(public EventService: EvenementsService, private messageService: MessageService, private UserService: AuthService) { }
 

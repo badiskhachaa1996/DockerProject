@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Competence } from 'src/app/models/Competence';
 import { Profile } from 'src/app/models/Profile';
@@ -17,8 +17,8 @@ export class SkillsManagementComponent implements OnInit {
   profiles: Profile[] = [];
   showFormAddProfile: boolean = false;
   showFormUpdateProfile: boolean = false;
-  formAddProfile: FormGroup;
-  formUpdateProfile: FormGroup;
+  formAddProfile: UntypedFormGroup;
+  formUpdateProfile: UntypedFormGroup;
   profileToUpdate: Profile;
   dropdownProfile: any[] = [{ label: '', value: null }];
   profileSelected: Profile;
@@ -27,8 +27,8 @@ export class SkillsManagementComponent implements OnInit {
   competences: Competence[] = [];
   showFormAddCompetence: boolean = false;
   showFormUpdateCompetence: boolean = false;
-  formAddCompetence: FormGroup;
-  formUpdateCompetence: FormGroup;
+  formAddCompetence: UntypedFormGroup;
+  formUpdateCompetence: UntypedFormGroup;
   competenceToUpdate: Competence;
   showCompetenceTable: boolean = false;
 
@@ -36,7 +36,7 @@ export class SkillsManagementComponent implements OnInit {
   loadingCompetence: boolean = true;
 
 
-  constructor(private formBuilder: FormBuilder, private skillsService: SkillsService, private userService: AuthService, private messageService: MessageService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private skillsService: SkillsService, private userService: AuthService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     // recuperation des données

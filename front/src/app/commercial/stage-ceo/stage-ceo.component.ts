@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Entreprise } from 'src/app/models/Entreprise';
@@ -28,7 +28,7 @@ export class StageCeoComponent implements OnInit {
   doc: any;
   showStagesForEnterprises: boolean;
   showFormAddDoc: boolean;
-  formAddDoc: FormGroup;
+  formAddDoc: UntypedFormGroup;
 
   // variables qui définit un chargement pour la tables des entreprises
   loading: boolean;
@@ -36,7 +36,7 @@ export class StageCeoComponent implements OnInit {
   token: any;
   fileTypeList: any[];
 
-  constructor(private router: Router, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private stageService: StageService, private messageService: MessageService, private etudiantService: EtudiantService, private userService: AuthService, private campusService: CampusService, private diplomeService: DiplomeService) { }
+  constructor(private router: Router, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private formBuilder: UntypedFormBuilder, private stageService: StageService, private messageService: MessageService, private etudiantService: EtudiantService, private userService: AuthService, private campusService: CampusService, private diplomeService: DiplomeService) { }
 
   ngOnInit(): void {
     this.loading = true;

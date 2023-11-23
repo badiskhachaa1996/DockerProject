@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { Partenaire } from 'src/app/models/Partenaire';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { MessageService, TreeNode } from 'primeng/api';
@@ -37,7 +37,7 @@ export class UserProfilComponent implements OnInit {
   Roles = environment.role;
   showFormModifInfo: boolean = true;
   showFormModifMdp: boolean = true;
-  passwordForm: FormGroup;
+  passwordForm: UntypedFormGroup;
 
   civiliteList = environment.civilite;
   statutList = environment.typeUser
@@ -84,7 +84,7 @@ export class UserProfilComponent implements OnInit {
   conges: Conge[] = [];
   showCongeList: boolean = false;
   showFormNewDemande: boolean = false;
-  formNewDemande: FormGroup;
+  formNewDemande: UntypedFormGroup;
   showCongeListForService: boolean = false;
 
   //Motif de demande de congés
@@ -97,7 +97,7 @@ export class UserProfilComponent implements OnInit {
 
   //Partie dedié a la justification des abscences
   showFormjustification: boolean = false;
-  justificationForm: FormGroup;
+  justificationForm: UntypedFormGroup;
   uploadedFiles: any;
 
   //Periode abscence
@@ -158,23 +158,23 @@ export class UserProfilComponent implements OnInit {
 
   }
 
-  RegisterForm: FormGroup = new FormGroup({
-    civilite: new FormControl(environment.civilite[0], [Validators.required]),
-    lastname: new FormControl(this.userco.lastname, [Validators.required, Validators.pattern('[^0-9]+')]),//Lettre et espace
-    firstname: new FormControl(this.userco.firstname, [Validators.required, Validators.pattern('[^0-9]+')]),
-    indicatif: new FormControl(this.userco.indicatif, [Validators.required]),//Si il finit par .png ou .jpg
-    phone: new FormControl(this.userco.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
-    pays_adresse: new FormControl(this.userco.pays_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
-    ville_adresse: new FormControl(this.userco.ville_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
-    rue_adresse: new FormControl(this.userco.rue_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
-    numero_adresse: new FormControl(this.userco.numero_adresse, [Validators.required, Validators.pattern('[0-9]+')]),
-    postal_adresse: new FormControl(this.userco.postal_adresse, [Validators.required, Validators.pattern('[0-9]+')]),
-    nationalite: new FormControl(null),
-    date_naissance: new FormControl("21/12/2000"),
+  RegisterForm: UntypedFormGroup = new UntypedFormGroup({
+    civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
+    lastname: new UntypedFormControl(this.userco.lastname, [Validators.required, Validators.pattern('[^0-9]+')]),//Lettre et espace
+    firstname: new UntypedFormControl(this.userco.firstname, [Validators.required, Validators.pattern('[^0-9]+')]),
+    indicatif: new UntypedFormControl(this.userco.indicatif, [Validators.required]),//Si il finit par .png ou .jpg
+    phone: new UntypedFormControl(this.userco.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+    pays_adresse: new UntypedFormControl(this.userco.pays_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
+    ville_adresse: new UntypedFormControl(this.userco.ville_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
+    rue_adresse: new UntypedFormControl(this.userco.rue_adresse, [Validators.required, Validators.pattern('[^0-9]+')]),
+    numero_adresse: new UntypedFormControl(this.userco.numero_adresse, [Validators.required, Validators.pattern('[0-9]+')]),
+    postal_adresse: new UntypedFormControl(this.userco.postal_adresse, [Validators.required, Validators.pattern('[0-9]+')]),
+    nationalite: new UntypedFormControl(null),
+    date_naissance: new UntypedFormControl("21/12/2000"),
   })
 
-  demandeConseillerForm: FormGroup = new FormGroup({
-    conseiller_id: new FormControl('', Validators.required)
+  demandeConseillerForm: UntypedFormGroup = new UntypedFormGroup({
+    conseiller_id: new UntypedFormControl('', Validators.required)
   })
 
   saveDemande() {
@@ -301,7 +301,7 @@ export class UserProfilComponent implements OnInit {
 
   dataCollab: Collaborateur
   dataMC
-  constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
+  constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: UntypedFormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
     private TCService: TeamCommercialService, private congeService: CongeService, private MCService: MicrosoftService,

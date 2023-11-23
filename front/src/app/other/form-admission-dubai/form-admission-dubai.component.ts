@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { MessageService, SelectItemGroup } from 'primeng/api';
 import { AdmissionFormDubai } from 'src/app/models/AdmissionFormDubai';
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FormAdmissionDubaiComponent implements OnInit {
 
-  formAdmission: FormGroup;
+  formAdmission: UntypedFormGroup;
   showFormAdmission: boolean = true;
   formData: AdmissionFormDubai;
   nationalities: any[] = [];
@@ -39,7 +39,7 @@ export class FormAdmissionDubaiComponent implements OnInit {
   // liste pour le choix du programme
   chosenProgramList: SelectItemGroup[];
 
-  constructor(private formBuilder: FormBuilder, private formAdmissionDubaiService: FormAdmissionDubaiService, private messageService: MessageService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private formAdmissionDubaiService: FormAdmissionDubaiService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     // initialisation des variables

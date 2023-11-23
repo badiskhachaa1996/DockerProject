@@ -15,7 +15,7 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Seance } from 'src/app/models/Seance';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Formateur } from 'src/app/models/Formateur';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CampusService } from 'src/app/services/campus.service';
@@ -38,7 +38,7 @@ export class EmergementComponent implements OnInit {
 
   constructor(private MatiereService: MatiereService, private ClasseService: ClasseService, private PresenceService: PresenceService, private router: Router, private FormateurService: FormateurService, private route: ActivatedRoute,
     private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService,
-    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService, private CampusService: CampusService,
+    private DiplomeService: DiplomeService, private formBuilder: UntypedFormBuilder, private etudiantService: EtudiantService, private CampusService: CampusService,
     private PPService: ProgressionPedaService) { }
   socket = io(environment.origin.replace('/soc', ''));
   token;

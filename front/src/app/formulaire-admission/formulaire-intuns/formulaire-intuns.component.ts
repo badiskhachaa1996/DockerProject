@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ProspectIntuns } from 'src/app/models/ProspectIntuns';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class FormulaireIntunsComponent implements OnInit {
   ActiveIndex = 0;
   paysList = environment.pays;
-  RegisterForm: FormGroup;
+  RegisterForm: UntypedFormGroup;
   formSteps: any[] = [
     "Infos",
     "Parcours",
@@ -38,7 +38,7 @@ export class FormulaireIntunsComponent implements OnInit {
       { value: "ENGLISH PROGRAM L7 Project Management", label: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
     ];
 
-  constructor(private formBuilder: FormBuilder, private ProspectService: AdmissionService, private MessageService: MessageService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private ProspectService: AdmissionService, private MessageService: MessageService) { }
 
   ngOnInit(): void {
     this.onInitRegisterForm();
@@ -57,18 +57,18 @@ export class FormulaireIntunsComponent implements OnInit {
     this.RegisterForm = this.formBuilder.group({
 
       // ****** Informations générales *******
-      nom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      prenom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      pays: new FormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      nom: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      prenom: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      pays: new UntypedFormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
+      email: new UntypedFormControl('', [Validators.required, Validators.email]),
+      phone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      indicatif: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
 
-      statut_actuel: new FormControl('', [Validators.required]),
-      other: new FormControl(''),
+      statut_actuel: new UntypedFormControl('', [Validators.required]),
+      other: new UntypedFormControl(''),
 
-      programme: new FormControl('', [Validators.required]),
-      remarque: new FormControl(''),
+      programme: new UntypedFormControl('', [Validators.required]),
+      remarque: new UntypedFormControl(''),
     });
   };
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MemberInt } from 'src/app/models/memberInt';
 import { TeamsRH } from 'src/app/models/TeamsRH';
@@ -43,9 +43,9 @@ export class GestionEquipeRhComponent implements OnInit {
     this.MicrosoftService.sendNotif()
   }
 
-  updateForm: FormGroup = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    nom: new FormControl('', Validators.required)
+  updateForm: UntypedFormGroup = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    nom: new UntypedFormControl('', Validators.required)
   })
 
   initUpdate(etudiant) {
@@ -62,8 +62,8 @@ export class GestionEquipeRhComponent implements OnInit {
     })
   }
 
-  createForm: FormGroup = new FormGroup({
-    nom: new FormControl('', Validators.required)
+  createForm: UntypedFormGroup = new UntypedFormGroup({
+    nom: new UntypedFormControl('', Validators.required)
   })
 
   newTeam = false
@@ -152,9 +152,9 @@ export class GestionEquipeRhComponent implements OnInit {
     })
   }
   newMember: TeamsRH;
-  AddMbForm = new FormGroup({
-    user_id: new FormControl('', Validators.required),
-    role: new FormControl('Membre', Validators.required),
+  AddMbForm = new UntypedFormGroup({
+    user_id: new UntypedFormControl('', Validators.required),
+    role: new UntypedFormControl('Membre', Validators.required),
   })
   AddMember(team: TeamsRH) {
     this.newMember = team

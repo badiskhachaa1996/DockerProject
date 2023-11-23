@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
 import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns.service';
@@ -26,9 +26,9 @@ export class EtudiantsIntunsComponent implements OnInit {
     })
   }
 
-  updateForm: FormGroup = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    formation_id: new FormControl('', Validators.required)
+  updateForm: UntypedFormGroup = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    formation_id: new UntypedFormControl('', Validators.required)
   })
 
   initUpdate(etudiant) {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DocumentInternational } from 'src/app/models/DocumentInternational';
 import { Prospect } from 'src/app/models/Prospect';
@@ -18,8 +18,8 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 })
 export class DocCheckerComponent implements OnInit {
   reader: FileReader = new FileReader();
-  documentForm = new FormGroup({
-    input: new FormControl('', Validators.required)
+  documentForm = new UntypedFormGroup({
+    input: new UntypedFormControl('', Validators.required)
   })
   documents: any[]
   USER: User

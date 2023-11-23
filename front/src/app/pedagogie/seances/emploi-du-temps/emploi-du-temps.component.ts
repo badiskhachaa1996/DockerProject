@@ -18,7 +18,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
@@ -86,18 +86,18 @@ export class EmploiDuTempsComponent implements OnInit {
         rowData.classe_id.forEach(classeID => {
           classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
         });
-        this.seanceFormUpdate = new FormGroup({
-          classe: new FormControl(classeList),
-          matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
-          libelle: new FormControl(rowData.libelle),
-          date_debut: new FormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
-          date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
-          formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
-          isPresentiel: new FormControl(rowData.isPresentiel),
-          salle_name: new FormControl({ value: rowData.salle_name }),
-          campus_id: new FormControl({ libelle: this.dicCampus[rowData.campus_id]?.nom, value: this.dicCampus[rowData.campus_id]?._id }),
-          isPlanified: new FormControl(rowData.isPlanified),
-          nbseance: new FormControl(rowData.nbseance)
+        this.seanceFormUpdate = new UntypedFormGroup({
+          classe: new UntypedFormControl(classeList),
+          matiere: new UntypedFormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
+          libelle: new UntypedFormControl(rowData.libelle),
+          date_debut: new UntypedFormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
+          date_fin: new UntypedFormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
+          formateur: new UntypedFormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
+          isPresentiel: new UntypedFormControl(rowData.isPresentiel),
+          salle_name: new UntypedFormControl({ value: rowData.salle_name }),
+          campus_id: new UntypedFormControl({ libelle: this.dicCampus[rowData.campus_id]?.nom, value: this.dicCampus[rowData.campus_id]?._id }),
+          isPlanified: new UntypedFormControl(rowData.isPlanified),
+          nbseance: new UntypedFormControl(rowData.nbseance)
         });
       })
     } else {
@@ -131,7 +131,7 @@ export class EmploiDuTempsComponent implements OnInit {
   btnPlan = this.planOptions[1].value
 
   SeanceToUpdate: Seance;
-  seanceFormUpdate: FormGroup;
+  seanceFormUpdate: UntypedFormGroup;
 
   dropdownFormateur: any[] = [{ nom: '', value: '' }];
   dropdownMatiere: any[] = [{ nom: '', value: '' }];

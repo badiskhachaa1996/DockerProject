@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Pointeuse } from 'src/app/models/Pointeuse';
 import { PointeuseData } from 'src/app/models/PointeuseData';
@@ -67,12 +67,12 @@ export class ConfigurationPointeuseComponent implements OnInit {
   }
 
   showAdd = false
-  addForm = new FormGroup({
-    serial_number: new FormControl('', Validators.required),
-    localisation: new FormControl('', Validators.required),
-    pointageType: new FormControl([], Validators.required),
-    modele: new FormControl('', Validators.required),
-    emplacement: new FormControl('Entrée')
+  addForm = new UntypedFormGroup({
+    serial_number: new UntypedFormControl('', Validators.required),
+    localisation: new UntypedFormControl('', Validators.required),
+    pointageType: new UntypedFormControl([], Validators.required),
+    modele: new UntypedFormControl('', Validators.required),
+    emplacement: new UntypedFormControl('Entrée')
   })
   onAdd() {
     this.PointeuseService.create({ ...this.addForm.value }).subscribe(p => {
@@ -84,13 +84,13 @@ export class ConfigurationPointeuseComponent implements OnInit {
   }
 
   showUpdate: Pointeuse = null
-  updateForm = new FormGroup({
-    serial_number: new FormControl('', Validators.required),
-    localisation: new FormControl('', Validators.required),
-    pointageType: new FormControl([], Validators.required),
-    modele: new FormControl('', Validators.required),
-    _id: new FormControl('', Validators.required),
-    emplacement: new FormControl('Entrée')
+  updateForm = new UntypedFormGroup({
+    serial_number: new UntypedFormControl('', Validators.required),
+    localisation: new UntypedFormControl('', Validators.required),
+    pointageType: new UntypedFormControl([], Validators.required),
+    modele: new UntypedFormControl('', Validators.required),
+    _id: new UntypedFormControl('', Validators.required),
+    emplacement: new UntypedFormControl('Entrée')
   })
   initUpdate(machine: Pointeuse) {
     this.updateForm.patchValue({

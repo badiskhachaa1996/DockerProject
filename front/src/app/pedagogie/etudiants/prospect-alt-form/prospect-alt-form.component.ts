@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -30,7 +30,7 @@ export class ProspectAltFormComponent implements OnInit {
   formSteps: any[];
 
   // formulaire de demande d'admission
-  formAskAdmission: FormGroup;
+  formAskAdmission: UntypedFormGroup;
   showForm: boolean = true;
   showValidatedPart: boolean = false;
 
@@ -41,7 +41,7 @@ export class ProspectAltFormComponent implements OnInit {
   commercialId: string;
   commercial: CommercialPartenaire;
 
-  constructor(private messageService: MessageService ,private commercialService: CommercialPartenaireService, private formBuilder: FormBuilder, private userService: AuthService, private activatedRoute: ActivatedRoute, private admissionService: AdmissionService) { }
+  constructor(private messageService: MessageService ,private commercialService: CommercialPartenaireService, private formBuilder: UntypedFormBuilder, private userService: AuthService, private activatedRoute: ActivatedRoute, private admissionService: AdmissionService) { }
 
   ngOnInit(): void {
     // recuperation du commercial via l'id dans l'url

@@ -3,7 +3,7 @@ import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { DemandeRemboursementService } from '../../services/demande-remboursement.service';
 import { Demande } from '../../models/Demande';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { saveAs as importedSaveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
@@ -20,7 +20,7 @@ export class RemboursementListComponent implements OnInit {
   selectedDemande: Demande | null = null; 
 
 
-  constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
+  constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: UntypedFormBuilder, )  { }
   
   keyDates = {
     motif_refus: "",
