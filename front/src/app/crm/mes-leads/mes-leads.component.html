@@ -369,46 +369,60 @@
         </div>
     </div>
     <div class="card col-12">
-        <h5>Liste de mes leads CRM</h5>
 
         <p-toast></p-toast>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
             [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" />
+                <div class="fp-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-3 ">
+                        <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" style="width: 100%" />
+                    </div>
 
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterPays" filter="true"
                         (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                         emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
-
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
+                    </div>
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterSource" filter="true"
                         (onChange)="dt1.filter($event.value, 'source', 'equals');"
                         emptyFilterMessage="Pas de source trouvé"
                         filterPlaceholder="Choisissez une source"></p-dropdown>
+                    </div>
 
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterOperation" filter="true"
                         (onChange)="dt1.filter($event.value, 'operation', 'equals');"
                         emptyFilterMessage="Pas d'opération trouvé"
                         filterPlaceholder="Choisissez une operation"></p-dropdown>
+                    </div>
                 </div>
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAffecte" filter="true"
+                <div class="fp-fluid p-formgrid grid">
+
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterAffecte" filter="true"
                         (onChange)="dt1.filter($event.value, 'affected_to_member', 'equals');"
                         emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Choisissez un membre"></p-dropdown>
+                    </div>
 
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterQualification" filter="true"
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterQualification" filter="true"
                         (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
                         emptyFilterMessage="Pas de qualification trouvé"
                         filterPlaceholder="Choisissez une qualification"></p-dropdown>
+                    </div>
 
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPaiement" filter="true"
+                    <div class="field col-12 md:col-3 ">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="filterPaiement" filter="true"
                         (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
                         emptyFilterMessage="Pas de modalité trouvé"
                         filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                    </div>
                 </div>
+
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
@@ -441,9 +455,6 @@
                     </th>
                     <th pSortableColumn="produit" scope="col" style="text-align: center;">
                         Produit <p-sortIcon field="produit"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="affected_to_member" scope="col" style="text-align: center;">
-                        Affecté à <p-sortIcon field="affected_to_member"></p-sortIcon>
                     </th>
                     <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
                         Decision Qualification <p-sortIcon field="decision_qualification"></p-sortIcon>
@@ -490,9 +501,6 @@
                     </td>
                     <td>
                         {{lead.produit}}
-                    </td>
-                    <td>
-                        {{lead.affected_to_member}}
                     </td>
                     <td>
                         {{lead.decision_qualification}}
