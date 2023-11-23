@@ -677,6 +677,15 @@ app.get("/getAllInt", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.get("/getAllInsDef", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: 'Inscription définitive' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
@@ -935,13 +944,12 @@ app.put("/updateV2", (req, res, next) => {
                         detail,
                         date_creation: new Date()
                     })
-                    console.log(hl)
                     hl.save().then(h => { console.log(h) })
                     res.status(201).send(prospectsFromDb)
                 })
-                .catch((error) => { res.status(500).send(error.message); });
+                .catch((error) => { res.status(500).send(error); });
         })
-        .catch((error) => { res.status(400).send(error.message); })
+        .catch((error) => { res.status(400).send(error); })
 });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()

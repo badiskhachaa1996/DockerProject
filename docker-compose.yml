@@ -1,31 +1,41 @@
 version: "3.9"
 services:
   mongodb:
-    image: :latest
+    image: mongo:latest
+    restart: always
     environment:
-      MONGODB_USER: 
-      MONGODB_PASSWORD: 
+      DB_USER: root
+      DB_PASSWORD: 
+      DB_HOST: mongodb #localhost
+      DB_PORT: 27017
+      DB_NAME: # FIXME sample-db
     ports: 
-      - '5432:5432'
+      - '27017-27019:27017-27019'
     volumes:
-      - db:/var/lib/sql/data
+      - mongo_data:/data/db
+      # Add the db-init.js file to the Mongo DB container
+      # - ./db-init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   back:
-    build:
-      context: .
+    build: /opt/app/ims/back
+    restart: always
     environment:
-      DB_SCHEMA: 
-      DB_USER: 
-      DB_PASSWORD: 
-      DB_HOST: 
+      # MONGODB_URI: mongodb://mongodb:27017
     depends_on:
-      - 
+      - mongodb
     ports:
+      # local->container
       - '3000:3000'
-    
-  front:    
+
+  front:
+    build: /opt/app/ims/front
+    restart: always
     ports:
+      # local->container
       - '80:80'
 
 volumes:
-  db:
+  mongo_data: {}
+
+
+# docker compose up # -d

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -10,6 +10,10 @@ import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { ProductService } from "../../../dev-components/service-template/productservice";
+import { GestionProduitsService } from "../../gestion-produits/gestion-produits.service";
+import { ProduitCRM } from "../../../models/produitCRM";
+import { ActivatedRoute, Router } from "@angular/router";
 @Component({
   selector: 'app-list-leadcrm',
   templateUrl: './list-leadcrm.component.html',
@@ -75,8 +79,15 @@ export class ListLeadcrmComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
+
+
+  //Qualification
+  produitList = [];
+  private selectedLead: LeadCRM;
+
+
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
-    private TeamCRMService: TeamsCrmService, private UserService: AuthService) { }
+    private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private router: Router, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
@@ -110,6 +121,14 @@ export class ListLeadcrmComponent implements OnInit {
       if (data.role == "Admin")
         this.AccessLevel = "Super-Admin"
     })
+
+    this.Products.GetAllProduit().subscribe(data => {
+      data.forEach(val => {
+        this.produitList.push({ label: val.nom, value: val._id })
+      })
+    })
+
+
   }
 
   //Follow Form
@@ -120,7 +139,6 @@ export class ListLeadcrmComponent implements OnInit {
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
-    eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
 
     produit: new FormControl(''),
@@ -130,9 +148,10 @@ export class ListLeadcrmComponent implements OnInit {
   })
 
 
+  @Output() suivreLead = new EventEmitter<LeadCRM>();
+
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({ ...lead })
-    this.showFollow = lead
+    this.suivreLead.emit(lead)
   }
 
   onUpdateFollow() {
@@ -274,12 +293,9 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Contrat de bail', value: 'Contrat de bail' },
     { label: 'Attestation avec blocage', value: 'Attestation avec blocage' },
   ]
-  //Qualification
-  produitList = [
-    { label: 'WIP', value: 'WIP' },
-    { label: 'WIP2', value: 'WIP2' },
-    { label: 'WIP3', value: 'WIP3' },
-  ]
+
+
+
   critereList = [
     { label: 'Langue', value: 'Langue' },
     { label: 'Volet Financier', value: 'Volet Financier' },
@@ -329,4 +345,28 @@ export class ListLeadcrmComponent implements OnInit {
       }
     }, 15);
   }
+
+
+
+  // Nazif ajout des buttons de mise à jour et de suppression
+  initUpdate(lead: LeadCRM) {
+    this.selectedLead = lead
+    this.followForm.patchValue({ ...lead })
+  }
+  delete(lead: LeadCRM) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce membre de l'équipe ?"))
+      this.LCS.delete(lead._id).subscribe(data => {
+        this.leads.splice(this.leads.indexOf(lead), 1)
+        this.ToastService.add({ severity: "success", summary: `Suppression du lead avec succès` })
+      })
+  }
+
+
+  updateLead(id: string) {
+    this.router.navigate(['/crm/leads/update', id]);
+  }
+
+
+
+
 }

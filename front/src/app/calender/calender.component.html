@@ -86,22 +86,9 @@
                                     number:'1.0-2'}}%</strong> <strong
                                     *ngIf="isNaN(craPercent) || isInfinity(craPercent)">0%</strong></h6>
                         </div>
-
-                    </div>
-                    <div>
-
-                        <p-splitButton label="Activité" [model]="items"
-                            styleClass="p-button-outlined p-button-secondary mr-2 mb-2"></p-splitButton>
-
-                    </div>
-                    <div>
-                        <div class="col-12">
-
-                        </div>
-                        <div *ngIf="visibleA">
-
-                            <p-table [value]="[historiqueCra[historiqueCra.length - 1]]" dataKey="_id" [rows]="1"
-                                [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                        <div class="col-12" *ngIf="dailyCheck">
+                            <p-table [value]="[dailyCheck]" dataKey="_id" [rows]="1" [rowHover]="true"
+                                styleClass="p-datatable-gridlines" responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th></th>
@@ -113,8 +100,7 @@
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-cra let-expandedt="expandedt" let-rit="rowIndex">
-                                    <tr
-                                        (click)="historiqueCraSelected = [historiqueCra[historiqueCra.length - 1]]; showDailySelectedCra = true">
+                                    <tr (click)="historiqueCraSelected = [dailyCheck]; showDailySelectedCra = true">
                                         <td>
                                             <button type="button" pButton pRipple [pRowToggler]="cra"
                                                 class="p-button-text p-button-rounded p-button-plain"
@@ -139,22 +125,22 @@
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td colspan="8">Vous n'avez aucun pointage enregistré pour le moment.</td>
+                                        <td colspan="7">Vous n'avez aucun pointage enregistré pour le moment.</td>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="loadingbody">
                                     <tr>
-                                        <td colspan="8">Chargement de votre historique, merci de patienter...</td>
+                                        <td colspan="7">Chargement de votre historique, merci de patienter...</td>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="rowexpansion" let-cra>
 
                                     <tr>
-                                        <td colspan="9">
+                                        <td colspan="7">
                                             <p-table class="col-12" styleClass="p-datatable-gridlines">
                                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th> Pauses </th>
+                                        <th>Pauses</th>
                                         <th>Motif</th>
                                     </tr>
                                 </ng-template>
@@ -166,7 +152,6 @@
                                                     de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
                                                 </li>
                                             </ul>
-                                            <br> &nbsp;&nbsp;&nbsp; {{ pauseTiming }}mn
                                         </td>
                                         <td colspan="2" *ngIf="!cra.pause || cra.pause.length==0">
                                             0mn
@@ -175,7 +160,7 @@
                                         <td *ngIf="cra.pause && cra.pause.length!=0">
                                             <ul>
                                                 <li *ngFor="let pause of cra.pause; let i = index">
-                                                    -{{ pause?.motif }}
+                                                    {{ pause?.motif }}
                                                 </li>
                                             </ul>
                                             <br> &nbsp;&nbsp;&nbsp;
@@ -198,9 +183,9 @@
                                 </p-table>
 
                         </div>
-
-                        <!-- affichage du CRA d'un historique de pointage -->
                         <div class="col-12 ">
+                            <a *ngIf="!visible" (click)="visible=true;getHistoPointage()"
+                                style="width: 100px; height: 50px;">Voir l'historique -></a>
                             <div class="col-12" *ngIf="visible">
                                 <!-- affichage du CRA d'un historique de pointage -->
                                 <h5 class="mt-5">Historique :</h5>
@@ -261,22 +246,22 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td colspan="8">Vous n'avez aucun pointage enregistré pour le moment.</td>
+                                            <td colspan="7">Vous n'avez aucun pointage enregistré pour le moment.</td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="loadingbody">
                                         <tr>
-                                            <td colspan="8">Chargement de votre historique, merci de patienter...</td>
+                                            <td colspan="7">Chargement de votre historique, merci de patienter...</td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="rowexpansion" let-cra>
 
                                         <tr>
-                                            <td colspan="3">
+                                            <td colspan="7">
                                                 <p-table class="col-12" styleClass="p-datatable-gridlines">
                                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th> Pauses </th>
+                                            <th>Pauses</th>
                                             <th>Motif</th>
 
                                         </tr>
@@ -290,7 +275,6 @@
                                                         }}
                                                     </li>
                                                 </ul>
-                                                <br> &nbsp;&nbsp;&nbsp; {{ pauseTiming }}mn
                                             </td>
                                             <td colspan="2" *ngIf="!cra.pause || cra.pause.length==0">
                                                 0mn
@@ -299,37 +283,21 @@
                                             <td *ngIf="cra.pause && cra.pause.length!=0">
                                                 <ul>
                                                     <li *ngFor="let pause of cra.pause; let i = index">
-                                                        -{{ pause?.motif }}
+                                                        {{ pause?.motif }}
                                                     </li>
                                                 </ul>
                                                 <br> &nbsp;&nbsp;&nbsp;
                                             </td>
-
-
                                         </tr>
-
                                     </ng-template>
-
-
                                 </p-table>
                                 </td>
-
                                 </tr>
-
                                 <tr>
-
-
                                     </ng-template>
-
-
-
-
                                     </p-table>
                             </div>
                         </div>
-
-
-
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="CRA">
@@ -503,10 +471,9 @@
                             <ng-template pTemplate="body" let-cra>
                                 <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
                                     <td>{{dateParseur(cra?.today)}}</td>
-
-                                    <td *ngIf="cra.taux_cra && !isNaN(cra.taux_cra)">{{ cra.taux_cra | number:'1.0-2'
-                                        }}%</td>
-                                    <td *ngIf="!cra.taux_cra || isNaN(cra.taux_cra)">0%</td>
+                                    <td>
+                                        {{calculCra(cra)}}%
+                                    </td>
 
                                 </tr>
                             </ng-template>
@@ -620,38 +587,12 @@
                                         <strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
                                         <strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
                                     </td>
-
-                                    <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
-                                        [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
-                                        {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check?.validated"
-                                            class="pi pi-check" tooltipPosition="bottom" pTooltip="CRA Validé"></i> <i
+                                    <td>
+                                        {{calculCra(check)}}% <i *ngIf="check?.validated" class="pi pi-check"
+                                            tooltipPosition="bottom" pTooltip="CRA Validé"></i> <i
                                             *ngIf="!check?.validated" class="pi pi-times" tooltipPosition="bottom"
                                             pTooltip="CRA Non validé"></i>
                                     </td>
-                                    <td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
-                                        0% <i *ngIf="check?.validated" class="pi pi-check" tooltipPosition="bottom"
-                                            pTooltip="CRA Validé"></i> <i *ngIf="!check?.validated" class="pi pi-times"
-                                            tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
-                                    </td>
-
-                                    <!--<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Disponible'">
-                                        <p-tag value="Disponible" severity="success" icon="pi pi-check"></p-tag>
-                                    </td>
-                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En congé'">
-                                        <p-tag value="En congé" icon="pi pi-home" severity="info"></p-tag>
-                                    </td>
-                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
-                                        <p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
-                                    </td>
-                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
-                                        <p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
-                                    </td>
-                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
-                                        <p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
-                                    </td>
-                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
-                                        <p-tag value="En pause" severity="warning" icon="pi pi-moon"></p-tag>
-                                    </td>-->
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage">

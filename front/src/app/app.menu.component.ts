@@ -20,6 +20,7 @@ import { MemberCRM } from './models/memberCRM';
 import { TeamsCrmService } from './services/crm/teams-crm.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CandidatureLeadService } from './services/candidature-lead.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -75,12 +76,15 @@ export class AppMenuComponent implements OnInit {
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
-        private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService, private CandidatureService: CandidatureLeadService) { }
+        private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService, private CandidatureService: CandidatureLeadService,
+        private router: Router) { }
 
     ngOnInit() {
         //Decoder le token
         this.showMenu = false;
         this.token = jwt_decode(localStorage.getItem('token'));
+        if (localStorage.getItem('parentSelected'))
+            this.parentSelected = JSON.parse(localStorage.getItem("parentSelected"));
         // Récupération du user connecter
         this.userService.getPopulate(this.token.id).subscribe({
             next: (response: User) => {
@@ -2624,27 +2628,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: ['crm/leads/liste'],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/6474bd8044e14520f9dd5f38',
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -2772,7 +2756,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
@@ -4493,11 +4477,17 @@ export class AppMenuComponent implements OnInit {
                                             },
                                         ]
                                     },
+
+                                    {
+                                        label: 'Evaluation Lead',
+                                        icon: 'pi pi-pencil',
+                                        routerLink: ['/admission/lead-evaluation']
+                                    },
                                     {
                                         label: 'Administration V2',
                                         icon: 'pi pi-users',
                                         items: [
-                                            
+
                                             {
                                                 label: 'Paramètre',
                                                 icon: 'pi pi-prime',
@@ -5451,30 +5441,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [
-                                                        'crm/leads/liste',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/' +
-                                                        member?._id,
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -5604,7 +5571,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
@@ -5662,30 +5629,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Liste des leads',
                                         icon: 'pi pi-users',
-                                        items: [
-                                            {
-                                                label: 'Tout les leads',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'crm/leads/liste',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Leads non attribués',
-                                                icon: 'pi pi-user-edit',
-                                                routerLink: [
-                                                    'crm/leads/liste-non-attribue',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Mes Leads',
-                                                icon: 'pi pi-user',
-                                                routerLink: [
-                                                    'crm/mes-leads/liste/' +
-                                                    member?._id,
-                                                ],
-                                            },
-                                        ],
+                                        routerLink: ['crm/liste'],
                                     },
                                     {
                                         label: 'Qualification',
@@ -6611,6 +6555,27 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
+                                    label: 'Booking V2',
+                                    icon: 'pi pi-building',
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['booking/configuration'],
+                                        },
+                                        {
+                                            label: 'Liste des demandes des rendez-vous',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['gestion-reservations']
+                                        },
+                                        {
+                                            label: 'Logements',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['logements']
+                                        }
+                                    ]
+                                },
+                                {
                                     label: 'Remboursement',
                                     icon: 'pi pi-dollar',
                                     items: [
@@ -6625,6 +6590,12 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/remboursements'],
                                         },
                                     ]
+                                },
+
+                                {
+                                    label: 'Evaluation Lead',
+                                    icon: 'pi pi-pencil',
+                                    routerLink: ['/admission/lead-evaluation']
                                 },
                                 {
                                     label: "Pointeuse",
@@ -6662,7 +6633,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Administration V2',
                                     icon: 'pi pi-users',
                                     items: [
-                                        
+
                                         {
                                             label: 'Préinscription - Admission',
                                             icon: 'pi pi-prime',
@@ -6674,7 +6645,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/administration/inscription']
                                         },
                                         {
-                                            label: 'Paramètre',
+                                            label: 'Paramètres',
                                             icon: 'pi pi-cog',
                                             items: [
                                                 {
@@ -6962,9 +6933,11 @@ export class AppMenuComponent implements OnInit {
                     )
                 }
                 setTimeout(() => {
+                    this.commandMaker(this.items)
+                    this.boldMenu(this.items, true)
                     this.items = Object.assign([], this.items);
                     this.showMenu = true
-                }, 0);
+                }, 1);
                 //this.showMenu=true
             },
             error: (error: any) => {
@@ -6975,10 +6948,72 @@ export class AppMenuComponent implements OnInit {
             },
         });
     }
+    treeNavigation: MenuItem[] = []
+    childSelect: string = this.router.url;
+    parentSelected = []
+    commandMaker(items) {
+        items.forEach(item => {
+            if (item.routerLink) {
+                item.command = (event) => {
+                    this.clickMenu(event, 'CHILD')
+                }
+            } else if (item.items) {
+                item.command = (event) => {
+                    this.clickMenu(event, 'PARENT')
+                }
+                this.commandMaker(item.items)
+            }
+        })
+        return items
+    }
+    clickMenu(event, position) {
+        if (position == 'CHILD') {
+            this.childSelect = event.item.routerLink[0]
+            this.parentSelected = []
+            this.treeNavigation.forEach(item => {
+                if (item.items && this.cleanParents(item.items))
+                    this.parentSelected.push(item.label)
+            })
+            localStorage.setItem('parentSelected', JSON.stringify(this.parentSelected))
+            this.boldMenu(this.items, true)
+            this.treeNavigation = []
+        } else
+            this.treeNavigation.push(event.item)
+        //console.log(event, position)
+    }
+    cleanParents(items: MenuItem[]): boolean {
+        let r = false
+        items.forEach(item => {
+            if (item.routerLink && item.routerLink[0] == this.childSelect) {
+                r = true
+            }
+            else if (item.items)
+                r = this.cleanParents(item.items)
+        })
+        return r
+    }
+    boldMenu(items: MenuItem[], first = false) {
+        items.forEach(item => {
+            if (item.routerLink && item.routerLink[0] == this.childSelect) {
+                item.style = { 'font-weight': 700 };
+            } else if (item.items) {
+                if (this.parentSelected.includes(item.label)) {
+                    item.style = { 'font-weight': 900 };
+                } else
+                    if (first)
+                        item.style = { 'font-weight': 700 };
+                    else
+                        item.style = { 'font-weight': 400 };
+                this.boldMenu(item.items)
+            } else
+                item.style = { 'font-weight': 400 };
+        })
+    }
 }
+
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccaulauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

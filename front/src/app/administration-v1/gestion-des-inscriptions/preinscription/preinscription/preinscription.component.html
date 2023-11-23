@@ -663,7 +663,7 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-prospect>
+                        <ng-template pTemplate="body" let-prospect let-expanded="expanded">
                             <tr [pEditableRow]="prospect">
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="prospect"
@@ -689,7 +689,7 @@
                                     {{prospect?.rythme_formation}}
                                 </td>
                                 <td>
-                                    {{ prospect?.decision?.decision_admission}}
+                                    {{ prospect?.decision_admission}}
                                 </td>
                                 <td>
                                     {{ calculPayement(prospect)}}
@@ -1805,9 +1805,15 @@
                 <p-accordion [(activeIndex)]="selectedTabIndex1">
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 1</span> &nbsp;
-                                <span style="font-weight: normal;">Dossier</span>
+                                <span style="font-weight: normal;">Dossier 
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-dialog header="Affecter un agent à ce ticket" [(visible)]="visible"
@@ -1984,9 +1990,7 @@
                                         <td>
                                             {{doc.nom}}
                                             <span style="color: red;"
-                                                *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
-                                            <span style="color: red;"
-                                                *ngIf="doc.nom=='Carte de séjour'">(Obligatoire)</span>
+                                                *ngIf="documentsObligatoires.includes(doc.nom) || doc.nom=='Copie Visa' || doc.nom=='Carte vitale ou attestation provisoire' || doc.nom=='Carte de séjour'">(Obligatoire)</span>
                                         </td>
                                         <td style="text-align: center;">
                                             <i *ngIf="doc.path" pTooltip="Télécharger le document"
@@ -2052,9 +2056,11 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 2</span> &nbsp;
-                                <span style="font-weight: normal;">Evaluation</span>
+                                <span style="font-weight: normal;">Evaluation </span>
+                                <i style="color: red;" class="pi pi-times"></i>
+                                <!-- Dépend du Score -->
                             </div>
                         </ng-template>
                         <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation"
@@ -2096,7 +2102,7 @@
                             </form>
                         </p-dialog>
 
-                        <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+                        <p-table #dt1 [value]="['']" dataKey="_id" responsiveLayout="scroll"
                             [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
                             [paginator]="true" rowExpandMode="single" [totalRecords]=""
                             styleClass="p-datatable-gridlines">
@@ -2150,9 +2156,16 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 3</span> &nbsp;
-                                <span style="font-weight: normal;">Entretien</span>
+                                <span style="font-weight: normal;">Entretien
+
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
@@ -2273,18 +2286,23 @@
                                 <textarea pInputTextarea formControlName="choix" autoResize rows="5"
                                     cols="30"></textarea>
                             </div>
-                            <div class="field col-12 md:col-5"></div>
-                            <div class="field col-12 md:col-1">
-                                <p-button (click)="addEntretien()">Enregistrer</p-button>
+                            <div class="col-12" style="text-align: center;">
+                                <p-button [style]="{'max-width':'10%'}" autoWidth="false"
+                                    (click)="addEntretien(prospect)">Enregistrer</p-button>
                             </div>
-                            <div class="field col-12 md:col-5"></div>
                         </form>
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 4</span> &nbsp;
-                                <span style="font-weight: normal;">Décision</span>
+                                <span style="font-weight: normal;">Décision&nbsp;
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="PROSPECT?.decision_admission!='Accepté'"></i>
+                                <!-- depend du changement de la decision admission -->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="PROSPECT?.decision_admission=='Accepté'"></i>
                             </div>
                         </ng-template>
                         <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="DecisionForm">
@@ -2301,19 +2319,17 @@
                                 <input type="date" formControlName="date_d" pInputText />
                             </div>
                             <div class="field col-12 md:col-12">
-                                <label For="explication">Expliquation<span style="color: red;"> *
+                                <label For="explication">Explication<span style="color: red;"> *
                                     </span></label><br>
                                 <textarea pInputTextarea formControlName="explication" autoResize rows="5"
                                     cols="50"></textarea>
                             </div>
 
-                            <div class="field col-12 md:col-9"></div>
-
-                            <div class="field col-12 md:col-5"></div>
-                            <div class="field col-12 md:col-1">
-                                <p-button (click)="adddicision(prospect)">Enregistrer</p-button>
+                            <div class="col-12" style="text-align: center;">
+                                <p-button [style]="{'max-width':'10%'}" autoWidth="false"
+                                    (click)="adddicision(prospect)">Enregistrer</p-button>
                             </div>
-                            <div class="field col-12 md:col-5"></div>
+
                         </form>
                     </p-accordionTab>
                 </p-accordion>
@@ -2373,9 +2389,8 @@
                         </ng-template>
 
                         <div class="col-4">
-                            <p-button [style]="{'width':'10%'}"
-                                (click)="addDoc();visibleC=true;showUploadFile=PROSPECT;" icon="pi pi-plus"
-                                autoWidth="false"></p-button>
+                            <p-button [style]="{'width':'10%'}" (click)="visibleC=true;showUploadFile=PROSPECT;"
+                                icon="pi pi-plus" autoWidth="false"></p-button>
                         </div>
                         <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsCandidature" rowExpandMode="single"
                             [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
@@ -2417,114 +2432,10 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">ADMISSIONS</span> &nbsp;
+                            </div>
 
-                            </div>
                         </ng-template>
-                        <div class="col-12">
-                            <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile"
-                                #selectedFile style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
-                            <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
-                                #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif"
-                                pInputFile />
-                        </div>
-                        <div class="card grid" *ngIf="PROSPECT ">
-                            <h3 class="col-12">Documents</h3>
-                            <p class="col-12"
-                                [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
-                                style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
-                                l'équipe d'admission.<br>
-                                Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
-                            </p>
-                            <div class="card col-12 grid">
-                                <div class="col-6">
-                                    Je réside en France
-                                    <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                                <div class="col-6">
-                                    Je cherche une alternance
-                                    <p-checkbox [(ngModel)]="alternance" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12"
-                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc>
-                                    <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
-                                        <td>
-                                            {{doc.nom}}
-                                            <span style="color: red;"
-                                                *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
-                                            <span style="color: red;"
-                                                *ngIf="doc.nom=='Carte de séjour'">(Obligatoire)</span>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file" (click)="downloadFile(doc)"
-                                                style="margin-left: 2%;color: green;" aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="initUpload(doc)" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <!--<h3 class="col-8">Autre documents</h3>
-                            <div class="col-4">
-                                <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
-                                    autoWidth="false" label="Ajouter un autre document"></p-button>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr [pEditableRow]="doc">
-                                        <td pEditableColumn>
-                                            <p-cellEditor>
-                                                <ng-template pTemplate="input">
-                                                    <input type="text" pInputText [(ngModel)]="doc.nom">
-                                                </ng-template>
-                                                <ng-template pTemplate="output">
-                                                    {{doc.nom}}
-                                                </ng-template>
-                                            </p-cellEditor>
-                                        </td>
-                                        <td>
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="downloadOtherFile(doc)" style="margin-left: 2%;color: green;"
-                                                aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>-->
-                        </div>
+                        <app-lead-dossier [PROSPECT_ID]="PROSPECT._id"></app-lead-dossier>
                     </p-accordionTab>
                     <p-accordionTab>
                         <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM">
@@ -2572,48 +2483,9 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
-
                             </div>
                         </ng-template>
-                        <div class="col-4">
-                            <p-button [style]="{'width':'10%'}"
-                                (click)="addDoc();visibleADM=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
-                                autoWidth="false"></p-button>
-                        </div>
-                        <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
-                            [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
-                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
-                            [filterDelay]="0" styleClass="p-datatable-gridlines">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
-                                    <th>Lien</th>
-                                    <th>Traité par</th>
-                                    <th>Action</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                <tr>
-                                    <td>{{doc?.custom_id}}</td>
-                                    <td>{{doc?.type}}</td>
-                                    <td>{{doc?.date|date:'dd MMMM yy'}}</td>
-                                    <td>
-                                        <a (click)="downloadAdminFile(doc?.path)">Télécharger</a>
-                                    </td>
-                                    <td>{{doc?.traited_by}}</td>
-                                    <td>
-                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                            *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                            aria-hidden="true"></i>
-                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                            class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
@@ -2796,15 +2668,16 @@
 <p-dialog header="Paiements" [(visible)]="seePaiements" [modal]="true">
     <input type="file" (change)="FileUploadPaiement($event.target.files)" id="UploadPaiement" #UploadPaiement
         style="display: none;" pInputFile />
-    <h3 *ngIf="showPaiement?.user_id" style="font-weight: bold;color:#37BAD4"> Paiement effectués par : {{
+    <h5 *ngIf="showPaiement?.user_id" style="font-weight: bold;color:#37BAD4"> Paiement effectués par {{
         showPaiement?.user_id?.firstname }} {{
         showPaiement?.user_id?.lastname | uppercase }}
-    </h3>
+    </h5>
     <div>
         <p-dropdown [options]="typeFormationDropdown" optionLabel="value" optionValue="value" autoWidth="false"
             *ngIf="showPaiement" placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
             [(ngModel)]="showPaiement.rythme_formation"></p-dropdown>
     </div>
+    <p>&nbsp;</p>
     <div class="grid">
         <p-table #dt2 dataKey="ID" [value]="payementList" class="col-12" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
@@ -2915,10 +2788,10 @@
     </div>
     <input type="file" (change)="FileUploadPaiementProgram($event.target.files)" id="UploadPaiementProgram"
         #UploadPaiementProgram style="display: none;" pInputFile />
-    <h3 *ngIf="showPaiement?.user_id" style="font-weight: bold;color:#37BAD4"> Paiement programmés par
+    <h5 *ngIf="showPaiement?.user_id" style="font-weight: bold;color:#37BAD4"> Paiement programmés pour
         {{ showPaiement?.user_id?.firstname }}
         {{ showPaiement?.user_id?.lastname | uppercase }}
-    </h3>
+    </h5>
     <div class="grid">
         <p-table #dt2 dataKey="ID" [value]="payementProgramList" class="col-12" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">

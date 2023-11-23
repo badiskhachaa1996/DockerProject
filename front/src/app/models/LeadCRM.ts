@@ -62,7 +62,6 @@ export class LeadCRM {
         public ecole?: string,
         public formation?: string,
         public campus?: string,
-        public eduhorizon?: string,
         public note_choix?: string,
 
         public documents?: {
