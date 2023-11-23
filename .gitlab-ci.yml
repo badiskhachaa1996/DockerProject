@@ -93,6 +93,7 @@ build_angular:
   stage: build
   tags:
     - dev-shell
+    - qa-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -108,7 +109,7 @@ build_angular:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
-    #expire_in: 1 hour
+    expire_in: 1 hour
 #  when: manual
 
 spotbugs-sast:
@@ -213,7 +214,7 @@ deploy_node_to_qa:
   stage: deploy
 
   tags:
-    - dev-shell
+    - qa-shell
   script:
     - cd back
     - ln -s ~/storage storage
