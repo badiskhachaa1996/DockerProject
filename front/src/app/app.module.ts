@@ -829,3 +829,4 @@ export class AppModule {
     registerLocaleData(fr.default);
   }
 }
+

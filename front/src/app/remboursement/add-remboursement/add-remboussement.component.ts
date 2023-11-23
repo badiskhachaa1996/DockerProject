@@ -1,14 +1,15 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { MessageService } from 'primeng/api';
 import { DemandeRemboursementService } from 'src/app/services/demande-remboursement.service';
 import { environment } from 'src/environments/environment';
 import jwt_decode from 'jwt-decode';
 import { Demande } from 'src/app/models/Demande';
-import { Router } from '@angular/router';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { AuthService } from 'src/app/services/auth.service';
+import {CaptchaModule} from 'primeng/captcha';
+import { MessageService } from 'src/app/services/message.service';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 
@@ -19,6 +20,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 
 export class AddRemboussementComponent implements OnInit {
+
+//   showResponse(event) {
+//     this.messageService.add({severity:'info', summary:'Succees', detail: 'User Responded', sticky: true});
+// }
 
 
   constructor(
@@ -129,9 +134,9 @@ Successfull = false
 
 
   ngOnInit(): void {
-    // this.aFormGroup = this.formBuilder.group({
-    //   recaptcha: ['', Validators.required]
-    // });
+    this.aFormGroup = this.formBuilder.group({
+      recaptcha: ['', Validators.required]
+    });
   
 
     this.formRembourssement = this.formBuilder.group({
@@ -198,11 +203,12 @@ Successfull = false
   }
 
 
-  // siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
+  siteKey='6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 
   // Mis à jour de la demande 
+ 
 
   chargeFormDate(demande) {
     this.formRembourssement = this.formBuilder.group({

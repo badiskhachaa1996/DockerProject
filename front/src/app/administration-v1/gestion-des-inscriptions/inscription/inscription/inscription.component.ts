@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { Table } from 'primeng/table';
-import { createViewChild } from '@angular/compiler/src/core';
+
 @Component({
   selector: 'app-inscription',
   templateUrl: './inscription.component.html',
