@@ -54,7 +54,7 @@ export class ListLeadcrmComponent implements OnInit {
   ]
 
   filterAffecte = [
-    { label: 'Tous les membres', value: null }
+    { label: 'Tous les commercial', value: null }
   ]
 
   filterQualification = [
@@ -341,6 +341,7 @@ export class ListLeadcrmComponent implements OnInit {
   ]
 
     statutDossierList = [
+        { label: 'Tous les status', value: null },
         { label: 'Non contacté', value: 'Non contacté' },
         { label: 'Intéressé', value: 'Intéressé' },
         { label: 'Non intéressé', value: 'Non intéressé' },

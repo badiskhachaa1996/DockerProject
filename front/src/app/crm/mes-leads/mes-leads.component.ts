@@ -315,4 +315,62 @@ export class MesLeadsComponent implements OnInit {
       }
     }, 15);
   }
+
+
+    showAddEmailInput = false
+    showAddNumberlInput = false
+    showAddWhatNumberlInput = false
+
+
+    onInitAddEmailInput(type: string) {
+
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            this.showAddEmailInput = true
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = true
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = true
+        }
+    }
+
+    onAddElseContact(event: any, lead: LeadCRM, type: string) {
+        // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            lead.email = lead.email + " ;" + event.target.value
+        }
+        if (type == "number") {
+            lead.numero_phone = lead.numero_phone + "; " + event.target.value
+        }
+        if (type == "whatsapp") {
+            lead.numero_whatsapp = lead.numero_whatsapp + " ;" + event.target.value
+        }
+        this.LCS.update(lead).subscribe(data => {
+            this.leads.splice(this.leads.indexOf(lead), 1, data)
+            this.ToastService.add({ severity: "success", summary: "Mise à jour avec succès" })
+        })
+    }
+
+    onHideAddEmailInput(type: string) {
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            this.showAddEmailInput = false
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = false
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = false
+        }
+    }
+
 }
