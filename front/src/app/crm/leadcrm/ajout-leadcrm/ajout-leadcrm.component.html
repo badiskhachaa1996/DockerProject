@@ -1,11 +1,20 @@
+<input type="file" (change)="importExcel($event.target.files)" id="selectedFile" #selectedFile
+    accept=".xlsx, .csv" style="display: none;" pInputFile />
 <div class="card grid col-12">
     <div class="col-12" style="text-align: center;">
         <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
             obligatoires</small><br>
     </div>
-    <form class="p-fluid p-formgrid grid" [formGroup]="addForm" >
-        <div class="field col-12">
-            <label>Source </label>
+    <div class="col-6 grid">
+        <button pButton label="Télécharger Template" icon="pi pi-cloud-download" (click)="downloadTemplate()"
+            style="width: 100%;" autoWidth="false" class="mb-2"></button>
+        <!-- ngif adding show adding -->
+        <button pButton label="Importer Excel" icon="pi pi-file-excel" (click)="onImportExcel()" style="width: 100%;"
+            autoWidth="false"></button>
+    </div>
+    <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
+        <div class="field col-12 md:col-6">
+            <label>Source</label>
             <p-dropdown filter="true" placeholder="Choisissez une source" [options]="sourceDropdown" autoWidth="false"
                 optionValue="value" optionLabel="value" [style]="{'width':'100%'}" formControlName="source"
                 emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
