@@ -22,18 +22,12 @@ export class AjoutLeadcrmComponent implements OnInit {
     { value: 'Recyclage' },
     { value: 'LinkdIn' },
   ]
-  operationDropdown = [
-    { value: 'Prospection FRP' },
-    { value: 'Prospection ENP' },
-    { value: 'Prospection ICBS Malte' },
-    { value: 'Prospection ICBS Dubai' },
-      { value: 'Prospection Alternant' },
-  ]
   civiliteDropdown = [
     { value: 'Monsieur' },
     { value: 'Madame' },
     { value: 'Autre' },
   ]
+
   nationaliteDropdown = environment.nationalites
   paysDropdown = environment.pays
   nivDropdown = [
@@ -44,31 +38,12 @@ export class AjoutLeadcrmComponent implements OnInit {
     { label: 'Bac +4', value: 'Bac +4' },
     { label: 'Bac +5', value: 'Bac +5' },
   ];
-  statutList =
-    [
-      { label: 'Etudiant', value: 'Etudiant' },
-      { label: 'Salarié', value: 'Salarié' },
-      { label: 'Au chômage', value: 'Au chômage' },
-      { label: 'Autre', value: 'Autre' },
-    ];
-  niveauFR =
-    [
-      { label: "Langue maternelle", value: "Langue maternelle" },
-      { label: "J’ai une attestation de niveau (TCF DALF DELF..)", value: "J’ai une attestation de niveau (TCF DALF DELF..)" },
-      { label: "Aucun de ces choix", value: "Aucun de ces choix" },
-    ]
-  niveauEN =
-    [
-      { label: "Langue maternelle", value: "Langue maternelle" },
-      { label: "Avancé", value: "Avancé" },
-      { label: "Intermédiaire", value: "Intermédiaire" },
-      { label: "Basique", value: "Basique" },
-      { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
-    ]
-  addForm: FormGroup = new FormGroup({
+
+
+
+    addForm: FormGroup = new FormGroup({
       _id: new FormControl(''),
     source: new FormControl(''),
-    operation: new FormControl(''),
     civilite: new FormControl(''),
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -76,22 +51,16 @@ export class AjoutLeadcrmComponent implements OnInit {
     email: new FormControl(''),
     indicatif_phone: new FormControl(''),
     numero_phone: new FormControl(''),
-    date_naissance: new FormControl('', Validators.required),
     nationalite: new FormControl('', Validators.required),
     indicatif_whatsapp: new FormControl(''),
     numero_whatsapp: new FormControl(''),
-    indicatif_telegram: new FormControl(''),
-    numero_telegram: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
-    statut: new FormControl(''),
-    niveau_fr: new FormControl(''),
-    niveau_en: new FormControl(''),
   })
 
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID() }).subscribe(data => {
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier:"Non contacté", decision_qualification:"En attente" }).subscribe(data => {
       this.addForm.reset()
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })

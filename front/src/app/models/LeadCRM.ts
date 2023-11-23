@@ -2,6 +2,7 @@ export class LeadCRM {
     constructor(
         public source?: string,
         public operation?: string,
+        public statut_dossier?: string,
         public civilite?: string,
         public nom?: string,
         public prenom?: string,

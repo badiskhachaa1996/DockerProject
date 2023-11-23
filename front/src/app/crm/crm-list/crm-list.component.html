@@ -2,9 +2,11 @@
     <p-tabPanel header="Créer">
         <app-ajout-leadcrm></app-ajout-leadcrm>
     </p-tabPanel>
+
     <p-tabPanel header="Admin">
         <app-list-leadcrm (suivreLead)="suivreLead($event)"></app-list-leadcrm>
     </p-tabPanel>
+
     <p-tabPanel header="Mes lead">
         <app-mes-leads (suivreLead)="suivreLead($event)"></app-mes-leads>
     </p-tabPanel>
