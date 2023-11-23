@@ -2,8 +2,8 @@ stages:
   - Install
   - Test
   - Build
-  - SAST
-  - DAST
+  - sast
+  - dast
   - Docker
   - DEV
   - QA
@@ -117,7 +117,6 @@ build_angular:
 #  when: manual
 
 spotbugs-sast:
-  stage: SAST
   dependencies:
     - build_angular
   variables:
