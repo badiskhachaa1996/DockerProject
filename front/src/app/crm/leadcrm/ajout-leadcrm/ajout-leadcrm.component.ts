@@ -36,6 +36,7 @@ export class AjoutLeadcrmComponent implements OnInit {
     { value: 'Madame' },
     { value: 'Autre' },
   ]
+
   nationaliteDropdown = environment.nationalites
   paysDropdown = environment.pays
   nivDropdown = [
@@ -70,7 +71,6 @@ export class AjoutLeadcrmComponent implements OnInit {
   addForm: FormGroup = new FormGroup({
     _id: new FormControl(''),
     source: new FormControl(''),
-    operation: new FormControl(''),
     civilite: new FormControl(''),
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -78,22 +78,16 @@ export class AjoutLeadcrmComponent implements OnInit {
     email: new FormControl(''),
     indicatif_phone: new FormControl(''),
     numero_phone: new FormControl(''),
-    date_naissance: new FormControl('', Validators.required),
     nationalite: new FormControl('', Validators.required),
     indicatif_whatsapp: new FormControl(''),
     numero_whatsapp: new FormControl(''),
-    indicatif_telegram: new FormControl(''),
-    numero_telegram: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
-    statut: new FormControl(''),
-    niveau_fr: new FormControl(''),
-    niveau_en: new FormControl(''),
   })
 
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID() }).subscribe(data => {
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier:"Non contacté", decision_qualification:"En attente" }).subscribe(data => {
       this.addForm.reset()
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })

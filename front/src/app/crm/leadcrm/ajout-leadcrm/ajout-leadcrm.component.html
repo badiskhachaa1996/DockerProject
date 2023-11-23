@@ -1,12 +1,9 @@
 <input type="file" (change)="importExcel($event.target.files)" id="selectedFile" #selectedFile
     accept=".xlsx, .csv" style="display: none;" pInputFile />
 <div class="card grid col-12">
-    <div class="col-6">
-        <h4 class="col-12" style="text-align: center;">Insérer un lead dans le CRM</h4>
-        <div class="col-12" style="text-align: center;">
-            <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                obligatoires</small><br>
-        </div>
+    <div class="col-12" style="text-align: center;">
+        <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+            obligatoires</small><br>
     </div>
     <div class="col-6 grid">
         <button pButton label="Télécharger Template" icon="pi pi-cloud-download" (click)="downloadTemplate()"
@@ -17,17 +14,10 @@
     </div>
     <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
         <div class="field col-12 md:col-6">
-            <label>Source Lead</label>
+            <label>Source</label>
             <p-dropdown filter="true" placeholder="Choisissez une source" [options]="sourceDropdown" autoWidth="false"
                 optionValue="value" optionLabel="value" [style]="{'width':'100%'}" formControlName="source"
                 emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
-            </p-dropdown>
-        </div>
-        <div class="field col-12 md:col-6">
-            <label>Operation</label>
-            <p-dropdown filter="true" optionValue="value" optionLabel="value" placeholder="Choisissez une opération"
-                [options]="operationDropdown" autoWidth="false" [style]="{'width':'100%'}" formControlName="operation"
-                emptyFilterMessage="Pas d'opération trouvé" filterPlaceholder="Opération">
             </p-dropdown>
         </div>
 
@@ -39,11 +29,11 @@
         </div>
 
         <div class="field col-12 md:col-6">
-            <label>Nom du Lead <span style="color: red;"> * </span></label>
+            <label>Nom  <span style="color: red;"> * </span></label>
             <input pInputText formControlName="nom" type="text" placeholder="Ex: Smith" />
         </div>
         <div class="field col-12 md:col-6">
-            <label>Prénom du Lead <span style="color: red;"> * </span></label>
+            <label>Prénom   <span style="color: red;"> * </span></label>
             <input pInputText formControlName="prenom" type="text" placeholder="Ex: John" />
         </div>
 
@@ -55,22 +45,16 @@
             </p-dropdown>
         </div>
         <div class="field col-12 md:col-6">
-            <label>Email du Lead</label>
+            <label>Email </label>
             <input pInputText id="lastname" formControlName="email" type="text" placeholder="Ex: email@gmail.com" />
         </div>
 
-        <div class="field col-12 md:col-6">
+        <div class="field col-12">
             <label>Nationalité <span style="color: red;"> * </span></label>
             <p-dropdown placeholder="Choisissez une nationalité" filter="true" formControlName="nationalite"
                 emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
                 [options]="nationaliteDropdown" autoWidth="false" [style]="{'width':'100%'}">
             </p-dropdown>
-        </div>
-        <div class="field col-12 md:col-6">
-            <label>Date de naissance <span style="color: red;"> * </span></label>
-            <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy">
-
-            </p-calendar>
         </div>
 
         <div class="field col-12 md:col-4">
@@ -92,45 +76,19 @@
                 placeholder="Ex: 683121415" />
         </div>
 
-        <div class="field col-12 md:col-4">
-            <label>Indicatif</label>
-            <input pInputText id="lastname" formControlName="indicatif_telegram" type="tel" placeholder="Ex: +33" />
-        </div>
-        <div class="field col-12 md:col-8">
-            <label>Numéro Telegram</label>
-            <input pInputText id="lastname" formControlName="numero_telegram" type="tel" placeholder="Ex: 683121415" />
-        </div>
-
-        <div class="field col-12 md:col-6">
-            <label>Dernier niveau académique</label>
+        <div class="field col-12">
+            <label>Niveau académique</label>
             <p-dropdown placeholder="Choisissez un niveau" formControlName="dernier_niveau_academique"
                 [options]="nivDropdown" autoWidth="false" [style]="{'width':'100%'}">
             </p-dropdown>
         </div>
-        <div class="field col-12 md:col-6">
-            <label>Statut Actuel</label>
-            <p-dropdown placeholder="Choisissez un statut" formControlName="statut" [options]="statutList"
-                autoWidth="false" [style]="{'width':'100%'}">
-            </p-dropdown>
-        </div>
 
-        <div class="field col-12 md:col-6">
-            <label>Niveau en Français</label>
-            <p-dropdown placeholder="Choisissez un niveau" formControlName="niveau_fr" [options]="niveauFR"
-                autoWidth="false" [style]="{'width':'100%'}">
-            </p-dropdown>
-        </div>
-        <div class="field col-12 md:col-6">
-            <label>Niveau en Anglais</label>
-            <p-dropdown placeholder="Choisissez un niveau" formControlName="niveau_en" [options]="niveauEN"
-                autoWidth="false" [style]="{'width':'100%'}">
-            </p-dropdown>
-        </div>
-        <div class="col-12">
+        <!-- justifier à droite -->
+        <div class="col-6 md:col-4" style="margin-left: auto;">
             <!-- ngif updating show updating -->
-            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour le lead" (click)="onUpdate()"></button>
+            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour" (click)="onUpdate()" ></button>
             <!-- ngif adding show adding -->
-            <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter le lead" (click)="onAdd()"></button>
+            <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter " (click)="onAdd()"></button>
         </div>
     </form>
 </div>

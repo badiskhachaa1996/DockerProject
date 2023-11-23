@@ -24,7 +24,7 @@ app.post("/create", (req, res) => {
     f.save()
         .then((FFSaved) => {
             if (FFSaved.source.startsWith('Site Web')) {
-                let ecole = FFSaved.source.replace('Site Web ','')
+                let ecole = FFSaved.source.replace('Site Web ', '')
                 let mailOptions = {
                     from: 'ims@intedgroup.com',
                     to: FFSaved.email,
@@ -36,7 +36,6 @@ app.post("/create", (req, res) => {
                     Chez ${ecole}, nous mettons un point d'honneur à offrir un service personnalisé et à répondre efficacement aux besoins de nos futurs étudiants.<br> Nous sommes impatients de vous fournir toutes les informations nécessaires pour faire de votre expérience chez nous une réussite.<br>
                     N'hésitez pas à nous faire part de toute question supplémentaire d'ici là.<br> Nous sommes là pour vous.<br>
                     Cordialement,<br>
-
                     `,
                     attachments: [{
                         filename: 'signature.png',
