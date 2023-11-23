@@ -108,7 +108,7 @@ build_angular:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
-    expire_in: 1 hour
+    #expire_in: 1 hour
 #  when: manual
 
 spotbugs-sast:
@@ -164,6 +164,7 @@ node_docker_build:
         - back/Dockerfile
       when: manual
       allow_failure: true # FIXME
+
 #======================================================
 
 deploy_angular_to_dev:
@@ -200,24 +201,26 @@ deploy_angular_to_qa:
   dependencies: 
     - build_angular
   tags:
-    - dev-docker # FIXME
+    - qa-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - develop
   when: manual
-
+  
 deploy_node_to_qa:
   stage: deploy
 
   tags:
-    - dev-docker # FIXME
+    - dev-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js -- --dev
+   # - pm2 logs index
   only:
     - develop
   when: manual
@@ -229,7 +232,7 @@ deploy_angular_to_prod:
   dependencies: 
     - build_angular
   tags:
-    - dev-docker # FIXME
+    - qa-docker # FIXME
   script:
     - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
     - mkdir -p "$MOUNT_POINT"
@@ -243,7 +246,7 @@ deploy_node_to_prod:
   stage: deploy
 
   tags:
-    - dev-docker # FIXME
+    - qa-docker # FIXME
   script:
     - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
     - mkdir -p "$MOUNT_POINT"
