@@ -503,18 +503,19 @@
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
                         <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification"
-                            autoWidth="false"  (onChange)="onUpdateQualification($event, lead)" placeholder="Choisissez une decision">
+                            autoWidth="false"  (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
                     <td>
-                        <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
+                        <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} afficher la dropdown au dessus de tout en abs -->
+
                         <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier"
                                     autoWidth="false"  (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
 
                     <td *ngIf="AccessLevel!='Spectateur'">
-                        <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
+                        <i pTooltip="Fiche lead" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
