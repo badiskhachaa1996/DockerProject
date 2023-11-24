@@ -34,6 +34,7 @@ import { Table } from 'primeng/table';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 import { LeadCRM } from 'src/app/models/LeadCRM';
+import { EvaluationService } from 'src/app/services/evaluation.service';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -76,6 +77,7 @@ export class PreinscriptionComponent implements OnInit {
   ]
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
+  evaluationDic = {}
 
   onUpdateFiltre() {
     if (this.selectedTabIndex == 1) {
@@ -372,11 +374,24 @@ export class PreinscriptionComponent implements OnInit {
     private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService, private VenteService: VenteService,
     private ToastService: MessageService, private rhService: RhService, private NotifService: NotificationService,
     private SujetService: SujetService, private ServiceService: ServService, private CandidatureService: CandidatureLeadService,
-    private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService, private CollaborateurService: RhService) { }
+    private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService, private CollaborateurService: RhService, private EvaluationService: EvaluationService) { }
   memberDropdown = []
+  AddEval = false
+  EvaluationDropdown = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
+    this.EvaluationService.getevaluations().then(evaluations => {
+      evaluations.forEach(ev => {
+        this.EvaluationDropdown.push({ label: ev.label, value: ev._id })
+        ev.resultats.forEach(r => {
+          if (this.evaluationDic[r.user_id])
+            this.evaluationDic[r.user_id].push(ev)
+          else
+            this.evaluationDic[r.user_id] = [ev]
+        })
+      })
+    })
     this.UserService.getAllAgent().subscribe(data => {
       data.forEach(u => {
         this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
@@ -1809,4 +1824,8 @@ export class PreinscriptionComponent implements OnInit {
   }
   modeAffichageE3 = 'Voir'
   modeAffichageE4 = 'Voir'
+  addEval(eval_id: string, prospect: Prospect) {
+
+
+  }
 }

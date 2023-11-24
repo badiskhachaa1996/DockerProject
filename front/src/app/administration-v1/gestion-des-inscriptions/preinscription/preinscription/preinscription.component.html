@@ -2057,7 +2057,7 @@
                                 <!-- Dépend du Score -->
                             </div>
                         </ng-template>
-                        <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation"
+                        <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation" modal="true"
                             [style]="{width: '50vw'}">
 
                             <form [formGroup]="formAffectation" class="p-fluid p-formgrid grid col-12">
@@ -2095,10 +2095,12 @@
                                 </div>
                             </form>
                         </p-dialog>
+                        <p-dialog modal="true" [(visible)]="AddEval" header="Ajouter une évaluation à {{PROSPECT.user_id.firstname}} {{PROSPECT.user_id.lastname}}">
 
-                        <p-table #dt1 [value]="['']" dataKey="_id" responsiveLayout="scroll"
-                            [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
-                            [paginator]="true" rowExpandMode="single" [totalRecords]=""
+                        </p-dialog>
+                        <p-table *ngIf="evaluationDic[PROSPECT.user_id]" #dt1 [value]="evaluationDic[PROSPECT.user_id]"
+                            dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="['nom', 'choix', 'rythme']"
+                            [rows]="8" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                             styleClass="p-datatable-gridlines">
 
                             <ng-template pTemplate="header">
@@ -2116,24 +2118,24 @@
                                         Date de l'envoie <p-sortIcon field="rythme"> </p-sortIcon>
                                     </th>
                                     <th pSortableColumn="decision">
-                                        Date de passastion<p-sortIcon field="decision"> </p-sortIcon>
+                                        Date de passation<p-sortIcon field="decision"> </p-sortIcon>
                                     </th>
                                     <th>Action</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-prospect>
+                            <ng-template pTemplate="body" let-evaluation>
                                 <tr>
                                     <td>
-                                        https
+                                        {{evaluation?.label}}
                                     </td>
                                     <td>
-                                        %
+                                        WIP
                                     </td>
                                     <td>
-                                        min
+                                        WIP
                                     </td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>WIP</td>
+                                    <td>WIP</td>
                                     <td>
                                         <i style="padding-left: 3%;color: rgb(72, 72, 255);
                                 " class="pi pi-pencil m-1" (click)="initEvaluation(prospect); scrollToTop()"
@@ -2146,7 +2148,7 @@
                             </ng-template>
                         </p-table>
                         <br>
-                        <p-button icon="pi pi-plus"></p-button>
+                        <p-button icon="pi pi-plus" (click)="AddEval=true"></p-button>
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
@@ -2378,7 +2380,8 @@
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Explication<span style="color: red;"> *
                                     </span></label><br>
-                                <textarea pInputTextarea formControlName="explication" autoResize rows="5" cols="50"></textarea>
+                                <textarea pInputTextarea formControlName="explication" autoResize rows="5"
+                                    cols="50"></textarea>
                             </div>
 
                             <div class="col-12" style="text-align: center;">
