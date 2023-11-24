@@ -33,6 +33,7 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { Table } from 'primeng/table';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
+import { LeadCRM } from 'src/app/models/LeadCRM';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -41,7 +42,9 @@ import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 export class PreinscriptionComponent implements OnInit {
   @ViewChild('dt1') dt1: Table | undefined;
   prospects: Prospect[] = [];
+  default_prospects: Prospect[] = [];
   prospectI: Prospect[] = [];
+  default_prospectI: Prospect[] = [];
   PROSPECT: Prospect;
   proscteList: Prospect[] = [];
   prospect_acctuelle: Prospect;
@@ -69,6 +72,22 @@ export class PreinscriptionComponent implements OnInit {
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
+
+  onUpdateFiltre() {
+    if (this.selectedTabIndex == 1) {
+      this.prospects = []
+      this.default_prospects.forEach(p => {
+        if (this.allowFilter(p))
+          this.prospects.push(p)
+      })
+    } else {
+      this.prospectI = []
+      this.default_prospectI.forEach(p => {
+        if (this.allowFilter(p))
+          this.prospectI.push(p)
+      })
+    }
+  }
   filtre_value = {
     rythme: "",
     rentree: "",
@@ -78,6 +97,28 @@ export class PreinscriptionComponent implements OnInit {
     ecole: '',
     phase: '',
     search: ''
+  }
+  allowFilter(lead: Prospect) {
+    let r = true
+    if (this.filtre_value.rythme && this.filtre_value.rythme != lead.rythme_formation)
+      r = false; //console.log(this.filtre_value.rythme, lead.rythme_formation)
+    if (this.filtre_value.rentree && this.filtre_value.rentree != lead.rentree_scolaire)
+      r = false; //console.log(this.filtre_value.rentree, lead.rentree_scolaire)
+    if (this.filtre_value.source && this.filtre_value.source != lead.source)
+      r = false; //console.log(this.filtre_value.source, lead.source)
+    if (this.filtre_value.campus && this.filtre_value.campus != lead.campus_choix_1)
+      r = false; //console.log(this.filtre_value.campus, lead.campus_choix_1)
+    if (this.filtre_value.formation && this.filtre_value.formation != lead.formation)
+      r = false; //console.log(this.filtre_value.formation, lead.formation)
+    if (this.filtre_value.ecole && this.filtre_value.ecole != lead.type_form)
+      r = false; //console.log(this.filtre_value.ecole, lead.type_form)
+    if (this.filtre_value.phase && this.filtre_value.phase != lead.phase_candidature)
+      r = false; //console.log(this.filtre_value.phase, lead.phase_candidature)
+    let search_string = lead?.user_id?.firstname + " " + lead?.user_id?.lastname + " " + lead.customid + " " + lead?.user_id?.email + " " + lead?.user_id?.email_perso
+    if (this.filtre_value.search && !search_string.includes(this.filtre_value.search))
+      r = false; //console.log(this.filtre_value.search, search_string)
+
+    return r
   }
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
@@ -132,12 +173,12 @@ export class PreinscriptionComponent implements OnInit {
   campusfiltre =
     [
       { value: null, label: "Tous les campus" },
-      { value: "Paris", label: "Paris - France" },
-      { value: "Montpellier", label: "Montpellier - France" },
-      { value: "Brazzaville", label: "Brazzaville - Congo" },
-      { value: "Rabat", label: "Rabat - Maroc" },
-      { value: "La Valette", label: "La Valette - Malte" },
-      { value: "UAE", label: "UAE - Dubai" },
+      { value: "Paris - France", label: "Paris - France" },
+      { value: "Montpellier - France", label: "Montpellier - France" },
+      { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+      { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+      { value: "La Valette - Malte", label: "La Valette - Malte" },
+      { value: "UAE - Dubai", label: "UAE - Dubai" },
       { value: "En ligne", label: "En ligne" },
     ];
   sourceFiltre = [
@@ -408,9 +449,11 @@ export class PreinscriptionComponent implements OnInit {
       //recuperation des prospect 
       this.admissionService.getAllLocal().subscribe((results => {
         this.prospects = results
+        this.default_prospects = results
       }))
       this.admissionService.getAllInt().subscribe((results => {
         this.prospectI = results
+        this.default_prospectI = results
       }))
       this.CandidatureService.getAll().subscribe(cs => {
         cs.forEach(c => {
@@ -576,10 +619,12 @@ export class PreinscriptionComponent implements OnInit {
         if (responsePRO.lead_type == 'Local')
           this.admissionService.getAllLocal().subscribe((results => {
             this.prospects = results
+            this.default_prospects = results
           }))
         else
           this.admissionService.getAllInt().subscribe((results => {
             this.prospectI = results
+            this.default_prospectI = results
           }))
         this.newLeadForm.reset()
         this.ServiceService.getAServiceByLabel("Administration").subscribe((response) => {
@@ -767,10 +812,15 @@ export class PreinscriptionComponent implements OnInit {
   deletePro(prospect: Prospect) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?'))
       this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => {
-        if (this.prospectI.indexOf(prospect) != -1)
+        if (this.prospectI.indexOf(prospect) != -1) {
           this.prospectI.splice(this.prospectI.indexOf(prospect), 1)
-        if (this.prospects.indexOf(prospect) != -1)
+          this.default_prospectI.splice(this.default_prospectI.indexOf(prospect), 1)
+        }
+        if (this.prospects.indexOf(prospect) != -1) {
           this.prospects.splice(this.prospects.indexOf(prospect), 1)
+          this.default_prospectI.splice(this.default_prospects.indexOf(prospect), 1)
+        }
+
         this.ToastService.add({ severity: 'success', summary: 'Lead supprimé avec succès' })
       });
   }
@@ -897,10 +947,14 @@ export class PreinscriptionComponent implements OnInit {
   UpdateProspect() {
     this.admissionService.update({ prospect: { ...this.updateLeadForm.value }, user: { ...this.updateLeadForm.value, _id: this.updateLeadForm.value.user_id } }).subscribe(p => {
       this.admissionService.getPopulate(p._id).subscribe(p => {
-        if (this.prospectI.indexOf(this.ProspectToUpdate) != -1)
+        if (this.prospectI.indexOf(this.ProspectToUpdate) != -1) {
           this.prospectI.splice(this.prospectI.indexOf(this.ProspectToUpdate), 1, p)
-        if (this.prospects.indexOf(this.ProspectToUpdate) != -1)
+          this.default_prospectI.splice(this.default_prospectI.indexOf(this.ProspectToUpdate), 1, p)
+        }
+        if (this.prospects.indexOf(this.ProspectToUpdate) != -1) {
           this.prospects.splice(this.prospects.indexOf(this.ProspectToUpdate), 1, p)
+          this.default_prospectI.splice(this.default_prospects.indexOf(this.ProspectToUpdate), 1, p)
+        }
       })
       this.showupdateLeadForm = false
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du prospect avec succès' })
@@ -1454,7 +1508,8 @@ export class PreinscriptionComponent implements OnInit {
       let p: Prospect = this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)]
       this.initDocument(p)
 
-    }
+    }else
+      this.onUpdateFiltre()
   }
   initDocument(prospect) {
     this.PROSPECT = prospect;
@@ -1651,6 +1706,7 @@ export class PreinscriptionComponent implements OnInit {
       phase: '',
       search: ''
     }
+    this.onUpdateFiltre()
   };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
