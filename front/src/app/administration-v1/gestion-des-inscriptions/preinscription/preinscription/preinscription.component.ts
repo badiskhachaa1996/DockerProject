@@ -69,7 +69,16 @@ export class PreinscriptionComponent implements OnInit {
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  Frythme: String; Fcampus: String; Frentree: String; Fecoles: String; Fformation: String; Fetape: String; Fsource: String;
+  filtre_value = {
+    rythme: "",
+    rentree: "",
+    source: '',
+    campus: "",
+    formation: '',
+    ecole: '',
+    phase: '',
+    search: ''
+  }
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
   ];
@@ -224,7 +233,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -233,7 +242,7 @@ export class PreinscriptionComponent implements OnInit {
     codep: new FormControl(''),
   });
   updateLeadForm: FormGroup = new FormGroup({
-    lead_type: new FormControl('', Validators.required),
+    lead_type: new FormControl(''),
     type_form: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
@@ -248,7 +257,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus_choix_1: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -280,7 +289,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -1632,7 +1641,16 @@ export class PreinscriptionComponent implements OnInit {
       })
   }
   clearFilter() {
-    this.Frythme = null; this.Fcampus = null; this.Frentree = null; this.Fecoles = null; this.Fformation = null; this.Fetape = null; this.Fsource = null;
+    this.filtre_value = {
+      rythme: "",
+      rentree: "",
+      source: '',
+      campus: "",
+      formation: '',
+      ecole: '',
+      phase: '',
+      search: ''
+    }
   };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
