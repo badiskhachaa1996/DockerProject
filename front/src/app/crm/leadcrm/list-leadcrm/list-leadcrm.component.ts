@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -29,6 +29,7 @@ import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Ticket } from 'src/app/models/Ticket';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-list-leadcrm',
@@ -90,10 +91,16 @@ export class ListLeadcrmComponent implements OnInit {
     private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService,
     private admissionService: AdmissionService, private OperationService: GestionOperationService) { }
   leads: LeadCRM[] = []
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe();
+  }
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
       this.leads = data
     })
+    this.eventsSubscription = this.newLead.subscribe((lead) => {
+      this.leads.push(lead)
+    });
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(f => {
         this.ecoleList.push({ label: f.titre, value: f._id })
@@ -142,6 +149,8 @@ export class ListLeadcrmComponent implements OnInit {
       this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
         if (dataS)
           this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+            this.memberList = []
+            this.filterAffecte = [{ label: 'Tous les commerciaux', value: null }]
             data.forEach(val => {
               this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
               this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
@@ -186,7 +195,8 @@ export class ListLeadcrmComponent implements OnInit {
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
   })
-
+  private eventsSubscription: Subscription;
+  @Input() newLead: Observable<LeadCRM>;
   @Output() suivreLead = new EventEmitter<LeadCRM>();
   initFollow(lead
     :
@@ -413,8 +423,43 @@ export class ListLeadcrmComponent implements OnInit {
     return "IGTP" + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1)) + Math.floor(Math.random() * (9 - 0 + 1));
   }
 
+  onAutoAffect(lead: LeadCRM) {
+    this.LCS.update({ _id: lead._id, affected_to_member: this.token.id, affected_date: new Date() }).subscribe(data => {
+      this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
+        this.SujetService.getByLabel('Prospection').subscribe(sujet => {
+          let newTicket = new Ticket(
+            null,
+            u._id,
+            sujet._id,
+            new Date(),
+            this.token.id,
+            "En cours de traitement",
+            new Date(),
+          )
+          newTicket.customid = this.generateID()
+          newTicket.resum = "Contactez le lead"
+          newTicket.description = `
+          Nom: ${lead?.nom}\n
+          Prénom: ${lead?.prenom}\n
+          Email: ${lead?.email}\n
+          Téléphone: ${lead?.indicatif_phone} ${lead?.numero_phone}\n
+          Source: ${lead?.source}
+          `
+          this.TicketService.create(newTicket).subscribe(r => {
+            this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
+          }, error => {
+            console.error(error)
+          })
+        })
+
+      })
+      this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
+    })
+  }
+
   onUpdateAffect() {
-    this.LCS.update({ ...this.affectForm.value }).subscribe(data => {
+    this.LCS.update({ ...this.affectForm.value, affected_date: new Date() }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
       this.affectForm.reset()
       this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {

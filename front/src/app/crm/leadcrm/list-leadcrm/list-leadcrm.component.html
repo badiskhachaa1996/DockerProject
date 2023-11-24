@@ -366,18 +366,14 @@
     </div>
     <div class="card col-12" *ngIf="showAffect">
         <form class="p-fluid p-formgrid grid" [formGroup]="affectForm">
-            <div class="field col-12 md:col-6">
-                <label>Affecter le :</label>
-                <input type="date" pInputText formControlName="affected_date">
-            </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12">
                 <label>Affecter à :</label>
                 <p-dropdown [options]="memberList" formControlName="affected_to_member" autoWidth="false"
-                    [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
+                    [filter]="true" [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
             </div>
             <div class="col-12 grid">
-                <div class="col-12">
-                    <button pButton label="Sauvegardez les modifications" (click)="onUpdateAffect()"></button>
+                <div class="md:col-2 md:col-offset-4 col-4 col-offset-4">
+                    <button pButton label="Modifier" (click)="onUpdateAffect()"></button>
                 </div>
             </div>
 
@@ -392,56 +388,58 @@
             <ng-template pTemplate="caption">
                 <div class="fp-fluid p-formgrid grid">
                     <div class="field col-12 md:col-3 ">
-                        <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                               placeholder="Recherche" class="h-auto " style="width:100%" />
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="h-auto " style="width:100%" />
                     </div>
 
                     <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterPays" filter="true"
-                                    (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
-                                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
+                            (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
+                            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-3 ">
-                    <p-dropdown [style]="{'width':'100%'}" [options]="filterSource" filter="true"
-                        (onChange)="dt1.filter($event.value, 'source', 'equals');"
-                        emptyFilterMessage="Pas de source trouvé"
-                        filterPlaceholder="Choisissez une source"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterSource" filter="true"
+                            (onChange)="dt1.filter($event.value, 'source', 'equals');"
+                            emptyFilterMessage="Pas de source trouvé"
+                            filterPlaceholder="Choisissez une source"></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-3 ">
-                    <p-dropdown [style]="{'width':'100%'}" [options]="filterOperation" filter="true"
-                        (onChange)="dt1.filter($event.value, 'operation', 'equals');"
-                        emptyFilterMessage="Pas d'opération trouvé"
-                        filterPlaceholder="Choisissez une operation"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterOperation" filter="true"
+                            (onChange)="dt1.filter($event.value, 'operation', 'equals');"
+                            emptyFilterMessage="Pas d'opération trouvé"
+                            filterPlaceholder="Choisissez une operation"></p-dropdown>
                     </div>
                 </div>
                 <div class="fp-fluid p-formgrid grid">
                     <div class="field col-12 md:col-3 ">
-                    <p-dropdown [style]="{'width':'100%'}" [options]="filterAffecte" filter="true"
-                        (onChange)="dt1.filter($event.value, 'affected_to_member', 'equals');"
-                        emptyFilterMessage="Pas de commercial trouvé" filterPlaceholder="Choisissez un membre"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterAffecte" filter="true"
+                            (onChange)="dt1.filter($event.value, 'affected_to_member._id', 'equals');"
+                            emptyFilterMessage="Pas de commercial trouvé"
+                            filterPlaceholder="Choisissez un membre"></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-3 ">
-                    <p-dropdown [style]="{'width':'100%'}" [options]="filterQualification" filter="true"
-                        (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
-                        emptyFilterMessage="Pas de qualification trouvé"
-                        filterPlaceholder="Choisissez une qualification"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterQualification" filter="true"
+                            (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
+                            emptyFilterMessage="Pas de qualification trouvé"
+                            filterPlaceholder="Choisissez une qualification"></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-3 ">
-                    <p-dropdown [style]="{'width':'100%'}" [options]="filterPaiement" filter="true"
-                        (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
-                        emptyFilterMessage="Pas de modalité trouvé"
-                        filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterPaiement" filter="true"
+                            (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
+                            emptyFilterMessage="Pas de modalité trouvé"
+                            filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
                     </div>
 
                     <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="statutDossierList" filter="true"
-                                    (onChange)="dt1.filter($event.value, 'statut_dossier', 'equals');"
-                                    emptyFilterMessage="Pas de modalité trouvé"
-                                    filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                            (onChange)="dt1.filter($event.value, 'statut_dossier', 'equals');"
+                            emptyFilterMessage="Pas de modalité trouvé"
+                            filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
                     </div>
                 </div>
             </ng-template>
@@ -502,15 +500,15 @@
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification"
-                            autoWidth="false"  (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
+                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false"
+                            (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} afficher la dropdown au dessus de tout en abs -->
 
-                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier"
-                                    autoWidth="false"  (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
+                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false"
+                            (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
 
@@ -518,11 +516,15 @@
                         <i pTooltip="Fiche lead" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                            *ngIf="AccessLevel=='Responsable' || AccessLevel=='Super-Admin'"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i style="padding-left: 3%;" class="pi pi-pencil" (click)="updateLead(lead._id)"
-                            pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
-                        <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
-                            pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
+                        <i pTooltip="Auto-Assignation" tooltipPosition="bottom" class="pi pi-user-plus mr-2"
+                            *ngIf="token && token.id!=lead?.affected_to_member?._id" (click)="onAutoAffect(lead);"
+                            aria-hidden="true"></i>
+                        <i class="pi pi-pencil mr-2" (click)="updateLead(lead._id)" pTooltip="Modifier le lead"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                        <i class="pi pi-trash mr-2" (click)="delete(lead);" pTooltip="Supprimer le lead"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -537,28 +539,34 @@
                     <th>Pays de résidence</th>
                     <th>
                         Email
-                        <i *ngIf="!showAddEmailInput" class="pi pi-plus" style="float:right; color: #38B9D4; cursor: pointer;" (click)="onInitAddEmailInput('email')"
-                           aria-hidden="true"> </i>
-                        <i *ngIf="showAddEmailInput" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('email')"
-                           aria-hidden="true"> </i>
+                        <i *ngIf="!showAddEmailInput" class="pi pi-plus"
+                            style="float:right; color: #38B9D4; cursor: pointer;" (click)="onInitAddEmailInput('email')"
+                            aria-hidden="true"> </i>
+                        <i *ngIf="showAddEmailInput" class="pi pi-times-circle"
+                            style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('email')"
+                            aria-hidden="true"> </i>
 
                     </th>
                     <th>Nationalité</th>
                     <th>Date de naissance</th>
                     <th>
                         Numéro de téléphone
-                        <i *ngIf="!showAddNumberlInput" class="pi pi-plus" style="float:right; color: #38B9D4; cursor: pointer;" (click)="onInitAddEmailInput('number')"
-                           aria-hidden="true"> </i>
-                        <i *ngIf="showAddNumberlInput" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('number')"
-                           aria-hidden="true"> </i>
+                        <i *ngIf="!showAddNumberlInput" class="pi pi-plus"
+                            style="float:right; color: #38B9D4; cursor: pointer;"
+                            (click)="onInitAddEmailInput('number')" aria-hidden="true"> </i>
+                        <i *ngIf="showAddNumberlInput" class="pi pi-times-circle"
+                            style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('number')"
+                            aria-hidden="true"> </i>
 
                     </th>
                     <th>
                         Numéro WhatsApp
-                        <i *ngIf="!showAddWhatNumberlInput" class="pi pi-plus" style="float:right; color: #38B9D4; cursor: pointer;" (click)="onInitAddEmailInput('whatsapp')"
-                           aria-hidden="true"> </i>
-                        <i *ngIf="showAddWhatNumberlInput" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('whatsapp')"
-                           aria-hidden="true"> </i>
+                        <i *ngIf="!showAddWhatNumberlInput" class="pi pi-plus"
+                            style="float:right; color: #38B9D4; cursor: pointer;"
+                            (click)="onInitAddEmailInput('whatsapp')" aria-hidden="true"> </i>
+                        <i *ngIf="showAddWhatNumberlInput" class="pi pi-times-circle"
+                            style="float:right; color: red; cursor: pointer;" (click)="onHideAddEmailInput('whatsapp')"
+                            aria-hidden="true"> </i>
                     </th>
                     <th>Dernier niveau académique</th>
                 </tr>
@@ -569,17 +577,20 @@
                     <td>{{lead?.pays_residence}}</td>
                     <td>
                         {{lead?.email}}
-                        <input type="email" pInputText *ngIf="showAddEmailInput" (keyup.enter)="onAddElseContact($event,lead,'email')">
+                        <input type="email" pInputText *ngIf="showAddEmailInput"
+                            (keyup.enter)="onAddElseContact($event,lead,'email')">
                     </td>
                     <td>{{lead?.nationalite}}</td>
                     <td>{{lead?.date_naissance | date: 'dd MMMM YYYY'}}</td>
                     <td>
                         {{lead?.indicatif_phone}} {{lead?.numero_phone}}
-                        <input type="text" pInputText *ngIf="showAddNumberlInput" (keyup.enter)="onAddElseContact($event,lead,'number')">
+                        <input type="text" pInputText *ngIf="showAddNumberlInput"
+                            (keyup.enter)="onAddElseContact($event,lead,'number')">
                     </td>
                     <td>
                         {{lead?.indicatif_whatsapp}} {{lead?.numero_whatsapp}}
-                        <input type="text" pInputText *ngIf="showAddWhatNumberlInput" (keyup.enter)="onAddElseContact($event,lead,'whatsapp')">
+                        <input type="text" pInputText *ngIf="showAddWhatNumberlInput"
+                            (keyup.enter)="onAddElseContact($event,lead,'whatsapp')">
                     </td>
                     <td>{{lead?.dernier_niveau_academique}}</td>
                 </tr>

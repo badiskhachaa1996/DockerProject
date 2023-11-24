@@ -1,10 +1,10 @@
 <p-tabView [(activeIndex)]="selectedTabIndex" (onClose)="onTabClose($event)">
     <p-tabPanel header="Créer">
-        <app-ajout-leadcrm></app-ajout-leadcrm>
+        <app-ajout-leadcrm (newLead)="newLead($event)"></app-ajout-leadcrm>
     </p-tabPanel>
 
     <p-tabPanel header="Admin">
-        <app-list-leadcrm (suivreLead)="suivreLead($event)"></app-list-leadcrm>
+        <app-list-leadcrm (suivreLead)="suivreLead($event)" [newLead]="eventsSubject.asObservable()"></app-list-leadcrm>
     </p-tabPanel>
 
     <p-tabPanel header="Mes lead">
