@@ -2096,7 +2096,11 @@
                             </form>
                         </p-dialog>
                         <p-dialog modal="true" [(visible)]="AddEval" header="Ajouter une évaluation à {{PROSPECT.user_id.firstname}} {{PROSPECT.user_id.lastname}}">
+                            <div style="text-align: center;">
+                                <p-dropdown appendTo="body" [value]="EvaluationDropdown" (onChange)="addEval($event,PROSPECT)">
 
+                                </p-dropdown>
+                            </div>
                         </p-dialog>
                         <p-table *ngIf="evaluationDic[PROSPECT.user_id]" #dt1 [value]="evaluationDic[PROSPECT.user_id]"
                             dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="['nom', 'choix', 'rythme']"

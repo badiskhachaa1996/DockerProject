@@ -1825,7 +1825,7 @@ export class PreinscriptionComponent implements OnInit {
   modeAffichageE3 = 'Voir'
   modeAffichageE4 = 'Voir'
   addEval(eval_id: string, prospect: Prospect) {
-
+    
 
   }
 }
