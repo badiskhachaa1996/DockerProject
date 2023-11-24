@@ -643,12 +643,12 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         if (response.success) {
           this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
             console.log(response, serviceAdmission)
-
-            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission.dataService._id)).pipe(map(notif => {
-              this.NotifService.newNotif(notif)
-            }, (error) => {
-              console.error(error)
-            }));
+            if (serviceAdmission.dataService)
+              this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission.dataService._id)).pipe(map(notif => {
+                this.NotifService.newNotif(notif)
+              }, (error) => {
+                console.error(error)
+              }));
 
             if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'success', summary: 'The request for admission was sent', detail: "Check your email for login details" });
             else this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });

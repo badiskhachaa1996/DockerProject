@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -13,6 +13,7 @@ import { LeadCRM } from 'src/app/models/LeadCRM';
   styleUrls: ['./ajout-leadcrm.component.scss']
 })
 export class AjoutLeadcrmComponent implements OnInit {
+  @Output() newLead = new EventEmitter<LeadCRM>();
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -87,8 +88,9 @@ export class AjoutLeadcrmComponent implements OnInit {
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier:"Non contacté", decision_qualification:"En attente" }).subscribe(data => {
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente" }).subscribe(data => {
       this.addForm.reset()
+      this.newLead.emit(data)
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })
     this.LCS.getAll().subscribe(data => {
