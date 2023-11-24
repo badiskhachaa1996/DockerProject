@@ -21,15 +21,17 @@ let transporter = nodemailer.createTransport({
 app.post("/create", (req, res) => {
     delete req.body._id
     let f = new LeadCRM({ ...req.body })
-    f.save()
-        .then((FFSaved) => {
-            if (FFSaved.source.startsWith('Site Web')) {
-                let ecole = FFSaved.source.replace('Site Web ', '')
-                let mailOptions = {
-                    from: 'ims@intedgroup.com',
-                    to: FFSaved.email,
-                    subject: '[IMS] - Suivi de votre demande de contact',
-                    html: `
+    LeadCRM.findOne({ email: req.body.email }).then(r => {
+        if (!r)
+            f.save()
+                .then((FFSaved) => {
+                    if (FFSaved.source.startsWith('Site Web')) {
+                        let ecole = FFSaved.source.replace('Site Web ', '')
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: FFSaved.email,
+                            subject: '[IMS] - Suivi de votre demande de contact',
+                            html: `
                     Cher/Chère ${FFSaved.nom},<br>
                     Nous vous remercions sincèrement d'avoir rempli le formulaire de contact de l'école ${ecole}.<br> Votre demande a été prise en compte, et nous sommes ravis de pouvoir vous accompagner dans votre démarche.<br>
                     Nous transmettons dès à présent votre requête à l'un de nos conseillers dédiés.<br> Celui-ci sera en contact avec vous prochainement pour répondre à toutes vos questions et vous guider à travers les différentes étapes du processus d'inscription.<br>
@@ -37,22 +39,26 @@ app.post("/create", (req, res) => {
                     N'hésitez pas à nous faire part de toute question supplémentaire d'ici là.<br> Nous sommes là pour vous.<br>
                     Cordialement,<br>
                     `,
-                    attachments: [{
-                        filename: 'signature.png',
-                        path: 'assets/ims-intedgroup-logo.png',
-                        cid: 'red' //same cid value as in the html img src
-                    }]
-                };
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
 
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.error(error);
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
                     }
-                });
-            }
-            res.status(201).send(FFSaved)
-        })
-        .catch((error) => { res.status(400).send(error); });
+                    res.status(201).send(FFSaved)
+                })
+                .catch((error) => { res.status(400).send(error); });
+        else
+            res.status(500).send("Lead existe déjà")
+    })
+
 })
 
 app.get("/getOneByID/:id", (req, res, next) => {
