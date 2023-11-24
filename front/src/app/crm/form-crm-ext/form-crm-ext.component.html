@@ -1,4 +1,4 @@
-<div class="grid col-12" style="width: 1500px;height: 700px;max-width: 100%;max-height: 100%;">
+<div class="grid col-12" style="max-width: 100%;max-height: 100%;padding-left: 1.5rem;">
     <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
         <div class="field col-12 md:col-6">
             <label>Nom <span style="color: red;"> * </span></label>
@@ -40,7 +40,7 @@
             <textarea rows="5" cols="30" pInputTextarea formControlName="note_choix"></textarea>
         </div>
         <div class="md:col-2  md:col-offset-5 col-4  col-offset-4">
-            <button pButton type="submit" label="Ajouter" (click)="onAdd()"></button>
+            <button pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
         </div>
     </form>
 </div>

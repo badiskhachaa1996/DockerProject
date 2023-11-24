@@ -88,7 +88,7 @@ export class FormCrmExtComponent implements OnInit {
       numero_whatsapp = this.addForm.value.numero_phone
     this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
       this.addForm.reset()
-      this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+      //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })
   }
 
