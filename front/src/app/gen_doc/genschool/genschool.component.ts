@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
-import { FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { GenSchool } from 'src/app/models/gen_doc/GenSchool';
@@ -20,10 +20,10 @@ export class GenschoolComponent implements OnInit {
   token: any;
   selectedSchools = []
   showAddSchool: boolean = false;
-  formAddSchool: UntypedFormGroup;
+  formAddSchool: FormGroup;
   showUpdateSchool: GenSchool;
 
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private messageService: MessageService, private genSchoolService: GenSchoolService, private router: Router) { }
 
   ngOnInit(): void {

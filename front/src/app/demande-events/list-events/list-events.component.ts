@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Demande_events } from '../../models/Demande_events';
-import { FormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -16,7 +16,7 @@ export class ListEventsComponent implements OnInit {
 
   events: sourceForm[] = [];
 
-  constructor(private formBuilder: UntypedFormBuilder, private dEventService: DemandeEventsService,
+  constructor(private formBuilder: FormBuilder, private dEventService: DemandeEventsService,
     private messageService: MessageService) { }
 
   ngOnInit(): void {

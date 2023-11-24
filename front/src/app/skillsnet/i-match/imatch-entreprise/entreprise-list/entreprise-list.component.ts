@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Annonce } from 'src/app/models/Annonce';
 import { CV } from 'src/app/models/CV';
@@ -35,13 +35,13 @@ export class EntrepriseListComponent implements OnInit {
     { label: 'Autre' },
   ];
   pdfSrc
-  form = new UntypedFormGroup({
-    civilite: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', [Validators.required]),
-    consent: new UntypedFormControl(false, Validators.required)
+  form = new FormGroup({
+    civilite: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    phone: new FormControl('', [Validators.required]),
+    consent: new FormControl(false, Validators.required)
   })
 
   offres = []

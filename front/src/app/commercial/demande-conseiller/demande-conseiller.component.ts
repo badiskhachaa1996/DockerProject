@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DemandeConseiller } from 'src/app/models/DemandeConseiller';
@@ -16,7 +16,7 @@ export class DemandeConseillerComponent implements OnInit {
   seeAffectation: DemandeConseiller = null
   listConseiller: any[] = []
   constructor(public DCService: DemandeConseillerService, public messageService: MessageService, public TCService: TeamCommercialService, private activatedRoute: ActivatedRoute,
-    private formBuilder: UntypedFormBuilder) { }
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     if (!this.activatedRoute.snapshot.params.equipe_id)
@@ -44,8 +44,8 @@ export class DemandeConseillerComponent implements OnInit {
     })
   }
 
-  demandeConseillerForm: UntypedFormGroup = new UntypedFormGroup({
-    conseiller_id: new UntypedFormControl('', Validators.required)
+  demandeConseillerForm: FormGroup = new FormGroup({
+    conseiller_id: new FormControl('', Validators.required)
   })
 
   affected() {

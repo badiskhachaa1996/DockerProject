@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Campus } from 'src/app/models/Campus';
@@ -30,13 +30,13 @@ export class StageComponent implements OnInit {
   stages: Stage[];
   stageToUpdate: Stage;
 
-  formAdd: UntypedFormGroup;
+  formAdd: FormGroup;
   showFormAdd: boolean;
-  formUpdate: UntypedFormGroup;
+  formUpdate: FormGroup;
   showFormUpdate: boolean;
-  formAddDoc: UntypedFormGroup;
+  formAddDoc: FormGroup;
   showFormAddDoc: boolean;
-  formUpdateStatus: UntypedFormGroup;
+  formUpdateStatus: FormGroup;
   showFormUpdateStatus: boolean;
 
   // liste des status du stage
@@ -58,7 +58,7 @@ export class StageComponent implements OnInit {
   doc: any;                 // représente le document à uploader
   fileTypeList: any[];      // liste des fichiers pour l'upload de document
 
-  constructor(private router: Router, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private formBuilder: UntypedFormBuilder, private stageService: StageService, private messageService: MessageService, private etudiantService: EtudiantService, private userService: AuthService, private campusService: CampusService, private diplomeService: DiplomeService) { }
+  constructor(private router: Router, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private stageService: StageService, private messageService: MessageService, private etudiantService: EtudiantService, private userService: AuthService, private campusService: CampusService, private diplomeService: DiplomeService) { }
 
   ngOnInit(): void {
     // décodage du token

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
@@ -51,29 +51,29 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService, private UserService: AuthService) { }
 
-  RegisterForm: UntypedFormGroup = new UntypedFormGroup({
+  RegisterForm: FormGroup = new FormGroup({
 
     //Informations de la société
-    nomSoc: new UntypedFormControl('', [Validators.required]),
-    type: new UntypedFormControl(this.typeSoc[0], Validators.required),
-    email_partenaire: new UntypedFormControl('', [Validators.required, Validators.email]),
+    nomSoc: new FormControl('', [Validators.required]),
+    type: new FormControl(this.typeSoc[0], Validators.required),
+    email_partenaire: new FormControl('', [Validators.required, Validators.email]),
 
-    indicatifPhone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    phone_partenaire: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    Services: new UntypedFormControl('', [Validators.required]),
-    ville_ent: new UntypedFormControl("", Validators.required),
-    code_postale_ent: new UntypedFormControl("", Validators.required),
-    adresse_ent: new UntypedFormControl("", Validators.required),
-    localisation: new UntypedFormControl('', Validators.required),
-    facebook: new UntypedFormControl(""),
-    site_web: new UntypedFormControl(""),
-    Pays: new UntypedFormControl([], [Validators.required]),
-    civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
-    lastname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    firstname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    description: new UntypedFormControl(""),
-    indicatifWhatsapp: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+')]),
-    whatsApp: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+')]),
+    indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    Services: new FormControl('', [Validators.required]),
+    ville_ent: new FormControl("", Validators.required),
+    code_postale_ent: new FormControl("", Validators.required),
+    adresse_ent: new FormControl("", Validators.required),
+    localisation: new FormControl('', Validators.required),
+    facebook: new FormControl(""),
+    site_web: new FormControl(""),
+    Pays: new FormControl([], [Validators.required]),
+    civilite: new FormControl(environment.civilite[0], [Validators.required]),
+    lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    description: new FormControl(""),
+    indicatifWhatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+    whatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
   })
 
   //Récupération des informations de la société

@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 
@@ -78,9 +78,9 @@ export class ListPartenaireComponent implements OnInit {
   ]
   localisationList = environment.pays
 
-  registerForm: UntypedFormGroup;
+  registerForm: FormGroup;
 
-  formModifPartenaire: UntypedFormGroup;
+  formModifPartenaire: FormGroup;
   partenaireToUpdate: Partenaire;
   idPartenaireToUpdate: Partenaire;
   idUserOfPartenaireToUpdate: string;
@@ -109,7 +109,7 @@ export class ListPartenaireComponent implements OnInit {
   { label: "Signé", value: "Signé" },
   { label: "Annulé", value: "Annulé" },]
   AccessLevel = "Spectateur"
-  constructor(private formBuilder: UntypedFormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
+  constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private MIService: TeamsIntService) { }
 
@@ -376,16 +376,16 @@ export class ListPartenaireComponent implements OnInit {
     })
   }
   editInfoCommercial = false
-  editInfoCommercialForm: UntypedFormGroup = new UntypedFormGroup({
-    indicatifPhone: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    indicatifWhatsapp: new UntypedFormControl(''),
-    WhatsApp: new UntypedFormControl(''),
-    site_web: new UntypedFormControl(''),
-    facebook: new UntypedFormControl(''),
-    Pays: new UntypedFormControl([], Validators.required),
-    Services: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
+  editInfoCommercialForm: FormGroup = new FormGroup({
+    indicatifPhone: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    indicatifWhatsapp: new FormControl(''),
+    WhatsApp: new FormControl(''),
+    site_web: new FormControl(''),
+    facebook: new FormControl(''),
+    Pays: new FormControl([], Validators.required),
+    Services: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
   })
   initEditCommercialForm() {
     this.editInfoCommercial = true
@@ -414,9 +414,9 @@ export class ListPartenaireComponent implements OnInit {
     })
   }
 
-  ajoutCommission = new UntypedFormGroup({
-    description: new UntypedFormControl('', Validators.required),
-    montant: new UntypedFormControl('', Validators.required)
+  ajoutCommission = new FormGroup({
+    description: new FormControl('', Validators.required),
+    montant: new FormControl('', Validators.required)
   })
   addCommission() {
     if (this.commissions)
@@ -466,12 +466,12 @@ export class ListPartenaireComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
   editInfoPartenariat = false
-  editInfoPartenariatForm: UntypedFormGroup = new UntypedFormGroup({
-    statut_anciennete: new UntypedFormControl('', Validators.required),
-    contribution: new UntypedFormControl('', Validators.required),
-    typePartenaire: new UntypedFormControl(''),
-    groupeWhatsApp: new UntypedFormControl(''),
-    localisation: new UntypedFormControl('')
+  editInfoPartenariatForm: FormGroup = new FormGroup({
+    statut_anciennete: new FormControl('', Validators.required),
+    contribution: new FormControl('', Validators.required),
+    typePartenaire: new FormControl(''),
+    groupeWhatsApp: new FormControl(''),
+    localisation: new FormControl('')
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true

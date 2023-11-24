@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
-import { FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { GenCampus } from 'src/app/models/gen_doc/GenCampus';
@@ -21,10 +21,10 @@ export class GencampusComponent implements OnInit {
   token: any;
   selectedCampuss = []
   showAddCampus: boolean = false;
-  formAddCampus: UntypedFormGroup;
+  formAddCampus: FormGroup;
   showUpdateCampus: GenCampus;
 
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private messageService: MessageService, private genCampusService: GenCampusService, private router: Router) { }
 
   ngOnInit(): void {

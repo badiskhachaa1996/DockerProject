@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, FormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
 import { Examen } from 'src/app/models/Examen';
@@ -57,17 +57,17 @@ export class AjoutExamenComponent implements OnInit {
     { label: "Participation", value: "Participation" }
   ]
 
-  formAddExamen: UntypedFormGroup = new UntypedFormGroup({
-    classe_id: new UntypedFormControl('', Validators.required),
-    matiere_id: new UntypedFormControl('', Validators.required),
-    libelle: new UntypedFormControl('', Validators.required),
-    formateur_id: new UntypedFormControl('', Validators.required),
-    date: new UntypedFormControl('', Validators.required),
-    type: new UntypedFormControl('', Validators.required),
-    niveau: new UntypedFormControl('', Validators.required),
-    note_max: new UntypedFormControl(20, [Validators.required, Validators.pattern("^[0-9.]+$")]),
-    coef: new UntypedFormControl(1, Validators.required),
-    semestre: new UntypedFormControl('', Validators.required)
+  formAddExamen: FormGroup = new FormGroup({
+    classe_id: new FormControl('', Validators.required),
+    matiere_id: new FormControl('', Validators.required),
+    libelle: new FormControl('', Validators.required),
+    formateur_id: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+    niveau: new FormControl('', Validators.required),
+    note_max: new FormControl(20, [Validators.required, Validators.pattern("^[0-9.]+$")]),
+    coef: new FormControl(1, Validators.required),
+    semestre: new FormControl('', Validators.required)
   })
 
 

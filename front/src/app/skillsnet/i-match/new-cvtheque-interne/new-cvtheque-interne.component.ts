@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { saveAs as importedSaveAs } from "file-saver";
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { Matching } from 'src/app/models/Matching';
@@ -133,35 +133,35 @@ export class NewCvthequeInterneComponent implements OnInit {
     })
   }
   cvToUpdate;
-  formUpdate = new UntypedFormGroup({
-    civilite: new UntypedFormControl('Monsieur', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    nationnalite: new UntypedFormControl(''),
-    email_perso: new UntypedFormControl('', [Validators.required, Validators.email]),
-    phone: new UntypedFormControl(''),
-    pays_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    numero_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl(''),
-    _id: new UntypedFormControl('', Validators.required),
-    last_modified_at: new UntypedFormControl(new Date())
+  formUpdate = new FormGroup({
+    civilite: new FormControl('Monsieur', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    nationnalite: new FormControl(''),
+    email_perso: new FormControl('', [Validators.required, Validators.email]),
+    phone: new FormControl(''),
+    pays_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    numero_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    _id: new FormControl('', Validators.required),
+    last_modified_at: new FormControl(new Date())
   })
 
   cvToAdd;
-  formAdd = new UntypedFormGroup({
-    civilite: new UntypedFormControl('Monsieur', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    nationnalite: new UntypedFormControl(''),
-    email_perso: new UntypedFormControl('', [Validators.required, Validators.email]),
-    phone: new UntypedFormControl(''),
-    pays_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    numero_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl('')
+  formAdd = new FormGroup({
+    civilite: new FormControl('Monsieur', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    nationnalite: new FormControl(''),
+    email_perso: new FormControl('', [Validators.required, Validators.email]),
+    phone: new FormControl(''),
+    pays_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    numero_adresse: new FormControl(''),
+    postal_adresse: new FormControl('')
   })
   onInitUpdate(cv: CV) {
     this.formUpdate.patchValue({ ...cv.user_id })

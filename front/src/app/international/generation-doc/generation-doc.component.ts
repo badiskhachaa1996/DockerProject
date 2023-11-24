@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DocumentInternational } from 'src/app/models/DocumentInternational';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -65,12 +65,12 @@ export class GenerationDocComponent implements OnInit {
 
 
 
-  documentForm = new UntypedFormGroup({
-    ecole: new UntypedFormControl('', Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    prospect_id: new UntypedFormControl('', Validators.required),
-    document: new UntypedFormControl('', Validators.required),
-    rentree_scolaire: new UntypedFormControl('', Validators.required)
+  documentForm = new FormGroup({
+    ecole: new FormControl('', Validators.required),
+    formation: new FormControl('', Validators.required),
+    prospect_id: new FormControl('', Validators.required),
+    document: new FormControl('', Validators.required),
+    rentree_scolaire: new FormControl('', Validators.required)
   })
 
   onSelectEcole() {

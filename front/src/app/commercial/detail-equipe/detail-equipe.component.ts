@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DemandeConseiller } from 'src/app/models/DemandeConseiller';
@@ -19,8 +19,8 @@ export class DetailEquipeComponent implements OnInit {
   affectationList: DemandeConseiller[]
   showFormAddDemande = false
 
-  demandeConseillerForm: UntypedFormGroup = new UntypedFormGroup({
-    conseiller_id: new UntypedFormControl('', Validators.required)
+  demandeConseillerForm: FormGroup = new FormGroup({
+    conseiller_id: new FormControl('', Validators.required)
   })
 
   constructor(private messageService: MessageService, private activatedRoute: ActivatedRoute, private TCService: TeamCommercialService, private DCService: DemandeConseillerService) { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
@@ -207,103 +207,103 @@ export class PreinscriptionComponent implements OnInit {
   EcoleFiltre = [{
     label: "Toutes les écoles", value: null
   }]
-  newLeadForm: UntypedFormGroup = new UntypedFormGroup({
-    type: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue: new UntypedFormControl(''),
-    ville: new UntypedFormControl(''),
-    codep: new UntypedFormControl(''),
+  newLeadForm: FormGroup = new FormGroup({
+    type: new FormControl('', Validators.required),
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0], Validators.required),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
   });
-  updateLeadForm: UntypedFormGroup = new UntypedFormGroup({
-    lead_type: new UntypedFormControl('', Validators.required),
-    type_form: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus_choix_1: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl(''),
-    _id: new UntypedFormControl('', Validators.required),
-    user_id: new UntypedFormControl('', Validators.required),
+  updateLeadForm: FormGroup = new FormGroup({
+    lead_type: new FormControl('', Validators.required),
+    type_form: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus_choix_1: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0], Validators.required),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    _id: new FormControl('', Validators.required),
+    user_id: new FormControl('', Validators.required),
   })
-  formAffectation = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    agent_id: new UntypedFormControl('', Validators.required),
-    date_limite: new UntypedFormControl(''),
-    note_assignation: new UntypedFormControl(''),
+  formAffectation = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl('', Validators.required),
+    date_limite: new FormControl(''),
+    note_assignation: new FormControl(''),
   })
-  RIForm: UntypedFormGroup = new UntypedFormGroup({
-    etudiant: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue: new UntypedFormControl(''),
-    ville: new UntypedFormControl(''),
-    codep: new UntypedFormControl(''),
+  RIForm: FormGroup = new FormGroup({
+    etudiant: new FormControl('', Validators.required),
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0], Validators.required),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
   })
 
-  RegisterForm2: UntypedFormGroup = new UntypedFormGroup({
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required)
+  RegisterForm2: FormGroup = new FormGroup({
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required)
   })
-  DecisionForm: UntypedFormGroup = new UntypedFormGroup({
-    decisoin_admission: new UntypedFormControl('', [Validators.required]),
-    explication: new UntypedFormControl('',),
-    date_d: new UntypedFormControl('',)
+  DecisionForm: FormGroup = new FormGroup({
+    decisoin_admission: new FormControl('', [Validators.required]),
+    explication: new FormControl('',),
+    date_d: new FormControl('',)
   })
-  entretienForm: UntypedFormGroup = new UntypedFormGroup({
-    date_e: new UntypedFormControl('',),
-    duree_e: new UntypedFormControl('', [Validators.required]),
-    niveau: new UntypedFormControl('',),
-    parcour: new UntypedFormControl('',),
-    choix: new UntypedFormControl('',)
+  entretienForm: FormGroup = new FormGroup({
+    date_e: new FormControl('',),
+    duree_e: new FormControl('', [Validators.required]),
+    niveau: new FormControl('',),
+    parcour: new FormControl('',),
+    choix: new FormControl('',)
   })
   dropdownMember = []
   TicketAffecter = null
@@ -1261,17 +1261,17 @@ export class PreinscriptionComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new UntypedFormGroup({
-    objet: new UntypedFormControl('', Validators.required),
-    body: new UntypedFormControl('', Validators.required),
-    cc: new UntypedFormControl([]),
-    send_from: new UntypedFormControl('', Validators.required)
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new UntypedFormGroup({
-    objet: new UntypedFormControl('', Validators.required),
-    body: new UntypedFormControl('', Validators.required),
-    cc: new UntypedFormControl([]),
-    send_from: new UntypedFormControl('', Validators.required)
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
   })
   onEmailPerso() {
     console.log(this.formEmailPerso.value)
@@ -1433,13 +1433,13 @@ export class PreinscriptionComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
-  uploadAdminFileForm: UntypedFormGroup = new UntypedFormGroup({
+  uploadAdminFileForm: FormGroup = new FormGroup({
     //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
-    date: new UntypedFormControl(this.convertTime(new Date), Validators.required),
-    nom: new UntypedFormControl("",),
-    note: new UntypedFormControl(""),
-    traited_by: new UntypedFormControl("",),
-    type: new UntypedFormControl(""),
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("",),
+    note: new FormControl(""),
+    traited_by: new FormControl("",),
+    type: new FormControl(""),
   })
   showUploadFile = null
   showDocAdmin: Prospect = null

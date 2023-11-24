@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Annonce } from 'src/app/models/Annonce';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
@@ -37,9 +37,9 @@ export class AnnoncesComponent implements OnInit {
 
   isEtudiant = false
 
-  form: UntypedFormGroup;
+  form: FormGroup;
   showForm: boolean = false;
-  formUpdate: UntypedFormGroup;
+  formUpdate: FormGroup;
   showFormUpdate: boolean = false;
 
   userConnected: User;
@@ -108,7 +108,7 @@ export class AnnoncesComponent implements OnInit {
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService,
     private entrepriseService: EntrepriseService, private messageService: MessageService,
-    private formBuilder: UntypedFormBuilder, private userService: AuthService,
+    private formBuilder: FormBuilder, private userService: AuthService,
     private annonceService: AnnonceService, private router: Router, private CvService: CvService,
     private MatchingService: MatchingService) { }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
@@ -26,7 +26,7 @@ export class DashboardProjectV2Component implements OnInit {
   taskListe: any[] = [];
   nbr_projet: number = 0; nbr_projet_encour: number = 0; nbr_projet_cloture: number = 0;
   nbr_taches: number = 0; nbr_tache_attente: number = 0; nbr_tache_encour: number = 0; nbr_tache_traite: number = 0; nbr_tache_valide: number = 0;
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private userService: AuthService,
     private messageService: MessageService,
     private projectService: ProjectService,

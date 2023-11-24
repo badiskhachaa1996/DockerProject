@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Formateur } from 'src/app/models/Formateur';
@@ -29,7 +29,7 @@ export class AddFormateurComponent implements OnInit {
 
   fr = environment.fr;
 
-  formAddFormateur: UntypedFormGroup;
+  formAddFormateur: FormGroup;
 
   users: User[] = [];
   civiliteList = environment.civilite;
@@ -97,7 +97,7 @@ export class AddFormateurComponent implements OnInit {
   }
 
 
-  constructor(private formateurService: FormateurService, private formBuilder: UntypedFormBuilder, private messageService: MessageService, private router: Router,
+  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
     private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService,
     private CampusService: CampusService, private entrepriseService: EntrepriseService) { }
 

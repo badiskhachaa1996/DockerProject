@@ -3,7 +3,7 @@ import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { DemandeRemboursementService } from '../../services/demande-remboursement.service';
 import { Demande } from '../../models/Demande';
-import { UntypedFormBuilder, FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
@@ -27,7 +27,7 @@ export class ListRemboursementComponent implements OnInit {
   selectedStatus=[];
 
 
-  constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: UntypedFormBuilder, private AService: AdmissionService, )  { }
+  constructor( private formationService: FormulaireAdmissionService, private userServise:AuthService, private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, private AService: AdmissionService, )  { }
 
   showUpdateForm = false
   selectedPays=[]

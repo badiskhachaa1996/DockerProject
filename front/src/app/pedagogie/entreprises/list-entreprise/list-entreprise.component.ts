@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
@@ -41,16 +41,16 @@ export class ListEntrepriseComponent implements OnInit {
 
   ActiveIndex = 0;
 
-  formUpdateEntreprise: UntypedFormGroup;
+  formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
   representantToUpdate: User;
   IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }];
 
   // formulaire qui permet de saisir l'adresse mail d'un représentant et de lui envoyer une creation link
-  formEmail: UntypedFormGroup;
+  formEmail: FormGroup;
   showFormEmail: boolean = false;
 
-  constructor(private userService: AuthService, private entrepriseService: EntrepriseService, private formBuilder: UntypedFormBuilder, private messageService: MessageService, private router: Router) { }
+  constructor(private userService: AuthService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     try {

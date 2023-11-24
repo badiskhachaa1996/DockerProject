@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { retry } from 'rxjs';
@@ -38,13 +38,13 @@ export class EntrepriseFormComponent implements OnInit {
 
   ActiveIndex = 0;
 
-  formAddEntreprise: UntypedFormGroup;
+  formAddEntreprise: FormGroup;
   showFormAddEntreprise: boolean = true;
   showEndArea: boolean = false;
 
   commercialId: string;
 
-  constructor(private formBuilder: UntypedFormBuilder, private messageService: MessageService, private activatedRoute: ActivatedRoute, private entrepriseService: EntrepriseService) { }
+  constructor(private formBuilder: FormBuilder, private messageService: MessageService, private activatedRoute: ActivatedRoute, private entrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
     // initialisation des src imgs

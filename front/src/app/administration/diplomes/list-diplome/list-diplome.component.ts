@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Diplome } from 'src/app/models/Diplome';
@@ -75,7 +75,7 @@ export class ListDiplomeComponent implements OnInit {
 
   showFormAddDiplome: boolean = false;
 
-  formUpdateDiplome: UntypedFormGroup;
+  formUpdateDiplome: FormGroup;
   showFormUpdateDiplome: boolean = false;
   diplomeToUpdate: Diplome = new Diplome();
   idDiplomeToUpdate: string;
@@ -98,7 +98,7 @@ export class ListDiplomeComponent implements OnInit {
 
   isCommercial: boolean = false;
 
-  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: UntypedFormBuilder,
+  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
     private formateurService: FormateurService, private AuthService: AuthService, private CommercialService: CommercialPartenaireService) { }
 

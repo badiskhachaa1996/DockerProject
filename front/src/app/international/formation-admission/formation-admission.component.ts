@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { log } from 'console';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
@@ -117,34 +117,34 @@ export class FormationAdmissionComponent implements OnInit {
     })
   }
 
-  updateForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    niveau: new UntypedFormControl(''),
-    rncp: new UntypedFormControl(''),
-    certificateur: new UntypedFormControl(''),
-    duree: new UntypedFormControl(''),
-    description: new UntypedFormControl(''),
-    criteres: new UntypedFormControl(''),
-    tarif: new UntypedFormControl(''),
-    langue: new UntypedFormControl([], Validators.required),
-    deroulement: new UntypedFormControl(''),
-    filiere: new UntypedFormControl(''),
-    bac: new UntypedFormControl(''),
-    code: new UntypedFormControl(''),
-    annee: new UntypedFormControl(''),
-    code_france_competence: new UntypedFormControl(''),
-    validite: new UntypedFormControl(''),
-    organisme_referent: new UntypedFormControl(''),
-    campus: new UntypedFormControl(''),
-    annee_scolaire: new UntypedFormControl(''),
-    date_debut: new UntypedFormControl(''),
-    date_fin: new UntypedFormControl(''),
-    nb_heures: new UntypedFormControl(''),
-    rythme: new UntypedFormControl(''),
-    calendrier: new UntypedFormControl(''),
-    examens: new UntypedFormControl(''),
-    note: new UntypedFormControl(''),
+  updateForm: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    niveau: new FormControl(''),
+    rncp: new FormControl(''),
+    certificateur: new FormControl(''),
+    duree: new FormControl(''),
+    description: new FormControl(''),
+    criteres: new FormControl(''),
+    tarif: new FormControl(''),
+    langue: new FormControl([], Validators.required),
+    deroulement: new FormControl(''),
+    filiere: new FormControl(''),
+    bac: new FormControl(''),
+    code: new FormControl(''),
+    annee: new FormControl(''),
+    code_france_competence: new FormControl(''),
+    validite: new FormControl(''),
+    organisme_referent: new FormControl(''),
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
+    note: new FormControl(''),
   })
 
  
@@ -206,37 +206,37 @@ export class FormationAdmissionComponent implements OnInit {
 
   }
 
-  createFormRA: UntypedFormGroup = new UntypedFormGroup({
-    campus: new UntypedFormControl(''),
-    annee_scolaire: new UntypedFormControl(''),
-    date_debut: new UntypedFormControl(''),
-    date_fin: new UntypedFormControl(''),
-    nb_heures: new UntypedFormControl(''),
-    rythme: new UntypedFormControl(''),
-    calendrier: new UntypedFormControl(''),
-    examens: new UntypedFormControl(''),
-    note: new UntypedFormControl(''),
+  createFormRA: FormGroup = new FormGroup({
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
+    note: new FormControl(''),
   })
 
-  createForm: UntypedFormGroup = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required),
-    niveau: new UntypedFormControl(''),
-    rncp: new UntypedFormControl(''),
-    certificateur: new UntypedFormControl(''),
-    duree: new UntypedFormControl(''),
-    description: new UntypedFormControl(''),
-    criteres: new UntypedFormControl(''),
-    tarif: new UntypedFormControl(''),
-    langue: new UntypedFormControl([], Validators.required),
-    deroulement: new UntypedFormControl(''),
-    filiere: new UntypedFormControl(''),
-    bac: new UntypedFormControl(''),
-    campus: new UntypedFormControl(''),
-    code: new UntypedFormControl(''),
-    annee: new UntypedFormControl(''),
-    code_france_competence: new UntypedFormControl(''),
-    validite: new UntypedFormControl(''),
-    organisme_referent: new UntypedFormControl(''),
+  createForm: FormGroup = new FormGroup({
+    nom: new FormControl('', Validators.required),
+    niveau: new FormControl(''),
+    rncp: new FormControl(''),
+    certificateur: new FormControl(''),
+    duree: new FormControl(''),
+    description: new FormControl(''),
+    criteres: new FormControl(''),
+    tarif: new FormControl(''),
+    langue: new FormControl([], Validators.required),
+    deroulement: new FormControl(''),
+    filiere: new FormControl(''),
+    bac: new FormControl(''),
+    campus: new FormControl(''),
+    code: new FormControl(''),
+    annee: new FormControl(''),
+    code_france_competence: new FormControl(''),
+    validite: new FormControl(''),
+    organisme_referent: new FormControl(''),
   })
 
   addForm = false

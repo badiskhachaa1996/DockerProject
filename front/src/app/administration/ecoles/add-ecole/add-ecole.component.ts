@@ -4,7 +4,7 @@ import { AnneeScolaire } from 'src/app/models/AnneeScolaire';
 import { DropdownModule } from 'primeng/dropdown';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { Ecole } from 'src/app/models/Ecole'
@@ -24,15 +24,15 @@ export class AddEcoleComponent implements OnInit {
   AnneeSelected : AnneeScolaire;
   display: boolean;
 
-  addecoleForm: UntypedFormGroup = new UntypedFormGroup({
-    libelle: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new UntypedFormControl('', Validators.required),
-    site: new UntypedFormControl('', Validators.required),
-    annee_id: new UntypedFormControl('', Validators.required),
-    telephone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new UntypedFormControl('', Validators.required),
-    ville: new UntypedFormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
-    pays: new UntypedFormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
+  addecoleForm: FormGroup = new FormGroup({
+    libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    email: new FormControl('', Validators.required),
+    site: new FormControl('', Validators.required),
+    annee_id: new FormControl('', Validators.required),
+    telephone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
+    adresse: new FormControl('', Validators.required),
+    ville: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
+    pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
   });
 
   columns = []

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { FormulaireServiceService } from '../formulaire-service.service';
 import { MessageService } from 'primeng/api';
@@ -51,22 +51,22 @@ export class FormulaireFrontComponent implements OnInit {
   dropdownContent2 = []
   dropdownContent3 = []
 
-  formulaire = new UntypedFormGroup({
-    texte: new UntypedFormControl('', Validators.required),
-    date: new UntypedFormControl('', Validators.required),
-    telephone: new UntypedFormControl(''),
-    dropdown: new UntypedFormControl(''),
-    multiSelect: new UntypedFormControl([]),
-    multiSelectMax3: new UntypedFormControl([]),
-    selectButton: new UntypedFormControl(''),
-    textArea: new UntypedFormControl(''),
-    sens_vie: new UntypedFormControl(''),
-    ecole: new UntypedFormControl(''),
-    formation: new UntypedFormControl(''),
-    argumentation: new UntypedFormControl(''),
-    onBlur: new UntypedFormControl(''),
-    onInput: new UntypedFormControl(''),
-    formation2: new UntypedFormControl('')
+  formulaire = new FormGroup({
+    texte: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    telephone: new FormControl(''),
+    dropdown: new FormControl(''),
+    multiSelect: new FormControl([]),
+    multiSelectMax3: new FormControl([]),
+    selectButton: new FormControl(''),
+    textArea: new FormControl(''),
+    sens_vie: new FormControl(''),
+    ecole: new FormControl(''),
+    formation: new FormControl(''),
+    argumentation: new FormControl(''),
+    onBlur: new FormControl(''),
+    onInput: new FormControl(''),
+    formation2: new FormControl('')
   })
 
   onSaveFormulaire() {

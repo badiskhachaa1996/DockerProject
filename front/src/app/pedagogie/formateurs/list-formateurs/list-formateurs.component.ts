@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Formateur } from 'src/app/models/Formateur';
@@ -58,7 +58,7 @@ export class ListFormateursComponent implements OnInit {
   dropdownCampus = [];
   diplomesListe = [];
   jury_diplomesList = []
-  formUpdateFormateur: UntypedFormGroup;
+  formUpdateFormateur: FormGroup;
 
   showFormUpdateFormateur: boolean = false;
   formateurToUpdate: Formateur;
@@ -97,7 +97,7 @@ export class ListFormateursComponent implements OnInit {
   showLien;
   display = false
 
-  formLien: UntypedFormGroup = this.formBuilder.group({
+  formLien: FormGroup = this.formBuilder.group({
     lien_sequentiel: [''],
   });
 
@@ -143,7 +143,7 @@ export class ListFormateursComponent implements OnInit {
     this.volumeHList.splice(i, 1)
   }
 
-  constructor(private formateurService: FormateurService, private formBuilder: UntypedFormBuilder, private messageService: MessageService, private router: Router, private diplomeService: DiplomeService,
+  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private diplomeService: DiplomeService,
     private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService, private EntrepriseService: EntrepriseService,
     private GroupeService: ClasseService) { }
 

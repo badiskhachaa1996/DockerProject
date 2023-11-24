@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -22,10 +22,10 @@ import { environment } from 'src/environments/environment';
 })
 export class AddProspectComponent implements OnInit {
 
-  RegisterForm2: UntypedFormGroup = new UntypedFormGroup({
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required)
+  RegisterForm2: FormGroup = new FormGroup({
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required)
   })
 
 
@@ -68,27 +68,27 @@ export class AddProspectComponent implements OnInit {
     ];
 
 
-  newLeadForm: UntypedFormGroup = new UntypedFormGroup({
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
+  newLeadForm: FormGroup = new FormGroup({
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
 
 
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
 
-    campus: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0], Validators.required),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
   })
 
 

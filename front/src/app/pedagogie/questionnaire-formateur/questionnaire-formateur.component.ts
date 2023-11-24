@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { QSService } from 'src/app/services/qs.service';
 import jwt_decode from "jwt-decode";
@@ -23,26 +23,26 @@ export class QuestionnaireFormateurComponent implements OnInit {
     { label: "Beaucoup moins difficiles à gérer", value: "Beaucoup moins difficiles à gérer" },
   ]
 
-  satisfactionsForm: UntypedFormGroup = new UntypedFormGroup({
-    matiere: new UntypedFormControl('', Validators.required),
-    annee_formation: new UntypedFormControl('', Validators.required),
-    contrat_travail: new UntypedFormControl('', Validators.required),
-    eleve: new UntypedFormControl('', Validators.required),
-    enseignant: new UntypedFormControl('', Validators.required),
-    pedagogie: new UntypedFormControl('', Validators.required),
-    direction: new UntypedFormControl('', Validators.required),
-    mesure_accueil: new UntypedFormControl('', Validators.required),
-    explication_mesure: new UntypedFormControl(''),
-    tutorat: new UntypedFormControl(false, Validators.required),
-    gere: new UntypedFormControl('', Validators.required),
-    salle_visio: new UntypedFormControl('', Validators.required),
-    disposition: new UntypedFormControl('', Validators.required),
-    satisfait_locaux: new UntypedFormControl('', Validators.required),
-    satisfait_site: new UntypedFormControl('', Validators.required),
-    satisfait_rythme: new UntypedFormControl('', Validators.required),
-    propositions: new UntypedFormControl('', Validators.required),
-    satisfait_global: new UntypedFormControl('', Validators.required),
-    user_id: new UntypedFormControl('', Validators.required)
+  satisfactionsForm: FormGroup = new FormGroup({
+    matiere: new FormControl('', Validators.required),
+    annee_formation: new FormControl('', Validators.required),
+    contrat_travail: new FormControl('', Validators.required),
+    eleve: new FormControl('', Validators.required),
+    enseignant: new FormControl('', Validators.required),
+    pedagogie: new FormControl('', Validators.required),
+    direction: new FormControl('', Validators.required),
+    mesure_accueil: new FormControl('', Validators.required),
+    explication_mesure: new FormControl(''),
+    tutorat: new FormControl(false, Validators.required),
+    gere: new FormControl('', Validators.required),
+    salle_visio: new FormControl('', Validators.required),
+    disposition: new FormControl('', Validators.required),
+    satisfait_locaux: new FormControl('', Validators.required),
+    satisfait_site: new FormControl('', Validators.required),
+    satisfait_rythme: new FormControl('', Validators.required),
+    propositions: new FormControl('', Validators.required),
+    satisfait_global: new FormControl('', Validators.required),
+    user_id: new FormControl('', Validators.required)
   })
   show = true
 

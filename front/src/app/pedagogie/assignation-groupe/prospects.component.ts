@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -64,14 +64,14 @@ export class ProspectsComponent implements OnInit {
 
   constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService,
     private messageService: MessageService, private commercialService: CommercialPartenaireService, private classeService: ClasseService,
-    private etudiantService: EtudiantService, private formBuilder: UntypedFormBuilder) { }
+    private etudiantService: EtudiantService, private formBuilder: FormBuilder) { }
 
 
-  uploadFileForm: UntypedFormGroup = new UntypedFormGroup({
-    typeDoc: new UntypedFormControl(this.DocTypes[0], Validators.required)
+  uploadFileForm: FormGroup = new FormGroup({
+    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
-  AssignForm: UntypedFormGroup = this.formBuilder.group({
+  AssignForm: FormGroup = this.formBuilder.group({
     groupe: ["", Validators.required],
     statut_dossier: [[''], Validators.required],
   })

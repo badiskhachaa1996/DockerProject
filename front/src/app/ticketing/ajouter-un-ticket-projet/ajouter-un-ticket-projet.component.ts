@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -33,13 +33,13 @@ export class AjouterUnTicketProjetComponent implements OnInit {
 
   ];
   taskSelected: Task;
-  TicketForm = new UntypedFormGroup({
-    project: new UntypedFormControl('', Validators.required),
-    task_id: new UntypedFormControl('', Validators.required),
-    sujet_id: new UntypedFormControl('', Validators.required),
-    service_id: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
-    priorite: new UntypedFormControl('', Validators.required)
+  TicketForm = new FormGroup({
+    project: new FormControl('', Validators.required),
+    task_id: new FormControl('', Validators.required),
+    sujet_id: new FormControl('', Validators.required),
+    service_id: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    priorite: new FormControl('', Validators.required)
   })
   token;
   sujetDropdown: any[] = [

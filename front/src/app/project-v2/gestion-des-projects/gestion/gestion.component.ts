@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl,UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormControl,FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { AuthService } from 'src/app/services/auth.service';
@@ -43,10 +43,10 @@ export class GestionComponent implements OnInit {
   showAddBudgetForm: boolean = false;
   showUpdateRessourcesForm: boolean = false;
   showUpdateBudgetForm: boolean = false;
-  formAddProject: UntypedFormGroup;
-  formAddTache: UntypedFormGroup;
-  formAddressources: UntypedFormGroup;
-  formAddbudget: UntypedFormGroup;
+  formAddProject: FormGroup;
+  formAddTache: FormGroup;
+  formAddressources: FormGroup;
+  formAddbudget: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
   task!: Task[];
@@ -86,17 +86,17 @@ export class GestionComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
-  TicketForm = new UntypedFormGroup({
-    project: new UntypedFormControl('', Validators.required),
-    task_id: new UntypedFormControl('', Validators.required),
-    sujet_id: new UntypedFormControl('', Validators.required),
-    service_id: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
-    priorite: new UntypedFormControl('', Validators.required)
+  TicketForm = new FormGroup({
+    project: new FormControl('', Validators.required),
+    task_id: new FormControl('', Validators.required),
+    sujet_id: new FormControl('', Validators.required),
+    service_id: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    priorite: new FormControl('', Validators.required)
   })
   uploadedFiles: File[] = [];
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private userService: AuthService,
     private messageService: MessageService,
     private projectService: ProjectService,

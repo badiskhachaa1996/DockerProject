@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Evaluation } from 'src/app/models/evaluation';
 import { EvaluationService } from 'src/app/services/evaluation.service';
 @Component({
@@ -13,21 +13,21 @@ export class EvaluationComponent implements OnInit {
   evaluation:Evaluation;
   evaluation_actuelle:Evaluation;
   evaluations:Evaluation[] = [];
-  evaluationForm: UntypedFormGroup = new UntypedFormGroup({
-    label: new UntypedFormControl('',),
-    lien: new UntypedFormControl('',),
-    duree:new UntypedFormControl('',),
-    score: new UntypedFormControl('',),
-    Condition_admission: new UntypedFormControl('',),
-    description: new UntypedFormControl('',),
+  evaluationForm: FormGroup = new FormGroup({
+    label: new FormControl('',),
+    lien: new FormControl('',),
+    duree:new FormControl('',),
+    score: new FormControl('',),
+    Condition_admission: new FormControl('',),
+    description: new FormControl('',),
   });
-  updateForm: UntypedFormGroup = new UntypedFormGroup({
-    label: new UntypedFormControl('',),
-    lien: new UntypedFormControl('',),
-    duree:new UntypedFormControl('',),
-    score: new UntypedFormControl('',),
-    Condition_admission: new UntypedFormControl('',),
-    description: new UntypedFormControl('',),
+  updateForm: FormGroup = new FormGroup({
+    label: new FormControl('',),
+    lien: new FormControl('',),
+    duree:new FormControl('',),
+    score: new FormControl('',),
+    Condition_admission: new FormControl('',),
+    description: new FormControl('',),
   });
   constructor(private evalService:EvaluationService) { }
 

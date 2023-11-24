@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AlternantsPartenaireService } from 'src/app/services/alternants-partenaire.service';
@@ -62,35 +62,35 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
   constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService,
     private ToastService: MessageService, private router: Router, private FAService: FormulaireAdmissionService) { }
 
-  RegisterForm = new UntypedFormGroup({
-    date_creation: new UntypedFormControl(new Date()),
-    prenom: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    email: new UntypedFormControl('', [Validators.required, Validators.email]),
-    pays: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', Validators.required),
-    formation: new UntypedFormControl(''),
-    rentree_scolaire: new UntypedFormControl('', Validators.required),
-    etat_contrat: new UntypedFormControl('',),
-    code_commercial: new UntypedFormControl(this.CODE, Validators.required),
-    civilite: new UntypedFormControl('', Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl('', Validators.required),
-    telephone: new UntypedFormControl('', Validators.required),
-    whatsapp: new UntypedFormControl(''),
-    indicatif: new UntypedFormControl('', Validators.required),
-    indicatif_whatsapp: new UntypedFormControl(''),
-    isPMR: new UntypedFormControl(false, Validators.required),
-    rue: new UntypedFormControl('', Validators.required),
-    numero: new UntypedFormControl('', Validators.required),
-    postal: new UntypedFormControl('', Validators.required),
-    ville: new UntypedFormControl('', Validators.required),
-    date_contrat: new UntypedFormControl('',),
-    entreprise: new UntypedFormControl('',),
-    adresse_entreprise: new UntypedFormControl('',),
-    telephone_entreprise: new UntypedFormControl('',),
-    mail_entreprise: new UntypedFormControl('', [Validators.email]),
+  RegisterForm = new FormGroup({
+    date_creation: new FormControl(new Date()),
+    prenom: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    pays: new FormControl('', Validators.required),
+    campus: new FormControl('', Validators.required),
+    ecole: new FormControl('', Validators.required),
+    formation: new FormControl(''),
+    rentree_scolaire: new FormControl('', Validators.required),
+    etat_contrat: new FormControl('',),
+    code_commercial: new FormControl(this.CODE, Validators.required),
+    civilite: new FormControl('', Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl('', Validators.required),
+    telephone: new FormControl('', Validators.required),
+    whatsapp: new FormControl(''),
+    indicatif: new FormControl('', Validators.required),
+    indicatif_whatsapp: new FormControl(''),
+    isPMR: new FormControl(false, Validators.required),
+    rue: new FormControl('', Validators.required),
+    numero: new FormControl('', Validators.required),
+    postal: new FormControl('', Validators.required),
+    ville: new FormControl('', Validators.required),
+    date_contrat: new FormControl('',),
+    entreprise: new FormControl('',),
+    adresse_entreprise: new FormControl('',),
+    telephone_entreprise: new FormControl('',),
+    mail_entreprise: new FormControl('', [Validators.email]),
   })
 
   canNext1() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
@@ -24,17 +24,17 @@ export class ActualiteNotificationsComponent implements OnInit {
   emailList = []
 
   showEmail: ActualiteRH
-  formEdit = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    titre: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl('', Validators.required),
+  formEdit = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    titre: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    campus: new FormControl('', Validators.required),
   })
-  formAdd = new UntypedFormGroup({
-    titre: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
-    date_creation: new UntypedFormControl(new Date()),
-    campus: new UntypedFormControl('', Validators.required),
+  formAdd = new FormGroup({
+    titre: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    date_creation: new FormControl(new Date()),
+    campus: new FormControl('', Validators.required),
   })
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));

@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import dayGridMonth from '@fullcalendar/timegrid';
 import jwt_decode from 'jwt-decode';
 import interactionPlugin from '@fullcalendar/interaction';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
 import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
 import { MessageService } from 'primeng/api';
@@ -478,19 +478,19 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
   dataEvent: EventCalendarRH;
   showEdit = false
 
-  formAdd = new UntypedFormGroup({
-    type: new UntypedFormControl('', Validators.required),
-    note: new UntypedFormControl(''),
-    name: new UntypedFormControl('', [Validators.required, Validators.maxLength(20)]),
-    campus: new UntypedFormControl('', Validators.required)
+  formAdd = new FormGroup({
+    type: new FormControl('', Validators.required),
+    note: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+    campus: new FormControl('', Validators.required)
   })
 
-  formUpdate = new UntypedFormGroup({
-    type: new UntypedFormControl('', Validators.required),
-    note: new UntypedFormControl(''),
-    name: new UntypedFormControl('', [Validators.required, Validators.maxLength(20)]),
-    campus: new UntypedFormControl('', Validators.required),
-    _id: new UntypedFormControl('', Validators.required)
+  formUpdate = new FormGroup({
+    type: new FormControl('', Validators.required),
+    note: new FormControl(''),
+    name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+    campus: new FormControl('', Validators.required),
+    _id: new FormControl('', Validators.required)
   })
   typeList = [
     { label: 'Jour férié Tunis', value: "Jour férié Tunis" },//BLUE

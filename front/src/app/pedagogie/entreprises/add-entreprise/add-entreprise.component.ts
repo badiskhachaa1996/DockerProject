@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Entreprise } from 'src/app/models/Entreprise';
@@ -18,7 +18,7 @@ export class AddEntrepriseComponent implements OnInit {
 
   display: boolean;
 
-  formAddEntreprise: UntypedFormGroup;
+  formAddEntreprise: FormGroup;
 
   choiceList = [
     { label: 'Oui', value: true },
@@ -67,7 +67,7 @@ export class AddEntrepriseComponent implements OnInit {
   userConnected: User;
   token: any;
 
-  constructor(private entrepriseService: EntrepriseService, private userService: AuthService, private formBuilder: UntypedFormBuilder, private messageService: MessageService, private router: Router) { }
+  constructor(private entrepriseService: EntrepriseService, private userService: AuthService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     // décodage du token

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
@@ -32,9 +32,9 @@ export class RdvCalendarInterneComponent implements OnInit {
   @Output() formExit = new EventEmitter<{ ID: string, offre_id: string }>();
   rdvTaker: User
 
-  form = new UntypedFormGroup({
-    date: new UntypedFormControl('', Validators.required),
-    offre_id: new UntypedFormControl(null)
+  form = new FormGroup({
+    date: new FormControl('', Validators.required),
+    offre_id: new FormControl(null)
 
   })
   annonces = []

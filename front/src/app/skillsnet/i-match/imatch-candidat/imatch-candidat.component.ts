@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Annonce } from 'src/app/models/Annonce';
 import { Competence } from 'src/app/models/Competence';
@@ -20,7 +20,7 @@ export class ImatchCandidatComponent implements OnInit {
 
   portail = "entreprise";
 
-  form: UntypedFormGroup;
+  form: FormGroup;
 
   showDeposerOffre = false;
 
@@ -91,7 +91,7 @@ export class ImatchCandidatComponent implements OnInit {
   selectedSkills = []
 
 
-  constructor(private formBuilder: UntypedFormBuilder, private SkillService: SkillsService,
+  constructor(private formBuilder: FormBuilder, private SkillService: SkillsService,
     private EntrepriseService: EntrepriseService, private AnnonceService: AnnonceService,
     private ToastService: MessageService, private router: Router) { }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Entreprise } from 'src/app/models/Entreprise';
@@ -74,19 +74,19 @@ export class NewEntreprisesComponent implements OnInit {
   entrepriseOfferList = []
   ActiveIndex = 0;
 
-  formUpdateEntreprise: UntypedFormGroup;
+  formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
   representantToUpdate: User;
   IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }];
 
   // formulaire qui permet de saisir l'adresse mail d'un représentant et de lui envoyer une creation link
-  formEmail: UntypedFormGroup;
+  formEmail: FormGroup;
   showFormEmail: boolean = false;
   dicEntLastConnection = {}
   dicEntRepresentant = {}
   dicEntOffer = {}
   constructor(private userService: AuthService, private entrepriseService: EntrepriseService,
-    private formBuilder: UntypedFormBuilder, private messageService: MessageService, private router: Router,
+    private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
     private TuteurService: TuteurService, private AnnonceService: AnnonceService) { }
 
   ngOnInit(): void {
@@ -376,14 +376,14 @@ export class NewEntreprisesComponent implements OnInit {
     { label: 'Administrateur', value: 'Administrateur' },
     { label: 'Commercial', value: 'Commercial' }
   ]
-  formAddRep = new UntypedFormGroup({
-    entreprise_id: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    role: new UntypedFormControl('Tuteur', Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
+  formAddRep = new FormGroup({
+    entreprise_id: new FormControl('', Validators.required),
+    civilite: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    role: new FormControl('Tuteur', Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
   })
   addRepresentant(entreprise: Entreprise) {
     this.addRep = entreprise

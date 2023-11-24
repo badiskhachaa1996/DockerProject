@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -90,11 +90,11 @@ export class PovPartenaireAlternantsComponent implements OnInit {
       this.uploadRequisFileForm.setValue({ nom: filename })
     }
   }
-  uploadRequisFileForm = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required)
+  uploadRequisFileForm = new FormGroup({
+    nom: new FormControl('', Validators.required)
   })
-  uploadOptionnelFileForm = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required)
+  uploadOptionnelFileForm = new FormGroup({
+    nom: new FormControl('', Validators.required)
   })
 
   fichierRequisList = [
@@ -156,34 +156,34 @@ export class PovPartenaireAlternantsComponent implements OnInit {
   }
 
 
-  updateForm = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    prenom: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    email: new UntypedFormControl('', [Validators.required, Validators.email]),
-    pays: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', Validators.required),
-    formation: new UntypedFormControl(''),
-    rentree_scolaire: new UntypedFormControl('', Validators.required),
-    etat_contrat: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl('', Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl('', Validators.required),
-    telephone: new UntypedFormControl('', Validators.required),
-    whatsapp: new UntypedFormControl(''),
-    indicatif: new UntypedFormControl('', Validators.required),
-    indicatif_whatsapp: new UntypedFormControl(''),
-    isPMR: new UntypedFormControl(false, Validators.required),
-    rue: new UntypedFormControl('', Validators.required),
-    numero: new UntypedFormControl('', Validators.required),
-    postal: new UntypedFormControl('', Validators.required),
-    ville: new UntypedFormControl('', Validators.required),
-    date_contrat: new UntypedFormControl('', Validators.required),
-    entreprise: new UntypedFormControl('', Validators.required),
-    adresse_entreprise: new UntypedFormControl('', Validators.required),
-    telephone_entreprise: new UntypedFormControl('', Validators.required),
-    mail_entreprise: new UntypedFormControl('', [Validators.required, Validators.email]),
+  updateForm = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    prenom: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    pays: new FormControl('', Validators.required),
+    campus: new FormControl('', Validators.required),
+    ecole: new FormControl('', Validators.required),
+    formation: new FormControl(''),
+    rentree_scolaire: new FormControl('', Validators.required),
+    etat_contrat: new FormControl('', Validators.required),
+    civilite: new FormControl('', Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl('', Validators.required),
+    telephone: new FormControl('', Validators.required),
+    whatsapp: new FormControl(''),
+    indicatif: new FormControl('', Validators.required),
+    indicatif_whatsapp: new FormControl(''),
+    isPMR: new FormControl(false, Validators.required),
+    rue: new FormControl('', Validators.required),
+    numero: new FormControl('', Validators.required),
+    postal: new FormControl('', Validators.required),
+    ville: new FormControl('', Validators.required),
+    date_contrat: new FormControl('', Validators.required),
+    entreprise: new FormControl('', Validators.required),
+    adresse_entreprise: new FormControl('', Validators.required),
+    telephone_entreprise: new FormControl('', Validators.required),
+    mail_entreprise: new FormControl('', [Validators.required, Validators.email]),
   })
 
   ActiveIndex = 0

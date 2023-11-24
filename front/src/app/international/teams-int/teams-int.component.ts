@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MemberInt } from 'src/app/models/memberInt';
 import { TeamsInt } from 'src/app/models/TeamsInt';
@@ -33,10 +33,10 @@ export class TeamsIntComponent implements OnInit {
     })
   }
 
-  updateForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('')
+  updateForm: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    description: new FormControl('')
   })
 
   initUpdate(etudiant) {
@@ -53,10 +53,10 @@ export class TeamsIntComponent implements OnInit {
     })
   }
 
-  createForm: UntypedFormGroup = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl(''),
-    date_creation: new UntypedFormControl(new Date(), Validators.required)
+  createForm: FormGroup = new FormGroup({
+    nom: new FormControl('', Validators.required),
+    description: new FormControl(''),
+    date_creation: new FormControl(new Date(), Validators.required)
   })
 
   newTeam = false

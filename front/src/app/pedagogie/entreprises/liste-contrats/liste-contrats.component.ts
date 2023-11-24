@@ -9,7 +9,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
@@ -50,7 +50,7 @@ export class ListeContratsComponent implements OnInit {
   myListAlternantDD: {};
   formationList = []
   myFormationList = {}
-  RegisterNewCA: UntypedFormGroup;
+  RegisterNewCA: FormGroup;
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
   ParmTuteur = this.route.snapshot.paramMap.get('idTuteur');
   formAddNewCA: boolean = false;
@@ -67,7 +67,7 @@ export class ListeContratsComponent implements OnInit {
 
   //partie dedié à la mise à jour 
   showFormUpdateCa: boolean = false;
-  formUpdateCa: UntypedFormGroup;
+  formUpdateCa: FormGroup;
   contratToUpdate: ContratAlternance;
 
   //Liste des années scolaire
@@ -135,7 +135,7 @@ export class ListeContratsComponent implements OnInit {
   showDLHelpPrice: boolean = false;
 
   showStatusForm: boolean = false;
-  statusForm: UntypedFormGroup;
+  statusForm: FormGroup;
 
   statusList: any = [
     { label: 'Choisir le status du contrat', value: null },
@@ -173,7 +173,7 @@ export class ListeContratsComponent implements OnInit {
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService, public classeService: ClasseService,
-    private formationService: DiplomeService, private formBuilder: UntypedFormBuilder, private EcoleService: EcoleService,
+    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService,
     private campusService: CampusService) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
@@ -404,23 +404,23 @@ export class ListeContratsComponent implements OnInit {
   onInitRegisterNewCA() {
 
     this.RegisterNewCA = this.formBuilder.group({
-      entreprise_id: new UntypedFormControl(''),
-      tuteur_id: new UntypedFormControl('', Validators.required),
-      debut_contrat: new UntypedFormControl('', Validators.required),
-      fin_contrat: new UntypedFormControl('', Validators.required),
-      horaire: new UntypedFormControl(''),
-      alternant: new UntypedFormControl('', Validators.required),
-      intitule: new UntypedFormControl(''),
-      classification: new UntypedFormControl(''),
-      niv: new UntypedFormControl(''),
-      coeff_hier: new UntypedFormControl(''),
-      form: new UntypedFormControl(this.formationList[0].value, Validators.required),
-      code_commercial: new UntypedFormControl(''),
-      professionnalisation: new UntypedFormControl(''),
-      anne_scolaire: new UntypedFormControl(),
-      ecole: new UntypedFormControl('', Validators.required),
+      entreprise_id: new FormControl(''),
+      tuteur_id: new FormControl('', Validators.required),
+      debut_contrat: new FormControl('', Validators.required),
+      fin_contrat: new FormControl('', Validators.required),
+      horaire: new FormControl(''),
+      alternant: new FormControl('', Validators.required),
+      intitule: new FormControl(''),
+      classification: new FormControl(''),
+      niv: new FormControl(''),
+      coeff_hier: new FormControl(''),
+      form: new FormControl(this.formationList[0].value, Validators.required),
+      code_commercial: new FormControl(''),
+      professionnalisation: new FormControl(''),
+      anne_scolaire: new FormControl(),
+      ecole: new FormControl('', Validators.required),
       mob_int: [this.advantageStatusList[0].label],
-      cout_mobilite: new UntypedFormControl(''),
+      cout_mobilite: new FormControl(''),
       mat_ped: [this.advantageStatusList[0].label],
       cout_mat_ped: [''],
       dl_help: [this.advantageStatusList[0].label],
@@ -431,23 +431,23 @@ export class ListeContratsComponent implements OnInit {
 
   onInitFormUpdateCa() {
     this.formUpdateCa = this.formBuilder.group({
-      entreprise_id: new UntypedFormControl(''),
-      tuteur_id: new UntypedFormControl('', Validators.required),
-      debut_contrat: new UntypedFormControl('', Validators.required),
-      fin_contrat: new UntypedFormControl('', Validators.required),
-      horaire: new UntypedFormControl(''),
-      alternant: new UntypedFormControl('', Validators.required),
-      intitule: new UntypedFormControl(''),
-      classification: new UntypedFormControl(''),
-      niv: new UntypedFormControl(''),
-      coeff_hier: new UntypedFormControl(''),
-      form: new UntypedFormControl('', Validators.required),
-      code_commercial: new UntypedFormControl(''),
-      anne_scolaire: new UntypedFormControl(''),
-      professionnalisation: new UntypedFormControl(''),
-      ecole: new UntypedFormControl('', Validators.required),
+      entreprise_id: new FormControl(''),
+      tuteur_id: new FormControl('', Validators.required),
+      debut_contrat: new FormControl('', Validators.required),
+      fin_contrat: new FormControl('', Validators.required),
+      horaire: new FormControl(''),
+      alternant: new FormControl('', Validators.required),
+      intitule: new FormControl(''),
+      classification: new FormControl(''),
+      niv: new FormControl(''),
+      coeff_hier: new FormControl(''),
+      form: new FormControl('', Validators.required),
+      code_commercial: new FormControl(''),
+      anne_scolaire: new FormControl(''),
+      professionnalisation: new FormControl(''),
+      ecole: new FormControl('', Validators.required),
       mob_int: [this.advantageStatusList[0].label],
-      cout_mobilite: new UntypedFormControl(''),
+      cout_mobilite: new FormControl(''),
       mat_ped: [this.advantageStatusList[0].label],
       cout_mat_ped: [''],
       dl_help: [this.advantageStatusList[0].label],

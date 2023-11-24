@@ -3,7 +3,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { AnneeScolaire } from 'src/app/models/AnneeScolaire'
 
@@ -22,13 +22,13 @@ export class ListAnneeScolaireComponent implements OnInit {
   rangedateS: string = "";
   anneeScolaires: AnneeScolaire[] = [];
 
-  anneeScolaireForm: UntypedFormGroup = new UntypedFormGroup({
-    libelle: new UntypedFormControl('', Validators.required),
-    etat: new UntypedFormControl('', Validators.required),
+  anneeScolaireForm: FormGroup = new FormGroup({
+    libelle: new FormControl('', Validators.required),
+    etat: new FormControl('', Validators.required),
   })
   
-  anneeScolaireFormUpdate: UntypedFormGroup = new UntypedFormGroup({
-    etat: new UntypedFormControl('Archivée', Validators.required),
+  anneeScolaireFormUpdate: FormGroup = new FormGroup({
+    etat: new FormControl('Archivée', Validators.required),
   })
 
   columns = []

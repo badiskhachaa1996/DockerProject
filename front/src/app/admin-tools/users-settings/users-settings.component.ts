@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Agent } from 'http';
 import { environment } from 'src/environments/environment';
 import { Etudiant } from '../../models/Etudiant';
@@ -24,7 +24,7 @@ export class UsersSettingsComponent implements OnInit {
 
   users: User[] = [];
   userToUpdate: any;
-  formUpdate: UntypedFormGroup;
+  formUpdate: FormGroup;
   showFormUpdate: boolean = false;
   showUsersList: boolean = true;
   //Photo de profil
@@ -96,7 +96,7 @@ export class UsersSettingsComponent implements OnInit {
 
   constructor(private userService: AuthService, private etudiantService: EtudiantService,
     private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
-    private serviceService: ServService, private formBuilder: UntypedFormBuilder, private CollabService: RhService,
+    private serviceService: ServService, private formBuilder: FormBuilder, private CollabService: RhService,
     private messageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {

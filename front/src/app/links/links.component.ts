@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PickListModule } from 'primeng/picklist';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Links } from 'src/app/models/Links'
 import { LinksService } from 'src/app/services/links.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -34,11 +34,11 @@ export class LinksComponent implements OnInit {
   showdF: boolean = false;
   showm: boolean = false;
   editer: boolean = false;
-  formAddLinks: UntypedFormGroup;
-  formUpdateLinks: UntypedFormGroup;
+  formAddLinks: FormGroup;
+  formUpdateLinks: FormGroup;
   constructor(
     private linksService: LinksService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private userService: AuthService,
   ) { }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import jwt_decode from 'jwt-decode';
 import { AuthService } from 'src/app/services/auth.service';
@@ -13,19 +13,19 @@ import { environment } from 'src/environments/environment';
 })
 export class FormulaireExterneSkillsnetComponent implements OnInit {
   token;
-  RegisterForm: UntypedFormGroup = new UntypedFormGroup({
-    lastname: new UntypedFormControl('', [Validators.required]),
-    firstname: new UntypedFormControl('', [Validators.required]),
-    phone: new UntypedFormControl(undefined),
-    civilite: new UntypedFormControl('', Validators.required),
-    pays_adresse: new UntypedFormControl(),
-    ville_adresse: new UntypedFormControl(),
-    rue_adresse: new UntypedFormControl(),
-    numero_adresse: new UntypedFormControl(),
-    postal_adresse: new UntypedFormControl(),
-    _id: new UntypedFormControl(),
-    password_clear: new UntypedFormControl('', Validators.required),
-    password_confirmed: new UntypedFormControl('', Validators.required)
+  RegisterForm: FormGroup = new FormGroup({
+    lastname: new FormControl('', [Validators.required]),
+    firstname: new FormControl('', [Validators.required]),
+    phone: new FormControl(undefined),
+    civilite: new FormControl('', Validators.required),
+    pays_adresse: new FormControl(),
+    ville_adresse: new FormControl(),
+    rue_adresse: new FormControl(),
+    numero_adresse: new FormControl(),
+    postal_adresse: new FormControl(),
+    _id: new FormControl(),
+    password_clear: new FormControl('', Validators.required),
+    password_confirmed: new FormControl('', Validators.required)
   })
 
   civiliteList: any = [

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -22,15 +22,15 @@ export class ActualiteComponent implements OnInit {
   emailList = []
   partenaireList = []
   showEmail: ActualiteInt
-  formEdit = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    titre: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
+  formEdit = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    titre: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
   })
-  formAdd = new UntypedFormGroup({
-    titre: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
-    date_creation: new UntypedFormControl(new Date())
+  formAdd = new FormGroup({
+    titre: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    date_creation: new FormControl(new Date())
   })
   type = this.route.snapshot.paramMap.get('type');
 

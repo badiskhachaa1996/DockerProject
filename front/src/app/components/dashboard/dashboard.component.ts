@@ -31,7 +31,7 @@ import { Formateur } from 'src/app/models/Formateur';
 import { PaymentService } from 'src/app/services/payment.service';
 import { Dashboard } from 'src/app/models/Dashboard';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { UntypedFormGroup, UntypedFormControl, Validators, UntypedFormBuilder, UntypedFormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { info } from 'console';
 import { ProjectService } from 'src/app/services/project.service';
 import { Task } from 'src/app/models/project/Task';
@@ -171,9 +171,9 @@ export class DashboardComponent implements OnInit {
   PartenaireInfo: Partenaire
   events: any[];
 
-  addLinkForm: UntypedFormGroup = new UntypedFormGroup({
-    libelle: new UntypedFormControl('', [Validators.required]),
-    link: new UntypedFormControl('', Validators.required),
+  addLinkForm: FormGroup = new FormGroup({
+    libelle: new FormControl('', [Validators.required]),
+    link: new FormControl('', Validators.required),
   });
 
   eventClickFC(col) {
@@ -273,7 +273,7 @@ export class DashboardComponent implements OnInit {
   pauseTiming: number; // temps passé en pause en minute
   selectedTabIndex: number = 0; // Index actuel du tableau d'affichage des données RH
   showFormUpdateStatut: boolean; // permet d'afficher la boîte de dialogue pour modifier le statut
-  formUpdateStatut: UntypedFormGroup;
+  formUpdateStatut: FormGroup;
   statutList: any[] = [
     { label: 'En congé', value: 'En congé' },
     { label: 'Disponible', value: 'Disponible' },
@@ -283,7 +283,7 @@ export class DashboardComponent implements OnInit {
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
   ];
-  formAddCra: UntypedFormGroup;
+  formAddCra: FormGroup;
   showFormAddCra: boolean = false;
   clonedCras: { [s: string]: any } = {};
   craPercent: string = '0';
@@ -302,8 +302,8 @@ export class DashboardComponent implements OnInit {
   showAddCongeForm: boolean = false;
   showUpdateCongeForm: boolean = false;
   congeToUpdate: Conge;
-  formAddConge: UntypedFormGroup;
-  formUpdateConge: UntypedFormGroup;
+  formAddConge: FormGroup;
+  formUpdateConge: FormGroup;
   conges: Conge[] = [];
   expandedRows = {};
   showOtherTextArea: boolean = false;
@@ -324,7 +324,7 @@ export class DashboardComponent implements OnInit {
     private formateurService: FormateurService, private paySer: PaymentService,
     private dashboardService: DashboardService, private http: HttpClient,
     private messageService: MessageService,
-    private formBuilder: UntypedFormBuilder, private projectService: ProjectService,
+    private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
     private rhService: RhService, private congeService: CongeService,
@@ -712,16 +712,16 @@ export class DashboardComponent implements OnInit {
     })
   }
   editInfoCommercial = false
-  editInfoCommercialForm: UntypedFormGroup = new UntypedFormGroup({
-    indicatifPhone: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    indicatifWhatsapp: new UntypedFormControl(''),
-    WhatsApp: new UntypedFormControl(''),
-    site_web: new UntypedFormControl(''),
-    facebook: new UntypedFormControl(''),
-    Pays: new UntypedFormControl([], Validators.required),
-    Services: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('', Validators.required),
+  editInfoCommercialForm: FormGroup = new FormGroup({
+    indicatifPhone: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    indicatifWhatsapp: new FormControl(''),
+    WhatsApp: new FormControl(''),
+    site_web: new FormControl(''),
+    facebook: new FormControl(''),
+    Pays: new FormControl([], Validators.required),
+    Services: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
   })
   initEditCommercialForm() {
     this.editInfoCommercial = true
@@ -977,7 +977,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
-  onCreateCraField(): UntypedFormGroup {
+  onCreateCraField(): FormGroup {
     return (
       this.formBuilder.group({
         tache: ['', Validators.required],
@@ -987,8 +987,8 @@ export class DashboardComponent implements OnInit {
   }
 
   // récupère les compétences
-  getCras(): UntypedFormArray {
-    return this.formAddCra.get('cras') as UntypedFormArray;
+  getCras(): FormArray {
+    return this.formAddCra.get('cras') as FormArray ;
   }
 
   // ajoute de nouveaux champs au formulaire

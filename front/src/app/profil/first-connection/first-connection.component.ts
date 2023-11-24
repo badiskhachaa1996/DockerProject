@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -26,7 +26,7 @@ import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
 })
 export class FirstConnectionComponent implements OnInit {
 
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
+  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
     private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService, private NotifService: NotificationService,
     private formationIntunsService: EtudiantsIntunsService) { }
 
@@ -54,30 +54,30 @@ export class FirstConnectionComponent implements OnInit {
 
   classes: Classe[] = [];
   entreprises: Entreprise[] = [];
-  RegisterForm: UntypedFormGroup;
+  RegisterForm: FormGroup;
   diplomes: Diplome[] = [];
   formationIntunsList = []
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
-      civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
-      lastname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      firstname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      indicatif: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      phone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      entreprise_id: new UntypedFormControl(this.dropdownEntreprise[0]),
-      type: new UntypedFormControl(this.statutList[0], [Validators.required]),
-      pays_adresse: new UntypedFormControl(this.paysList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
-      ville_adresse: new UntypedFormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-      rue_adresse: new UntypedFormControl("", [Validators.required]),
-      numero_adresse: new UntypedFormControl("", [Validators.required]),
-      postal_adresse: new UntypedFormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
+      civilite: new FormControl(environment.civilite[0], [Validators.required]),
+      lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      entreprise_id: new FormControl(this.dropdownEntreprise[0]),
+      type: new FormControl(this.statutList[0], [Validators.required]),
+      pays_adresse: new FormControl(this.paysList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
+      ville_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
+      rue_adresse: new FormControl("", [Validators.required]),
+      numero_adresse: new FormControl("", [Validators.required]),
+      postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       //classe_id: new FormControl(this.dropdownClasse[0]),
-      nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-      date_naissance: new UntypedFormControl("", Validators.required),
-      entreprise: new UntypedFormControl(""),
-      diplome: new UntypedFormControl(this.programReinscrit[0]),
-      formation_intuns: new UntypedFormControl(),
-      intuns: new UntypedFormControl('false')
+      nationalite: new FormControl(this.nationList[0], Validators.required),
+      date_naissance: new FormControl("", Validators.required),
+      entreprise: new FormControl(""),
+      diplome: new FormControl(this.programReinscrit[0]),
+      formation_intuns: new FormControl(),
+      intuns: new FormControl('false')
     });
   }
   dataEtudiant: Etudiant

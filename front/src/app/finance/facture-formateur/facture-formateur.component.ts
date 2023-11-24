@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FactureFormateur } from 'src/app/models/FactureFormateur';
 import { FormateurFactureService } from 'src/app/services/finance/formateur-facture.service';
 import { FormateurService } from 'src/app/services/formateur.service';
@@ -31,7 +31,7 @@ export class FactureFormateurComponent implements OnInit {
   infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }], remarque: RemarqueFormateur }];
   clonedTables;
 
-  formAddFactureMensuel: UntypedFormGroup = this.formBuilder.group({
+  formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
     mois: ['', Validators.required],
     file: [''],
@@ -59,7 +59,7 @@ export class FactureFormateurComponent implements OnInit {
 
   convert = [null, 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 
-  constructor(private formBuilder: UntypedFormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
+  constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
     private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService,
     private SeanceService: SeanceService) { }
 
@@ -128,7 +128,7 @@ export class FactureFormateurComponent implements OnInit {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
 
-  formFactureType1: UntypedFormGroup = this.formBuilder.group({
+  formFactureType1: FormGroup = this.formBuilder.group({
     entreprise: ['', Validators.required],
     tva: [true, Validators.required]
   });

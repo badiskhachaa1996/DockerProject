@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -130,19 +130,19 @@ export class LeadsPrequalifiesComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    rythme: new UntypedFormControl(''),
-    ecole: new UntypedFormControl(''),
-    formation: new UntypedFormControl(''),
-    campus: new UntypedFormControl(''),
-    eduhorizon: new UntypedFormControl(''),
-    note_choix: new UntypedFormControl(''),
+  followForm = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    rythme: new FormControl(''),
+    ecole: new FormControl(''),
+    formation: new FormControl(''),
+    campus: new FormControl(''),
+    eduhorizon: new FormControl(''),
+    note_choix: new FormControl(''),
 
-    produit: new UntypedFormControl(''),
-    criteres_qualification: new UntypedFormControl(''),
-    decision_qualification: new UntypedFormControl(''),
-    note_qualification: new UntypedFormControl(''),
+    produit: new FormControl(''),
+    criteres_qualification: new FormControl(''),
+    decision_qualification: new FormControl(''),
+    note_qualification: new FormControl(''),
   })
 
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Mail } from 'src/app/models/Mail';
 import { EmailTypeService } from 'src/app/services/email-type.service';
@@ -44,10 +44,10 @@ export class ConfigurationMailComponent implements OnInit {
     })
   }
   //Ajout
-  formAdd = new UntypedFormGroup({
-    email: new UntypedFormControl('', [Validators.required, Validators.email]),
-    password: new UntypedFormControl('', Validators.required),
-    type: new UntypedFormControl('', Validators.required)
+  formAdd = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required)
   })
   onAdd() {
     console.log(this.user)
@@ -74,11 +74,11 @@ export class ConfigurationMailComponent implements OnInit {
   }
 
   //Update
-  formEdit = new UntypedFormGroup({
-    email: new UntypedFormControl('', Validators.required),
-    type: new UntypedFormControl('', Validators.required),
-    password: new UntypedFormControl('', Validators.required),
-    _id: new UntypedFormControl('', Validators.required)
+  formEdit = new FormGroup({
+    email: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    _id: new FormControl('', Validators.required)
   })
   onInitUpdate(email: Mail) {
     this.formEdit.patchValue({ ...email })

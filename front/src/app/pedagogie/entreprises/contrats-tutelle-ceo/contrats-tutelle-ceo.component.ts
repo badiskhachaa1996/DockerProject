@@ -7,7 +7,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { saveAs } from 'file-saver';
 import { ClasseService } from 'src/app/services/classe.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-contrats-tutelle-ceo',
@@ -20,11 +20,11 @@ export class ContratsTutelleCeoComponent implements OnInit {
   showContractForEnterprise: boolean = false;
   contractToUpdate: ContratAlternance;
 
-  formRemarque: UntypedFormGroup;
+  formRemarque: FormGroup;
   showFormRemarque: boolean = false;
   token: any;
 
-  constructor(private formBuilder: UntypedFormBuilder, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService) { }
+  constructor(private formBuilder: FormBuilder, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService) { }
 
   ngOnInit(): void {
     // décodage du token

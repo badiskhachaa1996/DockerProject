@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -19,24 +19,24 @@ export class MyTargetComponent implements OnInit {
   targets = []
   EditTarget: Target
   AddTarget = false
-  formEdit = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    equipe_id: new UntypedFormControl(''),
-    member_id: new UntypedFormControl(''),
-    type: new UntypedFormControl(''),
-    KPI: new UntypedFormControl(''),
-    date_commencement: new UntypedFormControl(''),
-    deadline: new UntypedFormControl(''),
-    description: new UntypedFormControl(''),
+  formEdit = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    equipe_id: new FormControl(''),
+    member_id: new FormControl(''),
+    type: new FormControl(''),
+    KPI: new FormControl(''),
+    date_commencement: new FormControl(''),
+    deadline: new FormControl(''),
+    description: new FormControl(''),
   })
-  formAdd = new UntypedFormGroup({
-    equipe_id: new UntypedFormControl(),
-    member_id: new UntypedFormControl(),
-    type: new UntypedFormControl(''),
-    KPI: new UntypedFormControl(''),
-    date_commencement: new UntypedFormControl(''),
-    deadline: new UntypedFormControl(''),
-    description: new UntypedFormControl(''),
+  formAdd = new FormGroup({
+    equipe_id: new FormControl(),
+    member_id: new FormControl(),
+    type: new FormControl(''),
+    KPI: new FormControl(''),
+    date_commencement: new FormControl(''),
+    deadline: new FormControl(''),
+    description: new FormControl(''),
   })
   memberCRMDropdown = []
   equipeCRMDropdown = []

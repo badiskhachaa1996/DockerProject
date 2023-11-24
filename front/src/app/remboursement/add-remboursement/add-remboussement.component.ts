@@ -8,7 +8,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { AuthService } from 'src/app/services/auth.service';
 import {CaptchaModule} from 'primeng/captcha';
 import { MessageService } from 'src/app/services/message.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -27,7 +27,7 @@ export class AddRemboussementComponent implements OnInit {
 
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private http: HttpClient,
     private messageService: MessageService,
     private demandeRemboursementService: DemandeRemboursementService,
@@ -127,8 +127,8 @@ Successfull = false
 
   @Input() isNewDemande = false
 
-  formRembourssement: UntypedFormGroup;
-  aFormGroup: UntypedFormGroup;
+  formRembourssement: FormGroup;
+  aFormGroup: FormGroup;
 
   availableStatus = environment.availableStatus
 

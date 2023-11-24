@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
-import { FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { GenFormation } from 'src/app/models/gen_doc/GenFormation';
@@ -25,7 +25,7 @@ export class GenformationComponent implements OnInit {
   token: any;
   selectedFormations = []
   showAddFormation: boolean = false;
-  formAddFormation: UntypedFormGroup;
+  formAddFormation: FormGroup;
   showUpdateFormation: GenFormation;
 
   formationSelected: GenFormation;
@@ -40,14 +40,14 @@ export class GenformationComponent implements OnInit {
 
   rentreToUpdate: GenRentre;
 
-  formAddRentre: UntypedFormGroup;
+  formAddRentre: FormGroup;
 
   AccessLevel = "Spectateur"
 
   user: User;
 
 
-  constructor(private formBuilder: UntypedFormBuilder, private UserService: AuthService, private genRentreService: GenRentreService,
+  constructor(private formBuilder: FormBuilder, private UserService: AuthService, private genRentreService: GenRentreService,
     private messageService: MessageService, private genFormationService: GenFormationService, private router: Router) { }
 
   ngOnInit(): void {

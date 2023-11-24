@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
@@ -20,7 +20,7 @@ import { Campus } from 'src/app/models/Campus';
 })
 export class AddGroupeComponent implements OnInit {
 
-  formAddClasse: UntypedFormGroup;
+  formAddClasse: FormGroup;
   classes: Classe[] = [];
   numberClasse = {};
   display: boolean;
@@ -52,7 +52,7 @@ export class AddGroupeComponent implements OnInit {
 
   constructor(private campusService: CampusService, 
               private diplomeService: DiplomeService, 
-              private formBuilder: UntypedFormBuilder, 
+              private formBuilder: FormBuilder, 
               private classeService: ClasseService, 
               private messageService: MessageService, 
               private router: Router, 

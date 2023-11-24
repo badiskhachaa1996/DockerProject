@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { MessageService } from 'primeng/api';
 import { FormulaireICBS } from 'src/app/models/FormulaireICBS';
@@ -38,16 +38,16 @@ export class FormulaireIcbsComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.UnitedArabEmirates];
   
-  RegisterForm = new UntypedFormGroup({
-    name: new UntypedFormControl('', Validators.required),
-    age: new UntypedFormControl(null, Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    whatsapp: new UntypedFormControl('', Validators.required),
-    email: new UntypedFormControl('', [Validators.required, Validators.email]),
-    occupation: new UntypedFormControl('', Validators.required),
-    field: new UntypedFormControl(''),
-    langue: new UntypedFormControl('', Validators.required),
-    testType:new UntypedFormControl('', Validators.required),
+  RegisterForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    age: new FormControl(null, Validators.required),
+    phone: new FormControl('', Validators.required),
+    whatsapp: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    occupation: new FormControl('', Validators.required),
+    field: new FormControl(''),
+    langue: new FormControl('', Validators.required),
+    testType:new FormControl('', Validators.required),
   });
 
   get phone() { return this.RegisterForm.get('phone'); }

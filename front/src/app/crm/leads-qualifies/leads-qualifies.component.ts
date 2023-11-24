@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -185,19 +185,19 @@ export class LeadsQualifiesComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    rythme: new UntypedFormControl(''),
-    ecole: new UntypedFormControl(''),
-    formation: new UntypedFormControl(''),
-    campus: new UntypedFormControl(''),
-    eduhorizon: new UntypedFormControl(''),
-    note_choix: new UntypedFormControl(''),
+  followForm = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    rythme: new FormControl(''),
+    ecole: new FormControl(''),
+    formation: new FormControl(''),
+    campus: new FormControl(''),
+    eduhorizon: new FormControl(''),
+    note_choix: new FormControl(''),
 
-    produit: new UntypedFormControl(''),
-    criteres_qualification: new UntypedFormControl(''),
-    decision_qualification: new UntypedFormControl(''),
-    note_qualification: new UntypedFormControl(''),
+    produit: new FormControl(''),
+    criteres_qualification: new FormControl(''),
+    decision_qualification: new FormControl(''),
+    note_qualification: new FormControl(''),
   })
 
 
@@ -379,44 +379,44 @@ export class LeadsQualifiesComponent implements OnInit {
     }, 15);
   }
   //Envoyer à l'admission
-  formTransfertUser = new UntypedFormGroup({
-    civilite: new UntypedFormControl(''),
-    firstname: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl(''),
-    indicatif: new UntypedFormControl(''),
-    email_perso: new UntypedFormControl('', Validators.required),
-    role: new UntypedFormControl('user'),
-    pays_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    numero_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl(''),
-    nationnalite: new UntypedFormControl('', Validators.required),
-    _id: new UntypedFormControl('')
+  formTransfertUser = new FormGroup({
+    civilite: new FormControl(''),
+    firstname: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    phone: new FormControl(''),
+    indicatif: new FormControl(''),
+    email_perso: new FormControl('', Validators.required),
+    role: new FormControl('user'),
+    pays_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    numero_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    nationnalite: new FormControl('', Validators.required),
+    _id: new FormControl('')
   })
-  formTransfertProspect = new UntypedFormGroup({
-    user_id: new UntypedFormControl(''),
-    date_naissance: new UntypedFormControl(''),
-    numero_whatsapp: new UntypedFormControl(''),
-    validated_academic_level: new UntypedFormControl(''),
-    statut_actuel: new UntypedFormControl(''),
-    campus_choix_1: new UntypedFormControl(''),
-    formation: new UntypedFormControl(''),
-    rythme_formation: new UntypedFormControl(''),
-    date_creation: new UntypedFormControl(''),
-    type_form: new UntypedFormControl(''),
-    indicatif_whatsapp: new UntypedFormControl(''),
-    customid: new UntypedFormControl(''),
-    payement: new UntypedFormControl(''), // TODO
-    origin: new UntypedFormControl('CRM'),
-    source: new UntypedFormControl(''),
-    rentree_scolaire: new UntypedFormControl(''), //TODO
-    languages_fr: new UntypedFormControl(''),
-    languages_en: new UntypedFormControl(''),
-    numero_telegram: new UntypedFormControl(''),
-    indicatif_telegram: new UntypedFormControl(''),
-    documents_administrative: new UntypedFormControl(''), //TODO
+  formTransfertProspect = new FormGroup({
+    user_id: new FormControl(''),
+    date_naissance: new FormControl(''),
+    numero_whatsapp: new FormControl(''),
+    validated_academic_level: new FormControl(''),
+    statut_actuel: new FormControl(''),
+    campus_choix_1: new FormControl(''),
+    formation: new FormControl(''),
+    rythme_formation: new FormControl(''),
+    date_creation: new FormControl(''),
+    type_form: new FormControl(''),
+    indicatif_whatsapp: new FormControl(''),
+    customid: new FormControl(''),
+    payement: new FormControl(''), // TODO
+    origin: new FormControl('CRM'),
+    source: new FormControl(''),
+    rentree_scolaire: new FormControl(''), //TODO
+    languages_fr: new FormControl(''),
+    languages_en: new FormControl(''),
+    numero_telegram: new FormControl(''),
+    indicatif_telegram: new FormControl(''),
+    documents_administrative: new FormControl(''), //TODO
   })
   showTransfer: LeadCRM = null
   initTransferToSM(lead: LeadCRM) {

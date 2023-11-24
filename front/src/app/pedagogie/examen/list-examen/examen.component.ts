@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
@@ -32,7 +32,7 @@ export class ExamenComponent implements OnInit {
   isFormateur: Formateur = null
   token;
 
-  formUpdateExamen: UntypedFormGroup;
+  formUpdateExamen: FormGroup;
   showFormUpdateExamen: boolean = false;
   importExcel = false
 
@@ -86,7 +86,7 @@ export class ExamenComponent implements OnInit {
 
   constructor(
     private userService: AuthService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private formateurService: FormateurService,
     private examenService: ExamenService,

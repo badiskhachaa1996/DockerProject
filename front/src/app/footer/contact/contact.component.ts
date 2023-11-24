@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,10 +16,10 @@ import { environment } from 'src/environments/environment';
 })
 export class ContactComponent implements OnInit {
 
-  contactform: UntypedFormGroup;
+  contactform: FormGroup;
   civiliteList = environment.civilite;
 
-  constructor(private messageService: MessageService, private formBuilder: UntypedFormBuilder, private router: Router, private ContactService: contactService) { }
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private router: Router, private ContactService: contactService) { }
 
   ngOnInit(): void {
     this.onInitContactForm();
@@ -27,11 +27,11 @@ export class ContactComponent implements OnInit {
 
   onInitContactForm() {
     this.contactform = this.formBuilder.group({
-      civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
-      nom: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      prenom : new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      email: new UntypedFormControl('', [Validators.required, Validators.email]),
-      description: new UntypedFormControl('', [Validators.required]),
+      civilite: new FormControl(environment.civilite[0], [Validators.required]),
+      nom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      prenom : new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      description: new FormControl('', [Validators.required]),
     })
 
   }

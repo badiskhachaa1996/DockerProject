@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators, Form } from '@angular/forms';
+import { FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
@@ -28,12 +28,12 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     })
   }
 
-  updateForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    date_debut_inscription: new UntypedFormControl(''),
-    date_fin_inscription: new UntypedFormControl(''),
-    date_commencement: new UntypedFormControl(''),
+  updateForm: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    date_debut_inscription: new FormControl(''),
+    date_fin_inscription: new FormControl(''),
+    date_commencement: new FormControl(''),
   })
 
   initUpdate(rowData: RentreeAdmission) {
@@ -51,11 +51,11 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     })
   }
 
-  createForm: UntypedFormGroup = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required),
-    date_debut_inscription: new UntypedFormControl(''),
-    date_fin_inscription: new UntypedFormControl(''),
-    date_commencement: new UntypedFormControl(''),
+  createForm: FormGroup = new FormGroup({
+    nom: new FormControl('', Validators.required),
+    date_debut_inscription: new FormControl(''),
+    date_fin_inscription: new FormControl(''),
+    date_commencement: new FormControl(''),
   })
 
   addForm = false
@@ -86,9 +86,9 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     }, 15);
   }
 
-  affectedForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl(),
-    ecoles: new UntypedFormControl([])
+  affectedForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
+    ecoles: new FormControl([])
   })
 
   affectedEcole: RentreeAdmission = null

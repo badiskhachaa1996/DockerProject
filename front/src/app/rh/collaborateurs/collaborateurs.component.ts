@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray , FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
@@ -31,17 +31,17 @@ export class CollaborateursComponent implements OnInit {
   collaborateurPersonalData: User; // information personnelles du collaborateur pour la mise à jour des données
   collaborateurCompetences: any[] = []; // liste des compétences du collaborateur
   clonedCollaborateurCompetences: { [s: string]: any } = {};
-  formAdd: UntypedFormGroup; // ajout du collaborateur
+  formAdd: FormGroup; // ajout du collaborateur
   showFormAdd: boolean = false;
-  formUpdate: UntypedFormGroup; // mise à jour des infos collaborateur du collaborateur
+  formUpdate: FormGroup; // mise à jour des infos collaborateur du collaborateur
   showFormUpdate: boolean = false;
-  formUpdatePersonalInfo: UntypedFormGroup; // mise à jour des informations personnelles du collaborateur
+  formUpdatePersonalInfo: FormGroup; // mise à jour des informations personnelles du collaborateur
   showFormUpdatePersonalInfo: boolean = false;
   showCompetenceTable: boolean = false;
-  formAddCompetence: UntypedFormGroup;
+  formAddCompetence: FormGroup;
   showFormAddCompetence: boolean = false;
   showJobDescription: boolean = false;
-  formUpdateJobDescription: UntypedFormGroup;
+  formUpdateJobDescription: FormGroup;
   showFormUpdateJobDescriptionForm: boolean = false;
   showCra: boolean = false;
   showHistoriqueCra: boolean = false;
@@ -113,8 +113,8 @@ export class CollaborateursComponent implements OnInit {
   ];
 
   showEmailView: boolean = false;
-  formEmailPerso: UntypedFormGroup;
-  formEmailType: UntypedFormGroup;
+  formEmailPerso: FormGroup;
+  formEmailType: FormGroup;
   mailDropdown: any[] = [];
   mailTypeDropdown: any[] = [];
 
@@ -133,7 +133,7 @@ export class CollaborateursComponent implements OnInit {
   token: any;
 
   constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
-    private messageService: MessageService, private rhService: RhService, private formBuilder: UntypedFormBuilder,
+    private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder,
     private UserService: AuthService, private congeService: CongeService, private router: Router, private ServService: ServService) { }
 
   ngOnInit(): void {
@@ -200,18 +200,18 @@ export class CollaborateursComponent implements OnInit {
     });
 
     // initialisation des formulaires d'envois de mails
-    this.formEmailPerso = new UntypedFormGroup({
-      objet: new UntypedFormControl('', Validators.required),
-      body: new UntypedFormControl('', Validators.required),
-      cc: new UntypedFormControl([]),
-      send_from: new UntypedFormControl('', Validators.required)
+    this.formEmailPerso = new FormGroup({
+      objet: new FormControl('', Validators.required),
+      body: new FormControl('', Validators.required),
+      cc: new FormControl([]),
+      send_from: new FormControl('', Validators.required)
     });
 
-    this.formEmailType = new UntypedFormGroup({
-      objet: new UntypedFormControl('', Validators.required),
-      body: new UntypedFormControl('', Validators.required),
-      cc: new UntypedFormControl([]),
-      send_from: new UntypedFormControl('', Validators.required)
+    this.formEmailType = new FormGroup({
+      objet: new FormControl('', Validators.required),
+      body: new FormControl('', Validators.required),
+      cc: new FormControl([]),
+      send_from: new FormControl('', Validators.required)
     });
   }
 
@@ -373,7 +373,7 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // pour créer des champs de formulaires à la volée
-  onCreateCompetenceField(): UntypedFormGroup {
+  onCreateCompetenceField(): FormGroup {
     return (
       this.formBuilder.group({
         kind: [''],
@@ -383,8 +383,8 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // récupère les compétences
-  getCompetences(): UntypedFormArray {
-    return this.formAddCompetence.get('competences') as UntypedFormArray;
+  getCompetences(): FormArray {
+    return this.formAddCompetence.get('competences') as FormArray ;
   }
 
   // ajoute de nouveaux champs au formulaire

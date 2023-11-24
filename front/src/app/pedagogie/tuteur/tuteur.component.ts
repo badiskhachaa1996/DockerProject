@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { User } from 'src/app/models/User';
@@ -21,9 +21,9 @@ export class TuteurComponent implements OnInit {
 
 
   //Déclaration 
-  addTuteurForm: UntypedFormGroup;
+  addTuteurForm: FormGroup;
   showFormAddTuteur = false;
-  updateTuteurForm: UntypedFormGroup;
+  updateTuteurForm: FormGroup;
   showFormModifTuteur = false;
 
   civiliteList = environment.civilite;
@@ -54,7 +54,7 @@ export class TuteurComponent implements OnInit {
 
 
   //constructeur - injection des services
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private router: Router, private tuteurService: TuteurService,
     private messageService: MessageService, private UserService: AuthService,
     private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute) { }

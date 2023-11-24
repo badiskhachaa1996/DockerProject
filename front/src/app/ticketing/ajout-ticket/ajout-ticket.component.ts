@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -61,17 +61,17 @@ export class AjoutTicketComponent implements OnInit {
 
   serviceSelected: Service
   service_ID = this.route.snapshot.paramMap.get('service_id');
-  TicketForm = new UntypedFormGroup({
-    sujet_id: new UntypedFormControl('', Validators.required),
-    service_id: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl('',),
-    resum: new UntypedFormControl('', Validators.required),
-    priorite: new UntypedFormControl("false"),
-    module: new UntypedFormControl('',),
-    type: new UntypedFormControl('',),
-    demande: new UntypedFormControl('',),
-    campus: new UntypedFormControl('',),
-    filiere: new UntypedFormControl('',),
+  TicketForm = new FormGroup({
+    sujet_id: new FormControl('', Validators.required),
+    service_id: new FormControl('', Validators.required),
+    description: new FormControl('',),
+    resum: new FormControl('', Validators.required),
+    priorite: new FormControl("false"),
+    module: new FormControl('',),
+    type: new FormControl('',),
+    demande: new FormControl('',),
+    campus: new FormControl('',),
+    filiere: new FormControl('',),
   })
   token;
   sujetDropdown: any[] = [

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Matiere } from 'src/app/models/Matiere';
@@ -19,10 +19,10 @@ export class MatieresComponent implements OnInit {
 
   matieres: Matiere[] = [];
   matiereToUpdate: Matiere;
-  formAddMatiere: UntypedFormGroup;
+  formAddMatiere: FormGroup;
   showFormAddMatiere = false;
 
-  formModifMatiere: UntypedFormGroup;
+  formModifMatiere: FormGroup;
   showFormModifMatiere = false;
 
   idMatiereToUpdate: string;
@@ -39,7 +39,7 @@ export class MatieresComponent implements OnInit {
 
   matiereVolume: any = {};
   token;
-  constructor(private messageService: MessageService, private matiereService: MatiereService, private formBuilder: UntypedFormBuilder, private diplomeService: DiplomeService, private router: Router
+  constructor(private messageService: MessageService, private matiereService: MatiereService, private formBuilder: FormBuilder, private diplomeService: DiplomeService, private router: Router
     , private ClasseService: ClasseService) { }
 
   ngOnInit(): void {

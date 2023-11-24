@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -41,8 +41,8 @@ export class AdmissionIntComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  uploadFileForm: UntypedFormGroup = new UntypedFormGroup({
-    typeDoc: new UntypedFormControl(this.DocTypes[0], Validators.required)
+  uploadFileForm: FormGroup = new FormGroup({
+    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
   documentDropdown = [
@@ -55,14 +55,14 @@ export class AdmissionIntComponent implements OnInit {
     { label: "Dérogation", value: "derogation" },
     { label: "Lettre d'acceptation", value: "lettre-acceptation" },
   ]
-  uploadAdminFileForm: UntypedFormGroup = new UntypedFormGroup({
+  uploadAdminFileForm: FormGroup = new FormGroup({
     //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
-    date: new UntypedFormControl(this.convertTime(new Date), Validators.required),
-    nom: new UntypedFormControl("", Validators.required),
-    note: new UntypedFormControl(""),
-    traited_by: new UntypedFormControl("", Validators.required),
-    type: new UntypedFormControl(""),
-    custom_id: new UntypedFormControl('')
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("", Validators.required),
+    note: new FormControl(""),
+    traited_by: new FormControl("", Validators.required),
+    type: new FormControl(""),
+    custom_id: new FormControl('')
   })
   ecoleList = [];
   dicEcole = {};
@@ -492,52 +492,52 @@ export class AdmissionIntComponent implements OnInit {
     })
   }
 
-  traitementForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl(),
-    dossier_traited_by: new UntypedFormControl(),
-    dossier_traited_date: new UntypedFormControl(new Date()),
-    statut_dossier: new UntypedFormControl(),
-    procedure_peda: new UntypedFormControl(""),
-    decision_admission: new UntypedFormControl(""),
-    note_decision: new UntypedFormControl(""),
-    statut_payement: new UntypedFormControl(""),
-    numero_dossier_campus_france: new UntypedFormControl(""),
-    validated_cf: new UntypedFormControl(false),
-    avancement_cf: new UntypedFormControl(''),
+  traitementForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
+    dossier_traited_by: new FormControl(),
+    dossier_traited_date: new FormControl(new Date()),
+    statut_dossier: new FormControl(),
+    procedure_peda: new FormControl(""),
+    decision_admission: new FormControl(""),
+    note_decision: new FormControl(""),
+    statut_payement: new FormControl(""),
+    numero_dossier_campus_france: new FormControl(""),
+    validated_cf: new FormControl(false),
+    avancement_cf: new FormControl(''),
   })
 
   //Partie Details
   showDetails: Prospect = null
 
-  detailsForm: UntypedFormGroup = new UntypedFormGroup({
+  detailsForm: FormGroup = new FormGroup({
     //Informations Personnelles
-    civilite: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl(''),
-    phone: new UntypedFormControl(''),
-    email_perso: new UntypedFormControl('', Validators.required),
-    pays_adresse: new UntypedFormControl(''),
-    numero_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    date_creation: new UntypedFormControl(''),
+    civilite: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    indicatif: new FormControl(''),
+    phone: new FormControl(''),
+    email_perso: new FormControl('', Validators.required),
+    pays_adresse: new FormControl(''),
+    numero_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    date_creation: new FormControl(''),
     //Programme d'étude
-    formation: new UntypedFormControl(''),
-    campus_choix_1: new UntypedFormControl(''),
-    campus_choix_2: new UntypedFormControl(''),
-    campus_choix_3: new UntypedFormControl(''),
+    formation: new FormControl(''),
+    campus_choix_1: new FormControl(''),
+    campus_choix_2: new FormControl(''),
+    campus_choix_3: new FormControl(''),
     //Orientation
-    decision_orientation: new UntypedFormControl(''),
-    decision_admission: new UntypedFormControl(''),
+    decision_orientation: new FormControl(''),
+    decision_admission: new FormControl(''),
     //Avancement consulaire
-    a_besoin_visa: new UntypedFormControl(''),
-    validated_cf: new UntypedFormControl(false),
-    logement: new UntypedFormControl(''),
-    finance: new UntypedFormControl(''),
-    type_form: new UntypedFormControl('', Validators.required),
-    avancement_visa: new UntypedFormControl(''),
+    a_besoin_visa: new FormControl(''),
+    validated_cf: new FormControl(false),
+    logement: new FormControl(''),
+    finance: new FormControl(''),
+    type_form: new FormControl('', Validators.required),
+    avancement_visa: new FormControl(''),
 
 
   })
@@ -989,17 +989,17 @@ export class AdmissionIntComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new UntypedFormGroup({
-    objet: new UntypedFormControl('', Validators.required),
-    body: new UntypedFormControl('', Validators.required),
-    cc: new UntypedFormControl([]),
-    send_from: new UntypedFormControl('', Validators.required)
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new UntypedFormGroup({
-    objet: new UntypedFormControl('', Validators.required),
-    body: new UntypedFormControl('', Validators.required),
-    cc: new UntypedFormControl([]),
-    send_from: new UntypedFormControl('', Validators.required)
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
   })
   onEmailPerso() {
     this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {

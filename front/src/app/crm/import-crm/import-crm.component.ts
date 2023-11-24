@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -253,7 +253,7 @@ export class ImportCrmComponent implements OnInit {
 
   onChangeCreate(index, attribute, value) {
     if (attribute == 'date_naissance') {
-      if (new UntypedFormControl(value, Validators.required).valid) {
+      if (new FormControl(value, Validators.required).valid) {
         if (!this.isValid(value))
           this.errorToCreate[index][attribute] = { error: 'La date n\'est pas correct', warning: null }
         else
@@ -262,7 +262,7 @@ export class ImportCrmComponent implements OnInit {
         this.errorToCreate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
       }
     } else if (attribute == "email") {
-      if (new UntypedFormControl(value, [Validators.email, Validators.required]).invalid)
+      if (new FormControl(value, [Validators.email, Validators.required]).invalid)
         this.errorToCreate[index][attribute] = { error: 'Email non conforme', warning: null }
       else
         this.errorToCreate[index][attribute] = { error: null, warning: null }
@@ -317,7 +317,7 @@ export class ImportCrmComponent implements OnInit {
       else
         this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "nationalite" || attribute == "prenom" || attribute == "nom") {
-      if (new UntypedFormControl(value, Validators.required).valid)
+      if (new FormControl(value, Validators.required).valid)
         this.errorToCreate[index][attribute] = { error: null, warning: null }
       else
         this.errorToCreate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
@@ -326,7 +326,7 @@ export class ImportCrmComponent implements OnInit {
 
   onChangeUpdate(index, attribute, value) {
     if (attribute == 'date_naissance') {
-      if (new UntypedFormControl(value, Validators.required).valid) {
+      if (new FormControl(value, Validators.required).valid) {
         if (!this.isValid(value))
           this.errorToUpdate[index][attribute] = { error: 'La date n\'est pas correct', warning: null }
         else
@@ -335,7 +335,7 @@ export class ImportCrmComponent implements OnInit {
         this.errorToUpdate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
       }
     } else if (attribute == "email") {
-      if (new UntypedFormControl(value, [Validators.email, Validators.required]).valid)
+      if (new FormControl(value, [Validators.email, Validators.required]).valid)
         this.errorToUpdate[index][attribute] = { error: null, warning: null }
       else
         this.errorToUpdate[index][attribute] = { error: 'Email non conforme', warning: null }
@@ -390,7 +390,7 @@ export class ImportCrmComponent implements OnInit {
       else
         this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "nationalite" || attribute == "prenom" || attribute == "nom") {
-      if (new UntypedFormControl(value, Validators.required).valid)
+      if (new FormControl(value, Validators.required).valid)
         this.errorToUpdate[index][attribute] = { error: null, warning: null }
       else
         this.errorToUpdate[index][attribute] = { error: 'Le champ est requisF', warning: null }

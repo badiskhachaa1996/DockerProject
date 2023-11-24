@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
@@ -26,11 +26,11 @@ import { CalendrierEtudiantService } from 'src/app/services/calendrier-etudiant.
   styleUrls: ['./rendez-vous.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class RendezVousComponent implements OnInit {
-  form = new UntypedFormGroup({
-    email: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    date: new UntypedFormControl('', Validators.required),
-    offre_id: new UntypedFormControl(null)
+  form = new FormGroup({
+    email: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    offre_id: new FormControl(null)
 
   })
   annonces = []

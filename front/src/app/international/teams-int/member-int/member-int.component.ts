@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MemberInt } from 'src/app/models/memberInt';
 import { User } from 'src/app/models/User';
@@ -66,12 +66,12 @@ export class MemberIntComponent implements OnInit {
     })
   }
 
-  updateForm: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    team_id: new UntypedFormControl('', Validators.required),
-    localisation: new UntypedFormControl('', Validators.required),
-    role: new UntypedFormControl('', Validators.required),
-    numero_whatapp: new UntypedFormControl('', Validators.required)
+  updateForm: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    team_id: new FormControl('', Validators.required),
+    localisation: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+    numero_whatapp: new FormControl('', Validators.required)
   })
 
   initUpdate(etudiant: MemberInt) {
@@ -88,14 +88,14 @@ export class MemberIntComponent implements OnInit {
     })
   }
 
-  createForm: UntypedFormGroup = new UntypedFormGroup({
-    user_id: new UntypedFormControl('', Validators.required),
-    team_id: new UntypedFormControl('', Validators.required),
-    localisation: new UntypedFormControl('', Validators.required),
-    role: new UntypedFormControl('', Validators.required),
-    numero_whatapp: new UntypedFormControl('', Validators.required),
-    date_creation: new UntypedFormControl(new Date(), Validators.required),
-    custom_id: new UntypedFormControl("00X00", Validators.required)
+  createForm: FormGroup = new FormGroup({
+    user_id: new FormControl('', Validators.required),
+    team_id: new FormControl('', Validators.required),
+    localisation: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+    numero_whatapp: new FormControl('', Validators.required),
+    date_creation: new FormControl(new Date(), Validators.required),
+    custom_id: new FormControl("00X00", Validators.required)
   })
 
   newMember = false

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { Service } from 'src/app/models/Service';
@@ -72,8 +72,8 @@ export class ConfigurationComponent implements OnInit {
     })
   }
   //Ajout Service
-  ServiceForm = new UntypedFormGroup({
-    label: new UntypedFormControl('', Validators.required)
+  ServiceForm = new FormGroup({
+    label: new FormControl('', Validators.required)
   })
   onAdd() {
     this.ServServ.addService({ ...this.ServiceForm.value, active: true }).subscribe(data => {
@@ -88,9 +88,9 @@ export class ConfigurationComponent implements OnInit {
     this.addService = true
   }
   //Ajout Sujet
-  SujetForm = new UntypedFormGroup({
-    label: new UntypedFormControl('', Validators.required),
-    service_id: new UntypedFormControl('', Validators.required)
+  SujetForm = new FormGroup({
+    label: new FormControl('', Validators.required),
+    service_id: new FormControl('', Validators.required)
   })
   sujetList: Sujet[] = []
   onAddSujet() {
@@ -280,8 +280,8 @@ export class ConfigurationComponent implements OnInit {
   }
 
   addMember;
-  MemberForm: UntypedFormGroup = new UntypedFormGroup(
-    { member: new UntypedFormControl('', Validators.required) }
+  MemberForm: FormGroup = new FormGroup(
+    { member: new FormControl('', Validators.required) }
   )
   onAddMb() {
     this.onAddMember(this.MemberForm.value.member)

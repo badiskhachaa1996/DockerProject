@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeamCommercialService } from 'src/app/services/team-commercial.service';
 import { teamCommercial } from 'src/app/models/teamCommercial';
 import { Message, MessageService } from 'primeng/api';
@@ -21,16 +21,16 @@ export class GestionEquipeComponent implements OnInit {
   showFormAddEquipe: Boolean = false
   showFormUpdate: teamCommercial = null
   token: any;
-  formAddEquipe: UntypedFormGroup = this.formBuilder.group({
+  formAddEquipe: FormGroup = this.formBuilder.group({
     owner_id: ['', [Validators.required]],
     team_id: ['', [Validators.required]]
   })
 
-  formUpdateEquipe: UntypedFormGroup = this.formBuilder.group({
+  formUpdateEquipe: FormGroup = this.formBuilder.group({
     team_id: ['', [Validators.required]]
   })
 
-  constructor(private router: Router, private messageService: MessageService, private formBuilder: UntypedFormBuilder, private UserService: AuthService, 
+  constructor(private router: Router, private messageService: MessageService, private formBuilder: FormBuilder, private UserService: AuthService, 
     private TeamCommercialService: TeamCommercialService) { }
 
   ngOnInit(): void {

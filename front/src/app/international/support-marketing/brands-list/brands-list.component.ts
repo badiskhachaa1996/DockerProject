@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Brand } from 'src/app/models/Brand';
@@ -82,17 +82,17 @@ export class BrandsListComponent implements OnInit {
     })
   }
 
-  addForm = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl(),
-    logo: new UntypedFormControl(''),
+  addForm = new FormGroup({
+    nom: new FormControl('', Validators.required),
+    description: new FormControl(),
+    logo: new FormControl(''),
   })
 
-  updateForm = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl(),
-    logo: new UntypedFormControl(''),
+  updateForm = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    description: new FormControl(),
+    logo: new FormControl(''),
   })
 
   showUpdate: Brand = null
@@ -184,16 +184,16 @@ export class BrandsListComponent implements OnInit {
   //Partie Support Marketing
   showAddSM = false
   showUpdateSM: SupportMarketing
-  addFormSM = new UntypedFormGroup({
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl(),
-    brand_id: new UntypedFormControl(''),
-    date_creation: new UntypedFormControl(new Date()),
+  addFormSM = new FormGroup({
+    nom: new FormControl('', Validators.required),
+    description: new FormControl(),
+    brand_id: new FormControl(''),
+    date_creation: new FormControl(new Date()),
   })
-  updateFormSM = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    nom: new UntypedFormControl('', Validators.required),
-    description: new UntypedFormControl(),
+  updateFormSM = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    nom: new FormControl('', Validators.required),
+    description: new FormControl(),
   })
   onAddSM() {
     this.addFormSM.patchValue({

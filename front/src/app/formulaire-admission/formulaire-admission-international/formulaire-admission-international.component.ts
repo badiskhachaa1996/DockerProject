@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, MenuItem } from 'primeng/api';
 import { map } from 'rxjs';
@@ -29,7 +29,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   emailExist: boolean;
 
   constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router,
-    private formBuilder: UntypedFormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService,
+    private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService,
     private NotifService: NotificationService, private PartenaireService: PartenaireService, private FAService: FormulaireAdmissionService, private Socket: SocketService) { }
 
   routeItems: MenuItem[] = [
@@ -49,7 +49,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   calendar: any;
   fr = environment.fr;
   ActiveIndex = 0;
-  RegisterForm: UntypedFormGroup;
+  RegisterForm: FormGroup;
 
   diplomes = [];
   diplomesOfCampus = [];
@@ -339,60 +339,60 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     this.RegisterForm = this.formBuilder.group({
 
       // ****** Informations générales *******
-      civilite: new UntypedFormControl(environment.civilite[0], [Validators.required]),
-      lastname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      firstname: new UntypedFormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      date_naissance: new UntypedFormControl('', [Validators.required]),
-      nationalite: new UntypedFormControl(this.nationList[0], [Validators.required]),
-      pays_adresse: new UntypedFormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
-      email: new UntypedFormControl('', [Validators.required, Validators.email]),
-      phone: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      indicatif: new UntypedFormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+'),]),
-      indicatif_whatsapp: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+')]),
-      numero_telegram: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+'),]),
-      indicatif_telegram: new UntypedFormControl('', [Validators.pattern('[- +()0-9]+')]),
+      civilite: new FormControl(environment.civilite[0], [Validators.required]),
+      lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      date_naissance: new FormControl('', [Validators.required]),
+      nationalite: new FormControl(this.nationList[0], [Validators.required]),
+      pays_adresse: new FormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      numero_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+'),]),
+      indicatif_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+      numero_telegram: new FormControl('', [Validators.pattern('[- +()0-9]+'),]),
+      indicatif_telegram: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
       // ****** Informations suplumentaires si alternant *******
-      nir: new UntypedFormControl(''),
-      mobilite_reduite: new UntypedFormControl(false),
-      sportif_hn: new UntypedFormControl(false),
+      nir: new FormControl(''),
+      mobilite_reduite: new FormControl(false),
+      sportif_hn: new FormControl(false),
 
       //******* Parcours académiques et professionnel *******
-      validated_academic_level: new UntypedFormControl('', [Validators.required]),
-      statut_actuel: new UntypedFormControl(this.statutList[0], [Validators.required]),
-      other: new UntypedFormControl(''),
-      languages_fr: new UntypedFormControl('', [Validators.required]),
-      languages_en: new UntypedFormControl('', [Validators.required]),
-      is_professional_experience: new UntypedFormControl(false, [Validators.required]),
-      professional_experience: new UntypedFormControl('', Validators.required),
+      validated_academic_level: new FormControl('', [Validators.required]),
+      statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
+      other: new FormControl(''),
+      languages_fr: new FormControl('', [Validators.required]),
+      languages_en: new FormControl('', [Validators.required]),
+      is_professional_experience: new FormControl(false, [Validators.required]),
+      professional_experience: new FormControl('', Validators.required),
 
       //******* Choix du pays de destination, du programme et de la formation  *******
-      campusChoix1: new UntypedFormControl(this.campusDropdown[0], [Validators.required]),
-      campusChoix2: new UntypedFormControl(this.campusDropdown[1], [Validators.required]),
-      campusChoix3: new UntypedFormControl(this.campusDropdown[2], [Validators.required]),
-      formation: new UntypedFormControl("", [Validators.required]),
-      rentree_scolaire: new UntypedFormControl('', [Validators.required]),
-      programme: new UntypedFormControl(this.programList[0], [Validators.required]),
-      rythme_formation: new UntypedFormControl('', Validators.required),
+      campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
+      campusChoix2: new FormControl(this.campusDropdown[1], [Validators.required]),
+      campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
+      formation: new FormControl("", [Validators.required]),
+      rentree_scolaire: new FormControl('', [Validators.required]),
+      programme: new FormControl(this.programList[0], [Validators.required]),
+      rythme_formation: new FormControl('', Validators.required),
 
       //****** Notre partenaire d'accompagnement EduHorizons *******
-      servicesEh_1: new UntypedFormControl(false, [Validators.required]),
-      servicesEh_2: new UntypedFormControl(false, [Validators.required]),
-      servicesEh_3: new UntypedFormControl(false, [Validators.required]),
-      servicesEh_4: new UntypedFormControl(false, [Validators.required]),
-      servicesEh_5: new UntypedFormControl(false, [Validators.required]),
-      servicesEh_6: new UntypedFormControl(false, [Validators.required]),
-      isGarant: new UntypedFormControl(false, [Validators.required]),
-      nomGarant: new UntypedFormControl('', [Validators.pattern('[^0-9]+')]),
-      prenomGarant: new UntypedFormControl('', [Validators.pattern('[^0-9]+')]),
+      servicesEh_1: new FormControl(false, [Validators.required]),
+      servicesEh_2: new FormControl(false, [Validators.required]),
+      servicesEh_3: new FormControl(false, [Validators.required]),
+      servicesEh_4: new FormControl(false, [Validators.required]),
+      servicesEh_5: new FormControl(false, [Validators.required]),
+      servicesEh_6: new FormControl(false, [Validators.required]),
+      isGarant: new FormControl(false, [Validators.required]),
+      nomGarant: new FormControl('', [Validators.pattern('[^0-9]+')]),
+      prenomGarant: new FormControl('', [Validators.pattern('[^0-9]+')]),
 
       //****** Une dernière étape *******
-      agence: new UntypedFormControl(false),
-      nomAgence: new UntypedFormControl(''),
-      mailAgence: new UntypedFormControl(''),
-      numeroAgence: new UntypedFormControl(''),
-      donneePerso: new UntypedFormControl(false, Validators.required),
-      code_commercial: new UntypedFormControl(this.route.snapshot.paramMap.get('code_commercial')),
+      agence: new FormControl(false),
+      nomAgence: new FormControl(''),
+      mailAgence: new FormControl(''),
+      numeroAgence: new FormControl(''),
+      donneePerso: new FormControl(false, Validators.required),
+      code_commercial: new FormControl(this.route.snapshot.paramMap.get('code_commercial')),
 
     });
     if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {

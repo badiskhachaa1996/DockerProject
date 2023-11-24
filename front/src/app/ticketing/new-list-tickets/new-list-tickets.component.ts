@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
 import { MessageService as ToastService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
@@ -65,23 +65,23 @@ export class NewListTicketsComponent implements OnInit {
   tickets: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
-  TicketForm = new UntypedFormGroup({
-    sujet_id: new UntypedFormControl(null, Validators.required),
-    service_id: new UntypedFormControl(null, Validators.required),
-    description: new UntypedFormControl('',),
-    resum: new UntypedFormControl(''),
-    priorite: new UntypedFormControl("false"),
-    module: new UntypedFormControl('',),
-    type: new UntypedFormControl('',),
-    statut: new UntypedFormControl('',),
-    documents: new UntypedFormControl([]),
-    agent_id: new UntypedFormControl(null,),
-    _id: new UntypedFormControl(null, Validators.required),
-    demande: new UntypedFormControl('',),
-    campus: new UntypedFormControl('',),
-    filiere: new UntypedFormControl('',),
-    date_limite: new UntypedFormControl('',),
-    note_assignation: new UntypedFormControl('',),
+  TicketForm = new FormGroup({
+    sujet_id: new FormControl(null, Validators.required),
+    service_id: new FormControl(null, Validators.required),
+    description: new FormControl('',),
+    resum: new FormControl(''),
+    priorite: new FormControl("false"),
+    module: new FormControl('',),
+    type: new FormControl('',),
+    statut: new FormControl('',),
+    documents: new FormControl([]),
+    agent_id: new FormControl(null,),
+    _id: new FormControl(null, Validators.required),
+    demande: new FormControl('',),
+    campus: new FormControl('',),
+    filiere: new FormControl('',),
+    date_limite: new FormControl('',),
+    note_assignation: new FormControl('',),
   })
   stats = {
     en_attente: 0,
@@ -518,9 +518,9 @@ export class NewListTicketsComponent implements OnInit {
   seeMoreObj = { str: "", type: "" }
   seeMoreBool = false
   ticketTraiter: Ticket
-  TicketFormTraiter = new UntypedFormGroup({
-    user_id: new UntypedFormControl(''),
-    description: new UntypedFormControl('')
+  TicketFormTraiter = new FormGroup({
+    user_id: new FormControl(''),
+    description: new FormControl('')
   })
   onTraiter(ticket, index) {
     let ids = []

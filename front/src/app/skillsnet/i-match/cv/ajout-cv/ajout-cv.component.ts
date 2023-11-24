@@ -1,4 +1,4 @@
-import { FormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -39,7 +39,7 @@ export class AjoutCvComponent implements OnInit {
   // partie dedié aux CV
   cvLists: CV[] = [];
   showFormAddCV: boolean = true;
-  formAddCV: UntypedFormGroup;
+  formAddCV: FormGroup;
   showFormUpdateCV: boolean = false;
   typeContratList = [
     { label: 'Temps plein', value: 'Temps plein' },
@@ -212,7 +212,7 @@ export class AjoutCvComponent implements OnInit {
   isEtudiant = false
   profilsList = []
   profilSelected: Profile
-  constructor(private skillsService: SkillsService, private formBuilder: UntypedFormBuilder,
+  constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
     private ClasseService: ClasseService, private EtudiantService: EtudiantService,
@@ -538,7 +538,7 @@ export class AjoutCvComponent implements OnInit {
   //Partie Mis à jour du CV
 
   showUpdateCV: CV
-  formUpdateCV: UntypedFormGroup
+  formUpdateCV: FormGroup
   canEditWinner = false
   InitUpdateCV(cv) {
     this.formUpdateCV = this.formBuilder.group({
@@ -705,8 +705,8 @@ export class AjoutCvComponent implements OnInit {
     })
   }
 
-  AssignForm = new UntypedFormGroup({
-    offer: new UntypedFormControl()
+  AssignForm = new FormGroup({
+    offer: new FormControl()
   })
 
   onAssignOffer() {

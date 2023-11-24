@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { VenteService } from 'src/app/services/vente.service';
 import { Vente } from 'src/app/models/Vente';
@@ -144,14 +144,14 @@ export class VentesComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  formAddVente: UntypedFormGroup = new UntypedFormGroup({
-    produit: new UntypedFormControl('', Validators.required),
-    montant: new UntypedFormControl('', Validators.required),
-    statutCommission: new UntypedFormControl(''),
-    date_reglement: new UntypedFormControl('', Validators.required),
-    prospect_id: new UntypedFormControl('', Validators.required),
-    partenaire_id: new UntypedFormControl('', Validators.required),
-    modalite_paiement: new UntypedFormControl('', Validators.required)
+  formAddVente: FormGroup = new FormGroup({
+    produit: new FormControl('', Validators.required),
+    montant: new FormControl('', Validators.required),
+    statutCommission: new FormControl(''),
+    date_reglement: new FormControl('', Validators.required),
+    prospect_id: new FormControl('', Validators.required),
+    partenaire_id: new FormControl('', Validators.required),
+    modalite_paiement: new FormControl('', Validators.required)
   })
 
   onAddVente() {
@@ -194,13 +194,13 @@ export class VentesComponent implements OnInit {
 
   showFormEditVente = false
 
-  formEditVente: UntypedFormGroup = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    produit: new UntypedFormControl('', Validators.required),
-    montant: new UntypedFormControl(''),
-    statutCommission: new UntypedFormControl(''),
-    date_reglement: new UntypedFormControl('', Validators.required),
-    modalite_paiement: new UntypedFormControl('', Validators.required)
+  formEditVente: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    produit: new FormControl('', Validators.required),
+    montant: new FormControl(''),
+    statutCommission: new FormControl(''),
+    date_reglement: new FormControl('', Validators.required),
+    modalite_paiement: new FormControl('', Validators.required)
   })
 
   onUpdateVente() {
