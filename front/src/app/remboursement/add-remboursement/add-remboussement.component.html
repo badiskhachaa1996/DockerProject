@@ -1,24 +1,4 @@
-<!-- 
-<header>
-    <form [formGroup]="aFormGroup">
-        <ngx-invisible-recaptcha #captchaElem
-          [siteKey]="siteKey"
-          formControlName="recaptcha">
-        </ngx-invisible-recaptcha>
-      </form>
-</header> -->
 
-
-
-<div class="card">
-   
-
-    <!-- <p-captcha siteKey="6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU" (onResponse)="showResponse($event)"></p-captcha>
-</div>
-<script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=initRecaptcha" async defer></script>
-<script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=loadCaptcha" async defer></script>
-<p-captcha siteKey="6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU" (onResponse)="showResponse($event)" initCallback="loadCaptcha"></p-captcha>
- -->
 
 
 <div *ngIf="!Successfull" class=" col-12 grid">
@@ -122,11 +102,19 @@
             <div style="width: 100%;" *ngIf="showUpdateForm && !isNewDemande">
                 <app-dossier-remboursement [demande]="currentDemande" [user]="user"></app-dossier-remboursement>
             </div>
+            <p-captcha siteKey="6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU" (onResponse)="showResponse($event)"></p-captcha>
 
+            <form [formGroup]="aFormGroup">
+                <ngx-recaptcha2 #captchaElem
+                  [siteKey]="siteKey"
+                  formControlName="recaptcha">
+                </ngx-recaptcha2>
+              </form>
             <div class="col-12  flex align-items-center justify-content-center ">
+               
                 <br>
                 <span class="p-buttonset">
-                    <button [disabled]="formRembourssement.invalid" pButton pRipple (click)=" onSubmitRemboussementForm()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
+                    <button [disabled]="aFormGroup.invalid || aFormGroup.get('recaptcha').value === null" pButton pRipple (click)="onSubmitRemboussementForm()" class="imen-btn" label="Enregistrer" icon="pi pi-check" type="submit"></button>
                 </span>
             </div> 
         </form>

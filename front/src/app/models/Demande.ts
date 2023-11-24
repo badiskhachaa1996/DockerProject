@@ -50,31 +50,31 @@ export class Demande {
             }],
         public docs?: {
             
-            rib: {
+            rib?: {
                 nom?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
-            attestation_payement: {
+            attestation_payement?: {
                 nom?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
-            preuve_payement: {
+            preuve_payement?: {
                 nom?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string; 
             },
-            document_inscription: {
+            document_inscription?: {
                 nom?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
-            autres_doc: {
+            autres_doc?: {
                 nom?: string;
                 added_on?: Date;
                 added_by?: string;

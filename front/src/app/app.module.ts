@@ -394,10 +394,18 @@ import { UploadButtonComponent } from './remboursement/upload-button/upload-butt
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
+import { CaptchaModule } from 'primeng/captcha';
+import { RecaptchaModule } from "ng-recaptcha";
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
+    NgxCaptchaModule,
+    CaptchaModule,
+    BrowserModule,
+    RecaptchaModule,  
     TableModule,
     SignaturePadModule,
     BrowserModule,

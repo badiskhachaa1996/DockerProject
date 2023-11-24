@@ -8,7 +8,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { AuthService } from 'src/app/services/auth.service';
 import {CaptchaModule} from 'primeng/captcha';
 import { MessageService } from 'src/app/services/message.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormGroup , FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -21,19 +21,22 @@ import { Router } from '@angular/router';
 
 export class AddRemboussementComponent implements OnInit {
 
-//   showResponse(event) {
-//     this.messageService.add({severity:'info', summary:'Succees', detail: 'User Responded', sticky: true});
-// }
+  protected aFormGroup: FormGroup;
+
+
+  showResponse(event) {
+    this.messageService.add({severity:'info', summary:'Succees', detail: 'User Responded'});
+}
 
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private http: HttpClient,
     private messageService: MessageService,
     private demandeRemboursementService: DemandeRemboursementService,
     private router: Router,
     private formationService: FormulaireAdmissionService,
-    private userService: AuthService
+    private userService: AuthService,
   ) { }
 
 
@@ -128,13 +131,15 @@ Successfull = false
   @Input() isNewDemande = false
 
   formRembourssement: UntypedFormGroup;
-  aFormGroup: UntypedFormGroup;
+  
 
   availableStatus = environment.availableStatus
 
 
+
   ngOnInit(): void {
-    this.aFormGroup = this.formBuilder.group({
+
+ this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });
   
@@ -203,7 +208,7 @@ Successfull = false
   }
 
 
-  siteKey='6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
+  siteKey:string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 
@@ -335,10 +340,11 @@ Successfull = false
   newDemande(demande) {
 
     // Use the service to make the POST request
-    demande.status = 'new'
-    console.log(demande);
+    demande.status = 'new';
+      console.log(demande);
     this.demandeRemboursementService.addRemboursement(demande).subscribe(
       (response) => {
+
         // Handle success (show a success message)
         this.messageService.add({
           severity: 'success',
@@ -383,9 +389,14 @@ Successfull = false
 
 
   onSubmitRemboussementForm() {
-    
-    this.updateDemandeObject(this.currentDemande, this.showUpdateForm)
+    const captchaResponse = this.aFormGroup.get('recaptcha').value;
+    if (captchaResponse) {
+      this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
+    } else {
+      console.log('Please verify the captcha before submitting.');
+    }
   }
+  
 
   cancelForm() {
     this.cancelFormOutPut.emit(true)
