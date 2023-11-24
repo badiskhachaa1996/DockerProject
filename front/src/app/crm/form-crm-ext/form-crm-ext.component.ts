@@ -89,7 +89,11 @@ export class FormCrmExtComponent implements OnInit {
     this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
       this.addForm.reset()
       //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
-    })
+    },
+      ((error) => {
+        this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
+        console.error(error);
+      }))
   }
 
   generateID() {
