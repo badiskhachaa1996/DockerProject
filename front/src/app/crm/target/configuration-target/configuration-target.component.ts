@@ -147,7 +147,7 @@ export class ConfigurationTargetComponent implements OnInit {
     return `${diff.day}J ${diff.hour}H${diff.min}`;
   }
   calcAvancement(target: Target) {
-    //Avancement = les équations seront définies plus tard mais ils auront deux variable (membre / data set du CRM)  
+    //Avancement = les équations seront définies plus tard mais ils auront deux variable (membre / data set du CRM)
     return "membre / data set du CRM"
   }
 

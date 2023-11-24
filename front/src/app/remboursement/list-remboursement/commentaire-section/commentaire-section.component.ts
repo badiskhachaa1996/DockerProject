@@ -61,7 +61,7 @@ export class CommentaireSectionComponent implements OnInit {
       }
      
     )
-    console.log(this.commentaires)
+   
   }
 
   updateDemande(demande) {

@@ -48,6 +48,7 @@ app.get("/getByLabel/:label", (req, res) => {
         console.log(dataService)
         res.status(200).send({ dataService });
     }).catch((error) => {
+        console.error(error)
         res.status(404).send("erreur :" + error);
     })
 });

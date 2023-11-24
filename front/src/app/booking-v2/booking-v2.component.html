@@ -1,0 +1,280 @@
+<p-toast></p-toast>
+<!-- Formulaire d'ajout d'un nouveau sujet -->
+<div class="grid" *ngIf="showFormAddSujet">
+  <div class="col-12">
+    <div class="card">
+      <i class="pi pi-times-circle"
+        style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+        (click)="showFormAddSujet = false" aria-hidden="true"> </i>
+      <div class="clear-float"></div>
+      <h2 style="text-align: center;" class="header-title">Ajout d'un nouveau sujet</h2>
+      <form class="p-fluid p-formgrid grid" [formGroup]="formAddSujet" (ngSubmit)="onAddSujet()">
+        <div class="field col-12 md:col-12">
+          <label htmlFor="titre_sujet">Titre du sujet : <span style="color: red;"> * </span></label>
+          <input pInputText id="titre_sujet" type="text" placeholder="Titre du sujet" formControlName="titre_sujet" />
+        </div>
+        <div class="field col-6 md:col-6">
+          <label htmlFor="duree">Durée du rendez-vous : <span style="color: red;"> * </span> </label>
+          <p-dropdown [options]="dureeSujet" formControlName="duree" placeholder="Choisissez une durée"></p-dropdown>
+        </div>
+
+        <div class="field col-6 md:col-6">
+          <label For="canal">Canal <span style="color: red;"> * </span></label>
+            <p-multiSelect placeholder="Choisissez un ou plusieurs canal" filter="true"
+            formControlName="canal" [options]="canalSujet" autoWidth="false"
+            [style]="{'width':'100%'}">
+          </p-multiSelect>
+        </div>
+
+        <div class="field col-12 md:col-12">
+          <label htmlFor="description">Description : <span style="color: red;"> * </span></label>
+          <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+        </div>
+        <div>
+          <button pButton type="submit" label="Ajouter le sujet" icon=" pi pi-check-circle" [disabled]="formAddSujet.invalid"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Formulaire de modification d'un sujet -->
+<div class="card" *ngIf="showFormUpdateSujet">
+  <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+  (click)="showFormUpdateSujet = false;" aria-hidden="true"></i>
+
+  <h4 style="text-align: center;">Modifier ce sujet</h4>
+
+  <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateSujet" (ngSubmit)="onUpdateSujet()">
+    <div class="field col-12 md:col-12">
+      <label htmlFor="titre_sujet">Titre du sujet : <span style="color: red;"> * </span></label>
+      <input pInputText id="titre_sujet" type="text" placeholder="Titre du sujet" formControlName="titre_sujet" />
+    </div>
+    <div class="field col-6 md:col-6">
+      <label htmlFor="duree">Durée du rendez-vous : <span style="color: red;"> * </span> </label>
+      <p-dropdown [options]="dureeSujet" formControlName="duree" placeholder="Choisissez une durée"></p-dropdown>
+    </div>
+
+    <div class="field col-6 md:col-6">
+      <label For="canal">Canal <span style="color: red;"> * </span></label>
+        <p-multiSelect placeholder="Choisissez un ou plusieurs canal" filter="true"
+          formControlName="canal" [options]="canalSujet" autoWidth="false"
+          [style]="{'width':'100%'}">
+        </p-multiSelect>
+  </div>
+
+    <div class="field col-12 md:col-12">
+      <label htmlFor="description">Description : <span style="color: red;"> * </span></label>
+      <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+    </div>
+    <div>
+      <button pButton type="submit" label="Modifier le sujet" icon=" pi pi-check-circle" [disabled]="formUpdateSujet.invalid"></button>
+    </div>
+  </form>
+</div>
+
+<!-- Formulaire d'ajout des membres-->
+<div class="col-12 card" *ngIf="showFormAddMember">
+  <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+      (click)="showFormAddMember = null" aria-hidden="true"> </i>
+  <h3 class="text-center" style="font-weight: bold;">
+      Ajout des membres à {{showFormAddMember.titre_sujet}}
+  </h3>
+  <p-table class="col-12" [value]="showFormAddMember.membre">
+      <ng-template pTemplate="header">
+          <tr>
+              <th pSortableColumn="firstname" style="text-align:center">
+                  Prénom & Nom <p-sortIcon field="firstname"> </p-sortIcon>
+              </th>
+              <th>Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-ri="rowIndex">
+          <tr>
+              <td>
+                  {{user.firstname|titlecase}} {{user.lastname|uppercase}}
+              </td>
+              <td>
+                <i pTooltip="Supprimer ce membre du service" style="margin-left: 2%; cursor: pointer; color: red;"
+                    class="pi pi-trash" (click)="removeMember(user,ri)" aria-hidden="true"></i>
+            </td>
+          </tr>
+      </ng-template>
+  </p-table>
+  <div class="p-fluid p-formgrid grid col-12">
+      <div class="field col-12 md:col-12">
+          <label For="service">Nom du membre <span style="color: red;"> * </span></label>
+          <p-dropdown [options]="memberDropdown" placeholder="Choisissez un membre" autoWidth="false" [filter]="true"
+              [style]="{'width':'100%'}" (onChange)="onAddMemberToSujet($event.value)"></p-dropdown>
+      </div>
+  </div>
+</div>
+
+<!-- Calendrier des disponiblités-->
+<div class="card" *ngIf="showFormCalendar">
+  <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+  (click)="showFormCalendar = false;" aria-hidden="true"></i>
+  <h2 class="header-title"> Calendrier des disponibilités </h2>
+  <div class="card">
+  <div class="grid">
+      <div class="col-5 flex align-items-center justify-content-center">
+          <div class="p-fluid">
+            <div class="container text-start">
+              <div class="row justify-content-start">
+                <div class="col-12"> <!-- Utilisez la classe col-12 pour que la p-fieldset occupe toute la largeur -->
+                  <p-fieldset legend="Choisissez les disponibilités pour ce sujet">
+                    <div class="d-flex justify-content-start">
+                      <div class="text-left">
+                        <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <h6 class="mb-3">Dates sélectionnées :</h6>
+                        <li *ngFor="let date of rangeDates" class="list-group-item">{{ formatFrenchDate(date) }}</li>
+                    </div>
+                  </p-fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-2">
+          <p-divider layout="vertical">
+          </p-divider>
+      </div>
+      <div class="col-5 d-flex flex-column align-items-center justify-content-center">
+        <div class="text-left"><br><br>
+          <p>En choisissant ces dates, vous confirmez que vous êtes disponible pour des interactions liées à ce sujet. Veuillez noter que ces dates peuvent être soumises à des ajustements en fonction des disponibilités ultérieures.</p>
+        </div><br>
+        <div class="text-center">
+          <p-button label="Valider les disponibilités" icon="pi pi-check-circle" styleClass="p-button-success" (click)="sauvegarderDisponibilite()"></p-button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+</div>
+
+<!-- Affichage des sujets -->
+<div class="grid" *ngIf="showSujet">
+    <div class="col-12">
+      <div class="card">
+        <button pButton label="Nouveau sujet booking" icon="pi pi-plus-circle" style="float: right;" (click)="showFormAddSujet = true"></button>
+        <h2 class="header-title">Configuration Booking</h2>
+        <p-table #dt1 [value]="sujets" dataKey="_id" [rows]="5"  
+          styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="[
+                          'titre_sujet',
+                          'canal',
+                          'duree',
+                      ]" responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+              <span class="p-input-icon-left mb-2">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" #filter (input)=" dt1.filterGlobal( $event.target.value, 'contains')" placeholder="Rechercher un booking" class="w-full" />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem;"></th>
+                <th pSortableColumn="titre_sujet"> Sujet<p-sortIcon field="titre_sujet"></p-sortIcon></th>
+                <th pSortableColumn=""> Membres<p-sortIcon field=""></p-sortIcon>
+                <th pSortableColumn="canal"> Canal<p-sortIcon field="canal"></p-sortIcon>
+                <th pSortableColumn="duree"> Durée du rendez-vous<p-sortIcon field="duree"></p-sortIcon>
+                <th pSortableColumn=""> Lien<p-sortIcon field=""></p-sortIcon>
+                <th style="text-align: center;">Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-sujet let-expanded="expanded" let-ri="rowIndex">
+            <tr>
+              <td>
+                <p-button (click)="showDetails(sujet)" icon="pi pi-info-circle" label="Détails"></p-button>
+              </td>
+              <td style="min-width: 10rem" [ngStyle]="{color: getColor(sujet.active)}"> {{sujet.titre_sujet}}</td>
+              <td style="min-width: 10rem" [ngStyle]="{color: getColor(sujet.active)}"> 
+                <ng-container *ngFor="let membre of sujet.membre">
+                  {{membre.firstname}} {{membre.lastname}} <br>
+                  </ng-container>
+              </td>
+              <td style="min-width: 12rem" [ngStyle]="{color: getColor(sujet.active)}">{{sujet.canal}}</td>
+              <td style="min-width: 10rem" [ngStyle]="{color: getColor(sujet.active)}">{{sujet.duree}}</td>
+              <td style="min-width: 10rem" [ngStyle]="{color: getColor(sujet.active)}"> En cours de développement</td>
+              <td class="text-center" style="min-width: 8rem">
+                <i class="pi pi-user-plus m-1" pTooltip="Assigner les membres" (click)="showFormAddMember = sujet; AddMember(sujet)" aria-hidden="true" style="cursor: pointer; color: rgb(22, 225, 22)"></i>
+                <i class="pi pi-calendar m-1" pTooltip="Calendrier des disponibilités" (click)="showFormCalendar = sujet" style="cursor: pointer; color: orangered"></i>
+                <i class="pi pi-pencil m-1" pTooltip="Modifier" (click)="onFillFormUpdateSujet(sujet); showFormUpdateSujet = true;"  style="cursor: pointer; color: #3b82f6"></i>
+                <i class="pi pi-clock m-1" pTooltip="Suspendre" (click)="showDialogSuspendre(sujet);" style="cursor: pointer; color: #f59e0b"></i>
+                <i class="pi pi-trash m-1" pTooltip="Supprimer" (click)="onDeleteSujet(sujet._id)" style="cursor: pointer; color: #ef4444"></i>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-sujet>
+            <tr>
+              <td colspan="7">
+                <div class="p-3">
+                  <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                    </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                      <tr>
+                          <td>{{sujet._id}}</td>
+                          <td>{{sujet.description}}</td>
+                      </tr>
+                  </ng-template>
+                  </p-table>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+</div>
+
+<!-- Affiche les détails sous forme de pop-up-->
+<p-dialog header="Détails: " [(visible)]="visibleDetails" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" class="text-center">
+  <ng-template pTemplate="rowexpansion" let-sujet  >
+    <tr>
+      <td colspan="7">
+        <div class="p-3">
+          <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines" >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Disponibilités</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                  <td>{{sujetDetails._id}}</td>
+                  <td>{{sujetDetails.description}}</td>
+                  <td>
+                    <ng-container *ngFor="let date of sujetDetails.disponibilite">{{ date | date:'dd MMMM yy':'':'fr' }}<br></ng-container>
+                  </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-dialog>
+
+<p-dialog style="text-align: center;" header="Gérer la suspension du sujet" [(visible)]="visibleSuspendre" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <p class="m-0" style="text-align: center;" *ngIf="sujetSusprendre?.active">
+    En désactivant ce sujet, vous le rendrez inactif et il ne sera plus disponible pour les interactions. Êtes-vous sûr de vouloir désactiver ce sujet ?
+  </p>
+  <p class="m-0" style="text-align: center;" *ngIf="!sujetSusprendre?.active">
+    En activant ce sujet, vous le rendrez actif et disponible pour les interactions. Êtes-vous sûr de vouloir activer ce sujet ?
+  </p>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-times-circle" (click)="visibleSuspendre = false" label="Désactiver" styleClass="p-button-danger" *ngIf="sujetSusprendre.active" (click)="hideSujet(sujetSusprendre)"></p-button>
+    <p-button icon="pi pi-check-circle" (click)="visibleSuspendre = false" label="Activer" styleClass="p-button-success" *ngIf="!sujetSusprendre.active" (click)="activeSujet(sujetSusprendre)"></p-button>
+</ng-template>
+</p-dialog>

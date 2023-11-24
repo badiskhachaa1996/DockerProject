@@ -18,6 +18,7 @@ const schema = mongoose.Schema({
     numero_telegram: { type: String, required: false },
     dernier_niveau_academique: { type: String, required: false },
     statut: { type: String, required: false },
+    statut_dossier: { type: String, required: false },
     niveau_fr: { type: String, required: false },
     niveau_en: { type: String, required: false },
     date_creation: { type: Date, default: Date.now },
@@ -60,7 +61,7 @@ const schema = mongoose.Schema({
 
     //Affectation
     affected_date: { type: Date, required: false },
-    affected_to_member: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+    affected_to_member: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
 
     //Choix Prospects
     rythme: { type: String, required: false },

@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode';
 import { Demande } from 'src/app/models/Demande';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { AuthService } from 'src/app/services/auth.service';
-import {CaptchaModule} from 'primeng/captcha';
+import { CaptchaModule } from 'primeng/captcha';
 import { MessageService } from 'src/app/services/message.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -21,9 +21,11 @@ import { Router } from '@angular/router';
 
 export class AddRemboussementComponent implements OnInit {
 
-//   showResponse(event) {
-//     this.messageService.add({severity:'info', summary:'Succees', detail: 'User Responded', sticky: true});
-// }
+
+
+  showResponse(event) {
+    this.messageService.add({ severity: 'info', summary: 'Succees', detail: 'User Responded' });
+  }
 
 
   constructor(
@@ -33,7 +35,7 @@ export class AddRemboussementComponent implements OnInit {
     private demandeRemboursementService: DemandeRemboursementService,
     private router: Router,
     private formationService: FormulaireAdmissionService,
-    private userService: AuthService
+    private userService: AuthService,
   ) { }
 
 
@@ -117,11 +119,11 @@ export class AddRemboussementComponent implements OnInit {
 
   @Output() cancelFormOutPut = new EventEmitter<boolean>();
 
-@Output() doneUpdating = new EventEmitter<boolean>();
-@Input()   currentDemande = new Demande;
+  @Output() doneUpdating = new EventEmitter<boolean>();
+  @Input() currentDemande = new Demande;
 
 
-Successfull = false
+  Successfull = false
 
   @Input() showUpdateForm = false;
 
@@ -133,11 +135,13 @@ Successfull = false
   availableStatus = environment.availableStatus
 
 
+
   ngOnInit(): void {
+
     this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });
-  
+
 
     this.formRembourssement = this.formBuilder.group({
       civilite: [''],
@@ -155,8 +159,8 @@ Successfull = false
       formation: [''],
       motif_refus: [''],
       montant: [''],
-      payment_date:[''],
-   
+      payment_date: [''],
+
     })
 
 
@@ -203,12 +207,12 @@ Successfull = false
   }
 
 
-  siteKey='6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
+  siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 
   // Mis à jour de la demande 
- 
+
 
   chargeFormDate(demande) {
     this.formRembourssement = this.formBuilder.group({
@@ -227,7 +231,7 @@ Successfull = false
       formation: [demande.training?.name],
       motif_refus: [demande.motif],
       montant: [demande.payment?.montant],
-      payment_date:[demande.payment?.date],
+      payment_date: [demande.payment?.date],
 
     })
 
@@ -268,14 +272,14 @@ Successfull = false
         name: this.formRembourssement.value.formation,
       }
 
-   demande.payment = {
-    montant : this.formRembourssement.value.montant,
-    date : this.formRembourssement.value.payment_date,
-    method : this.formRembourssement.value.paymentType
+    demande.payment = {
+      montant: this.formRembourssement.value.montant,
+      date: this.formRembourssement.value.payment_date,
+      method: this.formRembourssement.value.paymentType
 
-   }
+    }
 
-    demande.payment={
+    demande.payment = {
       date: this.formRembourssement.value.payment_date,
       montant: this.formRembourssement.value.montant,
       method: this.formRembourssement.value.paymentType
@@ -335,10 +339,11 @@ Successfull = false
   newDemande(demande) {
 
     // Use the service to make the POST request
-    demande.status = 'new'
+    demande.status = 'new';
     console.log(demande);
     this.demandeRemboursementService.addRemboursement(demande).subscribe(
       (response) => {
+
         // Handle success (show a success message)
         this.messageService.add({
           severity: 'success',
@@ -383,9 +388,14 @@ Successfull = false
 
 
   onSubmitRemboussementForm() {
-    
-    this.updateDemandeObject(this.currentDemande, this.showUpdateForm)
+    const captchaResponse = this.aFormGroup.get('recaptcha').value;
+    if (captchaResponse) {
+      this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
+    } else {
+      console.log('Please verify the captcha before submitting.');
+    }
   }
+
 
   cancelForm() {
     this.cancelFormOutPut.emit(true)

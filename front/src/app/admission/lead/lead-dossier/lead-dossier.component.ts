@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -14,11 +14,14 @@ import mongoose from 'mongoose';
 export class LeadDossierComponent implements OnInit {
   documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
   ID = this.route.snapshot.paramMap.get('id');
+  @Input() PROSPECT_ID
   PROSPECT: Prospect;
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService) { }
   resideFr = false
   alternance = false
   ngOnInit(): void {
+    if (!this.ID)
+      this.ID = this.PROSPECT_ID
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
@@ -98,7 +101,7 @@ export class LeadDossierComponent implements OnInit {
       this.PROSPECT.documents_autre.splice(this.PROSPECT.documents_autre.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
 
       this.ProspectService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }, "Ajout d'un document du dossier Lead-Dossier").subscribe(a => {
-        console.log(a)
+        this.docToUpload = null
       })
     },
       (error) => {
@@ -130,9 +133,9 @@ export class LeadDossierComponent implements OnInit {
   }
   checkIfDossierComplet() {
     let r = false
-    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu", 
-    "Relevés de note depuis le baccalauréat", "Passeport / Pièce d'identité", 
-    "Diplôme baccalauréat ou équivalent","Relevé de note baccalauréat"]
+    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu",
+      "Relevés de note depuis le baccalauréat", "Passeport / Pièce d'identité",
+      "Diplôme baccalauréat ou équivalent", "Relevé de note baccalauréat"]
     if (this.resideFr && this.alternance) {
       this.documentsObligatoires.push('Copie Visa')
       this.documentsObligatoires.push('Carte de séjour')

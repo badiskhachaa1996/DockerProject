@@ -6,59 +6,111 @@ const fs = require("fs")
 var mime = require('mime-types')
 const path = require('path');
 const { LeadCRM } = require("../models/leadCRM");
+const nodemailer = require('nodemailer');
 
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
 app.post("/create", (req, res) => {
     delete req.body._id
     let f = new LeadCRM({ ...req.body })
-    f.save()
-        .then((FFSaved) => { res.status(201).send(FFSaved) })
-        .catch((error) => { res.status(400).send(error); });
+    LeadCRM.findOne({ email: req.body.email }).then(r => {
+        if (!r)
+            f.save()
+                .then((FFSaved) => {
+                    if (FFSaved.source.startsWith('Site Web')) {
+                        let ecole = FFSaved.source.replace('Site Web ', '')
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: FFSaved.email,
+                            subject: '[IMS] - Suivi de votre demande de contact',
+                            html: `
+                    Cher/Chère ${FFSaved.nom},<br>
+                    Nous vous remercions sincèrement d'avoir rempli le formulaire de contact de l'école ${ecole}.<br> Votre demande a été prise en compte, et nous sommes ravis de pouvoir vous accompagner dans votre démarche.<br>
+                    Nous transmettons dès à présent votre requête à l'un de nos conseillers dédiés.<br> Celui-ci sera en contact avec vous prochainement pour répondre à toutes vos questions et vous guider à travers les différentes étapes du processus d'inscription.<br>
+                    Chez ${ecole}, nous mettons un point d'honneur à offrir un service personnalisé et à répondre efficacement aux besoins de nos futurs étudiants.<br> Nous sommes impatients de vous fournir toutes les informations nécessaires pour faire de votre expérience chez nous une réussite.<br>
+                    N'hésitez pas à nous faire part de toute question supplémentaire d'ici là.<br> Nous sommes là pour vous.<br>
+                    Cordialement,<br>
+                    `,
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                    res.status(201).send(FFSaved)
+                })
+                .catch((error) => { res.status(400).send(error); });
+        else
+            res.status(500).send("Lead existe déjà")
+    })
+
 })
 
+app.get("/getOneByID/:id", (req, res, next) => {
+    LeadCRM.findById(req.params.id)
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+});
+
 app.get("/getAll", (req, res, next) => {
-    LeadCRM.find().populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find().populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllNonQualifies", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Non qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Non qualifié' }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllPreQualifies", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Pré-qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Pré-qualifié' }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllQualifies", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Qualifié' }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllNonQualifiesByID/:id", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Non qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Non qualifié', affected_to_member: req.params.id }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllPreQualifiesByID/:id", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Pré-qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Pré-qualifié', affected_to_member: req.params.id }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllQualifiesByID/:id", (req, res, next) => {
-    LeadCRM.find({ decision_qualification: 'Qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ decision_qualification: 'Qualifié', affected_to_member: req.params.id }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllByID/:id", (req, res, next) => {
-    LeadCRM.find({ affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+    LeadCRM.find({ affected_to_member: req.params.id }).populate('affected_to_member')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -76,7 +128,7 @@ app.put("/update", (req, res) => {
             console.error(err); res.status(500).send(err);
         }
         else
-            LeadCRM.findById(req.body._id).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+            LeadCRM.findById(req.body._id).populate('affected_to_member')
                 .then((formFromDb) => { res.status(200).send(formFromDb); })
                 .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });

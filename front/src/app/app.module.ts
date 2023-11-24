@@ -164,7 +164,6 @@ import { EmploiDuTempsComponent } from './pedagogie/seances/emploi-du-temps/empl
 import { EmergementComponent } from './pedagogie/seances/emergement/emergement.component';
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
-
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
@@ -354,7 +353,6 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { NgModule } from '@angular/core';
-import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 import { DataCleComponent } from './remboursement/list-remboursement/data-cle/data-cle.component';
 import { DetailsCandidatComponent } from './remboursement/list-remboursement/details-candidat/details-candidat.component';
@@ -394,10 +392,29 @@ import { UploadButtonComponent } from './remboursement/upload-button/upload-butt
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
+import { CaptchaModule } from 'primeng/captcha';
+import { RecaptchaModule } from "ng-recaptcha";
+import { NgxCaptchaModule } from 'ngx-captcha';
 
+import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
+import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
+import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
+import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
+import { CrmListComponent } from './crm/crm-list/crm-list.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
+import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
+import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
+    NgxCaptchaModule,
+    CaptchaModule,
+    BrowserModule,
+    RecaptchaModule,  
     TableModule,
     SignaturePadModule,
     BrowserModule,
@@ -493,6 +510,7 @@ import { AddRemboursementPublicComponent } from './remboursement/add-rembourseme
     EditorModule,
     QRCodeModule,
     PdfViewerModule,
+
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -767,7 +785,6 @@ import { AddRemboursementPublicComponent } from './remboursement/add-rembourseme
     ReadMoreComponent,
     NewCvthequeInterneComponent,
     // ======= Remboursement
-    AddRemboussementComponent,
     ListRemboursementComponent,
     ContactRemboursementComponent,
     DataCleComponent,
@@ -778,7 +795,7 @@ import { AddRemboursementPublicComponent } from './remboursement/add-rembourseme
     InformationRemboursementComponent,
     UploadRemboursementDocComponent,
 
-    // >>>>>>> 
+    // >>>>>>>
     MatchingViewerComponent,
     NewEntreprisesComponent,
     AnnonceViewerComponent,
@@ -807,9 +824,20 @@ import { AddRemboursementPublicComponent } from './remboursement/add-rembourseme
     EvaluationComponent,
     UploadButtonComponent,
     LeadEvaluationComponent,
-    AddRemboursementPublicComponent
+    AddRemboursementPublicComponent,
     
     
+    DocumentsCandidatureViewerComponent,
+    GestionProduitsComponent,
+    AddRemboussementComponent,
+    FormCrmExtComponent,
+    CrmListComponent,
+    LogementComponent,
+    GestionLogementComponent,
+    BookingV2Component,
+    SuivreLeadComponent,
+    GestionOperationComponent,
+    GestionSrourcesComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
