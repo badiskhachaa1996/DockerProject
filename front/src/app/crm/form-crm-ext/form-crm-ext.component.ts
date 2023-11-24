@@ -71,7 +71,7 @@ export class FormCrmExtComponent implements OnInit {
   addForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
-    email: new FormControl(''),
+    email: new FormControl('', Validators.required),
     numero_phone: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
     whatsapp: new FormControl("Non"),
