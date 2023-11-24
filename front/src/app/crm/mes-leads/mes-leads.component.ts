@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+=======
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+>>>>>>> 8496ac811921e6c6979456c3eae27485042cd2b3
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -9,14 +14,16 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
-
+import { ServService } from 'src/app/services/service.service';
+import { AuthService } from 'src/app/services/auth.service';
+import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-mes-leads',
   templateUrl: './mes-leads.component.html',
   styleUrls: ['./mes-leads.component.scss']
 })
 export class MesLeadsComponent implements OnInit {
-
+  token;
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -78,10 +85,11 @@ export class MesLeadsComponent implements OnInit {
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAllByID(this.ID).subscribe(data => {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.LCS.getAllByID(this.token.id).subscribe(data => {
       this.leads = data
     })
     this.FAService.EAgetAll().subscribe(data => {
@@ -95,6 +103,17 @@ export class MesLeadsComponent implements OnInit {
       })
     })
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
+      if (dataS)
+        this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+          data.forEach(val => {
+            this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+            this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+          })
+        })
+      else
+        console.error('Pas de service Commercial')
+    })
   }
 
   //Follow Form
@@ -115,9 +134,10 @@ export class MesLeadsComponent implements OnInit {
   })
 
 
+  @Output() suivreLead = new EventEmitter<LeadCRM>();
+
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({ ...lead })
-    this.showFollow = lead
+    this.suivreLead.emit(lead)
   }
 
   onUpdateFollow() {
@@ -314,4 +334,62 @@ export class MesLeadsComponent implements OnInit {
       }
     }, 15);
   }
+
+
+    showAddEmailInput = false
+    showAddNumberlInput = false
+    showAddWhatNumberlInput = false
+
+
+    onInitAddEmailInput(type: string) {
+
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            this.showAddEmailInput = true
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = true
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = true
+        }
+    }
+
+    onAddElseContact(event: any, lead: LeadCRM, type: string) {
+        // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            lead.email = lead.email + " ;" + event.target.value
+        }
+        if (type == "number") {
+            lead.numero_phone = lead.numero_phone + "; " + event.target.value
+        }
+        if (type == "whatsapp") {
+            lead.numero_whatsapp = lead.numero_whatsapp + " ;" + event.target.value
+        }
+        this.LCS.update(lead).subscribe(data => {
+            this.leads.splice(this.leads.indexOf(lead), 1, data)
+            this.ToastService.add({ severity: "success", summary: "Mise à jour avec succès" })
+        })
+    }
+
+    onHideAddEmailInput(type: string) {
+        if (!type){
+            return
+        }
+        if (type == "email") {
+            this.showAddEmailInput = false
+        }
+        if (type == "number") {
+            this.showAddNumberlInput = false
+        }
+        if (type == "whatsapp") {
+            this.showAddWhatNumberlInput = false
+        }
+    }
+
 }

@@ -149,6 +149,9 @@ const user_schema = new mongoose.Schema({
     savedAdministration: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "prospect" }], default: []
     },
+    savedLeadCRM: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "leadCRM" }], default: []
+    },
 
 
 });

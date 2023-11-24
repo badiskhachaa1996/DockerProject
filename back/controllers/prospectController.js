@@ -662,7 +662,7 @@ app.get("/getAll", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
 app.get("/getAllLocal", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'Local' }).populate("user_id").populate('decision.membre').populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -670,7 +670,16 @@ app.get("/getAllLocal", (req, res, next) => {
 });
 app.get("/getAllInt", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, lead_type: 'International' }).populate("user_id").populate('decision.membre').populate('agent_id').sort({ date_creation: -1 })
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllInsDef", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: 'Inscription définitive' }).populate("user_id").populate('agent_id').sort({ date_creation: -1 })
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -914,13 +923,13 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
-    console.log(req.body)
+    console.log(req.body, req.body.decision)
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
         }, { new: true })
         .then((prospectUpdated) => {
-            Prospect.findById(prospectUpdated._id).populate("user_id")?.populate('agent_id')
+            Prospect.findById(prospectUpdated._id).populate("user_id")?.populate('agent_id').populate('decision.membre')
                 .then((prospectsFromDb) => {
                     let detail = "Mise à jour des informations"
                     if (req.body.detail)

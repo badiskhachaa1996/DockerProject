@@ -49,7 +49,14 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
-
+app.get("/getByLabel/:label", (req, res) => {
+    //Récupérer un sujet via ID
+    Sujet.findOne({ label: req.params.label }).populate('service_id').then((dataSujet) => {
+        res.status(200).send(dataSujet);
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
 app.post("/updateById/:id", (req, res) => {
     //Mettre à jour un sujet via ID
     Sujet.findByIdAndUpdate(req.params.id,

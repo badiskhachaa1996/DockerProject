@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
+import { Validators, FormGroup, FormControl, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
@@ -32,6 +32,8 @@ import { FileUpload } from 'primeng/fileupload';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { Table } from 'primeng/table';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
+import { LeadCRM } from 'src/app/models/LeadCRM';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -40,7 +42,9 @@ import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 export class PreinscriptionComponent implements OnInit {
   @ViewChild('dt1') dt1: Table | undefined;
   prospects: Prospect[] = [];
+  default_prospects: Prospect[] = [];
   prospectI: Prospect[] = [];
+  default_prospectI: Prospect[] = [];
   PROSPECT: Prospect;
   proscteList: Prospect[] = [];
   prospect_acctuelle: Prospect;
@@ -66,9 +70,61 @@ export class PreinscriptionComponent implements OnInit {
   visibleC: boolean = false;
   nationList = environment.nationalites;
   paysList = environment.pays;
+  paysFiltre = [
+    { label: 'Tous les pays', value: '' },
+    ...this.paysList
+  ]
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  Frythme: String; Fcampus: String; Frentree: String; Fecoles: String; Fformation: String; Fetape: String; Fsource: String;
+
+  onUpdateFiltre() {
+    if (this.selectedTabIndex == 1) {
+      this.prospects = []
+      this.default_prospects.forEach(p => {
+        if (this.allowFilter(p))
+          this.prospects.push(p)
+      })
+    } else {
+      this.prospectI = []
+      this.default_prospectI.forEach(p => {
+        if (this.allowFilter(p))
+          this.prospectI.push(p)
+      })
+    }
+  }
+  filtre_value = {
+    rythme: "",
+    rentree: "",
+    source: '',
+    campus: "",
+    formation: '',
+    ecole: '',
+    phase: '',
+    search: '',
+    pays: ''
+  }
+  allowFilter(lead: Prospect) {
+    let r = true
+    if (this.filtre_value.rythme && this.filtre_value.rythme != lead.rythme_formation)
+      r = false; //console.log(this.filtre_value.rythme, lead.rythme_formation)
+    if (this.filtre_value.rentree && this.filtre_value.rentree != lead.rentree_scolaire)
+      r = false; //console.log(this.filtre_value.rentree, lead.rentree_scolaire)
+    if (this.filtre_value.source && this.filtre_value.source != lead.source)
+      r = false; //console.log(this.filtre_value.source, lead.source)
+    if (this.filtre_value.campus && this.filtre_value.campus != lead.campus_choix_1)
+      r = false; //console.log(this.filtre_value.campus, lead.campus_choix_1)
+    if (this.filtre_value.formation && this.filtre_value.formation != lead.formation)
+      r = false; //console.log(this.filtre_value.formation, lead.formation)
+    if (this.filtre_value.ecole && this.filtre_value.ecole != lead.type_form)
+      r = false; //console.log(this.filtre_value.ecole, lead.type_form)
+    if (this.filtre_value.phase && this.filtre_value.phase != lead.phase_candidature)
+      r = false; //console.log(this.filtre_value.phase, lead.phase_candidature)
+    let search_string = lead?.user_id?.firstname + " " + lead?.user_id?.lastname + " " + lead.customid + " " + lead?.user_id?.email + " " + lead?.user_id?.email_perso
+    if (this.filtre_value.search && !search_string.includes(this.filtre_value.search))
+      r = false; //console.log(this.filtre_value.search, search_string)
+
+    return r
+  }
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
   ];
@@ -122,12 +178,12 @@ export class PreinscriptionComponent implements OnInit {
   campusfiltre =
     [
       { value: null, label: "Tous les campus" },
-      { value: "Paris", label: "Paris - France" },
-      { value: "Montpellier", label: "Montpellier - France" },
-      { value: "Brazzaville", label: "Brazzaville - Congo" },
-      { value: "Rabat", label: "Rabat - Maroc" },
-      { value: "La Valette", label: "La Valette - Malte" },
-      { value: "UAE", label: "UAE - Dubai" },
+      { value: "Paris - France", label: "Paris - France" },
+      { value: "Montpellier - France", label: "Montpellier - France" },
+      { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+      { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+      { value: "La Valette - Malte", label: "La Valette - Malte" },
+      { value: "UAE - Dubai", label: "UAE - Dubai" },
       { value: "En ligne", label: "En ligne" },
     ];
   sourceFiltre = [
@@ -207,55 +263,55 @@ export class PreinscriptionComponent implements OnInit {
   EcoleFiltre = [{
     label: "Toutes les écoles", value: null
   }]
-  newLeadForm: UntypedFormGroup = new UntypedFormGroup({
-    type: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue: new UntypedFormControl(''),
-    ville: new UntypedFormControl(''),
-    codep: new UntypedFormControl(''),
+  newLeadForm: FormGroup = new FormGroup({
+    type: new FormControl(''),
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0]),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
   });
-  updateLeadForm: UntypedFormGroup = new UntypedFormGroup({
-    lead_type: new UntypedFormControl('', Validators.required),
-    type_form: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus_choix_1: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue_adresse: new UntypedFormControl(''),
-    ville_adresse: new UntypedFormControl(''),
-    postal_adresse: new UntypedFormControl(''),
-    _id: new UntypedFormControl('', Validators.required),
-    user_id: new UntypedFormControl('', Validators.required),
+  updateLeadForm: FormGroup = new FormGroup({
+    lead_type: new FormControl(''),
+    type_form: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus_choix_1: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0]),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    _id: new FormControl('', Validators.required),
+    user_id: new FormControl('', Validators.required),
   })
   formAffectation = new UntypedFormGroup({
     _id: new UntypedFormControl('', Validators.required),
@@ -263,29 +319,29 @@ export class PreinscriptionComponent implements OnInit {
     date_limite: new UntypedFormControl(''),
     note_assignation: new UntypedFormControl(''),
   })
-  RIForm: UntypedFormGroup = new UntypedFormGroup({
-    etudiant: new UntypedFormControl('', Validators.required),
-    ecole: new UntypedFormControl('', [Validators.required]),
-    commercial: new UntypedFormControl('',),
-    source: new UntypedFormControl('', Validators.required),
-    lastname: new UntypedFormControl('', Validators.required),
-    firstname: new UntypedFormControl('', Validators.required),
-    civilite: new UntypedFormControl(environment.civilite[0], Validators.required),
-    date_naissance: new UntypedFormControl('', Validators.required),
-    nationalite: new UntypedFormControl(this.nationList[0], Validators.required),
-    pays: new UntypedFormControl(this.paysList[76], Validators.required),
-    email_perso: new UntypedFormControl('', Validators.required),
-    indicatif: new UntypedFormControl('', Validators.required),
-    phone: new UntypedFormControl('', Validators.required),
-    campus: new UntypedFormControl(this.campusDropdown[0]),
-    rentree_scolaire: new UntypedFormControl(''),
-    programme: new UntypedFormControl(this.programList[0], Validators.required),
-    formation: new UntypedFormControl('', Validators.required),
-    rythme_formation: new UntypedFormControl('', Validators.required),
-    nomlead: new UntypedFormControl(''),
-    rue: new UntypedFormControl(''),
-    ville: new UntypedFormControl(''),
-    codep: new UntypedFormControl(''),
+  RIForm: FormGroup = new FormGroup({
+    etudiant: new FormControl('', Validators.required),
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    civilite: new FormControl(environment.civilite[0], Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl(this.nationList[0], Validators.required),
+    pays: new FormControl(this.paysList[76], Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    indicatif: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    campus: new FormControl(this.campusDropdown[0]),
+    rentree_scolaire: new FormControl(''),
+    programme: new FormControl(this.programList[0]),
+    formation: new FormControl('', Validators.required),
+    rythme_formation: new FormControl('', Validators.required),
+    nomlead: new FormControl(''),
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
   })
 
   RegisterForm2: UntypedFormGroup = new UntypedFormGroup({
@@ -293,10 +349,11 @@ export class PreinscriptionComponent implements OnInit {
     commercial: new UntypedFormControl('',),
     source: new UntypedFormControl('', Validators.required)
   })
-  DecisionForm: UntypedFormGroup = new UntypedFormGroup({
-    decisoin_admission: new UntypedFormControl('', [Validators.required]),
-    explication: new UntypedFormControl('',),
-    date_d: new UntypedFormControl('',)
+  DecisionForm: FormGroup = new FormGroup({
+    decisoin_admission: new FormControl('', [Validators.required]),
+    explication: new FormControl('',),
+    date_d: new FormControl('',),
+    membre: new FormControl('')
   })
   entretienForm: UntypedFormGroup = new UntypedFormGroup({
     date_e: new UntypedFormControl('',),
@@ -315,8 +372,8 @@ export class PreinscriptionComponent implements OnInit {
     private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService, private VenteService: VenteService,
     private ToastService: MessageService, private rhService: RhService, private NotifService: NotificationService,
     private SujetService: SujetService, private ServiceService: ServService, private CandidatureService: CandidatureLeadService,
-    private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService) { }
-
+    private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService, private CollaborateurService: RhService) { }
+  memberDropdown = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
@@ -324,6 +381,12 @@ export class PreinscriptionComponent implements OnInit {
       data.forEach(u => {
         this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
         this.userDic[u._id] = u
+      })
+    })
+    this.CollaborateurService.getCollaborateurs().then(cs => {
+      cs.forEach(c => {
+        if (c?.user_id)
+          this.memberDropdown.push({ label: `${c.user_id.firstname} ${c.user_id.lastname}`, value: c.user_id })
       })
     })
     if (localStorage.getItem("token") != null) {
@@ -398,9 +461,11 @@ export class PreinscriptionComponent implements OnInit {
       //recuperation des prospect 
       this.admissionService.getAllLocal().subscribe((results => {
         this.prospects = results
+        this.default_prospects = results
       }))
       this.admissionService.getAllInt().subscribe((results => {
         this.prospectI = results
+        this.default_prospectI = results
       }))
       this.CandidatureService.getAll().subscribe(cs => {
         cs.forEach(c => {
@@ -566,10 +631,12 @@ export class PreinscriptionComponent implements OnInit {
         if (responsePRO.lead_type == 'Local')
           this.admissionService.getAllLocal().subscribe((results => {
             this.prospects = results
+            this.default_prospects = results
           }))
         else
           this.admissionService.getAllInt().subscribe((results => {
             this.prospectI = results
+            this.default_prospectI = results
           }))
         this.newLeadForm.reset()
         this.ServiceService.getAServiceByLabel("Administration").subscribe((response) => {
@@ -672,7 +739,7 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-  docProspectList = []
+  docProspectList: Prospect[] = []
 
   onshowDossier(student: Prospect) {
     this.defaultEtatDossier = student.etat_dossier;
@@ -724,13 +791,11 @@ export class PreinscriptionComponent implements OnInit {
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(data => console.log(data))
   }
   conersiondate(a) {
-    const dl = a // Supposons que project.debut soit une date valide
-    const dateObjectl = new Date(dl); // Conversion en objet Date
+    const dateObjectl = new Date(a); // Conversion en objet Date
     const year = dateObjectl.getFullYear();
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
-    const new_date = `${year}-${month}-${day}`;
-    return new_date
+    return `${year}-${month}-${day}`
   }
   onTabClose(e) {
     this.proscteList.splice(e.index - 4, 1)
@@ -747,28 +812,66 @@ export class PreinscriptionComponent implements OnInit {
     }
   }
   onSelectEtat(event: any, procpect: Prospect) {
-    procpect.etat_dossier = event.value
+    if (event && event.value)
+      procpect.etat_dossier = event.value
+    else
+      procpect.etat_dossier = event
+
     this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
   }
   deletePro(prospect: Prospect) {
-    console.log("hello")
-    this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => { console.log(res) });
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?'))
+      this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => {
+        if (this.prospectI.indexOf(prospect) != -1) {
+          this.prospectI.splice(this.prospectI.indexOf(prospect), 1)
+          this.default_prospectI.splice(this.default_prospectI.indexOf(prospect), 1)
+        }
+        if (this.prospects.indexOf(prospect) != -1) {
+          this.prospects.splice(this.prospects.indexOf(prospect), 1)
+          this.default_prospectI.splice(this.default_prospects.indexOf(prospect), 1)
+        }
+
+        this.ToastService.add({ severity: 'success', summary: 'Lead supprimé avec succès' })
+      });
+  }
+  InitDecision(prospect: Prospect) {
+    this.DecisionForm.patchValue({
+      date_d: this.conersiondate(prospect.decision.date_decision),
+      decisoin_admission: prospect.decision.decision_admission,
+      explication: prospect.decision.expliquation,
+      membre: prospect.decision.membre?._id
+    })
   }
   adddicision(prospect: Prospect) {
-    this.prospect_acctuelle.decision.date_decision = this.DecisionForm.value.date_d;
-    this.prospect_acctuelle.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
-    this.prospect_acctuelle.decision.expliquation = this.DecisionForm.value.explication;
-    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
-
-
+    prospect.decision.date_decision = this.DecisionForm.value.date_d;
+    prospect.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
+    prospect.decision.expliquation = this.DecisionForm.value.explication;
+    prospect.decision.membre = this.DecisionForm.value.membre;
+    console.log(prospect.decision.membre)
+    this.admissionService.updateV2({ ...prospect }).subscribe(res => {
+      this.ToastService.add({ severity: 'success', summary: 'Modification de la décision avec succès' })
+      this.modeAffichageE4 = 'Voir'
+    });
   }
-  addEntretien() {
-    this.prospect_acctuelle.entretien.Duree = this.entretienForm.value.duree_e;
-    this.prospect_acctuelle.entretien.choix = this.entretienForm.value.choix;
-    this.prospect_acctuelle.entretien.date_entretien = this.entretienForm.value.date_e;
-    this.prospect_acctuelle.entretien.niveau = this.entretienForm.value.niveau;
-    this.prospect_acctuelle.entretien.parcours = this.entretienForm.value.parcour;
-    this.admissionService.updateV2(this.prospect_acctuelle).subscribe(res => { console.log(res) });
+  InitEntretien(prospect: Prospect) {
+    this.entretienForm.patchValue({
+      duree_e: prospect.entretien.Duree,
+      choix: prospect.entretien.choix,
+      date_e: this.conersiondate(new Date(prospect.entretien.date_entretien)),
+      niveau: prospect.entretien.niveau,
+      parcour: prospect.entretien.parcours,
+    })
+  }
+  addEntretien(prospect: Prospect) {
+    prospect.entretien.Duree = this.entretienForm.value.duree_e;
+    prospect.entretien.choix = this.entretienForm.value.choix;
+    prospect.entretien.date_entretien = this.entretienForm.value.date_e;
+    prospect.entretien.niveau = this.entretienForm.value.niveau;
+    prospect.entretien.parcours = this.entretienForm.value.parcour;
+    this.admissionService.updateV2({ ...prospect }).subscribe(res => {
+      this.ToastService.add({ severity: 'success', summary: 'Modification de l\'entretien avec succès' })
+      this.modeAffichageE3 = 'Voir'
+    });
   }
   showDialog(ticket: any) {
     this.visible = true;
@@ -781,8 +884,9 @@ export class PreinscriptionComponent implements OnInit {
       })
     })
   }
-
+  ProspectToUpdate: Prospect
   initupdateLeadForm(prospect: Prospect) {
+    this.ProspectToUpdate = prospect
     this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         let dicFilFr = {}
@@ -875,7 +979,16 @@ export class PreinscriptionComponent implements OnInit {
   }
   UpdateProspect() {
     this.admissionService.update({ prospect: { ...this.updateLeadForm.value }, user: { ...this.updateLeadForm.value, _id: this.updateLeadForm.value.user_id } }).subscribe(p => {
-      console.log(p)
+      this.admissionService.getPopulate(p._id).subscribe(p => {
+        if (this.prospectI.indexOf(this.ProspectToUpdate) != -1) {
+          this.prospectI.splice(this.prospectI.indexOf(this.ProspectToUpdate), 1, p)
+          this.default_prospectI.splice(this.default_prospectI.indexOf(this.ProspectToUpdate), 1, p)
+        }
+        if (this.prospects.indexOf(this.ProspectToUpdate) != -1) {
+          this.prospects.splice(this.prospects.indexOf(this.ProspectToUpdate), 1, p)
+          this.default_prospectI.splice(this.default_prospects.indexOf(this.ProspectToUpdate), 1, p)
+        }
+      })
       this.showupdateLeadForm = false
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du prospect avec succès' })
     }, error => {
@@ -913,7 +1026,6 @@ export class PreinscriptionComponent implements OnInit {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
-
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
     }, (error) => {
       console.error(error)
@@ -1051,12 +1163,44 @@ export class PreinscriptionComponent implements OnInit {
   seePaiements = false
   partenaireOwned: string = null
   commercialOwned: CommercialPartenaire
+  RENTREE: RentreeAdmission[]
   rowExpand(prospect: Prospect) {
     if (prospect?.code_commercial)
       this.commercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
         if (commercial && commercial.user_id)
           this.commercialOwned = commercial
       })
+    //
+    this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
+      this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
+        this.RENTREE = dataEcoles
+        let dicFilFr = {}
+        let fFrList = []
+        data.formations.forEach(f => {
+          if (dicFilFr[f.filiere]) {
+            dicFilFr[f.filiere].push({ label: f.nom, value: f.nom })
+          } else {
+            dicFilFr[f.filiere] = [{ label: f.nom, value: f.nom }]
+            fFrList.push(f.filiere)
+          }
+        })
+        fFrList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programeFrDropdown.push(
+            { label: f, value: f, items: dicFilFr[ft] }
+          )
+        })
+        dataEcoles.forEach(rentre => {
+          this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+        })
+      })
+      this.campusDropdown = []
+      data.campus.forEach(c => {
+        this.campusDropdown.push({ label: c, value: c })
+      })
+    })
   }
   initPaiement(prospect: Prospect) {
     this.showPaiement = prospect
@@ -1382,7 +1526,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   ListDocuments: String[] = []
   ListPiped: String[] = []
-  AddDocumentOnglet(prospect) {
+  AddDocumentOnglet(prospect: Prospect) {
     this.docProspectList.push(prospect)
     console.log(this.docProspectList)
     setTimeout(() => {
@@ -1391,10 +1535,14 @@ export class PreinscriptionComponent implements OnInit {
 
   }
   handleChange(event) {
-    console.log(event)
+    //console.log(event)
+
     if (this.selectedTabIndex > (3 + this.proscteList.length)) {
-      this.initDocument(this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)])
-    }
+      let p: Prospect = this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)]
+      this.initDocument(p)
+      this.onshowDossier(p)
+    } else
+      this.onUpdateFiltre()
   }
   initDocument(prospect) {
     this.PROSPECT = prospect;
@@ -1581,7 +1729,18 @@ export class PreinscriptionComponent implements OnInit {
       })
   }
   clearFilter() {
-    this.Frythme = null; this.Fcampus = null; this.Frentree = null; this.Fecoles = null; this.Fformation = null; this.Fetape = null; this.Fsource = null;
+    this.filtre_value = {
+      rythme: "",
+      rentree: "",
+      source: '',
+      campus: "",
+      formation: '',
+      ecole: '',
+      phase: '',
+      search: '',
+      pays: ''
+    }
+    this.onUpdateFiltre()
   };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);
@@ -1648,5 +1807,6 @@ export class PreinscriptionComponent implements OnInit {
       return `${total}€`
     }
   }
-
+  modeAffichageE3 = 'Voir'
+  modeAffichageE4 = 'Voir'
 }

@@ -135,14 +135,8 @@ export class InscriptionComponent implements OnInit {
 
   ngOnInit(): void {
     //RECUPERATION PROSPECT
-    this.admissionService.getAll().subscribe((results => {
-      results.forEach((result) => {
-        if (result.traited_by == "Local") {
-          this.prospects.push(result);
-        } else { this.prospectI.push(result); }
-        console.log(this.prospects);
-
-      })
+    this.admissionService.getAllInsDef().subscribe((results => {
+      this.prospects = results
     }))
     //RECUPERATION ECOLES
     this.FAService.EAgetAll().subscribe(data => {

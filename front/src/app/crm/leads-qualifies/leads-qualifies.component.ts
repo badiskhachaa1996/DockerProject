@@ -13,6 +13,8 @@ import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 import { ActivatedRoute } from '@angular/router';
+import { ServService } from 'src/app/services/service.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-leads-qualifies',
   templateUrl: './leads-qualifies.component.html',
@@ -150,7 +152,7 @@ export class LeadsQualifiesComponent implements OnInit {
 
 
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
-    private ProspectService: AdmissionService, private TeamCRMService: TeamsCrmService, private route: ActivatedRoute) { }
+    private ProspectService: AdmissionService, private ServService: ServService, private route: ActivatedRoute, private UserService: AuthService) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     if (!this.ID)
@@ -174,11 +176,16 @@ export class LeadsQualifiesComponent implements OnInit {
       })
     })
     this.filterPays = this.filterPays.concat(environment.pays)
-    this.TeamCRMService.MIgetAll().subscribe(data => {
-      data.forEach(val => {
-        this.filterAffecte.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
-      })
-
+    this.ServService.getAServiceByLabel('Commercial').subscribe(dataS => {
+      if (dataS)
+        this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
+          data.forEach(val => {
+            this.memberList.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+            this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
+          })
+        })
+      else
+        console.error('Pas de service Commercial')
     })
 
   }

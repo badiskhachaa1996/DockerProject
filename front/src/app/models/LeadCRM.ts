@@ -1,7 +1,10 @@
+import { User } from "./User";
+
 export class LeadCRM {
     constructor(
         public source?: string,
         public operation?: string,
+        public statut_dossier?: string,
         public civilite?: string,
         public nom?: string,
         public prenom?: string,
@@ -55,14 +58,13 @@ export class LeadCRM {
 
         //Affectation
         public affected_date?: Date,
-        public affected_to_member?: any,
+        public affected_to_member?: User,
 
         //Choix Prospects
         public rythme?: string,
         public ecole?: string,
         public formation?: string,
         public campus?: string,
-        public eduhorizon?: string,
         public note_choix?: string,
 
         public documents?: {

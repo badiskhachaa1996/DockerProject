@@ -240,7 +240,7 @@
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" rowExpandMode="single"
                 [value]="commercialPartenaires" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['code_commercial_partenaire', 'statut']"
-                [totalRecords]="commercialPartenaires.length" responsiveLayout="scroll"
+                [totalRecords]="commercialPartenaires.length" responsiveLayout="scroll" 
                 styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -251,9 +251,9 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
-                        <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                        <!--<button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
                             style="float: right;margin-left:2%" *ngIf="!idPartenaire">
-                        </button>
+                        </button>-->
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
