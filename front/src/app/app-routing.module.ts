@@ -236,6 +236,7 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { CriteresComponent } from './crm/criteres/criteres.component';
 const routes: Routes = [
     {
         path: '',
@@ -299,6 +300,11 @@ const routes: Routes = [
             {
                 path: 'ecole/:id',
                 component: ListEcoleComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'crm-criteres',
+                component: CriteresComponent,
                 canActivate: [AuthGuardService],
             },
             {

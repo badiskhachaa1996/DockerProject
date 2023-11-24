@@ -5612,6 +5612,11 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['crm/teams'],
                                                 },
                                                 {
+                                                    label: 'Gestion des critères',
+                                                    icon: 'pi pi-users',
+                                                    routerLink: ['crm-criteres'],
+                                                },
+                                                {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
                                                     routerLink: [''],
