@@ -338,16 +338,13 @@ const prospect_schema = new mongoose.Schema({
             type: Number,
             default: 0
         }, niveau: {
-            type: String,
-            default: "0"
+            type: String
         },
         parcours: {
-            type: String,
-            default: "0"
+            type: String
         },
         choix: {
-            type: String,
-            default: " "
+            type: String
         }
     },
     decision: {
@@ -362,6 +359,10 @@ const prospect_schema = new mongoose.Schema({
         date_decision: {
             type: Date,
             default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
+        },
+        membre: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
         }
     },
     teams: {

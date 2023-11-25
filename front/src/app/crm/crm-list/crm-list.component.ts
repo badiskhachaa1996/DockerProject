@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-crm-list',
   templateUrl: './crm-list.component.html',
@@ -12,6 +13,7 @@ export class CrmListComponent implements OnInit {
   leadList: LeadCRM[] = []
   base_idx = -3
   selectedTabIndex = 1
+  eventsSubject: Subject<LeadCRM> = new Subject<LeadCRM>();
   constructor(private UserService: AuthService) { }
   suivreLead(event: LeadCRM) {
     let ids = []
@@ -27,6 +29,9 @@ export class CrmListComponent implements OnInit {
 
       })
     }
+  }
+  newLead(event: LeadCRM) {
+    this.eventsSubject.next(event);
   }
   token;
   ngOnInit(): void {

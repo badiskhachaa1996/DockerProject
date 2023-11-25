@@ -106,7 +106,10 @@ export class AuthService {
     let registreUrl = this.apiUrl + "getByEmail/" + email;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
-
+  getByEmailIMS(email: string) {
+    let registreUrl = this.apiUrl + "getByEmailIMS/" + email;
+    return this.http.get<User>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   update(user: any) {
     let registreUrl = this.apiUrl + "updateById/" + user._id;
     return this.http.post<User>(registreUrl, { user }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -375,9 +378,9 @@ export class AuthService {
     return this.http.get<{ cv_id, lastname, firstname, email, email_perso, winner_email, winner_lastname, civilite, profile, winner_firstname, winner_id, profilePic }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllAgentByTicketing(service_id){
+  getAllAgentByTicketing(service_id) {
     let url = `${this.apiUrl}getAllAgentByTicketing/${service_id}`;
-    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });   
+    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

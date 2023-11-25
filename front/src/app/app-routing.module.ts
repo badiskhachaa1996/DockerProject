@@ -242,6 +242,8 @@ import { CrmListComponent } from './crm/crm-list/crm-list.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
+import {GestionSrourcesComponent} from "./crm/gestion-srources/gestion-srources.component";
+import {GestionOperationComponent} from "./crm/gestion-operation/gestion-operation.component";
 const routes: Routes = [
     {
         path: '',
@@ -535,7 +537,7 @@ const routes: Routes = [
             // {
             //     path: 'list-remboursement',
             //     component: RemboursementListComponent,
-            //     canActivate: [AuthGuardService],  
+            //     canActivate: [AuthGuardService],
             // },
             {
                 path: 'remboursements',
@@ -930,12 +932,12 @@ const routes: Routes = [
                 component: GenDocLettreAcceptationComponent,
                 canActivate: [AuthGuardService],
             },
-            /* Module CRM */
+            /* Module CRM
             {
                 path: 'crm/leads/ajout',
                 component: AjoutLeadcrmComponent,
                 canActivate: [AuthGuardService],
-            },
+            },*/
 
             {
                 path: 'crm/leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
@@ -1034,6 +1036,18 @@ const routes: Routes = [
                 component: GestionProduitsComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm/gestion-sources',
+                component: GestionSrourcesComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'crm/gestion-operations',
+                component: GestionOperationComponent,
+                canActivate: [AuthGuardService],
+            },
+
 
             /* Intuns */
             {
@@ -1168,7 +1182,7 @@ const routes: Routes = [
             // Generateur de Doc
             { path: 'imatch/entreprise', component: NewEntreprisesComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/annonce/entreprise/:entreprise_id', component: AnnonceViewerComponent, canActivate: [AuthGuardService], },
-            // Generateur de Doc 
+            // Generateur de Doc
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
