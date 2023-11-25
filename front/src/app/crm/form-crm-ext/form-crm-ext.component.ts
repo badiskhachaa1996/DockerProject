@@ -71,7 +71,7 @@ export class FormCrmExtComponent implements OnInit {
   addForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
-    email: new FormControl(''),
+    email: new FormControl('', Validators.required),
     numero_phone: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
     whatsapp: new FormControl("Non"),
@@ -88,8 +88,12 @@ export class FormCrmExtComponent implements OnInit {
       numero_whatsapp = this.addForm.value.numero_phone
     this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
       this.addForm.reset()
-      this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
-    })
+      //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+    },
+      ((error) => {
+        this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
+        console.error(error);
+      }))
   }
 
   generateID() {

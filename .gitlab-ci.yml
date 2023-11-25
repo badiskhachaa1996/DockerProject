@@ -3,7 +3,7 @@ stages:
   - Build
 #  - SAST
 #  - DAST
-  - Docker
+#  - Docker
   - DEV
   - QA
   - PROD
@@ -27,7 +27,8 @@ stages:
 
 node_dependencies:
   stage: Install
-  tags: [dev-shell, qa-shell]
+  tags:
+    - dev-shell # FIXME QA PROD
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -42,7 +43,8 @@ node_dependencies:
 
 angular_dependencies:
   stage: Install
-  tags: [dev-shell, qa-shell]
+  tags:
+    - dev-shell # FIXME QA PROD
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -85,7 +87,8 @@ angular_dependencies:
 
 build_angular:
   stage: Build
-  tags: [dev-shell, qa-shell]  # FIXME PROD
+  tags:
+    - dev-shell # FIXME QA PROD
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -121,41 +124,41 @@ build_angular:
 
 #======================================================
 
-angular_docker_build:
-  stage: Docker
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
-  before_script:
-    - docker info
-  script: 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG .
-    - docker push $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - front/Dockerfile
-      when: manual
-      allow_failure: true # FIXME
+# angular_docker_build:
+#   stage: Docker
+#   image: docker:24.0.5
+#   services:
+#     - docker:24.0.5-dind
+#   before_script:
+#     - docker info
+#   script: 
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG .
+#     - docker push $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       changes:
+#         - front/Dockerfile
+#       when: manual
+#       allow_failure: true # FIXME
 
-node_docker_build:
-  stage: Docker
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
-  before_script:
-    - docker info
-  script: 
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG .
-    - docker push $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - back/Dockerfile
-      when: manual
-      allow_failure: true # FIXME
+# node_docker_build:
+#   stage: Docker
+#   image: docker:24.0.5
+#   services:
+#     - docker:24.0.5-dind
+#   before_script:
+#     - docker info
+#   script: 
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG .
+#     - docker push $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       changes:
+#         - back/Dockerfile
+#       when: manual
+#       allow_failure: true # FIXME
 
 #======================================================
 

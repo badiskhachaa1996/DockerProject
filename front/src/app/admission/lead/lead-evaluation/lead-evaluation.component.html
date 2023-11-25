@@ -18,17 +18,30 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-eval>
-            <tr>
+            <tr *ngIf="!resultatDic[eval._id]">
                 <td>{{eval.label}}</td>
-                <td>X/{{eval.score}}</td>
+                <td>?/{{eval.score}}</td>
                 <td>
                     <strong>Durée du test</strong> 30 min<br>
-                    <strong>Durée mise</strong>{{eval.duree}} min
+                    <strong>Durée mise</strong>?? min
                 </td>
-                <td>XXX</td>
-                <td>XXX</td>
+                <td>{{eval.etat}}</td>
+                <td>???</td>
                 <td>
                     <a (click)="onStartEval(eval)">Passer le test</a>
+                </td>
+            </tr>
+            <tr *ngIf="resultatDic[eval._id]">
+                <td>{{eval.label}}</td>
+                <td>{{resultatDic[eval._id]?.note}}/{{eval.score}}</td>
+                <td>
+                    <strong>Durée du test</strong> 30 min<br>
+                    <strong>Durée mise</strong>{{resultatDic[eval._id]?.duree_mise}} min
+                </td>
+                <td>{{eval.etat}}</td>
+                <td>{{resultatDic[eval._id]?.date_passation | date:'dd MMMM YYYY'}}</td>
+                <td>
+
                 </td>
             </tr>
         </ng-template>
