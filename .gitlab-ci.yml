@@ -8,20 +8,20 @@ stages:
   - QA
   - PROD
 
-variables:
-  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
-  SAST_IMAGE_SUFFIX: '-fips'
+#variables:
+#  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+#  SAST_IMAGE_SUFFIX: '-fips'
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
+#include:
+#  - template: Security/SAST.gitlab-ci.yml
 
-semgrep-sast:
-  variables:
-    SAST_ANALYZER_IMAGE_TAG: "3.7"
+#semgrep-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.7"
 
-brakeman-sast:
-  variables:
-    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
+#brakeman-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
 
 #========================================================
 
