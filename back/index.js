@@ -12,10 +12,12 @@ let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a03
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  if (!argProd.includes("dev") && !argProd.includes("prod")) {
+  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25"];
+  } else if (argProd.includes("qa")) {
+    origin = ["https://152.228.219.55"];
   } else
     origin = [
       "https://ims.estya.com",
