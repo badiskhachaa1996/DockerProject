@@ -1,48 +1,48 @@
 stages:
-  - install_dependencies
-  - test
-  - build
-  - sast
-  - dast
-  - docker
-  - deploy
+  - Install
+  - Build
+#  - SAST
+#  - DAST
+  - Docker
+  - DEV
+  - QA
+  - PROD
 
-variables:
-  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
-  SAST_IMAGE_SUFFIX: '-fips'
+#variables:
+#  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+#  SAST_IMAGE_SUFFIX: '-fips'
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
+#include:
+#  - template: Security/SAST.gitlab-ci.yml
 
-semgrep-sast:
-  variables:
-    SAST_ANALYZER_IMAGE_TAG: "3.7"
+#semgrep-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.7"
 
-brakeman-sast:
-  variables:
-    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
+#brakeman-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
 
 #========================================================
 
-node_dependencies_dev:
-  stage: install_dependencies
-  tags:
-  - dev-shell
+node_dependencies:
+  stage: Install
+  tags: [dev-shell, qa-shell]
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - back/node_modules/
   script:
     - cd back
+    - rm -rf node_modules/
     - npm install
   only:
     changes:
       - back/package-lock.json
 
-angular_dependencies_dev:
-  stage: install_dependencies
-  tags:
-  - dev-shell
+angular_dependencies:
+  stage: Install
+  tags: [dev-shell, qa-shell]
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -51,49 +51,41 @@ angular_dependencies_dev:
     - cd front
     - rm -rf node_modules/
     - npm install
-    - npm uninstall angular2-signaturepad
-    - npm install angular2-signaturepad@3.0.4
   only:
     changes:
       - front/package-lock.json
 
-# FIXME QA
-# FIXME PROD
-
 #========================================================
 
-sonarqube-check:
-  stage: test
-  image: 
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  # cache:
-  #   key: "${CI_JOB_NAME}"
-  #   paths:
-  #     - .sonar/cache
-  script:
-    - >
-      sonar-scanner 
-      -Dsonar.projectKey=elitech-ecole_ems3_AXzmfloY1eE81W_XHtln
-      -Dsonar.qualitygate.wait=true
-      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
-      -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=back/controllers,back/models,back/middleware,front/src/app/
+# sonarqube-check:
+#   image: 
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   # cache:
+#   #   key: "${CI_JOB_NAME}"
+#   #   paths:
+#   #     - .sonar/cache
+#   script:
+#     - >
+#       sonar-scanner 
+#       -Dsonar.projectKey=elitech-ecole_ems3_AXzmfloY1eE81W_XHtln
+#       -Dsonar.qualitygate.wait=true
+#       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
+#       -Dsonar.test.inclusions=**/*.spec.ts
+#       -Dsonar.sources=back/controllers,back/models,back/middleware,front/src/app/
    
-  allow_failure: true
-  tags:
-    - dev-docker
+#   allow_failure: true
+#   tags:
+#     - dev-docker # FIXME QA PROD
 
 #========================================================
 
 build_angular:
-  stage: build
-  tags:
-    - dev-shell
-    - qa-shell
+  stage: Build
+  tags: [dev-shell, qa-shell]  # FIXME PROD
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -104,7 +96,7 @@ build_angular:
       - cd front
       - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
-    - develop
+    - develop # FIXME
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -112,18 +104,17 @@ build_angular:
     expire_in: 1 hour
 #  when: manual
 
-spotbugs-sast:
-  stage: sast
-  dependencies:
-    - build_angular
-  variables:
-    FAIL_NEVER: 1
-  allow_failure: true
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
+#spotbugs-sast:
+#  dependencies:
+#    - build_angular
+#  variables:
+#    FAIL_NEVER: 1
+#  allow_failure: true
+#  artifacts:
+#    reports:
+#      sast: gl-sast-report.json
 
-# dast:
+# DAST:
   # dast_configuration:
     # site_profile: "Inted Group"
     # scanner_profile: "Quick Passive Test"
@@ -131,7 +122,7 @@ spotbugs-sast:
 #======================================================
 
 angular_docker_build:
-  stage: docker
+  stage: Docker
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
@@ -149,7 +140,7 @@ angular_docker_build:
       allow_failure: true # FIXME
 
 node_docker_build:
-  stage: docker
+  stage: Docker
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
@@ -169,7 +160,7 @@ node_docker_build:
 #======================================================
 
 deploy_angular_to_dev:
-  stage: deploy
+  stage: DEV
   dependencies: 
     - build_angular
   tags:
@@ -181,7 +172,7 @@ deploy_angular_to_dev:
     - develop
   
 deploy_node_to_dev:
-  stage: deploy
+  stage: DEV
 
   tags:
     - dev-shell
@@ -189,8 +180,9 @@ deploy_node_to_dev:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index
-    - pm2 start index.js -- --dev
+    - npm start
+   # - pm2 delete index
+   # - pm2 start index.js -- --dev --time
    # - pm2 logs index
   only:
     - develop
@@ -198,7 +190,7 @@ deploy_node_to_dev:
 #======================================================
 
 deploy_angular_to_qa:
-  stage: deploy
+  stage: QA
   dependencies: 
     - build_angular
   tags:
@@ -211,7 +203,7 @@ deploy_angular_to_qa:
   when: manual
   
 deploy_node_to_qa:
-  stage: deploy
+  stage: QA
 
   tags:
     - qa-shell
@@ -219,8 +211,9 @@ deploy_node_to_qa:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index
-    - pm2 start index.js -- --dev
+    - npm start
+   # - pm2 delete index
+   # - pm2 start index.js -- --time
    # - pm2 logs index
   only:
     - develop
@@ -229,7 +222,7 @@ deploy_node_to_qa:
 #======================================================
 
 deploy_angular_to_prod:
-  stage: deploy
+  stage: PROD
   dependencies: 
     - build_angular
   tags:
@@ -244,7 +237,7 @@ deploy_angular_to_prod:
   #environment: production
   
 deploy_node_to_prod:
-  stage: deploy
+  stage: PROD
 
   tags:
     - qa-docker # FIXME

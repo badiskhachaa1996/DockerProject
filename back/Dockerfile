@@ -3,6 +3,8 @@ RUN mkdir -p /opt/app/ims/back
 WORKDIR /opt/app/ims/back
 COPY src/package.json src/package-lock.json ./
 RUN npm install
+#pm2 -g
 COPY src/ .
 EXPOSE 3000
 CMD [ "npm", "start"]
+#CMD ["pm2-runtime", "index.js"]
