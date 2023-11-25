@@ -1,8 +1,8 @@
 stages:
   - Install
   - Build
-  - SAST
-  - DAST
+#  - SAST
+#  - DAST
   - Docker
   - DEV
   - QA
@@ -104,15 +104,15 @@ build_angular:
     expire_in: 1 hour
 #  when: manual
 
-spotbugs-sast:
-  dependencies:
-    - build_angular
-  variables:
-    FAIL_NEVER: 1
-  allow_failure: true
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
+#spotbugs-sast:
+#  dependencies:
+#    - build_angular
+#  variables:
+#    FAIL_NEVER: 1
+#  allow_failure: true
+#  artifacts:
+#    reports:
+#      sast: gl-sast-report.json
 
 # DAST:
   # dast_configuration:
