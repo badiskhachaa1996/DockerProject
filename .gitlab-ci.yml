@@ -180,8 +180,9 @@ deploy_node_to_dev:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index
-    - pm2 start index.js -- --dev
+    - npm start
+   # - pm2 delete index
+   # - pm2 start index.js -- --dev --time
    # - pm2 logs index
   only:
     - develop
@@ -210,8 +211,9 @@ deploy_node_to_qa:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index
-    - pm2 start index.js -- --dev
+    - npm start
+   # - pm2 delete index
+   # - pm2 start index.js -- --time
    # - pm2 logs index
   only:
     - develop
