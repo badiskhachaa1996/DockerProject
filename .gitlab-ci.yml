@@ -183,16 +183,15 @@ deploy_node_to_dev:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - npm start
-   # - pm2 delete index
-   # - pm2 start index.js -- --dev --time
+    - pm2 delete index
+    - pm2 start index.js -- --dev --time
    # - pm2 logs index
   only:
     - develop
 
 #======================================================
 
-deploy_angular_to_qa:
+manual_deploy_angular_to_qa:
   stage: QA
   dependencies: 
     - build_angular
@@ -205,7 +204,7 @@ deploy_angular_to_qa:
     - develop
   when: manual
   
-deploy_node_to_qa:
+manual_deploy_node_to_qa:
   stage: QA
 
   tags:
@@ -214,9 +213,8 @@ deploy_node_to_qa:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - npm start
-   # - pm2 delete index
-   # - pm2 start index.js -- --time
+    - pm2 delete index
+    - pm2 start index.js -- --time
    # - pm2 logs index
   only:
     - develop
@@ -224,7 +222,7 @@ deploy_node_to_qa:
 
 #======================================================
 
-deploy_angular_to_prod:
+manual_deploy_angular_docker_to_prod:
   stage: PROD
   dependencies: 
     - build_angular
@@ -239,7 +237,7 @@ deploy_angular_to_prod:
   when: manual
   #environment: production
   
-deploy_node_to_prod:
+manual_deploy_node_docker_to_prod:
   stage: PROD
 
   tags:
