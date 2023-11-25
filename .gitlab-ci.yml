@@ -184,7 +184,7 @@ deploy_node_to_dev:
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js -- --dev --time
+    - pm2 start index.js --time -- --dev
    # - pm2 logs index
   only:
     - develop
@@ -214,7 +214,7 @@ manual_deploy_node_to_qa:
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js -- --time
+    - pm2 start index.js --time -- --qa
    # - pm2 logs index
   only:
     - develop
@@ -222,32 +222,61 @@ manual_deploy_node_to_qa:
 
 #======================================================
 
-manual_deploy_angular_docker_to_prod:
+manual_deploy_angular_to_prod:
   stage: PROD
   dependencies: 
     - build_angular
   tags:
-    - qa-docker # FIXME
+    - prod-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
   when: manual
-  #environment: production
   
-manual_deploy_node_docker_to_prod:
+manual_deploy_node_to_prod:
   stage: PROD
 
   tags:
-    - qa-docker # FIXME
+    - prod-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod
+   # - pm2 logs index
   only:
     - main
   when: manual
-  #environment: production
+
+# manual_deploy_angular_docker_to_prod:
+#   stage: PROD
+#   dependencies: 
+#     - build_angular
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
+  
+# manual_deploy_node_docker_to_prod:
+#   stage: PROD
+
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
 
