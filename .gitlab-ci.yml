@@ -1,8 +1,8 @@
 stages:
   - Install
   - Build
-  - sast
-  - dast
+  - SAST
+  - DAST
   - Docker
   - DEV
   - QA
@@ -27,15 +27,14 @@ brakeman-sast:
 
 node_dependencies:
   stage: Install
-  tags:
-    - dev-shell
-    - qa-shell
+  tags: [dev-shell, qa-shell]
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - back/node_modules/
   script:
     - cd back
+    - rm -rf node_modules/
     - npm install
   only:
     changes:
@@ -43,9 +42,7 @@ node_dependencies:
 
 angular_dependencies:
   stage: Install
-  tags:
-    - dev-shell
-    - qa-shell
+  tags: [dev-shell, qa-shell]
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -54,14 +51,9 @@ angular_dependencies:
     - cd front
     - rm -rf node_modules/
     - npm install
-    - npm uninstall angular2-signaturepad
-    - npm install angular2-signaturepad@3.0.4
   only:
     changes:
       - front/package-lock.json
-
-# FIXME QA
-# FIXME PROD
 
 #========================================================
 
@@ -87,15 +79,13 @@ sonarqube-check:
    
   allow_failure: true
   tags:
-    - dev-docker
+    - dev-docker # FIXME QA PROD
 
 #========================================================
 
 build_angular:
   stage: Build
-  tags:
-    - dev-shell
-    - qa-shell # FIXME
+  tags: [dev-shell, qa-shell]  # FIXME PROD
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
