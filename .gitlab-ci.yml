@@ -23,7 +23,7 @@ stages:
 #  variables:
 #    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
 
-#========================================================
+#==========================================================
 
 install_node_dependencies_on_dev:
   stage: Install
@@ -57,7 +57,7 @@ install_angular_dependencies_on_dev:
     changes:
       - front/package.json
 
-#======================================================
+#==========================================================
 
 install_node_dependencies_on_qa:
   stage: Install
@@ -72,8 +72,7 @@ install_node_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    changes:
-      - back/package.json
+    - develop
   when: manual
 
 install_angular_dependencies_on_qa:
@@ -89,11 +88,10 @@ install_angular_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    changes:
-      - front/package.json
+    - develop
   when: manual
 
-#======================================================
+#==========================================================
 
 install_node_dependencies_on_prod:
   stage: Install
@@ -108,8 +106,7 @@ install_node_dependencies_on_prod:
     - rm -rf node_modules/
     - npm install
   only:
-    changes:
-      - back/package.json
+    - main
   when: manual
 
 install_angular_dependencies_on_prod:
@@ -125,11 +122,10 @@ install_angular_dependencies_on_prod:
     - rm -rf node_modules/
     - npm install
   only:
-    changes:
-      - front/package.json
+    - main
   when: manual
 
-#========================================================
+#==========================================================
 
 # sonarqube-check:
 #   image: 
@@ -155,7 +151,7 @@ install_angular_dependencies_on_prod:
 #   tags:
 #     - dev-docker # FIXME QA PROD
 
-#========================================================
+#==========================================================
 
 build_angular_on_dev:
   stage: Build
@@ -178,7 +174,7 @@ build_angular_on_dev:
       - front/dist
     expire_in: 1 hour
 
-#======================================================
+#==========================================================
 
 build_angular_on_qa:
   stage: Build
@@ -202,7 +198,7 @@ build_angular_on_qa:
     expire_in: 1 hour
   when: manual
 
-#======================================================
+#==========================================================
 
 build_angular_on_prod:
   stage: Build
@@ -241,7 +237,7 @@ build_angular_on_prod:
     # site_profile: "Inted Group"
     # scanner_profile: "Quick Passive Test"
 
-#======================================================
+#==========================================================
 
 # angular_docker_build:
 #   stage: Docker
@@ -279,7 +275,7 @@ build_angular_on_prod:
 #       when: manual
 #       allow_failure: true # FIXME
 
-#======================================================
+#==========================================================
 
 deploy_angular_to_dev:
   stage: DEV
@@ -308,7 +304,7 @@ deploy_node_to_dev:
   only:
     - develop
 
-#======================================================
+#==========================================================
 
 manual_deploy_angular_to_qa:
   stage: QA
@@ -322,7 +318,7 @@ manual_deploy_angular_to_qa:
   only:
     - develop
   when: manual
-  
+
 manual_deploy_node_to_qa:
   stage: QA
 
@@ -339,7 +335,7 @@ manual_deploy_node_to_qa:
     - develop
   when: manual
 
-#======================================================
+#==========================================================
 
 manual_deploy_angular_to_prod:
   stage: PROD
