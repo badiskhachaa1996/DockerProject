@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AlternantsPartenaireService } from 'src/app/services/alternants-partenaire.service';
@@ -62,7 +62,7 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
   constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService,
     private ToastService: MessageService, private router: Router, private FAService: FormulaireAdmissionService) { }
 
-  RegisterForm = new FormGroup({
+  RegisterForm = new UntypedFormGroup({
     date_creation: new FormControl(new Date()),
     prenom: new FormControl('', Validators.required),
     nom: new FormControl('', Validators.required),

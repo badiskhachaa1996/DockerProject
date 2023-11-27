@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { FormulaireServiceService } from '../formulaire-service.service';
 import { MessageService } from 'primeng/api';
@@ -51,7 +51,7 @@ export class FormulaireFrontComponent implements OnInit {
   dropdownContent2 = []
   dropdownContent3 = []
 
-  formulaire = new FormGroup({
+  formulaire = new UntypedFormGroup({
     texte: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
     telephone: new FormControl(''),

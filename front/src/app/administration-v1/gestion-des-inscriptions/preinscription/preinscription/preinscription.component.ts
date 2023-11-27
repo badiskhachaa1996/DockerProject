@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
@@ -281,7 +281,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0]),
+    // programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -305,7 +305,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus_choix_1: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0]),
+    // programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -337,7 +337,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0]),
+    // programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -1420,13 +1420,13 @@ export class PreinscriptionComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

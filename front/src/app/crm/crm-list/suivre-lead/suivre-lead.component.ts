@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -15,7 +15,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 })
 export class SuivreLeadComponent implements OnInit {
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),

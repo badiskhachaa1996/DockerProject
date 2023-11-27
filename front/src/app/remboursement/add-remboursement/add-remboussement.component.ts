@@ -8,7 +8,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { AuthService } from 'src/app/services/auth.service';
 import { CaptchaModule } from 'primeng/captcha';
 import { MessageService } from 'src/app/services/message.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -129,8 +129,8 @@ export class AddRemboussementComponent implements OnInit {
 
   @Input() isNewDemande = false
 
-  formRembourssement: FormGroup;
-  aFormGroup: FormGroup;
+  formRembourssement: UntypedFormGroup;
+  aFormGroup: UntypedFormGroup;
 
   availableStatus = environment.availableStatus
 
@@ -344,14 +344,14 @@ export class AddRemboussementComponent implements OnInit {
     this.demandeRemboursementService.addRemboursement(demande).subscribe(
       (response) => {
 
-        // Handle success (show a success message)
+        console.log('Before MessageService.add');
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: 'Remboursement added successfully.'
         });
-
-        console.log(response)
+        console.log('After MessageService.add');
+        
 
         for (let key in this.docList) {
           let doc = this.docList[key]

@@ -13,7 +13,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-infoPay>
         <tr>
-            <td><input [disabled]="!infoPay.isUpdating" type="date" [ngModel]="infoPay.date | date:'dd-MM-yyyy'" (ngModelChange)="infoPay.date = $event" /></td>
+            <td><input [disabled]="!infoPay.isUpdating" type="date" [ngModel]="infoPay.date " (ngModelChange)="infoPay.date = $event" /></td>
             <td>{{infoPay.montant}}</td>
             <td><p-dropdown [disabled]="!infoPay.isUpdating" placeholder="Choisir Méthode" [options]="payementMethods" [(ngModel)]="infoPay.method">{{infoPay.method}}</p-dropdown></td>
             <td><textarea  rows="4" cols="50" [disabled]="!infoPay.isUpdating" type="text" [(ngModel)]="infoPay.note"></textarea></td>

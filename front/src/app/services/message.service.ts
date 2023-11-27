@@ -7,9 +7,14 @@ import { environment } from 'src/environments/environment';
 })
 export class MessageService {
 
-  add(arg0: { severity: string; summary: string; detail:any }) {
-    throw new Error(arg0.detail);
+  add(arg0: { severity: string; summary: string; detail: any }) {
+    if (arg0.severity === 'success') {
+      console.log('Success:', arg0.detail);
+    } else {
+      throw new Error(arg0.detail);
+    }
   }
+  
 
   httpOptions1 = { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) };
   apiUrl = environment.origin + "message/"

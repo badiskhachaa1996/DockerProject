@@ -1,6 +1,6 @@
 
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core'
 
@@ -187,7 +187,7 @@ export class ListLeadcrmComponent implements OnInit {
   //Follow Form
   showFollow: LeadCRM = null
 
-  followForm = new FormGroup({
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
@@ -409,7 +409,7 @@ export class ListLeadcrmComponent implements OnInit {
 
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
+  affectForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),
@@ -547,13 +547,13 @@ export class ListLeadcrmComponent implements OnInit {
     :
     FileUpload;
 
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

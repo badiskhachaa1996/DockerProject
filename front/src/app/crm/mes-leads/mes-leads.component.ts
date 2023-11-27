@@ -1,6 +1,6 @@
 
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
 
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -115,7 +115,7 @@ export class MesLeadsComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
@@ -298,7 +298,7 @@ export class MesLeadsComponent implements OnInit {
   ]
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
+  affectForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),

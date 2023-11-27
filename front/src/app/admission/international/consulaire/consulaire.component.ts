@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -555,7 +555,7 @@ export class ConsulaireComponent implements OnInit {
     })
   }
 
-  traitementForm: FormGroup = new FormGroup({
+  traitementForm: UntypedFormGroup = new FormGroup({
     _id: new FormControl(),
     consulaire_date: new FormControl(''),
     a_besoin_visa: new FormControl(''),
@@ -573,7 +573,7 @@ export class ConsulaireComponent implements OnInit {
   //Partie Details
   showDetails: Prospect = null
 
-  detailsForm: FormGroup = new FormGroup({
+  detailsForm: UntypedFormGroup = new FormGroup({
     //Informations Personnelles
     civilite: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
@@ -1017,13 +1017,13 @@ export class ConsulaireComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

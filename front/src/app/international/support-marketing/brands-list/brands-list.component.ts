@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Brand } from 'src/app/models/Brand';
@@ -82,13 +82,13 @@ export class BrandsListComponent implements OnInit {
     })
   }
 
-  addForm = new FormGroup({
+  addForm = new UntypedFormGroup({
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
     logo: new FormControl(''),
   })
 
-  updateForm = new FormGroup({
+  updateForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
@@ -184,13 +184,13 @@ export class BrandsListComponent implements OnInit {
   //Partie Support Marketing
   showAddSM = false
   showUpdateSM: SupportMarketing
-  addFormSM = new FormGroup({
+  addFormSM = new UntypedFormGroup({
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
     brand_id: new FormControl(''),
     date_creation: new FormControl(new Date()),
   })
-  updateFormSM = new FormGroup({
+  updateFormSM = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
