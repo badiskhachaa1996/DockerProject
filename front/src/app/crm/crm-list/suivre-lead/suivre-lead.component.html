@@ -1,3 +1,5 @@
+<input type="file" (change)="FileUpload($event.target.files)" id="selectedFilesuivre"
+#selectedFilesuivre style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 <div class="card col-12" *ngIf="showFollow">
     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showFollow = null"
         aria-hidden="true"> </i>
@@ -5,10 +7,28 @@
         {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
     </h3>
     <p-tabView class="col-12">
-        <p-tabPanel header="Echanges">
-            <div class="col-12">
-                <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
-            </div>
+        <p-tabPanel header="Historique">
+            <form class="p-fluid grid" [formGroup]="formAddHistorique" (ngSubmit)="onAddHistorique()">
+                <div class="field col-12 md:col-3">
+                    <p-dropdown [options]="canalList" placeholder="Veuillez décrire le canal"
+                        [editable]="true" formControlName="canal"></p-dropdown>
+                    <!--<input pInputText type="text" id="tache" formControlName="task"
+                        placeholder="Veuillez décrire l'activité">-->
+                </div>
+                <div class="field col-12 md:col-3" >
+                    <p-dropdown   formControlName="suite_contact"
+                     [options]="suiteContactList" placeholder="joignabilité"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4" >
+                    <input pInputText type="text"  formControlName="note"
+                        placeholder="note" step="15">
+                </div>
+                <div class="col-12 md:col-2">
+                    <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2 "
+                        [disabled]="formAddHistorique.invalid"></button>
+                </div>
+            </form>
+            
             <p-table #dtcontact dataKey="_id" [value]="showFollow.contacts" class="col-12"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -56,7 +76,7 @@
                                         placeholder="Choisissez un membre"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.contact_by}} &nbsp;
+                                    {{contact?.contact_by}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -67,7 +87,7 @@
                                         placeholder="Choisissez un canal"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.canal}} &nbsp;
+                                    {{contact?.canal}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -78,7 +98,7 @@
                                         placeholder="Choisissez un état"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.suite_contact}} &nbsp;
+                                    {{contact?.suite_contact}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -88,7 +108,7 @@
                                     <textarea pInputTextarea [(ngModel)]="contact.note"></textarea>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.note}} &nbsp;
+                                    {{contact?.note}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -101,9 +121,7 @@
             </p-table>
         </p-tabPanel>
         <p-tabPanel header="Document">
-            <div class="col-12">
-                <button pButton label="Ajouter un document" (click)="onAddDocuments()"></button>
-            </div>
+            
             <p-table #dtdocuments dataKey="_id" [value]="showFollow.documents" class="col-12"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -149,6 +167,9 @@
                 </ng-template>
             </p-table>
         </p-tabPanel>
+        <div class="col-12">
+            <button pButton label={{buttonName}} (click)="onAddDocumment()"></button>
+        </div>
         <p-tabPanel header="Mailing">
             <div class="col-12">
                 <button pButton label="Ajouter un mail" (click)="onAddMail()"></button>
@@ -356,9 +377,9 @@
             </p-table>
         </p-tabPanel>
     </p-tabView>
-    <div class="col-12 grid">
+   <!-- <div class="col-12 grid">
         <div class="col-12">
             <button pButton label="Sauvegardez les modifications" (click)="onUpdateFollow()"></button>
         </div>
-    </div>
+    </div>-->
 </div>

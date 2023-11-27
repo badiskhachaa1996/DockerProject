@@ -5,16 +5,24 @@ import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { saveAs } from "file-saver";
 import mongoose from 'mongoose';
+import { AuthService } from 'src/app/services/auth.service';
 import { GestionProduitsService } from '../../gestion-produits/gestion-produits.service';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { User } from 'src/app/models/User';
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-suivre-lead',
   templateUrl: './suivre-lead.component.html',
   styleUrls: ['./suivre-lead.component.scss']
 })
 export class SuivreLeadComponent implements OnInit {
-  showFollow: LeadCRM = null
+  showFollow: LeadCRM = null;
+  token: any;
+  userConnected :User;
+  docAdded:boolean=false
+  buttonName:string="Ajouter";
+  Actuelle_lead:LeadCRM = null
   followForm = new FormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
@@ -28,7 +36,11 @@ export class SuivreLeadComponent implements OnInit {
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
   })
-
+  formAddHistorique=new FormGroup({
+    canal: new FormControl(''),
+    note: new FormControl(''),
+    suite_contact: new FormControl('')
+  })
   memberList = []
   produitList = [];
   canalList = [
@@ -78,10 +90,18 @@ export class SuivreLeadComponent implements OnInit {
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
   ]
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
+  constructor(private UserService: AuthService,private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
     private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService) { }
   @Input() LEAD_ID
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe({
+        next: (response) => {
+          this.userConnected = response;
+         
+        }
+      })
+    
     this.LCS.getOneByID(this.LEAD_ID).subscribe(lead => {
       this.followForm.patchValue({ ...lead })
       this.showFollow = lead
@@ -113,14 +133,39 @@ export class SuivreLeadComponent implements OnInit {
   initFollow(lead: LeadCRM) {
     this.followForm.patchValue({ ...lead })
     this.showFollow = lead
+    
   }
 
   onUpdateFollow() {
+    console.log(this.showFollow);
     this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents }).subscribe(data => {
       this.followForm.reset()
       this.showFollow = null
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     })
+  }
+  onAddHistorique() {
+    console.log(this.showFollow);
+    
+    this.showFollow.contacts.push({contact_by:this.userConnected?.firstname+" "+this.userConnected?.lastname, date_contact:new Date(),...this.formAddHistorique.value})
+    this.LCS.update(this.showFollow).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+    
+    
+  }
+  onAddDocumment(){
+    if (!this.docAdded){
+      this.docAdded = true;
+      this.onAddDocuments();
+      this.buttonName="Enregistrer"
+
+    }else{
+      this.docAdded = false;
+      this.onUpdateFollow();
+      this.buttonName="Ajouter"
+    }
+
   }
   onAddContact() {
     this.showFollow.contacts.push({ canal: '', contact_by: null, date_contact: null, note: '', suite_contact: '' })
@@ -128,6 +173,12 @@ export class SuivreLeadComponent implements OnInit {
 
   deleteContact(index) {
     this.showFollow.contacts.splice(index, 1)
+    this.showFollow.contacts[index] = null;
+    this.LCS.update(this.showFollow).subscribe(data => {
+      
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+    
   }
   onUpdateDate(listname, index, varname, value) {
     this.followForm[listname][index][varname] = new Date(value)
@@ -149,13 +200,14 @@ export class SuivreLeadComponent implements OnInit {
   }
   uploadFile(index) {
     this.indexDocuments = index
-    document.getElementById('selectedFile').click();
+    document.getElementById('selectedFilesuivre').click();
   }
   deleteFile(index) {
     this.showFollow.documents.splice(index, 1)
   }
 
   FileUpload(event: { target: { files: File[] } }) {
+    console.log(event)
     if (event.target.files != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();

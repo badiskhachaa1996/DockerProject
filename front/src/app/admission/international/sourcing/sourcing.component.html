@@ -742,7 +742,7 @@
         <p-tabView> <!-- style="max-width: 100%;" -->
             <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
                 <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
-                    
+
                     <div class="col-12" style="text-align: right;"
                         *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                         <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel(ecole.url_form)"
@@ -752,130 +752,135 @@
                     </div>
                     <div class="field col-12 grid ">
                         <div *ngIf="Fpays" class="field col-4">
-                        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                        [ngModel]="Fpays"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
-                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
-                        [style]="{'margin':'5px'}">
-                    </p-dropdown>
-                </div>
-                <div *ngIf="Fcampus" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
-                    [ngModel]="Fcampus"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
-                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="Fformation" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
-                    [ngModel]="Fformation"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
-                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown></div>
-                    <div *ngIf="Frythme" class="field col-4">
-                    <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
-                    [ngModel]="Frythme"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="Flangue" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
-                    [ngModel]="Flangue"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
-                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="Fstatus" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
-                    [ngModel]="Fstatus"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="Fsource" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
-                    [ngModel]="Fsource"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
-                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                        [style]="{'margin-left':'5px','margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="Forientation" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays" [ngModel]="Fpays"
+                                [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Fcampus" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus" [ngModel]="Fcampus"
+                                [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
+                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Fformation" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                                [ngModel]="Fformation" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
+                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Frythme" class="field col-4">
+                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                                [ngModel]="Frythme" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Flangue" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                                [ngModel]="Flangue" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Fstatus" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
+                                [ngModel]="Fstatus" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Fsource" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource" [ngModel]="Fsource"
+                                [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="Forientation" class="field col-4">
 
-                    <p-dropdown filter="true" placeholder="Decision Orientation"
-                        [options]="dropdownDecisionOrientation"
-                        [ngModel]="Forientation"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </div>
-                    <div *ngIf="FDadmission" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Decision Admission"
-                        [options]="dropdownDecisionAdmission"
-                        [ngModel]="FDadmission"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown></div>
-                    <div *ngIf="FSPayement" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
-                    [ngModel]="FSPayement"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
-                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown></div>
-                    <div *ngIf="FSvisa" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                    [ngModel]="FSvisa"[style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown></div>
-                    <div *ngIf="FphaseC" class="field col-4">
-                    <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
-                    [ngModel]="FphaseC" [style]="{'width':'17em'}"
-                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
-                        emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown></div>
-                    
+                            <p-dropdown filter="true" placeholder="Decision Orientation"
+                                [options]="dropdownDecisionOrientation" [ngModel]="Forientation"
+                                [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="FDadmission" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Decision Admission"
+                                [options]="dropdownDecisionAdmission" [ngModel]="FDadmission" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="FSPayement" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
+                                [ngModel]="FSPayement" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+                                emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="FSvisa" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa" [ngModel]="FSvisa"
+                                [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                                >
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="FphaseC" class="field col-4">
+                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                                [ngModel]="FphaseC" [style]="{'width':'100%'}"
+                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                                >
+                            </p-dropdown>
+                        </div>
+
                     </div>
                     <div class="field col-12 grid ">
-                    <div class="md:col-2 col-12" style="text-align: center;">
-                        <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
-                            (click)="displayFilter=true"></button>
+                        <div class="md:col-2 col-12" style="text-align: center;">
+                            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                                (click)="displayFilter=true"></button>
+                        </div>
+                        <div class="md:col-2 col-12" style="text-align: center;">
+                            <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                                (click)="clearFilter()"></button>
+                        </div>
+                        <div class="md:col-2 col-12" style="text-align: center;">
+                            <input pInputText type="text" style="width: 100%;"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </div>
+                        <div class="md:col-2 col-12">
+                            <p-dropdown [style]="{'width':'100%'}" [options]="filterCampus" filter="true"
+                                [ngModel]="Fcampus"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                                emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                        </div>
+                        <div class="md:col-2 col-12">
+                            <p-dropdown [style]="{'width':'100%'}" [options]="filterFormation" filter="true"
+                                [ngModel]="Fformation"
+                                (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                                emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                        </div>
+                        <div class="md:col-2 col-12">
+                            <p-dropdown [style]="{'width':'100%'}" [options]="filterRentreeScolaire" filter="true"
+                                (onChange)="dt1.filter($event.value,'rentree_scolaire', 'equals')"
+                                emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
+                        </div>
                     </div>
-                    <div class="md:col-2 col-12" style="text-align: center;">
-                        <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
-                            (click)="clearFilter()"></button>
-                    </div>
-                    <div class="md:col-2 col-12" style="text-align: center;">
-                        <input pInputText type="text" style="width: 100%;"
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                    </div>
-                    <div class="md:col-2 col-12">
-                        <p-dropdown [style]="{'width':'11em'}" [options]="filterCampus" filter="true" [ngModel]="Fcampus"
-                            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
-                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
-                    </div>
-                    <div class="md:col-2 col-12">
-                        <p-dropdown [style]="{'width':'11em'}" [options]="filterFormation" filter="true"
-                            [ngModel]="Fformation"
-                            (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
-                            emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
-                    </div>
-                    <div class="md:col-2 col-12">
-                        <p-dropdown [style]="{'width':'11em'}" [options]="filterRentreeScolaire" filter="true"
-                            (onChange)="dt1.filter($event.value,'rentree_scolaire', 'equals')" emptyFilterMessage="Role non trouvé"
-                            filterPlaceholder="Rôle"></p-dropdown>
-                    </div>
-                </div>
 
                     <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
                         [(selection)]="selectedLeads" [value]="prospects[ecole.url_form]" [paginator]="true"
@@ -884,7 +889,7 @@
                         [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                         responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-                        
+
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="width: 3rem">
@@ -970,7 +975,7 @@
                                     expanded
                                         ? 'pi pi-chevron-down'
                                         : 'pi pi-chevron-right'"></button>
-                                    
+
                                 </td>
 
 
@@ -1261,63 +1266,58 @@
     </div>
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="displayFilter" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
-                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
-                                [style]="{'margin':'5px'}">
-                            </p-dropdown><br><br><br>
-                            
-                            
-                            <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
-                                (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
-                                (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
-                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
-                                (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
-                                (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
-                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                                [style]="{'margin-left':'5px','margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
+        <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals');Fpays=$event.value"
+            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" >
+        </p-dropdown><br><br>
 
 
-                            <p-dropdown filter="true" placeholder="Decision Orientation"
-                                [options]="dropdownDecisionOrientation"
-                                (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
-                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Decision Admission"
-                                [options]="dropdownDecisionAdmission"
-                                (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
-                                emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"
-                                (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
-                                emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                                (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
-                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
-                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
+        <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
+            >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'programme','equals');Flangue=$event.value"
+            emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme" >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'haveDoc','equals');Fstatus=$event.value"
+            emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+            >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Source" [options]="filterSource"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'source','startsWith');Fsource=$event.value"
+            emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+            >
+        </p-dropdown><br><br>
 
-                            
+
+        <p-dropdown filter="true" placeholder="Decision Orientation" [options]="dropdownDecisionOrientation"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'decision_orientation','equals');Forientation=$event.value"
+            emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+            >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'decision_admission','equals');FDadmission=$event.value"
+            emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+            >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Paiement" [options]="filterPaiement"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'statut_payement','equals');FSPayement=$event.value"
+            emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement" >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"[style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'avancement_visa','equals');FSvisa=$event.value"
+            emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+            >
+        </p-dropdown><br><br>
+        <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+        [style]="{'width':'100%'}"
+            (onChange)="dt1.filter($event.value, 'phase_candidature','equals');FphaseC=$event.value"
+            emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature">
+        </p-dropdown><br><br><br>
+
+
 
     </p-sidebar>
 </div>

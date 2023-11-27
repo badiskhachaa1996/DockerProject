@@ -27,7 +27,7 @@ const schema = mongoose.Schema({
     contacts: {
         type: [{
             date_contact: { type: Date, required: false },
-            contact_by: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+            contact_by: { type: String, required: false },
             canal: { type: String, required: false },
             suite_contact: { type: String, required: false },
             note: { type: String, required: false },
