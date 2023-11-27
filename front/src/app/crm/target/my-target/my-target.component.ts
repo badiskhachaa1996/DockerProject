@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -19,7 +19,7 @@ export class MyTargetComponent implements OnInit {
   targets = []
   EditTarget: Target
   AddTarget = false
-  formEdit = new FormGroup({
+  formEdit = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     equipe_id: new FormControl(''),
     member_id: new FormControl(''),
@@ -29,7 +29,7 @@ export class MyTargetComponent implements OnInit {
     deadline: new FormControl(''),
     description: new FormControl(''),
   })
-  formAdd = new FormGroup({
+  formAdd = new UntypedFormGroup({
     equipe_id: new FormControl(),
     member_id: new FormControl(),
     type: new FormControl(''),

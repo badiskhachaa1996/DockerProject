@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -156,7 +156,7 @@ export class PovPartenaireAlternantsComponent implements OnInit {
   }
 
 
-  updateForm = new FormGroup({
+  updateForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
     nom: new FormControl('', Validators.required),

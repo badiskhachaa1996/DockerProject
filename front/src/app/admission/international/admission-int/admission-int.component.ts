@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -289,7 +289,7 @@ export class AdmissionIntComponent implements OnInit {
     { value: "Alternance", label: "Alternance" },
     { value: "Initiale", label: "Initiale" },
   ]
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
    
   filterPhase = [
     { value: null, label: "Toutes les phases de candidature" },
@@ -989,13 +989,13 @@ export class AdmissionIntComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { DateSejourMI } from 'src/app/models/DateSejourMI';
 import { DestinationMI } from 'src/app/models/DestinationMI';
 import { FormulaireMIService } from 'src/app/services/formulaire-mi.service';
@@ -47,7 +47,7 @@ export class FormulaireMIComponent implements OnInit {
 
   dateSejours = []
 
-  RegisterForm = new FormGroup({
+  RegisterForm = new UntypedFormGroup({
     name: new FormControl('', Validators.required),
     date_naissance: new FormControl('', Validators.required),
     telephone: new FormControl('', Validators.required),

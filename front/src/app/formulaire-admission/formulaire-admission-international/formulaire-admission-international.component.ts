@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, MenuItem } from 'primeng/api';
 import { map } from 'rxjs';
@@ -49,7 +49,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   calendar: any;
   fr = environment.fr;
   ActiveIndex = 0;
-  RegisterForm: FormGroup;
+  RegisterForm: UntypedFormGroup;
 
   diplomes = [];
   diplomesOfCampus = [];
@@ -372,7 +372,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
       formation: new FormControl("", [Validators.required]),
       rentree_scolaire: new FormControl('', [Validators.required]),
-      programme: new FormControl(this.programList[0], [Validators.required]),
+      programme: new UntypedFormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
       //****** Notre partenaire d'accompagnement EduHorizons *******

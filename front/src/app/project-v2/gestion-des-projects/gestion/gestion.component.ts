@@ -28,10 +28,10 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
-  private task_id: string;
-  private project_id: string;
-  private ressources_id: string;
-  private budgetid: string;
+  private task_id!: string;
+  private project_id!: string;
+  private ressources_id!: string;
+  private budgetid!: string;
   avancement_p: number = 0;
   avancement_t: number = 0;
   showAddProjectForm: boolean = false;
@@ -43,35 +43,35 @@ export class GestionComponent implements OnInit {
   showAddBudgetForm: boolean = false;
   showUpdateRessourcesForm: boolean = false;
   showUpdateBudgetForm: boolean = false;
-  formAddProject: FormGroup;
-  formAddTache: FormGroup;
-  formAddressources: FormGroup;
-  formAddbudget: FormGroup;
+  formAddProject!: FormGroup;
+  formAddTache!: FormGroup;
+  formAddressources!: FormGroup;
+  formAddbudget!: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
   task!: Task[];
   ressources!: Ressources[];
   budget!: Budget[];
-  userConnected: User;
+  userConnected!: User;
   token: any;
   showTachesTable: boolean = false;
   showtache: boolean = false;
   showAddTacheForm: boolean = false;
   showUpdateTacheForm: boolean = false;
-  nbr_project: number;
-  nbr_projectEnCour: number;
-  nbr_projectCloturer: number;
-  budget_charge: number;
-  budgect_depense: number;
+  nbr_project!: number;
+  nbr_projectEnCour!: number;
+  nbr_projectCloturer!: number;
+  budget_charge!: number;
+  budgect_depense!: number;
   prioriteListe: any[] = [
     { label: 'Urgent', value: "Urgent" },
     { label: 'Trés urgent', value: "Trés urgent" },
   ];
   projectIdForTask: any
   //creation ticket variables
-  taskID: string;
+  taskID!: string;
   itsTask: boolean = false;
-  taskSelected: Task;
+  taskSelected!: Task;
   taskListe: any[] = [
 
   ];
@@ -87,12 +87,12 @@ export class GestionComponent implements OnInit {
   serviceDropdown: any[] = [
   ];
   TicketForm = new FormGroup({
-    project: new FormControl('', Validators.required),
-    task_id: new FormControl('', Validators.required),
-    sujet_id: new FormControl('', Validators.required),
-    service_id: new FormControl('', Validators.required),
-    description: new FormControl('', Validators.required),
-    priorite: new FormControl('', Validators.required)
+    project: new FormControl<any>('', Validators.required),
+    task_id: new FormControl<string>('', Validators.required),
+    sujet_id: new FormControl<any>('', Validators.required),
+    service_id: new FormControl<any>('', Validators.required),
+    description: new FormControl<string>('', Validators.required),
+    priorite: new FormControl<string>('', Validators.required)
   })
   uploadedFiles: File[] = [];
   constructor(
@@ -108,7 +108,7 @@ export class GestionComponent implements OnInit {
   ) { }
   serviceDic = {}
   sujetDic = {}
-  USER: User
+  USER!: User;
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -440,13 +440,14 @@ export class GestionComponent implements OnInit {
         });
       }
       
-
   affectertask(task: Task) {
     this.TicketForm = this.formBuilder.group({
       project:task.project_id,
       task_id:task._id,
+      sujet_id: null,
+      service_id: null,
       description:task.description_task,
-    
+      priorite: task.priorite
   })}
 
   deleteTask(id, ri) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad';
 import { CandidatureLead } from 'src/app/models/CandidatureLead';
@@ -37,7 +37,7 @@ export class LeadCandidatureComponent implements OnInit {
     { label: '4', value: 4 },
     { label: '5', value: 5 },
   ]
-  formCandidature = new FormGroup({
+  formCandidature = new UntypedFormGroup({
     nom: new FormControl(''),
     prenom: new FormControl(''),
     date_naissance: new FormControl(''),
@@ -559,15 +559,18 @@ export class LeadCandidatureComponent implements OnInit {
     })
 
   }
-  saveCandidature() {
-    var canvasContents = this.signaturePad.toDataURL();
-    var data = { a: canvasContents };
-    var string = JSON.stringify(data);
-    var signature = string.substring(6, string.length - 2);
-    var sign = signature.substring(signature.indexOf(",") + 1)
+  saveCandidature(signatureMode = false) {
+    if (signatureMode) {
+      var canvasContents = this.signaturePad.toDataURL();
+      var data = { a: canvasContents };
+      var string = JSON.stringify(data);
+      var signature = string.substring(6, string.length - 2);
+      var sign = signature.substring(signature.indexOf(",") + 1)
+    }
+
     this.CandidatureService.getByLead(this.ID).subscribe(c => {
       if (c) {
-        this.CandidatureService.update({ ...this.formCandidature.value, date_creation: new Date() }).subscribe(newCandidature => {
+        this.CandidatureService.update({ ...this.formCandidature.value, date_creation: new Date(), _id: c._id }).subscribe(newCandidature => {
           this.candidature = newCandidature
           this.pageNumber = 0
         })

@@ -23,9 +23,20 @@ export class PayementInformationComponent implements OnInit {
   payementMethods = environment.paymentType.slice(1)
 
   constructor() {}
-  isUpdating=true
+  isUpdating=false
   ngOnInit(): void {
     if (this.demande && this.demande.payment ){
+      this.infoPays = [
+        {
+          date: this.demande.payment.date,
+          montant:this.demande.payment.montant,
+          method:this.demande.payment.method,
+          note: this.demande.payment.note,
+          isUpdating : false
+        }
+      ]
+      console.log('infoPays:', this.infoPays);
+      console.log('demande.payment:', this.demande.payment);
       this.infoPays=[this.demande.payment];
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$");
       console.log(this.demande);
@@ -50,7 +61,10 @@ export class PayementInformationComponent implements OnInit {
   //   )
   // }
    saveKeyDates(infoPay){
-    this.demande.payment=this.infoPays
+    this.demande.payment.date=infoPay.date,
+    this.demande.payment.method=infoPay.method
+    this.demande.payment.note=infoPay.note
+    this.demande.payment.montant=infoPay.montant
     this.updateDemande(this.demande) 
     infoPay.isUpdating=false
    }

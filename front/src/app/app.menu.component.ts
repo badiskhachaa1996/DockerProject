@@ -18,7 +18,6 @@ import { AdmissionService } from './services/admission.service';
 import { LeadcrmService } from './services/crm/leadcrm.service';
 import { MemberCRM } from './models/memberCRM';
 import { TeamsCrmService } from './services/crm/teams-crm.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CandidatureLeadService } from './services/candidature-lead.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -30,7 +29,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <i class="pi pi-bars"></i>
             </a>
         </div>
-        <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
+        <p-panelMenu [model]="items" *ngIf="showMenu" [style]='{"overflow-x": "hidden","overflow-y": "auto","height":"85vh"}'></p-panelMenu>
         <!-- <div class="layout-menu-container">
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
@@ -5346,6 +5345,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/admission/lead-dossier/' + p._id]
                                 },
                                 {
+                                    label: 'Evaluation',
+                                    icon: "pi pi-pencil",
+                                    routerLink: ['/admission/lead-evaluation']
+                                },
+                                {
                                     label: "Suivre ma candidature",
                                     icon: "pi pi-list",
                                     routerLink: ['/admission/lead-suivi/' + p._id]
@@ -7200,7 +7204,7 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+    let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

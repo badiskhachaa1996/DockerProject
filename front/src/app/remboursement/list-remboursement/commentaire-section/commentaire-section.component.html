@@ -13,7 +13,7 @@
                 <td><textarea  rows="5" cols="90"  [disabled]="!commentaire.isUpdating" [(ngModel)]="commentaire.note" > </textarea></td>
                 <td>{{commentaire.created_by }} </td>
                 <td>{{commentaire.created_on | date: 'dd/MM/yyyy'}}</td>
-            
+             
                 <td class="text-right" style="min-width: 8rem">
                     <i class="pi pi-pencil clickable-element" *ngIf="!commentaire.isUpdating" (click)="updateKeyDates(commentaire)"></i>
                     <i class="pi pi-check clickable-element" *ngIf="commentaire.isUpdating" (click)="saveKeyDates(commentaire)"></i>

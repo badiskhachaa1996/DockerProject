@@ -282,12 +282,24 @@ const prospect_schema = new mongoose.Schema({
         default: [
             { nom: "CV", path: null, date: null },
             { nom: "Lettre de Motivation", path: null, date: null },
-            { nom: "Passeport - Pièce d'identité", path: null, date: null },
+            {
+                nom: "Passeport - Pièce d'identité", path: null, date: null, info: `
+            - Passeport pour les étudiant qui résident en dehors la France.
+            - Carte de séjours pour les internationaux qui résident en France.
+            - CNI Pour les étudiants de nationalité française.
+            ` },
             { nom: "Diplôme baccalauréat ou équivalent", path: null, date: null },
-            { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
+            {
+                nom: "Dernier diplôme supérieur obtenu", path: null, date: null, info: `
+            Si vous avez plus qu'un diplôme merci des les joindre ensemble sur le même fichier
+            ` },
             { nom: "Relevé de note baccalauréat", path: null, date: null },
             { nom: "Relevés de note depuis le baccalauréat", path: null, date: null },
-            { nom: "Test de niveau en Français - TCF (pour les étudiants des pays non francophones)", path: null, date: null },
+            {
+                nom: "Test de niveau en Français - TCF (pour les étudiants des pays non francophones)", path: null, date: null, info: `
+            Obligatoire pour les pays non francophones.
+            Un niveau B1 ou plus.
+            ` },
             { nom: 'Carte de séjour', path: null, date: null },
             { nom: "Copie Visa", path: null, date: null },
             { nom: "Carte vitale ou attestation provisoire", path: null, date: null },
@@ -389,6 +401,19 @@ const prospect_schema = new mongoose.Schema({
     sos_firstname: { type: String },
     sos_email: { type: String },
     sos_phone: { type: String },
+    evaluations: {
+        type: [{
+            evaluation_id: { type: mongoose.Schema.Types.ObjectId, ref: "evaluation" },
+            score: { type: Number, default: 0 },
+            date_passation: { type: Date },
+            duree_mise: { type: Number, default: 30 },
+            date_envoie: { type: Date },
+            etat: { type: String, default: 'Disponible' },
+            date_expiration: { type: Date },
+            commentaire: { type: String },
+        }],
+        default: []
+    }
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormBuilder, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -54,7 +54,7 @@ export class FirstConnectionComponent implements OnInit {
 
   classes: Classe[] = [];
   entreprises: Entreprise[] = [];
-  RegisterForm: FormGroup;
+  RegisterForm: UntypedFormGroup;
   diplomes: Diplome[] = [];
   formationIntunsList = []
   onInitRegisterForm() {
@@ -75,7 +75,7 @@ export class FirstConnectionComponent implements OnInit {
       nationalite: new FormControl(this.nationList[0], Validators.required),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
-      diplome: new FormControl(this.programReinscrit[0]),
+      diplome: new UntypedFormControl(this.programReinscrit[0]),
       formation_intuns: new FormControl(),
       intuns: new FormControl('false')
     });

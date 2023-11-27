@@ -391,6 +391,11 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
+import { CaptchaModule } from 'primeng/captcha';
+import { RecaptchaModule } from "ng-recaptcha";
+import { NgxCaptchaModule } from 'ngx-captcha';
+
 import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
@@ -405,6 +410,11 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
+    NgxCaptchaModule,
+    CaptchaModule,
+    BrowserModule,
+    RecaptchaModule,  
     TableModule,
     SignaturePadModule,
     BrowserModule,
@@ -814,6 +824,9 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     EvaluationComponent,
     UploadButtonComponent,
     LeadEvaluationComponent,
+    AddRemboursementPublicComponent,
+    
+    
     DocumentsCandidatureViewerComponent,
     GestionProduitsComponent,
     AddRemboussementComponent,
@@ -844,3 +857,4 @@ export class AppModule {
     registerLocaleData(fr.default);
   }
 }
+

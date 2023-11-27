@@ -1,4 +1,4 @@
-<p-fieldset legend="Test" style="width: 100%;" class="mb-2">
+<p-fieldset legend="Test" style="width: 100%;" class="mb-2" *ngIf="PROSPECT">
     <div style="width: 100%;">
         <p>
             En cliquant sur passer le test, un compteur se décleche pour calculer le temps mis pour effectuer
@@ -6,7 +6,8 @@
             Si vous finissez avant, cliquez sur 'Soumettre'.
         </p>
     </div>
-    <p-table #dt1 [value]="evaluations" dataKey="_id" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+    <p-table #dt1 [value]="PROSPECT.evaluations" dataKey="_id" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
                 <th>Evaluation</th>
@@ -17,45 +18,33 @@
                 <th>Action</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-eval>
-            <tr *ngIf="!resultatDic[eval._id]">
-                <td>{{eval.label}}</td>
-                <td>?/{{eval.score}}</td>
+        <ng-template pTemplate="body" let-eval let-ri="rowIndex">
+            <tr>
+                <td>{{eval?.evaluation_id?.label}}</td>
+                <td>{{eval?.score}}/{{eval?.evaluation_id?.score}}</td>
                 <td>
-                    <strong>Durée du test</strong> 30 min<br>
-                    <strong>Durée mise</strong>?? min
+                    <strong>Durée du test</strong> {{eval?.evaluation_id.duree}} min<br>
+                    <strong>Durée mise</strong> {{eval?.duree_mise}} min
                 </td>
                 <td>{{eval.etat}}</td>
-                <td>???</td>
+                <td>{{eval?.date_passation | date:'dd MMMM YY'}}</td>
                 <td>
-                    <a (click)="onStartEval(eval)">Passer le test</a>
-                </td>
-            </tr>
-            <tr *ngIf="resultatDic[eval._id]">
-                <td>{{eval.label}}</td>
-                <td>{{resultatDic[eval._id]?.note}}/{{eval.score}}</td>
-                <td>
-                    <strong>Durée du test</strong> 30 min<br>
-                    <strong>Durée mise</strong>{{resultatDic[eval._id]?.duree_mise}} min
-                </td>
-                <td>{{eval.etat}}</td>
-                <td>{{resultatDic[eval._id]?.date_passation | date:'dd MMMM YYYY'}}</td>
-                <td>
-
+                    <a *ngIf="!eval.date_passation" (click)="onStartEval(eval,ri)">Passer le test</a>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </p-fieldset>
+
 <p-fieldset legend="Evaluation" style="width: 100%;" class="mb-2" *ngIf="EvaluationOnGoing">
     <div class="grid" style="width: 100%;">
         <div class="col-12" style="text-align: right;padding: 9px;" *ngIf="DateStart">
-            Reste {{seeTimer()}}
+            Reste {{showTimer()}}
         </div>
         <div class="col-12">
-            <iframe [src]="EvaluationOnGoing.lien" width="100%" height="100%">
-
-            </iframe>
+            <!--<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfjfs96P5cgXwiDcjgJ_vDmueHHNnqLq4gBuRjtuhmW1OMeNA/viewform?embedded=true" width="640" height="994" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>-->
+            <iframe [src]="URLFORM" width="640" height="994" frameborder="0" marginheight="0"
+                marginwidth="0">Chargement…</iframe>
         </div>
         <div class="col-4 col-offset-8" style="text-align: center;">
             <button [style]="{'width':'100%'}" autoWidth="false" pButton type="button" (click)="onCloseEval()"

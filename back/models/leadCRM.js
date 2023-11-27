@@ -77,7 +77,8 @@ const schema = mongoose.Schema({
             nom: { type: String, required: false },
             path: { type: String, required: false },
         }], default: []
-    }
+    },
+    created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 });
 
 const LeadCRM = mongoose.model('leadCRM', schema);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { LeadCRM } from 'src/app/models/LeadCRM';
+import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-ajout-leadcrm',
   templateUrl: './ajout-leadcrm.component.html',
@@ -70,8 +71,9 @@ export class AjoutLeadcrmComponent implements OnInit {
       { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
     ]
   addForm: FormGroup = new FormGroup({
-    _id: new FormControl(''),
     source: new FormControl(''),
+    operation: new FormControl(''),
+    _id: new FormControl(''),
     civilite: new FormControl(''),
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -79,16 +81,28 @@ export class AjoutLeadcrmComponent implements OnInit {
     email: new FormControl(''),
     indicatif_phone: new FormControl(''),
     numero_phone: new FormControl(''),
+    date_naissance: new FormControl('', Validators.required),
     nationalite: new FormControl('', Validators.required),
     indicatif_whatsapp: new FormControl(''),
     numero_whatsapp: new FormControl(''),
+    indicatif_telegram: new FormControl(''),
+    numero_telegram: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
+    statut: new FormControl(''),
+    niveau_fr: new FormControl(''),
+    niveau_en: new FormControl(''),
   })
 
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente" }).subscribe(data => {
+    let user = null
+    try {
+      user = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      user = null
+    }
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente", created_by: user?.id }).subscribe(data => {
       this.addForm.reset()
       this.newLead.emit(data)
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })

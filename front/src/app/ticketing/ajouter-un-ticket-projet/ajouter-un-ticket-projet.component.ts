@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -33,7 +33,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
 
   ];
   taskSelected: Task;
-  TicketForm = new FormGroup({
+  TicketForm = new UntypedFormGroup({
     project: new FormControl('', Validators.required),
     task_id: new FormControl('', Validators.required),
     sujet_id: new FormControl('', Validators.required),

@@ -28,7 +28,7 @@ export class DemandeRemboursementService {
 
     return new Promise<any>((resolve, reject) => {
 
-      const  headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" , 'file' : file, 'token':localStorage.getItem('token') }) 
+      const  headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"  }) 
       this.http.get<any>(url, {headers}).subscribe({
 
         next: (response) => resolve(response),
@@ -90,7 +90,7 @@ export class DemandeRemboursementService {
       const url = `${this.apiUrl}/upload-docs`;
   
       return new Promise((resolve, reject) => {
-        this.http.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        this.http.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
           next: (response) => resolve(response),
           error: (error) => reject(error),
           complete: () => console.log('Fichier ajouté'),
