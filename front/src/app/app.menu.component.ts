@@ -2613,11 +2613,13 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Insertion',
                                             icon: 'pi pi-user-plus',
                                             items: [
-                                                {
-                                                    label: 'Ajouter un lead',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: ['crm/leads/ajout'],
-                                                },
+                                                /*{
+                                                 label: 'Ajouter un lead',
+                                                 icon: 'pi pi-user-plus',
+                                                 routerLink: [
+                                                     'crm/leads/ajout',
+                                                 ],
+                                             }, */
                                                 {
                                                     label: 'Importer',
                                                     icon: 'pi pi-database',
@@ -2628,27 +2630,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: ['crm/leads/liste'],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/6474bd8044e14520f9dd5f38',
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -2776,7 +2758,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
@@ -4497,7 +4479,7 @@ export class AppMenuComponent implements OnInit {
                                             },
                                         ]
                                     },
-    
+
                                     {
                                         label: 'Evaluation Lead',
                                         icon: 'pi pi-pencil',
@@ -5444,13 +5426,13 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Insertion',
                                             icon: 'pi pi-user-plus',
                                             items: [
-                                                {
-                                                    label: 'Ajouter un lead',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: [
-                                                        'crm/leads/ajout',
-                                                    ],
-                                                },
+                                                /*{
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            }, */
                                                 {
                                                     label: 'Importer',
                                                     icon: 'pi pi-database',
@@ -5461,30 +5443,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [
-                                                        'crm/leads/liste',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/' +
-                                                        member?._id,
-                                                    ],
-                                                },
-                                            ],
+                                            routerLink: ['crm/liste'],
                                         },
                                         {
                                             label: 'Qualification',
@@ -5619,17 +5578,17 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Gestion des produits',
                                                     icon: 'pi pi-briefcase',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
                                                     label: 'Gestion des sources',
                                                     icon: 'pi pi-map-marker',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-sources'],
                                                 },
                                                 {
                                                     label: 'Gestion des opérations',
                                                     icon: 'pi pi-tablet',
-                                                    routerLink: [''],
+                                                    routerLink: ['crm/gestion-operations'],
                                                 },
                                             ],
                                         },
@@ -5660,13 +5619,13 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Insertion',
                                         icon: 'pi pi-user-plus',
                                         items: [
-                                            {
+                                            /*{
                                                 label: 'Ajouter un lead',
                                                 icon: 'pi pi-user-plus',
                                                 routerLink: [
                                                     'crm/leads/ajout',
                                                 ],
-                                            },
+                                            },*/
                                             {
                                                 label: 'Importer',
                                                 icon: 'pi pi-database',
@@ -5677,30 +5636,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Liste des leads',
                                         icon: 'pi pi-users',
-                                        items: [
-                                            {
-                                                label: 'Tout les leads',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'crm/leads/liste',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Leads non attribués',
-                                                icon: 'pi pi-user-edit',
-                                                routerLink: [
-                                                    'crm/leads/liste-non-attribue',
-                                                ],
-                                            },
-                                            {
-                                                label: 'Mes Leads',
-                                                icon: 'pi pi-user',
-                                                routerLink: [
-                                                    'crm/mes-leads/liste/' +
-                                                    member?._id,
-                                                ],
-                                            },
-                                        ],
+                                        routerLink: ['crm/liste'],
                                     },
                                     {
                                         label: 'Qualification',
@@ -5840,13 +5776,13 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Insertion',
                                         icon: 'pi pi-user-plus',
                                         items: [
-                                            {
+                                            /*{
                                                 label: 'Ajouter un lead',
                                                 icon: 'pi pi-user-plus',
                                                 routerLink: [
                                                     'crm/leads/ajout',
                                                 ],
-                                            },
+                                            }, */
                                             {
                                                 label: 'Importer',
                                                 icon: 'pi pi-database',
@@ -6625,6 +6561,27 @@ export class AppMenuComponent implements OnInit {
                             label: "Admin IMS",
                             icon: 'pi pi-star',
                             items: [
+                                {
+                                    label: 'Booking V2',
+                                    icon: 'pi pi-building',
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['booking/configuration'],
+                                        },
+                                        {
+                                            label: 'Liste des demandes des rendez-vous',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['gestion-reservations']
+                                        },
+                                        {
+                                            label: 'Logements',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['logements']
+                                        }
+                                    ]
+                                },
                                 {
                                     label: 'Remboursement',
                                     icon: 'pi pi-dollar',

@@ -219,7 +219,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
   User.findOne({ _id: req.params.id })
-    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate('service_list').populate("roles_ticketing_list.module").populate("savedAdministration").populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
+    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedLeadCRM").populate('service_list').populate("roles_ticketing_list.module").populate({ path: "savedAdministration", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
@@ -572,7 +572,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
 
 //Récupérer tous les users via Service ID
 app.get("/getAllbyService/:id", (req, res) => {
-  User.find({ service: req.params.id })
+  User.find({ service_id: req.params.id })
     .then((result) => {
       res.send(result.length > 0 ? result : []);
     })
@@ -1511,6 +1511,15 @@ app.post("/uploadRH", upload2.single("file"), (req, res, next) => {
 
   res.send({ message: 'success' });
 });
+
+app.get('/getByEmailIMS/:email', (req, res) => {
+  User.findOne({ email: req.params.email }).then(r => {
+    if (r)
+      res.send(r)
+    else
+      res.status(404).send()
+  })
+})
 
 app.get("/downloadRH/:_id/:path", (req, res) => {
   let pathFile = "storage/documentRH/" + req.params._id + "/" + req.params.path

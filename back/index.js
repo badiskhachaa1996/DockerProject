@@ -155,7 +155,11 @@ const rhControlleur = require('./controllers/rhController');
 const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
 const meetingTeamsController = require('./controllers/meetingTeamsController');
-// const rembouresementController = require ('./controllers/rembouresementController')
+const gestionProduitsCrmController = require('./controllers/gestionProduitsCrmController');
+const gestionOperationCrmController = require('./controllers/gestionPoerationCrmController');
+const gestionSourceCrmController = require('./controllers/gestionSourceCrmController');
+
+
 const { User } = require("./models/user");
 const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
 // const documentsController = require('./controllers/documentsController');
@@ -266,7 +270,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
       req.originalUrl === '/soc/ticket/getAllPopulate' ||
-      req.originalUrl==='/soc/demanderemboursement/newremb'
+      req.originalUrl==='/soc/demanderemboursement/newremb' ||
+      req.originalUrl == '/soc/LeadCRM/create'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
@@ -425,12 +430,17 @@ app.use('/soc/meetingTeams', meetingTeamsController)
 app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
 // app.use('/soc/docremb',require('./controllers/documentsController'));
 
-//app.use('/soc/demanderemboursement', rembouresementController )
-app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'));
-app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'));
-app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'));
-//evaluation
+app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
+app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
+app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
 app.use('/soc/evaluation',require('./controllers/evaluationController'));
+//CRM Gestion Produits
+
+app.use('/soc/gestion-produits', gestionProduitsCrmController)
+app.use('/soc/gestion-operation',gestionOperationCrmController)
+app.use('/soc/gestion-sources',gestionSourceCrmController)
+
+
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

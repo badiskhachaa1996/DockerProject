@@ -32,6 +32,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { Table } from 'primeng/table';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -68,7 +69,16 @@ export class PreinscriptionComponent implements OnInit {
   paysList = environment.pays;
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  Frythme: String; Fcampus: String; Frentree: String; Fecoles: String; Fformation: String; Fetape: String; Fsource: String;
+  filtre_value = {
+    rythme: "",
+    rentree: "",
+    source: '',
+    campus: "",
+    formation: '',
+    ecole: '',
+    phase: '',
+    search: ''
+  }
   formationsFitre = [
     { label: "Toutes les Formations ", value: null }
   ];
@@ -223,7 +233,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -232,7 +242,7 @@ export class PreinscriptionComponent implements OnInit {
     codep: new FormControl(''),
   });
   updateLeadForm: FormGroup = new FormGroup({
-    lead_type: new FormControl('', Validators.required),
+    lead_type: new FormControl(''),
     type_form: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
@@ -247,7 +257,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus_choix_1: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -279,7 +289,7 @@ export class PreinscriptionComponent implements OnInit {
     phone: new FormControl('', Validators.required),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    programme: new FormControl(this.programList[0]),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
     nomlead: new FormControl(''),
@@ -672,7 +682,7 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-  docProspectList = []
+  docProspectList: Prospect[] = []
 
   onshowDossier(student: Prospect) {
     this.defaultEtatDossier = student.etat_dossier;
@@ -747,12 +757,22 @@ export class PreinscriptionComponent implements OnInit {
     }
   }
   onSelectEtat(event: any, procpect: Prospect) {
-    procpect.etat_dossier = event.value
+    if (event && event.value)
+      procpect.etat_dossier = event.value
+    else
+      procpect.etat_dossier = event
+
     this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
   }
   deletePro(prospect: Prospect) {
-    console.log("hello")
-    this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => { console.log(res) });
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?'))
+      this.admissionService.delete(prospect._id, prospect.user_id._id).subscribe(res => {
+        if (this.prospectI.indexOf(prospect) != -1)
+          this.prospectI.splice(this.prospectI.indexOf(prospect), 1)
+        if (this.prospects.indexOf(prospect) != -1)
+          this.prospects.splice(this.prospects.indexOf(prospect), 1)
+        this.ToastService.add({ severity: 'success', summary: 'Lead supprimé avec succès' })
+      });
   }
   adddicision(prospect: Prospect) {
     this.prospect_acctuelle.decision.date_decision = this.DecisionForm.value.date_d;
@@ -781,8 +801,9 @@ export class PreinscriptionComponent implements OnInit {
       })
     })
   }
-
+  ProspectToUpdate: Prospect
   initupdateLeadForm(prospect: Prospect) {
+    this.ProspectToUpdate = prospect
     this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         let dicFilFr = {}
@@ -875,7 +896,12 @@ export class PreinscriptionComponent implements OnInit {
   }
   UpdateProspect() {
     this.admissionService.update({ prospect: { ...this.updateLeadForm.value }, user: { ...this.updateLeadForm.value, _id: this.updateLeadForm.value.user_id } }).subscribe(p => {
-      console.log(p)
+      this.admissionService.getPopulate(p._id).subscribe(p => {
+        if (this.prospectI.indexOf(this.ProspectToUpdate) != -1)
+          this.prospectI.splice(this.prospectI.indexOf(this.ProspectToUpdate), 1, p)
+        if (this.prospects.indexOf(this.ProspectToUpdate) != -1)
+          this.prospects.splice(this.prospects.indexOf(this.ProspectToUpdate), 1, p)
+      })
       this.showupdateLeadForm = false
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du prospect avec succès' })
     }, error => {
@@ -913,7 +939,6 @@ export class PreinscriptionComponent implements OnInit {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
-
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
     }, (error) => {
       console.error(error)
@@ -1051,12 +1076,44 @@ export class PreinscriptionComponent implements OnInit {
   seePaiements = false
   partenaireOwned: string = null
   commercialOwned: CommercialPartenaire
+  RENTREE: RentreeAdmission[]
   rowExpand(prospect: Prospect) {
     if (prospect?.code_commercial)
       this.commercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
         if (commercial && commercial.user_id)
           this.commercialOwned = commercial
       })
+    //
+    this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
+      this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
+        this.RENTREE = dataEcoles
+        let dicFilFr = {}
+        let fFrList = []
+        data.formations.forEach(f => {
+          if (dicFilFr[f.filiere]) {
+            dicFilFr[f.filiere].push({ label: f.nom, value: f.nom })
+          } else {
+            dicFilFr[f.filiere] = [{ label: f.nom, value: f.nom }]
+            fFrList.push(f.filiere)
+          }
+        })
+        fFrList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programeFrDropdown.push(
+            { label: f, value: f, items: dicFilFr[ft] }
+          )
+        })
+        dataEcoles.forEach(rentre => {
+          this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+        })
+      })
+      this.campusDropdown = []
+      data.campus.forEach(c => {
+        this.campusDropdown.push({ label: c, value: c })
+      })
+    })
   }
   initPaiement(prospect: Prospect) {
     this.showPaiement = prospect
@@ -1382,7 +1439,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   ListDocuments: String[] = []
   ListPiped: String[] = []
-  AddDocumentOnglet(prospect) {
+  AddDocumentOnglet(prospect: Prospect) {
     this.docProspectList.push(prospect)
     console.log(this.docProspectList)
     setTimeout(() => {
@@ -1391,9 +1448,12 @@ export class PreinscriptionComponent implements OnInit {
 
   }
   handleChange(event) {
-    console.log(event)
+    //console.log(event)
+
     if (this.selectedTabIndex > (3 + this.proscteList.length)) {
-      this.initDocument(this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)])
+      let p: Prospect = this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)]
+      this.initDocument(p)
+
     }
   }
   initDocument(prospect) {
@@ -1581,7 +1641,16 @@ export class PreinscriptionComponent implements OnInit {
       })
   }
   clearFilter() {
-    this.Frythme = null; this.Fcampus = null; this.Frentree = null; this.Fecoles = null; this.Fformation = null; this.Fetape = null; this.Fsource = null;
+    this.filtre_value = {
+      rythme: "",
+      rentree: "",
+      source: '',
+      campus: "",
+      formation: '',
+      ecole: '',
+      phase: '',
+      search: ''
+    }
   };
   onTeamsCheckboxChange(event: any) {
     console.log('Checkbox changed', event);

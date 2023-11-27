@@ -27,6 +27,8 @@ app.post("/create", (req, res) => {
     Ticket.find({ sujet_id: req.body.sujet_id }).then(tkt => {
         var lengTicket = tkt.length + 1
         Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+            if (!req.body.id)
+                req.body.id = req.body.createur_id
             User.findById(req.body.id).then(u => {
                 //Generation Custom ID
                 let id = ""
@@ -329,6 +331,7 @@ app.post("/update/:id", (req, res) => {
         {
             ...req.body
         }, (err, oldTicket) => {
+            console.log(oldTicket, req.params.id)
             if (err) {
                 console.error(err)
                 res.status(500).send(err)

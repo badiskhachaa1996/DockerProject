@@ -1,4 +1,5 @@
 import { Annonce } from "./Annonce";
+import { LeadCRM } from "./LeadCRM";
 import { Matching } from "./Matching";
 import { Prospect } from "./Prospect";
 import { Service } from "./Service";
@@ -61,7 +62,8 @@ export class User {
         public last_connection?: Date,
         public haveNewAccess?: Boolean,
         public type_supp?: string[],
-        public savedAdministration?: Prospect[]
+        public savedAdministration?: Prospect[],
+        public savedLeadCRM?: LeadCRM[]
     ) { }
 
 

@@ -260,11 +260,11 @@
         <br>
         <form class="p-fluid p-formgrid grid" (ngSubmit)="UpdateProspect()" [formGroup]="updateLeadForm">
             <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
-            <div class="field col-12 md:col-12">
+            <!--<div class="field col-12 md:col-12">
                 <label For="type">Type <span style="color:red"> *</span></label>
                 <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead" (onChange)="onSelectEcole()"
                     formControlName="lead_type"></p-dropdown>
-            </div>
+            </div>-->
 
 
             <div class="field col-12 md:col-2">
@@ -352,12 +352,12 @@
                 </p-dropdown>
             </div>
 
-            <div class="field col-12 md:col-4">
+            <!--<div class="field col-12 md:col-4">
                 <label>Choix du programme <span style="color: red;"> * </span></label>
                 <p-dropdown [options]="programList" optionLabel="value" optionValue="value" formControlName="programme"
                     placeholder="Choisissez un programme">
                 </p-dropdown>
-            </div>
+            </div>-->
             <div class="field col-12 md:col-8" *ngIf="updateLeadForm.value.programme.value=='Programme Anglais'">
                 <label For="formation">Choix de la formation <span style="color: red;">
                         *</span></label>
@@ -410,11 +410,11 @@
                 <br>
                 <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="newLeadForm">
                     <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
-                    <div class="field col-12 md:col-12">
+                    <!--<div class="field col-12 md:col-12">
                         <label For="type">Type <span style="color:red"> *</span></label>
                         <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
                             formControlName="type"></p-dropdown>
-                    </div>
+                    </div>-->
 
 
                     <div class="field col-12 md:col-2">
@@ -503,20 +503,20 @@
                         </p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-4">
+                    <!--<div class="field col-12 md:col-4">
                         <label>Choix du programme <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
                             placeholder="Choisissez un programme">
                         </p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme?.value=='Programme Anglais'">
+                    </div>-->
+                    <div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme?.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
                         <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme?.value=='Programme Français'">
+                    <div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme?.value=='Programme Français'">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choisissez un programme français"
@@ -559,25 +559,25 @@
                 <ng-template pTemplate="header">
                     <div class="grid ">
                         <div class="field col-12 grid">
-                            <div *ngIf="Frythme" class="field col-4">
+                            <div *ngIf="filtre_value.rythme" class="field col-4">
                                 <label for="rythme">Rythme</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true"
-                                    [ngModel]="Frythme"
-                                    (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                                    [(ngModel)]="filtre_value.rythme"
+                                    (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
-                            <div *ngIf="Frentree" class="field col-4">
+                            <div *ngIf="filtre_value.rentree" class="field col-4">
                                 <label for="rythme">Rentrée</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true"
-                                    [ngModel]="Frentree"
-                                    (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+                                    [(ngModel)]="filtre_value.rentree"
+                                    (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
-                            <div *ngIf="Fsource" class="field col-4">
+                            <div *ngIf="filtre_value.source" class="field col-4">
                                 <label for="rythme">Etape</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true"
-                                    [ngModel]="Fsource"
-                                    (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+                                    [(ngModel)]="filtre_value.source"
+                                    (onChange)="dt1.filter($event.value, 'source', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
 
@@ -597,25 +597,25 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                         <div class="md:col-2 col-12">
-                            <p-dropdown [options]="campusfiltre" filter="true" [ngModel]="Fcampus" autoWidth="false"
+                            <p-dropdown [options]="campusfiltre" filter="true" [(ngModel)]="filtre_value.campus" autoWidth="false"
                                 [style]="{'width':'100%'}"
-                                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
-                            <p-dropdown [options]="formationsFitre" filter="true" [ngModel]="Fformation"
+                            <p-dropdown [options]="formationsFitre" filter="true" [(ngModel)]="filtre_value.formation"
                                 autoWidth="false" [style]="{'width':'100%'}"
-                                (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                                (onChange)="dt1.filter($event.value, 'formation', 'equals');"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
-                            <p-dropdown [options]="EcoleFiltre" filter="true" autoWidth="false"
+                            <p-dropdown [options]="EcoleFiltre" filter="true" autoWidth="false"  [(ngModel)]="filtre_value.campus"
                                 [style]="{'width':'100%'}" (onChange)="dt1.filter($event.value,'type_form', 'equals')"
                                 emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
                             <p-dropdown [style]="{'width':'100%'}" [options]="filterPhase" filter="true"
-                                [(ngModel)]="Fetape"
+                                [(ngModel)]="filtre_value.phase"
                                 (onChange)="dt1.filter($event.value, 'phase_candidature', 'equals')"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
@@ -663,7 +663,7 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-prospect>
+                        <ng-template pTemplate="body" let-prospect let-expanded="expanded">
                             <tr [pEditableRow]="prospect">
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="prospect"
@@ -689,7 +689,7 @@
                                     {{prospect?.rythme_formation}}
                                 </td>
                                 <td>
-                                    {{ prospect?.decision?.decision_admission}}
+                                    {{ prospect?.decision_admission}}
                                 </td>
                                 <td>
                                     {{ calculPayement(prospect)}}
@@ -1092,32 +1092,32 @@
                 <ng-template pTemplate="header">
                     <div class="grid ">
                         <div class="field col-12 grid ">
-                            <div *ngIf="Frythme" class="field col-4">
+                            <div *ngIf="filtre_value.rythme" class="field col-4">
                                 <label for="rythme">Rythme</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="rythme_filtre" filter="true"
-                                    [ngModel]="Frythme"
-                                    (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');Frythme=$event.value"
+                                    [(ngModel)]="filtre_value.rythme"
+                                    (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
-                            <div *ngIf="Frentree" class="field col-4">
+                            <div *ngIf="filtre_value.rentree" class="field col-4">
                                 <label for="rythme">Rentrée</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="rentreeFiltere" filter="true"
-                                    [ngModel]="Frentree"
-                                    (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+                                    [(ngModel)]="filtre_value.rentree"
+                                    (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
-                            <div *ngIf="Fetape" class="field col-4">
+                            <div *ngIf="filtre_value.phase" class="field col-4">
                                 <label for="rythme">Etape</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="filterPhase" filter="true"
-                                    [(ngModel)]="Fetape"
+                                    [(ngModel)]="filtre_value.phase"
                                     (onChange)="dt1.filter($event.value, 'phase_candidature', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
-                            <div *ngIf="Fsource" class="field col-4">
+                            <div *ngIf="filtre_value.source" class="field col-4">
                                 <label for="rythme">Etape</label> <br>
                                 <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true"
-                                    [ngModel]="Fsource"
-                                    (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+                                    [(ngModel)]="filtre_value.source"
+                                    (onChange)="dt1.filter($event.value, 'source', 'equals');"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
 
@@ -1137,14 +1137,14 @@
                         </div>
                         <div class="md:col-2 col-12">
                             <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="campusfiltre"
-                                filter="true" [ngModel]="Fcampus"
-                                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+                                filter="true" [(ngModel)]="filtre_value.campus"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
                             <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="formationsFitre"
-                                filter="true" [ngModel]="Fformation"
-                                (onChange)="dt1.filter($event.value, 'formation', 'equals');Fcampus=$event.value"
+                                filter="true" [(ngModel)]="filtre_value.formation"
+                                (onChange)="dt1.filter($event.value, 'formation', 'equals');"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
@@ -1728,20 +1728,20 @@
                         </p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-4">
+                    <!--<div class="field col-12 md:col-4">
                         <label>Choix du programme <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
                             placeholder="Choisissez un programme">
                         </p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
+                    </div>-->
+                    <div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
                         <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
+                    <div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
@@ -1805,9 +1805,15 @@
                 <p-accordion [(activeIndex)]="selectedTabIndex1">
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 1</span> &nbsp;
-                                <span style="font-weight: normal;">Dossier</span>
+                                <span style="font-weight: normal;">Dossier 
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-dialog header="Affecter un agent à ce ticket" [(visible)]="visible"
@@ -2050,9 +2056,11 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 2</span> &nbsp;
-                                <span style="font-weight: normal;">Evaluation</span>
+                                <span style="font-weight: normal;">Evaluation </span>
+                                <i style="color: red;" class="pi pi-times"></i>
+                                <!-- Dépend du Score -->
                             </div>
                         </ng-template>
                         <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation"
@@ -2094,7 +2102,7 @@
                             </form>
                         </p-dialog>
 
-                        <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+                        <p-table #dt1 [value]="['']" dataKey="_id" responsiveLayout="scroll"
                             [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
                             [paginator]="true" rowExpandMode="single" [totalRecords]=""
                             styleClass="p-datatable-gridlines">
@@ -2148,9 +2156,16 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 3</span> &nbsp;
-                                <span style="font-weight: normal;">Entretien</span>
+                                <span style="font-weight: normal;">Entretien
+
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="!ticket || ticket.length==0 || ticket.statut!='Traité'"></i>
+                                <!-- Si Ticket n'est pas traité-->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="ticket && ticket.length!=0 && ticket.statut=='Traité'"></i>
                             </div>
                         </ng-template>
                         <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
@@ -2279,9 +2294,15 @@
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
-                            <div>
+                            <div style="display: inline;">
                                 <span style="font-weight: bold;">ETAPE 4</span> &nbsp;
-                                <span style="font-weight: normal;">Décision</span>
+                                <span style="font-weight: normal;">Décision&nbsp;
+                                </span>
+                                <i style="color: red;" class="pi pi-times"
+                                    *ngIf="PROSPECT?.decision_admission!='Accepté'"></i>
+                                <!-- depend du changement de la decision admission -->
+                                <i style="color: green;" class="pi pi-check"
+                                    *ngIf="PROSPECT?.decision_admission=='Accepté'"></i>
                             </div>
                         </ng-template>
                         <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="DecisionForm">
@@ -2411,114 +2432,10 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">ADMISSIONS</span> &nbsp;
+                            </div>
 
-                            </div>
                         </ng-template>
-                        <div class="col-12">
-                            <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile"
-                                #selectedFile style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
-                            <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
-                                #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif"
-                                pInputFile />
-                        </div>
-                        <div class="card grid" *ngIf="PROSPECT ">
-                            <h3 class="col-12">Documents</h3>
-                            <p class="col-12"
-                                [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
-                                style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
-                                l'équipe d'admission.<br>
-                                Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
-                            </p>
-                            <div class="card col-12 grid">
-                                <div class="col-6">
-                                    Je réside en France
-                                    <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                                <div class="col-6">
-                                    Je cherche une alternance
-                                    <p-checkbox [(ngModel)]="alternance" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12"
-                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc>
-                                    <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
-                                        <td>
-                                            {{doc.nom}}
-                                            <span style="color: red;"
-                                                *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
-                                            <span style="color: red;"
-                                                *ngIf="doc.nom=='Carte de séjour'">(Obligatoire)</span>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file" (click)="downloadFile(doc)"
-                                                style="margin-left: 2%;color: green;" aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="initUpload(doc)" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <!--<h3 class="col-8">Autre documents</h3>
-                            <div class="col-4">
-                                <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
-                                    autoWidth="false" label="Ajouter un autre document"></p-button>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr [pEditableRow]="doc">
-                                        <td pEditableColumn>
-                                            <p-cellEditor>
-                                                <ng-template pTemplate="input">
-                                                    <input type="text" pInputText [(ngModel)]="doc.nom">
-                                                </ng-template>
-                                                <ng-template pTemplate="output">
-                                                    {{doc.nom}}
-                                                </ng-template>
-                                            </p-cellEditor>
-                                        </td>
-                                        <td>
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="downloadOtherFile(doc)" style="margin-left: 2%;color: green;"
-                                                aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>-->
-                        </div>
+                        <app-lead-dossier [PROSPECT_ID]="PROSPECT._id"></app-lead-dossier>
                     </p-accordionTab>
                     <p-accordionTab>
                         <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM">
@@ -2566,48 +2483,9 @@
                         <ng-template pTemplate="header">
                             <div>
                                 <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
-
                             </div>
                         </ng-template>
-                        <div class="col-4">
-                            <p-button [style]="{'width':'10%'}"
-                                (click)="addDoc();visibleADM=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
-                                autoWidth="false"></p-button>
-                        </div>
-                        <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
-                            [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
-                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
-                            [filterDelay]="0" styleClass="p-datatable-gridlines">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
-                                    <th>Lien</th>
-                                    <th>Traité par</th>
-                                    <th>Action</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                <tr>
-                                    <td>{{doc?.custom_id}}</td>
-                                    <td>{{doc?.type}}</td>
-                                    <td>{{doc?.date|date:'dd MMMM yy'}}</td>
-                                    <td>
-                                        <a (click)="downloadAdminFile(doc?.path)">Télécharger</a>
-                                    </td>
-                                    <td>{{doc?.traited_by}}</td>
-                                    <td>
-                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                            *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                            aria-hidden="true"></i>
-                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                            class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
+
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
@@ -2756,14 +2634,14 @@
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
     <h3>Filtres</h3>
     <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" [(ngModel)]="Frythme"
+        <p-dropdown [style]="{'width':'27em'}" [options]="rythme_filtre" filter="true" [(ngModel)]="filtre_value.rythme"
             (onChange)="dt1.filter($event.value, 'rythme_formation', 'equals')" emptyFilterMessage="Type non trouvé"
             filterPlaceholder="Type"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="campusfiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
+            (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="rentreeFiltere" filter="true"
-            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');Frentree=$event.value"
+            (onChange)="dt1.filter($event.value, 'rentree_scolaire', 'equals');"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="EcoleFiltre" filter="true"
             (onChange)="dt1.filter($event.value,'type_form', 'equals')" emptyFilterMessage="Role non trouvé"
@@ -2772,15 +2650,15 @@
             (onChange)="dt1.filter($event.value,'formation', 'equals')" emptyFilterMessage="Role non trouvé"
             filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="filterPhase" filter="true"
-            (onChange)="dt1.filter($event.value,'phase_candidature', 'equals');" [(ngModel)]="Fetape"
+            (onChange)="dt1.filter($event.value,'phase_candidature', 'equals');" [(ngModel)]="filtre_value.phase"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true"
-            (onChange)="dt1.filter($event.value, 'source', 'equals');Fsource=$event.value"
+            (onChange)="dt1.filter($event.value, 'source', 'equals');"
             emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>
 
         <div></div>
         <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
-			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
+			[(ngModel)]="filtre_value.user" (onChange)="updateFilter()"></p-dropdown>-->
         <button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
             (click)="displayFilter = false"></button>
         <button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
