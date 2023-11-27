@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { LeadCRM } from 'src/app/models/LeadCRM';
+import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-ajout-leadcrm',
   templateUrl: './ajout-leadcrm.component.html',
@@ -88,7 +89,13 @@ export class AjoutLeadcrmComponent implements OnInit {
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente" }).subscribe(data => {
+    let user = null
+    try {
+      user = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      user = null
+    }
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente", created_by: user?.id }).subscribe(data => {
       this.addForm.reset()
       this.newLead.emit(data)
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
