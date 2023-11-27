@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
@@ -26,7 +26,7 @@ import { CalendrierEtudiantService } from 'src/app/services/calendrier-etudiant.
   styleUrls: ['./rendez-vous.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class RendezVousComponent implements OnInit {
-  form = new FormGroup({
+  form = new UntypedFormGroup({
     email: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MemberInt } from 'src/app/models/memberInt';
 import { TeamsRH } from 'src/app/models/TeamsRH';
@@ -152,7 +152,7 @@ export class GestionEquipeRhComponent implements OnInit {
     })
   }
   newMember: TeamsRH;
-  AddMbForm = new FormGroup({
+  AddMbForm = new UntypedFormGroup({
     user_id: new FormControl('', Validators.required),
     role: new FormControl('Membre', Validators.required),
   })

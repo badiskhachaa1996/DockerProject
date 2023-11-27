@@ -47,7 +47,7 @@ export class FormulaireAdmissionService {
 
   RAgetAll() {
     let registerUrl = this.apiUrl + 'RA/getAll';
-    return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
 
   RAdelete(id: string): Promise<any> 
@@ -81,7 +81,7 @@ export class FormulaireAdmissionService {
 
   FAgetAll() {
     let registerUrl = this.apiUrl + 'FA/getAll';
-    return this.http.get<FormationAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<FormationAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
 
   FAdelete(_id: string) {
@@ -113,7 +113,7 @@ export class FormulaireAdmissionService {
 
   EAgetAll() {
     let registerUrl = this.apiUrl + 'EA/getAll';
-    return this.http.get<EcoleAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<EcoleAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
   
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { AuthService } from 'src/app/services/auth.service';
@@ -42,7 +42,7 @@ export class RendezVousResultatsComponent implements OnInit {
     })
   }
 
-  form = new FormGroup({
+  form = new UntypedFormGroup({
     statut: new FormControl('Planifié'),
     meeting_start_date: new FormControl('')
   })

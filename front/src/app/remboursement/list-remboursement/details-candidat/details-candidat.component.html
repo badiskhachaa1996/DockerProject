@@ -14,7 +14,7 @@
     <ng-template pTemplate="body" let-student >
         <tr>
           <td>{{student?.civility}}</td>
-          <td>{{student?.date_naissance}}</td>
+          <td>{{student?.date_naissance | date:'dd-MM-yyyy'}}</td>
           <td>{{student?.pays_residence}}</td>
           <td>{{student?.nationality}}</td>
           <td>

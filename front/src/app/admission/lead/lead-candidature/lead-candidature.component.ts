@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SignaturePad } from 'angular2-signaturepad';
 import { CandidatureLead } from 'src/app/models/CandidatureLead';
@@ -37,7 +37,7 @@ export class LeadCandidatureComponent implements OnInit {
     { label: '4', value: 4 },
     { label: '5', value: 5 },
   ]
-  formCandidature = new FormGroup({
+  formCandidature = new UntypedFormGroup({
     nom: new FormControl(''),
     prenom: new FormControl(''),
     date_naissance: new FormControl(''),

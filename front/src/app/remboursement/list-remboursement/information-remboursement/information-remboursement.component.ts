@@ -19,10 +19,14 @@ infoRefunds=[{
   refund_method:'choisir',
   montant:'',
   note:'',
-  doc_number: ''
+  doc_number: '',
+  isUpdating : false
+
 }]
 refundMethods = environment.paymentType
   constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService) { }
+  isUpdating=false
+
   docElement =
     {
       name: 'Ordre de virement',
@@ -32,33 +36,43 @@ refundMethods = environment.paymentType
 
     }
 
-  isUpdating=false
   ngOnInit(): void {
 
 
     
-    if (this.demande && this.demande.refund && this.demande.payment) {
-      this.infoRefunds[0].refund_date = this.demande.refund.date;
-      this.infoRefunds[0].refund_method = this.demande.refund.method;
-      this.infoRefunds[0].montant = this.demande.refund.montant;
-      this.infoRefunds[0].note = this.demande.refund.note;
-      this.infoRefunds[0].doc_number = this.demande.refund.doc_number;
+    if (this.demande && this.demande.refund ) {
+
+    this.infoRefunds=[
+      {
+        refund_date : this.demande?.refund?.date,
+        refund_method : this.demande?.refund?.method,
+        montant : this.demande?.refund?.montant,
+        note : this.demande?.refund?.note,
+        doc_number : this.demande?.refund?.doc_number,
+        isUpdating : false
+      }
+    ]
     }
 
   }
   updateKeyDates(){
     this.isUpdating = true 
    }
-   saveKeyDates(){
-    this.demande.refund.date=this.infoRefunds[0].refund_date
-    this.demande.refund.method=this.infoRefunds[0].refund_method
-    this.demande.refund.montant=this.infoRefunds[0].montant
-    this.demande.refund.note=this.infoRefunds[0].note
-    this.demande.refund.doc_number=this.infoRefunds[0].doc_number
+   saveKeyDates(infoRefund){
+
+
+    this.demande.refund = {
+      date : infoRefund.refund_date,
+      method : infoRefund.refund_method,
+      montant : infoRefund.montant,
+      note : infoRefund.note,
+      doc_number : infoRefund.doc_number
+    }
+
     this.updateDemande(this.demande) 
 
     this.isUpdating=false
- 
+  
   }
   updateDemande(demande) {
     const data = {
@@ -77,9 +91,11 @@ refundMethods = environment.paymentType
       formData.append('file', doc)
       this.demandeService.postDoc(formData)
       .then((response) => {
+        
         this.infoRefunds[0].doc_number =  'OV-' + Math.floor(Math.random() * Date.now()).toString()
         this.demande.refund.doc_number = this.infoRefunds[0].doc_number
         this.updateDemande(this.demande)
+        console.debug(this.infoRefunds)
         
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: "Le document " + doc.name + " n'a pas pu être ajouté" }); });

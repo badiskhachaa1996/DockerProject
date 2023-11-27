@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { MessageService } from 'primeng/api';
 import { FormulaireICBS } from 'src/app/models/FormulaireICBS';
@@ -38,7 +38,7 @@ export class FormulaireIcbsComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.UnitedArabEmirates];
   
-  RegisterForm = new FormGroup({
+  RegisterForm = new UntypedFormGroup({
     name: new FormControl('', Validators.required),
     age: new FormControl(null, Validators.required),
     phone: new FormControl('', Validators.required),

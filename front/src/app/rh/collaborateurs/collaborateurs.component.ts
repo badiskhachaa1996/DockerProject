@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray , FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
@@ -384,7 +384,7 @@ export class CollaborateursComponent implements OnInit {
 
   // récupère les compétences
   getCompetences(): FormArray {
-    return this.formAddCompetence.get('competences') as FormArray;
+    return this.formAddCompetence.get('competences') as FormArray ;
   }
 
   // ajoute de nouveaux champs au formulaire
