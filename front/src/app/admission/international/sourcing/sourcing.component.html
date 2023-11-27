@@ -742,8 +742,8 @@
         <p-tabView> <!-- style="max-width: 100%;" -->
             <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
                 <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
-                    <h5 class="col-8">Liste des leads Sourcing de {{ecole.titre}}</h5>
-                    <div class="col-4" style="text-align: right;"
+                    
+                    <div class="col-12" style="text-align: right;"
                         *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                         <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel(ecole.url_form)"
                             type="button" style="margin-left: 2px;"
@@ -1266,16 +1266,8 @@
                                 emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
                                 [style]="{'margin':'5px'}">
                             </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
-                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals');Fcampus=$event.value"
-                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
-                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
-                                (onChange)="dt1.filter($event.value, 'formation','equals');Fformation=$event.value"
-                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
+                            
+                            
                             <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
                                 (onChange)="dt1.filter($event.value, 'rythme_formation','equals');Frythme=$event.value"
                                 [style]="{'margin-right':'5px'}">
@@ -1325,11 +1317,7 @@
                                 [style]="{'margin-right':'5px'}">
                             </p-dropdown><br><br><br>
 
-                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                                (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals');FRentree=$event.value"
-                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
-                                [style]="{'margin-right':'5px'}">
-                            </p-dropdown><br><br><br>
+                            
 
     </p-sidebar>
 </div>

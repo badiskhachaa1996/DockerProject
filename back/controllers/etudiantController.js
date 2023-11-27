@@ -934,13 +934,5 @@ app.get('/getAllByFormateur/:formateur_id', (req, res) => {
         })
     })
 })
-app.get("/recuperation", (req, res) => {
-    Evaluation.find()
-    .then((response) => {
-      res.status(200).send(response);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(400).send("impossible de récupérer levaluation");
-    })});
+
 module.exports = app;
