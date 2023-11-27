@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <i class="pi pi-bars"></i>
             </a>
         </div>
-        <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
+        <p-panelMenu [model]="items" *ngIf="showMenu" [style]='{"overflow-x": "hidden","overflow-y": "auto","height":"85vh"}'></p-panelMenu>
         <!-- <div class="layout-menu-container">
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
