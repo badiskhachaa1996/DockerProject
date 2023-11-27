@@ -5346,6 +5346,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/admission/lead-dossier/' + p._id]
                                 },
                                 {
+                                    label: 'Evaluation',
+                                    icon: "pi pi-pencil",
+                                    routerLink: ['/admission/lead-evaluation']
+                                },
+                                {
                                     label: "Suivre ma candidature",
                                     icon: "pi pi-list",
                                     routerLink: ['/admission/lead-suivi/' + p._id]
@@ -7015,7 +7020,7 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+    let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

@@ -7,7 +7,7 @@ app.post("/create-evaluation", (req, res) => {
   const evaluation = new Evaluation({ ...req.body });
 
   evaluation.save()
-    .then((evaluationCreated) => { res.status(201).json({ evaluation: evaluationCreated, success: 'Evaluation crée' }) })
+    .then((evaluationCreated) => { res.status(201).json(evaluationCreated) })
     .catch((error) => { console.error(error); res.status(500).json({ error: 'Impossible de créer evaluation, si le problème persite veuillez créer un ticket au service IMS' }); })
 });
 app.get("/recuperation", (req, res) => {

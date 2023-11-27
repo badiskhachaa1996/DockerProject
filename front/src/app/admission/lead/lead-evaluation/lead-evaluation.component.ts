@@ -3,71 +3,71 @@ import { Evaluation } from 'src/app/models/evaluation';
 import { EvaluationService } from 'src/app/services/evaluation.service';
 import jwt_decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { Prospect } from 'src/app/models/Prospect';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-lead-evaluation',
   templateUrl: './lead-evaluation.component.html',
   styleUrls: ['./lead-evaluation.component.scss']
 })
 export class LeadEvaluationComponent implements OnInit {
-  evaluations: Evaluation[] = []
-  constructor(private EvaluationService: EvaluationService, private ToastService: MessageService) { }
+  constructor(private ToastService: MessageService, private ProspectService: AdmissionService, private domSanitizer: DomSanitizer) { }
   token;
-  resultatDic = {}
+  PROSPECT: Prospect
+  selectedIndex = 0
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.EvaluationService.getevaluations().then(evaluations => {
-      this.evaluations = evaluations
-      evaluations.forEach(ev => {
-        ev.resultats.forEach(r => {
-          if (r.user_id == this.token.id) {
-            this.resultatDic[ev._id] = r
-          }
-        })
-      })
+    this.ProspectService.getByUserId(this.token.id).subscribe(prospect => {
+      this.PROSPECT = prospect
     })
-
   }
   EvaluationOnGoing: Evaluation
   DateStart: Date;
-  onStartEval(evaluation: Evaluation) {
-    this.EvaluationOnGoing = evaluation
+  secondesPassed
+
+  onStartEval(evaluation, index) {
+    this.selectedIndex = index
+    this.EvaluationOnGoing = evaluation.evaluation_id
+    this.transform(this.EvaluationOnGoing.lien)
     this.DateStart = new Date()
+    let secondesMAX = evaluation.evaluation_id.duree * 60
+    this.secondesPassed = 0
+    setInterval(() => {
+      if (secondesMAX > 0)
+        secondesMAX--;
+      else
+        this.onCloseEval()
+      if (secondesMAX == 60)
+        this.ToastService.add({ severity: 'info', summary: 'Il vous reste 1 minutes!', detail: 'Pensez à envoyer le formulaire pour ne rien perdre!' })
+      this.secondesPassed++
+    }, 1000)
   }
-
-  seeTimer() {
-    let minutes = 0
-    let secondes = 0
-    let dateEnd = new Date(this.DateStart)
-    dateEnd.setMinutes(dateEnd.getMinutes() + 30)
-    let calc = dateEnd.getTime() - new Date().getTime()
-    minutes = Math.trunc(calc / 60000)
-    secondes = Math.trunc((calc - minutes * 60000) / 1000)
-    if (minutes == 0 && secondes == 0)
-      this.onCloseEval()
-    if (minutes == 2 && secondes == 31)
-      this.ToastService.add({ severity: 'info', summary: 'Il vous reste 2 minutes 30.' })
-    return `${minutes}:${secondes}`
+  showTimer() {
+    let calc = (this.EvaluationOnGoing.duree * 60) - this.secondesPassed
+    let minutes = Math.trunc(calc / 60)
+    let secondes = calc - (minutes * 60)
+    return `${minutes}min ${secondes}`
   }
-
   onCloseEval() {
     //Store seeTimer()
 
     let minutes = 0
-    let dateEnd = new Date(this.DateStart)
-    dateEnd.setMinutes(dateEnd.getMinutes() + 30)
-    let calc = dateEnd.getTime() - new Date().getTime()
+    let calc = new Date().getTime() - this.DateStart.getTime()
     minutes = Math.trunc(calc / 60000)
-    let r = {
-      user_id: this.token.id,
-      date_passation: new Date(),
-      duree_mise: minutes
-    }
-    this.EvaluationOnGoing.resultats.push(r)
-    this.resultatDic[this.EvaluationOnGoing._id] = r
-    this.EvaluationService.putEvaluation(this.EvaluationOnGoing).then(evaluation => {
+
+    this.PROSPECT.evaluations[this.selectedIndex].etat = "Envoyé"
+    this.PROSPECT.evaluations[this.selectedIndex].date_passation = new Date()
+    this.PROSPECT.evaluations[this.selectedIndex].duree_mise = minutes
+
+    this.ProspectService.updateV2({ _id: this.PROSPECT, evaluations: this.PROSPECT.evaluations }, 'Réalisation d\'une évaluation').subscribe(r => {
+      this.PROSPECT = r
       this.EvaluationOnGoing = null
-      this.ToastService.add({ severity: 'success', summary: 'Votre application a été ajouté' })
+
     })
   }
-
+  URLFORM
+  transform(url) {
+    this.URLFORM = this.domSanitizer.bypassSecurityTrustResourceUrl(url + "?embedded=true");
+  }
 }
