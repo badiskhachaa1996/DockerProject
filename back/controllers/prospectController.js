@@ -923,7 +923,7 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
-    console.log(req.body, req.body.decision)
+    console.log(req.body.decision)
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body

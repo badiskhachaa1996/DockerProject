@@ -6,7 +6,7 @@ stages:
 #  - Docker
   - DEV
   - QA
-  - PROD
+  - PROD # FIXME tests only on Dev/QA, not in Prod
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -23,12 +23,12 @@ stages:
 #  variables:
 #    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
 
-#========================================================
+#==========================================================
 
-node_dependencies:
+install_node_dependencies_on_dev:
   stage: Install
   tags:
-    - dev-shell # FIXME QA PROD
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -39,12 +39,12 @@ node_dependencies:
     - npm install
   only:
     changes:
-      - back/package-lock.json
+      - back/package.json
 
-angular_dependencies:
+install_angular_dependencies_on_dev:
   stage: Install
   tags:
-    - dev-shell # FIXME QA PROD
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -55,9 +55,77 @@ angular_dependencies:
     - npm install
   only:
     changes:
-      - front/package-lock.json
+      - front/package.json
 
-#========================================================
+#==========================================================
+
+install_node_dependencies_on_qa:
+  stage: Install
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - develop
+  when: manual
+
+install_angular_dependencies_on_qa:
+  stage: Install
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - develop
+  when: manual
+
+#==========================================================
+
+install_node_dependencies_on_prod:
+  stage: Install
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - main
+  when: manual
+
+install_angular_dependencies_on_prod:
+  stage: Install
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - main
+  when: manual
+
+#==========================================================
 
 # sonarqube-check:
 #   image: 
@@ -83,12 +151,12 @@ angular_dependencies:
 #   tags:
 #     - dev-docker # FIXME QA PROD
 
-#========================================================
+#==========================================================
 
-build_angular:
+build_angular_on_dev:
   stage: Build
   tags:
-    - dev-shell # FIXME QA PROD
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -99,13 +167,60 @@ build_angular:
       - cd front
       - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
-    - develop # FIXME
+    - develop
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
     expire_in: 1 hour
-#  when: manual
+
+#==========================================================
+
+build_angular_on_qa:
+  stage: Build
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
+  only:
+    - develop
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+  when: manual
+
+#==========================================================
+
+build_angular_on_prod:
+  stage: Build
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
+  only:
+    - main
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+  when: manual
 
 #spotbugs-sast:
 #  dependencies:
@@ -122,7 +237,7 @@ build_angular:
     # site_profile: "Inted Group"
     # scanner_profile: "Quick Passive Test"
 
-#======================================================
+#==========================================================
 
 # angular_docker_build:
 #   stage: Docker
@@ -160,12 +275,12 @@ build_angular:
 #       when: manual
 #       allow_failure: true # FIXME
 
-#======================================================
+#==========================================================
 
 deploy_angular_to_dev:
   stage: DEV
   dependencies: 
-    - build_angular
+    - build_angular_on_dev
   tags:
     - dev-shell
   script:
@@ -183,19 +298,18 @@ deploy_node_to_dev:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - npm start
-   # - pm2 delete index
-   # - pm2 start index.js -- --dev --time
+    - pm2 delete index
+    - pm2 start index.js --time -- --dev
    # - pm2 logs index
   only:
     - develop
 
-#======================================================
+#==========================================================
 
-deploy_angular_to_qa:
+manual_deploy_angular_to_qa:
   stage: QA
   dependencies: 
-    - build_angular
+    - build_angular_on_qa
   tags:
     - qa-shell
   script:
@@ -204,8 +318,8 @@ deploy_angular_to_qa:
   only:
     - develop
   when: manual
-  
-deploy_node_to_qa:
+
+manual_deploy_node_to_qa:
   stage: QA
 
   tags:
@@ -214,42 +328,70 @@ deploy_node_to_qa:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - npm start
-   # - pm2 delete index
-   # - pm2 start index.js -- --time
+    - pm2 delete index
+    - pm2 start index.js --time -- --qa
    # - pm2 logs index
   only:
     - develop
   when: manual
 
-#======================================================
+#==========================================================
 
-deploy_angular_to_prod:
+manual_deploy_angular_to_prod:
   stage: PROD
-  dependencies: 
-    - build_angular
+  dependencies:
+    - build_angular_on_prod
   tags:
-    - qa-docker # FIXME
+    - prod-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
   when: manual
-  #environment: production
   
-deploy_node_to_prod:
+manual_deploy_node_to_prod:
   stage: PROD
 
   tags:
-    - qa-docker # FIXME
+    - prod-shell
   script:
-    - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
-    - mkdir -p "$MOUNT_POINT"
-    - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod
+   # - pm2 logs index
   only:
     - main
   when: manual
-  #environment: production
+
+# manual_deploy_angular_docker_to_prod:
+#   stage: PROD
+#   dependencies: 
+#     - build_angular
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
+  
+# manual_deploy_node_docker_to_prod:
+#   stage: PROD
+
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
 
