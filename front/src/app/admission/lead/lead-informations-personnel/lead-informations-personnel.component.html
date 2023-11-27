@@ -94,7 +94,7 @@
             </div>
         </div>
     </p-fieldset>
-    <p-fieldset legend="Programme d'étude" style="width: 100%;" class="mb-1">
+    <p-fieldset legend="Choix académique" style="width: 100%;" class="mb-1">
         <p-table [value]="['']" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
@@ -119,7 +119,7 @@
             </ng-template>
         </p-table>
     </p-fieldset>
-    <p-fieldset legend="Personne à contacter en cas d'urgence" style="width: 100%;">
+    <p-fieldset legend="Personne à contacter en cas d'urgence" style="width: 100%;" *ngIf="PROSPECT && PROSPECT.phase_candidature=='Inscription définitive'">
         <div *ngIf="!editInfoSOS" class="col-12" style="text-align: right;">
             <button pButton type="button" class="mr-2" (click)="initEditFormSOS()"
                 pTooltip="Modifier les informations de la personne à contacter en cas d'urgence"

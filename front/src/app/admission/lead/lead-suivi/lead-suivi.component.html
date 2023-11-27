@@ -1,38 +1,41 @@
-<div class="grid card" *ngIf="PROSPECT">
-    <p-fieldset legend="Suivre ma candidature" class="col-12 grid">
+<div class="grid" *ngIf="PROSPECT" >
+    <p-fieldset legend="Suivre ma candidature" class="col-12 grid" [style]="{'width':'100%'}">
         <div class="col-12 grid">
-            <p class="col-6"><strong>Phase de candidature :</strong>
+            <p class="md:col-4 col-6"><strong>Etape :</strong>
                 {{PROSPECT.phase_candidature}}</p>
-            <p class="col-6"><strong>Décision admission :</strong>
+            <p class="md:col-4 col-6"><strong>Décision admission :</strong>
                 {{PROSPECT.decision_admission}}</p>
-            <p class="col-6"><strong>Etat du dossier:</strong>
-                {{PROSPECT.etat_dossier}}</p>
-            <p class="col-6"><strong>Procèdure pédagogique :</strong>
+            <p class="md:col-4 col-12"><strong>Etat du dossier:</strong>
+                {{PROSPECT.etat_dossier || 'En attente'}}</p>
+            <!--<p class="col-6"><strong>Procèdure pédagogique :</strong>
                 {{PROSPECT.procedure_peda}}</p>
             <p class="col-12"><strong>Paiement :</strong>
-                {{PROSPECT.statut_payement}}</p>
+                {{PROSPECT.statut_payement}}</p>-->
 
+            <ng-container *ngIf="PROSPECT.user_id && PROSPECT.user_id.pays_adresse!='France'">
+                <p class="col-12"><strong>Avez-vous besoin de visa d'étude :</strong> <p-selectButton autoWidth="false"
+                        [style]="{'width':'100%'}"
+                        [options]="[{label:'Oui',value:'Oui'},{label:'Non concerné',value:'Non concerné'}]"
+                        [(ngModel)]="PROSPECT.a_besoin_visa" (onChange)="updateValue('a_besoin_visa')"></p-selectButton>
+                </p>
+                <p class="col-6"><strong>Avancement Campus France :</strong>
+                    <br>
+                    <p-dropdown [options]="cfList" [(ngModel)]="PROSPECT.avancement_cf" placeholder="Choisissez un état"
+                        autoWidth="false" [style]="{'width':'100%'}"
+                        (onChange)="updateValue('avancement_cf',$event.value)"></p-dropdown>
+                </p>
+                <p class="col-6"><strong>Numéro de dossier Campus France :</strong><br>
+                    <input pInputText type="text" placeholder="1A2B3C"
+                        (blur)="updateValue('numero_dossier_campus_france')" autoWidth="false"
+                        [style]="{'width':'100%'}" [(ngModel)]="PROSPECT.numero_dossier_campus_france" />
+                </p>
+                <p class="col-12"><strong>Statut Visa :</strong><br>
+                    <p-dropdown [options]="visaList" [(ngModel)]="PROSPECT.avancement_visa"
+                        placeholder="Choisissez un état" autoWidth="false" [style]="{'width':'100%'}"
+                        (onChange)="updateValue('avancement_visa')"></p-dropdown>
+                </p>
+            </ng-container>
 
-            <p class="col-12"><strong>Avez-vous besoin de visa d'étude :</strong> <p-selectButton autoWidth="false"
-                    [style]="{'width':'100%'}"
-                    [options]="[{label:'Oui',value:'Oui'},{label:'Non concerné',value:'Non concerné'}]"
-                    [(ngModel)]="PROSPECT.a_besoin_visa" (onChange)="updateValue('a_besoin_visa')"></p-selectButton>
-            </p>
-            <p class="col-6"><strong>Avancement Campus France :</strong>
-                <br>
-                <p-dropdown [options]="cfList" [(ngModel)]="PROSPECT.avancement_cf" placeholder="Choisissez un état"
-                    autoWidth="false" [style]="{'width':'100%'}"
-                    (onChange)="updateValue('avancement_cf',$event.value)"></p-dropdown>
-            </p>
-            <p class="col-6"><strong>Numéro de dossier Campus France :</strong><br>
-                <input pInputText type="text" placeholder="1A2B3C" (blur)="updateValue('numero_dossier_campus_france')"
-                    autoWidth="false" [style]="{'width':'100%'}" [(ngModel)]="PROSPECT.numero_dossier_campus_france" />
-            </p>
-            <p class="col-12"><strong>Statut Visa :</strong><br>
-                <p-dropdown [options]="visaList" [(ngModel)]="PROSPECT.avancement_visa" placeholder="Choisissez un état"
-                    autoWidth="false" [style]="{'width':'100%'}"
-                    (onChange)="updateValue('avancement_visa')"></p-dropdown>
-            </p>
 
         </div>
     </p-fieldset>

@@ -20,11 +20,11 @@
                 <input pInputText id="nom" type="number" formControlName="score" />
             </div>
             <div class="field col-12 md:col-6">
-                <label For="Condition_admission">Condition d'admission <span style="color: red;"> * </span></label>
+                <label For="Condition_admission">Condition d'admission </label>
                 <input pInputText id="nom" type="text" formControlName="Condition_admission" />
             </div>
             <div class="field col-12 md:col-6">
-                <label For="description">Description <span style="color: red;"> * </span></label>
+                <label For="description">Description</label>
                 <input pInputText id="nom" type="text" formControlName="description" />
             </div>
             <div style="justify-content: right;">
@@ -54,11 +54,11 @@
                 <input pInputText id="nom" type="number" formControlName="score" />
             </div>
             <div class="field col-12 md:col-6">
-                <label For="Condition_admission">Condition d'admission <span style="color: red;"> * </span></label>
+                <label For="Condition_admission">Condition d'admission </label>
                 <input pInputText id="nom" type="text" formControlName="Condition_admission" />
             </div>
             <div class="field col-12 md:col-6">
-                <label For="description">Description <span style="color: red;"> * </span></label>
+                <label For="description">Description</label>
                 <input pInputText id="nom" type="text" formControlName="description" />
             </div>
             <div style="justify-content: right;">
@@ -69,8 +69,7 @@
     </div>
     <h3 class="col-8">Evaluation</h3>
     <div class="col-4">
-        <p-button [style]="{'width':'10%'}" (onClick)="showEvaluationForm=true" icon="pi pi-plus"
-            autoWidth="false"></p-button>
+        <p-button (onClick)="showEvaluationForm=true" icon="pi pi-plus"></p-button>
     </div>
     <p-table #dt1 [value]="evaluations" dataKey="_id" responsiveLayout="scroll"
         [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
@@ -116,26 +115,20 @@
                 <td style="text-align: center;">
 
                     <a [href]="evaluation?.lien" target="_blank">
-                        <i pTooltip="Voir l'évaluation" tooltipPosition="bottom"
-                            class="pi pi-file" style="color: green;" aria-hidden="true"></i>
+                        <i pTooltip="Voir l'évaluation" tooltipPosition="bottom" class="pi pi-file"
+                            style="color: green;" aria-hidden="true"></i>
                     </a>
 
                 </td>
                 <td>
                     {{evaluation?.duree}}mn
                 </td>
-
-
                 <td>
                     {{evaluation?.score}}
                 </td>
                 <td>
-
-
-
-
                     <i style="padding-left: 3%;color: rgb(72, 72, 255);
-                                " class="pi pi-pencil m-1" (click)="initupdateLeadForm(evaluation); scrollToTop()"
+                                " class="pi pi-pencil m-1" (click)="initupdateLeadForm(evaluation);"
                         pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
 
                     <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"

@@ -35,6 +35,7 @@ import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { EvaluationService } from 'src/app/services/evaluation.service';
+import { Evaluation } from 'src/app/models/evaluation';
 @Component({
   selector: 'app-preinscription',
   templateUrl: './preinscription.component.html',
@@ -77,7 +78,6 @@ export class PreinscriptionComponent implements OnInit {
   ]
   TicketnewPro: Ticket;
   civiliteList = environment.civilite;
-  evaluationDic = {}
 
   onUpdateFiltre() {
     if (this.selectedTabIndex == 1) {
@@ -138,7 +138,7 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Dernier diplôme supérieur obtenu", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Dernier diplôme supérieur obtenu", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
 
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
@@ -377,19 +377,16 @@ export class PreinscriptionComponent implements OnInit {
     private EmailTypeS: EmailTypeService, private TeamsIntService: TeamsIntService, private CollaborateurService: RhService, private EvaluationService: EvaluationService) { }
   memberDropdown = []
   AddEval = false
-  EvaluationDropdown = []
+  EvaluationDropdown = [{ label: 'Choisissez une évaluation', value: null }]
+  evaluationDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
     this.EvaluationService.getevaluations().then(evaluations => {
+      console.log(evaluations)
       evaluations.forEach(ev => {
-        this.EvaluationDropdown.push({ label: ev.label, value: ev._id })
-        ev.resultats.forEach(r => {
-          if (this.evaluationDic[r.user_id])
-            this.evaluationDic[r.user_id].push(ev)
-          else
-            this.evaluationDic[r.user_id] = [ev]
-        })
+        this.evaluationDic[ev._id] = ev
+        this.EvaluationDropdown.push({ label: ev.label, value: ev })
       })
     })
     this.UserService.getAllAgent().subscribe(data => {
@@ -492,7 +489,6 @@ export class PreinscriptionComponent implements OnInit {
         this.tickets = data;
       });
       this.UserService.getPopulate(this.token.id).subscribe((user: User) => {
-        console.log(user.savedAdministration)
         this.proscteList = user.savedAdministration
       })
     }
@@ -989,8 +985,34 @@ export class PreinscriptionComponent implements OnInit {
     console.log(prospect, this.updateLeadForm.invalid, this.updateLeadForm.status)
     this.showupdateLeadForm = true
   }
-  initEvaluation() {
+  formUpdateEvalProspect = new FormGroup({
+    score: new FormControl(0),
+    date_expiration: new FormControl(),
+    commentaire: new FormControl(),
+    index: new FormControl(0, Validators.required),
+  })
+  prospectEval: Prospect
+  initEvaluation(prospect, evaluation, index) {
     this.visible_evaluation = true;
+    this.prospectEval = prospect
+    console.log(evaluation)
+    this.formUpdateEvalProspect.patchValue({
+      ...evaluation,
+      date_expiration: this.conersiondate(evaluation.date_expiration),
+      index
+    })
+  }
+  onEditEval() {
+    console.log(this.prospectEval)
+    this.prospectEval.evaluations[this.formUpdateEvalProspect.value.index].score = this.formUpdateEvalProspect.value.score
+    this.prospectEval.evaluations[this.formUpdateEvalProspect.value.index].commentaire = this.formUpdateEvalProspect.value.commentaire
+    this.prospectEval.evaluations[this.formUpdateEvalProspect.value.index].date_expiration = new Date(this.formUpdateEvalProspect.value.date_expiration)
+    console.log(this.prospectEval.evaluations[this.formUpdateEvalProspect.value.index])
+    this.admissionService.updateV2({ _id: this.prospectEval._id, evaluations: this.prospectEval.evaluations }).subscribe(r => {
+      this.prospectEval = r
+      console.log(this.prospectEval.evaluations[this.formUpdateEvalProspect.value.index])
+      this.visible_evaluation = false
+    })
   }
   UpdateProspect() {
     this.admissionService.update({ prospect: { ...this.updateLeadForm.value }, user: { ...this.updateLeadForm.value, _id: this.updateLeadForm.value.user_id } }).subscribe(p => {
@@ -1824,8 +1846,34 @@ export class PreinscriptionComponent implements OnInit {
   }
   modeAffichageE3 = 'Voir'
   modeAffichageE4 = 'Voir'
-  addEval(eval_id: string, prospect: Prospect) {
-    
+  addEval(eval_id: { originalEvent: Event, value: any }, prospect: Prospect) {
+    if (prospect.evaluations)
+      prospect.evaluations.push(
+        {
+          evaluation_id: eval_id.value,
+          etat: 'Disponible',
+          date_envoie: new Date()
+        }
+      )
+    else
+      prospect.evaluations = [
+        {
+          evaluation_id: eval_id.value,
+          etat: 'Disponible',
+          date_envoie: new Date()
+        }
+      ]
+    this.admissionService.updateV2({ _id: prospect._id, evaluations: prospect.evaluations }, 'Mis à jour des évaluations').subscribe(r => {
+      prospect = r
+    })
+    this.AddEval = false
+  }
 
+  deleteEvaluation(prospect: Prospect, index) {
+    prospect.evaluations.splice(index, 1)
+    this.admissionService.updateV2({ _id: prospect._id, evaluations: prospect.evaluations }).subscribe(r => {
+      prospect = r
+      this.ToastService.add({ severity: 'success', summary: 'Evaluation supprimé du Lead avec succès' })
+    })
   }
 }
