@@ -206,18 +206,18 @@ export class SuivreLeadComponent implements OnInit {
     this.showFollow.documents.splice(index, 1)
   }
 
-  FileUpload(event: { target: { files: File[] } }) {
+  FileUpload(event) {
     console.log(event)
-    if (event.target.files != null) {
+    if (event != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
       formData.append('document_id', this.showFollow.documents[this.indexDocuments]._id)
       formData.append('lead_id', this.showFollow._id)
-      formData.append('file', event.target.files[0])
+      formData.append('file', event[0])
       this.LCS.uploadFile(formData).subscribe(res => {
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        event.target.files = null;
-        this.showFollow.documents[this.indexDocuments].path = event.target.files[0].name
+        event = null;
+        this.showFollow.documents[this.indexDocuments].path = event[0].name
         //this.fileInput.clear()
       }, error => {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
