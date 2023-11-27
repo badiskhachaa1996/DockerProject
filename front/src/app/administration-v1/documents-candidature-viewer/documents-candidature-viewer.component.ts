@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./documents-candidature-viewer.component.scss']
 })
 export class DocumentsCandidatureViewerComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
   ID = this.route.snapshot.paramMap.get('id');
   @Input() PROSPECT_ID
   @Input() selectedDocs = 'documents_dossier'
@@ -40,7 +40,7 @@ export class DocumentsCandidatureViewerComponent implements OnInit {
     let r = false
     if (this.selectedDocs == 'documents_dossier') {
       this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu",
-        "Relevés de note depuis le baccalauréat", "Passeport / Pièce d'identité",
+        "Relevés de note depuis le baccalauréat", "Passeport - Pièce d'identité",
         "Diplôme baccalauréat ou équivalent", "Relevé de note baccalauréat"]
       if (this.resideFr && this.alternance) {
         this.documentsObligatoires.push('Copie Visa')

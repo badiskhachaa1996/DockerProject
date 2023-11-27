@@ -34,7 +34,8 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-doc>
-            <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
+            <tr
+                *ngIf="(doc.nom!='Carte de séjour' || (alternance || resideFr)) && (doc.nom!='Test de niveau en Français - TCF (pour les étudiants des pays non francophones)' || resideFr)">
                 <td style="width: 80%;">
                     {{doc.nom}}
                     <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
@@ -44,6 +45,8 @@
                         (click)="downloadFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                 </td>
                 <td style="width: 10%;">
+                    <i *ngIf="doc.info" [pTooltip]="doc.info" tooltipPosition="bottom" class="pi pi-info-circle"
+                        style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus" *ngIf="!docToUpload"
                         (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Fichier en cours de chargement ..." tooltipPosition="bottom"

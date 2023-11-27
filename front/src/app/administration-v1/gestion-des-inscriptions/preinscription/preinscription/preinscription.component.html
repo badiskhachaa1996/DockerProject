@@ -2060,92 +2060,76 @@
                         <p-dialog header="Modifier l'évaluation" [(visible)]="visible_evaluation" modal="true"
                             [style]="{width: '50vw'}">
 
-                            <form [formGroup]="formAffectation" class="p-fluid p-formgrid grid col-12">
-                                <div class="field col-6">
-                                    <label>Evaluation </label>
-                                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember"
-                                        formControlName="agent_id" filter="true"
-                                        placeholder="Choisissez un membre"></p-dropdown>
-                                </div>
+                            <form [formGroup]="formUpdateEvalProspect" class="p-fluid p-formgrid grid col-12">
                                 <div class="field col-6">
                                     <label>Score </label>
-                                    <input pInputText type="number" formControlName="date_limite" />
+                                    <input pInputText type="number" formControlName="score" />
                                 </div>
                                 <div class="field col-6">
-                                    <label For="description">Durée <span style="color: red;"> *
-                                        </span></label>
-                                    <input pInputText type="number" formControlName="date_limite" />
+                                    <label>Date d'expiration </label>
+                                    <input pInputText type="date" formControlName="date_expiration" />
                                 </div>
                                 <div class="field col-6">
-                                    <label>date de passastion </label>
-                                    <input pInputText type="date" formControlName="date_limite" />
-                                </div>
-                                <div class="field col-6">
-                                    <label>date de l'envoi </label>
-                                    <input pInputText type="date" formControlName="date_limite" />
-                                </div>
-                                <div class="field col-6">
-                                    <label For="description">Durée <span style="color: red;"> *
-                                        </span></label>
-                                    <input pInputText type="number" formControlName="date_limite" />
+                                    <label For="description">Commentaire </label>
+                                    <textarea pInputTextarea formControlName="commentaire"></textarea>
                                 </div>
                                 <div class="col-12">
-                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onAffectation()"
-                                        label="Enregistrer" [disabled]="formAffectation.invalid"></p-button>
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onEditEval()"
+                                        label="Enregistrer" [disabled]="formUpdateEvalProspect.invalid"></p-button>
                                 </div>
                             </form>
                         </p-dialog>
-                        <p-dialog modal="true" [(visible)]="AddEval" header="Ajouter une évaluation à {{PROSPECT.user_id.firstname}} {{PROSPECT.user_id.lastname}}">
+                        <p-dialog [style]="{width: '50vw'}" modal="true" [(visible)]="AddEval"
+                            header="Ajouter une évaluation à {{PROSPECT.user_id.firstname}} {{PROSPECT.user_id.lastname}}">
                             <div style="text-align: center;">
-                                <p-dropdown appendTo="body" [value]="EvaluationDropdown" (onChange)="addEval($event,PROSPECT)">
+                                <p-dropdown appendTo="body" [options]="EvaluationDropdown" [style]="{width: '45vw'}"
+                                    autoWidth="false" (onChange)="addEval($event,PROSPECT)">
 
                                 </p-dropdown>
                             </div>
                         </p-dialog>
-                        <p-table *ngIf="evaluationDic[PROSPECT.user_id]" #dt1 [value]="evaluationDic[PROSPECT.user_id]"
-                            dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="['nom', 'choix', 'rythme']"
-                            [rows]="8" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
+                        <p-table #dt1 [value]="PROSPECT.evaluations" dataKey="_id" responsiveLayout="scroll"
                             styleClass="p-datatable-gridlines">
 
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th pSortableColumn="id">
-                                        Evaluation<p-sortIcon field="id"> </p-sortIcon>
+                                    <th pSortableColumn="evaluation_id?.label">
+                                        Evaluation<p-sortIcon field="evaluation_id?.label"> </p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="nom">
-                                        Score<p-sortIcon field="nom"> </p-sortIcon>
+                                    <th pSortableColumn="score">
+                                        Score<p-sortIcon field="score"> </p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="choix">
-                                        Durée <p-sortIcon field="choix"> </p-sortIcon>
+                                    <th pSortableColumn="duree_mise">
+                                        Durée <p-sortIcon field="duree_mise"> </p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="rythme">
-                                        Date de l'envoie <p-sortIcon field="rythme"> </p-sortIcon>
+                                    <th pSortableColumn="etat">
+                                        Etat <p-sortIcon field="etat"> </p-sortIcon>
                                     </th>
-                                    <th pSortableColumn="decision">
-                                        Date de passation<p-sortIcon field="decision"> </p-sortIcon>
+                                    <th pSortableColumn="date_passation">
+                                        Date de passation<p-sortIcon field="date_passation"> </p-sortIcon>
                                     </th>
                                     <th>Action</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-evaluation>
+                            <ng-template pTemplate="body" let-evaluation let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{evaluation?.label}}
+                                        {{evaluation?.evaluation_id?.label}}
                                     </td>
                                     <td>
-                                        WIP
+                                        {{evaluation?.score}}
                                     </td>
                                     <td>
-                                        WIP
+                                        {{evaluation?.duree_mise}}min
                                     </td>
-                                    <td>WIP</td>
-                                    <td>WIP</td>
+                                    <td>{{evaluation?.etat }}</td>
+                                    <td>{{evaluation?.date_passation | date:'dd MMMM YY'}}</td>
                                     <td>
-                                        <i style="padding-left: 3%;color: rgb(72, 72, 255);
-                                " class="pi pi-pencil m-1" (click)="initEvaluation(prospect); scrollToTop()"
+                                        <i style="padding-left: 3%;color: rgb(72, 72, 255);" class="pi pi-pencil m-1"
+                                            (click)="initEvaluation(PROSPECT,evaluation,ri); scrollToTop()"
                                             pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
                                         <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
-                                            (click)="deletePro(prospect)" pTooltip="Supprimer la formation"
+                                            (click)="deleteEvaluation(PROSPECT,ri)" pTooltip="Supprimer l'évaluation"
                                             aria-hidden="true" tooltipPosition="bottom"></i>
                                     </td>
                                 </tr>

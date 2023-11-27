@@ -467,33 +467,30 @@ export class ListLeadcrmComponent implements OnInit {
     this.LCS.update({ ...this.affectForm.value, affected_date: new Date() }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
       this.affectForm.reset()
-      this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
-        this.SujetService.getByLabel('Prospection').subscribe(sujet => {
-          let newTicket = new Ticket(
-            null,
-            u._id,
-            sujet._id,
-            new Date(),
-            this.affectForm.value.affected_to_member,
-            "En cours de traitement",
-            new Date(),
-          )
-          newTicket.customid = this.generateID()
-          newTicket.resum = "Contactez le lead"
-          newTicket.description = `
-          Nom: ${this.showAffect?.nom}\n
-          Prénom: ${this.showAffect?.prenom}\n
-          Email: ${this.showAffect?.email}\n
-          Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
-          Source: ${this.showAffect?.source}
-          `
-          this.TicketService.create(newTicket).subscribe(r => {
-            this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
-          }, error => {
-            console.error(error)
-          })
+      this.SujetService.getByLabel('Prospection').subscribe(sujet => {
+        let newTicket = new Ticket(
+          null,
+          this.token.id,
+          sujet._id,
+          new Date(),
+          this.affectForm.value.affected_to_member,
+          "En cours de traitement",
+          new Date(),
+        )
+        newTicket.customid = this.generateID()
+        newTicket.resum = "Contactez le lead"
+        newTicket.description = `
+        Nom: ${this.showAffect?.nom}\n
+        Prénom: ${this.showAffect?.prenom}\n
+        Email: ${this.showAffect?.email}\n
+        Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
+        Source: ${this.showAffect?.source}
+        `
+        this.TicketService.create(newTicket).subscribe(r => {
+          this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
+        }, error => {
+          console.error(error)
         })
-
       })
 
       this.showAffect = null
