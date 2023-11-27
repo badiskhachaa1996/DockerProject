@@ -509,6 +509,16 @@
 
                         <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false"
                             (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
+                            <ng-template pTemplate="selectedItem">
+                                <div [ngClass]="{
+                                    'nc_red': !lead.statut_dossier || lead.statut_dossier=='Non contacté',
+                                    'int_green': lead?.statut_dossier=='Intéressé',
+                                    'non_int_orange': lead?.statut_dossier=='Non intéressé',
+                                    'rflx_blue': lead?.statut_dossier=='En réflexion'
+                                }">
+                                    {{lead.statut_dossier || 'Non contacté'}}
+                                </div>
+                            </ng-template>
                         </p-dropdown>
                     </td>
 
@@ -569,6 +579,7 @@
                             aria-hidden="true"> </i>
                     </th>
                     <th>Dernier niveau académique</th>
+                    <th>Auteur</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body">
@@ -593,6 +604,7 @@
                             (keyup.enter)="onAddElseContact($event,lead,'whatsapp')">
                     </td>
                     <td>{{lead?.dernier_niveau_academique}}</td>
+                    <td>{{lead?.created_by?.firstname| titlecase}} {{lead?.created_by?.lastname| uppercase}}</td>
                 </tr>
             </ng-template>
         </p-table>

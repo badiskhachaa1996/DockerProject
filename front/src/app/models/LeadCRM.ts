@@ -72,7 +72,8 @@ export class LeadCRM {
             nom?: string,
             path?: string,
         }[],
-        public _id?: string
+        public _id?: string,
+        public created_by?: User
     ) { }
 
 }
