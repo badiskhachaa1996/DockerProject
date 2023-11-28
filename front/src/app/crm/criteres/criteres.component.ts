@@ -3,6 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Critere } from 'src/app/models/Critere';
 import { CritereService } from 'src/app/services/crm/criteres-crm.service';
+
+
+
+
 @Component({
   selector: 'app-criteres',
   templateUrl: './criteres.component.html',
@@ -33,23 +37,52 @@ export class CriteresComponent implements OnInit {
 
   createForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
-    description: new FormControl(''),
-    date_creation: new FormControl(new Date(), Validators.required)
+    description: new FormControl('',Validators.required),
+    
   })
+
+  dateCreationValue: Date = new Date();
+
 
   newCritere = false
 
   initCreate() {
     this.newCritere = true
   }
-
+  alertValidation = false;
+  messageValidation = "";
   onCreate() {
-    this.critereService.critereCreate({ ...this.createForm.value, custom_id: this.generateID({ ...this.createForm.value }) }).subscribe(data => {
-      this.criteres.push(data)
-      this.newCritere = null
-      this.createForm.reset()
-      this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau critere avec succès` })
-    })
+    if(this.createForm.valid){
+
+      const formData = { ...this.createForm.value, date_creation: new Date() };
+
+
+      this.critereService.critereCreate({ ... formData, custom_id: this.generateID({ ...this.createForm.value }) }).subscribe(data => {
+        this.criteres.push(data)
+        this.newCritere = false,
+        this.createForm.reset()
+        this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau critere avec succès` })
+        console.log('Form after reset:', this.createForm.value);
+      })
+    }else{
+     
+      this.alertValidation = true;
+      this.messageValidation ="";
+      if (!this.createForm.get('nom').valid) {
+        this.messageValidation = 'le Nom est obligatoire';
+      }
+      
+      if (!this.createForm.get('description').valid) {
+        if (this.messageValidation) {
+          this.messageValidation += '\n'; // Add newline only if there's a previous message
+        }
+        this.messageValidation += 'la description est obligatoire ';
+      }
+      
+
+
+    }
+
   }
 
   onUpdate() {

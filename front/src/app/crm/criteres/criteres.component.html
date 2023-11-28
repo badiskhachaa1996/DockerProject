@@ -9,7 +9,7 @@
             </div>
 
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="selectedCritere = null; updateForm.reset()" aria-hidden="true"></i>
+                 aria-hidden="true"></i>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
 
@@ -22,7 +22,10 @@
                     <textarea pInputTextarea placeholder="critere" formControlName="description"></textarea>
                 </div>
                 <div>
-                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
+                    <button  label="Valider" type="submit" ></button>
+                    
+
+                    
                 </div>
             </form>
 
@@ -38,8 +41,8 @@
                         style="color: red;"> * </span> sont obligatoires</small>
             </div>
 
-            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="newCritere = null; createForm.reset()" aria-hidden="true"></i>
+        <!--    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="newCritere = false; createForm.reset()" aria-hidden="true"></i> -->
 
             <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
 
@@ -51,14 +54,20 @@
                     <label>Description <span style="color: red;"> * </span></label>
                     <textarea pInputTextarea placeholder="critere" formControlName="description"></textarea>
                 </div>
-                <div>
-                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
+                <div style="display: flex;">
+                    <button pButton label="Valider" type="submit" ></button>
+                    
+                    <button pButton type="button" (click)="newCritere = false; createForm.reset()" aria-hidden="true" label="Retour" [style]="{ 'margin-left': '.5em' }"></button>
+                    
+                    <p-dialog id="dialogValidation" header="Saisie invalid" [(visible)]="alertValidation" [style]="" (onHide)="visible = false">
+                        <p>{{ messageValidation }}</p>
+                    </p-dialog>
                 </div>
             </form>
 
         </div>
     </div>
-    <!-- Listing des équipes -->
+    <!-- Listing des criteres -->
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
@@ -76,10 +85,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                       <!-- <th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id"> */
+                        <th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id"> */
                             </p-sortIcon>
                         </th>
-                     -->
+                     
 
                         <th pSortableColumn="nom">Nom du critere<p-sortIcon field="nom">
                             </p-sortIcon>
@@ -87,20 +96,26 @@
                         <th pSortableColumn="description">Description<p-sortIcon field="description">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="date_creation">Creation Date<p-sortIcon field="date_creation">
+                        </p-sortIcon>
+                    </th>
                         <th>Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-critere>
                     <tr>
-                       <!-- <td>
+                       <td>
                             {{ critere.custom_id }}
                         </td>
-                        -->
+                        
                         <td>
                             {{ critere.nom }}
                         </td>
                         <td>
                             {{ critere.description }}
+                        </td>
+                        <td>
+                            {{ critere.date_creation }} 
                         </td>
                         <td>
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(critere);scrollToTop()"
