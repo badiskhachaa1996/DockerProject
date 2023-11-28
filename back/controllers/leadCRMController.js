@@ -52,7 +52,12 @@ app.post("/create", (req, res) => {
                             }
                         });
                     }
-                    res.status(201).send(FFSaved)
+                    FFSaved.populate('created_by').execPopulate().then(t => {
+                        res.send(t)
+                    },error=>{
+                        console.log(error)
+                    })
+
                 })
                 .catch((error) => { res.status(400).send(error); });
         else
