@@ -16,42 +16,74 @@ export class DataCleComponent implements OnInit {
 
   @Output() saveDemande:EventEmitter<any> = new EventEmitter<any>();
 
-  Motif = environment.motif
-  isUpdating = false
+  Motif = environment.motif.slice(1)
 
-  keyDates = [{
-    motif: 'Motif',
-    date_refus: 'date de refus',
+  keyDates = [
+    {
+    motif:'',
+    date_refus: null,
     date_demande: new Date,
-    date_remboursement:'date de remboursement',
-    date_estime:'date estimé'
-  }]
+    date_remboursement: null,
+    // date_estime:null,
+    isUpdating : false
+
+  }
+]
 
 
   constructor(private demandeService: DemandeRemboursementService, private messageService: MessageService, private formBuilder: FormBuilder, )  { }
 
- 
+  isUpdating =false
+
 
   ngOnInit(): void {
-    if (this.demande){
-    this.keyDates[0].motif = this.demande?.motif
-    this.keyDates[0].date_refus=this.demande?.rejection_date
-    this.keyDates[0].date_demande = this.demande?.created_on
-    this.keyDates[0].date_remboursement=this.demande?.refund.date
+
+    if (this.demande && this.demande.refund){
+      this.keyDates=[
+        {
+        motif :  this.demande?.motif,
+        date_refus : this.demande?.rejection_date,
+        date_demande :this.demande?.created_on,
+        date_remboursement : this.demande?.refund?.date,
+        isUpdating : false
+      }
+    ]
+    
   }
 
   }
-  updateKeyDates(){
+  updateKeyDates(keyDates){
    this.isUpdating = true 
   }
-  saveKeyDates(){
-    this.demande.motif= this.keyDates[0].motif
-    this.demande.rejection_date=this.keyDates[0].date_refus
-    this.demande.created_on= this.keyDates[0].date_demande
-    this.demande.refund.date=this.keyDates[0].date_remboursement
+  saveKeyDates(keyDate){
+    if (!this.demande.refund) {
+      this.demande.refund = {}; 
+    }
+    this.demande.motif= keyDate.motif
+    this.demande.rejection_date=keyDate.date_refus
+    this.demande.created_on= keyDate.date_demande
+    this.demande.refund.date = keyDate.date_remboursement;
     this.updateDemande(this.demande) 
     this.isUpdating=false
   }
+
+  // saveKeyDates(infoRefund){
+
+
+  //   this.demande.refund = {
+  //     date : infoRefund.refund_date,
+  //     method : infoRefund.refund_method,
+  //     montant : infoRefund.montant,
+  //     note : infoRefund.note,
+  //     doc_number : infoRefund.doc_number
+  //   }
+
+  //   this.updateDemande(this.demande) 
+
+  //   this.isUpdating=false
+  
+  // }
+
 
 
 

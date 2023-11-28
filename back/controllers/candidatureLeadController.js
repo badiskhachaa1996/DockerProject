@@ -63,8 +63,11 @@ app.put("/update", (req, res) => {
             CandidatureLead.findById(doc._id).populate('lead_id').then(newCandidature => {
                 res.status(201).send(newCandidature)
             })
-        else
-            console.error(err); res.status(404).send({ ...req.body, err });
+        else{
+            console.error(err); 
+            res.status(500).send({ ...req.body, err });
+        }
+            
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 

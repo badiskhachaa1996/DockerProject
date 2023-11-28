@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
@@ -22,7 +22,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AddProspectComponent implements OnInit {
 
-  RegisterForm2: FormGroup = new FormGroup({
+  RegisterForm2: UntypedFormGroup = new FormGroup({
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required)
@@ -68,7 +68,7 @@ export class AddProspectComponent implements OnInit {
     ];
 
 
-  newLeadForm: FormGroup = new FormGroup({
+  newLeadForm: UntypedFormGroup = new FormGroup({
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required),
@@ -86,7 +86,7 @@ export class AddProspectComponent implements OnInit {
 
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
-    programme: new FormControl(this.programList[0], Validators.required),
+    // programme: new FormControl(this.programList[0], Validators.required),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
   })

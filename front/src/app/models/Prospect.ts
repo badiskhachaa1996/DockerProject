@@ -1,3 +1,6 @@
+import { User } from "./User";
+import { Evaluation } from "./evaluation";
+
 export class Prospect {
 
     constructor(
@@ -98,17 +101,29 @@ export class Prospect {
         public numero_adresse?: String,
         public evaluation?: [{ name: string, Score: string, duree: number, date_envoi: Date, date_passage: Date }],
         public entretien?: { date_entretien: Date, Duree: number, niveau: string, parcours: string, choix: string },
-        public decision?: { decision_admission: string, expliquation: string, date_decision: Date },
-        public teams?:String,
-        public Ypareo?:string,
-        public groupe?:string,
-        public ecole?:string,
+        public decision?: { decision_admission: string, expliquation: string, date_decision: Date, membre: User },
+        public teams?: String,
+        public Ypareo?: string,
+        public groupe?: string,
+        public ecole?: string,
         public payement_programme?: [{ type: string, montant: number, date: Date, ID: string, doc: string, motif: string, etat: string }],
-        public ville_adresse?:string,
+        public ville_adresse?: string,
         public sos_lastname?: string,
         public sos_firstname?: string,
         public sos_email?: string,
         public sos_phone?: string,
+        public evaluations?: [
+            {
+                evaluation_id?: Evaluation,
+                etat?: string,
+                score?: number,
+                date_passation?: Date,
+                date_envoie?: Date,
+                duree_mise?: number,
+                date_expiration?: Date,
+                commentaire?: string
+            }
+        ]
     ) { }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {  FormControl, Validators, UntypedFormGroup } from '@angular/forms';
+
 import jwt_decode from 'jwt-decode';
 import { MessageService as ToastService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
@@ -65,12 +66,12 @@ export class NewListTicketsComponent implements OnInit {
   tickets: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
-  TicketForm = new FormGroup({
+  TicketForm = new UntypedFormGroup({
     sujet_id: new FormControl(null, Validators.required),
     service_id: new FormControl(null, Validators.required),
     description: new FormControl('',),
     resum: new FormControl(''),
-    priorite: new FormControl("false"),
+    priorite: new FormControl(false),
     module: new FormControl('',),
     type: new FormControl('',),
     statut: new FormControl('',),
@@ -518,7 +519,7 @@ export class NewListTicketsComponent implements OnInit {
   seeMoreObj = { str: "", type: "" }
   seeMoreBool = false
   ticketTraiter: Ticket
-  TicketFormTraiter = new FormGroup({
+  TicketFormTraiter = new UntypedFormGroup({
     user_id: new FormControl(''),
     description: new FormControl('')
   })

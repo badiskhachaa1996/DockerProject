@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {   FormControl, Validators, UntypedFormGroup, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { Prospect } from 'src/app/models/Prospect';
@@ -31,7 +31,7 @@ import { Notification } from 'src/app/models/notification';
   styleUrls: ['./orientation.component.scss']
 })
 export class OrientationComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
    
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
@@ -44,7 +44,7 @@ export class OrientationComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  uploadFileForm: FormGroup = new FormGroup({
+  uploadFileForm: UntypedFormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
@@ -473,7 +473,7 @@ export class OrientationComponent implements OnInit {
     })
   }
 
-  traitementForm: FormGroup = new FormGroup({
+  traitementForm: UntypedFormGroup = new FormGroup({
     _id: new FormControl(),
     contact_date: new FormControl(new Date()),
     contact_orientation: new FormControl(''),
@@ -491,7 +491,7 @@ export class OrientationComponent implements OnInit {
   //Partie Details
   showDetails: Prospect = null
 
-  detailsForm: FormGroup = new FormGroup({
+  detailsForm: UntypedFormGroup = new FormGroup({
     //Informations Personnelles
     civilite: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
@@ -924,13 +924,13 @@ export class OrientationComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

@@ -236,6 +236,7 @@ import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-doc
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
 import { CriteresComponent } from './crm/criteres/criteres.component';
+import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
@@ -568,6 +569,7 @@ const routes: Routes = [
             { path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
             { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
+            
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
@@ -917,8 +919,8 @@ const routes: Routes = [
                 path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation/:rentree',
                 component: GenDocPaiementPreinscriptionComponent,
                 canActivate: [AuthGuardService],
-            },
-            {
+            }
+            ,{
                 path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation/:rentree',
                 component: GenDocPaiementPreinscriptionAcompteComponent,
                 canActivate: [AuthGuardService],
@@ -1284,12 +1286,8 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
-    // <<<<<<< HEAD
+    { path: 'formulaire-remboursement', component: AddRemboursementPublicComponent },
 
-    // =======
-
-
-    // >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 ]
 
 
@@ -1300,8 +1298,10 @@ const routes: Routes = [
             anchorScrolling: 'enabled',
             useHash: false,
         }),
+        
     ],
 
-    exports: [RouterModule],
+   
+   
 })
 export class AppRoutingModule { }

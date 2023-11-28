@@ -12,10 +12,12 @@ let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a03
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  if (!argProd.includes("dev") && !argProd.includes("prod")) {
+  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25"];
+  } else if (argProd.includes("qa")) {
+    origin = ["https://152.228.219.55"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -29,7 +31,8 @@ if (process.argv[2]) {
       "https://ims.adgeducation.com",
       "https://ims.intedgroup.com",
       "https://t.dev.estya.com",
-      "https://wio.fr/"
+      "https://wio.fr/",
+      "https://studinfo.com"
     ];
 }
 app.use(cors({ origin: origin }));
@@ -164,7 +167,7 @@ const { User } = require("./models/user");
 const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
 // const documentsController = require('./controllers/documentsController');
 const { Remboursement } = require("./models/Remboursement");
-const {evaluation } = require("./controllers/evaluationController");
+const { evaluation } = require("./controllers/evaluationController");
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
   if (token && token["prospectFromDb"]) {
@@ -212,6 +215,12 @@ app.use("/", function (req, res, next) {
     });
   } else {
     if (
+      req.originalUrl == "/soc/formulaireAdmission/FA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/RA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/EA/getAll" ||
+      req.originalUrl.startsWith("/soc/user/getPopulate/")  ||
+      req.originalUrl == "/soc/demanderemboursement//upload-docs" ||
+    
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
@@ -270,7 +279,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
       req.originalUrl === '/soc/ticket/getAllPopulate' ||
-      req.originalUrl==='/soc/demanderemboursement/newremb' ||
+      req.originalUrl === '/soc/demanderemboursement/newremb' ||
       req.originalUrl == '/soc/LeadCRM/create'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
@@ -427,18 +436,18 @@ app.use('/soc/pointage', require('./controllers/pointageController'))
 app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
 // app.use('/soc/demanderemboursement',rembouresementController)
-app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
+app.use('/soc/demanderemboursement', require('./controllers/rembouresementController'));
 // app.use('/soc/docremb',require('./controllers/documentsController'));
 
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
-app.use('/soc/evaluation',require('./controllers/evaluationController'));
+app.use('/soc/evaluation', require('./controllers/evaluationController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)
-app.use('/soc/gestion-operation',gestionOperationCrmController)
-app.use('/soc/gestion-sources',gestionSourceCrmController)
+app.use('/soc/gestion-operation', gestionOperationCrmController)
+app.use('/soc/gestion-sources', gestionSourceCrmController)
 
 
 io.on("connection", (socket) => {
@@ -535,4 +544,18 @@ io.on("connection", (socket) => {
 
 httpServer.listen(3000, () => {
   console.log("SERVEUR START");
+});
+
+
+
+// captcha 
+app.post('/verify-recaptcha', async (req, res) => {
+  try {
+    const { token, recaptchaAction } = req.body;
+    const score = await createAssessment({ token, recaptchaAction });
+    res.json({ score });
+  } catch (error) {
+    console.error('Error during reCAPTCHA assessment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });

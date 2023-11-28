@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { saveAs as importedSaveAs } from "file-saver";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { Matching } from 'src/app/models/Matching';
@@ -133,7 +133,7 @@ export class NewCvthequeInterneComponent implements OnInit {
     })
   }
   cvToUpdate;
-  formUpdate = new FormGroup({
+  formUpdate = new UntypedFormGroup({
     civilite: new FormControl('Monsieur', Validators.required),
     lastname: new FormControl('', Validators.required),
     firstname: new FormControl('', Validators.required),
@@ -150,7 +150,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   })
 
   cvToAdd;
-  formAdd = new FormGroup({
+  formAdd = new UntypedFormGroup({
     civilite: new FormControl('Monsieur', Validators.required),
     lastname: new FormControl('', Validators.required),
     firstname: new FormControl('', Validators.required),

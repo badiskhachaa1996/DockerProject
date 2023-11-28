@@ -205,12 +205,12 @@
                 [style]="{'width':'100%'}"></button>
         </div>
         <div class="col-6">
-            <button pButton (click)="saveCandidature()" label="Validez la signature & la candidature" autoWidth="false"
-                [style]="{'width':'100%'}"></button>
+            <button pButton (click)="saveCandidature(true)" label="Validez la signature & la candidature"
+                autoWidth="false" [style]="{'width':'100%'}"></button>
         </div>
     </div>
     <div class="col-6" *ngIf="pageNumber!=0">
-        <app-preview-candidature [PROSPECT]="PROSPECT"  [pageNumber]="pageNumber" [CANDIDATURE]="formCandidature.value">
+        <app-preview-candidature [PROSPECT]="PROSPECT" [pageNumber]="pageNumber" [CANDIDATURE]="formCandidature.value">
 
         </app-preview-candidature>
     </div>

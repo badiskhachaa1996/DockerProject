@@ -27,7 +27,7 @@ const schema = mongoose.Schema({
     contacts: {
         type: [{
             date_contact: { type: Date, required: false },
-            contact_by: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+            contact_by: { type: String, required: false },
             canal: { type: String, required: false },
             suite_contact: { type: String, required: false },
             note: { type: String, required: false },
@@ -77,7 +77,8 @@ const schema = mongoose.Schema({
             nom: { type: String, required: false },
             path: { type: String, required: false },
         }], default: []
-    }
+    },
+    created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
 });
 
 const LeadCRM = mongoose.model('leadCRM', schema);

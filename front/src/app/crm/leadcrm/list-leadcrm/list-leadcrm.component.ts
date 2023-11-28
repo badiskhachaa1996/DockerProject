@@ -1,5 +1,9 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core'
+
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
@@ -59,6 +63,10 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Qualifié', value: 'Qualifié' },
   ]
 
+  filterAuteur = [
+    { label: 'Tous les auteurs', value: null }
+  ]
+
   filterPaiement = [
     { label: 'Tous les modalités de paiements', value: null },
     { value: "Chèque Montpellier", label: "Chèque Montpellier" },
@@ -97,6 +105,13 @@ export class ListLeadcrmComponent implements OnInit {
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
       this.leads = data
+      let ids = []
+      data.forEach(l => {
+        if (l.created_by && !ids.includes(l.created_by._id)) {
+          this.filterAuteur.push({ label: `${l.created_by.firstname} ${l.created_by.lastname}`, value: l.created_by._id })
+          ids.push(l.created_by._id)
+        }
+      })
     })
     this.eventsSubscription = this.newLead.subscribe((lead) => {
       this.leads.push(lead)
@@ -182,14 +197,15 @@ export class ListLeadcrmComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
+    eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
-
     produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
@@ -404,7 +420,7 @@ export class ListLeadcrmComponent implements OnInit {
 
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
+  affectForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),
@@ -462,33 +478,30 @@ export class ListLeadcrmComponent implements OnInit {
     this.LCS.update({ ...this.affectForm.value, affected_date: new Date() }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
       this.affectForm.reset()
-      this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
-        this.SujetService.getByLabel('Prospection').subscribe(sujet => {
-          let newTicket = new Ticket(
-            null,
-            u._id,
-            sujet._id,
-            new Date(),
-            this.affectForm.value.affected_to_member,
-            "En cours de traitement",
-            new Date(),
-          )
-          newTicket.customid = this.generateID()
-          newTicket.resum = "Contactez le lead"
-          newTicket.description = `
-          Nom: ${this.showAffect?.nom}\n
-          Prénom: ${this.showAffect?.prenom}\n
-          Email: ${this.showAffect?.email}\n
-          Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
-          Source: ${this.showAffect?.source}
-          `
-          this.TicketService.create(newTicket).subscribe(r => {
-            this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
-          }, error => {
-            console.error(error)
-          })
+      this.SujetService.getByLabel('Prospection').subscribe(sujet => {
+        let newTicket = new Ticket(
+          null,
+          this.token.id,
+          sujet._id,
+          new Date(),
+          this.affectForm.value.affected_to_member,
+          "En cours de traitement",
+          new Date(),
+        )
+        newTicket.customid = this.generateID()
+        newTicket.resum = "Contactez le lead"
+        newTicket.description = `
+        Nom: ${this.showAffect?.nom}\n
+        Prénom: ${this.showAffect?.prenom}\n
+        Email: ${this.showAffect?.email}\n
+        Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
+        Source: ${this.showAffect?.source}
+        `
+        this.TicketService.create(newTicket).subscribe(r => {
+          this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
+        }, error => {
+          console.error(error)
         })
-
       })
 
       this.showAffect = null
@@ -542,13 +555,13 @@ export class ListLeadcrmComponent implements OnInit {
     :
     FileUpload;
 
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

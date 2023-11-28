@@ -988,7 +988,7 @@ export class DashboardComponent implements OnInit {
 
   // récupère les compétences
   getCras(): FormArray {
-    return this.formAddCra.get('cras') as FormArray;
+    return this.formAddCra.get('cras') as FormArray ;
   }
 
   // ajoute de nouveaux champs au formulaire

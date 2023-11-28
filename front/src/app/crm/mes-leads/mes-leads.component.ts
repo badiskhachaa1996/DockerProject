@@ -1,5 +1,7 @@
+
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
+
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -113,7 +115,7 @@ export class MesLeadsComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
@@ -296,7 +298,7 @@ export class MesLeadsComponent implements OnInit {
   ]
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
+  affectForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),
@@ -331,60 +333,60 @@ export class MesLeadsComponent implements OnInit {
   }
 
 
-    showAddEmailInput = false
-    showAddNumberlInput = false
-    showAddWhatNumberlInput = false
+  showAddEmailInput = false
+  showAddNumberlInput = false
+  showAddWhatNumberlInput = false
 
 
-    onInitAddEmailInput(type: string) {
+  onInitAddEmailInput(type: string) {
 
-        if (!type){
-            return
-        }
-        if (type == "email") {
-            this.showAddEmailInput = true
-        }
-        if (type == "number") {
-            this.showAddNumberlInput = true
-        }
-        if (type == "whatsapp") {
-            this.showAddWhatNumberlInput = true
-        }
+    if (!type) {
+      return
     }
-
-    onAddElseContact(event: any, lead: LeadCRM, type: string) {
-        // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
-        if (!type){
-            return
-        }
-        if (type == "email") {
-            lead.email = lead.email + " ;" + event.target.value
-        }
-        if (type == "number") {
-            lead.numero_phone = lead.numero_phone + "; " + event.target.value
-        }
-        if (type == "whatsapp") {
-            lead.numero_whatsapp = lead.numero_whatsapp + " ;" + event.target.value
-        }
-        this.LCS.update(lead).subscribe(data => {
-            this.leads.splice(this.leads.indexOf(lead), 1, data)
-            this.ToastService.add({ severity: "success", summary: "Mise à jour avec succès" })
-        })
+    if (type == "email") {
+      this.showAddEmailInput = true
     }
-
-    onHideAddEmailInput(type: string) {
-        if (!type){
-            return
-        }
-        if (type == "email") {
-            this.showAddEmailInput = false
-        }
-        if (type == "number") {
-            this.showAddNumberlInput = false
-        }
-        if (type == "whatsapp") {
-            this.showAddWhatNumberlInput = false
-        }
+    if (type == "number") {
+      this.showAddNumberlInput = true
     }
+    if (type == "whatsapp") {
+      this.showAddWhatNumberlInput = true
+    }
+  }
+
+  onAddElseContact(event: any, lead: LeadCRM, type: string) {
+    // ajouter une adresse email ou le numero de telephone ou le numéro whatsapp selon le type au lead en plus de celle existante
+    if (!type) {
+      return
+    }
+    if (type == "email") {
+      lead.email = lead.email + " ;" + event.target.value
+    }
+    if (type == "number") {
+      lead.numero_phone = lead.numero_phone + "; " + event.target.value
+    }
+    if (type == "whatsapp") {
+      lead.numero_whatsapp = lead.numero_whatsapp + " ;" + event.target.value
+    }
+    this.LCS.update(lead).subscribe(data => {
+      this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.ToastService.add({ severity: "success", summary: "Mise à jour avec succès" })
+    })
+  }
+
+  onHideAddEmailInput(type: string) {
+    if (!type) {
+      return
+    }
+    if (type == "email") {
+      this.showAddEmailInput = false
+    }
+    if (type == "number") {
+      this.showAddNumberlInput = false
+    }
+    if (type == "whatsapp") {
+      this.showAddWhatNumberlInput = false
+    }
+  }
 
 }

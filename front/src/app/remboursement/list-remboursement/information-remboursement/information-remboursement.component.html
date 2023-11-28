@@ -23,8 +23,8 @@
             <td><textarea [disabled]="!isUpdating" type="text" [(ngModel)]="infoRefund.note"></textarea></td>
            
             <td class="text-right" style="min-width: 8rem">
-                <i class="pi pi-pencil" *ngIf="!isUpdating" (click)="updateKeyDates()"></i>
-                <i class="pi pi-check" *ngIf="isUpdating" (click)="saveKeyDates()"></i>
+                <i class="pi pi-pencil" *ngIf="!isUpdating" (click)="updateKeyDates(infoRefund)"></i>
+                <i class="pi pi-check" *ngIf="isUpdating" (click)="saveKeyDates(infoRefund)"></i>
 
             </td>
         </tr>

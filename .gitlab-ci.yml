@@ -1,29 +1,50 @@
 stages:
-   - install_dependencies
-   - test
-   - build
-   - deploy
+  - Install
+  - Build
+#  - SAST
+#  - DAST
+#  - Docker
+  - DEV
+  - QA
+  - PROD # FIXME tests only on Dev/QA, not in Prod
 
-node_dependencies:
-  stage: install_dependencies
+#variables:
+#  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
+#  SAST_IMAGE_SUFFIX: '-fips'
+
+#include:
+#  - template: Security/SAST.gitlab-ci.yml
+
+#semgrep-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.7"
+
+#brakeman-sast:
+#  variables:
+#    SAST_ANALYZER_IMAGE_TAG: "3.1.1"
+
+#==========================================================
+
+install_node_dependencies_on_dev:
+  stage: Install
   tags:
-  - dev-shell
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
       - back/node_modules/
   script:
     - cd back
+    - rm -rf node_modules/
     - npm install
   only:
     changes:
-      - back/package-lock.json
+      - back/package.json
 
-  
-angular_dependencies:
-  stage: install_dependencies
+install_angular_dependencies_on_dev:
+  stage: Install
   tags:
-  - dev-shell
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -32,16 +53,108 @@ angular_dependencies:
     - cd front
     - rm -rf node_modules/
     - npm install
-    - npm uninstall angular2-signaturepad
-    - npm install angular2-signaturepad@3.0.4
-  # only:
-  #   - dev
   only:
     changes:
-      - front/package-lock.json
-#========================================================
-build_angular:
-  stage: build
+      - front/package.json
+
+#==========================================================
+
+install_node_dependencies_on_qa:
+  stage: Install
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - develop
+  when: manual
+
+install_angular_dependencies_on_qa:
+  stage: Install
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - develop
+  when: manual
+
+#==========================================================
+
+install_node_dependencies_on_prod:
+  stage: Install
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - main
+  when: manual
+
+install_angular_dependencies_on_prod:
+  stage: Install
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    - main
+  when: manual
+
+#==========================================================
+
+# sonarqube-check:
+#   image: 
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   # cache:
+#   #   key: "${CI_JOB_NAME}"
+#   #   paths:
+#   #     - .sonar/cache
+#   script:
+#     - >
+#       sonar-scanner 
+#       -Dsonar.projectKey=elitech-ecole_ems3_AXzmfloY1eE81W_XHtln
+#       -Dsonar.qualitygate.wait=true
+#       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
+#       -Dsonar.test.inclusions=**/*.spec.ts
+#       -Dsonar.sources=back/controllers,back/models,back/middleware,front/src/app/
+   
+#   allow_failure: true
+#   tags:
+#     - dev-docker # FIXME QA PROD
+
+#==========================================================
+
+build_angular_on_dev:
+  stage: Build
   tags:
     - dev-shell
   cache: 
@@ -54,29 +167,130 @@ build_angular:
       - cd front
       - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
-    - Version1-2
+    - develop
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
     expire_in: 1 hour
-#  when: manual
- #======================================================
-deploy_angular_todev:
-  stage: deploy
+
+#==========================================================
+
+build_angular_on_qa:
+  stage: Build
+  tags:
+    - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --prod --aot
+  only:
+    - develop
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+  when: manual
+
+#==========================================================
+
+build_angular_on_prod:
+  stage: Build
+  tags:
+    - prod-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --prod --aot
+  only:
+    - main
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+  when: manual
+
+#spotbugs-sast:
+#  dependencies:
+#    - build_angular
+#  variables:
+#    FAIL_NEVER: 1
+#  allow_failure: true
+#  artifacts:
+#    reports:
+#      sast: gl-sast-report.json
+
+# DAST:
+  # dast_configuration:
+    # site_profile: "Inted Group"
+    # scanner_profile: "Quick Passive Test"
+
+#==========================================================
+
+# angular_docker_build:
+#   stage: Docker
+#   image: docker:24.0.5
+#   services:
+#     - docker:24.0.5-dind
+#   before_script:
+#     - docker info
+#   script: 
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG .
+#     - docker push $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       changes:
+#         - front/Dockerfile
+#       when: manual
+#       allow_failure: true # FIXME
+
+# node_docker_build:
+#   stage: Docker
+#   image: docker:24.0.5
+#   services:
+#     - docker:24.0.5-dind
+#   before_script:
+#     - docker info
+#   script: 
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG .
+#     - docker push $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       changes:
+#         - back/Dockerfile
+#       when: manual
+#       allow_failure: true # FIXME
+
+#==========================================================
+
+deploy_angular_to_dev:
+  stage: DEV
   dependencies: 
-    - build_angular
+    - build_angular_on_dev
   tags:
     - dev-shell
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist /var/www/html/ems
   only:
-    - Version1-2
-  # when: manual
-#===========================================================
-deploy_node_todev:
-  stage: deploy
+    - develop
+  
+deploy_node_to_dev:
+  stage: DEV
 
   tags:
     - dev-shell
@@ -85,34 +299,99 @@ deploy_node_todev:
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js -- --dev
+    - pm2 start index.js --time -- --dev
    # - pm2 logs index
   only:
-    - Version1-2
-  # when: manual
+    - develop
 
-sonarqube-check:
-  image: 
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  # cache:
-  #   key: "${CI_JOB_NAME}"
-  #   paths:
-  #     - .sonar/cache
-  script:
-    - >
-      sonar-scanner 
-      -Dsonar.projectKey=elitech-ecole_ems3_AXzmfloY1eE81W_XHtln
-      -Dsonar.qualitygate.wait=true
-      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
-      -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=back/controllers,back/models,back/middleware,front/src/app/
-   
-  allow_failure: true
+#==========================================================
+
+manual_deploy_angular_to_qa:
+  stage: QA
+  dependencies: 
+    - build_angular_on_qa
   tags:
-    - dev-docker
+    - qa-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
-    - Version1-2
+    - develop
+  when: manual
+
+manual_deploy_node_to_qa:
+  stage: QA
+
+  tags:
+    - qa-shell
+  script:
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js --time -- --qa
+   # - pm2 logs index
+  only:
+    - develop
+  when: manual
+
+#==========================================================
+
+manual_deploy_angular_to_prod:
+  stage: PROD
+  dependencies:
+    - build_angular_on_prod
+  tags:
+    - prod-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - main
+  when: manual
+  
+manual_deploy_node_to_prod:
+  stage: PROD
+
+  tags:
+    - prod-shell
+  script:
+    - cd back
+    - ln -s ~/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod
+   # - pm2 logs index
+  only:
+    - main
+  when: manual
+
+# manual_deploy_angular_docker_to_prod:
+#   stage: PROD
+#   dependencies: 
+#     - build_angular
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/front:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
+  
+# manual_deploy_node_docker_to_prod:
+#   stage: PROD
+
+#   tags:
+#     - qa-docker # FIXME
+#   script:
+#     - docker pull $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#     - mkdir -p "$MOUNT_POINT"
+#     - docker run -v "$MOUNT_POINT:/mnt" $CI_REGISTRY/elitech-ecole/ems3/back:$CI_COMMIT_REF_SLUG
+#   only:
+#     - main
+#   when: manual
+#   #environment: production
+

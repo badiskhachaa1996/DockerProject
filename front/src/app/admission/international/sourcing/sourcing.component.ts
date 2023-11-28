@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { Prospect } from 'src/app/models/Prospect';
@@ -444,7 +444,7 @@ export class SourcingComponent implements OnInit {
   agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
   equipeSourcingList = [{ label: "Aucune", value: null }]
   dropdownFormation = []
-  affectationForm: FormGroup = new FormGroup({
+  affectationForm: UntypedFormGroup = new FormGroup({
     agent_sourcing_id: new FormControl(null),
     team_sourcing_id: new FormControl(null),
     date_sourcing: new FormControl(new Date()),
@@ -508,7 +508,7 @@ export class SourcingComponent implements OnInit {
   //Partie Details
   showDetails: Prospect = null
   dropdownEcole = []
-  detailsForm: FormGroup = new FormGroup({
+  detailsForm: UntypedFormGroup = new FormGroup({
     //Informations Personnelles
     civilite: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
@@ -991,13 +991,13 @@ export class SourcingComponent implements OnInit {
   mailDropdown = []
   mailTypeDropdown = []
 
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

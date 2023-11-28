@@ -30,7 +30,7 @@ export class DetailsCandidatComponent implements OnInit {
     this.students[0].scholar_year= this.demande?.training?.scholar_year
     this.students[0].formation = this.demande?.training?.name
   }
-  console.log('Scholar Year:', this.demande?.training?.scholar_year);
+  
 
 }
 
