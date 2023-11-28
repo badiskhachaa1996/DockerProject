@@ -13,7 +13,7 @@
     <ng-template pTemplate="body" let-keyDate let-demande>
         <tr>
             <td >
-                <p-dropdown placeholder="Choisir Méthode" [options]="Motif" [disabled]="!isUpdating" [(ngModel)]="keyDate.motif">{{keyDate.motif}}</p-dropdown>
+                <p-dropdown placeholder="Choisir Méthode" [options]="Motif" [disabled]="!isUpdating" [(ngModel)]="keyDate.motif">{{demande.motif}}</p-dropdown>
             </td>
             <td><input type="date" [disabled]="!isUpdating"  [ngModel]="keyDate.date_refus" (ngModelChange)="keyDate.date_refus = $event" /></td>
             <td > {{keyDate.date_demande | date:'dd-MM-yyyy'}}  </td>

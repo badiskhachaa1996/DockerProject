@@ -181,10 +181,14 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
 
   // Download the Document
 
-  downloadDoc(slug) {
+  downloadDoc(slug) 
+  {
     this.demandeService.downloadDoc(this.demande._id,slug).then((data: any) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      importedSaveAs(new Blob([byteArray], { type: data.documentType }), slug + '.pdf')
+      const blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(blob, slug + '.pdf');
+
     })
   }
 
