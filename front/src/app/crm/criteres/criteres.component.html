@@ -22,7 +22,7 @@
                     <textarea pInputTextarea placeholder="critere" formControlName="description"></textarea>
                 </div>
                 <div>
-                    <button  label="Valider" type="submit" ></button>
+                    <button  pButton label="Valider" type="submit" ></button>
                     
 
                     
@@ -85,9 +85,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id"> */
+                       <!--<th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id"> */
                             </p-sortIcon>
-                        </th>
+                        </th> -->
                      
 
                         <th pSortableColumn="nom">Nom du critere<p-sortIcon field="nom">
@@ -96,17 +96,17 @@
                         <th pSortableColumn="description">Description<p-sortIcon field="description">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="date_creation">Creation Date<p-sortIcon field="date_creation">
+                       <!-- <th pSortableColumn="date_creation">Creation Date<p-sortIcon field="date_creation">
                         </p-sortIcon>
-                    </th>
+                    </th> -->
                         <th>Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-critere>
                     <tr>
-                       <td>
+                      <!-- <td>
                             {{ critere.custom_id }}
-                        </td>
+                        </td> -->
                         
                         <td>
                             {{ critere.nom }}
@@ -114,9 +114,9 @@
                         <td>
                             {{ critere.description }}
                         </td>
-                        <td>
+                      <!-- <td>
                             {{ critere.date_creation }} 
-                        </td>
+                        </td> -->
                         <td>
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(critere);scrollToTop()"
                                 pTooltip="Modifier critere" aria-hidden="true" tooltipPosition="bottom"></i>
