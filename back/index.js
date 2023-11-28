@@ -327,6 +327,7 @@ app.use("/soc/anneeScolaire", anneeScolaireController);
 app.use("/soc/ecole", ecoleController);
 
 app.use("/soc/campus", campusController);
+app.use("/soc/campusR", require('./controllers/campusReworkController'));
 
 app.use("/soc/diplome", diplomeController);
 
