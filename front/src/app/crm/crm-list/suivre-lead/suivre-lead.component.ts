@@ -30,7 +30,6 @@ export class SuivreLeadComponent implements OnInit {
     formation: new FormControl(''),
     campus: new FormControl(''),
     note_choix: new FormControl(''),
-
     produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
@@ -41,6 +40,16 @@ export class SuivreLeadComponent implements OnInit {
     note: new FormControl(''),
     suite_contact: new FormControl('')
   })
+  qualifiquationsForm=new FormGroup({
+    criteres_qualification: new FormControl(''),
+    decision_qualification: new FormControl(''),
+    note_qualification: new FormControl(''),
+  })
+  paiementForm=new FormGroup({
+    montant_paye: new FormControl(''),
+    modalite_paiement: new FormControl(''),
+    note: new FormControl(''),
+  });
   memberList = []
   produitList = [];
   canalList = [
@@ -103,7 +112,7 @@ export class SuivreLeadComponent implements OnInit {
       })
     
     this.LCS.getOneByID(this.LEAD_ID).subscribe(lead => {
-      this.followForm.patchValue({ ...lead })
+      this.followForm.patchValue({ ...lead,  }); 
       this.showFollow = lead
     })
     this.TeamCRMService.MIgetAll().subscribe(data => {
@@ -131,22 +140,20 @@ export class SuivreLeadComponent implements OnInit {
   }
   //Follow Form
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({ ...lead })
+    this.followForm.patchValue({...lead ,})
     this.showFollow = lead
     
   }
 
   onUpdateFollow() {
     console.log(this.showFollow);
-    this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents }).subscribe(data => {
-      this.followForm.reset()
-      this.showFollow = null
+    this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents, }).subscribe(data => {
+      
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     })
   }
   onAddHistorique() {
     console.log(this.showFollow);
-    
     this.showFollow.contacts.push({contact_by:this.userConnected?.firstname+" "+this.userConnected?.lastname, date_contact:new Date(),...this.formAddHistorique.value})
     this.LCS.update(this.showFollow).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
@@ -167,13 +174,19 @@ export class SuivreLeadComponent implements OnInit {
     }
 
   }
+  onAddQualifications(){
+    this.showFollow.qualifications.push({...this.qualifiquationsForm.value})
+    this.LCS.update(this.showFollow).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+  }
   onAddContact() {
     this.showFollow.contacts.push({ canal: '', contact_by: null, date_contact: null, note: '', suite_contact: '' })
   }
 
   deleteContact(index) {
     this.showFollow.contacts.splice(index, 1)
-    this.showFollow.contacts[index] = null;
+    
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
@@ -190,6 +203,7 @@ export class SuivreLeadComponent implements OnInit {
   }
   downloadFile(index) {
     this.indexDocuments = index
+    console.log(this.showFollow._id, this.showFollow.documents[index]._id, this.showFollow.documents[index].path)
     this.LCS.downloadFile(this.showFollow._id, this.showFollow.documents[index]._id, this.showFollow.documents[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       saveAs(new Blob([byteArray], { type: data.documentType }), this.showFollow.documents[index].path)
@@ -204,8 +218,19 @@ export class SuivreLeadComponent implements OnInit {
   }
   deleteFile(index) {
     this.showFollow.documents.splice(index, 1)
+    this.showFollow.documents[index] = null;
+    this.LCS.update(this.showFollow).subscribe(data => {
+      
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
   }
-
+  deletequalification(index){
+    this.showFollow.qualifications.splice(index, 1);
+    this.LCS.update(this.showFollow).subscribe(data => {
+      
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+  }
   FileUpload(event) {
     console.log(event)
     if (event != null) {
@@ -216,8 +241,9 @@ export class SuivreLeadComponent implements OnInit {
       formData.append('file', event[0])
       this.LCS.uploadFile(formData).subscribe(res => {
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        event = null;
+     
         this.showFollow.documents[this.indexDocuments].path = event[0].name
+        event = null;
         //this.fileInput.clear()
       }, error => {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
@@ -256,9 +282,19 @@ export class SuivreLeadComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
   onAddPaiement() {
-    this.showFollow.ventes.push({ date_paiement: new Date(), montant_paye: "", modalite_paiement: "", note: "" })
+    this.showFollow.ventes.push({ date_paiement: new Date(),...this.paiementForm.value});
+    console.log(this.showFollow);
+    this.LCS.update(this.showFollow).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
   }
   deletePaiement(index) {
     this.showFollow.ventes.splice(index, 1)
+    this.showFollow.ventes[index] = null;
+    this.LCS.update(this.showFollow).subscribe(data => {
+      
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
   }
+  
 }
