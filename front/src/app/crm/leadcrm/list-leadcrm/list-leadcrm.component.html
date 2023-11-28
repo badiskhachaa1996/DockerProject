@@ -7,7 +7,7 @@
             {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
         </h3>
         <p-tabView class="col-12">
-            <p-tabPanel header="Echanges">
+            <p-tabPanel header="Historique">
                 <div class="col-12">
                     <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
                 </div>
@@ -387,12 +387,12 @@
             rowExpandMode="single" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="fp-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-3 ">
-                        <input pInputText type="text" #filter
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                            class="h-auto " style="width:100%" />
-                    </div>
 
+                    <div class="field col-12 md:col-3 ">
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterAuteur" filter="true"
+                            (onChange)="dt1.filter($event.value, 'created_by._id', 'equals');"
+                            emptyFilterMessage="Pas de auteur trouvé" filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                    </div>
                     <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterPays" filter="true"
                             (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
@@ -440,6 +440,11 @@
                             (onChange)="dt1.filter($event.value, 'statut_dossier', 'equals');"
                             emptyFilterMessage="Pas de modalité trouvé"
                             filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4  md:col-offset-4">
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="h-auto " style="width:100%" />
                     </div>
                 </div>
             </ng-template>
@@ -500,14 +505,14 @@
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false"
+                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false" appendTo="body"
                             (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} afficher la dropdown au dessus de tout en abs -->
 
-                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false"
+                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false" appendTo="body"
                             (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
                             <ng-template pTemplate="selectedItem">
                                 <div [ngClass]="{

@@ -442,7 +442,7 @@
                             emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
                             optionDisabled="actif"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12">
                         <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
                         <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
                             emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
@@ -483,19 +483,19 @@
 
 
                     <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
-                    <div class="field col-12 md:col-12">
+                    <div class="field col-12 md:col-6">
                         <label For="role">Ecole <span style="color:red"> *</span></label>
                         <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
                             (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-6">
                         <label>Choix du campus <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
                             placeholder="Choisissez un campus">
                         </p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-12">
+                    <div class="field col-12 md:col-6">
                         <label>Choix de la rentrée <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
                             placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
@@ -508,15 +508,15 @@
                             placeholder="Choisissez un programme">
                         </p-dropdown>
                     </div>-->
-                    <div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme?.value=='Programme Anglais'">
+                    <div class="field col-12 md:col-6" *ngIf="newLeadForm.value.programme?.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
                         <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-12"
-                        *ngIf="newLeadForm.value.programme?.value=='Programme Français'">
+                    <div class="field col-12 md:col-6"
+                        >
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choisissez un programme français"
