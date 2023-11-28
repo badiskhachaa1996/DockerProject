@@ -222,7 +222,7 @@
             <input pInputText type="text" style="width: 100%;"
                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
         </div>
-        <div class="col-12 md:col-2">
+        <div class="md:col-2 col-12">
             <p-dropdown [style]="{'width':'17em'}" [options]="campusfiltre" filter="true" [ngModel]="Fcampus"
                 (onChange)="dt1.filter($event.value, 'campus_choix_1', 'equals');Fcampus=$event.value"
                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
