@@ -165,7 +165,7 @@ build_angular_on_dev:
 
   script:
       - cd front
-      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev
   only:
     - develop
   artifacts:
@@ -188,7 +188,7 @@ build_angular_on_qa:
 
   script:
       - cd front
-      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --prod --aot
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - develop
   artifacts:
@@ -212,7 +212,7 @@ build_angular_on_prod:
 
   script:
       - cd front
-      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --prod --aot
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=prod
   only:
     - main
   artifacts:
