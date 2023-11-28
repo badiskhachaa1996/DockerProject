@@ -63,6 +63,10 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Qualifié', value: 'Qualifié' },
   ]
 
+  filterAuteur = [
+    { label: 'Tous les auteurs', value: null }
+  ]
+
   filterPaiement = [
     { label: 'Tous les modalités de paiements', value: null },
     { value: "Chèque Montpellier", label: "Chèque Montpellier" },
@@ -101,6 +105,13 @@ export class ListLeadcrmComponent implements OnInit {
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
       this.leads = data
+      let ids = []
+      data.forEach(l => {
+        if (l.created_by && !ids.includes(l.created_by._id)) {
+          this.filterAuteur.push({ label: `${l.created_by.firstname} ${l.created_by.lastname}`, value: l.created_by._id })
+          ids.push(l.created_by._id)
+        }
+      })
     })
     this.eventsSubscription = this.newLead.subscribe((lead) => {
       this.leads.push(lead)

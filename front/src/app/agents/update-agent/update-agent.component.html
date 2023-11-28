@@ -99,27 +99,13 @@
             </ng-template>
             <ng-template pTemplate="body" let-role let-ri="rowIndex">
                 <tr [pEditableRow]="role">
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="dropdownModule" [(ngModel)]="role.module"
-                                    placeholder="Choisissez une module de IMS"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{role.module}}
-                            </ng-template>
-                        </p-cellEditor>
+                    <td>
+                        <p-dropdown [options]="dropdownModule" [(ngModel)]="role.module"
+                            placeholder="Choisissez une module de IMS"></p-dropdown>
                     </td>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="dropdownRole" [(ngModel)]="role.role"
-                                    placeholder="Choisissez un niveau d'accès pour ce module"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{role.role}}
-                            </ng-template>
-                        </p-cellEditor>
+                    <td>
+                        <p-dropdown [options]="dropdownRole" [(ngModel)]="role.role"
+                            placeholder="Choisissez un niveau d'accès pour ce module"></p-dropdown>
                     </td>
                     <td>
                         <i pTooltip="Supprimer cette accès" tooltipPosition="bottom" class="pi pi-trash ml-2"

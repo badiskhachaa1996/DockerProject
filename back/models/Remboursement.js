@@ -4,15 +4,15 @@ const remboursementSchema = new Schema({
     student: {
         type: {
             civility: { type: String, required: true },
-            last_name: { type: String },
-            first_name: { type: String },
-            date_naissance: { type: Date },
-            nationality: { type: String },
-            country_residence: { type: String },
-            phone: { type: String },
-            indicatif_phone: { type: String },
+            last_name: { type: String ,required: true},
+            first_name: { type: String,required: true },
+            date_naissance: { type: Date ,required: true},
+            nationality: { type: String ,required: true},
+            country_residence: { type: String ,required: true},
+            phone: { type: String ,required: true},
+            indicatif_phone: { type: String ,required: true},
             email: { type: String, unique: true, required: true },
-            note: { type: String, required: true },
+            note: { type: String, required: true ,required: true},
             montant: { type: String, required: true },
             payment_method: { type: String, required: true },
             payment_date: { type: Date, required: true }

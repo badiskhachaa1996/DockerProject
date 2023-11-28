@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -19,6 +19,7 @@ import jwt_decode from "jwt-decode";
 export class SuivreLeadComponent implements OnInit {
   showFollow: LeadCRM = null;
   token: any;
+<<<<<<< HEAD
   userConnected :User;
   docAdded:boolean=false
   buttonName:string="Ajouter";
@@ -34,8 +35,26 @@ export class SuivreLeadComponent implements OnInit {
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
+=======
+  userConnected: User;
+  docAdded: boolean = false
+  buttonName: string = "Ajouter";
+  Actuelle_lead: LeadCRM = null
+  followForm = new UntypedFormGroup({
+    _id: new UntypedFormControl('', Validators.required),
+    rythme: new UntypedFormControl(''),
+    ecole: new UntypedFormControl(''),
+    formation: new UntypedFormControl(''),
+    campus: new UntypedFormControl(''),
+    note_choix: new UntypedFormControl(''),
+
+    produit: new UntypedFormControl(''),
+    criteres_qualification: new UntypedFormControl(''),
+    decision_qualification: new UntypedFormControl(''),
+    note_qualification: new UntypedFormControl(''),
+>>>>>>> 543d873b95db4fa35b61e34886d90e91a8357819
   })
-  formAddHistorique=new FormGroup({
+  formAddHistorique = new FormGroup({
     canal: new FormControl(''),
     note: new FormControl(''),
     suite_contact: new FormControl('')
@@ -99,18 +118,18 @@ export class SuivreLeadComponent implements OnInit {
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
   ]
-  constructor(private UserService: AuthService,private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
+  constructor(private UserService: AuthService, private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
     private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService) { }
   @Input() LEAD_ID
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.UserService.getPopulate(this.token.id).subscribe({
-        next: (response) => {
-          this.userConnected = response;
-         
-        }
-      })
-    
+      next: (response) => {
+        this.userConnected = response;
+
+      }
+    })
+
     this.LCS.getOneByID(this.LEAD_ID).subscribe(lead => {
       this.followForm.patchValue({ ...lead,  }); 
       this.showFollow = lead
@@ -142,7 +161,7 @@ export class SuivreLeadComponent implements OnInit {
   initFollow(lead: LeadCRM) {
     this.followForm.patchValue({...lead ,})
     this.showFollow = lead
-    
+
   }
 
   onUpdateFollow() {
@@ -154,23 +173,28 @@ export class SuivreLeadComponent implements OnInit {
   }
   onAddHistorique() {
     console.log(this.showFollow);
+<<<<<<< HEAD
     this.showFollow.contacts.push({contact_by:this.userConnected?.firstname+" "+this.userConnected?.lastname, date_contact:new Date(),...this.formAddHistorique.value})
+=======
+
+    this.showFollow.contacts.push({ contact_by: this.userConnected?.firstname + " " + this.userConnected?.lastname, date_contact: new Date(), ...this.formAddHistorique.value })
+>>>>>>> 543d873b95db4fa35b61e34886d90e91a8357819
     this.LCS.update(this.showFollow).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
-    
-    
+
+
   }
-  onAddDocumment(){
-    if (!this.docAdded){
+  onAddDocumment() {
+    if (!this.docAdded) {
       this.docAdded = true;
       this.onAddDocuments();
-      this.buttonName="Enregistrer"
+      this.buttonName = "Enregistrer"
 
-    }else{
+    } else {
       this.docAdded = false;
       this.onUpdateFollow();
-      this.buttonName="Ajouter"
+      this.buttonName = "Ajouter"
     }
 
   }
@@ -188,10 +212,10 @@ export class SuivreLeadComponent implements OnInit {
     this.showFollow.contacts.splice(index, 1)
     
     this.LCS.update(this.showFollow).subscribe(data => {
-      
+
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
-    
+
   }
   onUpdateDate(listname, index, varname, value) {
     this.followForm[listname][index][varname] = new Date(value)
