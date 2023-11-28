@@ -44,6 +44,7 @@ export class UpdateAgentComponent implements OnInit {
     { label: 'Admin', value: 'Admin' },
   ]
   dropdownModule = [
+    { label: 'Choisissez un Module', value: null },
     { value: "Admission", label: "Admission" },
     { value: "Partenaire", label: "Partenaire" },
     { value: "Ticketing", label: "Ticketing" },
@@ -66,6 +67,7 @@ export class UpdateAgentComponent implements OnInit {
   ]
 
   dropdownRole = [
+    { label: 'Choisissez un Role', value: null },
     { value: "Agent", label: "Agent" },
     { value: "Spectateur", label: "Spectateur" },
     { value: "Admin", label: "Admin" },
@@ -169,7 +171,7 @@ export class UpdateAgentComponent implements OnInit {
           this.dropdownModule.splice(11, 1) //Supprimer Admin-IMS
         if (this.USER?.type == 'Responsable')
           this.dropdownModule.splice(10, 1) //Supprimer RH
-        
+
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
         this.onSelectRole()

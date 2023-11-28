@@ -2608,24 +2608,24 @@ export class AppMenuComponent implements OnInit {
                                     label: 'CRM',
                                     icon: 'pi pi-database',
                                     items: [
-                                       /* {
-                                            label: 'Insertion',
-                                            icon: 'pi pi-user-plus',
-                                            items: [
-                                                /*{
-                                                 label: 'Ajouter un lead',
-                                                 icon: 'pi pi-user-plus',
-                                                 routerLink: [
-                                                     'crm/leads/ajout',
-                                                 ],
-                                             }, 
-                                                {
-                                                    label: 'Importer',
-                                                    icon: 'pi pi-database',
-                                                    routerLink: ['crm/import'],
-                                                },
-                                            ],
-                                        },*/
+                                        /* {
+                                             label: 'Insertion',
+                                             icon: 'pi pi-user-plus',
+                                             items: [
+                                                 /*{
+                                                  label: 'Ajouter un lead',
+                                                  icon: 'pi pi-user-plus',
+                                                  routerLink: [
+                                                      'crm/leads/ajout',
+                                                  ],
+                                              }, 
+                                                 {
+                                                     label: 'Importer',
+                                                     icon: 'pi pi-database',
+                                                     routerLink: ['crm/import'],
+                                                 },
+                                             ],
+                                         },*/
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
@@ -2771,22 +2771,22 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                             ],
                                         },
-                                       /* {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-tablet',
-                                            items: [
-                                                {
-                                                    label: 'Equipe',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Ma performance',
-                                                    icon: 'pi pi-chart-bar',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },*/
+                                        /* {
+                                             label: 'Dashboard',
+                                             icon: 'pi pi-tablet',
+                                             items: [
+                                                 {
+                                                     label: 'Equipe',
+                                                     icon: 'pi pi-users',
+                                                     routerLink: [''],
+                                                 },
+                                                 {
+                                                     label: 'Ma performance',
+                                                     icon: 'pi pi-chart-bar',
+                                                     routerLink: [''],
+                                                 },
+                                             ],
+                                         },*/
                                     ],
                                 },
                                 {
@@ -4462,6 +4462,58 @@ export class AppMenuComponent implements OnInit {
                                 label: "Admin IMS",
                                 icon: 'pi pi-star',
                                 items: [
+                                    {
+                                        label: 'Project',
+                                        icon: 'pi pi-list',
+                                        items: [
+                                            {
+                                                label: "Gestion de Projet",
+                                                icon: 'pi pi-database',
+                                                routerLink: ['/gestion-project']
+                                            },
+                                            {
+                                                label: 'Mes Tâches',
+                                                icon: 'pi pi-bookmark',
+                                                routerLink: ['/mytask']
+                                            },
+                                            {
+                                                label: 'Mes projets',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/myproject']
+                                            },
+                                            {
+                                                label: 'Dashboard',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/dashboard-project-v2']
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        label: 'Project',
+                                        icon: 'pi pi-list',
+                                        items: [
+                                            {
+                                                label: "Gestion de Projet",
+                                                icon: 'pi pi-database',
+                                                routerLink: ['/gestion-project']
+                                            },
+                                            {
+                                                label: 'Mes Tâches',
+                                                icon: 'pi ppi-bookmark',
+                                                routerLink: ['/mytask']
+                                            },
+                                            {
+                                                label: 'Mes projets',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/myproject']
+                                            },
+                                            {
+                                                label: 'Dashboard',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/dashboard-project-v2']
+                                            }
+                                        ]
+                                    },
                                     {
                                         label: 'Remboursement',
                                         icon: 'pi pi-dollar',
@@ -6561,6 +6613,32 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
+                                    label: 'Project',
+                                    icon: 'pi pi-list',
+                                    items: [
+                                        {
+                                            label: "Gestion de Projet",
+                                            icon: 'pi pi-database',
+                                            routerLink: ['/gestion-project']
+                                        },
+                                        {
+                                            label: 'Mes Tâches',
+                                            icon: 'pi ppi-bookmark',
+                                            routerLink: ['/mytask']
+                                        },
+                                        {
+                                            label: 'Mes projets',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/myproject']
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-chart-bar',
+                                            routerLink: ['/dashboard-project-v2']
+                                        }
+                                    ]
+                                },
+                                {
                                     label: 'Booking V2',
                                     icon: 'pi pi-building',
                                     items: [
@@ -6809,12 +6887,12 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-user-plus',
                                             items: [
                                                 {
-                                                 label: 'Ajouter un lead',
-                                                 icon: 'pi pi-user-plus',
-                                                 routerLink: [
-                                                     'crm/leads/ajout',
-                                                 ],
-                                             }, 
+                                                    label: 'Ajouter un lead',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: [
+                                                        'crm/leads/ajout',
+                                                    ],
+                                                },
                                                 {
                                                     label: 'Importer',
                                                     icon: 'pi pi-database',
