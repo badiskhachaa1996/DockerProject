@@ -4452,290 +4452,7 @@ export class AppMenuComponent implements OnInit {
                         }
                     }
                     else if (response.role == 'Admin') {
-                        this.items = [
-                            {
-                                label: 'Espace Personnel',
-                                icon: 'pi pi-fw pi-home',
-                                routerLink: ['/'],
-                            },
-                            {
-                                label: "Admin IMS",
-                                icon: 'pi pi-star',
-                                items: [
-                                    {
-                                        label: 'Project',
-                                        icon: 'pi pi-list',
-                                        items: [
-                                            {
-                                                label: "Gestion de Projet",
-                                                icon: 'pi pi-database',
-                                                routerLink: ['/gestion-project']
-                                            },
-                                            {
-                                                label: 'Mes Tâches',
-                                                icon: 'pi pi-bookmark',
-                                                routerLink: ['/mytask']
-                                            },
-                                            {
-                                                label: 'Mes projets',
-                                                icon: 'pi pi-briefcase',
-                                                routerLink: ['/myproject']
-                                            },
-                                            {
-                                                label: 'Dashboard',
-                                                icon: 'pi pi-chart-bar',
-                                                routerLink: ['/dashboard-project-v2']
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        label: 'Project',
-                                        icon: 'pi pi-list',
-                                        items: [
-                                            {
-                                                label: "Gestion de Projet",
-                                                icon: 'pi pi-database',
-                                                routerLink: ['/gestion-project']
-                                            },
-                                            {
-                                                label: 'Mes Tâches',
-                                                icon: 'pi ppi-bookmark',
-                                                routerLink: ['/mytask']
-                                            },
-                                            {
-                                                label: 'Mes projets',
-                                                icon: 'pi pi-briefcase',
-                                                routerLink: ['/myproject']
-                                            },
-                                            {
-                                                label: 'Dashboard',
-                                                icon: 'pi pi-chart-bar',
-                                                routerLink: ['/dashboard-project-v2']
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        label: 'Remboursement',
-                                        icon: 'pi pi-dollar',
-                                        items: [
-                                            {
-                                                label: 'Ajouter',
-                                                icon: 'pi pi-plus-circle',
-                                                routerLink: ['/ajout-remboursement'],
-                                            },
-                                            {
-                                                label: 'Liste',
-                                                icon: 'pi pi-fw pi-tags',
-                                                routerLink: ['/remboursements'],
-                                            },
-                                        ]
-                                    },
 
-                                    {
-                                        label: 'Evaluation Lead',
-                                        icon: 'pi pi-pencil',
-                                        routerLink: ['/admission/lead-evaluation']
-                                    },
-                                    {
-                                        label: 'Administration V2',
-                                        icon: 'pi pi-users',
-                                        items: [
-
-                                            {
-                                                label: 'Paramètre',
-                                                icon: 'pi pi-prime',
-                                                items: [
-                                                    {
-                                                        label: 'Session',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/administration/preinscription']
-                                                    },
-                                                    {
-                                                        label: 'Ecole',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/administration/preinscription']
-                                                    },
-                                                    {
-                                                        label: 'Campus',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/administration/preinscription']
-                                                    },
-                                                    {
-                                                        label: 'Formation',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/administration/preinscription']
-                                                    },
-                                                    {
-                                                        label: 'Groupes',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/groupes']
-                                                    },
-                                                    {
-                                                        label: 'Evaluations',
-                                                        icon: 'pi pi-prime',
-                                                        routerLink: ['/administration/preinscription']
-                                                    },
-                                                ]
-                                            },
-                                            {
-                                                label: 'Local - International',
-                                                icon: 'pi pi-prime',
-                                                routerLink: ['/administration/preinscription']
-                                            },
-                                            {
-                                                label: 'Inscription',
-                                                icon: 'pi pi-prime',
-                                                routerLink: ['/administration/inscription']
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        label: "Pointeuse",
-                                        icon: 'pi pi-camera',
-                                        items: [
-                                            {
-                                                label: "Configuration",
-                                                icon: 'pi pi-cog',
-                                                routerLink: ['/pointeuse/configuration']
-                                            }, {
-                                                label: "Activités",
-                                                icon: 'pi pi-desktop',
-                                                routerLink: ['/pointage/configuration']
-                                            },
-                                            {
-                                                label: "Historique",
-                                                icon: 'pi pi-book',
-                                                routerLink: ['/pointage/archivage']
-                                            },
-                                        ]
-
-                                    },
-                                    {
-                                        label: 'Gestion RH',
-                                        icon: 'pi pi-users',
-                                        items: [
-                                            {
-                                                label: 'Gestion des équipes',
-                                                icon: 'pi pi-users',
-                                                routerLink: ['/rh/teams']
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        label: 'Ticketing',
-                                        icon: 'pi pi-ticket',
-                                        routerLink: ['/ticketing/configuration']
-                                    },
-                                    {
-                                        label: 'Configuration des mentions et services',
-                                        icon: 'pi pi-cog',
-                                        routerLink: ['/configuration/service-mention']
-                                    },
-                                    {
-                                        label: 'Gestion des Agents',
-                                        icon: 'pi pi-users',
-                                        items: [
-                                            {
-                                                label: 'Ajouter un agent',
-                                                icon: 'pi pi-plus',
-                                                routerLink: ['/agent/ajout'],
-                                            },
-                                            {
-                                                label: 'Liste des agents',
-                                                icon: 'pi pi-users',
-                                                routerLink: ['/agent/list'],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Actualité et notifications',
-                                        icon: 'pi pi-tags',
-                                        routerLink: ['/rh/actualite-notifications'],
-                                    },
-                                    {
-                                        label: 'Développeur',
-                                        icon: 'pi pi-fw pi-cog',
-                                        items: [
-                                            {
-                                                label: 'Gestion des utilisateurs',
-                                                icon: 'pi pi-fw pi-user',
-                                                routerLink: ['/gestion-des-utilisateurs'],
-                                            },
-                                            {
-                                                label: 'Analyseur de doublon',
-                                                icon: 'pi pi-fw pi-server',
-                                                routerLink: ['/analyseur-doublons'],
-                                            },
-                                            {
-                                                label: 'Connexion des étudiants',
-                                                icon: 'pi pi-fw pi-sign-in',
-                                                routerLink: ['/gestion-etudiants'],
-                                            },
-                                            {
-                                                label: 'Infos IMS',
-                                                icon: 'pi pi-fw pi-info-circle',
-                                                routerLink: ['/infos-ims'],
-                                            },
-                                            {
-                                                label: 'Template Code',
-                                                icon: 'pi pi-copy',
-                                                items: [
-                                                    {
-                                                        label: 'Formulaire',
-                                                        icon: 'pi pi-align-center',
-                                                        routerLink: ['/template/formulaire/GH4'],
-                                                    },
-                                                ]
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Support',
-                                        icon: 'pi pi-cog',
-                                        items: [
-                                            {
-                                                label: 'Étudiants en attente de leur compte IMS',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: ['/assign-ims'],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'iMatch',
-                                        icon: 'pi pi-briefcase',
-                                        items: [{
-                                            label: 'Mes offres',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/mes-offres'],
-                                        }, {
-                                            label: 'Gestion des compétences',
-                                            icon: 'pi pi-book',
-                                            routerLink: ['/skills-management'],
-                                        },
-                                        {
-                                            label: 'Gestions des externes',
-                                            icon: 'pi pi-users',
-                                            routerLink: ['/imatch/externe'],
-                                        },
-                                        {
-                                            label: 'Gestions des événements',
-                                            icon: 'pi pi-flag',
-                                            routerLink: ['/evenements'],
-                                        }
-                                            , {
-                                            label: 'Rendez-vous',
-                                            icon: 'pi pi-calendar',
-                                            routerLink: ['/imatch/rendez-vous']
-                                        }, {
-                                            label: 'Cvthèque Externe',
-                                            icon: 'pi pi-briefcase',
-                                            routerLink: ['/imatch'],
-                                        },
-                                        ]
-                                    }
-                                ]
-                            },
-                        ]
                         if (response.type == 'Collaborateur') {
                         } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
                             services_list.push('Ressources Humaines')
@@ -6606,7 +6323,7 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
-                if (services_list.includes('Admin IMS')) {
+                if (services_list.includes('Admin IMS') || (response.role == 'Admin' && response.haveNewAccess)) {
                     this.items.push(
                         {
                             label: "Admin IMS",
@@ -6740,7 +6457,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ecole',
                                                     icon: 'pi pi-list',
-                                                    routerLink: ['/ecole']
+                                                    routerLink: ['/admission/ecoles']
                                                 },
                                                 {
                                                     label: 'Campus',
@@ -6754,8 +6471,8 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                                 {
                                                     label: 'Groupes',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/administration/preinscription']
+                                                    icon: 'pi pi-users',
+                                                    routerLink: ['/groupes']
                                                 },
                                                 {
                                                     label: 'Evaluations',
