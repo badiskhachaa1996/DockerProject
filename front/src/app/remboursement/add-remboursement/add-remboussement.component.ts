@@ -7,9 +7,9 @@ import { Demande } from 'src/app/models/Demande';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CaptchaModule } from 'primeng/captcha';
-import { MessageService } from 'src/app/services/message.service';
 import { FormBuilder, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -398,15 +398,22 @@ export class AddRemboussementComponent implements OnInit {
     );
   }
 
-
   onSubmitRemboussementForm() {
     const captchaResponse = this.aFormGroup.get('recaptcha').value;
-    if (captchaResponse) {
+  
+  
+    if (captchaResponse && this.formRembourssement.valid) {
       this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
     } else {
-      console.log('Please verify the captcha before submitting.');
+      console.log('Please fill out all the required fields and verify the captcha before submitting.');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill out all the required fields and verify the captcha before submitting.'
+      });
     }
   }
+  
 
 
   cancelForm() {

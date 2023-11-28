@@ -102,7 +102,7 @@
             <div style="width: 100%;" *ngIf="showUpdateForm && !isNewDemande">
                 <app-dossier-remboursement [demande]="currentDemande" [user]="user"></app-dossier-remboursement>
             </div>
-            <p-captcha siteKey="6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU" (onResponse)="showResponse($event)"></p-captcha>
+            <!-- <p-captcha siteKey="6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU" (onResponse)="showResponse($event)"></p-captcha> -->
 
             <form [formGroup]="aFormGroup">
                 <ngx-recaptcha2 #captchaElem
