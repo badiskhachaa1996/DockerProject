@@ -36,6 +36,7 @@ const docStorage = multer.diskStorage({
 const uploadDocs = multer({ storage: docStorage });
 
 app.post("/upload-docs/", uploadDocs.single("file"), (req, res, next) => {
+  console.log('WAS HERE')
   const doc = req.file;
   if (!doc) {
     const error = new Error("Aucun fichier chargé");
@@ -70,6 +71,10 @@ app.get("/download-docs/:id", (req, res) => {
     res.status(400).json({ error: e });
   }
 });
+
+
+
+
 
 app.get("/get-doc-by-demande/:id", (req, res) => {
   let id = req.params.id;
@@ -127,28 +132,46 @@ function entierAleatoire(min, max) {
 }
 id = "REM" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
 app.post("/newremb", async (req, res) => {
-  const remboussement = await Remboursement.findOne({
-    "student.email": req.body.student.email,
-    
-  });
-  if (remboussement) {
-    res
-      .status(500)
-      .json({ message: "une demande avec cette addresse existe déja!" });
-  } else {
-    try {
-      const newRemboursement = new Remboursement(req.body);
-      newRemboursement.customid=id;
-      const savedRemboursement = await newRemboursement.save();
-      res.status(201).json(savedRemboursement);
-    } catch (error) {
-      console.error("Error:", error);
-      res
-        .status(500)
-        .json({ message: "Erreur lors de la création du remboursement." });
+  try {
+    const requiredFields = [
+      'civility',
+      'last_name',
+      'first_name',
+      'nationality',
+      'country_residence',
+      'phone',
+      'indicatif_phone',
+      'email',
+     
+    ];
+
+    const missingField = requiredFields.find(field => !req.body.student[field]);
+
+    if (missingField) {
+      return res.status(400).json({ message: `${missingField} is required.` });
     }
+
+    const existingRemboursement = await Remboursement.findOne({
+      "student.email": req.body.student.email,
+    });
+
+    if (existingRemboursement) {
+      return res.status(500).json({ message: "A request with this email already exists." });
+    }
+
+    const newRemboursement = new Remboursement(req.body);
+    newRemboursement.customid = id;
+
+    const savedRemboursement = await newRemboursement.save();
+
+    res.status(201).json(savedRemboursement);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Error creating the remboursement." });
   }
 });
+
+
 
 app.get("/getAll", (req, res) => {
   Remboursement.find()

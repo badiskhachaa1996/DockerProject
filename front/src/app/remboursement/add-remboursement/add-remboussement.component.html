@@ -22,25 +22,25 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label>Nom</label>
-                <input pInputText type="text" formControlName="nom" placeholder="Ex: Smith"/>
+                <input required pInputText type="text" formControlName="nom" placeholder="Ex: Smith"/>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Prénom</label>
-                <input pInputText type="text" formControlName="prenom" placeholder="Ex: John"/>
+                <input required pInputText type="text" formControlName="prenom" placeholder="Ex: John"/>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Date de naissance</label>
-                <input pInputText type="date" formControlName="date_naissance"/>
+                <input required pInputText type="date" formControlName="date_naissance"/>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Nationalité</label>
-                <p-dropdown [options]="pays_residence" formControlName="nationalite"
+                <p-dropdown required [options]="pays_residence" formControlName="nationalite"
                             placeholder="Choisissez un service"></p-dropdown>
             </div>
 
-            <div class="field col-12 md:col-4">
+            <div  class="field col-12 md:col-4">
                 <label>Pays de résidence <span style="color: red">  </span></label>
-                <p-dropdown [options]="pays_residence" formControlName="pays_resid"
+                <p-dropdown required [options]="pays_residence" formControlName="pays_resid"
                             placeholder="Choisissez un service"></p-dropdown>
             </div>
             <div class="field col-12 md:col-2">
@@ -49,26 +49,26 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label>Téléphone</label>
-                <input pInputText type="text" formControlName="phone" placeholder="Ex: +33 612341518"/>
+                <input required pInputText type="text" formControlName="phone" placeholder="Ex: +33 612341518"/>
             </div>
             <div class="field col-12 md:col-6">
                 <label>Email</label>
-                <input pInputText type="text" formControlName="email" placeholder="Ex: example.email@mail.com"/>
+                <input required pInputText type="text" formControlName="email" placeholder="Ex: example.email@mail.com"/>
             </div>
 
             <h3 class="col-12" style="text-align: start;"> Formation</h3>
             <div class="field col-12 md:col-4">
                 <label>Année scolaire</label>
-                <p-dropdown [options]="annescolaires" formControlName="annee_scolaire"
+                <p-dropdown required [options]="annescolaires" formControlName="annee_scolaire"
                 placeholder="Choisissez un service"></p-dropdown>            </div>
             <div class="field col-12 md:col-4">
                     <label>Ecole</label>
-                    <p-dropdown [options]="ecoles" formControlName="ecole"
+                    <p-dropdown required [options]="ecoles" formControlName="ecole"
                                 placeholder="Choisissez un service"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Formation</label>
-                <p-dropdown [options]="formations" formControlName="formation"
+                <p-dropdown required [options]="formations" formControlName="formation"
                             placeholder="Choisissez une formation"></p-dropdown>
             </div>
 
@@ -76,21 +76,21 @@
             <h3 class="col-12" style="text-align: start;"> Demande</h3>
             <div class="field col-12 md:col-4">
                 <label>Motif de demande</label>
-                <p-dropdown [options]="motif" optionLabel="value" formControlName="motif_refus"
+                <p-dropdown required [options]="motif" optionLabel="value" formControlName="motif_refus"
                             placeholder="Choisissez une motif"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Montant</label>
-                <input pInputText type="text" formControlName="montant" placeholder="Ex: 1000€"/>
+                <input required pInputText type="text" formControlName="montant" placeholder="Ex: 1000€"/>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Modalité de paiement</label>
-                <p-dropdown [options]="modePaiement" formControlName="paymentType"
+                <p-dropdown required [options]="modePaiement" formControlName="paymentType"
                             placeholder="Choisissez une modalité de paiement"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Date de paiement</label>
-                <input pInputText type="date" formControlName="payment_date"/>
+                <input required pInputText type="date" formControlName="payment_date"/>
             </div>
 
             <div class="col-12 p-fluid p-formgrid grid " *ngIf="!showUpdateForm ">

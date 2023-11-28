@@ -19,7 +19,7 @@
                     <input #doc type="file" accept="application/pdf" maxFileSize="10000000"
                     (change)="onUpload($event.target.files[0], document)" chooseLabel="Browse" inputId="doc"/> 
                     <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="doc.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="document.doc_number" click)=" deleteDoc(document)" title="supprimer"></i>
+                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="document.doc_number" (click)=" deleteDoc(document)" title="supprimer"></i>
                 </td>
             </tr>
         </ng-template>

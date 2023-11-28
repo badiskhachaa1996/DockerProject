@@ -144,22 +144,22 @@ export class AddRemboussementComponent implements OnInit {
 
 
     this.formRembourssement = this.formBuilder.group({
-      civilite: [''],
-      nom: [''],
-      prenom: [''],
-      date_naissance: [''],
-      nationalite: [''],
-      pays_resid: [''],
-      paymentType: [''],
-      indicatif_phone: [''],
-      phone: [''],
-      email: [''],
-      annee_scolaire: [''],
-      ecole: [''],
-      formation: [''],
-      motif_refus: [''],
-      montant: [''],
-      payment_date: [''],
+      civilite: ['' ,Validators.required],
+      nom: ['', Validators.required],
+      prenom: ['', Validators.required],
+      date_naissance: ['', Validators.required],
+      nationalite: ['', Validators.required],
+      pays_resid: ['', Validators.required],
+      paymentType: ['', Validators.required],
+      indicatif_phone: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+      annee_scolaire: ['', Validators.required],
+      ecole: ['', Validators.required],
+      formation: ['', Validators.required],
+      motif_refus: ['', Validators.required],
+      montant: ['', Validators.required],
+      payment_date: ['', Validators.required],
 
     })
 
@@ -375,14 +375,26 @@ export class AddRemboussementComponent implements OnInit {
       (error) => {
         // Handle error (show an error message)
         console.error('Error adding remboursement:', error);
-        // Check if the error response contains a message
-        const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: errorMessage
-        });
+      
+        if (error.status === 400 && error.error && error.error.message) {
+          // Check if the error response indicates a missing field
+          const missingFieldMessage = error.error.message;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Missing Field: ${missingFieldMessage}`
+          });
+        } else {
+          // Default error message for other errors
+          const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: errorMessage
+          });
+        }
       }
+      
     );
   }
 
