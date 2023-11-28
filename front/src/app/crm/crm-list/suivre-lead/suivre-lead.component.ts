@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -17,16 +17,16 @@ export class SuivreLeadComponent implements OnInit {
   showFollow: LeadCRM = null
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
-    rythme: new FormControl(''),
-    ecole: new FormControl(''),
-    formation: new FormControl(''),
-    campus: new FormControl(''),
-    note_choix: new FormControl(''),
+    rythme: new UntypedFormControl(''),
+    ecole: new UntypedFormControl(''),
+    formation: new UntypedFormControl(''),
+    campus: new UntypedFormControl(''),
+    note_choix: new UntypedFormControl(''),
 
-    produit: new FormControl(''),
-    criteres_qualification: new FormControl(''),
-    decision_qualification: new FormControl(''),
-    note_qualification: new FormControl(''),
+    produit: new UntypedFormControl(''),
+    criteres_qualification: new UntypedFormControl(''),
+    decision_qualification: new UntypedFormControl(''),
+    note_qualification: new UntypedFormControl(''),
   })
 
   memberList = []
