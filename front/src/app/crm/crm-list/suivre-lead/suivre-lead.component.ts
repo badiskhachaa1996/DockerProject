@@ -19,7 +19,6 @@ import jwt_decode from "jwt-decode";
 export class SuivreLeadComponent implements OnInit {
   showFollow: LeadCRM = null;
   token: any;
-<<<<<<< HEAD
   userConnected :User;
   docAdded:boolean=false
   buttonName:string="Ajouter";
@@ -35,24 +34,6 @@ export class SuivreLeadComponent implements OnInit {
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
-=======
-  userConnected: User;
-  docAdded: boolean = false
-  buttonName: string = "Ajouter";
-  Actuelle_lead: LeadCRM = null
-  followForm = new UntypedFormGroup({
-    _id: new UntypedFormControl('', Validators.required),
-    rythme: new UntypedFormControl(''),
-    ecole: new UntypedFormControl(''),
-    formation: new UntypedFormControl(''),
-    campus: new UntypedFormControl(''),
-    note_choix: new UntypedFormControl(''),
-
-    produit: new UntypedFormControl(''),
-    criteres_qualification: new UntypedFormControl(''),
-    decision_qualification: new UntypedFormControl(''),
-    note_qualification: new UntypedFormControl(''),
->>>>>>> 543d873b95db4fa35b61e34886d90e91a8357819
   })
   formAddHistorique = new FormGroup({
     canal: new FormControl(''),
@@ -173,12 +154,7 @@ export class SuivreLeadComponent implements OnInit {
   }
   onAddHistorique() {
     console.log(this.showFollow);
-<<<<<<< HEAD
     this.showFollow.contacts.push({contact_by:this.userConnected?.firstname+" "+this.userConnected?.lastname, date_contact:new Date(),...this.formAddHistorique.value})
-=======
-
-    this.showFollow.contacts.push({ contact_by: this.userConnected?.firstname + " " + this.userConnected?.lastname, date_contact: new Date(), ...this.formAddHistorique.value })
->>>>>>> 543d873b95db4fa35b61e34886d90e91a8357819
     this.LCS.update(this.showFollow).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
