@@ -80,7 +80,8 @@ export class ListCampusComponent implements OnInit {
       })
     })
   }
-
+  ecolesList = []
+  dicCampus = {}//campus_id : Ecole[]
   updateList() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
@@ -91,13 +92,13 @@ export class ListCampusComponent implements OnInit {
     else {
       this.campusService.getAll().subscribe((data) => {
         this.campuss = data;
-
+        //Regrouper par école
       })
     }
   }
 
   editCampus() {
-    let campus = new Campus(this.campusToUpdate._id, this.campusFormUpdate.value.libelle, this.campusFormUpdate.value.ecole_id.value, this.campusFormUpdate.value.ville, this.campusFormUpdate.value.pays, this.campusFormUpdate.value.email, this.campusFormUpdate.value.adresse, this.campusFormUpdate.value.site,this.salles)
+    let campus = new Campus(this.campusToUpdate._id, this.campusFormUpdate.value.libelle, this.campusFormUpdate.value.ecole_id.value, this.campusFormUpdate.value.ville, this.campusFormUpdate.value.pays, this.campusFormUpdate.value.email, this.campusFormUpdate.value.adresse, this.campusFormUpdate.value.site, this.salles)
     this.campusService.edit(campus).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
 
@@ -120,8 +121,7 @@ export class ListCampusComponent implements OnInit {
     this.router.navigate(['/diplomes/', rowData._id]);
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-campus']);
   }
 }
