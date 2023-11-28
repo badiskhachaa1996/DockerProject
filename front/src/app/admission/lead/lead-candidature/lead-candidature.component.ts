@@ -559,15 +559,18 @@ export class LeadCandidatureComponent implements OnInit {
     })
 
   }
-  saveCandidature() {
-    var canvasContents = this.signaturePad.toDataURL();
-    var data = { a: canvasContents };
-    var string = JSON.stringify(data);
-    var signature = string.substring(6, string.length - 2);
-    var sign = signature.substring(signature.indexOf(",") + 1)
+  saveCandidature(signatureMode = false) {
+    if (signatureMode) {
+      var canvasContents = this.signaturePad.toDataURL();
+      var data = { a: canvasContents };
+      var string = JSON.stringify(data);
+      var signature = string.substring(6, string.length - 2);
+      var sign = signature.substring(signature.indexOf(",") + 1)
+    }
+
     this.CandidatureService.getByLead(this.ID).subscribe(c => {
       if (c) {
-        this.CandidatureService.update({ ...this.formCandidature.value, date_creation: new Date() }).subscribe(newCandidature => {
+        this.CandidatureService.update({ ...this.formCandidature.value, date_creation: new Date(), _id: c._id }).subscribe(newCandidature => {
           this.candidature = newCandidature
           this.pageNumber = 0
         })

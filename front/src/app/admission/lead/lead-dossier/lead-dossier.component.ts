@@ -12,7 +12,8 @@ import mongoose from 'mongoose';
   styleUrls: ['./lead-dossier.component.scss']
 })
 export class LeadDossierComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport / Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent",
+    "Relevés de note depuis le baccalauréat", "Carte vitale ou attestation provisoire"]
   ID = this.route.snapshot.paramMap.get('id');
   @Input() PROSPECT_ID
   PROSPECT: Prospect;
@@ -133,13 +134,12 @@ export class LeadDossierComponent implements OnInit {
   }
   checkIfDossierComplet() {
     let r = false
-    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu",
-      "Relevés de note depuis le baccalauréat", "Passeport / Pièce d'identité",
+    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu", "Carte vitale ou attestation provisoire",
+      "Relevés de note depuis le baccalauréat", "Passeport - Pièce d'identité",
       "Diplôme baccalauréat ou équivalent", "Relevé de note baccalauréat"]
     if (this.resideFr && this.alternance) {
       this.documentsObligatoires.push('Copie Visa')
       this.documentsObligatoires.push('Carte de séjour')
-      this.documentsObligatoires.push('Carte vitale ou attestation provisoire')
     }
     this.PROSPECT.documents_dossier.forEach(val => {
       if (this.documentsObligatoires.includes(val.nom) && !val.path)

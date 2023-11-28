@@ -1,4 +1,5 @@
 import { User } from "./User";
+import { Evaluation } from "./evaluation";
 
 export class Prospect {
 
@@ -111,6 +112,18 @@ export class Prospect {
         public sos_firstname?: string,
         public sos_email?: string,
         public sos_phone?: string,
+        public evaluations?: [
+            {
+                evaluation_id?: Evaluation,
+                etat?: string,
+                score?: number,
+                date_passation?: Date,
+                date_envoie?: Date,
+                duree_mise?: number,
+                date_expiration?: Date,
+                commentaire?: string
+            }
+        ]
     ) { }
 
 }
