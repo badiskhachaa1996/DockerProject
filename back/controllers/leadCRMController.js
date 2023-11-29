@@ -54,7 +54,7 @@ app.post("/create", (req, res) => {
                     }
                     FFSaved.populate('created_by').execPopulate().then(t => {
                         res.send(t)
-                    },error=>{
+                    }, error => {
                         console.log(error)
                     })
 
@@ -65,6 +65,12 @@ app.post("/create", (req, res) => {
     })
 
 })
+
+app.get("/getByEmail/:email", (req, res, next) => {
+    LeadCRM.findOne({ email: req.params.email })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+});
 
 app.get("/getOneByID/:id", (req, res, next) => {
     LeadCRM.findById(req.params.id)

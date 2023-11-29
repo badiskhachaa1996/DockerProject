@@ -355,7 +355,7 @@ export class PreinscriptionComponent implements OnInit {
     decisoin_admission: new FormControl('', [Validators.required]),
     explication: new FormControl('',),
     date_d: new FormControl('',),
-    membre: new FormControl('')
+    membre: new FormControl([])
   })
   entretienForm: FormGroup = new FormGroup({
     date_e: new FormControl('',),
@@ -398,7 +398,7 @@ export class PreinscriptionComponent implements OnInit {
     this.CollaborateurService.getCollaborateurs().then(cs => {
       cs.forEach(c => {
         if (c?.user_id)
-          this.memberDropdown.push({ label: `${c.user_id.firstname} ${c.user_id.lastname}`, value: c.user_id })
+          this.memberDropdown.push({ label: `${c.user_id.firstname} ${c.user_id.lastname}`, value: c.user_id._id })
       })
     })
     if (localStorage.getItem("token") != null) {
@@ -847,11 +847,15 @@ export class PreinscriptionComponent implements OnInit {
       });
   }
   InitDecision(prospect: Prospect) {
+    let ids = []
+    prospect.decision.membre.forEach(mb => {
+      ids.push(mb._id)
+    })
     this.DecisionForm.patchValue({
       date_d: this.conersiondate(prospect.decision.date_decision),
       decisoin_admission: prospect.decision.decision_admission,
       explication: prospect.decision.expliquation,
-      membre: prospect.decision.membre?._id
+      membre: ids
     })
   }
   adddicision(prospect: Prospect) {
@@ -859,7 +863,6 @@ export class PreinscriptionComponent implements OnInit {
     prospect.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
     prospect.decision.expliquation = this.DecisionForm.value.explication;
     prospect.decision.membre = this.DecisionForm.value.membre;
-    console.log(prospect.decision.membre)
     this.admissionService.updateV2({ ...prospect }).subscribe(res => {
       this.ToastService.add({ severity: 'success', summary: 'Modification de la décision avec succès' })
       this.modeAffichageE4 = 'Voir'

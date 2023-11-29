@@ -372,10 +372,10 @@ const prospect_schema = new mongoose.Schema({
             type: Date,
             default: Date.now // Valeur par défaut pour date_decision (utilisation de la date actuelle par défaut)
         },
-        membre: {
+        membre: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
-        }
+        }]
     },
     teams: {
         type: String,
