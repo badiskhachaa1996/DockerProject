@@ -26,9 +26,9 @@ let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
   if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com/"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com/"];
   } else
     origin = [
       "https://ims.estya.com",
