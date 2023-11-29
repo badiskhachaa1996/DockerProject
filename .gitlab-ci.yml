@@ -38,6 +38,8 @@ install_node_dependencies_on_dev:
     - rm -rf node_modules/
     - npm install
   only:
+    refs:
+      - devdelop
     changes:
       - back/package.json
 
@@ -54,6 +56,8 @@ install_angular_dependencies_on_dev:
     - rm -rf node_modules/
     - npm install
   only:
+    refs:
+      - devdelop
     changes:
       - front/package.json
 
@@ -106,7 +110,10 @@ install_node_dependencies_on_prod:
     - rm -rf node_modules/
     - npm install
   only:
-    - main
+    refs:
+      - main
+    changes:
+      - back/package.json
   when: manual
 
 install_angular_dependencies_on_prod:
@@ -122,7 +129,10 @@ install_angular_dependencies_on_prod:
     - rm -rf node_modules/
     - npm install
   only:
-    - main
+    refs:
+      - main
+    changes:
+      - front/package.json
   when: manual
 
 #==========================================================
