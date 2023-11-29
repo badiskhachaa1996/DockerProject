@@ -13,8 +13,8 @@ import { ConfigService } from 'src/app/dev-components/service-template/app.confi
   styleUrls: ['./lead-dossier.component.scss']
 })
 export class LeadDossierComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent",
-    "Relevés de note depuis le baccalauréat", "Carte vitale ou attestation provisoire"]
+  documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+    "Relevés de note de deux dernières année"]
   ID = this.route.snapshot.paramMap.get('id');
   @Input() PROSPECT_ID
   PROSPECT: Prospect;
@@ -135,13 +135,14 @@ export class LeadDossierComponent implements OnInit {
   }
   checkIfDossierComplet() {
     let r = false
-    this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu", "Carte vitale ou attestation provisoire",
-      "Relevés de note depuis le baccalauréat", "Passeport - Pièce d'identité",
-      "Diplôme baccalauréat ou équivalent", "Relevé de note baccalauréat"]
-    if (this.resideFr && this.alternance) {
-      this.documentsObligatoires.push('Copie Visa')
-      this.documentsObligatoires.push('Carte de séjour')
-    }
+    this.documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+      "Relevés de note de deux dernières année"]
+    if (this.alternance)
+      this.documentsObligatoires.push('Carte vitale ou attestation provisoire')
+
+    if (!this.resideFr)
+      this.documentsObligatoires.push('Test de niveau en Français - TCF ou DELF')
+    
     this.PROSPECT.documents_dossier.forEach(val => {
       if (this.documentsObligatoires.includes(val.nom) && !val.path)
         r = true

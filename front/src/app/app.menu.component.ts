@@ -7005,8 +7005,9 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
-   
-    let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+
+    let documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+        "Relevés de note de deux dernières année"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

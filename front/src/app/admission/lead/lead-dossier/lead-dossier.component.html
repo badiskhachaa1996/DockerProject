@@ -35,7 +35,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-doc>
             <tr
-                *ngIf="(doc.nom!='Carte de séjour' || (alternance || resideFr)) && (doc.nom!='Test de niveau en Français - TCF (pour les étudiants des pays non francophones)' || resideFr)">
+                *ngIf="(doc.nom!='Carte vitale ou attestation provisoire' || alternance) && (doc.nom!='Test de niveau en Français - TCF ou DELF' || resideFr)">
                 <td style="width: 80%;">
                     {{doc.nom}}
                     <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
