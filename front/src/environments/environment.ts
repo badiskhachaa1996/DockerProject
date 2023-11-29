@@ -54,6 +54,13 @@ export const environment = {
     "emptyMessage": 'Aucun résultat',
     "emptyFilterMessage": 'Aucun résultat'
   },
+
+  
+  recaptchaKey: '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU ',
+
+
+
+
   motif :[
     {label: 'Refus de visa', value: 'Refus de visa'},
     {label: 'Alternance',value: 'Alternance'},
