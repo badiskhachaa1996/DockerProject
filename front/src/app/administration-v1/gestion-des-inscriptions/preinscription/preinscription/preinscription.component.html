@@ -1837,97 +1837,6 @@
                             </form>
                         </p-dialog>
 
-                        <!--<p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
-                            [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
-                            [paginator]="true" rowExpandMode="single" [totalRecords]=""
-                            styleClass="p-datatable-gridlines">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th style="width: 5em"></th>
-                                    <th pSortableColumn="id">
-                                        ID Ticket <p-sortIcon field="id"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="nom">
-                                        Statut <p-sortIcon field="nom"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="choix">
-                                        Assigné à <p-sortIcon field="choix"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="rythme">
-                                        Traité le <p-sortIcon field="rythme"> </p-sortIcon>
-                                    </th>
-                                    <th>Action</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-ticket>
-
-                                <tr>
-                                    <td>
-                                        <button type="button" pButton pRipple [pRowToggler]="ticket"
-                                            class="p-button-text p-button-rounded p-button-plain" [icon]="
-                                    expanded
-                                        ? 'pi pi-chevron-down'
-                                        : 'pi pi-chevron-right'
-                                "></button>
-                                    </td>
-                                    <td>
-                                        {{ ticket?.customid }}
-                                    </td>
-                                    <td>
-                                        {{ ticket?.statut }}
-                                    </td>
-                                    <td>
-                                        {{ ticket?.agent_id?.firstname}}
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <i style="padding-left: 3%;color: rgb(72, 72, 255);" class="pi pi-send m-1"
-                                            (click)="showDialog(ticket); scrollToTop()" pTooltip="Affecter"
-                                            aria-hidden="true" tooltipPosition="bottom"></i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="rowexpansion" let-user>
-                                <tr>
-                                    <td colspan="6">
-
-
-                                        <p-table responsiveLayout="scroll">
-                                            <ng-template pTemplate="header">
-                                <tr>
-
-                                    <th>Commentaire</th>
-                                    <th>Commenté par </th>
-                                    <th>Commenté le </th>
-
-
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        {{ user?.user_id?.firstname | titlecase }}
-                                        {{ user?.user_id?.lastname | uppercase }}
-                                    </td>
-                                    <td>
-                                        {{
-                                        user?.date_naissance
-                                        }}
-                                    </td>
-
-                                </tr>
-
-
-                            </ng-template>
-
-                        </p-table>
-
-                        </ng-template>
-
-                        </p-table>-->
                         <h4 style="text-align: center;" *ngIf="PROSPECT.etat_dossier === 'Complet'">Etat du
                             dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
@@ -1943,6 +1852,7 @@
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
                         </h4>
+                        {{PROSPECT.etat_dossier}}
                         <div class="col-12">
                             <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile"
                                 #selectedFile style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
@@ -1993,7 +1903,7 @@
                                         </td>
                                         <td>
                                             <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="initUpload(doc)" style="margin-left: 2%;"
+                                                (click)="initUpload(doc,'selectedFile',PROSPECT)" style="margin-left: 2%;"
                                                 aria-hidden="true"></i>
                                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
                                                 class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>

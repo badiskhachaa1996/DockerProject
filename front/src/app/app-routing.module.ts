@@ -246,6 +246,7 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import {GestionSrourcesComponent} from "./crm/gestion-srources/gestion-srources.component";
 import {GestionOperationComponent} from "./crm/gestion-operation/gestion-operation.component";
+import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 const routes: Routes = [
     {
         path: '',
@@ -354,6 +355,11 @@ const routes: Routes = [
             {
                 path: 'groupes',
                 component: ListGroupeComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'new-groupes',
+                component: GroupesComponent,
                 canActivate: [AuthGuardService],
             },
             {

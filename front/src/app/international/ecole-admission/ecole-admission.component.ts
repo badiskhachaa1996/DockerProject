@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { CampusR } from 'src/app/models/CampusRework';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
+import { CampusRService } from 'src/app/services/administration/campus-r.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
@@ -18,8 +20,16 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'English', value: 'English' },
   ]
   selectedEcole: EcoleAdmission
-  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService, private route: ActivatedRoute) { }
-  campusList = [
+  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService, private route: ActivatedRoute, private CampusRService: CampusRService) { }
+  dropdownCampus = [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
+  campusList = []
+  campusFilter = [
+    { label: 'Tous les campus', value: null },
     { label: 'Paris', value: 'Paris' },
     { label: 'Montpellier', value: 'Montpellier' },
     { label: 'Congo Brazzaville', value: 'Congo Brazzaville' },
@@ -30,16 +40,6 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'Marne', value: 'Marne' },
     { label: 'En ligne', value: 'En ligne' }
   ]
-  dropdownCampus= [
-    { label: 'Paris', value: 'Paris' },
-    { label: 'Montpellier', value: 'Montpellier' },
-    { label: 'Marne', value: 'Marne' },
-    { label: 'En ligne', value: 'En ligne' }
-  ]
-  campusFilter = [
-    { label: 'Tous les campus', value: null },
-    ...this.campusList
-  ]
   ngOnInit(): void {
     this.FAService.EAgetAll().subscribe(data => {
       this.ecoles = data
@@ -49,6 +49,12 @@ export class EcoleAdmissionComponent implements OnInit {
     })
     this.route.url.subscribe(r => {
       this.seeAction = !(r[0].path == "informations")
+    })
+    this.CampusRService.getAll().subscribe(data => {
+      data.forEach(c => {
+
+        this.campusList.push({ label: c.libelle, value: c })
+      })
     })
 
   }
@@ -61,8 +67,8 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
-    NDA:new FormControl(''),
-    UAI:new FormControl(''),
+    NDA: new FormControl(''),
+    UAI: new FormControl(''),
     langue: new FormControl('Français')
   })
 
@@ -71,8 +77,8 @@ export class EcoleAdmissionComponent implements OnInit {
     this.updateForm.patchValue({ ...rowData })
   }
   onAddRentreeScolaire() {
-  
-    
+
+
     this.selectedEcole.campusinfo.push({ campus: "", adresse: "", UAI: "" })
 
   }
@@ -93,15 +99,15 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
-    NDA:new FormControl(''),
-    UAI:new FormControl(''),
+    NDA: new FormControl(''),
+    UAI: new FormControl(''),
     langue: new FormControl('Français')
   })
 
   addForm = false
 
-  
-  
+
+
   initCreate() {
     this.addForm = true
   }
@@ -111,26 +117,36 @@ export class EcoleAdmissionComponent implements OnInit {
     UAI: new FormControl(''),
   })
   onCreateRA() {
-    
-   
-    if(this.createFormRA.value.campus.length > 3){
-      this.selectedEcole.campus=this.createFormRA.value.campus;
-    this.selectedEcole.campus.push(this.createFormRA.value.campus)}
-  this.FAService.EAupdate(this.selectedEcole).subscribe(data => {
-    console.log(data)
-  })
-    
+
+
+    if (this.createFormRA.value.campus.length > 3) {
+      this.selectedEcole.campus = this.createFormRA.value.campus;
+      this.selectedEcole.campus.push(this.createFormRA.value.campus)
+    }
+    this.FAService.EAupdate(this.selectedEcole).subscribe(data => {
+      console.log(data)
+    })
+
   }
   onDeleteRentreeScolaire(id: number): void {
     console.log("*********************");
     this.selectedEcole.campusinfo.splice(id, 1);
     this.FAService.EAupdate(this.selectedEcole);
-      
+
   }
 
   onCreate() {
-    this.FAService.EAcreate({ ...this.createForm.value }).subscribe(data => {
+    let campus = []
+    this.createForm.value.campus.forEach((element: CampusR) => {
+      campus.push(element.libelle)
+    });
+    this.FAService.EAcreate({ ...this.createForm.value, campus }).subscribe(data => {
       this.ecoles.push(data)
+      this.createForm.value.campus.forEach((element: CampusR) => {
+        let ecoles = element.ecoles || []
+        ecoles.push({ ecole_id: data })
+        this.CampusRService.update({ _id: element._id, ecoles }).subscribe(r => { })
+      });
       this.addForm = null
       this.createForm.reset()
       this.MessageService.add({ severity: "success", summary: `Ajout d'une nouvelle école avec succès` })

@@ -409,6 +409,8 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
 import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
+import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { AddGroupeV2Component } from './administration-v1/configuration/groupes/add-groupe-v2/add-groupe-v2.component';
 
 @NgModule({
   imports: [
@@ -840,7 +842,9 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     BookingV2Component,
     SuivreLeadComponent,
     GestionOperationComponent,
-    GestionSrourcesComponent
+    GestionSrourcesComponent,
+    GroupesComponent,
+    AddGroupeV2Component
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

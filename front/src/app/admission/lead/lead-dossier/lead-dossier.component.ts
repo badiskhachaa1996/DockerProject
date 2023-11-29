@@ -6,6 +6,7 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import mongoose from 'mongoose';
+import { ConfigService } from 'src/app/dev-components/service-template/app.config.service';
 @Component({
   selector: 'app-lead-dossier',
   templateUrl: './lead-dossier.component.html',
@@ -17,7 +18,7 @@ export class LeadDossierComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   @Input() PROSPECT_ID
   PROSPECT: Prospect;
-  constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService) { }
+  constructor(private route: ActivatedRoute, private ProspectService: AdmissionService, private ToastService: MessageService, private ConfigService: ConfigService) { }
   resideFr = false
   alternance = false
   ngOnInit(): void {
@@ -149,6 +150,7 @@ export class LeadDossierComponent implements OnInit {
       this.PROSPECT.etat_dossier = 'Manquant'
     else
       this.PROSPECT.etat_dossier = 'Complet'
+    this.ConfigService.emitChange(this.PROSPECT.etat_dossier);
   }
 
 
