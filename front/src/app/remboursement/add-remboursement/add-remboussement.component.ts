@@ -133,6 +133,7 @@ export class AddRemboussementComponent implements OnInit {
   aFormGroup: UntypedFormGroup;
 
   availableStatus = environment.availableStatus
+  siteKey = environment. recaptchaKey
 
 
 
@@ -207,7 +208,6 @@ export class AddRemboussementComponent implements OnInit {
   }
 
 
-  siteKey: string = '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU';
 
 
 

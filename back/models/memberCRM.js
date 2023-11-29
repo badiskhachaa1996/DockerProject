@@ -9,6 +9,10 @@ const schema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'teamsCRM'
     },
+    critere_id: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'critere'
+    },
     localisation: {
         type: String,
         default: "France - Paris"

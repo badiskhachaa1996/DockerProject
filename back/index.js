@@ -82,7 +82,8 @@ mongoose
     console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     process.exit();
   });
-
+  const { Critere } = require("./models/critere");
+ 
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
@@ -133,6 +134,7 @@ const renduDevoirController = require('./controllers/renduDevoirController');
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const factureFormateurController = require('./controllers/factureFormateurController');
 const annonceController = require('./controllers/annonceController');
+// const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
 const progressionPedaController = require('./controllers/progressionPedaController');
 const QSController = require('./controllers/questionnaireSatisfactionController');
@@ -427,6 +429,7 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
+app.use('/soc/critere', require('./controllers/criteresController'))
 app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
