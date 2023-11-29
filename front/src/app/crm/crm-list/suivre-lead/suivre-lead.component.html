@@ -6,6 +6,31 @@
     
     <p-tabView class="col-12">
         <p-tabPanel header="Historique">
+            <p-dialog header="Modifier le contact" [(visible)]="visible_contact" modal="true"
+                            [style]="{width: '50vw'}">
+
+                            <form [formGroup]="formUpdateContact" class="p-fluid p-formgrid grid col-12">
+                                <div class="field col-6">
+                                    <label>canal </label>
+                                    <p-dropdown [options]="canalList" formControlName="canal" 
+                                        placeholder="Choisissez un canal"></p-dropdown>
+                                </div>
+                                <div class="field col-6">
+                                    <label>Joignabilité </label>
+                                    <p-dropdown [options]="suiteContactList" 
+                                    formControlName="suite_contact"  placeholder="Choisissez un état"></p-dropdown>
+                                </div>
+                                
+                                <div class="field col-6">
+                                    <label For="description">Note </label>
+                                    <textarea pInputTextarea formControlName="note"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onUpdateCon()"
+                                        label="Enregistrer" [disabled]="formUpdateContact.invalid"></p-button>
+                                </div>
+                            </form>
+                        </p-dialog>
             <form class="p-fluid grid" [formGroup]="formAddHistorique" (ngSubmit)="onAddHistorique()">
                 <div class="field col-12 md:col-3">
                     <p-dropdown [options]="canalList" placeholder="Veuillez décrire le canal"
@@ -111,6 +136,8 @@
                             </p-cellEditor>
                         </td>
                         <td>
+                            <i pTooltip="Modifier le contact" tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"
+                            (click)="onUpdatecontacte(ri)" ></i>
                             <i pTooltip="Supprimer le contact" tooltipPosition="bottom" class="pi pi-trash"
                                 aria-hidden="true" (click)="deleteContact(ri)"> </i>
                         </td>
@@ -300,13 +327,13 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
                 <div class="field col-12 md:col-6">
                     <label>Opération</label>
-                    <p-dropdown  formControlName="operation" autoWidth="false"
+                    <p-dropdown  formControlName="operation" autoWidth="false" [options]="operationList"
                         [style]="{'width':'100%'}" placeholder="Choisissez une opération"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Produit</label>
                     <p-dropdown  formControlName="produit" autoWidth="false" [options]="produitList"
-                        [style]="{'width':'100%'}" placeholder="Produite"></p-dropdown>
+                        [style]="{'width':'100%'}" placeholder="Produit"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Ecole</label>
@@ -443,4 +470,5 @@
             <button pButton label="Sauvegardez les modifications" (click)="onUpdateFollow()"></button>
         </div>
     </div>-->
+    
 </div>
