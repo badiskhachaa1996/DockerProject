@@ -39,21 +39,22 @@
                 <td style="width: 80%;">
                     {{doc.nom}}
                     <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
+                    <i *ngIf="doc.info" [pTooltip]="doc.info" tooltipPosition="bottom" class="pi pi-info-circle ml-2"
+                        style="margin-left: 2%;" aria-hidden="true"></i>
                 </td>
                 <td style="text-align: center;width: 10%;">
                     <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
                         (click)="downloadFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                 </td>
                 <td style="width: 10%;">
-                    <i *ngIf="doc.info" [pTooltip]="doc.info" tooltipPosition="bottom" class="pi pi-info-circle"
-                        style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus" *ngIf="!docToUpload"
-                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+
+                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus mr-2"
+                        *ngIf="!docToUpload" (click)="initUpload(doc)" aria-hidden="true"></i>
                     <i pTooltip="Fichier en cours de chargement ..." tooltipPosition="bottom"
-                        class="pi pi-spin pi-spinner" *ngIf="docToUpload" (click)="initUpload(doc)"
-                        style="margin-left: 2%;color: grey;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete(doc)" aria-hidden="true"></i>
+                        class="pi pi-spin pi-spinner mr-2" *ngIf="docToUpload" (click)="initUpload(doc)"
+                        style="color: grey;" aria-hidden="true"></i>
+                    <i pTooltip="Supprimer" style="cursor: pointer;" class="pi pi-trash" (click)="delete(doc)"
+                        aria-hidden="true"></i>
                 </td>
             </tr>
         </ng-template>

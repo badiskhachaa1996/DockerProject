@@ -90,6 +90,7 @@ const messageController = require('./controllers/messageController');
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
+const GroupeController = require('./controllers/GroupeController');
 const anneeScolaireController = require('./controllers/anneeScolaireController');
 const ecoleController = require('./controllers/ecoleController');
 const campusController = require('./controllers/campusController');
@@ -216,9 +217,9 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/formulaireAdmission/FA/getAll" ||
       req.originalUrl == "/soc/formulaireAdmission/RA/getAll" ||
       req.originalUrl == "/soc/formulaireAdmission/EA/getAll" ||
-      req.originalUrl.startsWith("/soc/user/getPopulate/")  ||
+      req.originalUrl.startsWith("/soc/user/getPopulate/") ||
       req.originalUrl == "/soc/demanderemboursement/upload-docs" ||
-    
+
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
@@ -321,7 +322,7 @@ app.use("/soc/ticket", ticketController);
 app.use("/soc/notification", notifController);
 
 app.use("/soc/classe", classeController);
-
+app.use("/soc/groupe", GroupeController);
 app.use("/soc/anneeScolaire", anneeScolaireController);
 
 app.use("/soc/ecole", ecoleController);

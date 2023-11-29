@@ -343,7 +343,7 @@ export class PreinscriptionComponent implements OnInit {
     nomlead: new FormControl(''),
     rue: new FormControl(''),
     ville: new FormControl(''),
-    codep: new FormControl(''),
+    codep: new FormControl('')
   })
 
   RegisterForm2: FormGroup = new FormGroup({
@@ -632,6 +632,7 @@ export class PreinscriptionComponent implements OnInit {
       newProspect.lead_type = "Local"
     else
       newProspect.lead_type = "International"
+    newProspect.source = this.newLeadForm.value.source
     newUser.rue_adresse = this.newLeadForm?.value.rue_adresse
     newUser.ville_adresse = this.newLeadForm?.value.ville_adresse
     newUser.postal_adresse = this.newLeadForm?.value.postal_adresse
@@ -1069,8 +1070,9 @@ export class PreinscriptionComponent implements OnInit {
     })
   }
   docToUpload: { date: Date, nom: string, path: string, _id: string }
-  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile", p: Prospect) {
     this.docToUpload = doc
+    this.PROSPECT = p
     document.getElementById(id).click();
   }
 

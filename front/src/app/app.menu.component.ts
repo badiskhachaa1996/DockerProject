@@ -5086,6 +5086,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
+                console.log("HIHI")
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {
@@ -6472,7 +6473,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Groupes',
                                                     icon: 'pi pi-users',
-                                                    routerLink: ['/groupes']
+                                                    routerLink: ['/new-groupes']
                                                 },
                                                 {
                                                     label: 'Evaluations',
@@ -6999,6 +7000,7 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
+   
     let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
