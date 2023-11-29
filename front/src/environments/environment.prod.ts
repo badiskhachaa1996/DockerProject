@@ -1966,7 +1966,7 @@ export const environment = {
       value: 'new'
     },
     {
-      label: "En cours de traiement",
+      label: "En cours ",
       value: 'in-progress'
     },
     {
@@ -1977,6 +1977,14 @@ export const environment = {
       label: "Acceptée",
       value: 'accepted'
     },
+    {
+      label: "Orienté",
+      value: 'oriented'
+    },
+    {
+      label: "Remboursé",
+      value: 'refunded'
+    }
   
   ],
 };
