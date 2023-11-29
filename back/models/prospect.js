@@ -283,20 +283,20 @@ const prospect_schema = new mongoose.Schema({
             { nom: "CV", path: null, date: null },
             { nom: "Lettre de Motivation", path: null, date: null },
             {
-                nom: "Pièce d'identité", path: null, date: null, info: `
-            - Passeport pour les étudiant qui résident en dehors la France.
+                nom: "Pièce d'identité", path: null, date: null, info: `- Passeport pour les étudiant qui résident en dehors la France.
             - Carte de séjours pour les internationaux qui résident en France.
-            - CNI Pour les étudiants de nationalité française.
-            ` },
+            - CNI Pour les étudiants de nationalité française.` },
             {
-                nom: "Dernier diplôme obtenu", path: null, date: null, info: `
-            Si vous avez plus qu'un diplôme merci de les joindre ensemble sur le même fichier
-            ` },
+                nom: "Dernier diplôme obtenu", path: null, date: null, info: `Si vous avez plus qu'un diplôme merci de les joindre ensemble sur le même fichier`
+            },
             {
-                nom: "Relevés de note de deux dernières année", path: null, date: null, info: `
-                Merci de les joindre ensemble sur le même fichier
-                ` },
-            { nom: "Test de niveau en Français - TCF ou DELF", path: null, date: null },
+                nom: "Relevés de note de deux dernières année", path: null, date: null, info: `Merci de les joindre ensemble sur le même fichier`
+            },
+            {
+                nom: "Test de niveau en Français - TCF ou DELF", path: null, date: null,
+                info: `Obligatoire pour les pays non francophones.
+Un niveau B1 ou plus.`
+            },
             { nom: "Carte vitale ou attestation provisoire", path: null, date: null }
         ]
     },

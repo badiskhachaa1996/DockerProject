@@ -6,12 +6,12 @@
 </div>
 <div class="card grid" *ngIf="PROSPECT">
     <h3 class="col-12">Documents</h3>
-    <p class="col-12"
+    <!--<p class="col-12"
         [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
         style="text-align: center;padding: 9px;">
         Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
         Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
-    </p>
+    </p>-->
     <div class="card col-12 grid">
         <div class="col-6">
             Je réside en France
@@ -34,8 +34,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-doc>
-            <tr
-                *ngIf="(doc.nom!='Carte vitale ou attestation provisoire' || alternance) && (doc.nom!='Test de niveau en Français - TCF ou DELF' || resideFr)">
+            <tr *ngIf="(doc.nom!='Carte vitale ou attestation provisoire' || alternance)">
                 <td style="width: 80%;">
                     {{doc.nom}}
                     <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
