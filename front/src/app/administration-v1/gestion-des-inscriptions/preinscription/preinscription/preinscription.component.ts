@@ -138,8 +138,8 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
-  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Dernier diplôme supérieur obtenu", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
-
+  documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+    "Relevés de note de deux dernières année"]
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
   filterPhase = [
