@@ -815,14 +815,6 @@ export class PreinscriptionComponent implements OnInit {
 
     })
   }
-  onshowDocuments() {
-
-    if (this.showDocuments == true) {
-      this.showDocuments = false
-    } else {
-      this.showDocuments = true
-    }
-  }
   onSelectEtat(event: any, procpect: Prospect) {
     if (event && event.value)
       procpect.etat_dossier = event.value
