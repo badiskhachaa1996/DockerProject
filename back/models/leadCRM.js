@@ -31,7 +31,7 @@ const schema = mongoose.Schema({
             canal: { type: String, required: false },
             suite_contact: { type: String, required: false },
             note: { type: String, required: false },
-        }], default: []
+        }],
     },
     //Ventes
     ventes: {
@@ -40,7 +40,7 @@ const schema = mongoose.Schema({
             montant_paye: { type: String, required: false },
             modalite_paiement: { type: String, required: false },
             note: { type: String }
-        }], default: []
+        }],
     },
     //Mailing
     mailing: {
@@ -76,9 +76,16 @@ const schema = mongoose.Schema({
         type: [{
             nom: { type: String, required: false },
             path: { type: String, required: false },
-        }], default: []
+        }],
     },
-    created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+    created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    qualifications: {
+        type: [{
+            criteres_qualification: { type: [String], required: false, default: [] },
+            decision_qualification: { type: String, required: false, default: "Non qualifié" },
+            note_qualification: { type: String, required: false },
+        }]
+    },
 });
 
 const LeadCRM = mongoose.model('leadCRM', schema);

@@ -7,9 +7,9 @@ import { Demande } from 'src/app/models/Demande';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CaptchaModule } from 'primeng/captcha';
-import { MessageService } from 'src/app/services/message.service';
 import { FormBuilder, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -144,22 +144,22 @@ export class AddRemboussementComponent implements OnInit {
 
 
     this.formRembourssement = this.formBuilder.group({
-      civilite: [''],
-      nom: [''],
-      prenom: [''],
-      date_naissance: [''],
-      nationalite: [''],
-      pays_resid: [''],
-      paymentType: [''],
-      indicatif_phone: [''],
-      phone: [''],
-      email: [''],
-      annee_scolaire: [''],
-      ecole: [''],
-      formation: [''],
-      motif_refus: [''],
-      montant: [''],
-      payment_date: [''],
+      civilite: ['' ,Validators.required],
+      nom: ['', Validators.required],
+      prenom: ['', Validators.required],
+      date_naissance: ['', Validators.required],
+      nationalite: ['', Validators.required],
+      pays_resid: ['', Validators.required],
+      paymentType: ['', Validators.required],
+      indicatif_phone: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+      annee_scolaire: ['', Validators.required],
+      ecole: ['', Validators.required],
+      formation: ['', Validators.required],
+      motif_refus: ['', Validators.required],
+      montant: ['', Validators.required],
+      payment_date: ['', Validators.required],
 
     })
 
@@ -375,26 +375,45 @@ export class AddRemboussementComponent implements OnInit {
       (error) => {
         // Handle error (show an error message)
         console.error('Error adding remboursement:', error);
-        // Check if the error response contains a message
-        const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: errorMessage
-        });
+      
+        if (error.status === 400 && error.error && error.error.message) {
+          // Check if the error response indicates a missing field
+          const missingFieldMessage = error.error.message;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Missing Field: ${missingFieldMessage}`
+          });
+        } else {
+          // Default error message for other errors
+          const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: errorMessage
+          });
+        }
       }
+      
     );
   }
 
-
   onSubmitRemboussementForm() {
     const captchaResponse = this.aFormGroup.get('recaptcha').value;
-    if (captchaResponse) {
+  
+  
+    if (captchaResponse && this.formRembourssement.valid) {
       this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
     } else {
-      console.log('Please verify the captcha before submitting.');
+      console.log('Please fill out all the required fields and verify the captcha before submitting.');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill out all the required fields and verify the captcha before submitting.'
+      });
     }
   }
+  
 
 
   cancelForm() {

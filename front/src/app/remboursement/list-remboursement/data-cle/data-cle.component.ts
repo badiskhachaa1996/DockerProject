@@ -42,12 +42,14 @@ export class DataCleComponent implements OnInit {
       this.keyDates=[
         {
         motif :  this.demande?.motif,
-        date_refus : this.demande?.rejection_date,
+        date_refus :this.conersiondate( this.demande?.rejection_date),
         date_demande :this.demande?.created_on,
         date_remboursement : this.demande?.refund?.date,
         isUpdating : false
       }
     ]
+    console.log('hello its me',this.demande.rejection_date)
+
     
   }
 
@@ -61,6 +63,7 @@ export class DataCleComponent implements OnInit {
     }
     this.demande.motif= keyDate.motif
     this.demande.rejection_date=keyDate.date_refus
+    
     this.demande.created_on= keyDate.date_demande
     this.demande.refund.date = keyDate.date_remboursement;
     this.updateDemande(this.demande) 
@@ -85,7 +88,14 @@ export class DataCleComponent implements OnInit {
   // }
 
 
-
+ 
+  conersiondate(a) {
+      const dateObjectl = new Date(a); // Conversion en objet Date
+      const year = dateObjectl.getFullYear();
+      const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+      const day = String(dateObjectl.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`
+    }
 
 
 
