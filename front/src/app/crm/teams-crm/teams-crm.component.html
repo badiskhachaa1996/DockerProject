@@ -100,7 +100,9 @@
                         <td>
                             {{ team.description }}
                         </td>
-                        <td>
+                        <td> 
+                            <i style="padding-left: 3%;" class="pi pi-plus" (click)="initAdd(team);scrollToTop()"
+                                pTooltip="Ajouter un membre à l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(team);scrollToTop()"
                                 pTooltip="Modifier l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(team);"

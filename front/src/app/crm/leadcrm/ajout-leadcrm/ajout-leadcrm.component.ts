@@ -8,6 +8,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import jwt_decode from 'jwt-decode';
+import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
 @Component({
   selector: 'app-ajout-leadcrm',
   templateUrl: './ajout-leadcrm.component.html',
@@ -15,17 +16,7 @@ import jwt_decode from 'jwt-decode';
 })
 export class AjoutLeadcrmComponent implements OnInit {
   @Output() newLead = new EventEmitter<LeadCRM>();
-  sourceDropdown = [
-    { value: 'Facebook' },
-    { value: 'WhatsApp' },
-    { value: 'Appel Telephonique' },
-    { value: 'Mail' },
-    { value: 'Visite au site' },
-    { value: 'Online Meeting' },
-    { value: 'Marketing' },
-    { value: 'Recyclage' },
-    { value: 'LinkdIn' },
-  ]
+  sourceDropdown = []
   operationDropdown = [
     { value: 'Prospection FRP' },
     { value: 'Prospection ENP' },
@@ -131,7 +122,7 @@ export class AjoutLeadcrmComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router,private sourceService:GestionSourcesServices) { }
 
   isUpdate = false
   paramID = ""
@@ -145,6 +136,12 @@ export class AjoutLeadcrmComponent implements OnInit {
         this.isUpdate = true
       }
     });
+    this.sourceService.GetAllSource().subscribe(data => {
+      data.forEach(val=>{
+        
+        this.sourceDropdown.push({label:val.nom,value:val.nom});
+      })
+      });
 
   }
 
