@@ -124,21 +124,28 @@
                                     "maximumWarning": "6kb"
                                 }
                             ]
-                        }
+                        },
+                        "local": {}
                     },
-                    "defaultConfiguration": ""
+                    "defaultConfiguration": "local"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
-                        "production": {
-                            "browserTarget": "sakai:build:production"
+                        "prod": {
+                            "browserTarget": "sakai:build:prod"
                         },
-                        "development": {
-                            "browserTarget": "sakai:build:development"
+                        "qa": {
+                            "browserTarget": "sakai:build:qa"
+                        },
+                        "dev": {
+                            "browserTarget": "sakai:build:dev"
+                        },
+                        "local": {
+                            "browserTarget": "sakai:build:local"
                         }
                     },
-                    "defaultConfiguration": "development"
+                    "defaultConfiguration": "local"
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
