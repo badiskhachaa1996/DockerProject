@@ -7,4 +7,4 @@ RUN npm run build
 # Serve Application using Nginx Server
 FROM nginx:alpine
 COPY --from=build /opt/app/ims/front /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 4200
