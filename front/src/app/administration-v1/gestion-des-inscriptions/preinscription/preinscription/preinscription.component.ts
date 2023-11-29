@@ -138,8 +138,8 @@ export class PreinscriptionComponent implements OnInit {
   programEnDropdown = [
 
   ]
-  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Dernier diplôme supérieur obtenu", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
-
+  documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+    "Relevés de note de deux dernières année"]
   rentreeList = [];
   rentreeFiltere = [{ label: "Toutes les rentrées ", value: null, _id: null }];
   filterPhase = [
@@ -343,7 +343,7 @@ export class PreinscriptionComponent implements OnInit {
     nomlead: new FormControl(''),
     rue: new FormControl(''),
     ville: new FormControl(''),
-    codep: new FormControl(''),
+    codep: new FormControl('')
   })
 
   RegisterForm2: FormGroup = new FormGroup({
@@ -355,7 +355,7 @@ export class PreinscriptionComponent implements OnInit {
     decisoin_admission: new FormControl('', [Validators.required]),
     explication: new FormControl('',),
     date_d: new FormControl('',),
-    membre: new FormControl('')
+    membre: new FormControl([])
   })
   entretienForm: FormGroup = new FormGroup({
     date_e: new FormControl('',),
@@ -398,7 +398,7 @@ export class PreinscriptionComponent implements OnInit {
     this.CollaborateurService.getCollaborateurs().then(cs => {
       cs.forEach(c => {
         if (c?.user_id)
-          this.memberDropdown.push({ label: `${c.user_id.firstname} ${c.user_id.lastname}`, value: c.user_id })
+          this.memberDropdown.push({ label: `${c.user_id.firstname} ${c.user_id.lastname}`, value: c.user_id._id })
       })
     })
     if (localStorage.getItem("token") != null) {
@@ -632,6 +632,7 @@ export class PreinscriptionComponent implements OnInit {
       newProspect.lead_type = "Local"
     else
       newProspect.lead_type = "International"
+    newProspect.source = this.newLeadForm.value.source
     newUser.rue_adresse = this.newLeadForm?.value.rue_adresse
     newUser.ville_adresse = this.newLeadForm?.value.ville_adresse
     newUser.postal_adresse = this.newLeadForm?.value.postal_adresse
@@ -814,14 +815,6 @@ export class PreinscriptionComponent implements OnInit {
 
     })
   }
-  onshowDocuments() {
-
-    if (this.showDocuments == true) {
-      this.showDocuments = false
-    } else {
-      this.showDocuments = true
-    }
-  }
   onSelectEtat(event: any, procpect: Prospect) {
     if (event && event.value)
       procpect.etat_dossier = event.value
@@ -846,11 +839,15 @@ export class PreinscriptionComponent implements OnInit {
       });
   }
   InitDecision(prospect: Prospect) {
+    let ids = []
+    prospect.decision.membre.forEach(mb => {
+      ids.push(mb._id)
+    })
     this.DecisionForm.patchValue({
       date_d: this.conersiondate(prospect.decision.date_decision),
       decisoin_admission: prospect.decision.decision_admission,
       explication: prospect.decision.expliquation,
-      membre: prospect.decision.membre?._id
+      membre: ids
     })
   }
   adddicision(prospect: Prospect) {
@@ -858,7 +855,6 @@ export class PreinscriptionComponent implements OnInit {
     prospect.decision.decision_admission = this.DecisionForm.value.decisoin_admission;
     prospect.decision.expliquation = this.DecisionForm.value.explication;
     prospect.decision.membre = this.DecisionForm.value.membre;
-    console.log(prospect.decision.membre)
     this.admissionService.updateV2({ ...prospect }).subscribe(res => {
       this.ToastService.add({ severity: 'success', summary: 'Modification de la décision avec succès' })
       this.modeAffichageE4 = 'Voir'
@@ -1069,8 +1065,9 @@ export class PreinscriptionComponent implements OnInit {
     })
   }
   docToUpload: { date: Date, nom: string, path: string, _id: string }
-  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile", p: Prospect) {
     this.docToUpload = doc
+    this.PROSPECT = p
     document.getElementById(id).click();
   }
 

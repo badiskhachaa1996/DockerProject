@@ -45,7 +45,8 @@
         </div>
         <div class="field col-12 md:col-6">
             <label>Email </label>
-            <input pInputText id="lastname" formControlName="email" type="text" placeholder="Ex: email@gmail.com" />
+            <input pInputText id="lastname" formControlName="email" type="text" placeholder="Ex: email@gmail.com"
+                (blur)="testEmail()" />
         </div>
 
         <div class="field col-12">
@@ -85,9 +86,11 @@
         <!-- justifier à droite -->
         <div class="col-6 md:col-4" style="margin-left: auto;">
             <!-- ngif updating show updating -->
-            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour" (click)="onUpdate()"></button>
+            <button *ngIf="isUpdate" pButton type="submit" label="Mettre à jour" (click)="onUpdate()"
+                [disabled]="EmailExist"></button>
             <!-- ngif adding show adding -->
-            <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter " (click)="onAdd()"></button>
+            <button *ngIf="!isUpdate" pButton type="submit" label="Ajouter " (click)="onAdd()"
+                [disabled]="EmailExist"></button>
         </div>
     </form>
 </div>

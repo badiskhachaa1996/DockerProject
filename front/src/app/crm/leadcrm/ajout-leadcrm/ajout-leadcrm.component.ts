@@ -97,6 +97,8 @@ export class AjoutLeadcrmComponent implements OnInit {
       this.addForm.reset()
       this.newLead.emit(data)
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+    }, err => {
+      this.ToastService.add({ severity: "error", summary: "Impossible d'ajouter le lead, l'email est déjà utilisée", detail: err?.error })
     })
     this.LCS.getAll().subscribe(data => {
       this.prospects = data
@@ -144,8 +146,16 @@ export class AjoutLeadcrmComponent implements OnInit {
       });
 
   }
-
-
+  EmailExist = false
+  testEmail() {
+    this.LCS.getByEmail(this.addForm.value.email).subscribe(l => {
+      if (l) {
+        this.EmailExist = true
+        this.ToastService.add({ severity: 'error', summary: "L'email existe déjà" })
+      } else
+        this.EmailExist = false
+    })
+  }
 
   private loadLeadData(id: string) {
     this.LCS.getOneByID(id).subscribe(data => {

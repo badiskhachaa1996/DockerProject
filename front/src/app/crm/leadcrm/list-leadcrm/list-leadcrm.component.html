@@ -519,7 +519,7 @@
                         </p-dropdown>
                     </td>
 
-                    <td *ngIf="AccessLevel!='Spectateur'">
+                     <td *ngIf="AccessLevel!='Spectateur'">
                         <i pTooltip="Fiche lead" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
@@ -535,7 +535,7 @@
                     </td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-lead>
+            <ng-template pTemplate="rowexpansion" let-lead >
                 <tr>
                     <td colspan="9">
                         <h5>Informations supplémentaire</h5>

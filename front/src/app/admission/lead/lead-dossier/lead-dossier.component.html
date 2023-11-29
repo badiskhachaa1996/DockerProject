@@ -6,12 +6,12 @@
 </div>
 <div class="card grid" *ngIf="PROSPECT">
     <h3 class="col-12">Documents</h3>
-    <p class="col-12"
+    <!--<p class="col-12"
         [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
         style="text-align: center;padding: 9px;">
         Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
         Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
-    </p>
+    </p>-->
     <div class="card col-12 grid">
         <div class="col-6">
             Je réside en France
@@ -34,26 +34,26 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-doc>
-            <tr
-                *ngIf="(doc.nom!='Carte de séjour' || (alternance || resideFr)) && (doc.nom!='Test de niveau en Français - TCF (pour les étudiants des pays non francophones)' || resideFr)">
+            <tr *ngIf="(doc.nom!='Carte vitale ou attestation provisoire' || alternance)">
                 <td style="width: 80%;">
                     {{doc.nom}}
                     <span style="color: red;" *ngIf="documentsObligatoires.includes(doc.nom)">(Obligatoire)</span>
+                    <i *ngIf="doc.info" [pTooltip]="doc.info" tooltipPosition="bottom" class="pi pi-info-circle ml-2"
+                        style="margin-left: 2%;" aria-hidden="true"></i>
                 </td>
                 <td style="text-align: center;width: 10%;">
                     <i *ngIf="doc.path" pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
                         (click)="downloadFile(doc)" style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                 </td>
                 <td style="width: 10%;">
-                    <i *ngIf="doc.info" [pTooltip]="doc.info" tooltipPosition="bottom" class="pi pi-info-circle"
-                        style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus" *ngIf="!docToUpload"
-                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+
+                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus mr-2"
+                        *ngIf="!docToUpload" (click)="initUpload(doc)" aria-hidden="true"></i>
                     <i pTooltip="Fichier en cours de chargement ..." tooltipPosition="bottom"
-                        class="pi pi-spin pi-spinner" *ngIf="docToUpload" (click)="initUpload(doc)"
-                        style="margin-left: 2%;color: grey;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete(doc)" aria-hidden="true"></i>
+                        class="pi pi-spin pi-spinner mr-2" *ngIf="docToUpload" (click)="initUpload(doc)"
+                        style="color: grey;" aria-hidden="true"></i>
+                    <i pTooltip="Supprimer" style="cursor: pointer;" class="pi pi-trash" (click)="delete(doc)"
+                        aria-hidden="true"></i>
                 </td>
             </tr>
         </ng-template>

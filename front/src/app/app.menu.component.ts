@@ -5086,6 +5086,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
+                console.log("HIHI")
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {
@@ -5342,6 +5343,11 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Gestion des équipes',
                                                     icon: 'pi pi-users',
                                                     routerLink: ['crm/teams'],
+                                                },
+                                                {
+                                                    label: 'Gestion des critères',
+                                                    icon: 'pi pi-users',
+                                                    routerLink: ['crm-criteres'],
                                                 },
                                                 {
                                                     label: 'Gestion des produits',
@@ -6034,98 +6040,61 @@ export class AppMenuComponent implements OnInit {
                     );
                 }
                 if (services_list.includes('Administration')) {
-                    this.items.push({
-                        label: 'Administration',
-                        icon: 'pi pi-fw pi-inbox',
-                        items: [
-                            {
-                                label: 'Gestions des années scolaires',
-                                icon: 'pi pi-calendar',
-                                items: [
-                                    {
-                                        label: 'Ajouter une année scolaire',
-                                        icon: 'pi pi-calendar-plus',
-                                        routerLink: ['/ajout-annee-scolaire'],
-                                    },
-                                    {
-                                        label: 'Liste des années scolaires',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/annee-scolaire'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des écoles',
-                                icon: 'pi pi-home',
-                                items: [
-                                    {
-                                        label: 'Ajouter une école',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-ecole'],
-                                    },
-                                    {
-                                        label: 'Liste des écoles',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/ecole'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des campus',
-                                icon: 'pi pi-home',
-                                items: [
-                                    {
-                                        label: 'Ajouter un campus',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-campus'],
-                                    },
-                                    {
-                                        label: 'Liste des campus',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/campus'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des diplômes',
-                                icon: 'pi pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Ajouter un diplôme',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-diplome'],
-                                    },
-                                    {
-                                        label: 'Liste des diplômes',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/diplomes'],
-                                    },
-                                ],
-                            },
+                    this.items.push(
+                        {
+                            label: 'Administration V2',
+                            icon: 'pi pi-users',
+                            items: [
 
-                            {
-                                label: 'Gestions des agents',
-                                icon: 'pi pi-users',
-                                items: [
-                                    {
-                                        label: 'Ajouter un agent',
-                                        icon: 'pi pi-user-plus',
-                                        routerLink: ['/admin/ajout-agent'],
-                                    },
-                                    {
-                                        label: 'Liste des agents',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/admin/agents'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Validation des inscrits',
-                                icon: 'pi pi-check-square',
-                                routerLink: ['/validation-inscrit'],
-                            },
-                        ],
-                    });
+                                {
+                                    label: 'Préinscription - Admission',
+                                    icon: 'pi pi-prime',
+                                    routerLink: ['/administration/preinscription']
+                                },
+                                {
+                                    label: 'Inscription',
+                                    icon: 'pi pi-prime',
+                                    routerLink: ['/administration/inscription']
+                                },
+                                {
+                                    label: 'Paramètres',
+                                    icon: 'pi pi-cog',
+                                    items: [
+                                        {
+                                            label: 'Session',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/admission/rentree']
+                                        },
+                                        {
+                                            label: 'Ecole',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['/admission/ecoles']
+                                        },
+                                        {
+                                            label: 'Campus',
+                                            icon: 'pi pi-map-marker',
+                                            routerLink: ['/campus']
+                                        },
+                                        {
+                                            label: 'Formation',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/admission/formations']
+                                        },
+                                        {
+                                            label: 'Groupes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/new-groupes']
+                                        },
+                                        {
+                                            label: 'Evaluations',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/administration/evaluation']
+                                        },
+                                    ]
+                                },
+                            ]
+                        }
+                    )
                 }
                 if (services_list.includes('iMatch')) {
                     let role = service_dic['iMatch']
@@ -6429,59 +6398,97 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/rh/teams']
                                         }
                                     ]
-                                },
-                                {
-                                    label: 'Administration V2',
-                                    icon: 'pi pi-users',
+                                }, {
+                                    label: 'Ancien Administration',
+                                    icon: 'pi pi-fw pi-inbox',
                                     items: [
-
                                         {
-                                            label: 'Préinscription - Admission',
-                                            icon: 'pi pi-prime',
-                                            routerLink: ['/administration/preinscription']
-                                        },
-                                        {
-                                            label: 'Inscription',
-                                            icon: 'pi pi-prime',
-                                            routerLink: ['/administration/inscription']
-                                        },
-                                        {
-                                            label: 'Paramètres',
-                                            icon: 'pi pi-cog',
+                                            label: 'Gestions des années scolaires',
+                                            icon: 'pi pi-calendar',
                                             items: [
                                                 {
-                                                    label: 'Session',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/admission/rentree']
+                                                    label: 'Ajouter une année scolaire',
+                                                    icon: 'pi pi-calendar-plus',
+                                                    routerLink: ['/ajout-annee-scolaire'],
                                                 },
                                                 {
-                                                    label: 'Ecole',
-                                                    icon: 'pi pi-list',
-                                                    routerLink: ['/admission/ecoles']
+                                                    label: 'Liste des années scolaires',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/annee-scolaire'],
                                                 },
-                                                {
-                                                    label: 'Campus',
-                                                    icon: 'pi pi-map-marker',
-                                                    routerLink: ['/campus']
-                                                },
-                                                {
-                                                    label: 'Formation',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/admission/formations']
-                                                },
-                                                {
-                                                    label: 'Groupes',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: ['/groupes']
-                                                },
-                                                {
-                                                    label: 'Evaluations',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/administration/evaluation']
-                                                },
-                                            ]
+                                            ],
                                         },
-                                    ]
+                                        {
+                                            label: 'Gestions des écoles',
+                                            icon: 'pi pi-home',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter une école',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-ecole'],
+                                                },
+                                                {
+                                                    label: 'Liste des écoles',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/ecole'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Gestions des campus',
+                                            icon: 'pi pi-home',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un campus',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-campus'],
+                                                },
+                                                {
+                                                    label: 'Liste des campus',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/campus'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Gestions des diplômes',
+                                            icon: 'pi pi-bookmark',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un diplôme',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-diplome'],
+                                                },
+                                                {
+                                                    label: 'Liste des diplômes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/diplomes'],
+                                                },
+                                            ],
+                                        },
+
+                                        {
+                                            label: 'Gestions des agents',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un agent',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: ['/admin/ajout-agent'],
+                                                },
+                                                {
+                                                    label: 'Liste des agents',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/admin/agents'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Validation des inscrits',
+                                            icon: 'pi pi-check-square',
+                                            routerLink: ['/validation-inscrit'],
+                                        },
+                                    ],
                                 },
                                 {
                                     label: 'Ticketing',
@@ -6999,7 +7006,9 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+
+    let documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+        "Relevés de note de deux dernières année"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

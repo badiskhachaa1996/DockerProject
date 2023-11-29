@@ -6,7 +6,7 @@
             Si vous finissez avant, cliquez sur 'Soumettre'.
         </p>
     </div>
-    <p-table #dt1 [value]="PROSPECT.evaluations" dataKey="_id" responsiveLayout="scroll"
+    <p-table #dt1 [value]="PROSPECT.evaluations" dataKey="_id" responsiveLayout="scroll" *ngIf="!EvaluationOnGoing"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
@@ -23,10 +23,10 @@
                 <td>{{eval?.evaluation_id?.label}}</td>
                 <td>{{eval?.score}}/{{eval?.evaluation_id?.score}}</td>
                 <td>
-                    <strong>Durée du test</strong> {{eval?.evaluation_id.duree}} min<br>
+                    <strong>Durée du test</strong> {{eval?.evaluation_id?.duree}} min<br>
                     <strong>Durée mise</strong> {{eval?.duree_mise}} min
                 </td>
-                <td>{{eval.etat}}</td>
+                <td>{{eval?.etat}}</td>
                 <td>{{eval?.date_passation | date:'dd MMMM YY'}}</td>
                 <td>
                     <a *ngIf="!eval.date_passation" (click)="onStartEval(eval,ri)">Passer le test</a>

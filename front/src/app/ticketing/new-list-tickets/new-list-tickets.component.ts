@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
+import {  FormControl, Validators, UntypedFormGroup } from '@angular/forms';
+
 import jwt_decode from 'jwt-decode';
 import { MessageService as ToastService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
