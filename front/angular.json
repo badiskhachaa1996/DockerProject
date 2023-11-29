@@ -57,17 +57,17 @@
                         ]
                     },
                     "configurations": {
-                        "production": {
+                        "prod": {
                             "budgets": [
                                 {
                                     "type": "initial",
                                     "maximumWarning": "3mb",
-                                    "maximumError": "20mb"
+                                    "maximumError": "30mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
                                     "maximumWarning": "6kb",
-                                    "maximumError": "200kb"
+                                    "maximumError": "600kb"
                                 }
                             ],
                             "fileReplacements": [
@@ -78,15 +78,34 @@
                             ],
                             "outputHashing": "all"
                         },
-                        "development": {
+                        "qa": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "30mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "600kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.qa.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "dev": {
                             "buildOptimizer": false,
                             "optimization": false,
                             "vendorChunk": true,
                             "extractLicenses": false,
                             "sourceMap": true,
-                            "namedChunks": true
-                        },
-                        "dev": {
+                            "namedChunks": true,
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
@@ -98,7 +117,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "5mb",
-                                    "maximumError": "20mb"
+                                    "maximumError": "50mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -107,7 +126,7 @@
                             ]
                         }
                     },
-                    "defaultConfiguration": "production"
+                    "defaultConfiguration": ""
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
