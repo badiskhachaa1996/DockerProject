@@ -515,8 +515,7 @@
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6"
-                        >
+                    <div class="field col-12 md:col-6">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choisissez un programme français"
@@ -1843,7 +1842,8 @@
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
                         </h4>
                         <h4 style="text-align: center;"
-                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier">Etat
+                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier || PROSPECT.etat_dossier==='En cours de traitement'">
+                            Etat
                             du dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
@@ -1852,7 +1852,6 @@
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
                         </h4>
-                        {{PROSPECT.etat_dossier}}
                         <div class="col-12">
                             <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile"
                                 #selectedFile style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
@@ -1903,8 +1902,8 @@
                                         </td>
                                         <td>
                                             <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="initUpload(doc,'selectedFile',PROSPECT)" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
+                                                (click)="initUpload(doc,'selectedFile',PROSPECT)"
+                                                style="margin-left: 2%;" aria-hidden="true"></i>
                                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
                                                 class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
                                         </td>
@@ -2240,10 +2239,10 @@
                                 <label For="date_d">Date</label>
                                 <p>{{PROSPECT.decision.date_decision | date:'dd MMMM YY'}}</p>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-6" *ngIf="PROSPECT.decision && PROSPECT.decision.membre">
                                 <label For="explication">Membre de Commission</label><br>
-                                <p>{{PROSPECT.decision?.membre?.firstname | titlecase}}
-                                    {{PROSPECT.decision?.membre?.lastname | uppercase}}</p>
+                                <p *ngFor="let membre of PROSPECT.decision.membre">{{membre?.firstname | titlecase}}
+                                    {{membre?.lastname | uppercase}}<br></p>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Explication</label><br>
@@ -2259,7 +2258,7 @@
                         <form class="p-fluid p-formgrid grid" [formGroup]="DecisionForm"
                             *ngIf="modeAffichageE4!='Voir'">
                             <div class="field col-12 md:col-6">
-                                <label For="decisoin_admission">Décision du conseil d'oriontation pédagogique<span
+                                <label For="decisoin_admission">Décision du conseil d'orientation pédagogique<span
                                         style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="decision_dropdown" [style]="{'width':'100%'}"
@@ -2272,8 +2271,8 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Membre de Commission</label><br>
-                                <p-dropdown [options]="memberDropdown" [style]="{'width':'100%'}"
-                                    formControlName="membre"></p-dropdown>
+                                <p-multiSelect [options]="memberDropdown" [style]="{'width':'100%'}"
+                                    formControlName="membre"></p-multiSelect>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Explication<span style="color: red;"> *
