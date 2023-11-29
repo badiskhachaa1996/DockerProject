@@ -39,7 +39,7 @@ install_node_dependencies_on_dev:
     - npm install
   only:
     refs:
-      - devdelop
+      - develop
     changes:
       - back/package.json
 
@@ -57,7 +57,7 @@ install_angular_dependencies_on_dev:
     - npm install
   only:
     refs:
-      - devdelop
+      - develop
     changes:
       - front/package.json
 
