@@ -45,19 +45,6 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Personnel' },
     { label: 'Service' }
   ]
-  TicketMode = "Personnel"
-  onChangeMode(e) {
-    if (e.value == 'Personnel') {
-      this.filterType = ['Mine']
-      this.filterBase = []//'En attente de traitement', 'En cours de traitement'
-      this.dt1.filter(this.filterBase, 'statut', 'in')
-    } else {
-      this.filterType = ['Assigne Service']
-      this.filterBase = []
-      this.dt1.filter([], 'statut', 'in')
-    }
-    this.onFilterTicket()
-  }
   USER: User
   isAgent = false
   constructor(private route: ActivatedRoute, private TicketService: TicketService, private ToastService: ToastService,
@@ -138,7 +125,8 @@ export class NewListTicketsComponent implements OnInit {
           e.documents_service.forEach(ds => { ds.by = "Agent" })
           e.documents = e.documents.concat(e.documents_service)
         })
-        this.tickets = this.tickets.concat(data)
+        this.ticketsService = data
+        console.log(data)
         let service_dic = {};
         this.USER.roles_list.forEach((val) => {
           if (!service_dic[val.module])
@@ -158,15 +146,14 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            this.ticketsService = nonassigne
-            this.tickets = this.tickets.concat(nonassigne)
+            this.ticketsService = this.ticketsService.concat(nonassigne)
             this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
                 e.documents_service.forEach(ds => { ds.by = "Agent" })
                 e.documents = e.documents.concat(e.documents_service)
               })
-              this.tickets = this.tickets.concat(allAssigne)
+              this.ticketsService = this.ticketsService.concat(allAssigne)
 
 
               this.tickets.sort((a, b) => {
@@ -176,14 +163,21 @@ export class NewListTicketsComponent implements OnInit {
                   return 1
               })
 
-              this.defaultTicket = this.tickets
-              this.filteredValues = this.tickets
+              this.ticketsService.sort((a, b) => {
+                if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                  return -1
+                else
+                  return 1
+              })
+
+              this.defaultTicket = this.ticketsService
+              this.filteredValues = this.ticketsService
               this.onFilterTicket()
               let tempDate = new Date()
               tempDate.setDate(tempDate.getDate() - 2)
               this.stats = {
-                en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-                en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+                en_attente: Math.trunc(this.ticketsService.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+                en_cours: Math.trunc(this.ticketsService.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
               }
               if (isFirst) {
                 this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
@@ -212,15 +206,14 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            this.ticketsService = nonassigne
-            this.tickets = this.tickets.concat(nonassigne)
+            this.ticketsService.concat(nonassigne)
             this.TicketService.getAllAssigneAdmin().subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
                 e.documents_service.forEach(ds => { ds.by = "Agent" })
                 e.documents = e.documents.concat(e.documents_service)
               })
-              this.tickets = this.tickets.concat(allAssigne)
+              this.ticketsService = this.ticketsService.concat(allAssigne)
 
               this.tickets.sort((a, b) => {
                 if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
@@ -228,8 +221,13 @@ export class NewListTicketsComponent implements OnInit {
                 else
                   return 1
               })
-
-              this.defaultTicket = this.tickets
+              this.ticketsService.sort((a, b) => {
+                if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                  return -1
+                else
+                  return 1
+              })
+              this.defaultTicket = this.ticketsService
               this.onFilterTicket()
               if (isFirst) {
                 this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
@@ -251,8 +249,8 @@ export class NewListTicketsComponent implements OnInit {
               let tempDate = new Date()
               tempDate.setDate(tempDate.getDate() - 2)
               this.stats = {
-                en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-                en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+                en_attente: Math.trunc(this.ticketsService.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+                en_cours: Math.trunc(this.ticketsService.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
               }
             })
           })
@@ -268,11 +266,9 @@ export class NewListTicketsComponent implements OnInit {
   hideTicket = true
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
-    if (this.router.url == '/ticketing/mes-tickets-services') {
-      this.TicketMode = 'Service'
-      this.onChangeMode({ value: 'Service' })
+    if (this.router.url == '/ticketing/mes-tickets-services')
       this.filterType = ['Non Assigne']
-    }
+
 
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
@@ -666,16 +662,16 @@ export class NewListTicketsComponent implements OnInit {
   handleClose(e) {
     this.deleteTicket(this.ticketsOnglets[e.index - 2])
   }
-  filterType = ['Mine']
+  filterType = ['Non Assigne']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
-    this.tickets = []
+    this.ticketsService = []
     if (this.filterType.indexOf('Assigne Service') != -1)
       this.filterType.splice(this.filterType.indexOf('Assigne Service'), 1)
-    if (!this.filterType.includes('Non Assigne') && this.TicketMode != 'Personnel' && this.filterType.indexOf('Assigne Service') == -1)
+    if (!this.filterType.includes('Non Assigne') && this.filterType.indexOf('Assigne Service') == -1 && this.filterType.indexOf('Assigne') == -1)
       this.filterType.push('Assigne Service')
-
+    console.log(this.filterType)
     this.createurList = []
     let ids = []
     this.defaultTicket.forEach((t: Ticket) => {
@@ -694,7 +690,7 @@ export class NewListTicketsComponent implements OnInit {
       }
 
       if (r) {
-        this.tickets.push(t)
+        this.ticketsService.push(t)
         if (t.createur_id && !ids.includes(t.createur_id._id)) {
           ids.push(t.createur_id._id)
           this.createurList.push({ label: `${t.createur_id.firstname} ${t.createur_id.lastname}`, value: t.createur_id._id })
@@ -702,7 +698,7 @@ export class NewListTicketsComponent implements OnInit {
       }
     })
     setTimeout(() => {
-      this.filteredValues = this.dt1._value
+      this.filteredValues = this.dt2._value
     }, 5)
 
     this.hideTicket = false
