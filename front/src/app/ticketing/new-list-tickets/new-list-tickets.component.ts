@@ -662,16 +662,16 @@ export class NewListTicketsComponent implements OnInit {
   handleClose(e) {
     this.deleteTicket(this.ticketsOnglets[e.index - 2])
   }
-  filterType = ['Non Assigne']
+  filterType = ['Assigne']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
     this.ticketsService = []
-    if (this.filterType.indexOf('Assigne Service') != -1)
+    /*if (this.filterType.indexOf('Assigne Service') != -1)
       this.filterType.splice(this.filterType.indexOf('Assigne Service'), 1)
-    if (!this.filterType.includes('Non Assigne') && this.filterType.indexOf('Assigne Service') == -1 && this.filterType.indexOf('Assigne') == -1)
+    if (!this.filterType.includes('Non Assigne') && this.filterType.indexOf('Assigne Service') == -1)
       this.filterType.push('Assigne Service')
-    console.log(this.filterType)
+    console.log(this.filterType)*/
     this.createurList = []
     let ids = []
     this.defaultTicket.forEach((t: Ticket) => {

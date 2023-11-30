@@ -365,12 +365,17 @@
         </p-tabPanel>
         <p-tabPanel header="Admin" *ngIf="roleAccess!='Spectateur'">
             <div class="grid">
-                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' ">
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' ">
                     <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
                     <label for="city1">Non assignés</label>
                 </div>
-                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'">
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' ">
+                    <p-checkbox name="filterType" value="Assigne Service" [(ngModel)]="filterType"
+                        (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
+                    <label for="city1">Assigné aux Services</label>
+                </div>
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'">
                     <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type2"></p-checkbox>
                     <label for="city1">Assignés à moi</label>
