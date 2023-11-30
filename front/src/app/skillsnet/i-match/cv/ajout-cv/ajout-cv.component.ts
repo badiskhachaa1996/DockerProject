@@ -268,31 +268,33 @@ export class AjoutCvComponent implements OnInit {
     if (this.ID) {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
-        this.onLoadFile(this.ID)
-        console.log(c)
-        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
-        this.pdfPreviewChosenSchool = c.ecole
-        this.selectedMultiCpt = []
-        c.competences.forEach(val => {
-          this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
-        })
-        if (c.competences.length == 0)
-          this.selectedMultiCpt = ['']
-        this.selectedMultilang = []
-        c.langues.forEach(val => {
-          this.selectedMultilang.push({ label: val })
-        })
-        this.experiences_pro = c.experiences_pro
-        this.education = c.education
-        this.experiences_associatif = c.experiences_associatif
-        this.informatique = c.informatique
-        setTimeout(() => {
-          if (c?.user_id?.type?.startsWith('Externe'))
-            this.formAddCV.patchValue({ user_create_type: 'Externe' })
-          else
-            this.formAddCV.patchValue({ user_create_type: 'Interne' })
-        }, 1000);
-
+        if (c) {
+          this.onLoadFile(this.ID)
+          this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
+          this.pdfPreviewChosenSchool = c.ecole
+          this.selectedMultiCpt = []
+          c.competences.forEach(val => {
+            this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
+          })
+          if (c.competences.length == 0)
+            this.selectedMultiCpt = ['']
+          this.selectedMultilang = []
+          c.langues.forEach(val => {
+            this.selectedMultilang.push({ label: val })
+          })
+          this.experiences_pro = c.experiences_pro
+          this.education = c.education
+          this.experiences_associatif = c.experiences_associatif
+          this.informatique = c.informatique
+          setTimeout(() => {
+            if (c?.user_id?.type?.startsWith('Externe'))
+              this.formAddCV.patchValue({ user_create_type: 'Externe' })
+            else
+              this.formAddCV.patchValue({ user_create_type: 'Interne' })
+          }, 1000);
+        }
+        else
+          this.messageService.add({ severity: 'error', summary: 'Pas de CV trouvé à votre nom' })
       })
     }
 
@@ -423,7 +425,6 @@ export class AjoutCvComponent implements OnInit {
 
   onLoadFile(cv_id) {
     this.cvService.downloadCV(cv_id).then(r => {
-      console.log(r)
       const byteArray = new Uint8Array(atob(r.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: r.extension });
       /*var blobURL = URL.createObjectURL(blob);
