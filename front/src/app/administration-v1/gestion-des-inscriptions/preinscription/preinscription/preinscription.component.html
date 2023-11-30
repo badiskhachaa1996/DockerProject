@@ -2346,6 +2346,44 @@
                                 <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
                             </div>
                         </ng-template>
+                        <div class="col-4">
+                            <p-button [style]="{'width':'10%'}" (click)="visibleADM=true;showUploadFile=PROSPECT;"
+                                icon="pi pi-plus" autoWidth="false"></p-button>
+                        </div>
+                        <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
+                            [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
+                            [filterDelay]="0" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Lien</th>
+                                    <th>Traité par</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                                <tr>
+                                    <td>{{doc?.custom_id}}</td>
+                                    <td>{{doc?.type}}</td>
+                                    <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                                    <td>
+                                        <a (click)="downloadAdminFile(doc.path,PROSPECT)">Télécharger</a>
+                                    </td>
+                                    <td>{{doc?.traited_by}}</td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                            *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                            aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                            class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
 
                     </p-accordionTab>
                     <p-accordionTab>
@@ -2440,7 +2478,7 @@
                     </p-accordionTab>
                 </p-accordion>
             </div>
-            <div class="col-12" *ngIf="showUploadFile!=null">
+           <!-- <div class="col-12" *ngIf="showUploadFile!=null">
                 <div class="card">
                     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                         (click)="showUploadFile = null" aria-hidden="true"> </i>
@@ -2484,7 +2522,7 @@
 
                     </form>
                 </div>
-            </div>
+            </div>-->
         </p-tabPanel>
         <p-tabPanel style="width: 100%;" *ngFor="let PROSPECT of candidatureList" [closable]="true"
             header="CANDIDATURE - {{PROSPECT?.user_id?.firstname}} {{PROSPECT?.user_id?.lastname}}">
