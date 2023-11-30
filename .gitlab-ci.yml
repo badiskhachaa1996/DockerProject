@@ -112,8 +112,6 @@ install_node_dependencies_on_prod:
   only:
     refs:
       - main
-    changes:
-      - back/package.json
   when: manual
 
 install_angular_dependencies_on_prod:
@@ -131,8 +129,6 @@ install_angular_dependencies_on_prod:
   only:
     refs:
       - main
-    changes:
-      - front/package.json
   when: manual
 
 #==========================================================
