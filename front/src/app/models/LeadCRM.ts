@@ -79,6 +79,7 @@ export class LeadCRM {
              decision_qualification?: string,
              note_qualification?: string,
         }[],
+        public equipe?: string,
     ) { }
 
 }
