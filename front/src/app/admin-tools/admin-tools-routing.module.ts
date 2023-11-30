@@ -12,8 +12,8 @@ const routes: Routes = [
             },
             {
                 path: '',
-                canActivate: [AdminGuardService],
                 component: InfoImsComponent,
+                canActivate: [AdminGuardService],
             },
 ];
 

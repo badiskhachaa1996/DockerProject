@@ -8,6 +8,16 @@ const jwt = require("jsonwebtoken");
 // var CronJob = require('cron').CronJob;
 app.use(bodyParser.json({ limit: "20mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
+app.use(express.static('public', {
+  etag: true, // Just being explicit about the default.
+  lastModified: true,  // Just being explicit about the default.
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      // All of the project's HTML files end in .html
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {

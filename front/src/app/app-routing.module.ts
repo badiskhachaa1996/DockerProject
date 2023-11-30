@@ -70,9 +70,9 @@ import { TuteurEntrepriseGuard } from './dev-components/guards/tuteur-entreprise
 import { CeoEntrepriseGuard } from './dev-components/guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './dev-components/guards/completion-profil.guard';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
-import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
-import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
-import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
+//import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
+//import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
+//import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 //import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 //import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
@@ -101,13 +101,13 @@ import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
-import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
+//import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
-import { StageComponent } from './commercial/stage/stage.component';
+//import { StageComponent } from './commercial/stage/stage.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
@@ -125,7 +125,7 @@ import { RentreeScolaireAdmissionComponent } from './international/rentree-scola
 import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 import { PaiementsComponent } from './admission/international/paiements/paiements.component';
-import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
+//import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
 import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
@@ -144,18 +144,18 @@ import { PerformanceComponent } from './international/dashboard-int/performance/
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 import { ActualiteComponent } from './international/actualite/actualite.component';
-import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
+//import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
 import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
 import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-admission-dubai.component';
 import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
-import { CollaborateursComponent } from './rh/collaborateurs/collaborateurs.component';
-import { CongesAutorisationsComponent } from './rh/conges-autorisations/conges-autorisations.component';
-import { ActualiteNotificationsComponent } from './rh/actualite-notifications/actualite-notifications.component';
-import { DemandesReclamationsComponent } from './rh/demandes-reclamations/demandes-reclamations.component';
-import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
+//import { CollaborateursComponent } from './rh/collaborateurs/collaborateurs.component';
+//import { CongesAutorisationsComponent } from './rh/conges-autorisations/conges-autorisations.component';
+//import { ActualiteNotificationsComponent } from './rh/actualite-notifications/actualite-notifications.component';
+//import { DemandesReclamationsComponent } from './rh/demandes-reclamations/demandes-reclamations.component';
+//import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
 import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
 import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
@@ -194,12 +194,12 @@ import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/d
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
-import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
-import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
-import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+//import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+//import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
+//import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
-import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
-import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
+//import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
+//import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
 import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
 import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
 import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
@@ -210,7 +210,7 @@ import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
-import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+//import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
 import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
 import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
 import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
@@ -230,9 +230,9 @@ import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entrepr
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
-import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+//import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
 import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
-import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
+//import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
 import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
@@ -484,11 +484,6 @@ const routes: Routes = [
                 component: ProspectsIntunsComponent,
                 canActivate: [AuthGuardService],
             },
-            {
-                path: 'prospects-alt',
-                component: ProspectsAlternablesComponent,
-                canActivate: [AuthGuardService],
-            },
 
             {
                 path: 'liste-contrats/:idTuteur',
@@ -558,16 +553,20 @@ const routes: Routes = [
             { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque-interne', component: NewCvthequeInterneComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
-            { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService] },
-            { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
-            { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-            { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+
+            { path: 'equipe-commercial', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+            { path: 'detail-equipe-commercial/:equipe_id', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+            { path: 'liste-demande-commercial', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+            { path: 'liste-demande-commercial/:equipe_id', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/cv-etudiant', component: CvEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/reporting', component: DashboardImatchComponent, canActivate: [AuthGuardService] },
-            { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
-            { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
+
+            { path: 'stages', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+            { path: 'stages/:id', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
+
             { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
             { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
@@ -598,28 +597,27 @@ const routes: Routes = [
             },
             {
                 path: 'equipe-commercial',
-                component: GestionEquipeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'detail-equipe-commercial/:equipe_id',
-                component: DetailEquipeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
+            },
+            {
+                path: 'prospects-alt',
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'liste-demande-commercial',
-                component: DemandeConseillerComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'dashboard-alternance',
-                component: DashboardAlternanceComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'liste-demande-commercial/:equipe_id',
-                component: DemandeConseillerComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'evenements',
@@ -633,13 +631,11 @@ const routes: Routes = [
             },
             {
                 path: 'stages',
-                component: StageComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'stages/:id',
-                component: StageCeoComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'livret',
@@ -653,24 +649,39 @@ const routes: Routes = [
             },
 
             // RH paths
-            { path: 'rh/collaborateurs', component: CollaborateursComponent },
+            {
+                path: 'rh/collaborateurs',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
             {
                 path: 'rh/conges-autorisations',
-                component: CongesAutorisationsComponent,
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
             },
             {
                 path: 'rh/actualite-notifications',
-                component: ActualiteNotificationsComponent,
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
             },
             {
                 path: 'rh/demandes-reclamations',
-                component: DemandesReclamationsComponent,
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
             },
-            { path: 'rh/dashboard', component: DashboardRhComponent },
-            { path: 'rh/calendrier', component: NewCalendrierComponent },
-            { path: 'rh/calendrier/:id', component: CalendrierRhComponent },
-
-            /** end */
+            {
+                path: 'rh/dashboard',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
+            {
+                path: 'rh/calendrier',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
+            {
+                path: 'rh/calendrier/:id',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
+            {
+                path: 'rh/teams',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
+            /** end of rh paths */
             {
                 path: 'resultats-icbs',
                 component: ResultatsFormulaireIcbsComponent,
@@ -795,11 +806,6 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'rh/teams',
-                component: GestionEquipeRhComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
                 path: 'international/member',
                 component: MemberIntComponent,
                 canActivate: [AuthGuardService],
@@ -831,8 +837,7 @@ const routes: Routes = [
             },
             {
                 path: 'dashboard/commercial',
-                component: DashboardCommercialComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule)
             },
             {
                 path: 'dashboard/partenaire/:id',
@@ -1057,7 +1062,7 @@ const routes: Routes = [
             { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
-            { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
+            { path: 'configuration/service-mention', loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule) },
             /* Ticketing V3 */
             { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/mes-tickets-services', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
@@ -1065,18 +1070,17 @@ const routes: Routes = [
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
-                component: AddAgentV2Component,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule)
             },
             {
                 path: 'agent/list',
                 component: ListAgentV2Component,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule)
             },
             {
                 path: 'agent/update/:id',
                 component: UpdateAgentComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule)
             },
             /* Configuration Formulaire Admission */
             {
@@ -1149,9 +1153,9 @@ const routes: Routes = [
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
-            { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
-            { path: 'pointage/configuration', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
-            { path: 'pointage/archivage', component: ArchivagePointageComponent, canActivate: [AuthGuardService] },
+            { path: 'pointeuse/configuration', loadChildren: () => import('./rh/rh.module').then(m => m.RhModule) },
+            { path: 'pointage/configuration', loadChildren: () => import('./rh/rh.module').then(m => m.RhModule) },
+            { path: 'pointage/archivage', loadChildren: () => import('./rh/rh.module').then(m => m.RhModule) },
 
             //Module Formulaire MI
             { path: 'formulaireMI/configuration', component: ConfigurationMIComponent, canActivate: [AuthGuardService] },
