@@ -45,6 +45,7 @@ export class Ticket {
         public demande?: string,
         public campus?: string,
         public filiere?: string,
+        public site?: string,
     ) { }
 
 

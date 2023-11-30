@@ -60,7 +60,11 @@
             <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"
                 placeholder="Choisissez le type"></p-dropdown>
         </div>
-
+        <div class="field col-12 md:col-6" *ngIf="showSite">
+            <label For="type">Site</label>
+            <p-dropdown [options]="siteDropdown" formControlName="site"
+                placeholder="Choisissez un site"></p-dropdown>
+        </div>
         <div class="field col-12 md:col-6">
             <label For="resum">Résumé :
                 <span style="color: red"> * </span></label>

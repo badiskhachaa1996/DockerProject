@@ -101,12 +101,14 @@ const ticket_schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: "user",
     },
     demande: { type: String, required: false },
-    campus:[
-       { type: String,
-        required: false
-    }],
-    
+    campus: [
+        {
+            type: String,
+            required: false
+        }],
+
     filiere: { type: String, required: false },
+    site: { type: String, required: false },
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Ticket = mongoose.model("ticket", ticket_schema);
