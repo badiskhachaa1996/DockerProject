@@ -11,7 +11,14 @@ export class ConfigService {
         inputStyle: 'outlined',
         ripple: true
     };
-
+    // Observable string sources
+    private emitUpdateMenu = new Subject<any>();
+    // Observable string streams
+    changeEmitted$ = this.emitUpdateMenu.asObservable();
+    // Service message commands
+    emitChange(change: any) {
+        this.emitUpdateMenu.next(change);
+    }
     private configUpdate = new Subject<AppConfig>();
 
     configUpdate$ = this.configUpdate.asObservable();

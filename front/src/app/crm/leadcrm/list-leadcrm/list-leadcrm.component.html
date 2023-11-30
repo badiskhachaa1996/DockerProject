@@ -7,7 +7,7 @@
             {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
         </h3>
         <p-tabView class="col-12">
-            <p-tabPanel header="Echanges">
+            <p-tabPanel header="Historique">
                 <div class="col-12">
                     <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
                 </div>
@@ -382,64 +382,61 @@
     <div class="card col-12">
 
         <p-toast></p-toast>
-        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
+        <p-table #dt1 (onFilter)="onFilter($event)" dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
             [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
             rowExpandMode="single" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="fp-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-3 ">
-                        <input pInputText type="text" #filter
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                            class="h-auto " style="width:100%" />
-                    </div>
 
-                    <div class="field col-12 md:col-3 ">
+                    <div class="field col-12 md:col-4 ">
+                        <p-dropdown [style]="{'width':'100%'}" [options]="filterAuteur" filter="true"
+                            (onChange)="dt1.filter($event.value, 'created_by._id', 'equals');"
+                            emptyFilterMessage="Pas de auteur trouvé" filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterPays" filter="true"
                             (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                             emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-3 ">
+                    <div class="field col-12 md:col-4 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterSource" filter="true"
                             (onChange)="dt1.filter($event.value, 'source', 'equals');"
                             emptyFilterMessage="Pas de source trouvé"
                             filterPlaceholder="Choisissez une source"></p-dropdown>
                     </div>
-
-                    <div class="field col-12 md:col-3 ">
-                        <p-dropdown [style]="{'width':'100%'}" [options]="filterOperation" filter="true"
-                            (onChange)="dt1.filter($event.value, 'operation', 'equals');"
-                            emptyFilterMessage="Pas d'opération trouvé"
-                            filterPlaceholder="Choisissez une operation"></p-dropdown>
-                    </div>
                 </div>
                 <div class="fp-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-3 ">
+                    <div class="field col-12 md:col-4 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterAffecte" filter="true"
                             (onChange)="dt1.filter($event.value, 'affected_to_member._id', 'equals');"
                             emptyFilterMessage="Pas de commercial trouvé"
                             filterPlaceholder="Choisissez un membre"></p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-3 ">
+                    <div class="field col-12 md:col-4 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterQualification" filter="true"
                             (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
                             emptyFilterMessage="Pas de qualification trouvé"
                             filterPlaceholder="Choisissez une qualification"></p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-3 ">
-                        <p-dropdown [style]="{'width':'100%'}" [options]="filterPaiement" filter="true"
-                            (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
-                            emptyFilterMessage="Pas de modalité trouvé"
-                            filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
-                    </div>
+                    
 
-                    <div class="field col-12 md:col-3 ">
+                    <div class="field col-12 md:col-4 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="statutDossierList" filter="true"
                             (onChange)="dt1.filter($event.value, 'statut_dossier', 'equals');"
                             emptyFilterMessage="Pas de modalité trouvé"
                             filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4  md:col-offset-4">
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="h-auto " style="width:100%" />
+                    </div>
+                    <div class="col-6 md:col-2 grid">
+                        <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Leads
+                                selectionnés </span>{{ filteredLeadsCount }}</p>
                     </div>
                 </div>
             </ng-template>
@@ -500,19 +497,29 @@
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false"
+                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false" appendTo="body"
                             (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
                         </p-dropdown>
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} afficher la dropdown au dessus de tout en abs -->
 
-                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false"
+                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false" appendTo="body"
                             (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
+                            <ng-template pTemplate="selectedItem">
+                                <div [ngClass]="{
+                                    'nc_red': !lead.statut_dossier || lead.statut_dossier=='Non contacté',
+                                    'int_green': lead?.statut_dossier=='Intéressé',
+                                    'non_int_orange': lead?.statut_dossier=='Non intéressé',
+                                    'rflx_blue': lead?.statut_dossier=='En réflexion'
+                                }">
+                                    {{lead.statut_dossier || 'Non contacté'}}
+                                </div>
+                            </ng-template>
                         </p-dropdown>
                     </td>
 
-                    <td *ngIf="AccessLevel!='Spectateur'">
+                     <td *ngIf="AccessLevel!='Spectateur'">
                         <i pTooltip="Fiche lead" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
@@ -528,7 +535,7 @@
                     </td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-lead>
+            <ng-template pTemplate="rowexpansion" let-lead >
                 <tr>
                     <td colspan="9">
                         <h5>Informations supplémentaire</h5>
@@ -569,6 +576,7 @@
                             aria-hidden="true"> </i>
                     </th>
                     <th>Dernier niveau académique</th>
+                    <th>Auteur</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body">
@@ -593,6 +601,7 @@
                             (keyup.enter)="onAddElseContact($event,lead,'whatsapp')">
                     </td>
                     <td>{{lead?.dernier_niveau_academique}}</td>
+                    <td>{{lead?.created_by?.firstname| titlecase}} {{lead?.created_by?.lastname| uppercase}}</td>
                 </tr>
             </ng-template>
         </p-table>

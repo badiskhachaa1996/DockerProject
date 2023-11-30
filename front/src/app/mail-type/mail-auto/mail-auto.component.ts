@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MailAuto } from 'src/app/models/MailAuto';
 import { MailType } from 'src/app/models/MailType';
@@ -43,7 +43,7 @@ export class MailAutoComponent implements OnInit {
     })
   }
   //Ajout
-  formAdd = new FormGroup({
+  formAdd = new UntypedFormGroup({
     condition: new FormControl('', Validators.required),
     mailType: new FormControl('', Validators.required),
     mail: new FormControl('', Validators.required)
@@ -58,7 +58,7 @@ export class MailAutoComponent implements OnInit {
   }
 
   //Update
-  formEdit = new FormGroup({
+  formEdit = new UntypedFormGroup({
     condition: new FormControl('', Validators.required),
     mailType: new FormControl('', Validators.required),
     mail: new FormControl('', Validators.required),

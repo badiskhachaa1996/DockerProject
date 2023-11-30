@@ -23,18 +23,27 @@ export class PayementInformationComponent implements OnInit {
   payementMethods = environment.paymentType.slice(1)
 
   constructor() {}
-  isUpdating=true
+  isUpdating=false
   ngOnInit(): void {
-    if (this.demande && this.demande.payment ){
-      this.infoPays=[this.demande.payment];
-      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      console.log(this.demande);
-      console.log(this.infoPays)
+    if ( this.demande.payment ){
+
+      this.infoPays = [
+        {
+          date: this.formatDate(this.demande?.payment.date),
+          montant:this.demande.payment.montant,
+          method:this.demande.payment.method,
+          note: this.demande.payment.note,
+          isUpdating : false
+        }
+      ]
+
+     
  
   }
 }
   updateKeyDates(infoPay){
     infoPay.isUpdating = true 
+    console.log('date paiement:', this.demande.payment);
 
    }
   //  addPay() {
@@ -50,11 +59,18 @@ export class PayementInformationComponent implements OnInit {
   //   )
   // }
    saveKeyDates(infoPay){
-    this.demande.payment=this.infoPays
+    this.demande.payment.date= infoPay.date,
+    this.demande.payment.method=infoPay.method
+    this.demande.payment.note=infoPay.note
+    this.demande.payment.montant=infoPay.montant
     this.updateDemande(this.demande) 
     infoPay.isUpdating=false
    }
    
+
+
+   
+
   deletePay(pay) {
     const index = this.infoPays.findIndex(c => c === pay);
          if (index !== -1) {
@@ -71,4 +87,13 @@ export class PayementInformationComponent implements OnInit {
     }
     this.saveDemande.emit(data)
   }
+
+
+  formatDate(date: Date | string): string {
+    date = new Date(date);
+    const day = `${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
+    const month = `${date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}`;
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+}
 }

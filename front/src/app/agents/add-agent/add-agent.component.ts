@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
@@ -70,7 +70,7 @@ export class AddAgentComponent implements OnInit {
 
   ]
 
-  addForm = new FormGroup({
+  addForm = new UntypedFormGroup({
     civilite: new FormControl(''),
     lastname: new FormControl('', Validators.required),
     firstname: new FormControl('', Validators.required),

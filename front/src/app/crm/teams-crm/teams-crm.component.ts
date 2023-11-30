@@ -11,8 +11,11 @@ import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 })
 export class TeamsCrmComponent implements OnInit {
 
-  teams: TeamsCRM[] = []
-  selectedTeam: TeamsCRM
+  teams: TeamsCRM[] = [];
+  visibleAddToTeams: boolean = false;
+  selectedTeam: TeamsCRM;
+  formAddToTeams = new FormGroup({
+    membre: new FormControl('', ),})
   constructor(private TeamsIntService: TeamsCrmService, private MessageService: MessageService) { }
 
   ngOnInit(): void {

@@ -26,9 +26,9 @@ let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
   if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com/"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com/"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -221,7 +221,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
   User.findOne({ _id: req.params.id })
-    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedLeadCRM").populate('service_list').populate("roles_ticketing_list.module").populate({ path: "savedAdministration", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
+    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedLeadCRM").populate('service_list').populate("roles_ticketing_list.module").populate({ path: "savedAdministration", populate: { path: 'user_id' } }).populate({ path: "savedAdministration", populate: { path: 'evaluations.evaluation_id' } }).populate({ path: "savedAdministration", populate: { path: 'decision.membre' } }).populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
@@ -579,8 +579,9 @@ app.get("/getAllbyService/:id", (req, res) => {
       res.send(result.length > 0 ? result : []);
     })
     .catch((err) => {
-      res.status(404).send(error);
+
       console.error(err);
+      res.status(404).send(err);
     });
 });
 app.get("/getAllCommercial/", (req, res) => {
@@ -589,8 +590,9 @@ app.get("/getAllCommercial/", (req, res) => {
       res.send(result.length > 0 ? result : []);
     })
     .catch((err) => {
-      res.status(404).send(error);
+
       console.error(err);
+      res.status(404).send(err);
     });
 });
 
@@ -606,8 +608,9 @@ app.get("/getAllbyEmailPerso/:id", (req, res) => {
       res.status(200).send(userToken);
     })
     .catch((err) => {
-      res.status(404).send(error);
       console.error(err);
+      res.status(404).send(err);
+
     });
 });
 app.get("/getByEmail/:email", (req, res) => {
@@ -633,8 +636,8 @@ app.get("/getAllAgent/", (req, res) => {
       res.send(result.length > 0 ? result : []);
     })
     .catch((err) => {
-      res.status(404).send(error);
       console.error(err);
+      res.status(404).send(err);
     });
 });
 
@@ -645,8 +648,9 @@ app.get("/getAllAgentPopulate", (req, res) => {
       res.send(result.length > 0 ? result : []);
     })
     .catch((err) => {
-      res.status(404).send(error);
       console.error(err);
+      res.status(404).send(err);
+
     });
 });
 

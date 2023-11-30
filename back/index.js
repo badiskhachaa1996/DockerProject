@@ -15,9 +15,9 @@ if (process.argv[2]) {
   if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -31,7 +31,8 @@ if (process.argv[2]) {
       "https://ims.adgeducation.com",
       "https://ims.intedgroup.com",
       "https://t.dev.estya.com",
-      "https://wio.fr/"
+      "https://wio.fr/",
+      "https://studinfo.com"
     ];
 }
 app.use(cors({ origin: origin }));
@@ -81,6 +82,7 @@ mongoose
     console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     process.exit();
   });
+const { Critere } = require("./models/critere");
 
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
@@ -89,6 +91,7 @@ const messageController = require('./controllers/messageController');
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
+const GroupeController = require('./controllers/GroupeController');
 const anneeScolaireController = require('./controllers/anneeScolaireController');
 const ecoleController = require('./controllers/ecoleController');
 const campusController = require('./controllers/campusController');
@@ -131,6 +134,7 @@ const renduDevoirController = require('./controllers/renduDevoirController');
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const factureFormateurController = require('./controllers/factureFormateurController');
 const annonceController = require('./controllers/annonceController');
+// const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
 const progressionPedaController = require('./controllers/progressionPedaController');
 const QSController = require('./controllers/questionnaireSatisfactionController');
@@ -164,7 +168,7 @@ const { User } = require("./models/user");
 const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
 // const documentsController = require('./controllers/documentsController');
 const { Remboursement } = require("./models/Remboursement");
-const {evaluation } = require("./controllers/evaluationController");
+const { evaluation } = require("./controllers/evaluationController");
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
   if (token && token["prospectFromDb"]) {
@@ -212,6 +216,12 @@ app.use("/", function (req, res, next) {
     });
   } else {
     if (
+      req.originalUrl == "/soc/formulaireAdmission/FA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/RA/getAll" ||
+      req.originalUrl == "/soc/formulaireAdmission/EA/getAll" ||
+      req.originalUrl.startsWith("/soc/user/getPopulate/") ||
+      req.originalUrl == "/soc/demanderemboursement/upload-docs" ||
+
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
@@ -270,7 +280,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
       req.originalUrl === '/soc/ticket/getAllPopulate' ||
-      req.originalUrl==='/soc/demanderemboursement/newremb' ||
+      req.originalUrl === '/soc/demanderemboursement/newremb' ||
+      req.originalUrl === '/soc/demanderemboursement/upload-docs' ||
       req.originalUrl == '/soc/LeadCRM/create'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
@@ -313,12 +324,13 @@ app.use("/soc/ticket", ticketController);
 app.use("/soc/notification", notifController);
 
 app.use("/soc/classe", classeController);
-
+app.use("/soc/groupe", GroupeController);
 app.use("/soc/anneeScolaire", anneeScolaireController);
 
 app.use("/soc/ecole", ecoleController);
 
 app.use("/soc/campus", campusController);
+app.use("/soc/campusR", require('./controllers/campusReworkController'));
 
 app.use("/soc/diplome", diplomeController);
 
@@ -417,6 +429,7 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
+app.use('/soc/critere', require('./controllers/criteresController'))
 app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
@@ -426,18 +439,18 @@ app.use('/soc/pointage', require('./controllers/pointageController'))
 app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
 // app.use('/soc/demanderemboursement',rembouresementController)
-app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
+app.use('/soc/demanderemboursement', require('./controllers/rembouresementController'));
 // app.use('/soc/docremb',require('./controllers/documentsController'));
 
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
-app.use('/soc/evaluation',require('./controllers/evaluationController'));
+app.use('/soc/evaluation', require('./controllers/evaluationController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)
-app.use('/soc/gestion-operation',gestionOperationCrmController)
-app.use('/soc/gestion-sources',gestionSourceCrmController)
+app.use('/soc/gestion-operation', gestionOperationCrmController)
+app.use('/soc/gestion-sources', gestionSourceCrmController)
 
 
 io.on("connection", (socket) => {
@@ -534,4 +547,18 @@ io.on("connection", (socket) => {
 
 httpServer.listen(3000, () => {
   console.log("SERVEUR START");
+});
+
+
+
+// captcha 
+app.post('/verify-recaptcha', async (req, res) => {
+  try {
+    const { token, recaptchaAction } = req.body;
+    const score = await createAssessment({ token, recaptchaAction });
+    res.json({ score });
+  } catch (error) {
+    console.error('Error during reCAPTCHA assessment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });

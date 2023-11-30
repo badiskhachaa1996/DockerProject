@@ -168,11 +168,6 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
     );
   }
 
-
-
-
-
-
   // Updating the Visualization
 
   updateDocList(doc, demande) {
@@ -186,18 +181,27 @@ import { ConfirmEventType, ConfirmationService } from 'primeng/api';
 
   // Download the Document
 
-  downloadDoc(slug) {
+  downloadDoc(slug) 
+  {
     this.demandeService.downloadDoc(this.demande._id,slug).then((data: any) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      importedSaveAs(new Blob([byteArray], { type: data.documentType }), slug + '.pdf')
+      const blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(blob, slug + '.pdf');
+
     })
   }
 
   
   getDocOwner(index, id) {
-    this.userService.getPopulate(id).subscribe(u => {
-      this.docList[index].added_by =  u.firstname + ' ' + u.lastname
-    })
+    if (id) {
+      this.userService.getPopulate(id).subscribe(u => {
+        this.docList[index].added_by =  u.firstname + ' ' + u.lastname
+      })
+    } else {
+      this.docList[index].added_by = 'Annonyme'
+    }
+
   }
 
 }

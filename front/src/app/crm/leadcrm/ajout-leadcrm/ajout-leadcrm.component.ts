@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { LeadCRM } from 'src/app/models/LeadCRM';
+import jwt_decode from 'jwt-decode';
+import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
 @Component({
   selector: 'app-ajout-leadcrm',
   templateUrl: './ajout-leadcrm.component.html',
@@ -14,17 +16,7 @@ import { LeadCRM } from 'src/app/models/LeadCRM';
 })
 export class AjoutLeadcrmComponent implements OnInit {
   @Output() newLead = new EventEmitter<LeadCRM>();
-  sourceDropdown = [
-    { value: 'Facebook' },
-    { value: 'WhatsApp' },
-    { value: 'Appel Telephonique' },
-    { value: 'Mail' },
-    { value: 'Visite au site' },
-    { value: 'Online Meeting' },
-    { value: 'Marketing' },
-    { value: 'Recyclage' },
-    { value: 'LinkdIn' },
-  ]
+  sourceDropdown = []
   operationDropdown = [
     { value: 'Prospection FRP' },
     { value: 'Prospection ENP' },
@@ -70,8 +62,9 @@ export class AjoutLeadcrmComponent implements OnInit {
       { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
     ]
   addForm: FormGroup = new FormGroup({
-    _id: new FormControl(''),
     source: new FormControl(''),
+    operation: new FormControl(''),
+    _id: new FormControl(''),
     civilite: new FormControl(''),
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -79,19 +72,33 @@ export class AjoutLeadcrmComponent implements OnInit {
     email: new FormControl(''),
     indicatif_phone: new FormControl(''),
     numero_phone: new FormControl(''),
+    date_naissance: new FormControl('', Validators.required),
     nationalite: new FormControl('', Validators.required),
     indicatif_whatsapp: new FormControl(''),
     numero_whatsapp: new FormControl(''),
+    indicatif_telegram: new FormControl(''),
+    numero_telegram: new FormControl(''),
     dernier_niveau_academique: new FormControl(''),
+    statut: new FormControl(''),
+    niveau_fr: new FormControl(''),
+    niveau_en: new FormControl(''),
   })
 
   prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente" }).subscribe(data => {
+    let user = null
+    try {
+      user = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      user = null
+    }
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente", created_by: user?.id }).subscribe(data => {
       this.addForm.reset()
       this.newLead.emit(data)
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+    }, err => {
+      this.ToastService.add({ severity: "error", summary: "Impossible d'ajouter le lead, l'email est déjà utilisée", detail: err?.error })
     })
     this.LCS.getAll().subscribe(data => {
       this.prospects = data
@@ -117,7 +124,7 @@ export class AjoutLeadcrmComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router,private sourceService:GestionSourcesServices) { }
 
   isUpdate = false
   paramID = ""
@@ -131,10 +138,24 @@ export class AjoutLeadcrmComponent implements OnInit {
         this.isUpdate = true
       }
     });
+    this.sourceService.GetAllSource().subscribe(data => {
+      data.forEach(val=>{
+        
+        this.sourceDropdown.push({label:val.nom,value:val.nom});
+      })
+      });
 
   }
-
-
+  EmailExist = false
+  testEmail() {
+    this.LCS.getByEmail(this.addForm.value.email).subscribe(l => {
+      if (l) {
+        this.EmailExist = true
+        this.ToastService.add({ severity: 'error', summary: "L'email existe déjà" })
+      } else
+        this.EmailExist = false
+    })
+  }
 
   private loadLeadData(id: string) {
     this.LCS.getOneByID(id).subscribe(data => {

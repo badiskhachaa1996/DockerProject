@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -192,7 +192,7 @@ export class LeadsQualifiesComponent implements OnInit {
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
@@ -386,7 +386,7 @@ export class LeadsQualifiesComponent implements OnInit {
     }, 15);
   }
   //Envoyer à l'admission
-  formTransfertUser = new FormGroup({
+  formTransfertUser = new UntypedFormGroup({
     civilite: new FormControl(''),
     firstname: new FormControl('', Validators.required),
     lastname: new FormControl('', Validators.required),
@@ -402,7 +402,7 @@ export class LeadsQualifiesComponent implements OnInit {
     nationnalite: new FormControl('', Validators.required),
     _id: new FormControl('')
   })
-  formTransfertProspect = new FormGroup({
+  formTransfertProspect = new UntypedFormGroup({
     user_id: new FormControl(''),
     date_naissance: new FormControl(''),
     numero_whatsapp: new FormControl(''),

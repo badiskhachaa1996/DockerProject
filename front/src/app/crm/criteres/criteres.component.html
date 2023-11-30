@@ -1,0 +1,131 @@
+<div class="grid">
+    <div class="col-12 grid" *ngIf="selectedCritere">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Modifier les informations de {{selectedCritere.nom}} </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                 aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+
+                <div class="field col-12">
+                    <label>Nom <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="critere" formControlName="nom" />
+                </div>
+                <div class="field col-12">
+                    <label>Description <span style="color: red;"> * </span></label>
+                    <textarea pInputTextarea placeholder="critere" formControlName="description"></textarea>
+                </div>
+                <div>
+                    <button  pButton label="Valider" type="submit" ></button>
+                    
+
+                    
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-12 grid" *ngIf="newCritere">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'un nouveau critere </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+        <!--    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="newCritere = false; createForm.reset()" aria-hidden="true"></i> -->
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
+
+                <div class="field col-12">
+                    <label>Nom <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="critere" formControlName="nom" />
+                </div>
+                <div class="field col-12">
+                    <label>Description <span style="color: red;"> * </span></label>
+                    <textarea pInputTextarea placeholder="critere" formControlName="description"></textarea>
+                </div>
+                <div style="display: flex;">
+                    <button pButton label="Valider" type="submit" ></button>
+                    
+                    <button pButton type="button" (click)="newCritere = false; createForm.reset()" aria-hidden="true" label="Retour" [style]="{ 'margin-left': '.5em' }"></button>
+                    
+                    <p-dialog id="dialogValidation" header="Saisie invalid" [(visible)]="alertValidation" [style]="" (onHide)="visible = false">
+                        <p>{{ messageValidation }}</p>
+                    </p-dialog>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- Listing des criteres -->
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Créer"
+                    (click)="initCreate()"></button>
+            </div>
+            <h5>Liste des criteres du CRM</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="criteres" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['nom', 'description']" [rows]="5" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="criteres.length" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                       <!--<th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id"> */
+                            </p-sortIcon>
+                        </th> -->
+                     
+
+                        <th pSortableColumn="nom">Nom du critere<p-sortIcon field="nom">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="description">Description<p-sortIcon field="description">
+                            </p-sortIcon>
+                        </th>
+                       <!-- <th pSortableColumn="date_creation">Creation Date<p-sortIcon field="date_creation">
+                        </p-sortIcon>
+                    </th> -->
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-critere>
+                    <tr>
+                      <!-- <td>
+                            {{ critere.custom_id }}
+                        </td> -->
+                        
+                        <td>
+                            {{ critere.nom }}
+                        </td>
+                        <td>
+                            {{ critere.description }}
+                        </td>
+                      <!-- <td>
+                            {{ critere.date_creation }} 
+                        </td> -->
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(critere);scrollToTop()"
+                                pTooltip="Modifier critere" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(critere);"
+                                pTooltip="Supprimer critere" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

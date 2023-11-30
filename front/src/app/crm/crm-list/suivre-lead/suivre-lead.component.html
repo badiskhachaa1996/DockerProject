@@ -1,14 +1,57 @@
+<input type="file" (change)="FileUpload($event.target.files)" id="selectedFilesuivre"
+#selectedFilesuivre style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 <div class="card col-12" *ngIf="showFollow">
     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showFollow = null"
         aria-hidden="true"> </i>
-    <h3 class="text-center" style="font-weight: bold;">Suivre le lead :
-        {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
-    </h3>
+    
     <p-tabView class="col-12">
-        <p-tabPanel header="Echanges">
-            <div class="col-12">
-                <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
-            </div>
+        <p-tabPanel header="Historique">
+            <p-dialog header="Modifier le contact" [(visible)]="visible_contact" modal="true"
+                            [style]="{width: '50vw'}">
+
+                            <form [formGroup]="formUpdateContact" class="p-fluid p-formgrid grid col-12">
+                                <div class="field col-6">
+                                    <label>canal </label>
+                                    <p-dropdown [options]="canalList" formControlName="canal" 
+                                        placeholder="Choisissez un canal"></p-dropdown>
+                                </div>
+                                <div class="field col-6">
+                                    <label>Joignabilité </label>
+                                    <p-dropdown [options]="suiteContactList" 
+                                    formControlName="suite_contact"  placeholder="Choisissez un état"></p-dropdown>
+                                </div>
+                                
+                                <div class="field col-6">
+                                    <label For="description">Note </label>
+                                    <textarea pInputTextarea formControlName="note"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onUpdateCon()"
+                                        label="Enregistrer" [disabled]="formUpdateContact.invalid"></p-button>
+                                </div>
+                            </form>
+                        </p-dialog>
+            <form class="p-fluid grid" [formGroup]="formAddHistorique" (ngSubmit)="onAddHistorique()">
+                <div class="field col-12 md:col-3">
+                    <p-dropdown [options]="canalList" placeholder="Veuillez décrire le canal"
+                        [editable]="true" formControlName="canal"></p-dropdown>
+                    <!--<input pInputText type="text" id="tache" formControlName="task"
+                        placeholder="Veuillez décrire l'activité">-->
+                </div>
+                <div class="field col-12 md:col-3" >
+                    <p-dropdown   formControlName="suite_contact"
+                     [options]="suiteContactList" placeholder="joignabilité"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4" >
+                    <input pInputText type="text"  formControlName="note"
+                        placeholder="note" step="15">
+                </div>
+                <div class="col-12 md:col-2">
+                    <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2 "
+                        [disabled]="formAddHistorique.invalid"></button>
+                </div>
+            </form>
+            
             <p-table #dtcontact dataKey="_id" [value]="showFollow.contacts" class="col-12"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -56,7 +99,7 @@
                                         placeholder="Choisissez un membre"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.contact_by}} &nbsp;
+                                    {{contact?.contact_by}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -67,7 +110,7 @@
                                         placeholder="Choisissez un canal"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.canal}} &nbsp;
+                                    {{contact?.canal}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -78,7 +121,7 @@
                                         placeholder="Choisissez un état"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.suite_contact}} &nbsp;
+                                    {{contact?.suite_contact}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -88,11 +131,13 @@
                                     <textarea pInputTextarea [(ngModel)]="contact.note"></textarea>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{contact.note}} &nbsp;
+                                    {{contact?.note}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
                         <td>
+                            <i pTooltip="Modifier le contact" tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"
+                            (click)="onUpdatecontacte(ri)" ></i>
                             <i pTooltip="Supprimer le contact" tooltipPosition="bottom" class="pi pi-trash"
                                 aria-hidden="true" (click)="deleteContact(ri)"> </i>
                         </td>
@@ -101,9 +146,7 @@
             </p-table>
         </p-tabPanel>
         <p-tabPanel header="Document">
-            <div class="col-12">
-                <button pButton label="Ajouter un document" (click)="onAddDocuments()"></button>
-            </div>
+            
             <p-table #dtdocuments dataKey="_id" [value]="showFollow.documents" class="col-12"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -129,27 +172,31 @@
                                     <input type="text" pInputText [(ngModel)]="document.nom">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{document.nom}} &nbsp;
+                                    {{document?.nom}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td *ngIf="document.path">
+                        <td *ngIf="document?.path">
                             <a (click)="downloadFile(ri)">Télécharger le document</a>
                         </td>
-                        <td *ngIf="!document.path">
+                        <td *ngIf="!document?.path">
                             <a (click)="uploadFile(ri)">Uploader le document</a>
                         </td>
                         <td>
                             <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
                                 aria-hidden="true" (click)="deleteFile(ri)"> </i>
-                            <i *ngIf="document.path" pTooltip="Uploader le document" tooltipPosition="bottom"
+                            <i *ngIf="document?.path" pTooltip="Uploader le document" tooltipPosition="bottom"
                                 class="pi pi-cloud-upload" aria-hidden="true" (click)="uploadFile(ri)"> </i>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
+            <div class="col-12">
+                <button pButton label={{buttonName}} (click)="onAddDocumment()"></button>
+            </div>
         </p-tabPanel>
-        <p-tabPanel header="Mailing">
+        
+        <!--<p-tabPanel header="Mailing">
             <div class="col-12">
                 <button pButton label="Ajouter un mail" (click)="onAddMail()"></button>
             </div>
@@ -218,13 +265,75 @@
                     </tr>
                 </ng-template>
             </p-table>
+        </p-tabPanel>-->
+        
+        <p-tabPanel header="Fiche Qualification">
+            <form class="p-fluid p-formgrid grid" [formGroup]="qualifiquationsForm">
+                
+                <div class="field col-12 md:col-3">
+                    <p-multiSelect [options]="critereList" formControlName="criteres_qualification"
+                        autoWidth="false" [style]="{'width':'100%'}"
+                        placeholder="Choisissez un critère"></p-multiSelect>
+                </div>
+                <!-- <div class="field col-12 md:col-3">
+                    <p-dropdown [options]="decisionList" formControlName="decision_qualification" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez une decision"></p-dropdown>
+                </div>-->
+                <div class="field col-12 md:col-4">
+                    
+                    <textarea pInputTextarea formControlName="note_qualification" placeholder="Commentaire"></textarea>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <button pButton label=Ajouter (click)="onAddQualifications()"></button>
+                </div>
+            </form>
+            <p-table #dtq dataKey="_id" [value]="showFollow.qualifications" class="col-12"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th  style="text-align: center;">  Critére
+                        </th>
+                        
+                       
+                        <th  style="text-align: center;"> Commentaire
+                        </th>
+                        
+
+                        <th style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-qualifiction let-ri="rowIndex">
+                    <tr >
+                        <td >
+                            {{qualifiction.criteres_qualification}}
+                        </td>
+                        
+                        <td >
+                            {{qualifiction.note_qualification}}
+                        </td>
+                        
+                        
+                        <td>
+                            <i pTooltip="Supprimer le contact" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deletequalification(ri)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </p-tabPanel>
-        <p-tabPanel header="Choix Prospect">
+        <p-tabPanel header="Fiche Choix">
             <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
                 <div class="field col-12 md:col-6">
-                    <label>Rythme</label>
-                    <p-dropdown [options]="rythmeList" formControlName="rythme" autoWidth="false"
-                        [style]="{'width':'100%'}" placeholder="Choisissez un rythme"></p-dropdown>
+                    <label>Opération</label>
+                    <p-dropdown  formControlName="operation" autoWidth="false" [options]="operationList"
+                        [style]="{'width':'100%'}" placeholder="Choisissez une opération"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Produit</label>
+                    <p-dropdown  formControlName="produit" autoWidth="false" [options]="produitList"
+                        [style]="{'width':'100%'}" placeholder="Produit"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Ecole</label>
@@ -241,41 +350,41 @@
                     <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false"
                         [style]="{'width':'100%'}" placeholder="Choisissez un campus"></p-dropdown>
                 </div>
-
+                <div class="field col-12 md:col-6">
+                    <label>Rythme</label>
+                    <p-dropdown [options]="rythmeList" formControlName="rythme" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez un rythme"></p-dropdown>
+                </div>
                 <div class="field col-12 md:col-6">
                     <label>Note</label>
                     <textarea pInputTextarea formControlName="note_choix"></textarea>
                 </div>
-            </form>
-        </p-tabPanel>
-        <p-tabPanel header="Qualification">
-            <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
-                <div class="field col-12 md:col-6">
-                    <label>Produit</label>
-                    <p-multiSelect [options]="produitList" formControlName="produit" autoWidth="false"
-                        [style]="{'width':'100%'}" placeholder="Choisissez un produit"></p-multiSelect>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label>Critères</label>
-                    <p-multiSelect [options]="critereList" formControlName="criteres_qualification"
-                        autoWidth="false" [style]="{'width':'100%'}"
-                        placeholder="Choisissez un critère"></p-multiSelect>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label>Décision qualification</label>
-                    <p-dropdown [options]="decisionList" formControlName="decision_qualification" autoWidth="false"
-                        [style]="{'width':'100%'}" placeholder="Choisissez une decision"></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label>Note</label>
-                    <textarea pInputTextarea formControlName="note_qualification"></textarea>
+                <div class="field col-12 md:col-6"></div>
+                <div class="field col-12 md:col-10"></div>
+                <div class="field col-12 md:col-2">
+                    <button pButton label=Enregistrer (click)="onUpdateFollow()"></button>
                 </div>
             </form>
         </p-tabPanel>
         <p-tabPanel header="Paiement">
-            <div class="col-12">
-                <button pButton label="Ajouter un paiement" (click)="onAddPaiement()"></button>
-            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="paiementForm">
+                
+                <div class="field col-12 md:col-3">
+                    <input pInputText type="number"  formControlName="montant_paye"
+                    placeholder="Montant" >
+                </div>
+                <div class="field col-12 md:col-3">
+                    <p-dropdown [options]="typePaiement" formControlName="modalite_paiement" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Modalité"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    
+                    <textarea pInputTextarea formControlName="note" placeholder="Note"></textarea>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <button pButton label=Ajouter (click)="onAddPaiement()"></button>
+                </div>
+            </form>
             <p-table #dtvente dataKey="_id" [value]="showFollow.ventes" class="col-12"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
@@ -322,7 +431,7 @@
                                         currency="EUR" locale="fr-FR"></p-inputNumber>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{paiement.montant_paye}}€ &nbsp;
+                                    {{paiement?.montant_paye}}€ &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -333,7 +442,7 @@
                                         placeholder="Choisissez une modalite"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{paiement.modalite_paiement}} &nbsp;
+                                    {{paiement?.modalite_paiement}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -343,7 +452,7 @@
                                     <textarea pInputTextarea [(ngModel)]="paiement.note"></textarea>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{paiement.note}} &nbsp;
+                                    {{paiement?.note}} &nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -356,9 +465,10 @@
             </p-table>
         </p-tabPanel>
     </p-tabView>
-    <div class="col-12 grid">
+   <!-- <div class="col-12 grid">
         <div class="col-12">
             <button pButton label="Sauvegardez les modifications" (click)="onUpdateFollow()"></button>
         </div>
-    </div>
+    </div>-->
+    
 </div>

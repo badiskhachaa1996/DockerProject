@@ -17,6 +17,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+
 import { CarouselModule } from 'primeng/carousel';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { ChartModule } from 'primeng/chart';
@@ -391,6 +392,12 @@ import { EvaluationComponent } from './administration-v1/evaluation/evaluation.c
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
+import { CriteresComponent } from './crm/criteres/criteres.component';
+import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
+import { CaptchaModule } from 'primeng/captcha';
+import { RecaptchaModule } from "ng-recaptcha";
+import { NgxCaptchaModule } from 'ngx-captcha';
+
 import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
@@ -402,9 +409,16 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
 import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
+import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { AddGroupeV2Component } from './administration-v1/configuration/groupes/add-groupe-v2/add-groupe-v2.component';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
+    NgxCaptchaModule,
+    CaptchaModule,
+    BrowserModule,
+    RecaptchaModule,  
     TableModule,
     SignaturePadModule,
     BrowserModule,
@@ -814,6 +828,10 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     EvaluationComponent,
     UploadButtonComponent,
     LeadEvaluationComponent,
+    CriteresComponent,
+    AddRemboursementPublicComponent,
+    
+    
     DocumentsCandidatureViewerComponent,
     GestionProduitsComponent,
     AddRemboussementComponent,
@@ -824,7 +842,9 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     BookingV2Component,
     SuivreLeadComponent,
     GestionOperationComponent,
-    GestionSrourcesComponent
+    GestionSrourcesComponent,
+    GroupesComponent,
+    AddGroupeV2Component
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -844,3 +864,4 @@ export class AppModule {
     registerLocaleData(fr.default);
   }
 }
+

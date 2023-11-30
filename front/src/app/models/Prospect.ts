@@ -1,4 +1,5 @@
 import { User } from "./User";
+import { Evaluation } from "./evaluation";
 
 export class Prospect {
 
@@ -100,7 +101,7 @@ export class Prospect {
         public numero_adresse?: String,
         public evaluation?: [{ name: string, Score: string, duree: number, date_envoi: Date, date_passage: Date }],
         public entretien?: { date_entretien: Date, Duree: number, niveau: string, parcours: string, choix: string },
-        public decision?: { decision_admission: string, expliquation: string, date_decision: Date, membre: User },
+        public decision?: { decision_admission: string, expliquation: string, date_decision: Date, membre: [User] },
         public teams?: String,
         public Ypareo?: string,
         public groupe?: string,
@@ -111,6 +112,18 @@ export class Prospect {
         public sos_firstname?: string,
         public sos_email?: string,
         public sos_phone?: string,
+        public evaluations?: [
+            {
+                evaluation_id?: Evaluation,
+                etat?: string,
+                score?: number,
+                date_passation?: Date,
+                date_envoie?: Date,
+                duree_mise?: number,
+                date_expiration?: Date,
+                commentaire?: string
+            }
+        ]
     ) { }
 
 }

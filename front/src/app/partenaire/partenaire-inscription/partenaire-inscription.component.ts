@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
@@ -51,11 +51,11 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService, private UserService: AuthService) { }
 
-  RegisterForm: FormGroup = new FormGroup({
+  RegisterForm: UntypedFormGroup = new FormGroup({
 
     //Informations de la société
     nomSoc: new FormControl('', [Validators.required]),
-    type: new FormControl(this.typeSoc[0], Validators.required),
+    type: new UntypedFormControl(this.typeSoc[0], Validators.required),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
 
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),

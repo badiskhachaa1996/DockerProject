@@ -36,15 +36,15 @@ export class Ticket {
         public task_id?: any,
         public consignes?: any[],
         public avancement?: number,
-        public validation?: String,
+        public validation?: string,
         public module?: string,
         public resum?: string,
         public type?: string,
         public origin?: string,
         public assigne_by?: User,
-        public demande?: String,
-        public campus?: String,
-        public filiere?: String,
+        public demande?: string,
+        public campus?: string,
+        public filiere?: string,
     ) { }
 
 

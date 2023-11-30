@@ -1,5 +1,9 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core'
+
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
@@ -42,10 +46,10 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Tous les pays', value: null }
   ]
   AccessLevel = "Spectateur"
-  filterSource = []
+  filterSource = [{ label: 'Toutes les sources', value: null }]
 
   filterOperation = []
-
+  filteredLeadsCount:number
 
   filterAffecte = [
     { label: 'Tous les membres', value: null }
@@ -57,6 +61,10 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Non qualifié', value: 'Non qualifié' },
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
+  ]
+
+  filterAuteur = [
+    { label: 'Tous les auteurs', value: null }
   ]
 
   filterPaiement = [
@@ -89,7 +97,7 @@ export class ListLeadcrmComponent implements OnInit {
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
     private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private EmailTypeS: EmailTypeService,
     private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService,
-    private admissionService: AdmissionService, private OperationService: GestionOperationService) { }
+    private admissionService: AdmissionService, private OperationService: GestionOperationService,private sourceService:GestionSourcesServices) { }
   leads: LeadCRM[] = []
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
@@ -97,7 +105,17 @@ export class ListLeadcrmComponent implements OnInit {
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
       this.leads = data
+      console.log(this.leads);
+      this.filteredLeadsCount = this.leads.length;
+      let ids = []
+      data.forEach(l => {
+        if (l.created_by && !ids.includes(l.created_by._id)) {
+          this.filterAuteur.push({ label: `${l.created_by.firstname} ${l.created_by.lastname}`, value: l.created_by._id })
+          ids.push(l.created_by._id)
+        }
+      })
     })
+    
     this.eventsSubscription = this.newLead.subscribe((lead) => {
       this.leads.push(lead)
     });
@@ -178,19 +196,28 @@ export class ListLeadcrmComponent implements OnInit {
         })
       })
     })
+    this.sourceService.GetAllSource().subscribe(data => {
+    data.forEach(val=>{
+      this.filterSource.push({label:val.nom,value:val.nom});
+      this.canalList.push({label:val.nom,value:val._id});
+    })
+    });
+    
   }
 
   //Follow Form
   showFollow: LeadCRM = null
-  followForm = new FormGroup({
+
+  followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
+    eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
-
     produit: new FormControl(''),
+    operation:new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -202,6 +229,7 @@ export class ListLeadcrmComponent implements OnInit {
     :
     LeadCRM
   ) {
+    console.log(lead);
     this.suivreLead.emit(lead)
   }
 
@@ -227,12 +255,7 @@ export class ListLeadcrmComponent implements OnInit {
   //Contact
   memberList = []
   canalList = [
-    { label: "Facebook", value: "Facebook" },
-    { label: "WhatsApp", value: "WhatsApp" },
-    { label: "Appel Téléphonique", value: "Appel Téléphonique" },
-    { label: "Mail", value: "Mail" },
-    { label: "Visite au Site", value: "Visite au Site" },
-    { label: "Online meeting", value: "Online meeting" },
+    
   ]
 
   suiteContactList = [
@@ -279,13 +302,16 @@ export class ListLeadcrmComponent implements OnInit {
     if (index >= 0 && index < this.showFollow.documents.length
     ) {
       this.showFollow.documents.splice(index, 1);
+      
     }
     else {
       this.ToastService.add({ severity: 'error', summary: 'Erreur', detail: 'Index de document invalide' });
     }
   }
 
-
+  onFilter(event: any): void {
+    this.filteredLeadsCount = event.filteredValue ? event.filteredValue.length : 0;
+}
   FileUpload(event: { target: { files: File[] } }): void {
     const selectedFile = event.target.files[0];
 
@@ -404,7 +430,7 @@ export class ListLeadcrmComponent implements OnInit {
 
   //Affect Form
   showAffect: LeadCRM = null
-  affectForm = new FormGroup({
+  affectForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),
@@ -415,7 +441,7 @@ export class ListLeadcrmComponent implements OnInit {
     :
     LeadCRM
   ) {
-    this.affectForm.patchValue({ ...lead })
+    this.affectForm.patchValue({ ...lead,produit:lead.produit[0] })
     this.showAffect = lead
   }
 
@@ -462,33 +488,30 @@ export class ListLeadcrmComponent implements OnInit {
     this.LCS.update({ ...this.affectForm.value, affected_date: new Date() }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
       this.affectForm.reset()
-      this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
-        this.SujetService.getByLabel('Prospection').subscribe(sujet => {
-          let newTicket = new Ticket(
-            null,
-            u._id,
-            sujet._id,
-            new Date(),
-            this.affectForm.value.affected_to_member,
-            "En cours de traitement",
-            new Date(),
-          )
-          newTicket.customid = this.generateID()
-          newTicket.resum = "Contactez le lead"
-          newTicket.description = `
-          Nom: ${this.showAffect?.nom}\n
-          Prénom: ${this.showAffect?.prenom}\n
-          Email: ${this.showAffect?.email}\n
-          Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
-          Source: ${this.showAffect?.source}
-          `
-          this.TicketService.create(newTicket).subscribe(r => {
-            this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
-          }, error => {
-            console.error(error)
-          })
+      this.SujetService.getByLabel('Prospection').subscribe(sujet => {
+        let newTicket = new Ticket(
+          null,
+          this.token.id,
+          sujet._id,
+          new Date(),
+          this.affectForm.value.affected_to_member,
+          "En cours de traitement",
+          new Date(),
+        )
+        newTicket.customid = this.generateID()
+        newTicket.resum = "Contactez le lead"
+        newTicket.description = `
+        Nom: ${this.showAffect?.nom}\n
+        Prénom: ${this.showAffect?.prenom}\n
+        Email: ${this.showAffect?.email}\n
+        Téléphone: ${this.showAffect?.indicatif_phone} ${this.showAffect?.numero_phone}\n
+        Source: ${this.showAffect?.source}
+        `
+        this.TicketService.create(newTicket).subscribe(r => {
+          this.ToastService.add({ severity: "success", summary: "Création du Ticket d'affectation avec succès" })
+        }, error => {
+          console.error(error)
         })
-
       })
 
       this.showAffect = null
@@ -514,7 +537,7 @@ export class ListLeadcrmComponent implements OnInit {
   // Nazif ajout des buttons de mise à jour et de suppression
   initUpdate(lead: LeadCRM) {
     this.selectedLead = lead
-    this.followForm.patchValue({ ...lead })
+    this.followForm.patchValue({ ...lead,produit:lead.produit[0] })
   }
   delete(lead: LeadCRM) {
     if (confirm("Êtes-vous sûr de vouloir supprimer ce membre de l'équipe ?"))
@@ -542,13 +565,13 @@ export class ListLeadcrmComponent implements OnInit {
     :
     FileUpload;
 
-  formEmailPerso = new FormGroup({
+  formEmailPerso = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
-  formEmailType = new FormGroup({
+  formEmailType = new UntypedFormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
     cc: new FormControl([]),

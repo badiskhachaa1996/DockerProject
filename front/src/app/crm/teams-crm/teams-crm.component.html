@@ -100,7 +100,9 @@
                         <td>
                             {{ team.description }}
                         </td>
-                        <td>
+                        <td> 
+                            <i style="padding-left: 3%;" class="pi pi-plus" (click)="initAdd(team);scrollToTop()"
+                                pTooltip="Ajouter un membre à l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(team);scrollToTop()"
                                 pTooltip="Modifier l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(team);"
@@ -112,3 +114,24 @@
         </div>
     </div>
 </div>
+<p-dialog header="Modifier le contact" [(visible)]="visibleAddToTeams" modal="true"
+                            [style]="{width: '50vw'}">
+
+                            <form [formGroup]="formAddToTeams" class="p-fluid p-formgrid grid col-12">
+                                
+                                <div class="field col-6">
+                                    <label>membre</label>
+                                    <p-dropdown 
+                                    formControlName="suite_contact"  placeholder="Choisissez un état"></p-dropdown>
+                                </div>
+                                
+                                <div class="field col-6">
+                                    <label For="description">Note </label>
+                                    <textarea pInputTextarea formControlName="note"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" 
+                                        label="Enregistrer" [disabled]="formAddToTeams.invalid"></p-button>
+                                </div>
+                            </form>
+                        </p-dialog>

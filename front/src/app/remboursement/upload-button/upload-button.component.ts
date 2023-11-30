@@ -10,7 +10,7 @@ export class UploadButtonComponent implements OnInit {
   @Output() uploadFile = new EventEmitter<any>();
 
   @Input() isDisable = false
-  @Input() doc_number
+  @Input() doc_number : any = null;
 
   @Output() downloadDoc =  new EventEmitter<any>();
 

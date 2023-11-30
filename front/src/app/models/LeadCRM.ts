@@ -51,8 +51,8 @@ export class LeadCRM {
         public send_mail?: string,
 
         //Qualification
-        public produit?: string[],
-        public criteres_qualification?: string[],
+        public produit?: any,
+        public criteres_qualification?: any,
         public decision_qualification?: string,
         public note_qualification?: string,
 
@@ -72,7 +72,13 @@ export class LeadCRM {
             nom?: string,
             path?: string,
         }[],
-        public _id?: string
+        public _id?: string,
+        public created_by?: User,
+        public qualifications?:{
+             criteres_qualification?: any,
+             decision_qualification?: string,
+             note_qualification?: string,
+        }[],
     ) { }
 
 }

@@ -1,10 +1,11 @@
 <p-toast></p-toast>
 <div class="grid">
 
-	<!-- Formulaire de modification d'un campus -->
-	<div class="col-12" *ngIf="showFormUpdateCampus">
+    <!-- Formulaire de modification d'un campus -->
+    <div class="col-12" *ngIf="campusToUpdate">
         <div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormUpdateCampus=false;campusFormUpdate.reset()"  aria-hidden="true"> </i>
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="campusToUpdate=null;campusFormUpdate.reset()" aria-hidden="true"> </i>
             <h4 style="text-align: center;">Modifier un campus</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="campusFormUpdate" (ngSubmit)="editCampus()">
                 <div class="field col-12 md:col-6">
@@ -12,35 +13,17 @@
                     <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Nom du campus" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="email">Email</label>
-                    <input pInputText id="email" type="email" formControlName="email" placeholder="email du siége du campus" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label for="site">Site Web</label>
-                    <input pInputText id="site" type="text" formControlName="site" placeholder="site web du campus" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label for="ecole">Ecole</label>
-                    <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="libelle"></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-4">
                     <label for="adress">Adresse</label>
-                    <input pInputText id="adress" type="text" formControlName="adresse" placeholder="adresse du siége du campus" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label for="ville">Ville</label>
-                    <input pInputText id="ville" type="text" formControlName="ville" placeholder="ville du siége du campus" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label for="ville">Pays</label>
-                    <input pInputText id="ville" type="text" formControlName="pays" placeholder="pays du siége du campus" />
+                    <input pInputText id="adress" type="text" formControlName="adresse"
+                        placeholder="Adresse du  campus" />
                 </div>
                 <div class="field col-12 md:col-12 grid">
                     <div class="field col-12 md:col-6 grid" *ngFor="let data of salles; let i = index">
                         <h5> Salle n°{{i+1}}: </h5>
                         <div class="col-11">
                             <label>Nom de la salle:</label><br>
-                            <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]" placeholder="Salle {{i+1}}" pInputText>
+                            <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]"
+                                placeholder="Salle {{i+1}}" pInputText>
                         </div>
                         <div class="col-1">
                             <i class="pi pi-trash" (click)="salles.splice(i,1)" aria-hidden="true"></i>
@@ -54,74 +37,152 @@
             </form>
         </div>
     </div>
+    <div class="col-12 card mb-2" *ngIf="showEcoles">
+        <div style="text-align: right;">
+            <i class="pi pi-times-circle" style=" font-size: 20px; color: red; cursor: pointer;"
+                (click)="showEcoles=null;addEcoleForm.reset()" aria-hidden="true"> </i>
+        </div>
 
+        <form class="p-fluid p-formgrid grid mb-2" [formGroup]="addEcoleForm" (ngSubmit)="addEcole()"
+            *ngIf="addEcoleForm.value._id">
+            <div class="field col-12 md:col-6">
+                <label for="libelle">Ecole</label>
+                <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownEcole"
+                    formControlName="ecole_id">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="libelle">Email</label>
+                <input pInputText id="libelle" type="text" formControlName="email" placeholder="Ex: xxx@gmail.com" />
+            </div>
+            <button pButton label="Ajouter une école" type="submit" [disabled]="addEcoleForm.invalid"></button>
+        </form>
+        <p-table dataKey="_id" [value]="showEcoles.ecoles" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Ecole <p-sortIcon
+                            field="ecole_id.titre"></p-sortIcon></th>
+                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Libellé <p-sortIcon
+                            field="ecole_id.titre"></p-sortIcon></th>
+                    <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon
+                            field="email"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ecole>
+                <tr>
+                    <td>
+                        {{ecole?.ecole_id?.titre}}
+                    </td>
+                    <td>
+                        {{ecole?.ecole_id?.titre}} - {{showEcoles?.libelle}}
+                    </td>
+                    <td>
+                        {{ecole?.email}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-tabView style="width: 100%;">
+        <p-tabPanel header="Ajouter" style="width: 100%;">
+            <app-add-campus (createCampus)="onAddCampus($event)"></app-add-campus>
+        </p-tabPanel>
+        <p-tabPanel header="Liste" [selected]="true" style="width: 100%;">
+            <p-table #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single" dataKey="_id" [rows]="8"
+                [rowHover]="true" [paginator]="true" [pageLinks]="5" rowExpandMode="single"
+                [globalFilterFields]="['libelle','email','site','ville','pays']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
 
-    <div class="col-12">
-		<div class="card">
-			<h5>Liste des campus</h5>
-			<p-table #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single"
-                     dataKey="_id" [rows]="8" 
-                     [rowHover]="true" [paginator]="true" [pageLinks]="5"
-                     [globalFilterFields]="['libelle','email','site','ville','pays']"
-                     responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
 
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
-						<span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-
-                        <div style="float: right;">
-                            <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
-                        </div>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th pSortableColumn="libelle" style="text-align: center;"> Libellé <p-sortIcon field="libelle"></p-sortIcon></th>
-						<th pSortableColumn="ecole" style="text-align: center;"> Ecole <p-sortIcon field="ecole"></p-sortIcon></th>	
-						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
-                        <th pSortableColumn="site_web" style="text-align: center;"> Site Web <p-sortIcon field="site_web"></p-sortIcon> </th>
-                        <th pSortableColumn="ville" style="text-align: center;"> Ville <p-sortIcon field="ville"></p-sortIcon></th>
-                        <th pSortableColumn="salles.length" style="text-align: center;"> Salle <p-sortIcon field="salles.length"></p-sortIcon></th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Action
-							</div>
-						</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-rowData>
-					<tr>
-						<td style="min-width: 12rem;">
-							{{rowData.libelle}}
-						</td>
-						<td style="min-width: 12rem;">
-							{{ ecoles[rowData.ecole_id]?.libelle }}
-						</td>
-						<td style="min-width: 14rem;">
-							{{ (rowData.email.length>25)? (rowData.email | slice:0:25)+'..':(rowData.email) }}
-						</td>
-						<td>
-                            {{rowData.site}}
-                        </td>
+                        </th>
+                        <th pSortableColumn="libelle" style="text-align: center;"> Libellé <p-sortIcon
+                                field="libelle"></p-sortIcon></th>
+                        <th pSortableColumn="adresse" style="text-align: center;"> Adresse <p-sortIcon
+                                field="adresse"></p-sortIcon></th>
+                        <th pSortableColumn="email" style="text-align: center;"> Ecole(s) <p-sortIcon
+                                field="email"></p-sortIcon></th>
+                        <th pSortableColumn="salles.length" style="text-align: center;"> Salle <p-sortIcon
+                                field="salles.length"></p-sortIcon></th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                    <tr>
                         <td>
-                            {{rowData.ville}}
+                            <button type="button" pButton pRipple [pRowToggler]="rowData"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{rowData.libelle}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData.adresse }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            WIP
                         </td>
                         <td>
                             {{rowData.salles.length}}
                         </td>
-						<td style="min-width: 10rem;">
-							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                        <td style="min-width: 10rem;">
+                            <i pTooltip="Ajouter une école" tooltipPosition="bottom" class="pi pi-building "
+                                (click)="onAddEcole(rowData)" aria-hidden="true"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil ml-2"
                                 (click)="showModify(rowData)" aria-hidden="true"></i>
-                            <i pTooltip="Diplomes" tooltipPosition="bottom" class="pi pi-play"
-                                (click)="navigatetoDiplome(rowData)" aria-hidden="true"></i>
-						</td>
-					</tr>
-				</ng-template>
-    		</p-table>
-		</div>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash ml-2"
+                                (click)="delete(rowData)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <td colspan="6">
+                        <p-table dataKey="_id" [value]="rowData.ecoles" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Ecole <p-sortIcon
+                                            field="ecole_id.titre"></p-sortIcon></th>
+                                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Libellé
+                                        <p-sortIcon field="ecole_id.titre"></p-sortIcon></th>
+                                    <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon
+                                            field="email"></p-sortIcon></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-ecole>
+                                <tr>
+                                    <td>
+                                        {{ecole?.ecole_id?.titre}}
+                                    </td>
+                                    <td>
+                                        {{ecole?.ecole_id?.titre}} - {{rowData?.libelle}}
+                                    </td>
+                                    <td>
+                                        {{ecole?.email}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </td>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
 
-	</div>
 </div>

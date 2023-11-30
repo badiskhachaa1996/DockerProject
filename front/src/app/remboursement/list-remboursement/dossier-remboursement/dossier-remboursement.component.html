@@ -14,12 +14,12 @@
                 <td><h6 >{{document.nom}}</h6></td>
                 <td><span *ngIf="document.added_by">{{document.added_on | date: 'dd/MM/yyyy'}}</span></td>
                 <td>{{document.added_by}}</td>
-                <td type="link" class="download-btn"><span class="file-name" (click)="downloadDoc(document.slug)" *ngIf="document.added_by">{{document.doc_number}}</span></td>  
+                <td type="link" class="download-btn"><span class="file-name" (click)="downloadDoc(document.slug)" *ngIf="document.doc_number">{{document.doc_number}}</span></td>  
                 <td class="text-right" style="min-width: 8rem">
                     <input #doc type="file" accept="application/pdf" maxFileSize="10000000"
                     (change)="onUpload($event.target.files[0], document)" chooseLabel="Browse" inputId="doc"/> 
                     <i class="pi pi-upload mr-2 clickable-element"  title="charger" (click)="doc.click()"  ></i>
-                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="document.added_by" (click)=" deleteDoc(document)" title="supprimer"></i>
+                    <i class="pi pi-trash mr-2 clickable-element" *ngIf="document.doc_number" (click)=" deleteDoc(document)" title="supprimer"></i>
                 </td>
             </tr>
         </ng-template>
