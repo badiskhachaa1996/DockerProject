@@ -2330,12 +2330,12 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Insérer un Partenaire',
+                                            label: 'Insérer ',
                                             icon: 'pi pi pi-user-plus',
                                             routerLink: ['/partenaireInscription'],
                                         },
                                         {
-                                            label: 'Liste des partenaires',
+                                            label: 'Liste ',
                                             icon: 'pi pi-sort-alpha-down',
                                             routerLink: ['/admin/partenaire'],
                                         },
@@ -4521,12 +4521,12 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-share-alt',
                                 items: [
                                     {
-                                        label: 'Insérer un Partenaire',
+                                        label: 'Insérer ',
                                         icon: 'pi pi pi-user-plus',
                                         routerLink: ['/partenaireInscription']
                                     },
                                     {
-                                        label: 'Liste des partenaires',
+                                        label: 'Liste ',
                                         icon: 'pi pi-sort-alpha-down',
                                         routerLink: ['/admin/partenaire']
                                     },
@@ -4581,7 +4581,7 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-share-alt',
                                 items: [
                                     {
-                                        label: 'Liste des partenaires',
+                                        label: 'Liste ',
                                         icon: 'pi pi-sort-alpha-down',
                                         routerLink: ['/admin/partenaire']
                                     },
@@ -6912,7 +6912,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-dollar',
                             items: [
                                 {
-                                    label: 'Ajouter un remboursement',
+                                    label: 'Ajouter ',
                                     icon: 'pi pi-plus-circle',
                                     routerLink: ['/ajout-remboursement'],
                                 },
