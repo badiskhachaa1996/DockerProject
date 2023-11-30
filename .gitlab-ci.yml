@@ -315,7 +315,7 @@ deploy_node_to_dev:
 manual_deploy_angular_to_qa:
   stage: QA
   dependencies: 
-    - build_angular_on_qa
+    - manual_build_angular_on_qa
   tags:
     - qa-shell
   script:
@@ -346,7 +346,7 @@ manual_deploy_node_to_qa:
 manual_deploy_angular_to_prod:
   stage: PROD
   dependencies:
-    - build_angular_on_prod
+    - manual_build_angular_on_prod
   tags:
     - prod-shell
   script:
