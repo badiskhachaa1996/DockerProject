@@ -63,7 +63,7 @@ install_angular_dependencies_on_dev:
 
 #==========================================================
 
-install_node_dependencies_on_qa:
+manual_install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -79,7 +79,7 @@ install_node_dependencies_on_qa:
     - develop
   when: manual
 
-install_angular_dependencies_on_qa:
+manual_install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -97,7 +97,7 @@ install_angular_dependencies_on_qa:
 
 #==========================================================
 
-install_node_dependencies_on_prod:
+manual_install_node_dependencies_on_prod:
   stage: Install
   tags:
     - prod-shell
@@ -112,11 +112,9 @@ install_node_dependencies_on_prod:
   only:
     refs:
       - main
-    changes:
-      - back/package.json
   when: manual
 
-install_angular_dependencies_on_prod:
+manual_install_angular_dependencies_on_prod:
   stage: Install
   tags:
     - prod-shell
@@ -131,8 +129,6 @@ install_angular_dependencies_on_prod:
   only:
     refs:
       - main
-    changes:
-      - front/package.json
   when: manual
 
 #==========================================================
@@ -186,7 +182,7 @@ build_angular_on_dev:
 
 #==========================================================
 
-build_angular_on_qa:
+manual_build_angular_on_qa:
   stage: Build
   tags:
     - qa-shell
@@ -198,7 +194,7 @@ build_angular_on_qa:
 
   script:
       - cd front
-      - node --max-old-space-size=1024 node_modules/@angular/cli/bin/ng build --configuration=qa
+      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - develop
   artifacts:
@@ -210,7 +206,7 @@ build_angular_on_qa:
 
 #==========================================================
 
-build_angular_on_prod:
+manual_build_angular_on_prod:
   stage: Build
   tags:
     - prod-shell
@@ -319,7 +315,7 @@ deploy_node_to_dev:
 manual_deploy_angular_to_qa:
   stage: QA
   dependencies: 
-    - build_angular_on_qa
+    - manual_build_angular_on_qa
   tags:
     - qa-shell
   script:
@@ -350,7 +346,7 @@ manual_deploy_node_to_qa:
 manual_deploy_angular_to_prod:
   stage: PROD
   dependencies:
-    - build_angular_on_prod
+    - manual_build_angular_on_prod
   tags:
     - prod-shell
   script:
