@@ -63,7 +63,7 @@ install_angular_dependencies_on_dev:
 
 #==========================================================
 
-install_node_dependencies_on_qa:
+manual_install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -79,7 +79,7 @@ install_node_dependencies_on_qa:
     - develop
   when: manual
 
-install_angular_dependencies_on_qa:
+manual_install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -97,7 +97,7 @@ install_angular_dependencies_on_qa:
 
 #==========================================================
 
-install_node_dependencies_on_prod:
+manual_install_node_dependencies_on_prod:
   stage: Install
   tags:
     - prod-shell
@@ -114,7 +114,7 @@ install_node_dependencies_on_prod:
       - main
   when: manual
 
-install_angular_dependencies_on_prod:
+manual_install_angular_dependencies_on_prod:
   stage: Install
   tags:
     - prod-shell
@@ -182,7 +182,7 @@ build_angular_on_dev:
 
 #==========================================================
 
-build_angular_on_qa:
+manual_build_angular_on_qa:
   stage: Build
   tags:
     - qa-shell
@@ -206,7 +206,7 @@ build_angular_on_qa:
 
 #==========================================================
 
-build_angular_on_prod:
+manual_build_angular_on_prod:
   stage: Build
   tags:
     - prod-shell
