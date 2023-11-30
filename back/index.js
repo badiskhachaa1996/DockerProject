@@ -15,9 +15,9 @@ if (process.argv[2]) {
   if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com/"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com/"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -82,8 +82,8 @@ mongoose
     console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     process.exit();
   });
-  const { Critere } = require("./models/critere");
- 
+const { Critere } = require("./models/critere");
+
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
