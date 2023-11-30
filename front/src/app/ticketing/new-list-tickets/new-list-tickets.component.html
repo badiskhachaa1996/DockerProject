@@ -136,74 +136,17 @@
             <app-ajout-ticket (ADD)="onAddTicket($event)"></app-ajout-ticket>
         </p-tabPanel>
         <p-tabPanel header="Liste">
-            <div class="grid">
-                <div class="col-12" *ngIf="isAgent && roleAccess!='Spectateur'">
-                    <p-selectButton [options]="modeOptions" [(ngModel)]="TicketMode" optionLabel="label"
-                        [disabled]="roleAccess=='Agent'" (onChange)="onChangeMode($event)"
-                        optionValue="label"></p-selectButton>
-                </div>
-                <div class="col-6 md:col-3 field-checkbox"
-                    *ngIf="isAgent && roleAccess!='Spectateur' && TicketMode=='Personnel'">
-                    <p-checkbox name="filterType" value="Mine" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
-                        inputId="type3"></p-checkbox>
-                    <label for="city1">Crées</label>
-                </div>
-                <div class="col-6 md:col-6 field-checkbox"
-                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode!='Personnel'">
-                    <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
-                        (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
-                    <label for="city1">Non assignés</label>
-                </div>
-                <div class="col-6 md:col-3 field-checkbox"
-                    *ngIf="isAgent && roleAccess!='Spectateur'  && TicketMode=='Personnel'">
-                    <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
-                        inputId="type2"></p-checkbox>
-                    <label for="city1">Assignés</label>
-                </div>
-                <!--<div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
-                    <p-checkbox name="filterType" value="Assigne Service" [(ngModel)]="filterType"
-                        (onChange)="onFilterTicket()" inputId="type2"></p-checkbox>
-                    <label for="city1">Assignés au service</label>
-                </div>-->
 
-                <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
-                        [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
-                    <label for="city1">Tickets > 48 heures</label>
-                </div>
-                <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
-                        (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
-                    <label for="city1">Urgent</label>
-                </div>
-                <div class="col-6 md:col-2 grid">
-                    <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets
-                            selectionnés </span>{{filteredValues.length}}</p>
-                </div>
-            </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
-                (onFilter)="onFilter($event, dt1)" [paginator]="true" rowExpandMode="single"
+                [paginator]="true" rowExpandMode="single"
                 [globalFilterFields]="['customid', 'sujet_id?.service_id?.label', 'sujet_id?.label', 'module','createur_id?.firstname','createur_id?.lastname',
-                'type','campus','filiere','demande','resum','createur_id.email_perso','createur_id.email','description']" [pageLinks]="5" selectionMode="single" class="col-12"
-                [globalFilterFields]="['customid']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                'type','campus','filiere','demande','resum','createur_id.email_perso','createur_id.email','description']" [pageLinks]="5" selectionMode="single"
+                class="col-12" [globalFilterFields]="['customid']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <input pInputText type="text" #filter [style]="{'width':'12em'}"
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                        <p-dropdown *ngIf="TicketMode!='Personnel'" [style]="{'width':'12em'}" [options]="createurList"
-                            filter="true" [showClear]="true"
-                            (onChange)="dt1.filter($event.value, 'createur_id._id', 'equals');"
-                            (onClear)="dt1.filter('', 'createur_id._id', 'equals');" placeholder="Créateur"
-                            emptyFilterMessage="Pas de user trouvé"
-                            filterPlaceholder="Choisissez un créateur"></p-dropdown>
-                        <p-dropdown *ngIf="TicketMode!='Personnel'" [style]="{'width':'12em'}" [options]="filterAgent"
-                            filter="true" [group]="true" [showClear]="true"
-                            (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
-                            (onClear)="dt1.filter('', 'agent_id._id', 'equals');" placeholder="Collaborateur"
-                            emptyFilterMessage="Pas de collaborateur trouvé"
-                            filterPlaceholder="Choisissez un collaborateur"></p-dropdown>
-                        <input *ngIf="TicketMode!='Personnel'" type="date" [style]="{'width':'12em'}"
-                            (change)="filterDate(dt1,$event.target.value)" placeholder="Date" pInputText>
 
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filterService" filter="true"
                             [(ngModel)]="serviceFiltered"
@@ -216,11 +159,11 @@
                             (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');" placeholder="Sujet"
                             emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
-                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true" [(ngModel)]="selectedSite"
-                            [showClear]="true" (onChange)="dt1.filter($event.value, 'site', 'equals');"
+                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true"
+                            [(ngModel)]="selectedSite" [showClear]="true"
+                            (onChange)="dt1.filter($event.value, 'site', 'equals');"
                             (onClear)="dt1.filter('', 'site', 'equals');" placeholder="Site"
-                            emptyFilterMessage="Pas de site trouvé"
-                            filterPlaceholder="Choisissez un site"></p-dropdown>
+                            emptyFilterMessage="Pas de site trouvé" filterPlaceholder="Choisissez un site"></p-dropdown>
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filterStatut" filter="true"
                             [showClear]="true" (onClear)="dt1.filter('', 'statut', 'in');" [(ngModel)]="filterBase"
                             (onChange)="dt1.filter($event.value, 'statut', 'in');" placeholder="Statut"
@@ -324,28 +267,6 @@
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                                 tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
-                        <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
-                            <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
-                                tooltipPosition="bottom" (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
-                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
-                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
-                        </td>
-                        <td *ngIf="ticket.origin=='Non Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
-                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
-                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
-                            <i pTooltip="Assigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user-plus"
-                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
-                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
-                        </td>
-                        <td *ngIf="ticket.origin=='Assigne Service'" [ngClass]="{'urgent-end':ticket.priorite}">
-                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
-                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
-                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
-                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
-                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
-                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket>
@@ -436,42 +357,46 @@
             </p-table>
             </td>
             </tr>
-            <!--<tr *ngIf="ticket.documents_service.length!=0">
-                <td colspan="10">
-                    <h5>Pièces jointes du service</h5>
-                    <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12"
-                        styleClass="p-datatable-gridlines">
-                        <ng-template pTemplate="header">
-            <tr>
-                <th> Nom </th>
-                <th>Lien </th>
-                <th> Action </th>
-            </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-document let-idx="rowIndex">
-                <tr>
-                    <td>{{document.path}}</td>
-                    <td>
-                        <a (click)="downloadFileService(idx,ticket)">Télécharger le document</a>
-                    </td>
-                    <td>
-                        <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
-                            aria-hidden="true" (click)="deleteFileService(idx,ticket)"> </i>
-                    </td>
-                </tr>
-            </ng-template>
-            </p-table>
-            </td>
-            </tr>-->
 
 
             </ng-template>
             </p-table>
             <p-skeleton *ngIf="hideTicket" width="100%" height="40vh"></p-skeleton>
         </p-tabPanel>
-        <p-tabPanel header="Admin">
-            <p-table #dt2 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="ticketsService"
-                (onFilter)="onFilter($event, dt1)" [paginator]="true" rowExpandMode="single"
+        <p-tabPanel header="Admin" *ngIf="roleAccess!='Spectateur'">
+            <div class="grid">
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' ">
+                    <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
+                        (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
+                    <label for="city1">Non assignés</label>
+                </div>
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur' ">
+                    <p-checkbox name="filterType" value="Assigne Service" [(ngModel)]="filterType"
+                        (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
+                    <label for="city1">Assigné aux Services</label>
+                </div>
+                <div class="col-6 md:col-4 field-checkbox" *ngIf="isAgent && roleAccess!='Spectateur'">
+                    <p-checkbox name="filterType" value="Assigne" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
+                        inputId="type2"></p-checkbox>
+                    <label for="city1">Assignés à moi</label>
+                </div>
+                <div class="col-6 md:col-4 field-checkbox">
+                    <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
+                        [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
+                    <label for="city1">Tickets > 48 heures</label>
+                </div>
+                <div class="col-6 md:col-4 field-checkbox">
+                    <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
+                        (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
+                    <label for="city1">Urgent</label>
+                </div>
+                <div class="col-6 md:col-4 grid">
+                    <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets
+                            selectionnés </span>{{filteredValues.length}}</p>
+                </div>
+            </div>
+            <p-table #dt2 id="dt2" dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="ticketsService"
+                (onFilter)="onFilter($event, dt2)" [paginator]="true" rowExpandMode="single"
                 [globalFilterFields]="['customid', 'sujet_id?.service_id?.label', 'sujet_id?.label', 'module','createur_id?.firstname','createur_id?.lastname',
                 'type','campus','filiere','demande','resum','createur_id.email_perso','createur_id.email','description']" [pageLinks]="5" selectionMode="single" class="col-12"
                 [globalFilterFields]="['customid']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
@@ -491,11 +416,11 @@
                             filterPlaceholder="Choisissez un collaborateur"></p-dropdown>
                         <input type="date" [style]="{'width':'12em'}" (change)="filterDate(dt2,$event.target.value)"
                             placeholder="Date" pInputText>
-                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true" [(ngModel)]="selectedSite"
-                            [showClear]="true" (onChange)="dt2.filter($event.value, 'site', 'equals');"
+                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true"
+                            [(ngModel)]="selectedSite" [showClear]="true"
+                            (onChange)="dt2.filter($event.value, 'site', 'equals');"
                             (onClear)="dt2.filter('', 'site', 'equals');" placeholder="Site"
-                            emptyFilterMessage="Pas de site trouvé"
-                            filterPlaceholder="Choisissez un site"></p-dropdown>
+                            emptyFilterMessage="Pas de site trouvé" filterPlaceholder="Choisissez un site"></p-dropdown>
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filterService" filter="true"
                             [(ngModel)]="serviceFiltered"
                             (onChange)="dt2.filter($event.value, 'sujet_id.service_id._id', 'in');"
@@ -593,10 +518,30 @@
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{getDelaiTraitrement(ticket)}}
                         </td>
-                        <td [ngClass]="{'urgent-end':ticket.priorite}">
-                            <i pTooltip="Auto-Assigner" style="margin-left: 2%; cursor: pointer;"
-                                class="pi pi-user-plus" tooltipPosition="bottom" (click)="onAutoAssign(ticket)"
-                                aria-hidden="true"></i>
+                        <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
+                                tooltipPosition="bottom" (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="ticket.origin=='Non Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
+                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Assigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user-plus"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Auto-Assigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAutoAssign(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="ticket.origin=='Assigne Service' && roleAccess!='Spectateur' && roleAccess!='Agent'"
+                            [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
+                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
