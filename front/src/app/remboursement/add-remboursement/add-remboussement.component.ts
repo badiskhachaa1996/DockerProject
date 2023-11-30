@@ -313,7 +313,7 @@ export class AddRemboussementComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Remboursement added successfully.'
+          detail: 'Remboursement ajouté avec succès.'
         });
         console.log(response);
         console.log(demande);
@@ -324,7 +324,8 @@ export class AddRemboussementComponent implements OnInit {
         // Handle error (show an error message)
         console.error('Error adding remboursement:', error);
         // Check if the error response contains a message
-        const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
+        const errorMessage = error.error ? error.error.message : 
+        "Échec de l'ajout du remboursement.";
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -348,7 +349,7 @@ export class AddRemboussementComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Remboursement added successfully.'
+          detail: 'Remboursement ajouté avec succès.'
         });
         console.log('After MessageService.add');
         
@@ -374,7 +375,7 @@ export class AddRemboussementComponent implements OnInit {
       },
       (error) => {
         // Handle error (show an error message)
-        console.error('Error adding remboursement:', error);
+        console.error("Échec d'ajout de remboursement" , error);
       
         if (error.status === 400 && error.error && error.error.message) {
           // Check if the error response indicates a missing field
@@ -386,7 +387,13 @@ export class AddRemboussementComponent implements OnInit {
           });
         } else {
           // Default error message for other errors
-          const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
+          const errorMessage = error.error ? error.error.message : "Échec d'ajout de remboursement"
+
+
+
+
+
+          ;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -400,19 +407,21 @@ export class AddRemboussementComponent implements OnInit {
 
   onSubmitRemboussementForm() {
     const captchaResponse = this.aFormGroup.get('recaptcha').value;
-  
-  
+
     if (captchaResponse && this.formRembourssement.valid) {
-      this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
+        this.updateDemandeObject(this.currentDemande, this.showUpdateForm);
+
+        // Assuming a successful form submission, navigate to the list of demands
+        this.router.navigate(['remboursements']); // Update with your actual route
     } else {
-      console.log('Please fill out all the required fields and verify the captcha before submitting.');
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please fill out all the required fields and verify the captcha before submitting.'
-      });
+        console.log('Veuillez remplir tous les champs obligatoires et vérifier le captcha avant de soumettre');
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Veuillez remplir tous les champs obligatoires et vérifier le captcha avant de soumettre'
+        });
     }
-  }
+}
   
 
 
@@ -447,7 +456,7 @@ export class AddRemboussementComponent implements OnInit {
 
   getUserNameById(id) {
     const user = this.user.find(u => u.id === id);
-    return user ? `${user.firstname} ${user.lastname}` : 'User not found';
+    return user ? `${user.firstname} ${user.lastname}` : 'Utilisateur introuvable';
   }
 
 

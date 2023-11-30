@@ -20,7 +20,7 @@ services:
     build: /opt/app/ims/back
     restart: always
     environment:
-      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_URI: mongodb://127.0.0.1:27017
     depends_on:
       - mongodb
     ports:

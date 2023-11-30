@@ -252,6 +252,9 @@ const routes: Routes = [
         path: '',
         component: AppMainComponent,
         children: [
+            { path: 'partenaireInscription', component: PartenaireInscriptionComponent,
+            canActivate: [AuthGuardService], },
+
             {
                 path: '',
                 component: DashboardComponent,
@@ -1240,7 +1243,6 @@ const routes: Routes = [
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
-    { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
     {
         path: 'suivre-ma-preinscription',
