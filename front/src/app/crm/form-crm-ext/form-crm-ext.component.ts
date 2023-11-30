@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
-
+import { ViewportScroller } from '@angular/common';
 @Component({
   selector: 'app-form-crm-ext',
   templateUrl: './form-crm-ext.component.html',
@@ -84,16 +84,22 @@ export class FormCrmExtComponent implements OnInit {
 
   onAdd() {
     let numero_whatsapp = ''
-    if (this.addForm.value.whatsapp.includes('Oui'))
-      numero_whatsapp = this.addForm.value.numero_phone
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
-      this.addForm.reset()
-      //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
-    },
-      ((error) => {
-        this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
-        console.error(error);
-      }))
+    if (this.addForm.invalid) {
+      this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé' });
+      this.viewportScroller.scrollToAnchor('EmailForm');
+    } else {
+      if (this.addForm.value.whatsapp.includes('Oui'))
+        numero_whatsapp = this.addForm.value.numero_phone
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
+        this.addForm.reset()
+        //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+      },
+        ((error) => {
+          this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
+          console.error(error);
+        }))
+    }
+
   }
 
   generateID() {
@@ -108,7 +114,7 @@ export class FormCrmExtComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService,
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private viewportScroller: ViewportScroller,
     private route: ActivatedRoute, private router: Router, private FAService: FormulaireAdmissionService) { }
   ECOLE: EcoleAdmission
   RENTREE: RentreeAdmission[]
