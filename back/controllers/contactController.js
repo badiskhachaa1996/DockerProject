@@ -9,17 +9,16 @@ app.disable("x-powered-by");
 
 // initialiser le transporter 
 
-let transporterContact = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'support@estya.com',
-        pass: 'EstyaSupp@75001',
+        user: "ims@intedgroup.com",
+        pass: "InTeDGROUP@@0908",
     },
-})
-
+});
 
 app.post("/sendMail", (req, res) => {
     let messageObject = req.body;
@@ -36,8 +35,8 @@ app.post("/sendMail", (req, res) => {
                     <footer> <img src="cid:red"/></footer>`
 
     let mailOptions = {
-        from: "support@estya.com",
-        to: "support@estya.com",
+        from: "ims@intedgroup.com",
+        to: "ims.support@intedgroup.com",
         subject: 'Demande de renseignements',
         html: htmlmail,
         attachments: [{
@@ -45,7 +44,7 @@ app.post("/sendMail", (req, res) => {
             path: 'assets/logo.png',
             cid: 'red' //same cid value as in the html img src
         }]
-        
+
     };
 
     let htmlmailUser = `<p style="font-size:20px; color:black">Bonjour ${messageObject.civilite} ${messageObject.name},</p>
@@ -61,7 +60,7 @@ app.post("/sendMail", (req, res) => {
                     <footer> <img src="cid:red"/></footer>`
 
     let mailOptionsUser = {
-        from: "support@estya.com",
+        from: "ims@intedgroup.com",
         to: `${messageObject.mail}`,
         subject: 'Demande de renseignements prise en compte',
         html: htmlmailUser,
@@ -71,12 +70,18 @@ app.post("/sendMail", (req, res) => {
             cid: 'red' //same cid value as in the html img src
         }]
     };
-
-    transporterContact.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptionsUser, function (error, info) {
         if (error) {
             console.error(error);
         }
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+            }
+            res.send({ msg: "YEAH" })
+        });
     });
+
 
 
 });
