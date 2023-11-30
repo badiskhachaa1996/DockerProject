@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import jwt_decode from 'jwt-decode';
 import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
+import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 @Component({
   selector: 'app-ajout-leadcrm',
   templateUrl: './ajout-leadcrm.component.html',
@@ -87,22 +88,32 @@ export class AjoutLeadcrmComponent implements OnInit {
   prospects = []
 
   onAdd() {
-    let user = null
+    let user = null;
+    let equipeL="NON";
     try {
       user = jwt_decode(localStorage.getItem("token"))
+      
+        this.TeamsIntService.MIgetByUSERID(user.id).subscribe(data => {
+          equipeL=data.team_id.nom;
+        })
+      
     } catch (e) {
       user = null
     }
-    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente", created_by: user?.id }).subscribe(data => {
-      this.addForm.reset()
-      this.newLead.emit(data)
-      this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
-    }, err => {
-      this.ToastService.add({ severity: "error", summary: "Impossible d'ajouter le lead, l'email est déjà utilisée", detail: err?.error })
-    })
-    this.LCS.getAll().subscribe(data => {
-      this.prospects = data
-    })
+    setTimeout(() => {
+      console.log(equipeL);
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), statut_dossier: "Non contacté", decision_qualification: "En attente", created_by: user?.id ,equipe:equipeL}).subscribe(data => {
+        this.addForm.reset()
+        this.newLead.emit(data)
+        this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+      }, err => {
+        this.ToastService.add({ severity: "error", summary: "Impossible d'ajouter le lead, l'email est déjà utilisée", detail: err?.error })
+      })
+      this.LCS.getAll().subscribe(data => {
+        this.prospects = data
+      })
+    }, 100);
+    
   }
 
   generateID() {
@@ -124,7 +135,7 @@ export class AjoutLeadcrmComponent implements OnInit {
   }
 
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router,private sourceService:GestionSourcesServices) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private route: ActivatedRoute, private router: Router,private sourceService:GestionSourcesServices,private TeamsIntService: TeamsCrmService,) { }
 
   isUpdate = false
   paramID = ""

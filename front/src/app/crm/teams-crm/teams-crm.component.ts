@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TeamsCRM } from 'src/app/models/TeamsCRM';
+import { MemberCRM } from 'src/app/models/memberCRM';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
-
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-teams-crm',
   templateUrl: './teams-crm.component.html',
@@ -12,15 +14,25 @@ import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 export class TeamsCrmComponent implements OnInit {
 
   teams: TeamsCRM[] = [];
+  userList = []
+  userselected:User;
   visibleAddToTeams: boolean = false;
   selectedTeam: TeamsCRM;
+  selectedMember = new MemberCRM();
   formAddToTeams = new FormGroup({
     membre: new FormControl('', ),})
-  constructor(private TeamsIntService: TeamsCrmService, private MessageService: MessageService) { }
+  constructor(private TeamsIntService: TeamsCrmService, private MessageService: MessageService, private UserService: AuthService) { }
 
   ngOnInit(): void {
     this.TeamsIntService.TIgetAll().subscribe(data => {
       this.teams = data
+    });
+    this.UserService.getAll().subscribe(users => {
+      //Imagine tu dois charger toute la DB .........
+      users.forEach(user => {
+        if (user && user.type==="Collaborateur")
+          this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+      })
     })
   }
 
@@ -95,6 +107,28 @@ export class TeamsCrmComponent implements OnInit {
     while (number.length < 6)
       number = `0${number}`
     return number
+  }
+  initAdd(teams: TeamsCRM){
+    this.visibleAddToTeams=true;
+    this.selectedTeam=teams;
+  }
+  initUser(event){
+    console.log(event);
+    this.UserService.getInfoById(event).subscribe(data=>{
+      this.userselected=data;
+      console.log(this.userselected);
+    });
+    console.log(this.userselected);
+  }
+  addToTeam(){
+this.selectedMember.team_id=this.selectedTeam;
+this.selectedMember.user_id=this.userselected;
+this.TeamsIntService.MIcreate(this.selectedMember).subscribe(data => {
+  this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau membre avec succès` })
+})
+
+
+
   }
 
 
