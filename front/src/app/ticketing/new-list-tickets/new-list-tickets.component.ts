@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {  FormControl, Validators, UntypedFormGroup } from '@angular/forms';
+import { FormControl, Validators, UntypedFormGroup } from '@angular/forms';
 
 import jwt_decode from 'jwt-decode';
 import { MessageService as ToastService } from 'primeng/api';
@@ -23,6 +23,7 @@ import { Service } from 'src/app/models/Service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Table } from 'primeng/table';
 import { error } from 'console';
+import { RhService } from 'src/app/services/rh.service';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -62,8 +63,9 @@ export class NewListTicketsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
     private NotifService: NotificationService, private Socket: SocketService, private router: Router,
-    private MessageService: MessageService, private diplomeService: DiplomeService) { }
+    private MessageService: MessageService, private diplomeService: DiplomeService, private CollaborateurService: RhService) { }
   tickets: Ticket[] = []
+  ticketsService: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
   TicketForm = new UntypedFormGroup({
@@ -99,7 +101,19 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'En cours', value: "En cours de traitement" },
     { label: 'Traité', value: "Traité" },
   ]
-
+  selectedSite = null
+  filterSite: any[] = [
+    { label: 'Tous les sites', value: null },
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
   statutDropdown = [
     { label: 'En attente', value: "En attente de traitement" },
     { label: 'En cours', value: "En cours de traitement" },
@@ -110,7 +124,7 @@ export class NewListTicketsComponent implements OnInit {
   sujetDic = {}
   serviceDic = {}
   createurList = []
-  updateTicketList() {
+  updateTicketList(isFirst = false) {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
       this.tickets = dataM
       dataM.forEach(e => {
@@ -144,6 +158,7 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
+            this.ticketsService = nonassigne
             this.tickets = this.tickets.concat(nonassigne)
             this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
@@ -170,6 +185,23 @@ export class NewListTicketsComponent implements OnInit {
                 en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
                 en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
               }
+              if (isFirst) {
+                this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
+                  let site = ''
+                  if (Array.isArray(r.localisation) && r.localisation.length != 0)
+                    site = r.localisation[0]
+                  else if (!Array.isArray(r.localisation)) {
+                    let buffer: any = r.localisation
+                    site = buffer
+                  }
+                  if (site) {
+                    this.selectedSite = site
+                    this.dt1.filter(site, 'site', 'equals')
+                    this.dt2.filter(site, 'site', 'equals')
+                  }
+
+                })
+              }
             })
           })
         }
@@ -180,6 +212,7 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
+            this.ticketsService = nonassigne
             this.tickets = this.tickets.concat(nonassigne)
             this.TicketService.getAllAssigneAdmin().subscribe(allAssigne => {
               allAssigne.forEach(e => {
@@ -198,6 +231,23 @@ export class NewListTicketsComponent implements OnInit {
 
               this.defaultTicket = this.tickets
               this.onFilterTicket()
+              if (isFirst) {
+                this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
+                  let site = ''
+                  if (Array.isArray(r.localisation) && r.localisation.length != 0)
+                    site = r.localisation[0]
+                  else if (!Array.isArray(r.localisation)) {
+                    let buffer: any = r.localisation
+                    site = buffer
+                  }
+                  if (site) {
+                    this.selectedSite = site
+                    this.dt1.filter(site, 'site', 'equals')
+                    this.dt2.filter(site, 'site', 'equals')
+                  }
+
+                })
+              }
               let tempDate = new Date()
               tempDate.setDate(tempDate.getDate() - 2)
               this.stats = {
@@ -214,6 +264,7 @@ export class NewListTicketsComponent implements OnInit {
   roleAccess = 'Spectateur'
   filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: Table;
+  @ViewChild('dt2', { static: true }) dt2: Table;
   hideTicket = true
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
@@ -250,11 +301,12 @@ export class NewListTicketsComponent implements OnInit {
               this.messageList = messages
             })
             setTimeout(() => {
-              this.activeIndex1 = 1 + this.ticketsOnglets.length
+              this.activeIndex1 = 2 + this.ticketsOnglets.length
             }, 2)
           }
         })
-      this.updateTicketList()
+      this.updateTicketList(true)
+
     })
 
     this.dt1.filter(this.filterBase, 'statut', 'in')
@@ -371,6 +423,8 @@ export class NewListTicketsComponent implements OnInit {
       this.TicketForm.patchValue({ sujet_id: ticket.sujet_id._id })
     })
   }
+
+
 
   onSubmitUpdate() {
     let documents = this.TicketForm.value.documents
@@ -531,11 +585,11 @@ export class NewListTicketsComponent implements OnInit {
     if (!ids.includes(ticket._id)) {
       this.ticketsOnglets.push(ticket)
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
-        this.activeIndex1 = this.ticketsOnglets.length + 1
+        this.activeIndex1 = this.ticketsOnglets.length + 2
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
     } else {
-      this.activeIndex1 = ids.indexOf(ticket._id) + 2
+      this.activeIndex1 = ids.indexOf(ticket._id) + 3
       this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
@@ -557,6 +611,8 @@ export class NewListTicketsComponent implements OnInit {
       r = r + " - " + ticket.filiere
     if (ticket.demande && ticket.demande != "")
       r = r + " - " + ticket.demande
+    if (ticket.site && ticket.site != "")
+      r = r + " - " + ticket.site
     return r
   }
   messageList = []
@@ -737,6 +793,14 @@ export class NewListTicketsComponent implements OnInit {
 
   ticketAssign: Ticket;
   dropdownMember = []
+
+  onAutoAssign(ticket: Ticket) {
+    this.TicketService.update({ _id: ticket._id, agent_id: this.token.id, assigne_by: this.token.id }).subscribe(data => {
+      this.updateTicketList()
+      this.TicketForm.reset()
+      this.ToastService.add({ severity: 'success', summary: "Auto Assignation du Ticket avec succès" })
+    })
+  }
   onAssign(ticket: Ticket) {
     this.ticketAssign = ticket
     this.TicketForm.patchValue({ ...ticket, service_id: ticket.sujet_id.service_id._id })

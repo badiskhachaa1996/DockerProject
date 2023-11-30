@@ -823,6 +823,8 @@ export class CalenderComponent implements OnInit {
       r = r + " - " + ticket.filiere
     if (ticket.demande)
       r = r + " - " + ticket.demande
+    if (ticket.site && ticket.site != "")
+      r = r + " - " + ticket.site
     return r
   }
   //* Check methods
