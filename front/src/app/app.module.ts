@@ -135,18 +135,18 @@ import { LoginComponent } from './components/login/login.component';
 import { ErrorComponent } from './components/error/error.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AccessComponent } from './components/access/access.component';
-import { ListCampusComponent } from './administration/campus/list-campus/list-campus.component';
-import { AddCampusComponent } from './administration/campus/add-campus/add-campus.component';
-import { ListEcoleComponent } from './administration/ecoles/list-ecole/list-ecole.component';
-import { AddEcoleComponent } from './administration/ecoles/add-ecole/add-ecole.component';
-import { ListAnneeScolaireComponent } from './administration/annees-scolaires/list-annee-scolaire/list-annee-scolaire.component';
-import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
+//import { ListCampusComponent } from './administration/campus/list-campus/list-campus.component';
+//import { AddCampusComponent } from './administration/campus/add-campus/add-campus.component';
+//import { ListEcoleComponent } from './administration/ecoles/list-ecole/list-ecole.component';
+//import { AddEcoleComponent } from './administration/ecoles/add-ecole/add-ecole.component';
+//import { ListAnneeScolaireComponent } from './administration/annees-scolaires/list-annee-scolaire/list-annee-scolaire.component';
+//import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
-import { ListDiplomeComponent } from './administration/diplomes/list-diplome/list-diplome.component';
-import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
-import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
-import { ListGroupeComponent } from './administration/groupes/list-groupe/list-groupe.component';
+//import { ListDiplomeComponent } from './administration/diplomes/list-diplome/list-diplome.component';
+//import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
+//import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
+//import { ListGroupeComponent } from './administration/groupes/list-groupe/list-groupe.component';
 import { MatieresComponent } from './pedagogie/matieres/matieres.component';
 import { AddFormateurComponent } from './pedagogie/formateurs/add-formateur/add-formateur.component';
 import { ListFormateursComponent } from './pedagogie/formateurs/list-formateurs/list-formateurs.component';
@@ -170,7 +170,7 @@ import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-exam
 import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
+//import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
@@ -185,10 +185,10 @@ import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
-import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
+//import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
+//import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
@@ -408,13 +408,16 @@ import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.comp
 import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
 
+import { AdminToolsModule } from './admin-tools/admin-tools.module';
+import { AdministrationModule } from './administration/administration.module';
+
 @NgModule({
   imports: [
     ReactiveFormsModule,
     NgxCaptchaModule,
     CaptchaModule,
     BrowserModule,
-    RecaptchaModule,  
+    RecaptchaModule,
     TableModule,
     SignaturePadModule,
     BrowserModule,
@@ -510,6 +513,8 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     EditorModule,
     QRCodeModule,
     PdfViewerModule,
+    AdminToolsModule,
+    AdministrationModule,
 
     MsalModule.forRoot(
       new PublicClientApplication({
@@ -582,16 +587,16 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     AccessComponent,
     ListPartenaireComponent,
     ListCollaborateurComponent,
-    AddAnneeScolaireComponent,
-    ListAnneeScolaireComponent,
-    AddEcoleComponent,
-    ListEcoleComponent,
-    AddCampusComponent,
-    ListCampusComponent,
-    ListDiplomeComponent,
-    AddDiplomeComponent,
-    AddGroupeComponent,
-    ListGroupeComponent,
+    //AddAnneeScolaireComponent,
+    //ListAnneeScolaireComponent,
+    //AddEcoleComponent,
+    //ListEcoleComponent,
+    //AddCampusComponent,
+    //ListCampusComponent,
+    //ListDiplomeComponent,
+    //AddDiplomeComponent,
+    //AddGroupeComponent,
+    //ListGroupeComponent,
     MatieresComponent,
     AddFormateurComponent,
     ListFormateursComponent,
@@ -612,7 +617,7 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     PartenaireInscriptionComponent,
     FirstConnectionComponent,
     ProspectsComponent,
-    ReinscritComponent,
+    //ReinscritComponent,
     DetailsEtudiantComponent,
     NotificationComponent,
     MpOublieComponent,
@@ -628,9 +633,9 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     GestionEquipeComponent,
     DetailEquipeComponent,
     DemandeConseillerComponent,
-    UsersSettingsComponent,
+    //UsersSettingsComponent,
     GestionEtudiantsComponent,
-    InfoImsComponent,
+    //InfoImsComponent,
     FactureFormateurComponent,
     AnnoncesComponent,
     FormulaireIntunsComponent,
@@ -825,8 +830,8 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     UploadButtonComponent,
     LeadEvaluationComponent,
     AddRemboursementPublicComponent,
-    
-    
+
+
     DocumentsCandidatureViewerComponent,
     GestionProduitsComponent,
     AddRemboussementComponent,

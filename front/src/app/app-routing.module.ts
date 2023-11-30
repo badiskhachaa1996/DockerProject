@@ -10,6 +10,7 @@ import { AccessComponent } from './components/access/access.component';
 /***************************/
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
+/*
 import { ListAnneeScolaireComponent } from './administration/annees-scolaires/list-annee-scolaire/list-annee-scolaire.component';
 import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
 import { ListEcoleComponent } from './administration/ecoles/list-ecole/list-ecole.component';
@@ -20,6 +21,7 @@ import { ListDiplomeComponent } from './administration/diplomes/list-diplome/lis
 import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
 import { ListGroupeComponent } from './administration/groupes/list-groupe/list-groupe.component';
 import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
+ */
 import { MatieresComponent } from './pedagogie/matieres/matieres.component';
 import { AddFormateurComponent } from './pedagogie/formateurs/add-formateur/add-formateur.component';
 import { ListFormateursComponent } from './pedagogie/formateurs/list-formateurs/list-formateurs.component';
@@ -39,18 +41,18 @@ import { UserProfilComponent } from './profil/user-profil/user-profil.component'
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
 import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
 import { AuthGuardService } from './dev-components/guards/auth-guard';
-import { AdminGuardService } from './dev-components/guards/admin-guard';
+//import { AdminGuardService } from './dev-components/guards/admin-guard';
 
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
 import { ProspectGuard } from './dev-components/guards/prospect-guard';
-import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
+//import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { LoginGuard } from './dev-components/guards/login-guard';
-import { FormAdmissionGuard } from './dev-components/guards/formAdmission-guard';
+//import { FormAdmissionGuard } from './dev-components/guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { ContactComponent } from './footer/contact/contact.component';
-import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
+//import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
@@ -71,8 +73,8 @@ import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
-import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
-import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
+//import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
+//import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
@@ -257,8 +259,7 @@ const routes: Routes = [
             },
             {
                 path: 'gestion-des-utilisateurs',
-                component: UsersSettingsComponent,
-                canActivate: [AdminGuardService],
+                loadChildren: () => import('./admin-tools/admin-tools.module').then(m => m.AdminToolsModule)
             },
             {
                 path: 'notes',
@@ -292,68 +293,55 @@ const routes: Routes = [
             },
             {
                 path: 'annee-scolaire',
-                component: ListAnneeScolaireComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ajout-annee-scolaire',
-                component: AddAnneeScolaireComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ecole',
-                component: ListEcoleComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ecole/:id',
-                component: ListEcoleComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ajout-ecole',
-                component: AddEcoleComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'campus',
-                component: ListCampusComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'campus/:id',
-                component: ListCampusComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ajout-campus',
-                component: AddCampusComponent,
-                canActivate: [AuthGuardService,],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'diplomes',
-                component: ListDiplomeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'diplomes/:id',
-                component: ListDiplomeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ajout-diplome',
-                component: AddDiplomeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'groupes',
-                component: ListGroupeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'ajout-groupe',
-                component: AddGroupeComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'matieres',
@@ -412,8 +400,7 @@ const routes: Routes = [
             },
             {
                 path: 'validation-inscrit',
-                component: ReinscritComponent,
-                canActivate: [AuthGuardService],
+                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
                 path: 'entreprises',
@@ -563,7 +550,7 @@ const routes: Routes = [
             { path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
             { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
-            
+
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
@@ -690,8 +677,7 @@ const routes: Routes = [
             },
             {
                 path: 'infos-ims',
-                canActivate: [AdminGuardService],
-                component: InfoImsComponent,
+                loadChildren: () => import('./admin-tools/admin-tools.module').then(m => m.AdminToolsModule),
             },
             {
                 path: 'suivi-preinscription/:user_id',
@@ -1292,10 +1278,8 @@ const routes: Routes = [
             anchorScrolling: 'enabled',
             useHash: false,
         }),
-        
     ],
-
-   
-   
+    exports: [RouterModule],
+    declarations: []
 })
 export class AppRoutingModule { }
