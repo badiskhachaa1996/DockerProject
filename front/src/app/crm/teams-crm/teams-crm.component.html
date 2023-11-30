@@ -123,7 +123,7 @@
                                     <label>Ajouter un membre à cette équipe:</label>
                                     <p-dropdown [options]="userList" (onChange)="initUser($event.value)"
                                     formControlName="membre"  placeholder="Choisissez un membre"></p-dropdown>
-                                </div>
+                                </div><br><br><br><br><br><br>
                                 <div class="col-12">
                                     <p-button [style]="{'width':'20%'}" autoWidth="false" 
                                         label="Ajouter" [disabled]="formAddToTeams.invalid" (click)="addToTeam()"></p-button>

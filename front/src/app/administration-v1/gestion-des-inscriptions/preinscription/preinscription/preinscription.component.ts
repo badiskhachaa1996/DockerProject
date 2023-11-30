@@ -751,7 +751,7 @@ export class PreinscriptionComponent implements OnInit {
     return r
 
   }
-  docProspectList: Prospect[] = []
+  docProspectList: Prospect[] = [];
 
   onshowDossier(student: Prospect) {
     this.defaultEtatDossier = student.etat_dossier;
@@ -1565,22 +1565,26 @@ export class PreinscriptionComponent implements OnInit {
     console.log(this.docProspectList)
     setTimeout(() => {
       this.selectedTabIndex = 3 + this.proscteList.length + this.docProspectList.length
+      this.initDocument(prospect)
+      //this.onshowDossier(prospect)
     }, 5)
 
   }
   handleChange(event) {
     //console.log(event)
-
+console.log(this.proscteList)
     if (this.selectedTabIndex > (3 + this.proscteList.length)) {
-      let p: Prospect = this.docProspectList[this.selectedTabIndex - (3 + this.proscteList.length)]
+      
+      let p: Prospect = this.docProspectList[this.selectedTabIndex - (4 + this.proscteList.length)]
       this.initDocument(p)
-      this.onshowDossier(p)
+      //this.onshowDossier(p)
     } else
       this.onUpdateFiltre()
   }
   initDocument(prospect) {
     this.PROSPECT = prospect;
-    this.showDocAdmin = prospect
+    this.showDocAdmin = prospect;
+    console.log(prospect)
     this.DocumentsCandidature = this.PROSPECT.documents_administrative.filter(document =>
       ["Formulaire de candidature", "Test de Sélection", "Attente"].includes(document.type)
     );

@@ -6,6 +6,7 @@ import { MemberCRM } from 'src/app/models/memberCRM';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { RhService } from 'src/app/services/rh.service';
 @Component({
   selector: 'app-teams-crm',
   templateUrl: './teams-crm.component.html',
@@ -21,17 +22,16 @@ export class TeamsCrmComponent implements OnInit {
   selectedMember = new MemberCRM();
   formAddToTeams = new FormGroup({
     membre: new FormControl('', ),})
-  constructor(private TeamsIntService: TeamsCrmService, private MessageService: MessageService, private UserService: AuthService) { }
+  constructor(private TeamsIntService: TeamsCrmService, private MessageService: MessageService, private UserService: AuthService,private rhService:RhService) { }
 
   ngOnInit(): void {
     this.TeamsIntService.TIgetAll().subscribe(data => {
       this.teams = data
     });
-    this.UserService.getAll().subscribe(users => {
-      //Imagine tu dois charger toute la DB .........
-      users.forEach(user => {
-        if (user && user.type==="Collaborateur")
-          this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+   
+    this.rhService.getAgents().then(data => {
+      data.forEach(user => {
+this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
       })
     })
   }
