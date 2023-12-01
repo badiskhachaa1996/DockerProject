@@ -650,6 +650,10 @@ const routes: Routes = [
 
             // RH paths
             {
+                path: 'rh',
+                loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
+            },
+            {
                 path: 'rh/collaborateurs',
                 loadChildren: () => import('./rh/rh.module').then(m => m.RhModule)
             },

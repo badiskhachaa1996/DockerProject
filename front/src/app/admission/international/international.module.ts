@@ -81,7 +81,7 @@ import { ChartModule } from 'primeng/chart';
         SelectButtonModule,
         SidebarModule,
         TimelineModule,
-        ChartModule
+        ChartModule,
     ]
 })
 export class InternationalModule { }
