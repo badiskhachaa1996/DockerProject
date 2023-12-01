@@ -53,6 +53,7 @@ import { ListSeancesComponent } from './seances/list-seances/list-seances.compon
 import { TuteurCeoComponent } from './tuteur-ceo/tuteur-ceo.component';
 import { TuteurComponent } from './tuteur/tuteur.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
 @NgModule({
     declarations: [
         ProspectsComponent,
@@ -108,7 +109,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         CheckboxModule,
         StepsModule,
         FieldsetModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        DividerModule
     ]
 })
 export class PedagogieModule { }
