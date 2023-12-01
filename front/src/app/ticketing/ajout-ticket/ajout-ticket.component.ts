@@ -77,7 +77,7 @@ export class AjoutTicketComponent implements OnInit {
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
-  ];;
+  ];
   // Haute priorité / Moyenne priorité / Basse priorité / Priorité normale
   prioriteDropdown: any[] = [
     { label: 'Urgent', value: "Urgent" },

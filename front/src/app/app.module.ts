@@ -172,7 +172,7 @@ import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscript
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 //import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
-import { NotificationComponent } from './ticketing/notification/notification.component';
+//import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
@@ -291,14 +291,14 @@ import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.c
 //import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.component';
 //import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 //import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
-import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
-import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
-import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
-import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
-import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
-import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
-import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
-import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
+//import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
+//import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
+//import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
+//import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
+//import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
+//import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
+//import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
+//import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
 import { MailTypeComponent } from './mail-type/mail/mail.component';
@@ -339,8 +339,8 @@ import { FormulaireFrontComponent } from './template/formulaire/formulaire-front
 import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
 import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
 import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
-import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
-import { InformationsComponent } from './informations/informations.component';
+//import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
+//import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
 import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
@@ -349,7 +349,7 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 import { CalenderComponent } from './calender/calender.component';
-import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+//import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { NgModule } from '@angular/core';
@@ -624,7 +624,7 @@ import {RhModule} from "./rh/rh.module";
         ProspectsComponent,
         //ReinscritComponent,
         DetailsEtudiantComponent,
-        NotificationComponent,
+        //NotificationComponent,
         MpOublieComponent,
         ContactComponent,
         InscriptionEntrepriseComponent,
@@ -644,7 +644,7 @@ import {RhModule} from "./rh/rh.module";
         FactureFormateurComponent,
         AnnoncesComponent,
         FormulaireIntunsComponent,
-        AjoutTicketComponent,
+        //AjoutTicketComponent,
         MesOffresComponent,
         SkillsManagementComponent,
         ProgressionPedagogiqueComponent,
@@ -734,8 +734,8 @@ import {RhModule} from "./rh/rh.module";
         //AddAgentC,
         //UpdateAgentComponent,
         //ListAgentV2Component,
-        ConfigurationComponent,
-        DashboardTicketingComponent,
+        //ConfigurationComponent,
+        //DashboardTicketingComponent,
         //PaiementComponent,
         //LeadInformationsPersonnelComponent,
         //LeadProgrammeComponent,
@@ -757,7 +757,7 @@ import {RhModule} from "./rh/rh.module";
         DashboardProjectV2Component,
         //ConfigurationPointeuseComponent,
         IMatchComponent,
-        AjouterUnTicketProjetComponent,
+        //AjouterUnTicketProjetComponent,
         IMatchComponent,
         //CalendrierRhComponent,
         //ConfigurationPointageComponent,
@@ -792,7 +792,7 @@ import {RhModule} from "./rh/rh.module";
         CandidatListComponent,
         EntrepriseListComponent,
         CalenderComponent,
-        NewListTicketsComponent,
+        //NewListTicketsComponent,
         ReadMoreComponent,
         NewCvthequeInterneComponent,
         // ======= Remboursement

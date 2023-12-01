@@ -45,7 +45,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
-  ];;
+  ];
   // Haute priorité / Moyenne priorité / Basse priorité / Priorité normale
   prioriteDropdown: any[] = [
     { label: 'Priorité normale', value: "Priorité normale" },
@@ -210,8 +210,8 @@ export class AjouterUnTicketProjetComponent implements OnInit {
       this.taskSelected = data;
       console.log(this.taskSelected)
       this.TicketForm.patchValue({
-        description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,  
-        priorite: this.taskSelected.priorite,  
+        description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
+        priorite: this.taskSelected.priorite,
     })
 
   })}
