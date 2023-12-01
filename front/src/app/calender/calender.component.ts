@@ -184,7 +184,7 @@ export class CalenderComponent implements OnInit {
   });
 
   eventClickFC(col) {
-    this.router.navigate(['/emergement/' + col.event.id])
+    this.router.navigate(['/pedagogie/emergement/' + col.event.id])
   }
 
   ID = this.route.snapshot.paramMap.get('id');
@@ -823,6 +823,8 @@ export class CalenderComponent implements OnInit {
       r = r + " - " + ticket.filiere
     if (ticket.demande)
       r = r + " - " + ticket.demande
+    if (ticket.site && ticket.site != "")
+      r = r + " - " + ticket.site
     return r
   }
   //* Check methods

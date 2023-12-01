@@ -25,9 +25,9 @@ if (process.argv[2]) {
   if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -92,6 +92,7 @@ mongoose
     console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     process.exit();
   });
+const { Critere } = require("./models/critere");
 
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
@@ -100,6 +101,7 @@ const messageController = require('./controllers/messageController');
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
+const GroupeController = require('./controllers/GroupeController');
 const anneeScolaireController = require('./controllers/anneeScolaireController');
 const ecoleController = require('./controllers/ecoleController');
 const campusController = require('./controllers/campusController');
@@ -142,6 +144,7 @@ const renduDevoirController = require('./controllers/renduDevoirController');
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const factureFormateurController = require('./controllers/factureFormateurController');
 const annonceController = require('./controllers/annonceController');
+// const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
 const progressionPedaController = require('./controllers/progressionPedaController');
 const QSController = require('./controllers/questionnaireSatisfactionController');
@@ -226,9 +229,9 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/formulaireAdmission/FA/getAll" ||
       req.originalUrl == "/soc/formulaireAdmission/RA/getAll" ||
       req.originalUrl == "/soc/formulaireAdmission/EA/getAll" ||
-      req.originalUrl.startsWith("/soc/user/getPopulate/")  ||
+      req.originalUrl.startsWith("/soc/user/getPopulate/") ||
       req.originalUrl == "/soc/demanderemboursement/upload-docs" ||
-    
+
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
@@ -331,7 +334,7 @@ app.use("/soc/ticket", ticketController);
 app.use("/soc/notification", notifController);
 
 app.use("/soc/classe", classeController);
-
+app.use("/soc/groupe", GroupeController);
 app.use("/soc/anneeScolaire", anneeScolaireController);
 
 app.use("/soc/ecole", ecoleController);
@@ -436,6 +439,7 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
+app.use('/soc/critere', require('./controllers/criteresController'))
 app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))

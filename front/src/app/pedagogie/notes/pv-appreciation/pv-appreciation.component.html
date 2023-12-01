@@ -123,7 +123,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-data let-ri="rowIndex">
                 <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
-                    <td><a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
+                    <td><a style="color: black;" [routerLink]="['/pedagogie/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
                             target="_blank">{{data.custom_id}}</a></td>
                     <td class="text-center">{{data.nom |uppercase}} {{data.prenom |titlecase}}</td>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>

@@ -210,8 +210,8 @@ export class PartenaireInscriptionComponent implements OnInit {
     return result
   }
 
-  redirectLogin() {
-    this.router.navigate(["/login"])
+  redirectTo() {
+    this.router.navigate(["admin/partenaire"])
   };
 
 }

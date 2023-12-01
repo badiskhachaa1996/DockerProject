@@ -156,7 +156,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des modules',
                                     icon: 'pi pi-fw pi-tags',
-                                    routerLink: ['/matieres'],
+                                    routerLink: ['/pedagogie/matieres'],
                                 },
                                 {
                                     label: 'Gestion des groupes',
@@ -181,17 +181,17 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une séance',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-seance'],
+                                            routerLink: ['/pedagogie/ajout-seance'],
                                         },
                                         {
                                             label: 'Voir la liste des séances',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/seances'],
+                                            routerLink: ['/pedagogie/seances'],
                                         },
                                         {
                                             label: "Voir l'emploi du temps des séances",
                                             icon: 'pi pi-calendar',
-                                            routerLink: ['/emploi-du-temps'],
+                                            routerLink: ['/pedagogie/emploi-du-temps'],
                                         },
                                     ],
                                 },
@@ -202,19 +202,19 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un formateur',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-formateur'],
+                                            routerLink: ['/pedagogie/ajout-formateur'],
                                         },
                                         {
                                             label: 'Liste des formateurs',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/formateurs'],
+                                            routerLink: ['/pedagogie/formateurs'],
                                         },
                                     ],
                                 },
                                 {
                                     label: "Gestion des inscrits en attente d'assignation",
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/assignation-inscrit'],
+                                    routerLink: ['/pedagogie/assignation-inscrit'],
                                 },
                                 {
                                     label: 'Gestions des étudiants',
@@ -223,12 +223,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un étudiant',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-etudiant'],
+                                            routerLink: ['/pedagogie/ajout-etudiant'],
                                         },
                                         {
                                             label: 'Liste des étudiants',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['etudiants'],
+                                            routerLink: ['pedagogie/etudiants'],
                                         },
                                     ],
                                 },
@@ -239,12 +239,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une évaluation',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-examen'],
+                                            routerLink: ['/pedagogie/ajout-examen'],
                                         },
                                         {
                                             label: 'Liste des évaluations',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/examens'],
+                                            routerLink: ['/pedagogie/examens'],
                                         },
                                     ],
                                 },
@@ -276,14 +276,14 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des entreprises',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/entreprises'],
+                                            routerLink: ['/pedagogie/entreprises'],
                                         },
                                     ],
                                 },
                                 {
                                     label: 'Gestion des tuteurs',
                                     icon: 'pi pi-user',
-                                    routerLink: ['/tuteur'],
+                                    routerLink: ['//pedagogie/tuteur'],
                                 },
                                 {
                                     label: 'Placement',
@@ -292,7 +292,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Alternances',
                                             icon: 'pi pi-list',
-                                            routerLink: ['/liste-contrats'],
+                                            routerLink: ['/pedagogie/liste-contrats'],
                                         },
                                         {
                                             label: 'Stages',
@@ -325,17 +325,17 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Questionnaire satisfaction',
                                     icon: 'pi pi-heart',
-                                    routerLink: ['resultat-qs'],
+                                    routerLink: ['/pedagogie/resultat-qs'],
                                 },
                                 {
                                     label: 'Questionnaire formateur',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['resultat-qf'],
+                                    routerLink: ['/pedagogie/resultat-qf'],
                                 },
                                 {
                                     label: 'Questionnaire fin de formation',
                                     icon: 'pi pi-check-circle',
-                                    routerLink: ['resultat-qff'],
+                                    routerLink: ['pedagogie/resultat-qff'],
                                 },
                             ],
                         },
@@ -590,7 +590,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des étudiants',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['etudiants'],
+                                            routerLink: ['pedagogie/etudiants'],
                                         },
                                     ],
                                 },
@@ -920,12 +920,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un étudiant',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-etudiant'],
+                                            routerLink: ['/pedagogie/ajout-etudiant'],
                                         },
                                         {
                                             label: 'Liste des étudiants',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['etudiants'],
+                                            routerLink: ['pedagogie/etudiants'],
                                         },
                                     ],
                                 },
@@ -947,14 +947,14 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des entreprises',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/entreprises'],
+                                            routerLink: ['/pedagogie/entreprises'],
                                         },
                                     ],
                                 },
                                 {
                                     label: 'Gestion des tuteurs',
                                     icon: 'pi pi-user',
-                                    routerLink: ['/tuteur'],
+                                    routerLink: ['//pedagogie/tuteur'],
                                 },
                                 {
                                     label: 'Placement',
@@ -963,7 +963,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Alternances',
                                             icon: 'pi pi-list',
-                                            routerLink: ['/liste-contrats'],
+                                            routerLink: ['/pedagogie/liste-contrats'],
                                         },
                                         {
                                             label: 'Stages',
@@ -1197,7 +1197,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Gestion des inscrits en attente d'assignation",
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/assignation-inscrit'],
+                                    routerLink: ['/pedagogie/assignation-inscrit'],
                                 },
                             ],
                         },
@@ -1317,7 +1317,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
-                                            routerLink: ['/matieres'],
+                                            routerLink: ['/pedagogie/matieres'],
                                         },
                                         {
                                             label: 'Gestions des séances',
@@ -1327,19 +1327,19 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une séance',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-seance',
+                                                        '/pedagogie/ajout-seance',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Voir la liste des séances',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/seances'],
+                                                    routerLink: ['/pedagogie/seances'],
                                                 },
                                                 {
                                                     label: "Voir l'emploi du temps des séances",
                                                     icon: 'pi pi-calendar',
                                                     routerLink: [
-                                                        '/emploi-du-temps',
+                                                        '/pedagogie/emploi-du-temps',
                                                     ],
                                                 },
                                             ],
@@ -1352,13 +1352,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter un formateur',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-formateur',
+                                                        '/pedagogie/ajout-formateur',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des formateurs',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/formateurs'],
+                                                    routerLink: ['/pedagogie/formateurs'],
                                                 },
                                             ],
                                         },
@@ -1366,7 +1366,7 @@ export class AppMenuComponent implements OnInit {
                                             label: "Gestion des inscrits en attente d'assignation",
                                             icon: 'pi pi-user-plus',
                                             routerLink: [
-                                                '/assignation-inscrit',
+                                                '/pedagogie/assignation-inscrit',
                                             ],
                                         },
                                         {
@@ -1377,13 +1377,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter un étudiant',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-etudiant',
+                                                        '/pedagogie/ajout-etudiant',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['etudiants'],
+                                                    routerLink: ['pedagogie/etudiants'],
                                                 },
                                             ],
                                         },
@@ -1395,13 +1395,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une évaluation',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-examen',
+                                                        '/pedagogie/ajout-examen',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des évaluations',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
+                                                    routerLink: ['/pedagogie/examens'],
                                                 },
                                             ],
                                         },
@@ -1590,7 +1590,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Liste des entreprises',
                                                     icon: 'pi pi-sort-alpha-down',
                                                     routerLink: [
-                                                        '/entreprises',
+                                                        '/pedagogie/entreprises',
                                                     ],
                                                 },
                                             ],
@@ -1598,7 +1598,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des tuteurs',
                                             icon: 'pi pi-user',
-                                            routerLink: ['/tuteur'],
+                                            routerLink: ['//pedagogie/tuteur'],
                                         },
                                         {
                                             label: 'Placement',
@@ -1608,7 +1608,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Alternances',
                                                     icon: 'pi pi-list',
                                                     routerLink: [
-                                                        '/liste-contrats',
+                                                        '/pedagogie/liste-contrats',
                                                     ],
                                                 },
                                                 {
@@ -1759,17 +1759,17 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Questionnaire satisfaction',
                                             icon: 'pi pi-heart',
-                                            routerLink: ['resultat-qs'],
+                                            routerLink: ['/pedagogie/resultat-qs'],
                                         },
                                         {
                                             label: 'Questionnaire formateur',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['resultat-qf'],
+                                            routerLink: ['/pedagogie/resultat-qf'],
                                         },
                                         {
                                             label: 'Questionnaire fin de formation',
                                             icon: 'pi pi-check-circle',
-                                            routerLink: ['resultat-qff'],
+                                            routerLink: ['pedagogie/resultat-qff'],
                                         },
                                     ],
                                 },
@@ -1781,7 +1781,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -1793,7 +1793,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -2003,7 +2003,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
-                                            routerLink: ['/matieres'],
+                                            routerLink: ['/pedagogie/matieres'],
                                         },
                                         {
                                             label: 'Gestion des groupes',
@@ -2028,17 +2028,17 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter une séance',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-seance'],
+                                                    routerLink: ['/pedagogie/ajout-seance'],
                                                 },
                                                 {
                                                     label: 'Voir la liste des séances',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/seances'],
+                                                    routerLink: ['/pedagogie/seances'],
                                                 },
                                                 {
                                                     label: "Voir l'emploi du temps des séances",
                                                     icon: 'pi pi-calendar',
-                                                    routerLink: ['/emploi-du-temps'],
+                                                    routerLink: ['/pedagogie/emploi-du-temps'],
                                                 },
                                             ],
                                         },
@@ -2049,19 +2049,19 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un formateur',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-formateur'],
+                                                    routerLink: ['/pedagogie/ajout-formateur'],
                                                 },
                                                 {
                                                     label: 'Liste des formateurs',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/formateurs'],
+                                                    routerLink: ['/pedagogie/formateurs'],
                                                 },
                                             ],
                                         },
                                         {
                                             label: "Gestion des inscrits en attente d'assignation",
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/assignation-inscrit'],
+                                            routerLink: ['/pedagogie/assignation-inscrit'],
                                         },
                                         {
                                             label: 'Gestions des étudiants',
@@ -2070,12 +2070,12 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un étudiant',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-etudiant'],
+                                                    routerLink: ['/pedagogie/ajout-etudiant'],
                                                 },
                                                 {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['etudiants'],
+                                                    routerLink: ['pedagogie/etudiants'],
                                                 },
                                             ],
                                         },
@@ -2086,12 +2086,12 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter une évaluation',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-examen'],
+                                                    routerLink: ['/pedagogie/ajout-examen'],
                                                 },
                                                 {
                                                     label: 'Liste des évaluations',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
+                                                    routerLink: ['/pedagogie/examens'],
                                                 },
                                             ],
                                         },
@@ -2283,14 +2283,14 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Liste des entreprises',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/entreprises'],
+                                                    routerLink: ['/pedagogie/entreprises'],
                                                 },
                                             ],
                                         },
                                         {
                                             label: 'Gestion des tuteurs',
                                             icon: 'pi pi-user',
-                                            routerLink: ['/tuteur'],
+                                            routerLink: ['//pedagogie/tuteur'],
                                         },
                                         {
                                             label: 'Placement',
@@ -2299,7 +2299,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Alternances',
                                                     icon: 'pi pi-list',
-                                                    routerLink: ['/liste-contrats'],
+                                                    routerLink: ['/pedagogie/liste-contrats'],
                                                 },
                                                 {
                                                     label: 'Stages',
@@ -2330,12 +2330,12 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Insérer un Partenaire',
+                                            label: 'Insérer ',
                                             icon: 'pi pi pi-user-plus',
                                             routerLink: ['/partenaireInscription'],
                                         },
                                         {
-                                            label: 'Liste des partenaires',
+                                            label: 'Liste ',
                                             icon: 'pi pi-sort-alpha-down',
                                             routerLink: ['/admin/partenaire'],
                                         },
@@ -2479,17 +2479,17 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Questionnaire satisfaction',
                                             icon: 'pi pi-heart',
-                                            routerLink: ['resultat-qs'],
+                                            routerLink: ['/pedagogie/resultat-qs'],
                                         },
                                         {
                                             label: 'Questionnaire formateur',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['resultat-qf'],
+                                            routerLink: ['/pedagogie/resultat-qf'],
                                         },
                                         {
                                             label: 'Questionnaire fin de formation',
                                             icon: 'pi pi-check-circle',
-                                            routerLink: ['resultat-qff'],
+                                            routerLink: ['pedagogie/resultat-qff'],
                                         },
                                         {
                                             label: 'Questionnaire ICBS Event title',
@@ -2836,7 +2836,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/formateur/' +
+                                                'pedagogie/emploi-du-temps/formateur/' +
                                                 this.token.id,
                                         },
                                         {
@@ -2847,13 +2847,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une évaluation',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-examen',
+                                                        '/pedagogie/ajout-examen',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des évaluations',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
+                                                    routerLink: ['/pedagogie/examens'],
                                                 },
                                             ],
                                         },
@@ -2953,7 +2953,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
-                                            routerLink: ['/matieres'],
+                                            routerLink: ['/pedagogie/matieres'],
                                         },
                                         {
                                             label: 'Gestions des séances',
@@ -2963,19 +2963,19 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une séance',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-seance',
+                                                        '/pedagogie/ajout-seance',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Voir la liste des séances',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/seances'],
+                                                    routerLink: ['/pedagogie/seances'],
                                                 },
                                                 {
                                                     label: "Voir l'emploi du temps des séances",
                                                     icon: 'pi pi-calendar',
                                                     routerLink: [
-                                                        '/emploi-du-temps',
+                                                        '/pedagogie/emploi-du-temps',
                                                     ],
                                                 },
                                             ],
@@ -2988,13 +2988,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter un formateur',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-formateur',
+                                                        '/pedagogie/ajout-formateur',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des formateurs',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/formateurs'],
+                                                    routerLink: ['/pedagogie/formateurs'],
                                                 },
                                             ],
                                         },
@@ -3002,7 +3002,7 @@ export class AppMenuComponent implements OnInit {
                                             label: "Gestion des inscrits en attente d'assignation",
                                             icon: 'pi pi-user-plus',
                                             routerLink: [
-                                                '/assignation-inscrit',
+                                                '/pedagogie/assignation-inscrit',
                                             ],
                                         },
                                         {
@@ -3013,13 +3013,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter un étudiant',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-etudiant',
+                                                        '/pedagogie/ajout-etudiant',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['etudiants'],
+                                                    routerLink: ['pedagogie/etudiants'],
                                                 },
                                             ],
                                         },
@@ -3031,13 +3031,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une évaluation',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-examen',
+                                                        '/pedagogie/ajout-examen',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des évaluations',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
+                                                    routerLink: ['/pedagogie/examens'],
                                                 },
                                             ],
                                         },
@@ -3072,7 +3072,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Liste des entreprises',
                                                     icon: 'pi pi-sort-alpha-down',
                                                     routerLink: [
-                                                        '/entreprises',
+                                                        '/pedagogie/entreprises',
                                                     ],
                                                 },
                                             ],
@@ -3080,7 +3080,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des tuteurs',
                                             icon: 'pi pi-user',
-                                            routerLink: ['/tuteur'],
+                                            routerLink: ['//pedagogie/tuteur'],
                                         },
                                         {
                                             label: 'Placement',
@@ -3090,7 +3090,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Alternances',
                                                     icon: 'pi pi-list',
                                                     routerLink: [
-                                                        '/liste-contrats',
+                                                        '/pedagogie/liste-contrats',
                                                     ],
                                                 },
                                                 {
@@ -3124,17 +3124,17 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Questionnaire satisfaction',
                                             icon: 'pi pi-heart',
-                                            routerLink: ['resultat-qs'],
+                                            routerLink: ['/pedagogie/resultat-qs'],
                                         },
                                         {
                                             label: 'Questionnaire formateur',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['resultat-qf'],
+                                            routerLink: ['/pedagogie/resultat-qf'],
                                         },
                                         {
                                             label: 'Questionnaire fin de formation',
                                             icon: 'pi pi-check-circle',
-                                            routerLink: ['resultat-qff'],
+                                            routerLink: ['pedagogie/resultat-qff'],
                                         },
                                     ],
                                 },
@@ -3146,7 +3146,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3158,7 +3158,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -3281,7 +3281,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3293,7 +3293,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -3362,7 +3362,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3374,7 +3374,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 });
@@ -3556,7 +3556,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['etudiants'],
+                                                    routerLink: ['pedagogie/etudiants'],
                                                 },
                                             ],
                                         },
@@ -3588,7 +3588,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3600,7 +3600,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -3679,13 +3679,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter un étudiant',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-etudiant',
+                                                        '/pedagogie/ajout-etudiant',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['etudiants'],
+                                                    routerLink: ['pedagogie/etudiants'],
                                                 },
                                             ],
                                         },
@@ -3787,7 +3787,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3799,7 +3799,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -3887,7 +3887,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -3899,7 +3899,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -3953,7 +3953,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Connexion des étudiants',
                                             icon: 'pi pi-fw pi-sign-in',
-                                            routerLink: ['/gestion-etudiants'],
+                                            routerLink: ['pedagogie/gestion-etudiants'],
                                         },
                                         {
                                             label: 'Infos IMS',
@@ -4025,7 +4025,7 @@ export class AppMenuComponent implements OnInit {
                                             label: "Gestion des inscrits en attente d'assignation",
                                             icon: 'pi pi-user-plus',
                                             routerLink: [
-                                                '/assignation-inscrit',
+                                                '/pedagogie/assignation-inscrit',
                                             ],
                                         },
                                     ],
@@ -4049,7 +4049,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -4061,7 +4061,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -4291,7 +4291,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                     ],
@@ -4328,7 +4328,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/classe/' +
+                                                'pedagogie/emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
                                         /*{
@@ -4340,7 +4340,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
                                             routerLink:
-                                                'details/' + dataEtu._id,
+                                                'pedagogie/details/' + dataEtu._id,
                                         },
                                     ],
                                 },
@@ -4473,7 +4473,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Emploi du temps',
                                             icon: 'pi pi-calendar',
                                             routerLink:
-                                                'emploi-du-temps/formateur/' +
+                                                'pedagogie/emploi-du-temps/formateur/' +
                                                 this.token.id,
                                         },
                                         {
@@ -4484,13 +4484,13 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une évaluation',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-examen',
+                                                        '/pedagogie/ajout-examen',
                                                     ],
                                                 },
                                                 {
                                                     label: 'Liste des évaluations',
                                                     icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/examens'],
+                                                    routerLink: ['/pedagogie/examens'],
                                                 },
                                             ],
                                         },
@@ -4521,12 +4521,12 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-share-alt',
                                 items: [
                                     {
-                                        label: 'Insérer un Partenaire',
+                                        label: 'Insérer ',
                                         icon: 'pi pi pi-user-plus',
                                         routerLink: ['/partenaireInscription']
                                     },
                                     {
-                                        label: 'Liste des partenaires',
+                                        label: 'Liste ',
                                         icon: 'pi pi-sort-alpha-down',
                                         routerLink: ['/admin/partenaire']
                                     },
@@ -4581,7 +4581,7 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-share-alt',
                                 items: [
                                     {
-                                        label: 'Liste des partenaires',
+                                        label: 'Liste ',
                                         icon: 'pi pi-sort-alpha-down',
                                         routerLink: ['/admin/partenaire']
                                     },
@@ -5086,6 +5086,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
+                console.log("HIHI")
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {
@@ -5342,6 +5343,11 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Gestion des équipes',
                                                     icon: 'pi pi-users',
                                                     routerLink: ['crm/teams'],
+                                                },
+                                                {
+                                                    label: 'Gestion des critères',
+                                                    icon: 'pi pi-users',
+                                                    routerLink: ['crm-criteres'],
                                                 },
                                                 {
                                                     label: 'Gestion des produits',
@@ -5846,14 +5852,14 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Liste des entreprises',
                                         icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/entreprises'],
+                                        routerLink: ['/pedagogie/entreprises'],
                                     },
                                 ],
                             },
                             {
                                 label: 'Gestion des tuteurs',
                                 icon: 'pi pi-user',
-                                routerLink: ['/tuteur'],
+                                routerLink: ['//pedagogie/tuteur'],
                             },
                             {
                                 label: 'Placement',
@@ -5862,7 +5868,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Alternances',
                                         icon: 'pi pi-list',
-                                        routerLink: ['/liste-contrats'],
+                                        routerLink: ['/pedagogie/liste-contrats'],
                                     },
                                     {
                                         label: 'Stages',
@@ -5901,7 +5907,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des modules',
                                     icon: 'pi pi-fw pi-tags',
-                                    routerLink: ['/matieres'],
+                                    routerLink: ['/pedagogie/matieres'],
                                 },
                                 {
                                     label: 'Gestion des groupes',
@@ -5926,17 +5932,17 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une séance',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-seance'],
+                                            routerLink: ['/pedagogie/ajout-seance'],
                                         },
                                         {
                                             label: 'Voir la liste des séances',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/seances'],
+                                            routerLink: ['/pedagogie/seances'],
                                         },
                                         {
                                             label: "Voir l'emploi du temps des séances",
                                             icon: 'pi pi-calendar',
-                                            routerLink: ['/emploi-du-temps'],
+                                            routerLink: ['/pedagogie/emploi-du-temps'],
                                         },
                                     ],
                                 },
@@ -5947,19 +5953,19 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un formateur',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-formateur'],
+                                            routerLink: ['/pedagogie/ajout-formateur'],
                                         },
                                         {
                                             label: 'Liste des formateurs',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/formateurs'],
+                                            routerLink: ['/pedagogie/formateurs'],
                                         },
                                     ],
                                 },
                                 {
                                     label: "Gestion des inscrits en attente d'assignation",
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/assignation-inscrit'],
+                                    routerLink: ['/pedagogie/assignation-inscrit'],
                                 },
                                 {
                                     label: 'Gestions des étudiants',
@@ -5968,12 +5974,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un étudiant',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-etudiant'],
+                                            routerLink: ['/pedagogie/ajout-etudiant'],
                                         },
                                         {
                                             label: 'Liste des étudiants',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['etudiants'],
+                                            routerLink: ['pedagogie/etudiants'],
                                         },
                                     ],
                                 },
@@ -5984,12 +5990,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une évaluation',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-examen'],
+                                            routerLink: ['/pedagogie/ajout-examen'],
                                         },
                                         {
                                             label: 'Liste des évaluations',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/examens'],
+                                            routerLink: ['/pedagogie/examens'],
                                         },
                                     ],
                                 },
@@ -6012,17 +6018,17 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Questionnaire satisfaction',
                                     icon: 'pi pi-heart',
-                                    routerLink: ['resultat-qs'],
+                                    routerLink: ['/pedagogie/resultat-qs'],
                                 },
                                 {
                                     label: 'Questionnaire formateur',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['resultat-qf'],
+                                    routerLink: ['/pedagogie/resultat-qf'],
                                 },
                                 {
                                     label: 'Questionnaire fin de formation',
                                     icon: 'pi pi-check-circle',
-                                    routerLink: ['resultat-qff'],
+                                    routerLink: ['pedagogie/resultat-qff'],
                                 },
                                 {
                                     label: 'Questionnaire ICBS Event title',
@@ -6034,98 +6040,61 @@ export class AppMenuComponent implements OnInit {
                     );
                 }
                 if (services_list.includes('Administration')) {
-                    this.items.push({
-                        label: 'Administration',
-                        icon: 'pi pi-fw pi-inbox',
-                        items: [
-                            {
-                                label: 'Gestions des années scolaires',
-                                icon: 'pi pi-calendar',
-                                items: [
-                                    {
-                                        label: 'Ajouter une année scolaire',
-                                        icon: 'pi pi-calendar-plus',
-                                        routerLink: ['/ajout-annee-scolaire'],
-                                    },
-                                    {
-                                        label: 'Liste des années scolaires',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/annee-scolaire'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des écoles',
-                                icon: 'pi pi-home',
-                                items: [
-                                    {
-                                        label: 'Ajouter une école',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-ecole'],
-                                    },
-                                    {
-                                        label: 'Liste des écoles',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/ecole'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des campus',
-                                icon: 'pi pi-home',
-                                items: [
-                                    {
-                                        label: 'Ajouter un campus',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-campus'],
-                                    },
-                                    {
-                                        label: 'Liste des campus',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/campus'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Gestions des diplômes',
-                                icon: 'pi pi-bookmark',
-                                items: [
-                                    {
-                                        label: 'Ajouter un diplôme',
-                                        icon: 'pi pi-plus-circle',
-                                        routerLink: ['/ajout-diplome'],
-                                    },
-                                    {
-                                        label: 'Liste des diplômes',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/diplomes'],
-                                    },
-                                ],
-                            },
+                    this.items.push(
+                        {
+                            label: 'Administration V2',
+                            icon: 'pi pi-users',
+                            items: [
 
-                            {
-                                label: 'Gestions des agents',
-                                icon: 'pi pi-users',
-                                items: [
-                                    {
-                                        label: 'Ajouter un agent',
-                                        icon: 'pi pi-user-plus',
-                                        routerLink: ['/admin/ajout-agent'],
-                                    },
-                                    {
-                                        label: 'Liste des agents',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/admin/agents'],
-                                    },
-                                ],
-                            },
-                            {
-                                label: 'Validation des inscrits',
-                                icon: 'pi pi-check-square',
-                                routerLink: ['/validation-inscrit'],
-                            },
-                        ],
-                    });
+                                {
+                                    label: 'Préinscription - Admission',
+                                    icon: 'pi pi-prime',
+                                    routerLink: ['/administration/preinscription']
+                                },
+                                {
+                                    label: 'Inscription',
+                                    icon: 'pi pi-prime',
+                                    routerLink: ['/administration/inscription']
+                                },
+                                {
+                                    label: 'Paramètres',
+                                    icon: 'pi pi-cog',
+                                    items: [
+                                        {
+                                            label: 'Session',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/admission/rentree']
+                                        },
+                                        {
+                                            label: 'Ecole',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['/admission/ecoles']
+                                        },
+                                        {
+                                            label: 'Campus',
+                                            icon: 'pi pi-map-marker',
+                                            routerLink: ['/campus']
+                                        },
+                                        {
+                                            label: 'Formation',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/admission/formations']
+                                        },
+                                        {
+                                            label: 'Groupes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/new-groupes']
+                                        },
+                                        {
+                                            label: 'Evaluations',
+                                            icon: 'pi pi-prime',
+                                            routerLink: ['/administration/evaluation']
+                                        },
+                                    ]
+                                },
+                            ]
+                        }
+                    )
                 }
                 if (services_list.includes('iMatch')) {
                     let role = service_dic['iMatch']
@@ -6205,7 +6174,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Liste des entreprises',
                                             icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/entreprises']
+                                            routerLink: ['/pedagogie/entreprises']
                                         },
                                     ]
                                 },
@@ -6429,59 +6398,97 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/rh/teams']
                                         }
                                     ]
-                                },
-                                {
-                                    label: 'Administration V2',
-                                    icon: 'pi pi-users',
+                                }, {
+                                    label: 'Ancien Administration',
+                                    icon: 'pi pi-fw pi-inbox',
                                     items: [
-
                                         {
-                                            label: 'Préinscription - Admission',
-                                            icon: 'pi pi-prime',
-                                            routerLink: ['/administration/preinscription']
-                                        },
-                                        {
-                                            label: 'Inscription',
-                                            icon: 'pi pi-prime',
-                                            routerLink: ['/administration/inscription']
-                                        },
-                                        {
-                                            label: 'Paramètres',
-                                            icon: 'pi pi-cog',
+                                            label: 'Gestions des années scolaires',
+                                            icon: 'pi pi-calendar',
                                             items: [
                                                 {
-                                                    label: 'Session',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/admission/rentree']
+                                                    label: 'Ajouter une année scolaire',
+                                                    icon: 'pi pi-calendar-plus',
+                                                    routerLink: ['/ajout-annee-scolaire'],
                                                 },
                                                 {
-                                                    label: 'Ecole',
-                                                    icon: 'pi pi-list',
-                                                    routerLink: ['/admission/ecoles']
+                                                    label: 'Liste des années scolaires',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/annee-scolaire'],
                                                 },
-                                                {
-                                                    label: 'Campus',
-                                                    icon: 'pi pi-map-marker',
-                                                    routerLink: ['/campus']
-                                                },
-                                                {
-                                                    label: 'Formation',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/admission/formations']
-                                                },
-                                                {
-                                                    label: 'Groupes',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: ['/groupes']
-                                                },
-                                                {
-                                                    label: 'Evaluations',
-                                                    icon: 'pi pi-prime',
-                                                    routerLink: ['/administration/evaluation']
-                                                },
-                                            ]
+                                            ],
                                         },
-                                    ]
+                                        {
+                                            label: 'Gestions des écoles',
+                                            icon: 'pi pi-home',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter une école',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-ecole'],
+                                                },
+                                                {
+                                                    label: 'Liste des écoles',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/ecole'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Gestions des campus',
+                                            icon: 'pi pi-home',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un campus',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-campus'],
+                                                },
+                                                {
+                                                    label: 'Liste des campus',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/campus'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Gestions des diplômes',
+                                            icon: 'pi pi-bookmark',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un diplôme',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-diplome'],
+                                                },
+                                                {
+                                                    label: 'Liste des diplômes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/diplomes'],
+                                                },
+                                            ],
+                                        },
+
+                                        {
+                                            label: 'Gestions des agents',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un agent',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: ['/admin/ajout-agent'],
+                                                },
+                                                {
+                                                    label: 'Liste des agents',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/admin/agents'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Validation des inscrits',
+                                            icon: 'pi pi-check-square',
+                                            routerLink: ['/validation-inscrit'],
+                                        },
+                                    ],
                                 },
                                 {
                                     label: 'Ticketing',
@@ -6531,7 +6538,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Connexion des étudiants',
                                             icon: 'pi pi-fw pi-sign-in',
-                                            routerLink: ['/gestion-etudiants'],
+                                            routerLink: ['pedagogie/gestion-etudiants'],
                                         },
                                         {
                                             label: 'Infos IMS',
@@ -6817,17 +6824,17 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Questionnaire satisfaction',
                                 icon: 'pi pi-heart',
-                                routerLink: ['resultat-qs'],
+                                routerLink: ['/pedagogie/resultat-qs'],
                             },
                             {
                                 label: 'Questionnaire formateur',
                                 icon: 'pi pi-briefcase',
-                                routerLink: ['resultat-qf'],
+                                routerLink: ['/pedagogie/resultat-qf'],
                             },
                             {
                                 label: 'Questionnaire fin de formation',
                                 icon: 'pi pi-check-circle',
-                                routerLink: ['resultat-qff'],
+                                routerLink: ['pedagogie/resultat-qff'],
                             },
                             {
                                 label: 'Questionnaire ICBS Event title',
@@ -6905,7 +6912,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-dollar',
                             items: [
                                 {
-                                    label: 'Ajouter un remboursement',
+                                    label: 'Ajouter ',
                                     icon: 'pi pi-plus-circle',
                                     routerLink: ['/ajout-remboursement'],
                                 },
@@ -6999,7 +7006,9 @@ export class AppMenuComponent implements OnInit {
 
 function isCHECK3(documents) {
     let r = false
-    let documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+
+    let documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+        "Relevés de note de deux dernières année"]
     documents.forEach(val => {
         if (documentsObligatoires.includes(val.nom) && !val.path)
             r = true

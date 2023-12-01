@@ -11,6 +11,8 @@ import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
+import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
+import {GestionOperationService} from "../../gestion-operation/gestion-operation.service";
 @Component({
   selector: 'app-suivre-lead',
   templateUrl: './suivre-lead.component.html',
@@ -20,7 +22,10 @@ export class SuivreLeadComponent implements OnInit {
   showFollow: LeadCRM = null;
   token: any;
   userConnected :User;
-  docAdded:boolean=false
+  visible_contact:boolean=false;
+  indexHistorique:number;
+  docAdded:boolean=false;
+  filterSource = [{ label: 'Toutes les sources', value: null }]
   buttonName:string="Ajouter";
   Actuelle_lead:LeadCRM = null
   followForm = new FormGroup({
@@ -31,6 +36,7 @@ export class SuivreLeadComponent implements OnInit {
     campus: new FormControl(''),
     note_choix: new FormControl(''),
     produit: new FormControl(''),
+    operation:new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -50,8 +56,15 @@ export class SuivreLeadComponent implements OnInit {
     modalite_paiement: new FormControl(''),
     note: new FormControl(''),
   });
+  formUpdateContact=new FormGroup({
+    
+    canal:new FormControl(''),
+    note: new FormControl(''),
+    suite_contact: new FormControl(''),
+  })
   memberList = []
   produitList = [];
+  operationList = [];
   canalList = [
     { label: "Facebook", value: "Facebook" },
     { label: "WhatsApp", value: "WhatsApp" },
@@ -100,7 +113,7 @@ export class SuivreLeadComponent implements OnInit {
     { label: 'Qualifié', value: 'Qualifié' },
   ]
   constructor(private UserService: AuthService, private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
-    private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService) { }
+    private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService,private operationService:GestionOperationService,private sourceService:GestionSourcesServices) { }
   @Input() LEAD_ID
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -112,9 +125,13 @@ export class SuivreLeadComponent implements OnInit {
     })
 
     this.LCS.getOneByID(this.LEAD_ID).subscribe(lead => {
-      this.followForm.patchValue({ ...lead,  }); 
-      this.showFollow = lead
-    })
+      this.followForm.patchValue({ ...lead,produit:lead.produit[0] }); 
+      setTimeout(() => {
+        this.showFollow = lead;
+      }, 10);
+    });
+      
+   
     this.TeamCRMService.MIgetAll().subscribe(data => {
       data.forEach(val => {
         this.memberList.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
@@ -136,11 +153,22 @@ export class SuivreLeadComponent implements OnInit {
         this.produitList.push({ label: val.nom, value: val._id })
       })
     })
+    this.operationService.GetAllOperation().subscribe(data => {
+      data.forEach(val => {
+        this.operationList.push({ label: val.nom, value: val._id })
+      })
+    })
+    this.sourceService.GetAllSource().subscribe(data => {
+      data.forEach(val=>{
+        this.filterSource.push({label:val.nom,value:val._id});
+        this.canalList.push({label:val.nom,value:val._id});
+      })
+      });
 
   }
   //Follow Form
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({...lead ,})
+    this.followForm.patchValue({...lead ,produit:lead.produit[0]})
     this.showFollow = lead
 
   }
@@ -195,6 +223,8 @@ export class SuivreLeadComponent implements OnInit {
   }
   onUpdateDate(listname, index, varname, value) {
     this.followForm[listname][index][varname] = new Date(value)
+    this.showFollow.contacts[index][varname]=value;
+    console.log(this.showFollow);
   }
   //Documents
   indexDocuments = 0
@@ -218,7 +248,7 @@ export class SuivreLeadComponent implements OnInit {
   }
   deleteFile(index) {
     this.showFollow.documents.splice(index, 1)
-    this.showFollow.documents[index] = null;
+    
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
@@ -290,11 +320,35 @@ export class SuivreLeadComponent implements OnInit {
   }
   deletePaiement(index) {
     this.showFollow.ventes.splice(index, 1)
-    this.showFollow.ventes[index] = null;
+    
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
+  }
+  onUpdatecontacte(index){
+    this.indexHistorique=index
+    console.log(this.showFollow.contacts[index].canal);
+    this.formUpdateContact.patchValue({
+    canal:this.showFollow.contacts[index].canal,
+    note:this.showFollow.contacts[index].note, 
+    suite_contact:this.showFollow.contacts[index].suite_contact,
+    })
+    setTimeout(() => {
+      this.visible_contact=true
+    }, 10);
+  
+    
+
+  }
+  onUpdateCon(){
+    this.showFollow.contacts[this.indexHistorique].canal=this.formUpdateContact.value.canal;
+    this.showFollow.contacts[this.indexHistorique].suite_contact=this.formUpdateContact.value.suite_contact;
+    this.showFollow.contacts[this.indexHistorique].note=this.formUpdateContact.value.note;
+    this.LCS.update(this.showFollow).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+
   }
   
 }

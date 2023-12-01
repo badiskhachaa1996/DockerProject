@@ -252,7 +252,7 @@ export class AjoutExamenComponent implements OnInit {
           severity: "success",
           summary: "Nouvel examen ajouté",
         });
-        this.router.navigate(['/examens'])
+        this.router.navigate(['/pedagogie/examens'])
       },
       (error) => {
         console.error(error)

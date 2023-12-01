@@ -515,8 +515,7 @@
                             autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
                             formControlName="formation"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6"
-                        >
+                    <div class="field col-12 md:col-6">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choisissez un programme français"
@@ -1837,104 +1836,14 @@
                             </form>
                         </p-dialog>
 
-                        <!--<p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
-                            [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5"
-                            [paginator]="true" rowExpandMode="single" [totalRecords]=""
-                            styleClass="p-datatable-gridlines">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th style="width: 5em"></th>
-                                    <th pSortableColumn="id">
-                                        ID Ticket <p-sortIcon field="id"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="nom">
-                                        Statut <p-sortIcon field="nom"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="choix">
-                                        Assigné à <p-sortIcon field="choix"> </p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="rythme">
-                                        Traité le <p-sortIcon field="rythme"> </p-sortIcon>
-                                    </th>
-                                    <th>Action</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-ticket>
-
-                                <tr>
-                                    <td>
-                                        <button type="button" pButton pRipple [pRowToggler]="ticket"
-                                            class="p-button-text p-button-rounded p-button-plain" [icon]="
-                                    expanded
-                                        ? 'pi pi-chevron-down'
-                                        : 'pi pi-chevron-right'
-                                "></button>
-                                    </td>
-                                    <td>
-                                        {{ ticket?.customid }}
-                                    </td>
-                                    <td>
-                                        {{ ticket?.statut }}
-                                    </td>
-                                    <td>
-                                        {{ ticket?.agent_id?.firstname}}
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <i style="padding-left: 3%;color: rgb(72, 72, 255);" class="pi pi-send m-1"
-                                            (click)="showDialog(ticket); scrollToTop()" pTooltip="Affecter"
-                                            aria-hidden="true" tooltipPosition="bottom"></i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="rowexpansion" let-user>
-                                <tr>
-                                    <td colspan="6">
-
-
-                                        <p-table responsiveLayout="scroll">
-                                            <ng-template pTemplate="header">
-                                <tr>
-
-                                    <th>Commentaire</th>
-                                    <th>Commenté par </th>
-                                    <th>Commenté le </th>
-
-
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        {{ user?.user_id?.firstname | titlecase }}
-                                        {{ user?.user_id?.lastname | uppercase }}
-                                    </td>
-                                    <td>
-                                        {{
-                                        user?.date_naissance
-                                        }}
-                                    </td>
-
-                                </tr>
-
-
-                            </ng-template>
-
-                        </p-table>
-
-                        </ng-template>
-
-                        </p-table>-->
                         <h4 style="text-align: center;" *ngIf="PROSPECT.etat_dossier === 'Complet'">Etat du
                             dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
                         </h4>
                         <h4 style="text-align: center;"
-                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier">Etat
+                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier || PROSPECT.etat_dossier==='En cours de traitement'">
+                            Etat
                             du dossier <p-dropdown [options]="etat_dossierDropdown"
                                 placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
                                 (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
@@ -1950,103 +1859,8 @@
                                 #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif"
                                 pInputFile />
                         </div>
-                        <a href="javascript:void(0)" (click)="onshowDocuments()">Afficher le dossier -></a>
-                        <div class="card grid" *ngIf="PROSPECT && showDocuments">
-                            <h3 class="col-12">Documents</h3>
-                            <p class="col-12"
-                                [ngClass]="{'green-border':PROSPECT.etat_dossier=== 'Complet','orange-border':(PROSPECT.etat_dossier!= 'Complet'||!PROSPECT.etat_dossier)}"
-                                style="text-align: center;padding: 9px;">
-                                Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par
-                                l'équipe d'admission.<br>
-                                Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
-                            </p>
-                            <div class="card col-12 grid">
-                                <div class="col-6">
-                                    Je réside en France
-                                    <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                                <div class="col-6">
-                                    Je cherche une alternance
-                                    <p-checkbox [(ngModel)]="alternance" [binary]="true" inputId="binary"></p-checkbox>
-                                </div>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12"
-                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc>
-                                    <tr *ngIf="doc.nom!='Carte de séjour' || (alternance || resideFr)">
-                                        <td>
-                                            {{doc.nom}}
-                                            <span style="color: red;"
-                                                *ngIf="documentsObligatoires.includes(doc.nom) || doc.nom=='Copie Visa' || doc.nom=='Carte vitale ou attestation provisoire' || doc.nom=='Carte de séjour'">(Obligatoire)</span>
-                                        </td>
-                                        <td style="text-align: center;">
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file" (click)="downloadFile(doc)"
-                                                style="margin-left: 2%;color: green;" aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="initUpload(doc)" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <!--<h3 class="col-8">Autre documents</h3>
-                            <div class="col-4">
-                                <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus"
-                                    autoWidth="false" label="Ajouter un autre document"></p-button>
-                            </div>
-                            <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8"
-                                rowExpandMode="single" [rows]="8" [rowHover]="true" class="col-12" [paginator]="true"
-                                [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-                                responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Document</th>
-                                        <th>Lien</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
-                                    <tr [pEditableRow]="doc">
-                                        <td pEditableColumn>
-                                            <p-cellEditor>
-                                                <ng-template pTemplate="input">
-                                                    <input type="text" pInputText [(ngModel)]="doc.nom">
-                                                </ng-template>
-                                                <ng-template pTemplate="output">
-                                                    {{doc.nom}}
-                                                </ng-template>
-                                            </p-cellEditor>
-                                        </td>
-                                        <td>
-                                            <i *ngIf="doc.path" pTooltip="Télécharger le document"
-                                                tooltipPosition="bottom" class="pi pi-file"
-                                                (click)="downloadOtherFile(doc)" style="margin-left: 2%;color: green;"
-                                                aria-hidden="true"></i>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
-                                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
-                                                aria-hidden="true"></i>
-                                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
-                                                class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>-->
-                        </div>
+                        <a href="javascript:void(0)" (click)="showDocuments = !showDocuments">Afficher le dossier -></a>
+                        <app-lead-dossier *ngIf="showDocuments" [PROSPECT_ID]="PROSPECT._id"></app-lead-dossier>
                     </p-accordionTab>
                     <p-accordionTab>
                         <ng-template pTemplate="header">
@@ -2330,10 +2144,10 @@
                                 <label For="date_d">Date</label>
                                 <p>{{PROSPECT.decision.date_decision | date:'dd MMMM YY'}}</p>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-6" *ngIf="PROSPECT.decision && PROSPECT.decision.membre">
                                 <label For="explication">Membre de Commission</label><br>
-                                <p>{{PROSPECT.decision?.membre?.firstname | titlecase}}
-                                    {{PROSPECT.decision?.membre?.lastname | uppercase}}</p>
+                                <p *ngFor="let membre of PROSPECT.decision.membre">{{membre?.firstname | titlecase}}
+                                    {{membre?.lastname | uppercase}}<br></p>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Explication</label><br>
@@ -2349,7 +2163,7 @@
                         <form class="p-fluid p-formgrid grid" [formGroup]="DecisionForm"
                             *ngIf="modeAffichageE4!='Voir'">
                             <div class="field col-12 md:col-6">
-                                <label For="decisoin_admission">Décision du conseil d'oriontation pédagogique<span
+                                <label For="decisoin_admission">Décision du conseil d'orientation pédagogique<span
                                         style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="decision_dropdown" [style]="{'width':'100%'}"
@@ -2362,8 +2176,8 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Membre de Commission</label><br>
-                                <p-dropdown [options]="memberDropdown" [style]="{'width':'100%'}"
-                                    formControlName="membre"></p-dropdown>
+                                <p-multiSelect [options]="memberDropdown" [style]="{'width':'100%'}"
+                                    formControlName="membre"></p-multiSelect>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="explication">Explication<span style="color: red;"> *
@@ -2532,6 +2346,44 @@
                                 <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
                             </div>
                         </ng-template>
+                        <div class="col-4">
+                            <p-button [style]="{'width':'10%'}" (click)="visibleADM=true;showUploadFile=PROSPECT;"
+                                icon="pi pi-plus" autoWidth="false"></p-button>
+                        </div>
+                        <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
+                            [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
+                            [filterDelay]="0" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Lien</th>
+                                    <th>Traité par</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                                <tr>
+                                    <td>{{doc?.custom_id}}</td>
+                                    <td>{{doc?.type}}</td>
+                                    <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                                    <td>
+                                        <a (click)="downloadAdminFile(doc.path,PROSPECT)">Télécharger</a>
+                                    </td>
+                                    <td>{{doc?.traited_by}}</td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                            *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                            aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                            class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
 
                     </p-accordionTab>
                     <p-accordionTab>
@@ -2626,7 +2478,7 @@
                     </p-accordionTab>
                 </p-accordion>
             </div>
-            <div class="col-12" *ngIf="showUploadFile!=null">
+           <!-- <div class="col-12" *ngIf="showUploadFile!=null">
                 <div class="card">
                     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                         (click)="showUploadFile = null" aria-hidden="true"> </i>
@@ -2670,7 +2522,7 @@
 
                     </form>
                 </div>
-            </div>
+            </div>-->
         </p-tabPanel>
         <p-tabPanel style="width: 100%;" *ngFor="let PROSPECT of candidatureList" [closable]="true"
             header="CANDIDATURE - {{PROSPECT?.user_id?.firstname}} {{PROSPECT?.user_id?.lastname}}">

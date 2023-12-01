@@ -53,8 +53,17 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
     config: AppConfig;
 
     subscription: Subscription;
-    
-    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService) { }
+    showMenu = true
+    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService) {
+        configService.changeEmitted$.subscribe(text => {
+            this.showMenu = false
+            console.log('POOF')
+            setTimeout(() => {
+                this.showMenu = true
+                console.log('UNPOOF')
+            }, 5)
+        });
+    }
 
     ngOnInit() {
         this.config = this.configService.config;
@@ -77,7 +86,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 if (!this.menuClick && this.isOverlay()) {
                     this.menuInactiveDesktop = true;
                 }
-                if (!this.menuClick){
+                if (!this.menuClick) {
                     this.overlayMenuActive = false;
                 }
             }
@@ -97,7 +106,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         if (this.isDesktop()) {
             if (this.app.menuMode === 'overlay') {
-                if(this.menuActiveMobile === true) {
+                if (this.menuActiveMobile === true) {
                     this.overlayMenuActive = true;
                 }
 
@@ -162,7 +171,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
         return window.innerWidth > 992;
     }
 
-    isMobile(){
+    isMobile() {
         return window.innerWidth < 1024;
     }
 

@@ -3,9 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+    recaptchaKey: '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU ',
     origin: "https://152.228.219.55/soc/",
     key: "6abdfb04243e096a4a51b46c8f3d4b32",
-    clientId: "24cf4a22-5a5f-4c56-bab4-29884bc6c06f",
+    clientId: "5f12fbdb-67a1-437c-be11-4efe4cd2ee27",
     User: null,
     filterFR: {
         "startsWith": "Commence par",
@@ -2021,7 +2022,7 @@ export const environment = {
           value: 'new'
         },
         {
-          label: "En cours de traiement",
+          label: "En cours ",
           value: 'in-progress'
         },
         {
@@ -2032,6 +2033,14 @@ export const environment = {
           label: "Acceptée",
           value: 'accepted'
         },
+        {
+          label: "Orienté",
+          value: 'oriented'
+        },
+        {
+          label: "Remboursé",
+          value: 'refunded'
+        }
       
       ],
 };
