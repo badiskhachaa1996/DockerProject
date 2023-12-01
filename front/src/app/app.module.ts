@@ -282,6 +282,9 @@ import { AdministrationModule } from './administration/administration.module';
 import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
+import { CriteresComponent } from './crm/criteres/criteres.component';
+import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { AddGroupeV2Component } from './administration-v1/configuration/groupes/add-groupe-v2/add-groupe-v2.component';
 
 @NgModule({
     imports: [
@@ -480,6 +483,9 @@ import { RhModule } from "./rh/rh.module";
         //AddEntrepriseComponent,
         //ListEntrepriseComponent,
         ExterneComponent,
+        GroupesComponent,
+        AddGroupeV2Component,
+        CriteresComponent,
         SuiviePreinscriptionComponent,
         //ListSeancesComponent,
         //AddSeanceComponent,
