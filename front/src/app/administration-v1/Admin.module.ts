@@ -23,13 +23,13 @@ import { DocumentsCandidatureViewerComponent } from './documents-candidature-vie
 import { EvaluationComponent } from './evaluation/evaluation.component';
 import { InscriptionComponent } from './gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { PreinscriptionComponent } from './gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
     declarations: [
         DocumentsCandidatureViewerComponent,
         EvaluationComponent,
-        InscriptionComponent,
-        PreinscriptionComponent
+        PreinscriptionComponent,
     ],
     imports: [
         CommonModule,
@@ -51,7 +51,8 @@ import { PreinscriptionComponent } from './gestion-des-inscriptions/preinscripti
         FullCalendarModule,
         DataViewModule,
         CheckboxModule,
-        StepsModule
+        StepsModule,
+        AccordionModule
     ]
 })
 export class AdminModule { }

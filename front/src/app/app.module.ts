@@ -285,6 +285,7 @@ import { RhModule } from "./rh/rh.module";
 import { CriteresComponent } from './crm/criteres/criteres.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 import { AddGroupeV2Component } from './administration-v1/configuration/groupes/add-groupe-v2/add-groupe-v2.component';
+import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
 
 @NgModule({
     imports: [
@@ -454,6 +455,7 @@ import { AddGroupeV2Component } from './administration-v1/configuration/groupes/
         BlocksComponent,
         BlockViewer,
         MediaComponent,
+        InscriptionComponent,
         PaymentComponent,
         ConfirmationComponent,
         PersonalComponent,

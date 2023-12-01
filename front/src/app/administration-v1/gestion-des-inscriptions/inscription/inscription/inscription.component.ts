@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { Table } from 'primeng/table';
+import mongoose from 'mongoose';
 
 @Component({
   selector: 'app-inscription',
@@ -16,10 +17,18 @@ export class InscriptionComponent implements OnInit {
   @ViewChild('dt1') dt1: Table | undefined;
   prospects: Prospect[] = [];
   prospectI: Prospect[] = [];
+  PROSPECT:Prospect;
   prospect_acctuelle: Prospect;
   visible: boolean = false;
+  visibleC: boolean=false;
+  visibleADM: boolean=false;
+  visiblep: boolean=false;
+  showUploadFile = null;
+  selectedTabIndex: number = 0;
   showupdateLeadForm: boolean = false;
   displayFilter: boolean = false;
+  showdoc:boolean=false;
+  showDocAdmin: Prospect = null
   civiliteList = environment.civilite;
   paysList = environment.pays;
   nationList = environment.nationalites;
@@ -30,6 +39,9 @@ export class InscriptionComponent implements OnInit {
   programeFrDropdown = [];
   programEnDropdown = [];
   rentreeList = [];
+  DocumentsCandidature: any[] = [];
+  DocumentsAdministratif: any[] = [];
+  DoccumentProfessionel: any[] = [];
   groupe_dropdown = [
     { value: "BIG DATA 1", label: "BIG DATA 1" },
     { value: "BIG DATA 2", label: "BIG DATA 2" },
@@ -101,6 +113,31 @@ export class InscriptionComponent implements OnInit {
     { label: "Etape 4", value: "Etape 4" },
 
   ];
+  documentDropdownc = [
+    { label: "Formulaire de candidature", value: "Formulaire de candidature" },
+    { label: "Test de Sélection", value: "Test de Sélection" },
+    { label: "Attente", value: "Attente" },
+  ]
+  documentDropdowna = [
+    { label: "Attestation inscription", value: "Attestation inscription" },
+    { label: "Certificat de scolarité", value: "Certificat de scolarité" },
+    { label: "Attestation de présence / assiduité", value: "Attestation de présence / assiduité" },
+    { label: "Réglement intérieur", value: "Réglement intérieur" },
+    { label: "Livret d'accueil", value: "Livret d'accueil" },
+    { label: "Autorisation de diffusion et d'utilisation de photographie et vidéos", value: "Autorisation de diffusion et d'utilisation de photographie et vidéos" }
+  ];
+  documentDropdownpro = [
+    { label: "Convention de stage", value: "Convention de stage" },
+    { label: "Attestation de stage", value: "Attestation de stage" },
+    { label: "Satisfaction de stage", value: "Satisfaction de stage" },
+    { label: "Contrat d'apprentisage", value: "Contrat d'apprentisage" },
+    { label: "Convention de formation", value: "Convention de formation" },
+    { label: "Livret de suivi", value: "Livret de suivi" },
+    { label: "Convocation d'examen", value: "Convocation d'examen" },
+    { label: "Bulletin de note", value: "Bulletin de note" },
+    { label: "Suivi post formation-orientation", value: "Suivi post formation-orientation" }
+
+  ];
   filterValue: string | null = null;
   updateLeadForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], Validators.required),
@@ -129,6 +166,14 @@ export class InscriptionComponent implements OnInit {
     teams: new FormControl('',),
     Ypareo: new FormControl('',),
     groupe: new FormControl('',),
+  })
+  uploadAdminFileForm: FormGroup = new FormGroup({
+    //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("",),
+    note: new FormControl(""),
+    traited_by: new FormControl("",),
+    type: new FormControl(""),
   })
 
   constructor(private FAService: FormulaireAdmissionService, private admissionService: AdmissionService, private messageService: MessageService,) { }
@@ -407,5 +452,23 @@ export class InscriptionComponent implements OnInit {
       this.Fgroupe = false;
     }
   }
-
+  onShowDoc(procpect:Prospect){
+    this.showdoc=true;
+    this.PROSPECT=procpect;
+  }
+  addDoc() {
+    if (this.PROSPECT.documents_autre)
+      this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    else
+      this.PROSPECT.documents_autre = [{ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() }]
+  }
+  convertTime(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
 }
