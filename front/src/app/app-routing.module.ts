@@ -467,7 +467,7 @@ const routes: Routes = [
             /** end */
 
             /**Calender */
-            { path: 'calendar', component: CalenderComponent, canActivate: [AuthGuardService] },
+            { path: 'calendar', loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule) },
             /**informations */
             //{ path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */

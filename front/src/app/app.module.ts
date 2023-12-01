@@ -697,7 +697,7 @@ import {RhModule} from "./rh/rh.module";
         //CandidatListComponent,
         EntrepriseListComponent,
         CandidatListComponent,
-        CalenderComponent,
+        //CalenderComponent,
         //NewListTicketsComponent,
         ReadMoreComponent,
         //NewCvthequeInterneComponent,
