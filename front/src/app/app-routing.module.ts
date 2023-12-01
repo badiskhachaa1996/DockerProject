@@ -776,59 +776,8 @@ const routes: Routes = [
             },
             /* International Haithem */
             {
-                path: 'international/sourcing',
-                component: SourcingComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/orientation',
-                component: OrientationComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/admission',
-                component: AdmissionIntComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/consulaire',
-                component: ConsulaireComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/paiement',
-                component: PaiementsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/teams',
-                component: TeamsIntComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/member',
-                component: MemberIntComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/alternants',
-                component: PovPartenaireAlternantsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/partenaire/ajout-alternant/:code_commercial',
-                component: AjoutAlternantPartenaireComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/partenaire/alternants/:id',
-                component: PovPartenaireAlternantsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/partenaire/:id',
-                component: PovPartenaireListProspectsComponent,
-                canActivate: [AuthGuardService],
+                path: 'international',
+                loadChildren: () => import('./admission/international/international.module').then(m => m.InternationalModule)
             },
             {
                 path: 'dashboard/partenaire',
@@ -844,87 +793,7 @@ const routes: Routes = [
                 component: DashboardPartenaireComponent,
                 canActivate: [AuthGuardService],
             },
-            {
-                path: 'international/dashboard',
-                component: DashboardIntComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/dashboard/performance',
-                component: PerformanceComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/brands/:id',
-                component: BrandsListComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/brands',
-                component: BrandsListComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/prospects',
-                component: ListProspectsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/actualite/:type',
-                component: ActualiteComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/actualite',
-                component: ActualiteComponent,
-                canActivate: [AuthGuardService],
-            },
-            /* Generation Documents */
-            {
-                path: 'international/generation-documents',
-                component: GenerationDocComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocInscriptionComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/preinscription/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocPreinscriptionComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/paiement/:ecole/:prospect_id/:formation/:rentree',
-                component: PaiementComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocPaiementPreinscriptionComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocPaiementPreinscriptionAcompteComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocPaiementAcompteComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/derogation/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocDerogationComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'international/generation-documents/lettre-acceptation/:ecole/:prospect_id/:formation/:rentree',
-                component: GenDocLettreAcceptationComponent,
-                canActivate: [AuthGuardService],
-            },
+          
             /* Module CRM */
 
             {
