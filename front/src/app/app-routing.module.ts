@@ -274,9 +274,7 @@ const routes: Routes = [
             },
 
             {
-                path: 'notifications',
-                component: NotificationComponent,
-                canActivate: [AuthGuardService],
+                path: 'notifications', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule)
             },
             { path: 'contact', component: ContactComponent },
             {
@@ -325,7 +323,7 @@ const routes: Routes = [
             /** end */
 
             /**Calender */
-            { path: 'calendar', component: CalenderComponent, canActivate: [AuthGuardService] },
+            { path: 'calendar', loadChildren: () => import('./calender/calender.module').then(m => m.CalenderModule) },
             /**informations */
             //{ path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
@@ -515,14 +513,15 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             /*Ticketing V2*/
-            { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
+            { path: 'ticketing/Ajouter-un-ticket-projet', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
+            { path: 'ticketing/configuration', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
+            { path: 'ticketing/dashboard', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
             { path: 'configuration/service-mention', loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule) },
             /* Ticketing V3 */
-            { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/mes-tickets-services', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/mes-tickets/:ticket_id', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/mes-tickets', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
+            { path: 'ticketing/mes-tickets-services', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
+            { path: 'ticketing/mes-tickets/:ticket_id', loadChildren: () => import('./ticketing/ticketing.module').then(m => m.TicketingModule) },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',

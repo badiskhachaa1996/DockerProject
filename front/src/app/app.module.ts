@@ -254,7 +254,7 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 import { CalenderComponent } from './calender/calender.component';
-import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+//import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NgModule } from '@angular/core';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
@@ -499,7 +499,7 @@ import { RhModule } from "./rh/rh.module";
         //ProspectsComponent,
         //ReinscritComponent,
         //DetailsEtudiantComponent,
-        NotificationComponent,
+        //NotificationComponent,
         MpOublieComponent,
         ContactComponent,
         InscriptionEntrepriseComponent,
@@ -518,7 +518,7 @@ import { RhModule } from "./rh/rh.module";
         FactureFormateurComponent,
         //AnnoncesComponent,
         FormulaireIntunsComponent,
-        AjoutTicketComponent,
+        //AjoutTicketComponent,
         //MesOffresComponent,
         //SkillsManagementComponent,
         //ProgressionPedagogiqueComponent,
@@ -608,8 +608,8 @@ import { RhModule } from "./rh/rh.module";
         //AddAgentC,
         //UpdateAgentComponent,
         //ListAgentV2Component,
-        ConfigurationComponent,
-        DashboardTicketingComponent,
+        //ConfigurationComponent,
+        //DashboardTicketingComponent,
         //PaiementComponent,
         //LeadInformationsPersonnelComponent,
         //LeadProgrammeComponent,
@@ -631,7 +631,7 @@ import { RhModule } from "./rh/rh.module";
         DashboardProjectV2Component,
         //ConfigurationPointeuseComponent,
         IMatchComponent,
-        AjouterUnTicketProjetComponent,
+        //AjouterUnTicketProjetComponent,
         IMatchComponent,
         //CalendrierRhComponent,
         //ConfigurationPointageComponent,
@@ -666,8 +666,8 @@ import { RhModule } from "./rh/rh.module";
         //CandidatListComponent,
         EntrepriseListComponent,
         CandidatListComponent,
-        CalenderComponent,
-        NewListTicketsComponent,
+        //CalenderComponent,
+        //NewListTicketsComponent,
         ReadMoreComponent,
         //NewCvthequeInterneComponent,
         // ======= Remboursement
