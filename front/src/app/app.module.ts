@@ -399,7 +399,6 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
-import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
 import { CrmListComponent } from './crm/crm-list/crm-list.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
@@ -715,22 +714,22 @@ import {RhModule} from "./rh/rh.module";
         ResultatsFormulaireIcbsComponent,
         FormAdmissionDubaiComponent,
         FormAdmissionDubaiResultsComponent,
-        AjoutLeadcrmComponent,
-        ListLeadcrmComponent,
+        //AjoutLeadcrmComponent,
+        //ListLeadcrmComponent,
         //CollaborateursComponent,
         //CongesAutorisationsComponent,
         //ActualiteNotificationsComponent,
         //DemandesReclamationsComponent,
         //DashboardRhComponent,
-        LeadsNonAttribuesComponent,
-        MesLeadsComponent,
-        TeamsCrmComponent,
-        MemberCrmComponent,
-        ImportCrmComponent,
-        LeadsNonQualifiesComponent,
-        LeadsPrequalifiesComponent,
-        VentesCRMComponent,
-        LeadsQualifiesComponent,
+        //LeadsNonAttribuesComponent,
+        //MesLeadsComponent,
+        //TeamsCrmComponent,
+        //MemberCrmComponent,
+        //ImportCrmComponent,
+        //LeadsNonQualifiesComponent,
+        //LeadsPrequalifiesComponent,
+        //VentesCRMComponent,
+        //LeadsQualifiesComponent,
         //AddAgentC,
         //UpdateAgentComponent,
         //ListAgentV2Component,
@@ -746,9 +745,9 @@ import {RhModule} from "./rh/rh.module";
         ConfigurationMailComponent,
         MailTypeComponent,
         MailAutoComponent,
-        MyTargetComponent,
-        ConfigurationTargetComponent,
-        DashboardTargetComponent,
+        //MyTargetComponent,
+        //ConfigurationTargetComponent,
+        //DashboardTargetComponent,
         DocCheckerComponent,
         LeadCandidatureComponent,
         GestionComponent,
@@ -839,16 +838,15 @@ import {RhModule} from "./rh/rh.module";
 
 
         DocumentsCandidatureViewerComponent,
-        GestionProduitsComponent,
+        //GestionProduitsComponent,
         AddRemboussementComponent,
-        FormCrmExtComponent,
-        CrmListComponent,
+        //CrmListComponent,
         LogementComponent,
         GestionLogementComponent,
         BookingV2Component,
-        SuivreLeadComponent,
-        GestionOperationComponent,
-        GestionSrourcesComponent
+        //SuivreLeadComponent,
+        //GestionOperationComponent,
+        //GestionSrourcesComponent
     ],
     providers: [{provide: LOCALE_ID, useValue: 'fr-FR'}, MessageService, ConfirmationService, DatePipe,
         {provide: LocationStrategy, useClass: HashLocationStrategy},

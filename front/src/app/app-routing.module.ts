@@ -241,12 +241,12 @@ import { AddRemboursementPublicComponent } from './remboursement/add-rembourseme
 import { GestionProduitsComponent } from "./crm/gestion-produits/gestion-produits.component";
 import { AddRemboussementComponent } from './remboursement/add-remboursement/add-remboussement.component';
 import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
-import { CrmListComponent } from './crm/crm-list/crm-list.component';
+//import { CrmListComponent } from './crm/crm-list/crm-list.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
-import {GestionSrourcesComponent} from "./crm/gestion-srources/gestion-srources.component";
-import {GestionOperationComponent} from "./crm/gestion-operation/gestion-operation.component";
+import { GestionSrourcesComponent } from "./crm/gestion-srources/gestion-srources.component";
+import { GestionOperationComponent } from "./crm/gestion-operation/gestion-operation.component";
 const routes: Routes = [
     {
         path: '',
@@ -925,121 +925,13 @@ const routes: Routes = [
                 component: GenDocLettreAcceptationComponent,
                 canActivate: [AuthGuardService],
             },
-            /* Module CRM
-            {
-                path: 'crm/leads/ajout',
-                component: AjoutLeadcrmComponent,
-                canActivate: [AuthGuardService],
-            },*/
+            /* Module CRM */
 
             {
-                path: 'crm/leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
-                component: AjoutLeadcrmComponent,
-                canActivate: [AuthGuardService],
+                path: 'crm',
+                loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
             },
 
-            {
-                path: 'crm/leads/liste',
-                component: ListLeadcrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/liste',
-                component: CrmListComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/liste-non-attribue',
-                component: LeadsNonAttribuesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/mes-leads/liste/:id',
-                component: MesLeadsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/teams',
-                component: TeamsCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/member',
-                component: MemberCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/import',
-                component: ImportCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/non-qualifies',
-                component: LeadsNonQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/pre-qualifies',
-                component: LeadsPrequalifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/qualifies',
-                component: LeadsQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/mes-leads/non-qualifies/:id',
-                component: LeadsNonQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-
-            {
-                path: 'crm/mes-leads/pre-qualifies/:id',
-                component: LeadsPrequalifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/mes-leads/qualifies/:id',
-                component: LeadsQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/ventes',
-                component: VentesCRMComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/target/configuration',
-                component: ConfigurationTargetComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/target/my-target',
-                component: MyTargetComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/target/dashboard',
-                component: DashboardTargetComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/gestion-produits',
-                component: GestionProduitsComponent,
-                canActivate: [AuthGuardService],
-            },
-
-            {
-                path: 'crm/gestion-sources',
-                component: GestionSrourcesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/gestion-operations',
-                component: GestionOperationComponent,
-                canActivate: [AuthGuardService],
-            },
 
 
             /* Intuns */
@@ -1205,8 +1097,7 @@ const routes: Routes = [
         component: InscriptionEntrepriseComponent,
     },
     {
-        path: 'formulaire-crm/:ecole',
-        component: FormCrmExtComponent,
+        path: 'formulaire-crm/:ecole', loadChildren: () => import('./crm/formcrm.module').then(m => m.FormCRMModule)
     },
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'formulaire-mi', component: FormulaireMIComponent },

@@ -57,7 +57,7 @@
                         ]
                     },
                     "configurations": {
-                        "prod": {
+                        "production": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -125,27 +125,28 @@
                                 }
                             ]
                         },
-                        "local": {}
+                        "local": {
+
+                        }
                     },
                     "defaultConfiguration": "local"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                      "browserTarget": "sakai:build"
+                    },
                     "configurations": {
-                        "prod": {
-                            "browserTarget": "sakai:build:prod"
+                        "production": {
+                            "browserTarget": "sakai:build:production"
                         },
                         "qa": {
                             "browserTarget": "sakai:build:qa"
                         },
                         "dev": {
                             "browserTarget": "sakai:build:dev"
-                        },
-                        "local": {
-                            "browserTarget": "sakai:build:local"
                         }
-                    },
-                    "defaultConfiguration": "local"
+                    }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
