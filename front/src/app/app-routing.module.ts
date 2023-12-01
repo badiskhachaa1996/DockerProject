@@ -542,7 +542,7 @@ const routes: Routes = [
             /**Calender */
             { path: 'calendar', component: CalenderComponent, canActivate: [AuthGuardService] },
             /**informations */
-            { path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
+            //{ path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
             { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
 
@@ -793,7 +793,7 @@ const routes: Routes = [
                 component: DashboardPartenaireComponent,
                 canActivate: [AuthGuardService],
             },
-          
+
             /* Module CRM */
 
             {
@@ -843,69 +843,9 @@ const routes: Routes = [
                 component: UpdateAgentComponent,
                 loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule)
             },
-            /* Configuration Formulaire Admission */
             {
-                path: 'admission/formations',
-                component: FormationAdmissionComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/ecoles',
-                component: EcoleAdmissionComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/rentree',
-                component: RentreeScolaireAdmissionComponent,
-                canActivate: [AuthGuardService],
-            },
-
-            // dubai admission form
-            {
-                path: 'admission/dubai-form-results',
-                component: FormAdmissionDubaiResultsComponent,
-                canActivate: [AuthGuardService],
-            },
-            //Accès Prospect V2
-            {
-                path: 'admission/lead-programme/:id',
-                component: LeadProgrammeComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-dossier/:id',
-                component: LeadDossierComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-paiements/:id',
-                component: LeadPaiementsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-documents/:id',
-                component: LeadDocumentsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-informations/:id',
-                component: LeadInformationsPersonnelComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-suivi/:id',
-                component: LeadSuiviComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-candidature/:id',
-                component: LeadCandidatureComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'admission/lead-evaluation',
-                component: LeadEvaluationComponent,
-                canActivate: [AuthGuardService],
+                path: 'admission',
+                loadChildren: () => import('./admission/admission.module').then(m => m.AdmissionModule)
             },
             { path: 'administration/preinscription', component: PreinscriptionComponent, canActivate: [AuthGuardService], },
             { path: 'administration/inscription', component: InscriptionComponent, canActivate: [AuthGuardService], },
