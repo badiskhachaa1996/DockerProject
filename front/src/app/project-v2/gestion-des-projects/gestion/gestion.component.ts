@@ -28,6 +28,19 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
+  
+  tasks = [
+    { label: 'Tâche 1', value: 'task1', category: 'todo' },
+    { label: 'Tâche 2', value: 'task2', category: 'todo' },
+    { label: 'Tâche en cours 1', value: 'inprogress1', category: 'doing' },
+    { label: 'Tâche en cours 2', value: 'inprogress2', category: 'doing' },
+    { label: 'Tâche terminée 1', value: 'completed1', category: 'done' },
+    { label: 'Tâche terminée 2', value: 'completed2', category: 'done' },
+  ];
+  todoTasks = this.tasks.filter(task => task.category === 'todo');
+  doingTasks = this.tasks.filter(task => task.category === 'doing');
+  doneTasks = this.tasks.filter(task => task.category === 'done');
+
   private task_id!: string;
   private project_id!: string;
   private ressources_id!: string;
@@ -38,6 +51,8 @@ export class GestionComponent implements OnInit {
   showressources: boolean = false;
   showCreateticket: boolean = false;
   showbudget: boolean = false;
+  selectedTabIndex: number = 1;
+  selectedTabIndex1: number = 0;
   showUpdateProjectForm: boolean = false;
   showAddRessourcesForm: boolean = false;
   showAddBudgetForm: boolean = false;
@@ -50,10 +65,14 @@ export class GestionComponent implements OnInit {
   responsableListe: any[] = [];
   project!: Project[];
   task!: Task[];
+  taskToDo:Task[]=[];
+  taskDoing: Task[]=[];
+  taskDone: Task[]=[];
   ressources!: Ressources[];
   budget!: Budget[];
   userConnected!: User;
   token: any;
+  projectSelecteds:Project[]=[];
   showTachesTable: boolean = false;
   showtache: boolean = false;
   showAddTacheForm: boolean = false;
@@ -356,16 +375,22 @@ export class GestionComponent implements OnInit {
 
   }
 
-  showTaskList(project_id) {
-    this.projectService.getTasksByIdProject(project_id).then((data) => {
-      
+  showTaskList(project) {
+   
+    this.projectSelecteds.push(project);
+    this.projectService.getTasksByIdProject(project._id).then((data) => {
       this.task = [];
       this.task = data;
-      this.projectIdForTask = project_id;
-      data.forEach((d) => {})
-
-
-    })
+      this.projectIdForTask = project._id;
+      data.forEach((d) => {
+        this.task.push(d);
+        if (d.etat === "En attente de traitement") {
+          this.taskToDo.push(d);
+        }
+      });
+      console.log(this.taskToDo);
+      this.selectedTabIndex=3;
+    });
   }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
