@@ -169,11 +169,9 @@
                         "styles": [
                             "src/styles.css",
                             "node_modules/@fullcalendar/common/main.css",
-                            "src/styles.scss",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
                             "node_modules/@fullcalendar/timegrid/main.min.css",
-                            "node_modules/@fullcalendar/common/main.css",
                             "node_modules/@fullcalendar/daygrid/main.css",
                             "node_modules/@fullcalendar/timegrid/main.css",
                             "node_modules/@fullcalendar/list/main.css",
