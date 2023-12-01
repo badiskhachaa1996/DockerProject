@@ -461,7 +461,7 @@ export class AddEtudiantComponent implements OnInit {
       ((response) => {
         console.log(response.data)
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
-        this.router.navigate(['etudiants']);
+        this.router.navigate(['pedagogie/etudiants']);
 
 
       }), error => {
