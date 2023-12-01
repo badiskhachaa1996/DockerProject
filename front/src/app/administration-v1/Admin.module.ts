@@ -23,9 +23,21 @@ import { DocumentsCandidatureViewerComponent } from './documents-candidature-vie
 import { EvaluationComponent } from './evaluation/evaluation.component';
 import { InscriptionComponent } from './gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { PreinscriptionComponent } from './gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import {AddGroupeV2Component} from "./configuration/groupes/add-groupe-v2/add-groupe-v2.component";
+import {GroupesComponent} from "./configuration/groupes/groupes.component";
 
 @NgModule({
     declarations: [
+        DocumentsCandidatureViewerComponent,
+        EvaluationComponent,
+        InscriptionComponent,
+        PreinscriptionComponent,
+        AddGroupeV2Component,
+        GroupesComponent
+    ],
+    exports:[
+        AddGroupeV2Component,
+        GroupesComponent,
         DocumentsCandidatureViewerComponent,
         EvaluationComponent,
         InscriptionComponent,
