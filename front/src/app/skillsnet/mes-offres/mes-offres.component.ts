@@ -686,7 +686,7 @@ export class MesOffresComponent implements OnInit {
   }
 
   InitMatching(annonce: Annonce) {
-    this.router.navigate(['matching', annonce._id])
+    this.router.navigate(['skillsnet/matching', annonce._id])
   }
 
   onGenerateID(profilLabel, contrat) {

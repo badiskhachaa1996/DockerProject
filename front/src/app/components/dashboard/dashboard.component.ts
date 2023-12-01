@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit {
   });
 
   eventClickFC(col) {
-    this.router.navigate(['/emergement/' + col.event.id])
+    this.router.navigate(['/pedagogie/emergement/' + col.event.id])
   }
 
   ID = this.route.snapshot.paramMap.get('id');

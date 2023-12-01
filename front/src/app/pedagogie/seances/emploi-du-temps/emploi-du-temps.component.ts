@@ -101,7 +101,7 @@ export class EmploiDuTempsComponent implements OnInit {
         });
       })
     } else {
-      this.router.navigate(['/emergement/' + col.event.id])
+      this.router.navigate(['/pedagogie/emergement/' + col.event.id])
     }
 
   }

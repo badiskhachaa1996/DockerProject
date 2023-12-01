@@ -66,7 +66,7 @@ export class ListEntrepriseCeoComponent implements OnInit {
   // methode de edirection vers la liste des présences
   showPresence(alternant_id: String): void 
   {
-    this.router.navigate(["details/" + alternant_id]);
+    this.router.navigate(["pedagogie/details/" + alternant_id]);
   }
 
   // méthode de téléchargement du calendrier de la formation
