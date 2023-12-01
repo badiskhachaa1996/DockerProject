@@ -34,6 +34,8 @@ import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Ticket } from 'src/app/models/Ticket';
 import { Observable, Subscription } from 'rxjs';
+import {BadgeModule} from 'primeng/badge';
+
 
 @Component({
   selector: 'app-list-leadcrm',
@@ -49,6 +51,9 @@ export class ListLeadcrmComponent implements OnInit {
   filterSource = [{ label: 'Toutes les sources', value: null }]
 
   filterOperation = []
+  filterEquipe=[
+    { label: 'Toutes les équipe', value: null }
+  ]
   filteredLeadsCount:number
 
   filterAffecte = [
@@ -202,6 +207,11 @@ export class ListLeadcrmComponent implements OnInit {
       this.canalList.push({label:val.nom,value:val._id});
     })
     });
+    this.TeamCRMService.TIgetAll().subscribe(data => {
+      data.forEach(val=>{
+this.filterEquipe.push({label:val.nom,value:val.nom});
+      })
+    })
     
   }
 
