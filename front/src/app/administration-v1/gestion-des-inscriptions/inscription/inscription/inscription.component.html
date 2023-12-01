@@ -322,7 +322,7 @@
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-at m-1" pTooltip="Compte"
                         (click)="onShowCompte(prospect); " aria-hidden="true" tooltipPosition="bottom"></i>
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1" pTooltip="Document"
-                        aria-hidden="true" tooltipPosition="bottom"></i>
+                        aria-hidden="true" tooltipPosition="bottom" (click)="onShowDoc(prospect)"></i>
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1" pTooltip="Paiement"
                         aria-hidden="true" tooltipPosition="bottom"></i>
                     <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -540,3 +540,283 @@
             (click)="clearFilter()"></button>
     </div>
 </p-sidebar>
+<p-dialog header="Documents de l'étudiant" [(visible)]="showdoc">
+    <p-accordion [(activeIndex)]="selectedTabIndex">
+        <p-dialog header="Documents de Candidature" [(visible)]="visibleC">
+            <div class="col-12" *ngIf="showUploadFile!=null">
+                <div class="card">
+                    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                        (click)="showUploadFile = null" aria-hidden="true"> </i>
+                    <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">
+                        Ajouter un
+                        document à : {{
+                        showUploadFile?.user_id?.firstname }} {{
+                        showUploadFile?.user_id?.lastname | uppercase }}
+                    </h3>
+
+                    <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                        <div class="field col-6">
+                            <label>Date de délivrance</label>
+                            <input type="date" formControlName="date" pInputText />
+                        </div>
+
+                        <div class="field col-6">
+                            <label>Note :</label>
+                            <textarea pInputTextarea formControlName="note"></textarea>
+                        </div>
+
+                        <div class="field col-12">
+                            <label>Type de document :</label>
+                            <p-dropdown [options]="documentDropdownc" formControlName="type"
+                                placeholder="Choisissez un type" filter="true">
+                                <br><br><br><br><br><br>
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-12">
+                            <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                                customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000"
+                                [auto]="true" #fileInput>
+                            </p-fileUpload>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </p-dialog>
+        <p-accordionTab>
+            <ng-template pTemplate="header">
+                <div>
+                    <span style="font-weight: bold;">CANDIDATURE</span> &nbsp;
+                </div>
+            </ng-template>
+
+            <div class="col-4">
+                <p-button [style]="{'width':'10%'}" (click)="visibleC=true;showUploadFile=PROSPECT;"
+                    icon="pi pi-plus" autoWidth="false"></p-button>
+            </div>
+            <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsCandidature" rowExpandMode="single"
+                [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
+                [filterDelay]="0" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Lien</th>
+                        <th>Traité par</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                    <tr>
+                        <td>{{doc?.custom_id}}</td>
+                        <td>{{doc?.type}}</td>
+                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                        <td>
+                            <a (click)="downloadAdminFile(doc.path,PROSPECT)">Télécharger</a>
+                        </td>
+                        <td>{{doc?.traited_by}}</td>
+                        <td>
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+        <p-accordionTab>
+            <ng-template pTemplate="header">
+                <div>
+                    <span style="font-weight: bold;">ADMISSIONS</span> &nbsp;
+                </div>
+
+            </ng-template>
+            <app-lead-dossier [PROSPECT_ID]="PROSPECT?._id"></app-lead-dossier>
+        </p-accordionTab>
+        <p-accordionTab>
+            <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM">
+                <div class="col-12" *ngIf="showUploadFile!=null">
+                    <div class="card">
+                        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                            (click)="showUploadFile = null" aria-hidden="true"> </i>
+                        <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">
+                            Ajouter un
+                            document à : {{
+                            showUploadFile?.user_id?.firstname }} {{
+                            showUploadFile?.user_id?.lastname | uppercase }}
+                        </h3>
+
+                        <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                            <div class="field col-6">
+                                <label>Date de délivrance</label>
+                                <input type="date" formControlName="date" pInputText />
+                            </div>
+
+                            <div class="field col-6">
+                                <label>Note :</label>
+                                <textarea pInputTextarea formControlName="note"></textarea>
+                            </div>
+
+                            <div class="field col-12">
+                                <label>Type de document :</label>
+                                <p-dropdown [options]="documentDropdowna" formControlName="type"
+                                    placeholder="Choisissez un type" filter="true"></p-dropdown>
+                                <br><br><br><br><br><br>
+                            </div>
+                            <div class="field col-12">
+                                <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                                    customUpload="true" fileLimit="1"
+                                    accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                    [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000"
+                                    [auto]="true" #fileInput>
+                                </p-fileUpload>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </p-dialog>
+            <ng-template pTemplate="header">
+                <div>
+                    <span style="font-weight: bold;">DOSSIER ADMINISTRATIF</span> &nbsp;
+                </div>
+            </ng-template>
+            <div class="col-4">
+                <p-button [style]="{'width':'10%'}" (click)="visibleADM=true;showUploadFile=PROSPECT;"
+                    icon="pi pi-plus" autoWidth="false"></p-button>
+            </div>
+            <p-table #dt1 dataKey="_id" [rows]="8" [value]="DocumentsAdministratif" rowExpandMode="single"
+                [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
+                [filterDelay]="0" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Lien</th>
+                        <th>Traité par</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                    <tr>
+                        <td>{{doc?.custom_id}}</td>
+                        <td>{{doc?.type}}</td>
+                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                        <td>
+                            <a (click)="downloadAdminFile(doc.path,PROSPECT)">Télécharger</a>
+                        </td>
+                        <td>{{doc?.traited_by}}</td>
+                        <td>
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </p-accordionTab>
+        <p-accordionTab>
+            <ng-template pTemplate="header">
+                <div>
+                    <span style="font-weight: bold;">DOSSIER PROFESSIONNEL</span> &nbsp;
+
+                </div>
+            </ng-template>
+            <p-dialog header="Documents du dossier professionel" [(visible)]="visiblep">
+                <div class="col-12" *ngIf="showUploadFile!=null">
+                    <div class="card">
+                        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                            (click)="showUploadFile = null" aria-hidden="true"> </i>
+                        <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">
+                            Ajouter un
+                            document à : {{
+                            showUploadFile?.user_id?.firstname }} {{
+                            showUploadFile?.user_id?.lastname | uppercase }}
+                        </h3>
+
+                        <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                            <div class="field col-6">
+                                <label>Date de délivrance</label>
+                                <input type="date" formControlName="date" pInputText />
+                            </div>
+
+                            <div class="field col-6">
+                                <label>Note :</label>
+                                <textarea pInputTextarea formControlName="note"></textarea>
+                            </div>
+
+                            <div class="field col-12">
+                                <label>Type de document :</label>
+                                <p-dropdown [options]="documentDropdownpro" formControlName="type"
+                                    placeholder="Choisissez un type" filter="true"></p-dropdown>
+                                <br><br><br><br><br><br>
+                            </div>
+                            <br><br><br><br><br><br>
+                            <div class="field col-12">
+                                <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                                    customUpload="true" fileLimit="1"
+                                    accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                    [disabled]="uploadAdminFileForm.invalid" maxFileSize="10000000"
+                                    [auto]="true" #fileInput>
+                                </p-fileUpload>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </p-dialog>
+            <div class="col-4">
+                <p-button [style]="{'width':'10%'}"
+                    (click)="addDoc();visiblep=true;showUploadFile=showDocAdmin;" icon="pi pi-plus"
+                    autoWidth="false"></p-button>
+            </div>
+            <p-table #dt1 dataKey="_id" [rows]="8" [value]="DoccumentProfessionel" rowExpandMode="single"
+                [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll"
+                [filterDelay]="0" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Lien</th>
+                        <th>Traité par</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                    <tr>
+                        <td>{{doc?.custom_id}}</td>
+                        <td>{{doc?.type}}</td>
+                        <td>{{doc?.date|date:'dd MMMM yy'}}</td>
+                        <td>
+                            <a (click)="downloadAdminFile(doc.path)">Télécharger</a>
+                        </td>
+                        <td>{{doc?.traited_by}}</td>
+                        <td>
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-trash" (click)="deleteDocument(doc,ri)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-accordionTab>
+    </p-accordion>
+</p-dialog>
