@@ -512,6 +512,10 @@
                            pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                         <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
                            pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
+
+                           <!--button pop up formaulaire pour ajouter une tache à un lead -->
+                          <!-- <p-button label="Ajouter Tâche" (onClick)="showDialog()"></p-button> -->
+                           <i class="pi pi-plus" pTooltip="Ajouter Tâche" (click)="showDialog()" style="margin: 5px;"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -595,4 +599,96 @@
             </ng-template>
         </p-table>
     </div>
+
+
+    <p-dialog header="Ajouter une Nouvelle Tâche" [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}">
+        <form>
+            <div class="p-fluid">
+                
+
+                <div class="p-field">
+                    <label for="taskDescription">Description de la tâche</label>
+                    <input style="margin: 15px;" id="taskDescription" type="text" pInputText [(ngModel)]="task.description" required>
+                  </div>
+                  <div class="p-field">
+                    <label for="taskDueDate">Date limite</label>
+                    <input style="margin: 15px;" id="taskDueDate" type="date" pInputText [(ngModel)]="task.dueDate" required>
+                  </div>
+
+                <div class="button-container" style="margin: 30px;">
+                    <button  pButton type="button" label="Ajouter" (click)="addTask()" style="width: 150px;"></button>
+                 
+                    <button *ngIf="editingTaskIndex !== null" pButton label="Enregistrer les Modifications" (click)="saveTaskChanges()" style="width: 250px; margin-left: 10px;"></button>
+                </div>
+
+                <!-- <p-button label="Ajouter" (onClick)="addTask()"></p-button> -->
+            </div>
+        </form>
+    
+        <!-- Tableau pour afficher les tâches -->
+        <div *ngIf="tasks.length > 0">
+           <!-- <p-table [value]="tasks" [paginator]="true" [rows]="3">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Description</th>
+                        <th>Date Limite</th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task let-i="rowIndex">
+                    <tr>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>
+                            <button pButton type="button" icon="pi pi-pencil" (click)="editTask(i)"></button>
+                            <button pButton type="button" icon="pi pi-trash" (click)="deleteTask(i)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>  -->
+
+
+           <!-- Tableau PrimeNG avec tri sur une seule colonne -->
+           <p-table [value]="tasks" [paginator]="true" [rows]="3" [totalRecords]="tasks.length" sortMode="single" [style]="{'margin-top': '20px'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="description">Description
+                        <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="dueDate">Date limite
+                        <p-sortIcon field="dueDate"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
+                        Statut
+                        <p-sortIcon field="statut"></p-sortIcon>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-task let-i="rowIndex">
+                <tr>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.dueDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>
+                        <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
+                        <p-dropdown [options]="avancementList" [(ngModel)]="task.decision_avancement"
+            autoWidth="false" (onChange)="onDropdownChange()"
+            placeholder="Choisissez un état d'avancement">
+</p-dropdown>
+                    </td>
+                    <td>
+                        <i class="pi pi-pencil" pTooltip="Ajouter Tâche" (click)="editTask(i)" style="margin: 5px;"></i>
+                        <i class="pi pi-trash" pTooltip="Ajouter Tâche" (click)="deleteTask(i)" style="margin: 5px;"></i>
+                       
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        
+
+            
+        </div>
+    </p-dialog> 
+    
+    
 </div>

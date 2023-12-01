@@ -20,6 +20,95 @@ import jwt_decode from 'jwt-decode';
   styleUrls: ['./mes-leads.component.scss']
 })
 export class MesLeadsComponent implements OnInit {
+
+
+  // la propriété displayDialog pour contrôler l'affichage du pop-up
+  displayDialog: boolean = false;
+
+
+  // la méthode showDialog() pour activer le pop-up.
+showDialog() {
+  this.displayDialog = true;
+}
+
+
+//une méthode addTask() qui sera appelée lorsque le bouton "Ajouter" du formulaire est cliqué. Cette méthode peut traiter les données du formulaire et les ajouter à un tableau de tâches
+    
+
+
+task = { description: '', dueDate: null };
+  tasks = [];
+  editingTaskIndex: number | null = null;
+    
+
+/*addTask() {
+  if (this.editingTaskIndex !== null) {
+    // Mise à jour de la tâche existante
+    this.tasks[this.editingTaskIndex] = { ...this.task };
+    this.editingTaskIndex = null; // Réinitialiser l'index après la modification
+  } else {
+    // Ajouter une nouvelle tâche
+    this.tasks.push({ ...this.task });
+  }
+  this.task = { description: '', dueDate: null }; // Réinitialiser la tâche
+  
+  this.saveTasks(); // Sauvegarder les tâches
+}
+
+editTask(index: number) {
+  this.editingTaskIndex = index;
+  this.task = { ...this.tasks[index] }; // Remplir le formulaire avec les données de la tâche
+}
+
+
+deleteTask(index: number) {
+  this.tasks.splice(index, 1);
+  this.saveTasks();
+}
+
+saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(this.tasks));
+}
+*/
+saveTaskChanges() {
+  if (this.editingTaskIndex !== null) {
+    this.tasks[this.editingTaskIndex] = { ...this.task };
+    this.editingTaskIndex = null;
+    this.task = { description: '', dueDate: null };
+    this.saveTasks();
+  }
+}
+addTask() {
+  if (this.editingTaskIndex !== null) {
+    // Update existing task
+    this.tasks[this.editingTaskIndex] = { ...this.task };
+    this.editingTaskIndex = null;
+  } else {
+    // Add new task
+    this.tasks.push({ ...this.task });
+  }
+  this.task = { description: '', dueDate: null }; // Reset task
+  this.saveTasks(); // Save tasks
+}
+
+editTask(index: number) {
+  this.editingTaskIndex = index;
+  this.task = { ...this.tasks[index] }; // Fill form with task data
+}
+
+deleteTask(index: number) {
+  this.tasks.splice(index, 1);
+  this.saveTasks();
+}
+
+saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(this.tasks));
+}
+
+
+
+
+
   token;
 
   filterPays = [
@@ -52,10 +141,18 @@ export class MesLeadsComponent implements OnInit {
 
   filterQualification = [
     { label: 'Tous les qualifications', value: null },
+    { label: 'Encours de traitement', value: 'En attente de traitement' },
+    { label: 'Non traitée', value: 'Non qualifié' },
+    //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'traitée', value: 'Qualifié' },
+  ]
+
+  filterAvancement = [
+    { label: 'Tous les avancements', value: null },
     { label: 'En attente de traitement', value: 'En attente de traitement' },
-    { label: 'Non qualifié', value: 'Non qualifié' },
-    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
-    { label: 'Qualifié', value: 'Qualifié' },
+    { label: 'Non traiée', value: 'Non traiée' },
+    { label: 'en cours ', value: 'en cours' },
+    { label: 'traitée', value: 'traitée' },
   ]
 
   filterPaiement = [
@@ -111,7 +208,17 @@ export class MesLeadsComponent implements OnInit {
       else
         console.error('Pas de service Commercial')
     })
+
+    //taches
+    this.token = jwt_decode(localStorage.getItem('token'));
+     // Charger les tâches sauvegardées
+     this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    
   }
+
+
+
 
   //Follow Form
   showFollow: LeadCRM = null
@@ -127,6 +234,8 @@ export class MesLeadsComponent implements OnInit {
     produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
+    decision_avancement: new FormControl(''),
+
     note_qualification: new FormControl(''),
   })
 
@@ -136,6 +245,11 @@ export class MesLeadsComponent implements OnInit {
   initFollow(lead: LeadCRM) {
     this.suivreLead.emit(lead)
   }
+
+  onDropdownChange() {
+    this.saveTasks();
+  }
+
 
   onUpdateFollow() {
     this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents }).subscribe(data => {
@@ -291,11 +405,21 @@ export class MesLeadsComponent implements OnInit {
   ]
   //En attente de traitement ;Non qualifié, Pré-qualifié, Qualifié
   decisionList = [
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
-    { label: 'Non qualifié', value: 'Non qualifié' },
-    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
-    { label: 'Qualifié', value: 'Qualifié' },
+    { label: 'Encours de traitement', value: 'En attente de traitement' },
+    { label: 'Non traitée', value: 'Non qualifié' },
+    //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'traitée', value: 'Qualifié' },
   ]
+
+
+  avancementList = [
+    { label: 'En attente de traitement', value: 'En attente de traitement' },
+    { label: 'Non traiée', value: 'Non traiée' },
+    { label: 'en cours', value: 'en cours' },
+    { label: 'traitée', value: 'traitée' },
+  ]
+  
+
   //Affect Form
   showAffect: LeadCRM = null
   affectForm = new UntypedFormGroup({
