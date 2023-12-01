@@ -17,7 +17,6 @@ import {ToastModule} from "primeng/toast";
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TableModule} from "primeng/table";
-import {AppModule} from "../app.module";
 import {DialogModule} from "primeng/dialog";
 import {TabViewModule} from "primeng/tabview";
 import {SidebarModule} from "primeng/sidebar";

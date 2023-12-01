@@ -14,53 +14,22 @@ import {DemandesReclamationsComponent} from "./demandes-reclamations/demandes-re
 import {GestionEquipeRhComponent} from "./gestion-equipe-rh/gestion-equipe-rh.component";
 
 const routes: Routes = [
-    {
-        path: '',
-        component: DashboardRhComponent },
-    {
-        path: '',
-        component: NewCalendrierComponent },
-    {
-        path: '',
-        component: CalendrierRhComponent },
-    {
-        path: '',
-        component: ActualiteNotificationsComponent,
-    },
-    {
-        path: '',
-        component: ArchivagePointageComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: '',
-        component: CollaborateursComponent
-    },
-    {
-        path: '',
-        component: ConfigurationPointageComponent,
-        canActivate: [AuthGuardService] },
-    {
-        path: '',
-        component: ConfigurationPointeuseComponent,
-        canActivate: [AuthGuardService] },
-    {
-        path: '',
-        component: CongesAutorisationsComponent,
-    },
-    {
-        path: '',
-        component: DemandesReclamationsComponent,
-    },
-    {
-        path: '',
-        component: GestionEquipeRhComponent,
-        canActivate: [AuthGuardService],
-    },
+    { path: 'dashboard', component: DashboardRhComponent },
+    { path: 'calendrier', component: NewCalendrierComponent },
+    { path: 'calendrier/:id', component: CalendrierRhComponent },
+    { path: 'actualite-notifications', component: ActualiteNotificationsComponent },
+    { path: 'archivage-pointage', component: ArchivagePointageComponent, canActivate: [AuthGuardService] },
+    { path: 'collaborateurs', component: CollaborateursComponent },
+    { path: 'configuration-pointage', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
+    { path: 'configuration-pointeuse', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
+    { path: 'conges-autorisations', component: CongesAutorisationsComponent },
+    { path: 'demandes-reclamations', component: DemandesReclamationsComponent },
+    { path: 'gestion-equipe-rh', component: GestionEquipeRhComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RhRoutingModule { }
+export class RhRoutingModule {
+}
