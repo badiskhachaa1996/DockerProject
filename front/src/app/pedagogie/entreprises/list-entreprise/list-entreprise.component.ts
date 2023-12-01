@@ -330,7 +330,7 @@ export class ListEntrepriseComponent implements OnInit {
 
   onRedirect()
   {
-    this.router.navigate(['ajout-entreprise']);
+    this.router.navigate(['/skillsnet/ajout-entreprise']);
   }
 
   // méthode de redirection vers le formulaire de création d'entreprise

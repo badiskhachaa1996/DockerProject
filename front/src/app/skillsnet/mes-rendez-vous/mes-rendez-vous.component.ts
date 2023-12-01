@@ -119,11 +119,11 @@ export class MesRendezVousComponent implements OnInit {
   }
   seeCV(rdv: MeetingTeams) {
     if (rdv?.cv_id)
-      this.router.navigate(['cv', rdv.cv_id._id])
+      this.router.navigate(['skillsnet/cv', rdv.cv_id._id])
     else
       this.CVService.getCvbyUserId(rdv.user_id._id).subscribe(r => {
         if (r)
-          this.router.navigate(['cv', r._id])
+          this.router.navigate(['skillsnet/cv', r._id])
         else
           this.ToastService.add({ severity: 'error', summary: "Impossible de trouver le CV", detail: "L'étudiant l'a peut être supprimé, merci de le contacter à " + rdv?.user_id?.email + " ou " + rdv?.user_id?.email_perso })
       })

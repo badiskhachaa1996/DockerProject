@@ -57,12 +57,12 @@ export class AppMenuComponent implements OnInit {
                 {
                     label: 'Offres',
                     icon: 'pi pi-volume-up',
-                    routerLink: ['/offres'],
+                    routerLink: ['/skillsnet/offres'],
                 },
                 {
                     label: 'CV',
                     icon: 'pi pi-volume-up',
-                    routerLink: ['/imatch/cv-etudiant'],
+                    routerLink: ['/i-match/cv-etudiant'],
                 }
             ],
         },
@@ -271,7 +271,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une entreprise',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-entreprise'],
+                                            routerLink: ['/skillsnet/ajout-entreprise'],
                                         },
                                         {
                                             label: 'Liste des entreprises',
@@ -942,7 +942,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une entreprise',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-entreprise'],
+                                            routerLink: ['/skillsnet/ajout-entreprise'],
                                         },
                                         {
                                             label: 'Liste des entreprises',
@@ -1041,32 +1041,32 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Offres",
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/offres'],
+                                    routerLink: ['/skillsnet/offres'],
                                 },
                                 {
                                     label: 'Mes offres',
                                     icon: 'pi pi-user',
-                                    routerLink: ['/mes-offres'],
+                                    routerLink: ['/skillsnet/mes-offres'],
                                 },
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque-interne']
+                                    routerLink: ['/i-match/cvtheque-interne']
                                 },
                                 {
                                     label: 'Gestion des compétences',
                                     icon: 'pi pi-book',
-                                    routerLink: ['/skills-management'],
+                                    routerLink: ['/skillsnet/skills-management'],
                                 },
                                 {
                                     label: 'Gestions des externes',
                                     icon: 'pi pi-users',
-                                    routerLink: ['/imatch/externe'],
+                                    routerLink: ['/i-match/externe'],
                                 },
                                 {
                                     label: 'Gestions des événements',
                                     icon: 'pi pi-flag',
-                                    routerLink: ['/evenements'],
+                                    routerLink: ['/skillsnet/evenements'],
                                 },
                                 {
                                     label: 'Cvthèque Externe',
@@ -1583,7 +1583,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une entreprise',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-entreprise',
+                                                        '/skillsnet/ajout-entreprise',
                                                     ],
                                                 },
                                                 {
@@ -1684,32 +1684,32 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Offres",
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/offres'],
+                                            routerLink: ['/skillsnet/offres'],
                                         },
                                         {
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
-                                            routerLink: ['/mes-offres'],
+                                            routerLink: ['/skillsnet/mes-offres'],
                                         },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque-interne']
+                                            routerLink: ['/i-match/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
                                             icon: 'pi pi-book',
-                                            routerLink: ['/skills-management'],
+                                            routerLink: ['/skillsnet/skills-management'],
                                         },
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/imatch/externe'],
+                                            routerLink: ['/i-match/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
                                             icon: 'pi pi-flag',
-                                            routerLink: ['/evenements'],
+                                            routerLink: ['/skillsnet/evenements'],
                                         },
                                         {
                                             label: 'Cvthèque Externe',
@@ -2278,7 +2278,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter une entreprise',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-entreprise'],
+                                                    routerLink: ['/skillsnet/ajout-entreprise'],
                                                 },
                                                 {
                                                     label: 'Liste des entreprises',
@@ -2383,32 +2383,32 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Offres",
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/offres'],
+                                            routerLink: ['/skillsnet/offres'],
                                         },
                                         {
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
-                                            routerLink: ['/mes-offres'],
+                                            routerLink: ['/skillsnet/mes-offres'],
                                         },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque-interne']
+                                            routerLink: ['/i-match/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
                                             icon: 'pi pi-book',
-                                            routerLink: ['/skills-management'],
+                                            routerLink: ['/skillsnet/skills-management'],
                                         },
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/imatch/externe'],
+                                            routerLink: ['/i-match/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
                                             icon: 'pi pi-flag',
-                                            routerLink: ['/evenements'],
+                                            routerLink: ['/skillsnet/evenements'],
                                         },
                                         {
                                             label: 'Cvthèque Externe',
@@ -3065,7 +3065,7 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Ajouter une entreprise',
                                                     icon: 'pi pi-user-plus',
                                                     routerLink: [
-                                                        '/ajout-entreprise',
+                                                        '/skillsnet/ajout-entreprise',
                                                     ],
                                                 },
                                                 {
@@ -3740,32 +3740,32 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Offres",
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/offres'],
+                                            routerLink: ['/skillsnet/offres'],
                                         },
                                         {
                                       label: 'Mes offres',
                                       icon: 'pi pi-user',
-                                      routerLink: ['/mes-offres'],
+                                      routerLink: ['/skillsnet/mes-offres'],
                                   },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque-interne']
+                                            routerLink: ['/i-match/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
                                             icon: 'pi pi-book',
-                                            routerLink: ['/skills-management'],
+                                            routerLink: ['/skillsnet/skills-management'],
                                         },
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/imatch/externe'],
+                                            routerLink: ['/i-match/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
                                             icon: 'pi pi-flag',
-                                            routerLink: ['/evenements'],
+                                            routerLink: ['/skillsnet/evenements'],
                                         },
                                         {
                                             label: 'Cvthèque Externe',
@@ -4255,12 +4255,12 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Offres',
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/offres'],
+                                    routerLink: ['/skillsnet/offres'],
                                 },
                                 {
                                     label: 'CV',
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/imatch/cv-etudiant'],
+                                    routerLink: ['/i-match/cv-etudiant'],
                                 }
                             ],
                         },
@@ -4303,12 +4303,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Offres',
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/offres'],
+                                            routerLink: ['/skillsnet/offres'],
                                         },
                                         {
                                             label: 'CV',
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/imatch/cv-etudiant'],
+                                            routerLink: ['/i-match/cv-etudiant'],
                                         },
                                         /*{
                                             label: 'Mes Matching',
@@ -4361,12 +4361,12 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Offres',
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/offres'],
+                                            routerLink: ['/skillsnet/offres'],
                                         },
                                         {
                                             label: 'CV',
                                             icon: 'pi pi-volume-up',
-                                            routerLink: ['/imatch/cv-etudiant'],
+                                            routerLink: ['/i-match/cv-etudiant'],
                                         }
                                     ],
                                 },
@@ -4402,12 +4402,12 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Offres",
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/offres'],
+                                    routerLink: ['/skillsnet/offres'],
                                 },
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-list',
-                                    routerLink: ['/cvtheque-interne']
+                                    routerLink: ['/i-match/cvtheque-interne']
                                 },
                             ],
                         },
@@ -5841,7 +5841,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Ajouter une entreprise',
                                         icon: 'pi pi-user-plus',
-                                        routerLink: ['/ajout-entreprise'],
+                                        routerLink: ['/skillsnet/ajout-entreprise'],
                                     },
                                     {
                                         label: 'Liste des entreprises',
@@ -6138,42 +6138,42 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Entreprise',
                                         icon: 'pi pi-building',
-                                        routerLink: ['/imatch/entreprise']
+                                        routerLink: ['/skillsnet/entreprise']
                                     },
                                     {
                                         label: "Offres",
                                         icon: 'pi pi-volume-up',
-                                        routerLink: ['/offres'],
+                                        routerLink: ['/skillsnet/offres'],
                                     },
                                     /*{
                                         label: 'Mes offres',
                                         icon: 'pi pi-user',
-                                        routerLink: ['/mes-offres'],
+                                        routerLink: ['/skillsnet/mes-offres'],
                                     },*/
                                     {
                                         label: 'Cvthèque',
                                         icon: 'pi pi-list',
-                                        routerLink: ['/cvtheque-interne']
+                                        routerLink: ['/i-match/cvtheque-interne']
                                     },
                                     {
                                         label: 'Reporting',
                                         icon: 'pi pi-chart-line',
-                                        routerLink: ['/imatch/reporting']
+                                        routerLink: ['/skillsnet/reporting']
                                     },
                                     /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',
-                                        routerLink: ['/skills-management'],
+                                        routerLink: ['/skillsnet/skills-management'],
                                     },
                                     {
                                         label: 'Gestions des externes',
                                         icon: 'pi pi-users',
-                                        routerLink: ['/imatch/externe'],
+                                        routerLink: ['/i-match/externe'],
                                     },
                                     {
                                         label: 'Gestions des événements',
                                         icon: 'pi pi-flag',
-                                        routerLink: ['/evenements'],
+                                        routerLink: ['/skillsnet/evenements'],
                                     },*/
                                     /*{
                                         label: 'Cvthèque Externe',
@@ -6200,7 +6200,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter une entreprise',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-entreprise']
+                                            routerLink: ['/skillsnet/ajout-entreprise']
                                         },
                                         {
                                             label: 'Liste des entreprises',
@@ -6568,21 +6568,21 @@ export class AppMenuComponent implements OnInit {
                                     items: [{
                                         label: 'Mes offres',
                                         icon: 'pi pi-user',
-                                        routerLink: ['/mes-offres'],
+                                        routerLink: ['/skillsnet/mes-offres'],
                                     }, {
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',
-                                        routerLink: ['/skills-management'],
+                                        routerLink: ['/skillsnet/skills-management'],
                                     },
                                     {
                                         label: 'Gestions des externes',
                                         icon: 'pi pi-users',
-                                        routerLink: ['/imatch/externe'],
+                                        routerLink: ['/i-match/externe'],
                                     },
                                     {
                                         label: 'Gestions des événements',
                                         icon: 'pi pi-flag',
-                                        routerLink: ['/evenements'],
+                                        routerLink: ['/skillsnet/evenements'],
                                     }
                                         , {
                                         label: 'Rendez-vous',
