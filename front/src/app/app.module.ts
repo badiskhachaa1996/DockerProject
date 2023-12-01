@@ -17,6 +17,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+
 import { CarouselModule } from 'primeng/carousel';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { ChartModule } from 'primeng/chart';
@@ -157,7 +158,6 @@ import { UserProfilComponent } from './profil/user-profil/user-profil.component'
 import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 //import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
-import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
@@ -216,8 +216,6 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 //import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.component';
 //import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 //import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
-import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
-import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
 import { MailTypeComponent } from './mail-type/mail/mail.component';
@@ -247,13 +245,11 @@ import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-out
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 //import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
-import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 import { LinksComponent } from './links/links.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
-import { CalenderComponent } from './calender/calender.component';
 //import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NgModule } from '@angular/core';
@@ -271,7 +267,6 @@ import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-
 //import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
-import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
 import { CaptchaModule } from 'primeng/captcha';
 import { RecaptchaModule } from "ng-recaptcha";

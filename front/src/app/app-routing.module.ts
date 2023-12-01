@@ -34,7 +34,6 @@ import { ProspectGuard } from './dev-components/guards/prospect-guard';
 //import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { LoginGuard } from './dev-components/guards/login-guard';
 //import { FormAdmissionGuard } from './dev-components/guards/formAdmission-guard';
-import { NotificationComponent } from './ticketing/notification/notification.component';
 import { ContactComponent } from './footer/contact/contact.component';
 //import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
@@ -91,8 +90,6 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
 
-import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
-import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
 import { MailTypeComponent } from './mail-type/mail/mail.component';
@@ -119,12 +116,9 @@ import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 //import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
-import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 import { LinksComponent } from './links/links.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
-import { CalenderComponent } from './calender/calender.component';
-import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 
 //import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
@@ -135,11 +129,18 @@ import { AddRemboussementComponent } from './remboursement/add-remboursement/add
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { CriteresComponent } from './crm/criteres/criteres.component';
 const routes: Routes = [
     {
         path: '',
         component: AppMainComponent,
         children: [
+            {
+                path: 'partenaireInscription', component: PartenaireInscriptionComponent,
+                canActivate: [AuthGuardService],
+            },
+
             {
                 path: '',
                 component: DashboardComponent,
@@ -214,6 +215,11 @@ const routes: Routes = [
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
+                path: 'crm-criteres',
+                component: CriteresComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
                 path: 'ajout-ecole',
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
@@ -244,6 +250,11 @@ const routes: Routes = [
             {
                 path: 'groupes',
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
+            },
+            {
+                path: 'new-groupes',
+                component: GroupesComponent,
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-groupe',
@@ -600,7 +611,6 @@ const routes: Routes = [
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
-    { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
     {
         path: 'suivre-ma-preinscription',

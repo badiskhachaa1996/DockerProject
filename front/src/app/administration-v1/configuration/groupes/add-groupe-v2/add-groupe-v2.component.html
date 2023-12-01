@@ -1,0 +1,31 @@
+<form class="p-fluid p-formgrid grid" [formGroup]="formAddClasse" (ngSubmit)="saveClasse()"
+    [ngClass]="{'card':isUpdate}">
+    <div class="field col-12 md:col-6">
+        <label>Campus <span style="color: red;"> * </span></label>
+        <p-dropdown [options]="dropdownCampus" formControlName="campus_id" emptyFilterMessage="Pas de campus trouvé"
+            filterPlaceholder="Choisissez un campus" filter="true"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-6">
+        <label>Ecole <span style="color: red;"> * </span></label>
+        <p-dropdown [options]="dropdownEcole" formControlName="ecole_id" emptyFilterMessage="Pas d'école trouvé"
+            filterPlaceholder="Choisissez une école" filter="true"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-6">
+        <label>Formation <span style="color: red;"> * </span></label>
+        <p-dropdown [options]="dropdownFormation" formControlName="formation_id" filter="true"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-6">
+        <label>Nom Complet</label>
+        <input pInputText type="text" placeholder="Ex: Manager Des Organisations 1A 2022-2023" formControlName="nom" />
+    </div>
+    <div class="field col-12">
+        <label>Abbréviation <span style="color: red;"> * </span></label>
+        <input pInputText type="text" placeholder="Ex: MDO 1 A 2022-2O23" formControlName="abbrv" />
+    </div>
+    <div style="justify-content: right;" *ngIf="!isUpdate">
+        <button pButton label="Ajouter" type="submit" [disabled]="formAddClasse.invalid"></button>
+    </div>
+    <div style="justify-content: right;" *ngIf="isUpdate">
+        <button pButton label="Modifier" type="submit" [disabled]="formAddClasse.invalid"></button>
+    </div>
+</form>

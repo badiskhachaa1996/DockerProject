@@ -34,6 +34,8 @@ import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Ticket } from 'src/app/models/Ticket';
 import { Observable, Subscription } from 'rxjs';
+import {BadgeModule} from 'primeng/badge';
+
 
 @Component({
   selector: 'app-list-leadcrm',
@@ -46,10 +48,13 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Tous les pays', value: null }
   ]
   AccessLevel = "Spectateur"
-  filterSource = []
+  filterSource = [{ label: 'Toutes les sources', value: null }]
 
   filterOperation = []
-
+  filterEquipe=[
+    { label: 'Toutes les équipe', value: null }
+  ]
+  filteredLeadsCount:number
 
   filterAffecte = [
     { label: 'Tous les membres', value: null }
@@ -97,7 +102,7 @@ export class ListLeadcrmComponent implements OnInit {
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
     private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private EmailTypeS: EmailTypeService,
     private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService,
-    private admissionService: AdmissionService, private OperationService: GestionOperationService) { }
+    private admissionService: AdmissionService, private OperationService: GestionOperationService,private sourceService:GestionSourcesServices) { }
   leads: LeadCRM[] = []
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
@@ -105,6 +110,8 @@ export class ListLeadcrmComponent implements OnInit {
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
       this.leads = data
+      console.log(this.leads);
+      this.filteredLeadsCount = this.leads.length;
       let ids = []
       data.forEach(l => {
         if (l.created_by && !ids.includes(l.created_by._id)) {
@@ -113,6 +120,7 @@ export class ListLeadcrmComponent implements OnInit {
         }
       })
     })
+    
     this.eventsSubscription = this.newLead.subscribe((lead) => {
       this.leads.push(lead)
     });
@@ -193,6 +201,18 @@ export class ListLeadcrmComponent implements OnInit {
         })
       })
     })
+    this.sourceService.GetAllSource().subscribe(data => {
+    data.forEach(val=>{
+      this.filterSource.push({label:val.nom,value:val.nom});
+      this.canalList.push({label:val.nom,value:val._id});
+    })
+    });
+    this.TeamCRMService.TIgetAll().subscribe(data => {
+      data.forEach(val=>{
+this.filterEquipe.push({label:val.nom,value:val.nom});
+      })
+    })
+    
   }
 
   //Follow Form
@@ -207,6 +227,7 @@ export class ListLeadcrmComponent implements OnInit {
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
     produit: new FormControl(''),
+    operation:new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -218,6 +239,7 @@ export class ListLeadcrmComponent implements OnInit {
     :
     LeadCRM
   ) {
+    console.log(lead);
     this.suivreLead.emit(lead)
   }
 
@@ -243,12 +265,7 @@ export class ListLeadcrmComponent implements OnInit {
   //Contact
   memberList = []
   canalList = [
-    { label: "Facebook", value: "Facebook" },
-    { label: "WhatsApp", value: "WhatsApp" },
-    { label: "Appel Téléphonique", value: "Appel Téléphonique" },
-    { label: "Mail", value: "Mail" },
-    { label: "Visite au Site", value: "Visite au Site" },
-    { label: "Online meeting", value: "Online meeting" },
+    
   ]
 
   suiteContactList = [
@@ -295,13 +312,16 @@ export class ListLeadcrmComponent implements OnInit {
     if (index >= 0 && index < this.showFollow.documents.length
     ) {
       this.showFollow.documents.splice(index, 1);
+      
     }
     else {
       this.ToastService.add({ severity: 'error', summary: 'Erreur', detail: 'Index de document invalide' });
     }
   }
 
-
+  onFilter(event: any): void {
+    this.filteredLeadsCount = event.filteredValue ? event.filteredValue.length : 0;
+}
   FileUpload(event: { target: { files: File[] } }): void {
     const selectedFile = event.target.files[0];
 
@@ -431,7 +451,7 @@ export class ListLeadcrmComponent implements OnInit {
     :
     LeadCRM
   ) {
-    this.affectForm.patchValue({ ...lead })
+    this.affectForm.patchValue({ ...lead,produit:lead.produit[0] })
     this.showAffect = lead
   }
 
@@ -527,7 +547,7 @@ export class ListLeadcrmComponent implements OnInit {
   // Nazif ajout des buttons de mise à jour et de suppression
   initUpdate(lead: LeadCRM) {
     this.selectedLead = lead
-    this.followForm.patchValue({ ...lead })
+    this.followForm.patchValue({ ...lead,produit:lead.produit[0] })
   }
   delete(lead: LeadCRM) {
     if (confirm("Êtes-vous sûr de vouloir supprimer ce membre de l'équipe ?"))
