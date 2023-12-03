@@ -110,7 +110,6 @@ import { TableComponent } from './components/table/table.component';
 import { ListComponent } from './components/list/list.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { PanelsComponent } from './components/panels/panels.component';
-import { OverlaysComponent } from './components/overlays/overlays.component';
 import { MediaComponent } from './components/media/media.component';
 import { MenusComponent } from './components/menus/menus.component';
 import { MessagesComponent } from './components/messages/messages.component';
@@ -439,7 +438,6 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
         ListComponent,
         TreeComponent,
         PanelsComponent,
-        OverlaysComponent,
         MenusComponent,
         MessagesComponent,
         MessagesComponent,
