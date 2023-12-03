@@ -122,7 +122,6 @@ import { DocumentationComponent } from './components/documentation/documentation
 import { CrudComponent } from './components/crud/crud.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { IconsComponent } from './components/icons/icons.component';
-import { BlocksComponent } from './components/blocks/blocks.component';
 import { PaymentComponent } from './components/menus/payment.component';
 import { ConfirmationComponent } from './components/menus/confirmation.component';
 import { PersonalComponent } from './components/menus/personal.component';
@@ -452,7 +451,6 @@ import { InscriptionComponent } from './administration-v1/gestion-des-inscriptio
         DocumentationComponent,
         CrudComponent,
         TimelineComponent,
-        BlocksComponent,
         BlockViewer,
         MediaComponent,
         InscriptionComponent,
