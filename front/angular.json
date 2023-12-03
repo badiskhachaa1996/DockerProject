@@ -57,7 +57,7 @@
                         ]
                     },
                     "configurations": {
-                        "production": {
+                        "prod": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -141,8 +141,8 @@
                       "browserTarget": "sakai:build"
                     },
                     "configurations": {
-                        "production": {
-                            "browserTarget": "sakai:build:production"
+                        "prod": {
+                            "browserTarget": "sakai:build:prod"
                         },
                         "qa": {
                             "browserTarget": "sakai:build:qa"
