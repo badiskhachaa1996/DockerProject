@@ -304,7 +304,7 @@ deploy_node_to_dev:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index 2> /dev/null
+    - pm2 delete index
     - pm2 start index.js --time -- --dev
    # - pm2 logs index
   only:
@@ -334,7 +334,7 @@ manual_deploy_node_to_qa:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index 2> /dev/null
+    - pm2 delete index
     - pm2 start index.js --time -- --qa
    # - pm2 logs index
   only:
@@ -365,7 +365,7 @@ manual_deploy_node_to_prod:
     - cd back
     - ln -s ~/storage storage
     - npm install
-    - pm2 delete index 2> /dev/null
+    - pm2 delete index
     - pm2 start index.js --time -- --prod
    # - pm2 logs index
   only:

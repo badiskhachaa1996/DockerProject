@@ -231,7 +231,7 @@ export class ListGroupeComponent implements OnInit {
   }
 
   showCalendar(rowData) {
-    this.router.navigate(['/emploi-du-temps/classe/' + rowData._id])
+    this.router.navigate(['/pedagogie/emploi-du-temps/classe/' + rowData._id])
   }
 
   sendCalendar(def: string, objet: string) {
@@ -274,13 +274,13 @@ export class ListGroupeComponent implements OnInit {
 
   generatePV() {
     if (this.formPV.value.semestre != "Annuel")
-      this.router.navigate(['pv-semestriel', this.formPV.value.semestre, this.showPV._id])
+      this.router.navigate(['pedagogie/pv-semestriel', this.formPV.value.semestre, this.showPV._id])
     else
-      this.router.navigate(['pv-annuel', this.showPV._id])
+      this.router.navigate(['pedagogie/pv-annuel', this.showPV._id])
   }
 
   generatePVApp() {
-    this.router.navigate(['pv-appreciation', this.formPV.value.semestre, this.showPV._id])
+    this.router.navigate(['pedagogie/pv-appreciation', this.formPV.value.semestre, this.showPV._id])
   }
 
   showLien: Classe = null

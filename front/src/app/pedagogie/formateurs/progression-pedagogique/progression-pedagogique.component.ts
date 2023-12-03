@@ -17,7 +17,7 @@ import { FormateurService } from 'src/app/services/formateur.service';
 export class ProgressionPedagogiqueComponent implements OnInit {
   hideForPDF = false
   constructor(private router: Router, private route: ActivatedRoute, private PPService: ProgressionPedaService,
-    private AuthService: AuthService, private ModuleService: MatiereService,private FormateurService:FormateurService) { }
+    private AuthService: AuthService, private ModuleService: MatiereService, private FormateurService: FormateurService) { }
   ID = this.route.snapshot.paramMap.get('formateur_id');
   FORMATEUR: User;
   ppList: ProgressionPeda[] = [];
@@ -50,7 +50,7 @@ export class ProgressionPedagogiqueComponent implements OnInit {
   }
 
   seeSeance(seance) {
-    this.router.navigate(['emergement', seance._id])
+    this.router.navigate(['pedagogie/emergement', seance._id])
   }
 
   exportPDF() {

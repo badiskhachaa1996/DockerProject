@@ -429,7 +429,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   cvList = []
   goToCV(cv: CV) {
     //localStorage.setItem('seeEditBTNCV', 'true')
-    //this.router.navigate(['imatch/cv', cv._id])
+    //this.router.navigate(['i-match/cv', cv._id])
     this.cvList.push({ label: "CV - " + cv?.user_id?.lastname + " " + cv?.user_id?.firstname, CV_ID: cv._id })
     console.log(this.activeIndex1)
     setTimeout(() => {

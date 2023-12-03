@@ -34,7 +34,7 @@ export class ListFormateursComponent implements OnInit {
   dropdownGroupe = []
   dropdownSemestre = [{ value: 'Semestre 1', label: 'Semestre 1' }, { value: 'Semestre 2', label: 'Semestre 2' }, { value: 'Annuel', label: 'Annuel' }]
   showApp() {
-    this.router.navigate(['appreciation', this.formApp.value.semestre, this.formApp.value.classe_id, this.showFormApp._id])
+    this.router.navigate(['pedagogie/appreciation', this.formApp.value.semestre, this.formApp.value.classe_id, this.showFormApp._id])
   }
 
   showFormAppFc(formateur) {
@@ -450,11 +450,11 @@ export class ListFormateursComponent implements OnInit {
   }
 
   showCalendar(rowData) {
-    this.router.navigate(['/emploi-du-temps/formateur/' + rowData.user_id._id])
+    this.router.navigate(['/pedagogie/emploi-du-temps/formateur/' + rowData.user_id._id])
   }
 
   showPP(rowData) {
-    this.router.navigate(['progression-pedagogique/' + rowData.user_id._id])
+    this.router.navigate(['/pedagogie/progression-pedagogique/' + rowData.user_id._id])
   }
   onGetStatut() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire

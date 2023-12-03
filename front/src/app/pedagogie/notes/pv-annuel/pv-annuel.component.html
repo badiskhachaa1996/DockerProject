@@ -253,7 +253,7 @@
             <ng-template pTemplate="body" let-data let-ri="rowIndex">
                 <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
                     <td class="text-center">
-                        <a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
+                        <a style="color: black;" [routerLink]="['/pedagogie/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
                             target="_blank">{{data.custom_id}}</a><!-- TODO Remplacer par le bulletin Annuel -->
                     </td>
                     <td class="text-center">{{data.nom}}</td>

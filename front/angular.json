@@ -120,27 +120,37 @@
                             ],
                             "outputHashing": "all"
                         },
-                        "local": {}
+                        "local": {
+                            "buildOptimizer": false,
+                            "optimization": {
+                                "scripts": false,
+                                "styles": false,
+                                "fonts": false
+                            },
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        }
                     },
                     "defaultConfiguration": "local"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                      "browserTarget": "sakai:build"
+                    },
                     "configurations": {
-                        "prod": {
-                            "browserTarget": "sakai:build:prod"
+                        "production": {
+                            "browserTarget": "sakai:build:production"
                         },
                         "qa": {
                             "browserTarget": "sakai:build:qa"
                         },
                         "dev": {
                             "browserTarget": "sakai:build:dev"
-                        },
-                        "local": {
-                            "browserTarget": "sakai:build:local"
                         }
-                    },
-                    "defaultConfiguration": "local"
+                    }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -163,11 +173,9 @@
                         "styles": [
                             "src/styles.css",
                             "node_modules/@fullcalendar/common/main.css",
-                            "src/styles.scss",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
                             "node_modules/@fullcalendar/timegrid/main.min.css",
-                            "node_modules/@fullcalendar/common/main.css",
                             "node_modules/@fullcalendar/daygrid/main.css",
                             "node_modules/@fullcalendar/timegrid/main.css",
                             "node_modules/@fullcalendar/list/main.css",
