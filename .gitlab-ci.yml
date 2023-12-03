@@ -6,7 +6,7 @@ stages:
 #  - Docker
   - DEV
   - QA
-  - PROD # FIXME tests only on Dev/QA, not in Prod
+  - PROD2 # FIXME tests only on Dev/QA, not in Prod1/2
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -97,10 +97,10 @@ manual_install_angular_dependencies_on_qa:
 
 #==========================================================
 
-manual_install_node_dependencies_on_prod:
+manual_install_node_dependencies_on_prod2:
   stage: Install
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -114,10 +114,10 @@ manual_install_node_dependencies_on_prod:
       - main
   when: manual
 
-manual_install_angular_dependencies_on_prod:
+manual_install_angular_dependencies_on_prod2:
   stage: Install
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -206,10 +206,10 @@ manual_build_angular_on_qa:
 
 #==========================================================
 
-manual_build_angular_on_prod:
+manual_build_angular_on_prod2:
   stage: Build
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -343,12 +343,12 @@ manual_deploy_node_to_qa:
 
 #==========================================================
 
-manual_deploy_angular_to_prod:
-  stage: PROD
+manual_deploy_angular_to_prod2:
+  stage: PROD2
   dependencies:
-    - manual_build_angular_on_prod
+    - manual_build_angular_on_prod2
   tags:
-    - prod-shell
+    - prod2-shell
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist /var/www/html/ems
@@ -356,11 +356,11 @@ manual_deploy_angular_to_prod:
     - main
   when: manual
   
-manual_deploy_node_to_prod:
-  stage: PROD
+manual_deploy_node_to_prod2:
+  stage: PROD2
 
   tags:
-    - prod-shell
+    - prod2-shell
   script:
     - cd back
     - ln -s ~/storage storage
