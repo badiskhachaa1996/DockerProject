@@ -5086,7 +5086,6 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
-                console.log("HIHI")
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {

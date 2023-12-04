@@ -38,6 +38,7 @@ import { DashboardIntComponent } from 'src/app/international/dashboard-int/dashb
 import { SidebarModule } from 'primeng/sidebar';
 import { TimelineModule } from 'primeng/timeline';
 import { ChartModule } from 'primeng/chart';
+import { ButtonModule } from 'primeng/button';
 @NgModule({
     declarations: [
         AdmissionIntComponent,
@@ -82,6 +83,7 @@ import { ChartModule } from 'primeng/chart';
         SidebarModule,
         TimelineModule,
         ChartModule,
+        ButtonModule
     ]
 })
 export class InternationalModule { }
