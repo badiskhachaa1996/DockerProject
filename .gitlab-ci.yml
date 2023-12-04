@@ -218,7 +218,7 @@ manual_build_angular_on_prod2:
 
   script:
       - cd front
-      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod
+      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
   artifacts:
@@ -366,7 +366,7 @@ manual_deploy_node_to_prod2:
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js --time -- --prod
+    - pm2 start index.js --time -- --prod2
    # - pm2 logs index
   only:
     - main
