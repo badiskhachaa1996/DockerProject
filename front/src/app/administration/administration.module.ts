@@ -23,6 +23,7 @@ import {DialogModule} from "primeng/dialog";
 import {TabViewModule} from "primeng/tabview";
 import {CalendarModule} from "primeng/calendar";
 import {SelectButtonModule} from "primeng/selectbutton";
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import {SelectButtonModule} from "primeng/selectbutton";
         DialogModule,
         TabViewModule,
         CalendarModule,
-        SelectButtonModule
+        SelectButtonModule,
+        ButtonModule
     ]
 })
 export class AdministrationModule { }

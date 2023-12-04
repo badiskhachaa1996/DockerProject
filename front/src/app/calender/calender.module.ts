@@ -12,6 +12,7 @@ import {DropdownModule} from "primeng/dropdown";
 import {CalendarModule} from "primeng/calendar";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
         CalendarModule,
         ToggleButtonModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        ButtonModule
     ]
 })
 export class CalenderModule {
