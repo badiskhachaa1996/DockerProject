@@ -190,11 +190,11 @@ export class NewListTicketsComponent implements OnInit {
                     let buffer: any = r.localisation
                     site = buffer
                   }
-                  if (site) {
+                  if (site && this.UserServiceDic['Ressources Humaines'] && this.UserServiceDic['Ressources Humaines'] == 'Responsable') {
                     this.selectedSite = site
-                    this.dt1.filter(site, 'site', 'equals')
+                    this.dt1.filter(site, 'site', 'in')
                     if (this.dt2)
-                      this.dt2.filter(site, 'site', 'equals')
+                      this.dt2.filter(site, 'site', 'in')
                   }
 
                 })
@@ -242,7 +242,7 @@ export class NewListTicketsComponent implements OnInit {
                     let buffer: any = r.localisation
                     site = buffer
                   }
-                  if (site) {
+                  if (site && this.UserServiceDic['Ressources Humaines'] && this.UserServiceDic['Ressources Humaines'] == 'Responsable') {
                     this.selectedSite = site
                     this.dt1.filter(site, 'site', 'equals')
                     if (this.dt2)
@@ -269,6 +269,7 @@ export class NewListTicketsComponent implements OnInit {
   @ViewChild('dt1', { static: true }) dt1: Table;
   @ViewChild('dt2', { static: true }) dt2: Table;
   hideTicket = true
+  UserServiceDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     if (this.router.url == '/ticketing/mes-tickets-services')
@@ -289,6 +290,7 @@ export class NewListTicketsComponent implements OnInit {
           if (!service_dic[val.module])
             service_dic[val.module] = val.role
         })
+        this.UserServiceDic = service_dic
         this.roleAccess = 'Admin'
         if (service_dic['Ticketing'])
           this.roleAccess = service_dic['Ticketing']
