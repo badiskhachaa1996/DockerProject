@@ -1,4 +1,3 @@
-
 <p-tabView [(activeIndex)]="selectedTabIndex">
     <p-tabPanel header="Créer">
         <div class="card">
@@ -47,8 +46,9 @@
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-4">
                         <div>
-                            <span class="block text-500 font-medium mb-4">Nombre total des projets {{nbr_project }}</span>
-                          
+                            <span class="block text-500 font-medium mb-4">Nombre total des projets {{nbr_project
+                                }}</span>
+
                         </div>
                         <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -61,8 +61,9 @@
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-4">
                         <div>
-                            <span class="block text-500 font-medium mb-4">Nombre total des projets en cours {{nbr_project}}</span>
-                            
+                            <span class="block text-500 font-medium mb-4">Nombre total des projets en cours
+                                {{nbr_project}}</span>
+
                         </div>
                         <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -75,8 +76,9 @@
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-4">
                         <div>
-                            <span class="block text-500 font-medium mb-4">Nombre total des Projets cloturés {{nbr_projectCloturer }}</span>
-                            
+                            <span class="block text-500 font-medium mb-4">Nombre total des Projets cloturés
+                                {{nbr_projectCloturer }}</span>
+
                         </div>
                         <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -85,8 +87,8 @@
                     </div>
                 </div>
             </div>
-        
-        
+
+
         </div>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [value]="project" [paginator]="true"
             rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
@@ -101,7 +103,7 @@
                         (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
                         emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
 
-                    
+
 
                 </div>
             </ng-template>
@@ -233,35 +235,78 @@
     <p-tabPanel header="Reporting">
         <app-dashboard-project-v2></app-dashboard-project-v2>
     </p-tabPanel>
-    <p-tabPanel style="width: 100%;"
-    header="Project -  {{projectSelected?.titre}}"
-    *ngFor="let projectSelected of projectSelecteds " [closable]="true"
->
-        <div  class="grid col-12">
+    <p-tabPanel style="width: 100%;" header="Project -  {{projectSelected?.titre}}"
+        *ngFor="let projectSelected of projectSelecteds " [closable]="true">
+        <div class="grid col-12">
             <div class="col-4 "><p-card header="To DO ">
                     <ng-container *ngFor="let t of taskToDo">
-                        {{t?.libelle}}
-                    </ng-container>
-                </p-card>
+                        <p-card header={{t?.libelle}}><br>
 
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
+                        </p-card><br>
+                    </ng-container>
+                    <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true" (click)="showAddTacheForm=true"></p-button>
+                </p-card>
             </div>
             <div class="col-4 ">
                 <p-card header="Doing ">
                     <ng-container *ngFor="let t of task">
-                        <p-card header={{t.description_task}}>
+                        <p-card header={{t?.libelle}}><br>
 
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
                         </p-card><br>
-
-
-
                     </ng-container>
-                </p-card> </div>
+                </p-card>
+            </div>
             <div class="col-4 ">
                 <p-card header="Done ">
                     <ng-container *ngFor="let t of task">
-                        {{t?.libelle}}
+                        <p-card header={{t?.libelle}}><br>
+
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
+                        </p-card><br>
                     </ng-container>
-                </p-card></div>
+                </p-card>
+            </div>
 
 
         </div>
@@ -562,13 +607,8 @@
 
 
 
-<div *ngIf="showAddTacheForm" class="card">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showAddTacheForm = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-
-    <h3 class="text-center">Nouvelle activité pour ce project</h3>
-    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project._id)">
+<p-dialog header="Nouvelle activité pour ce project" [(visible)]="showAddTacheForm" >
+    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
 
         <div class="field col-12 md:col-12">
             <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
@@ -579,7 +619,7 @@
         <div class="field col-12">
             <label>Priorité <span style="color: red">*</span></label>
             <p-dropdown formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
-                [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                [showClear]="true" ></p-dropdown>
         </div>
 
         <div class="field col-12 md:col-6">
@@ -599,8 +639,32 @@
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
     </form>
-</div>
-
+</p-dialog>
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
+    <div class="grid col-12">
+        <div class="col-9">
+            Assigné à
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            Urgent
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            Nombre des heures
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            DDL
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            description
+        </div>
+        <div class="col-3"></div>
+        
+    </div>
+</p-sidebar>
 
 <div *ngIf="showCreateticket" class="col-12 card grid">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"

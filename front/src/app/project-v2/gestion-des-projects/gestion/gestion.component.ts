@@ -47,6 +47,7 @@ export class GestionComponent implements OnInit {
   private budgetid!: string;
   avancement_p: number = 0;
   avancement_t: number = 0;
+  displayTache: boolean = false;
   showAddProjectForm: boolean = false;
   showressources: boolean = false;
   showCreateticket: boolean = false;
@@ -385,8 +386,9 @@ export class GestionComponent implements OnInit {
       data.forEach((d) => {
         this.task.push(d);
         if (d.etat === "En attente de traitement") {
+          console.log(d.attribuate_to)
           this.taskToDo.push(d);
-        }
+        } 
       });
       console.log(this.taskToDo);
       this.selectedTabIndex=3;
