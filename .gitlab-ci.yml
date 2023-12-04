@@ -63,7 +63,7 @@ install_angular_dependencies_on_dev:
 
 #==========================================================
 
-install_node_dependencies_on_qa:
+manual_install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -78,10 +78,9 @@ install_node_dependencies_on_qa:
   only:
     refs:
       - main
-    changes:
-      - back/package.json
+  when: manual
 
-install_angular_dependencies_on_qa:
+manual_install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -96,8 +95,7 @@ install_angular_dependencies_on_qa:
   only:
     refs:
       - main
-    changes:
-      - front/package.json
+  when: manual
 
 #==========================================================
 
