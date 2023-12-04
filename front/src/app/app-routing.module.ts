@@ -146,10 +146,16 @@ const routes: Routes = [
                 component: DashboardComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm',
+                loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
+                
+
+            },
             {
                 path: 'pedagogie',
                 loadChildren: () => import('./pedagogie/pedagogie.module').then(m => m.PedagogieModule)
-
             },
             {
                 path: 'skillsnet',
@@ -500,10 +506,7 @@ const routes: Routes = [
 
             /* Module CRM */
 
-            {
-                path: 'crm',
-                loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
-            },
+
 
 
 
