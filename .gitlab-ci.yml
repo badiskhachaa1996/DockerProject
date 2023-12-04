@@ -78,6 +78,8 @@ install_node_dependencies_on_qa:
   only:
     refs:
       - main
+    changes:
+      - back/package.json
 
 install_angular_dependencies_on_qa:
   stage: Install
@@ -94,6 +96,8 @@ install_angular_dependencies_on_qa:
   only:
     refs:
       - main
+    changes:
+      - front/package.json
 
 #==========================================================
 
