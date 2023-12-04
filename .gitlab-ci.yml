@@ -4,9 +4,9 @@ stages:
 #  - SAST
 #  - DAST
 #  - Docker
-  - DEV
-  - QA
-  - PROD # FIXME tests only on Dev/QA, not in Prod
+  - DEV # auto from develop
+  - QA # auto from main
+  - PROD2 # manual from main
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -63,7 +63,7 @@ install_angular_dependencies_on_dev:
 
 #==========================================================
 
-manual_install_node_dependencies_on_qa:
+install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -76,10 +76,12 @@ manual_install_node_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    - develop
-  when: manual
+    refs:
+      - main
+    changes:
+      - back/package.json
 
-manual_install_angular_dependencies_on_qa:
+install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -92,15 +94,17 @@ manual_install_angular_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    - develop
-  when: manual
+    refs:
+      - main
+    changes:
+      - front/package.json
 
 #==========================================================
 
-manual_install_node_dependencies_on_prod:
+manual_install_node_dependencies_on_prod2:
   stage: Install
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -114,10 +118,10 @@ manual_install_node_dependencies_on_prod:
       - main
   when: manual
 
-manual_install_angular_dependencies_on_prod:
+manual_install_angular_dependencies_on_prod2:
   stage: Install
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -182,7 +186,7 @@ build_angular_on_dev:
 
 #==========================================================
 
-manual_build_angular_on_qa:
+build_angular_on_qa:
   stage: Build
   tags:
     - qa-shell
@@ -196,20 +200,19 @@ manual_build_angular_on_qa:
       - cd front
       - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
-    - develop
+    - main
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
     expire_in: 1 hour
-  when: manual
 
 #==========================================================
 
-manual_build_angular_on_prod:
+manual_build_angular_on_prod2:
   stage: Build
   tags:
-    - prod-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -218,7 +221,7 @@ manual_build_angular_on_prod:
 
   script:
       - cd front
-      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod
+      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
   artifacts:
@@ -312,20 +315,19 @@ deploy_node_to_dev:
 
 #==========================================================
 
-manual_deploy_angular_to_qa:
+deploy_angular_to_qa:
   stage: QA
   dependencies: 
-    - manual_build_angular_on_qa
+    - build_angular_on_qa
   tags:
     - qa-shell
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist /var/www/html/ems
   only:
-    - develop
-  when: manual
+    - main
 
-manual_deploy_node_to_qa:
+deploy_node_to_qa:
   stage: QA
 
   tags:
@@ -338,17 +340,16 @@ manual_deploy_node_to_qa:
     - pm2 start index.js --time -- --qa
    # - pm2 logs index
   only:
-    - develop
-  when: manual
+    - main
 
 #==========================================================
 
-manual_deploy_angular_to_prod:
-  stage: PROD
+manual_deploy_angular_to_prod2:
+  stage: PROD2
   dependencies:
-    - manual_build_angular_on_prod
+    - manual_build_angular_on_prod2
   tags:
-    - prod-shell
+    - prod2-shell
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist /var/www/html/ems
@@ -356,17 +357,17 @@ manual_deploy_angular_to_prod:
     - main
   when: manual
   
-manual_deploy_node_to_prod:
-  stage: PROD
+manual_deploy_node_to_prod2:
+  stage: PROD2
 
   tags:
-    - prod-shell
+    - prod2-shell
   script:
     - cd back
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js --time -- --prod
+    - pm2 start index.js --time -- --prod2
    # - pm2 logs index
   only:
     - main
