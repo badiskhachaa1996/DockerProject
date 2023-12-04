@@ -4,7 +4,6 @@ import { ToastModule } from "primeng/toast";
 import { DropdownModule } from "primeng/dropdown";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TableModule } from "primeng/table";
-import { AppModule } from "../app.module";
 import { DialogModule } from "primeng/dialog";
 import { TabViewModule } from "primeng/tabview";
 import { SidebarModule } from "primeng/sidebar";
@@ -14,8 +13,6 @@ import { CheckboxModule } from "primeng/checkbox";
 import { ToggleButtonModule } from "primeng/togglebutton";
 import { ButtonModule } from "primeng/button";
 import { FullCalendarModule } from "primeng/fullcalendar";
-import { FormCrmRoutingModule } from './formcrm-routing.module';
-import { FormCrmExtComponent } from './form-crm-ext/form-crm-ext.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
@@ -38,9 +35,9 @@ import { MyTargetComponent } from './target/my-target/my-target.component';
 import { TeamsCrmComponent } from './teams-crm/teams-crm.component';
 import { VentesCRMComponent } from './ventes-crm/ventes-crm.component';
 import { CrmRoutingModule } from './crm-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MemberCrmComponent } from './teams-crm/member-crm/member-crm.component';
 import { ChartModule } from 'primeng/chart';
+import {CriteresComponent} from "./criteres/criteres.component";
 
 
 
@@ -65,7 +62,8 @@ import { ChartModule } from 'primeng/chart';
         MyTargetComponent,
         TeamsCrmComponent,
         VentesCRMComponent,
-        MemberCrmComponent
+        MemberCrmComponent,
+        CriteresComponent
     ],
     exports: [
         SuivreLeadComponent,
@@ -87,7 +85,8 @@ import { ChartModule } from 'primeng/chart';
         MyTargetComponent,
         TeamsCrmComponent,
         VentesCRMComponent,
-        MemberCrmComponent
+        MemberCrmComponent,
+        CriteresComponent
     ],
     imports: [
         CommonModule,

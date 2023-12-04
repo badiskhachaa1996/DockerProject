@@ -4,9 +4,9 @@ stages:
 #  - SAST
 #  - DAST
 #  - Docker
-  - DEV
-  - QA
-  - PROD2 # FIXME tests only on Dev/QA, not in Prod1/2
+  - DEV # auto from develop
+  - QA # auto from main
+  - PROD2 # manual from main
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -76,7 +76,8 @@ manual_install_node_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    - develop
+    refs:
+      - main
   when: manual
 
 manual_install_angular_dependencies_on_qa:
@@ -92,7 +93,8 @@ manual_install_angular_dependencies_on_qa:
     - rm -rf node_modules/
     - npm install
   only:
-    - develop
+    refs:
+      - main
   when: manual
 
 #==========================================================
@@ -182,7 +184,7 @@ build_angular_on_dev:
 
 #==========================================================
 
-manual_build_angular_on_qa:
+build_angular_on_qa:
   stage: Build
   tags:
     - qa-shell
@@ -196,13 +198,12 @@ manual_build_angular_on_qa:
       - cd front
       - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
-    - develop
+    - main
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - front/dist
     expire_in: 1 hour
-  when: manual
 
 #==========================================================
 
@@ -312,20 +313,19 @@ deploy_node_to_dev:
 
 #==========================================================
 
-manual_deploy_angular_to_qa:
+deploy_angular_to_qa:
   stage: QA
   dependencies: 
-    - manual_build_angular_on_qa
+    - build_angular_on_qa
   tags:
     - qa-shell
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist /var/www/html/ems
   only:
-    - develop
-  when: manual
+    - main
 
-manual_deploy_node_to_qa:
+deploy_node_to_qa:
   stage: QA
 
   tags:
@@ -338,8 +338,7 @@ manual_deploy_node_to_qa:
     - pm2 start index.js --time -- --qa
    # - pm2 logs index
   only:
-    - develop
-  when: manual
+    - main
 
 #==========================================================
 
