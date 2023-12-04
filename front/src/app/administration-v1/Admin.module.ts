@@ -25,6 +25,7 @@ import { InscriptionComponent } from './gestion-des-inscriptions/inscription/ins
 import { PreinscriptionComponent } from './gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 import {AddGroupeV2Component} from "./configuration/groupes/add-groupe-v2/add-groupe-v2.component";
 import {GroupesComponent} from "./configuration/groupes/groupes.component";
+import {AccordionModule} from "primeng/accordion";
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import {GroupesComponent} from "./configuration/groupes/groupes.component";
         FullCalendarModule,
         DataViewModule,
         CheckboxModule,
-        StepsModule
+        StepsModule,
+        AccordionModule
     ]
 })
 export class AdminModule { }

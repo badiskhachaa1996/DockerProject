@@ -382,7 +382,6 @@ import { RhModule } from "./rh/rh.module";
         InvalidStateComponent,
         InputComponent,
         ButtonComponent,
-        TableComponent,
         ListComponent,
         TreeComponent,
         PanelsComponent,
