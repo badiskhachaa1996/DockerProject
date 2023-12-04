@@ -173,6 +173,9 @@
                         },
                         "dev": {
                             "browserTarget": "sakai:build:dev"
+                        },
+                        "local": {
+                            "browserTarget": "sakai:build:local"
                         }
                     }
                 },

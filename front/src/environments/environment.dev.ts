@@ -4,7 +4,7 @@
 
 export const environment = {
     recaptchaKey: '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU ',
-    origin: "https://141.94.71.25/soc/",
+    origin: "https://dev-ims.intedgroup.com/soc/",
     key: "6abdfb04243e096a4a51b46c8f3d4b32",
     clientId: "24cf4a22-5a5f-4c56-bab4-29884bc6c06f",
     User: null,
