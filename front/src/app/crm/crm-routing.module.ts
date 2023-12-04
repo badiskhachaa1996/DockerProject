@@ -26,13 +26,6 @@ const routes: Routes = [
     {
         path: 'liste',
         component: CrmListComponent
-        /*children: [
-            {
-                path: 'liste',
-                component: CrmListComponent,
-                canActivate: [AuthGuardService],
-            }
-        ]*/
     },
     {
         path: 'leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif
@@ -136,7 +129,7 @@ const routes: Routes = [
         component: GestionOperationComponent,
         canActivate: [AuthGuardService],
     },
-    
+
 ];
 
 @NgModule({
