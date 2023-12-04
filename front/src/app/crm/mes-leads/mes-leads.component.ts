@@ -1,7 +1,7 @@
 
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
-
+import { DatePipe } from '@angular/common';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
+
 @Component({
   selector: 'app-mes-leads',
   templateUrl: './mes-leads.component.html',
@@ -36,76 +37,61 @@ showDialog() {
     
 
 
-task = { description: '', dueDate: null };
+task = { id: 0,dueDate: null, description: '',  };
   tasks = [];
   editingTaskIndex: number | null = null;
-    
 
-/*addTask() {
-  if (this.editingTaskIndex !== null) {
-    // Mise à jour de la tâche existante
-    this.tasks[this.editingTaskIndex] = { ...this.task };
-    this.editingTaskIndex = null; // Réinitialiser l'index après la modification
-  } else {
-    // Ajouter une nouvelle tâche
-    this.tasks.push({ ...this.task });
+  generateNewId(): number {
+    // Generate a random number between 1000 and 9999
+    return Math.floor(1000 + Math.random() * 9000);
   }
-  this.task = { description: '', dueDate: null }; // Réinitialiser la tâche
-  
-  this.saveTasks(); // Sauvegarder les tâches
-}
 
-editTask(index: number) {
-  this.editingTaskIndex = index;
-  this.task = { ...this.tasks[index] }; // Remplir le formulaire avec les données de la tâche
-}
+  saveTaskChanges() {
+    if (this.editingTaskIndex !== null) {
+      this.tasks[this.editingTaskIndex] = { ...this.task };
+      this.editingTaskIndex = null;
+      this.task = { id: 0, dueDate: null, description: '' };
+      this.saveTasks();
+    }
+  }
 
+  addTask() {
+    if (this.editingTaskIndex !== null) {
+      // Update existing task
+      this.tasks[this.editingTaskIndex] = { ...this.task };
+      this.editingTaskIndex = null;
+    } else {
+      // Add new task with a generated ID
+      const newId = this.generateNewId();
+      this.tasks.push({ ...this.task, id: newId });
+    }
+    this.task = { id: 0, description: '', dueDate: null }; // Reset task
+    this.saveTasks(); // Save tasks
+  }
 
-deleteTask(index: number) {
-  this.tasks.splice(index, 1);
-  this.saveTasks();
-}
-
-saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(this.tasks));
-}
-*/
-saveTaskChanges() {
-  if (this.editingTaskIndex !== null) {
-    this.tasks[this.editingTaskIndex] = { ...this.task };
-    this.editingTaskIndex = null;
-    this.task = { description: '', dueDate: null };
+  editTask(index: number) {
+    this.editingTaskIndex = index;
+    // Ensure that properties are correctly associated using the cloneTask method
+    this.task = this.cloneTask(this.tasks[index]);
+  }
+  deleteTask(index: number) {
+    this.tasks.splice(index, 1);
     this.saveTasks();
   }
-}
-addTask() {
-  if (this.editingTaskIndex !== null) {
-    // Update existing task
-    this.tasks[this.editingTaskIndex] = { ...this.task };
-    this.editingTaskIndex = null;
-  } else {
-    // Add new task
-    this.tasks.push({ ...this.task });
+
+  saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
-  this.task = { description: '', dueDate: null }; // Reset task
-  this.saveTasks(); // Save tasks
-}
 
-editTask(index: number) {
-  this.editingTaskIndex = index;
-  this.task = { ...this.tasks[index] }; // Fill form with task data
-}
+  private generateUniqueId(): number {
+    // Replace this with your own logic for generating unique IDs
+    return new Date().getTime();
+  }
 
-deleteTask(index: number) {
-  this.tasks.splice(index, 1);
-  this.saveTasks();
-}
-
-saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(this.tasks));
-}
-
-
+  private cloneTask(task: any): any {
+    // Use this method to clone the task properties
+    return { ...task };
+  }
 
 
 
@@ -179,7 +165,7 @@ saveTasks() {
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+  constructor(private LCS: LeadcrmService,private datePipe: DatePipe, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -213,7 +199,8 @@ saveTasks() {
     this.token = jwt_decode(localStorage.getItem('token'));
      // Charger les tâches sauvegardées
      this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
+     
+     this.tasks.reverse();
     
   }
 

@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { AppRoutingModule } from './app-routing.module';
 import { registerLocaleData } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
+
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
@@ -407,6 +408,7 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
 import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -837,7 +839,8 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     BookingV2Component,
     SuivreLeadComponent,
     GestionOperationComponent,
-    GestionSrourcesComponent
+    GestionSrourcesComponent,
+    ConfirmDialogComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

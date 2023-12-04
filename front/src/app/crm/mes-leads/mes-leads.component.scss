@@ -1,5 +1,12 @@
+/* Ajouter la classe "custom-dialog" pour personnaliser la hauteur du popup */
+.custom-dialog {
+    height: 600px; /* Ajuster la hauteur selon vos besoins */
+}
+
+/* Reste du CSS inchangé */
 .table-style {
     width: 100%;
+    margin-top: 20px;
     border-collapse: collapse;
     font-family: 'Arial', sans-serif;
 }
@@ -7,8 +14,8 @@
 .table-style th,
 .table-style td {
     border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+    padding: 10px; /* Ajuster la marge intérieure des cellules */
+    text-align: center; /* Centrer le contenu des cellules */
 }
 
 .table-style th {
@@ -24,7 +31,25 @@
     background-color: #eaeaea;
 }
 
-.table-style th,
-.table-style td {
-    padding: 12px 15px;
+/* Ajouter une classe pour définir une taille fixe pour le dropdown */
+.fixed-dropdown {
+    width: 150px; /* Ajuster la taille selon vos besoins */
 }
+
+.form-inline {
+    display: flex;
+    align-items: center;
+}
+
+.flex-grow-1 {
+    flex: 1;
+}
+
+.mr-2 {
+    margin-right: 8px;
+}
+.modify-task-message {
+    color: rgb(0, 87, 109);
+    font-weight: bold;
+    padding: 10px; /* Adjust the padding as needed */
+  }
