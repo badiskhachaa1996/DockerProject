@@ -115,6 +115,8 @@ app.post("/create", (req, res) => {
                             r = r + " - " + ticket.filiere
                         if (ticket.demande)
                             r = r + " - " + ticket.demande
+                        if (ticket.site)
+                            r = r + " - " + ticket.site
                         let mailOptions = {
                             from: 'ims@intedgroup.com',
                             to: 'ims.support@intedgroup.com',
@@ -607,6 +609,8 @@ app.post("/AccAff/:id", (req, res) => {
                                 r = r + " - " + ticket.filiere
                             if (ticket.demande)
                                 r = r + " - " + ticket.demande
+                            if (ticket.site)
+                                r = r + " - " + ticket.site
                             let mailOptions = {
                                 from: 'ims@intedgroup.com',
                                 to: ['ims.support@intedgroup.com', userFromDb?.email],

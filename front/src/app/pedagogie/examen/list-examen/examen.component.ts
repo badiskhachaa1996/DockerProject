@@ -653,7 +653,7 @@ export class ExamenComponent implements OnInit {
   onShowAppreciation() {
     //appreciation/:semestre/:classe_id/:formateur_id
     let fid: any = this.examSelected.formateur_id
-    this.router.navigate(['appreciation', this.examSelected.semestre, this.formAppreciation.value.classe_id, fid._id])
+    this.router.navigate(['pedagogie/appreciation', this.examSelected.semestre, this.formAppreciation.value.classe_id, fid._id])
   }
   dropdownClasseExamen = []
   updateDropdown(exam) {

@@ -1,0 +1,69 @@
+<div>
+    <div style="text-align: right;">
+        <i class="pi pi-times-circle" style=" font-size: 20px; color: red; cursor: pointer;"
+            (click)="groupeUpdated=null" aria-hidden="true"> </i>
+    </div>
+    <app-add-groupe-v2 *ngIf="groupeUpdated" [isUpdate]="groupeUpdated"
+        (updateGroupe)="onUpdateGroupe($event)"></app-add-groupe-v2>
+</div>
+
+<p-tabView>
+    <p-tabPanel header="Ajouter">
+        <app-add-groupe-v2 (addGroupe)="onAddGroupe($event);"></app-add-groupe-v2>
+    </p-tabPanel>
+    <p-tabPanel header="Liste" [selected]="true">
+        <div class="col-12">
+            <p-table #dt1 [value]="groupes" rowExpandMode="single" dataKey="_id" [rows]="8" [rowHover]="true"
+                [paginator]="true" [pageLinks]="5" [globalFilterFields]="['abbrv','nom']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="abbrv" style="text-align: center;"> Nom du groupe <p-sortIcon
+                                field="abbrv"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation_id.nom" style="text-align: center;"> Formation <p-sortIcon
+                                field="formation_id.nom">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="campus_id.libelle" style="text-align: center;"> Campus <p-sortIcon
+                                field="campus_id.libelle">
+                            </p-sortIcon>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td style="min-width: 12rem;">
+                            {{ rowData?.abbrv }}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData?.formation_id?.nom }}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData?.campus_id?.libelle }}
+                        </td>
+                        <td style="min-width: 10rem;">
+
+                            <i aria-hidden="true" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                tooltipPosition="bottom" (click)="InitUpdateGroupe(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-tabPanel>
+</p-tabView>

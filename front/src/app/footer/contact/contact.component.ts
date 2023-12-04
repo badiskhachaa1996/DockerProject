@@ -29,7 +29,7 @@ export class ContactComponent implements OnInit {
     this.contactform = this.formBuilder.group({
       civilite: new FormControl(environment.civilite[0], [Validators.required]),
       nom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      prenom : new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      prenom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       email: new FormControl('', [Validators.required, Validators.email]),
       description: new FormControl('', [Validators.required]),
     })
@@ -44,7 +44,7 @@ export class ContactComponent implements OnInit {
 
   register() {
     let messageObject = {
-      civilite : this.civilite,
+      civilite: this.civilite,
       lastname: this.nom,
       firstname: this.prenom,
       mail: this.email,
@@ -54,9 +54,7 @@ export class ContactComponent implements OnInit {
     console.log(messageObject)
 
     this.ContactService.sendEmail(messageObject).subscribe((data) => {
-      let res = data;
-      res.send("ok");
-      console.log("ok");
+      this.messageService.add({ severity: 'success', summary: 'Message envoyé avec succès' })
     })
 
   }

@@ -61,7 +61,7 @@ export class CvComponent implements OnInit {
   }
 
   gotoEdit() {
-    this.router.navigate(['generateur-cv/', this.user._id])
+    this.router.navigate(['i-match/generateur-cv/', this.user._id])
   }
 
   showMore() {

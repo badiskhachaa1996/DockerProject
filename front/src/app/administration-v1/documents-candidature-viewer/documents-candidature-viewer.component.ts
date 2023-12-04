@@ -11,7 +11,8 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./documents-candidature-viewer.component.scss']
 })
 export class DocumentsCandidatureViewerComponent implements OnInit {
-  documentsObligatoires = ['CV', "Passeport - Pièce d'identité", "Diplôme baccalauréat ou équivalent", "Relevés de note depuis le baccalauréat"]
+  documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+    "Relevés de note de deux dernières année"]
   ID = this.route.snapshot.paramMap.get('id');
   @Input() PROSPECT_ID
   @Input() selectedDocs = 'documents_dossier'
@@ -39,14 +40,14 @@ export class DocumentsCandidatureViewerComponent implements OnInit {
   checkIfDossierComplet() {
     let r = false
     if (this.selectedDocs == 'documents_dossier') {
-      this.documentsObligatoires = ["CV", "Dernier diplôme supérieur obtenu",
-        "Relevés de note depuis le baccalauréat", "Passeport - Pièce d'identité",
-        "Diplôme baccalauréat ou équivalent", "Relevé de note baccalauréat"]
-      if (this.resideFr && this.alternance) {
-        this.documentsObligatoires.push('Copie Visa')
-        this.documentsObligatoires.push('Carte de séjour')
+      this.documentsObligatoires = ['CV', "Pièce d'identité", "Dernier diplôme obtenu",
+        "Relevés de note de deux dernières année"]
+      if (this.alternance)
         this.documentsObligatoires.push('Carte vitale ou attestation provisoire')
-      }
+
+      if (!this.resideFr)
+        this.documentsObligatoires.push('Test de niveau en Français - TCF ou DELF')
+
       this.PROSPECT.documents_dossier.forEach(val => {
         if (this.documentsObligatoires.includes(val.nom) && !val.path)
           r = true
