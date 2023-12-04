@@ -106,11 +106,9 @@ import { FloatLabelComponent } from './components/floatlabel/floatlabel.componen
 import { InvalidStateComponent } from './components/invalidstate/invalidstate.component';
 import { InputComponent } from './components/input/input.component';
 import { ButtonComponent } from './components/button/button.component';
-import { TableComponent } from './components/table/table.component';
 import { ListComponent } from './components/list/list.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { PanelsComponent } from './components/panels/panels.component';
-import { OverlaysComponent } from './components/overlays/overlays.component';
 import { MediaComponent } from './components/media/media.component';
 import { MenusComponent } from './components/menus/menus.component';
 import { MessagesComponent } from './components/messages/messages.component';
@@ -122,7 +120,6 @@ import { DocumentationComponent } from './components/documentation/documentation
 import { CrudComponent } from './components/crud/crud.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { IconsComponent } from './components/icons/icons.component';
-import { BlocksComponent } from './components/blocks/blocks.component';
 import { PaymentComponent } from './components/menus/payment.component';
 import { ConfirmationComponent } from './components/menus/confirmation.component';
 import { PersonalComponent } from './components/menus/personal.component';
@@ -152,6 +149,7 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 import { ArrToStrPipe } from './arr-to-str.pipe';
 import { SignaturePadModule } from 'angular2-signaturepad';
+//import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
 import { MsalInterceptor, MsalModule, MsalRedirectComponent } from "@azure/msal-angular";
@@ -388,7 +386,6 @@ import { RhModule } from "./rh/rh.module";
         ListComponent,
         TreeComponent,
         PanelsComponent,
-        OverlaysComponent,
         MenusComponent,
         MessagesComponent,
         MessagesComponent,
@@ -400,7 +397,6 @@ import { RhModule } from "./rh/rh.module";
         DocumentationComponent,
         CrudComponent,
         TimelineComponent,
-        BlocksComponent,
         BlockViewer,
         MediaComponent,
         PaymentComponent,

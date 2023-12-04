@@ -36,12 +36,12 @@ import {GroupesComponent} from "./configuration/groupes/groupes.component";
         GroupesComponent
     ],
     exports:[
-        AddGroupeV2Component,
-        GroupesComponent,
         DocumentsCandidatureViewerComponent,
         EvaluationComponent,
         InscriptionComponent,
-        PreinscriptionComponent
+        PreinscriptionComponent,
+        AddGroupeV2Component,
+        GroupesComponent
     ],
     imports: [
         CommonModule,
