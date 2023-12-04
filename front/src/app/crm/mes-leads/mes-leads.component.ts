@@ -1,6 +1,6 @@
 
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl,  FormGroup,  UntypedFormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-mes-leads',
@@ -35,52 +36,87 @@ showDialog() {
 
 //une méthode addTask() qui sera appelée lorsque le bouton "Ajouter" du formulaire est cliqué. Cette méthode peut traiter les données du formulaire et les ajouter à un tableau de tâches
     
+description : string;
+
+rappel: {
+  id: number,
+  dueDate: any,  // Ajustez le type au besoin (par exemple, Date ou string)
+  description: string
+} = {
+  id: 0,
+  dueDate: null,
+  description: ''
+};
 
 
-task = { id: 0,dueDate: null, description: '',  };
-  tasks = [];
-  editingTaskIndex: number | null = null;
+rappels: Array<{ id: number, dueDate: any, description: string }> = [];
+editingRappelIndex: number | null = null;
 
   generateNewId(): number {
     // Generate a random number between 1000 and 9999
     return Math.floor(1000 + Math.random() * 9000);
   }
 
-  saveTaskChanges() {
-    if (this.editingTaskIndex !== null) {
-      this.tasks[this.editingTaskIndex] = { ...this.task };
-      this.editingTaskIndex = null;
-      this.task = { id: 0, dueDate: null, description: '' };
-      this.saveTasks();
+  saveRappelChanges() {
+    if (this.editingRappelIndex !== null) {
+      this.rappels[this.editingRappelIndex] = { ...this.rappel };
+      this.editingRappelIndex = null;
+      this.rappel = { id: 0, dueDate: null, description: '' };
+      this.saveRappels();
     }
   }
 
-  addTask() {
-    if (this.editingTaskIndex !== null) {
-      // Update existing task
-      this.tasks[this.editingTaskIndex] = { ...this.task };
-      this.editingTaskIndex = null;
+  addRappel() {
+    if (this.editingRappelIndex !== null) {
+      // Mise à jour d'un rappel existant
+      this.rappels[this.editingRappelIndex] = { ...this.rappel };
+      this.editingRappelIndex = null;
     } else {
-      // Add new task with a generated ID
+      // Ajout d'un nouveau rappel avec un ID généré
       const newId = this.generateNewId();
-      this.tasks.push({ ...this.task, id: newId });
+      this.rappels.push({ ...this.rappel, id: newId });
+      // Trier les rappels ici si nécessaire
+      this.rappels.sort((a, b) => b.dueDate - a.dueDate);
     }
-    this.task = { id: 0, description: '', dueDate: null }; // Reset task
-    this.saveTasks(); // Save tasks
+    this.rappel = { id: 0, description: '', dueDate: null }; // Réinitialiser le rappel
+    this.saveRappels(); // Sauvegarder les rappels
   }
 
-  editTask(index: number) {
-    this.editingTaskIndex = index;
-    // Ensure that properties are correctly associated using the cloneTask method
-    this.task = this.cloneTask(this.tasks[index]);
+  editRappel(index: number) {
+    this.editingRappelIndex = index;  // Store the index of the rappel being edited
+    this.rappel = this.cloneRappel(this.rappels[index]);  // Clone the rappel for editing
+console.log(this.cloneRappel(this.rappels[index]))
+this.description = this.rappels[index].description
+console.log(this.description)
+this.Updatetache.patchValue({
+  description:this.description
+})
   }
-  deleteTask(index: number) {
-    this.tasks.splice(index, 1);
-    this.saveTasks();
+  
+
+  confirmDelete(rappelIndex: number) {
+    this.confirmationService.confirm({
+      message: 'Êtes-vous sûr de vouloir supprimer cette tâche ?',
+      accept: () => {
+        // Logique pour supprimer la tâche
+        this.deleteRappel(rappelIndex);
+      },
+      reject: () => {
+        // Logique en cas d'annulation
+      }
+    });
   }
 
-  saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  deleteRappel(index: number) {
+    // Logique de suppression de la tâche
+    this.rappels.splice(index, 1);
+    this.saveRappels();
+    // ... autre logique si nécessaire
+  }
+
+
+  saveRappels() {
+    localStorage.setItem('rappels', JSON.stringify(this.rappels));
   }
 
   private generateUniqueId(): number {
@@ -88,9 +124,14 @@ task = { id: 0,dueDate: null, description: '',  };
     return new Date().getTime();
   }
 
-  private cloneTask(task: any): any {
-    // Use this method to clone the task properties
-    return { ...task };
+  private cloneRappel(rappel: any): any {
+    // Ici, nous clonons explicitement chaque propriété pour éviter les erreurs
+    return {
+      id: rappel.id,
+      dueDate: rappel.dueDate,
+      description: rappel.description,
+      // Ajoutez toutes les autres propriétés nécessaires ici
+    };
   }
 
 
@@ -127,7 +168,7 @@ task = { id: 0,dueDate: null, description: '',  };
 
   filterQualification = [
     { label: 'Tous les qualifications', value: null },
-    { label: 'Encours de traitement', value: 'En attente de traitement' },
+    
     { label: 'Non traitée', value: 'Non qualifié' },
     //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'traitée', value: 'Qualifié' },
@@ -135,10 +176,10 @@ task = { id: 0,dueDate: null, description: '',  };
 
   filterAvancement = [
     { label: 'Tous les avancements', value: null },
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
+    
     { label: 'Non traiée', value: 'Non traiée' },
-    { label: 'en cours ', value: 'en cours' },
-    { label: 'traitée', value: 'traitée' },
+    { label: 'En cours ', value: 'en cours' },
+    { label: 'Traitée', value: 'traitée' },
   ]
 
   filterPaiement = [
@@ -165,7 +206,7 @@ task = { id: 0,dueDate: null, description: '',  };
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  constructor(private LCS: LeadcrmService,private datePipe: DatePipe, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+  constructor(private confirmationService: ConfirmationService,private LCS: LeadcrmService,private datePipe: DatePipe, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -198,9 +239,9 @@ task = { id: 0,dueDate: null, description: '',  };
     //taches
     this.token = jwt_decode(localStorage.getItem('token'));
      // Charger les tâches sauvegardées
-     this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+     this.rappels = JSON.parse(localStorage.getItem('rappels')) || [];
      
-     this.tasks.reverse();
+     this.rappels.reverse();
     
   }
 
@@ -225,7 +266,10 @@ task = { id: 0,dueDate: null, description: '',  };
 
     note_qualification: new FormControl(''),
   })
-
+Updatetache=new FormGroup({
+  date:new FormControl('',Validators.required),
+  description:new FormControl(''),
+});
 
   @Output() suivreLead = new EventEmitter<LeadCRM>();
 
@@ -234,7 +278,7 @@ task = { id: 0,dueDate: null, description: '',  };
   }
 
   onDropdownChange() {
-    this.saveTasks();
+    this.saveRappels();
   }
 
 
@@ -392,7 +436,7 @@ task = { id: 0,dueDate: null, description: '',  };
   ]
   //En attente de traitement ;Non qualifié, Pré-qualifié, Qualifié
   decisionList = [
-    { label: 'Encours de traitement', value: 'En attente de traitement' },
+    
     { label: 'Non traitée', value: 'Non qualifié' },
     //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'traitée', value: 'Qualifié' },
@@ -400,7 +444,7 @@ task = { id: 0,dueDate: null, description: '',  };
 
 
   avancementList = [
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
+    
     { label: 'Non traiée', value: 'Non traiée' },
     { label: 'en cours', value: 'en cours' },
     { label: 'traitée', value: 'traitée' },

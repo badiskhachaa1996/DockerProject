@@ -601,38 +601,38 @@
     </div>
 
 
-    <p-dialog header=" Liste des rappels" [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
-        <form>
-            <div *ngIf="editingTaskIndex !== null" class="modify-task-message">
-                <p>{{ 'Vous etes entrain de modifier le rappel numéro ' + tasks[editingTaskIndex]?.id }}</p>
+    <p-dialog header=" Liste des taches " [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
+        <form [formGroup]="Updatetache">
+            <div *ngIf="editingRappelIndex !== null" class="modify-task-message">
+                <p>{{ 'Tache numéro ' + rappels[editingRappelIndex]?.id }}</p>
               </div>
             <div class="p-fluid form-inline">
               <!-- Champ de description -->
             
               <div class="p-field flex-grow-1 mr-2">
-                <input id="taskDescription" type="text" pInputText [(ngModel)]="task.description" placeholder="Description" required>
+                <input id="rappelDescription" type="text" pInputText [(ngModel)]="rappel.description" formControlName="description" placeholder="Description" required>
               </div>
               
               <!-- Champ de date limite -->
               <div class="p-field mr-2">
-                <input id="taskDueDate" type="date" pInputText [(ngModel)]="task.dueDate" required>
+                <input id="rappelDueDate" type="date" pInputText [(ngModel)]="rappel.dueDate"  formControlName="date" required>
               </div>
         
               <!-- Bouton Ajouter / Enregistrer les Modifications -->
               <div class="p-field">
-                <button *ngIf="editingTaskIndex === null" pButton type="button" label="Ajouter" (click)="addTask()" style="width: 100px;"></button>
-                <button *ngIf="editingTaskIndex !== null" pButton type="button" label="Enregistrer" (click)="saveTaskChanges()" style="width: 100px;"></button>
+                <button *ngIf="editingRappelIndex === null" pButton type="button" label="Ajouter" (click)="addRappel()" style="width: 100px;"></button>
+                <button *ngIf="editingRappelIndex !== null" pButton type="button" label="Enregistrer" (click)="saveRappelChanges()" style="width: 100px;"></button>
               </div>
             </div>
           </form>
     
         <!-- Tableau pour afficher les tâches -->
-        <div *ngIf="tasks.length > 0">
+        <div *ngIf="rappels.length > 0">
           
 
 
            <!-- Tableau PrimeNG avec tri sur une seule colonne -->
-           <p-table [value]="tasks" [paginator]="true" [rows]="3" [totalRecords]="tasks.length" sortMode="single" [style]="{'margin-top': '20px'}" class="table-style">
+           <p-table [value]="rappels" [paginator]="true" [rows]="3" [totalRecords]="rappels.length" sortMode="single" [style]="{'margin-top': '20px'}" class="table-style">
             <ng-template pTemplate="header">
               <tr>
                 <th>Numéro</th>
@@ -649,26 +649,26 @@
                 <th>Actions</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-task let-i="rowIndex">
+            <ng-template pTemplate="body" let-rappel let-i="rowIndex">
               <tr>
-                <td>{{ task.id }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.dueDate }}</td>
+                <td>{{ rappel.id }}</td>
+                <td>{{ rappel.description }}</td>
+                <td>{{ rappel.dueDate | date: 'dd/MM/yyyy' }}</td>
                 <td>
                   <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                  <p-dropdown [options]="avancementList" [(ngModel)]="task.decision_avancement"
-                    autoWidth="false" (onChange)="onDropdownChange()" placeholder="Choisissez un état d'avancement" class="fixed-dropdown">
-                  </p-dropdown>
+                  <p-dropdown [options]="avancementList" [(ngModel)]="rappel.decision_avancement"
+  autoWidth="false" (onChange)="onDropdownChange()" class="fixed-dropdown">
+</p-dropdown>
                 </td>
                 <td>
-                  <i class="pi pi-pencil" pTooltip="Modifier Tâche" (click)="editTask(i)" style="margin: 5px;"></i>
-                  <i class="pi pi-trash" pTooltip="Supprimer Tâche" (click)="deleteTask(i)" style="margin: 5px;"></i>
+                  <i class="pi pi-pencil" pTooltip="Modifier Tâche" (click)="editRappel(i)" style="margin: 5px;"></i>
+                  <i class="pi pi-trash" pTooltip="Supprimer Tâche" (click)="confirmDelete(i)" style="margin: 5px;"></i>
 
                 </td>
               </tr>
             </ng-template>
           </p-table>
-        
+          <p-confirmDialog></p-confirmDialog>
 
             
         </div>
