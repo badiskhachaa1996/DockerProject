@@ -67,7 +67,7 @@
             </div>
             <h5>Liste des équipes du CRM</h5>
             <p-toast></p-toast>
-            <p-table #dt1 [value]="teams" dataKey="_id" responsiveLayout="scroll"
+            <p-table #dt1 [value]="test" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['nom', 'description']" [rows]="5" [pageLinks]="5" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="teams.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -83,29 +83,40 @@
                         <th pSortableColumn="nom">Nom de l'équipe<p-sortIcon field="nom">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="membre">Membres de l'équipe<p-sortIcon field="membre">
+                            </p-sortIcon>
+                        </th>
                         <th pSortableColumn="description">Description<p-sortIcon field="description">
                             </p-sortIcon>
                         </th>
                         <th>Action </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-team>
+                <ng-template pTemplate="body" let-test>
                     <tr>
                         <td>
-                            {{ team.custom_id }}
+                            {{ test.team.custom_id }}
                         </td>
                         <td>
-                            {{ team.nom }}
+                            {{ test.team.nom }}
                         </td>
                         <td>
-                            {{ team.description }}
+                            <ng-container *ngFor="let membre of test?.membre">
+                                {{membre?.user_id?.firstname}} {{membre?.user_id?.lastname}} <br>
+                            </ng-container>
                         </td>
-                        <td> 
-                            <i style="padding-left: 3%;" class="pi pi-plus" (click)="initAdd(team);scrollToTop()"
+
+                        <td>
+                            {{ test.team.description }}
+                        </td>
+
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-plus" (click)="initAdd(test.team);scrollToTop()"
                                 pTooltip="Ajouter un membre à l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(team);scrollToTop()"
-                                pTooltip="Modifier l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
-                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(team);"
+                            <i style="padding-left: 3%;" class="pi pi-pencil"
+                                (click)="initUpdate(test.team);scrollToTop()" pTooltip="Modifier l'équipe"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(test.team);"
                                 pTooltip="Supprimer l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                         </td>
                     </tr>
@@ -114,19 +125,35 @@
         </div>
     </div>
 </div>
-<p-dialog header="Equipe" [(visible)]="visibleAddToTeams" modal="true"
-                            [style]="{width: '50vw'}">
+<p-dialog header="Equipe" [(visible)]="visibleAddToTeams" modal="true" [style]="{width: '50vw'}">
 
-                            <form [formGroup]="formAddToTeams" class="p-fluid p-formgrid grid col-12">
-                                
-                                <div class="field col-12">
-                                    <label>Ajouter un membre à cette équipe:</label>
-                                    <p-dropdown [options]="userList" (onChange)="initUser($event.value)"
-                                    formControlName="membre"  placeholder="Choisissez un membre"></p-dropdown>
-                                </div><br><br><br><br><br><br>
-                                <div class="col-12">
-                                    <p-button [style]="{'width':'20%'}" autoWidth="false" 
-                                        label="Ajouter" [disabled]="formAddToTeams.invalid" (click)="addToTeam()"></p-button>
-                                </div>
-                            </form>
-                        </p-dialog>
+    <form [formGroup]="formAddToTeams" class="p-fluid p-formgrid grid col-12">
+
+        <div class="field col-12">
+            <label>Ajouter un membre à cette équipe:</label>
+            <p-dropdown [options]="userList" (onChange)="initUser($event.value)" formControlName="membre" filter="true"
+                placeholder="Choisissez un membre"></p-dropdown>
+        </div><br><br><br><br><br><br>
+        <div class="col-12">
+            <p-button [style]="{'width':'20%'}" autoWidth="false" label="Ajouter" [disabled]="formAddToTeams.invalid"
+                (click)="addToTeam()"></p-button>
+        </div>
+        <p-table #dt1 [value]="membres" dataKey="module" rowExpandMode="single" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>membre </th>
+                    <th > action </th>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-membre let-ri="rowIndex">
+                <tr>
+                    <td>{{membre?.user_id.firstname}} {{membre?.user_id.lastname}}</td>
+                   <td> <i class="pi pi-trash" (click)="deleteMember(membre?.user_id?._id,ri)" aria-hidden="true"></i></td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+    </form>
+</p-dialog>
