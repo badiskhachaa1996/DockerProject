@@ -258,14 +258,14 @@ this.Updatetache.patchValue({
   showFollow: LeadCRM = null
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation: new FormControl(''),
+    produit: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
-
-    produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     decision_avancement: new FormControl(''),

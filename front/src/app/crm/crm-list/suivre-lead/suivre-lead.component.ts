@@ -36,13 +36,14 @@ export class SuivreLeadComponent implements OnInit {
   Actuelle_lead:LeadCRM = null
   followForm = new FormGroup({
     _id: new FormControl('', Validators.required),
+    operation:new FormControl(''),
+    produit: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
     note_choix: new FormControl(''),
-    produit: new FormControl(''),
-    operation:new FormControl(''),
+    
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -183,7 +184,10 @@ export class SuivreLeadComponent implements OnInit {
   //Follow Form
   initFollow(lead: LeadCRM) {
     this.followForm.patchValue({...lead ,produit:lead.produit[0],operation:lead.operation})
-    this.showFollow = lead
+    setTimeout(() => {
+      this.showFollow = lead;
+    }, 10);
+    
 
   }
 

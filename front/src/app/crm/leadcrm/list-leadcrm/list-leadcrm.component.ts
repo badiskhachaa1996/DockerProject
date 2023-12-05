@@ -231,6 +231,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
 
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
@@ -238,7 +239,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
     produit: new FormControl(''),
-    operation:new FormControl(''),
+    
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -247,9 +248,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
   @Input() newLead: Observable<LeadCRM>;
   @Output() suivreLead = new EventEmitter<LeadCRM>();
   @Output() myLead = new EventEmitter<LeadCRM>();
-  initFollow(lead
-    :
-    LeadCRM
+  initFollow(lead:LeadCRM
   ) {
     console.log(lead);
     this.suivreLead.emit(lead)
@@ -897,6 +896,6 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
       this.showAddWhatNumberlInput = false
     }
   }
-  
+
 
 }
