@@ -535,62 +535,17 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
         multi: true,
     },
     [CountryService]
+    ],
 
-    // >>>>>>>
-   , MatchingViewerComponent,
-    NewEntreprisesComponent,
-    AnnonceViewerComponent,
-    RdvCalendarInterneComponent,
-    SeeCvExterneComponent,
-    VoirDetailsOffreComponent,
-    CvEtudiantComponent,
-    PreinscriptionComponent,
-    InscriptionComponent,
-    PauseReadMoreComponent,
-    NewCalendrierComponent,
-    DashboardImatchComponent,
-    CvPdfPreviewComponent,
-    CvPdfHeaderComponent,
-    CvPdfHeaderEspicComponent,
-    CvPdfHeaderStudinfoComponent,
-    CvPdfHeaderAdgComponent,
-    CvPdfHeaderMedasupComponent,
-    CvPdfHeaderBtechComponent,
-    CvPdfSidebarComponent,
-    CvPdfContentComponent,
-    GestionEquipeRhComponent,
-    CvLoaderPreviewComponent,
-    PreviewCandidatureComponent,
-    LeadDocumentsComponent,
-    EvaluationComponent,
-    UploadButtonComponent,
-    LeadEvaluationComponent,
-    AddRemboursementPublicComponent,
-    
-    
-    DocumentsCandidatureViewerComponent,
-    GestionProduitsComponent,
-    AddRemboussementComponent,
-    FormCrmExtComponent,
-    CrmListComponent,
-    LogementComponent,
-    GestionLogementComponent,
-    BookingV2Component,
-    SuivreLeadComponent,
-    GestionOperationComponent,
-    GestionSrourcesComponent,
-    ConfirmDialogComponent
-  ],
-  
 
-  
-  bootstrap: [AppComponent, MsalRedirectComponent],
-    
+
+    bootstrap: [AppComponent, MsalRedirectComponent],
+
     exports: [
         ReadMoreComponent,
         PauseReadMoreComponent
     ],
-    
+
 })
 export class AppModule {
     constructor() {
