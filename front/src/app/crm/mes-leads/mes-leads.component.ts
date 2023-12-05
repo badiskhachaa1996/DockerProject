@@ -97,31 +97,22 @@ this.Updatetache.patchValue({
   }
   
 
+
   confirmDelete(rappelIndex: number) {
-    this.confirmationService.confirm({
-      message: 'Êtes-vous sûr de vouloir supprimer cette tâche ?',
-      accept: () => {
-        // Logique pour supprimer la tâche
-        this.deleteRappel(rappelIndex);
-      },
-      reject: () => {
-        // Logique en cas d'annulation
-      }
-    });
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+      this.deleteRappel(rappelIndex);
+    }
   }
 
   deleteRappel(index: number) {
-    // Logique de suppression de la tâche
     this.rappels.splice(index, 1);
     this.saveRappels();
-    // ... autre logique si nécessaire
   }
-
 
   saveRappels() {
     localStorage.setItem('rappels', JSON.stringify(this.rappels));
   }
-
+ 
   private generateUniqueId(): number {
     // Replace this with your own logic for generating unique IDs
     return new Date().getTime();
