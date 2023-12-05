@@ -24,6 +24,7 @@ export class LeadDossierComponent implements OnInit {
   ngOnInit(): void {
     if (!this.ID)
       this.ID = this.PROSPECT_ID
+    console.log(this.ID,this.PROSPECT_ID)
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
