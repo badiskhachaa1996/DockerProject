@@ -19,9 +19,9 @@ import { CommercialPartenaireService } from 'src/app/services/commercial-partena
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 
 @Component({
-  selector: 'app-list-partenaire',
-  templateUrl: './list-partenaire.component.html',
-  styleUrls: ['./list-partenaire.component.scss'],
+  selector: 'app-principale-list',
+  templateUrl: './principale-list.component.html',
+  styleUrls: ['./principale-list.component.scss'],
   providers: [MessageService, ConfirmationService],
   styles: [`
         :host ::ng-deep  .p-frozen-column {
@@ -37,9 +37,7 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
         }
     `]
 })
-export class ListPartenaireComponent implements OnInit {
-  selectedInsert: Partenaire | null = null; 
-
+export class PrincipaleListComponent implements OnInit {
   expandedRows = {};
   FjTopatch: any;
   Ttopatch: any;

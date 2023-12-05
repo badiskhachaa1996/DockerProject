@@ -436,9 +436,18 @@ export class NewListTicketsComponent implements OnInit {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
     let statut = this.TicketForm.value.statut
-    if (this.ticketAssign)
+    let assigne_by = this.ticketUpdate?.assigne_by
+    let agent_id = this.ticketUpdate?.agent_id
+    if (this.ticketAssign) {
       statut = "En cours de traitement"
-    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by: this.token.id }).subscribe(data => {
+      assigne_by = this.token.id
+      agent_id = this.TicketForm.value.agent_id
+      if (!agent_id && this.dropdownMember.length != 0)
+        agent_id = this.dropdownMember[0].value
+    }
+
+
+    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()

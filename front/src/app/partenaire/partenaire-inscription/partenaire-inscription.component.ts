@@ -8,6 +8,8 @@ import { Partenaire } from '../../models/Partenaire';
 import { User } from '../../models/User';
 import { AuthService } from '../../services/auth.service';
 import { PartenaireService } from '../../services/partenaire.service';
+import { Entreprise } from 'src/app/models/Entreprise';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-partenaire-inscription',
@@ -57,7 +59,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     nomSoc: new FormControl('', [Validators.required]),
     type: new UntypedFormControl(this.typeSoc[0], Validators.required),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
-
+    created_by :   new FormControl,
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     Services: new FormControl('', [Validators.required]),
@@ -99,8 +101,10 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   txtBtnBack = "Se connecter"
+  token : any
 
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
     this.PartenaireService.getNBAll().subscribe(data => {
       this.pL = data.nb
     })
@@ -144,7 +148,8 @@ export class PartenaireInscriptionComponent implements OnInit {
       this.RegisterForm.value.number_TVA,
       this.RegisterForm.value.SIREN,
       this.RegisterForm.value.SIRET,
-      null,
+      null,      
+      
       this.RegisterForm.value.type.value,
       this.RegisterForm.value.APE,
       this.RegisterForm.value.Services,
@@ -155,11 +160,15 @@ export class PartenaireInscriptionComponent implements OnInit {
       this.RegisterForm.value.site_web,
       this.RegisterForm.value.facebook,
       this.RegisterForm.value.description,
-      new Date(),
+   
       null, null, null, null, null, null, null, null, null, null,
-      this.RegisterForm.value.localisation, null
-    )
 
+      this.RegisterForm.value.localisation, null,null, this.token.id,
+      this.RegisterForm.value.code_postale_ent,
+      this.RegisterForm.value.adresse_ent,
+      this.RegisterForm.value.ville_ent,
+    )
+p.date_creation = new Date()
     let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin", true, null, this.RegisterForm.value.whatsApp, null, this.RegisterForm.value.localisation)
 
     this.PartenaireService.inscription(u, p, c).subscribe(data => {
