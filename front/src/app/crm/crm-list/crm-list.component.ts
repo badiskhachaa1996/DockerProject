@@ -14,6 +14,7 @@ export class CrmListComponent implements OnInit {
   base_idx = -3
   selectedTabIndex = 1
   eventsSubject: Subject<LeadCRM> = new Subject<LeadCRM>();
+  eventsLead: Subject<LeadCRM> = new Subject<LeadCRM>();
   constructor(private UserService: AuthService) { }
   suivreLead(event: LeadCRM) {
     let ids = []
@@ -47,6 +48,10 @@ export class CrmListComponent implements OnInit {
       this.UserService.update({ savedLeadCRM: this.leadList, _id: this.token.id }).subscribe((u: User) => {
       })
     }
+
+  }
+  autoLead(value:LeadCRM){
+    this.eventsLead.next(value)
 
   }
 

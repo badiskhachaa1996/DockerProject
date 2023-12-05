@@ -672,8 +672,8 @@
                                     {{ prospect.customid}}
                                 </td>
                                 <td>
-                                    {{ prospect.user_id.firstname | titlecase }}
-                                    {{ prospect.user_id.lastname | uppercase }}
+                                    {{ prospect?.user_id?.firstname | titlecase }}
+                                    {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
                                 <td>
                                     {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
@@ -770,8 +770,8 @@
                                                 [(value)]="user.user_id.lastname">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{ user.user_id.firstname | titlecase }}
-                                            {{ user.user_id.lastname | uppercase }}
+                                            {{ user?.user_id?.firstname | titlecase }}
+                                            {{ user?.user_id?.lastname | uppercase }}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -1047,7 +1047,7 @@
                                 </div>
                                 <div class="offre-card-main">
                                     <h4 class="offre-card-title">
-                                        {{prospect.user_id.firstname}} {{prospect.user_id.lastname}}</h4>
+                                        {{prospect?.user_id?.firstname}} {{prospect?.user_id?.lastname}}</h4>
                                     <p class="offre-card-lieu"> {{prospect?.campus_choix_1 }} - {{prospect?.formation }}
                                     </p>
                                 </div>
@@ -1205,8 +1205,8 @@
                                     {{ prospect.customid}}
                                 </td>
                                 <td>
-                                    {{ prospect.user_id.firstname | titlecase }}
-                                    {{ prospect.user_id.lastname | uppercase }}
+                                    {{ prospect?.user_id?.firstname | titlecase }}
+                                    {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
                                 <td>
                                     {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
@@ -1306,8 +1306,8 @@
                                                 [(value)]="user.user_id.lastname">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{ user.user_id.firstname | titlecase }}
-                                            {{ user.user_id.lastname | uppercase }}
+                                            {{ user?.user_id?.firstname | titlecase }}
+                                            {{ user?.user_id?.lastname | uppercase }}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -1582,7 +1582,7 @@
                                 </div>
                                 <div class="offre-card-main">
                                     <h4 class="offre-card-title">
-                                        {{prospect.user_id.firstname}} {{prospect.user_id.lastname}}</h4>
+                                        {{prospect?.user_id?.firstname}} {{prospect?.user_id?.lastname}}</h4>
                                     <p class="offre-card-lieu"> {{prospect?.campus_choix_1 }} -
                                         {{prospect?.user_id?.pays_adresse}} - {{prospect?.formation }}
                                     </p>
@@ -2478,7 +2478,7 @@
                     </p-accordionTab>
                 </p-accordion>
             </div>
-           <!-- <div class="col-12" *ngIf="showUploadFile!=null">
+            <!-- <div class="col-12" *ngIf="showUploadFile!=null">
                 <div class="card">
                     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                         (click)="showUploadFile = null" aria-hidden="true"> </i>

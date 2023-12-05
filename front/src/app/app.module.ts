@@ -8,7 +8,6 @@ import { TableModule } from 'primeng/table';
 import { AppRoutingModule } from './app-routing.module';
 import { registerLocaleData } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
-
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
@@ -228,44 +227,13 @@ import { AddRemboussementComponent } from './remboursement/add-remboursement/add
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
-import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
-import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
-import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { AdminToolsModule } from './admin-tools/admin-tools.module';
 import { AdministrationModule } from './administration/administration.module';
 import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
-import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
-import { SeeCvExterneComponent } from './skillsnet/i-match/see-cv-externe/see-cv-externe.component';
-import { RdvCalendarInterneComponent } from './skillsnet/i-match/rdv-calendar-interne/rdv-calendar-interne.component';
-import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
-import { DocumentsCandidatureViewerComponent } from './administration-v1/documents-candidature-viewer/documents-candidature-viewer.component';
-import { EvaluationComponent } from './administration-v1/evaluation/evaluation.component';
-import { InscriptionComponent } from './administration-v1/gestion-des-inscriptions/inscription/inscription/inscription.component';
-import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
-import { LeadDocumentsComponent } from './admission/lead/lead-documents/lead-documents.component';
-import { LeadEvaluationComponent } from './admission/lead/lead-evaluation/lead-evaluation.component';
-import { CrmListComponent } from './crm/crm-list/crm-list.component';
-import { FormCrmExtComponent } from './crm/form-crm-ext/form-crm-ext.component';
-import { GestionProduitsComponent } from './crm/gestion-produits/gestion-produits.component';
-import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
-import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
-import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
-import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
-import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
-import { CvLoaderPreviewComponent } from './skillsnet/i-match/cv-pdf-preview/cv-loader-preview/cv-loader-preview.component';
-import { CvPdfContentComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-content/cv-pdf-content.component';
-import { CvPdfHeaderAdgComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-adg/cv-pdf-header-adg.component';
-import { CvPdfHeaderBtechComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-btech/cv-pdf-header-btech.component';
-import { CvPdfHeaderEspicComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-espic/cv-pdf-header-espic.component';
-import { CvPdfHeaderMedasupComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-medasup/cv-pdf-header-medasup.component';
-import { CvPdfHeaderStudinfoComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header-studinfo/cv-pdf-header-studinfo.component';
-import { CvPdfHeaderComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-header/cv-pdf-header.component';
-import { CvPdfPreviewComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-preview.component';
-import { CvPdfSidebarComponent } from './skillsnet/i-match/cv/ajout-cv/cv-pdf-preview/cv-pdf-sidebar/cv-pdf-sidebar.component';
-import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-details-offre.component';
+import { ReadMoreModule } from './other/component/read-more/read-more.module';
+import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
 
 @NgModule({
     imports: [
@@ -374,7 +342,7 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
         AgentsModule,
         CommercialModule,
         RhModule,
-
+        ReadMoreModule,
         MsalModule.forRoot(
             new PublicClientApplication({
                 auth: {
@@ -506,7 +474,6 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
         ImatchCandidatComponent,
         EntrepriseListComponent,
         CandidatListComponent,
-        ReadMoreComponent,
         // ======= Remboursement
         ListRemboursementComponent,
         ContactRemboursementComponent,
@@ -524,7 +491,8 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
         LogementComponent,
         GestionLogementComponent,
         BookingV2Component,
-        PauseReadMoreComponent
+        PauseReadMoreComponent,
+        PrincipaleListComponent
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -542,7 +510,6 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
     bootstrap: [AppComponent, MsalRedirectComponent],
 
     exports: [
-        ReadMoreComponent,
         PauseReadMoreComponent
     ],
 

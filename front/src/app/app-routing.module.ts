@@ -130,6 +130,7 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
 import { CriteresComponent } from './crm/criteres/criteres.component';
 const routes: Routes = [
     {
@@ -188,6 +189,10 @@ const routes: Routes = [
                 path: 'admin/ajout-de-partenaire',
                 component: ListPartenaireComponent,
                 canActivate: [AuthGuardService],
+            },  {
+                path: 'listpartenaires',
+                component: PrincipaleListComponent,
+               
             },
             {
                 path: 'collaborateur',
@@ -205,19 +210,7 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole/:id',
+                path: 'administrations',
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
@@ -226,54 +219,9 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'ajout-ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-diplome',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'groupes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
                 path: 'new-groupes',
                 component: GroupesComponent,
                 canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ajout-groupe',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-
-
-
-
-
-            {
-                path: 'validation-inscrit',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
 
             {
@@ -311,20 +259,18 @@ const routes: Routes = [
 
 
 
-            {
-                path: 'ajout-remboursement',
-                component: AddRemboussementComponent,
+           
 
-            }, //Remboursement
-
-            // {
-            //     path: 'list-remboursement',
-            //     component: RemboursementListComponent,
-            //     canActivate: [AuthGuardService],
-            // },
+           
             {
                 path: 'remboursements',
                 component: ListRemboursementComponent,
+                canActivate: [AuthGuardService],
+            },
+              
+            {
+                path: 'ajout-remboursement',
+                component: AddRemboussementComponent,
                 canActivate: [AuthGuardService],
             },
 
@@ -665,6 +611,7 @@ const routes: Routes = [
 
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+    
     { path: 'formulaire-remboursement', component: AddRemboursementPublicComponent },
 
 ]

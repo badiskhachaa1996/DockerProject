@@ -228,7 +228,7 @@ app.post("/inscription", (req, res, next) => {
 });
 
 app.get("/getAll", (req, res) => {
-    Partenaire.find().populate('user_id').populate({ path: 'manage_by', populate: { path: 'user_id' } })
+    Partenaire.find().populate('user_id').populate({ path: 'manage_by', populate: { path: 'user_id' } }).populate('created_by')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
