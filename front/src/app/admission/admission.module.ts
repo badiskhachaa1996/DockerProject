@@ -28,6 +28,8 @@ import { LeadEvaluationComponent } from "./lead/lead-evaluation/lead-evaluation.
 import { InformationsComponent } from '../informations/informations.component';
 import { Fieldset, FieldsetModule } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
+import { InputText, InputTextModule } from 'primeng/inputtext';
+import { LeadDossierModule } from './lead/lead-dossier/lead-dossier.module';
 @NgModule({
     declarations: [
         FormationAdmissionComponent,
@@ -35,7 +37,6 @@ import { ButtonModule } from 'primeng/button';
         RentreeScolaireAdmissionComponent,
         FormAdmissionDubaiResultsComponent,
         LeadProgrammeComponent,
-        LeadDossierComponent,
         LeadPaiementsComponent,
         LeadDocumentsComponent,
         LeadInformationsPersonnelComponent,
@@ -61,7 +62,9 @@ import { ButtonModule } from 'primeng/button';
         SidebarModule,
         TimelineModule,
         FieldsetModule,
-        ButtonModule
+        ButtonModule,
+        InputTextModule,
+        LeadDossierModule
     ]
 })
 export class AdmissionModule { }

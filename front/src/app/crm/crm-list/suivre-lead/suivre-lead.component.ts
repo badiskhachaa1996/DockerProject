@@ -13,6 +13,8 @@ import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
 import { GestionSourcesServices } from "../../gestion-srources/gestion-sources.services";
 import {GestionOperationService} from "../../gestion-operation/gestion-operation.service";
+import { CritereService } from 'src/app/services/crm/criteres-crm.service';
+import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-suivre-lead',
   templateUrl: './suivre-lead.component.html',
@@ -23,20 +25,25 @@ export class SuivreLeadComponent implements OnInit {
   token: any;
   userConnected :User;
   visible_contact:boolean=false;
+  visible_qualification:boolean=false;
+  visible_paiement:boolean=false;
   indexHistorique:number;
+  indexQualification:number ;
+  indexPaiement:number;
   docAdded:boolean=false;
   filterSource = [{ label: 'Toutes les sources', value: null }]
   buttonName:string="Ajouter";
   Actuelle_lead:LeadCRM = null
   followForm = new FormGroup({
     _id: new FormControl('', Validators.required),
+    operation:new FormControl(''),
+    produit: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
     note_choix: new FormControl(''),
-    produit: new FormControl(''),
-    operation:new FormControl(''),
+    
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -56,12 +63,21 @@ export class SuivreLeadComponent implements OnInit {
     modalite_paiement: new FormControl(''),
     note: new FormControl(''),
   });
+  formUpdatepaiementForm=new FormGroup({
+    montant_paye: new FormControl(''),
+    modalite_paiement: new FormControl(''),
+    note: new FormControl(''),
+  });
   formUpdateContact=new FormGroup({
     
     canal:new FormControl(''),
     note: new FormControl(''),
     suite_contact: new FormControl(''),
   })
+  formUpdateQualification=new FormGroup({
+    critere:new FormControl(''),
+    commentaire:new FormControl(''),
+  });
   memberList = []
   produitList = [];
   operationList = [];
@@ -100,11 +116,6 @@ export class SuivreLeadComponent implements OnInit {
     { label: 'En ligne', value: 'En ligne' }
   ]
   critereList = [
-    { label: 'Langue', value: 'Langue' },
-    { label: 'Volet Financier', value: 'Volet Financier' },
-    { label: 'Age', value: 'Age' },
-    { label: 'Motivation', value: 'Motivation' },
-    { label: 'Dossier admission cohérant ', value: 'Dossier admission cohérant ' },
   ]
   decisionList = [
     { label: 'En attente de traitement', value: 'En attente de traitement' },
@@ -113,7 +124,7 @@ export class SuivreLeadComponent implements OnInit {
     { label: 'Qualifié', value: 'Qualifié' },
   ]
   constructor(private UserService: AuthService, private LCS: LeadcrmService, private ToastService: MessageService, private Products: GestionProduitsService,
-    private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService,private operationService:GestionOperationService,private sourceService:GestionSourcesServices) { }
+    private TeamCRMService: TeamsCrmService, private FAService: FormulaireAdmissionService,private operationService:GestionOperationService,private sourceService:GestionSourcesServices,private critereService: CritereService,) { }
   @Input() LEAD_ID
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -125,13 +136,12 @@ export class SuivreLeadComponent implements OnInit {
     })
 
     this.LCS.getOneByID(this.LEAD_ID).subscribe(lead => {
-      this.followForm.patchValue({ ...lead,produit:lead.produit[0] }); 
+      this.followForm.patchValue({ ...lead,produit:lead.produit[0],operation:lead.operation }); 
       setTimeout(() => {
         this.showFollow = lead;
       }, 10);
     });
       
-   
     this.TeamCRMService.MIgetAll().subscribe(data => {
       data.forEach(val => {
         this.memberList.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
@@ -150,12 +160,12 @@ export class SuivreLeadComponent implements OnInit {
     })
     this.Products.GetAllProduit().subscribe(data => {
       data.forEach(val => {
-        this.produitList.push({ label: val.nom, value: val._id })
+        this.produitList.push({ label: val.nom, value: val.nom })
       })
     })
     this.operationService.GetAllOperation().subscribe(data => {
       data.forEach(val => {
-        this.operationList.push({ label: val.nom, value: val._id })
+        this.operationList.push({ label: val.nom, value: val.nom })
       })
     })
     this.sourceService.GetAllSource().subscribe(data => {
@@ -164,12 +174,20 @@ export class SuivreLeadComponent implements OnInit {
         this.canalList.push({label:val.nom,value:val._id});
       })
       });
+    this.critereService.getAllCriteres().subscribe(data => {
+      data.forEach(valc=>{
+      this.critereList.push({label:valc.nom,value:valc.nom});})
+      });
+   }
 
-  }
+  
   //Follow Form
   initFollow(lead: LeadCRM) {
-    this.followForm.patchValue({...lead ,produit:lead.produit[0]})
-    this.showFollow = lead
+    this.followForm.patchValue({...lead ,produit:lead.produit[0],operation:lead.operation})
+    setTimeout(() => {
+      this.showFollow = lead;
+    }, 10);
+    
 
   }
 
@@ -213,13 +231,14 @@ export class SuivreLeadComponent implements OnInit {
   }
 
   deleteContact(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce contact  ?")){
     this.showFollow.contacts.splice(index, 1)
     
     this.LCS.update(this.showFollow).subscribe(data => {
 
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
-
+  }
   }
   onUpdateDate(listname, index, varname, value) {
     this.followForm[listname][index][varname] = new Date(value)
@@ -247,20 +266,22 @@ export class SuivreLeadComponent implements OnInit {
     document.getElementById('selectedFilesuivre').click();
   }
   deleteFile(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce document  ?")){
     this.showFollow.documents.splice(index, 1)
     
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
-    });
+    });}
   }
   deletequalification(index){
+    if (confirm("Voulez-vous vraiment supprimer cette qualification  ?")){
     this.showFollow.qualifications.splice(index, 1);
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
-  }
+  }}
   FileUpload(event) {
     console.log(event)
     if (event != null) {
@@ -319,13 +340,14 @@ export class SuivreLeadComponent implements OnInit {
     });
   }
   deletePaiement(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce paiement  ?")){
     this.showFollow.ventes.splice(index, 1)
     
     this.LCS.update(this.showFollow).subscribe(data => {
       
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
-  }
+    }}
   onUpdatecontacte(index){
     this.indexHistorique=index
     console.log(this.showFollow.contacts[index].canal);
@@ -337,10 +359,29 @@ export class SuivreLeadComponent implements OnInit {
     setTimeout(() => {
       this.visible_contact=true
     }, 10);
-  
-    
-
   }
+  updatequalification(index){
+    this.indexQualification=index;
+    this.formUpdateQualification.patchValue({
+      critere:this.showFollow.qualifications[index].criteres_qualification,
+      commentaire:this.showFollow.qualifications[index].note_qualification,
+    })
+    setTimeout(() => {
+this.visible_qualification=true;
+    },10);
+  }
+  Updatepaiement(index){
+    this.indexPaiement=index;
+    this.formUpdatepaiementForm.patchValue({
+      montant_paye:this.showFollow.ventes[index].montant_paye,
+      modalite_paiement:this.showFollow.ventes[index].modalite_paiement,
+      note:this.showFollow.ventes[index].note
+    })
+    setTimeout(() => {
+      this.visible_paiement=true
+    }, 10);
+  }
+
   onUpdateCon(){
     this.showFollow.contacts[this.indexHistorique].canal=this.formUpdateContact.value.canal;
     this.showFollow.contacts[this.indexHistorique].suite_contact=this.formUpdateContact.value.suite_contact;
@@ -348,6 +389,21 @@ export class SuivreLeadComponent implements OnInit {
     this.LCS.update(this.showFollow).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
     });
+  }
+  onUpdatequalification(){
+    this.showFollow.qualifications[this.indexQualification].criteres_qualification=this.formUpdateQualification.value.critere;
+    this.showFollow.qualifications[this.indexQualification].note_qualification=this.formUpdateQualification.value.commentaire;
+    this.LCS.update(this.showFollow).subscribe(data => {
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });
+  }
+  onUpdatepaiement(){
+this.showFollow.ventes[this.indexPaiement].modalite_paiement=this.formUpdatepaiementForm.value.modalite_paiement;
+this.showFollow.ventes[this.indexPaiement].montant_paye=this.formUpdatepaiementForm.value.montant_paye;
+this.showFollow.ventes[this.indexPaiement].note=this.formUpdatepaiementForm.value.note;
+this.LCS.update(this.showFollow).subscribe(data => {
+  this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+});
 
   }
   

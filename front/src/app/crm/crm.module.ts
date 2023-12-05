@@ -38,6 +38,7 @@ import { CrmRoutingModule } from './crm-routing.module';
 import { MemberCrmComponent } from './teams-crm/member-crm/member-crm.component';
 import { ChartModule } from 'primeng/chart';
 import {CriteresComponent} from "./criteres/criteres.component";
+import { TooltipModule } from 'primeng/tooltip';
 
 
 
@@ -108,7 +109,8 @@ import {CriteresComponent} from "./criteres/criteres.component";
         RadioButtonModule,
         InputTextareaModule,
         InputTextModule,
-        ChartModule
+        ChartModule,
+        TooltipModule,
     ]
 })
 export class CRMModule { }

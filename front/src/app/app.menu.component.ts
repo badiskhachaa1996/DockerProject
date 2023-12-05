@@ -6072,7 +6072,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Campus',
                                             icon: 'pi pi-map-marker',
-                                            routerLink: ['/campus']
+                                            routerLink: ['/administrations/campus']
                                         },
                                         {
                                             label: 'Formation',

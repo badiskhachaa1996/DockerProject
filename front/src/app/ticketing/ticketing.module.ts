@@ -23,6 +23,7 @@ import { ChartModule } from "primeng/chart";
 import { TooltipModule } from 'primeng/tooltip';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ReadMoreModule } from '../other/component/read-more/read-more.module';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
         ChartModule,
         TooltipModule,
         InputTextModule,
-        InputTextareaModule
+        InputTextareaModule,
+        ReadMoreModule
     ]
 })
 export class TicketingModule { }

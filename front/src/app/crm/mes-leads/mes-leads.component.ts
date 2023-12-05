@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild,Input } from '@angular/core';
 import { FormControl,  FormGroup,  UntypedFormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import mongoose from 'mongoose';
@@ -15,6 +15,7 @@ import { ServService } from 'src/app/services/service.service';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
 import { ConfirmationService } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mes-leads',
@@ -22,6 +23,8 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['./mes-leads.component.scss']
 })
 export class MesLeadsComponent implements OnInit {
+  private eventsSubscription: Subscription;
+  @Input() myLead: Observable<LeadCRM>;
 
 
   // la propriété displayDialog pour contrôler l'affichage du pop-up
@@ -242,6 +245,9 @@ this.Updatetache.patchValue({
      this.rappels = JSON.parse(localStorage.getItem('rappels')) || [];
      
      this.rappels.reverse();
+     this.eventsSubscription = this.myLead.subscribe((lead) => {
+      this.leads.push(lead)
+    });
     
   }
 
@@ -252,14 +258,14 @@ this.Updatetache.patchValue({
   showFollow: LeadCRM = null
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation: new FormControl(''),
+    produit: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
-
-    produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     decision_avancement: new FormControl(''),
