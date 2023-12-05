@@ -662,16 +662,19 @@
                 </td>
                 <td>
                   <i class="pi pi-pencil" pTooltip="Modifier Tâche" (click)="editRappel(i)" style="margin: 5px;"></i>
-                  <i class="pi pi-trash" pTooltip="Supprimer Tâche" (click)="confirmDelete(i)" style="margin: 5px;"></i>
+                  <i class="pi pi-trash" (click)="confirmDelete(i)"></i>
+
 
                 </td>
               </tr>
             </ng-template>
           </p-table>
-          <p-confirmDialog></p-confirmDialog>
+          
 
             
         </div>
+       
+
     </p-dialog> 
     
     

@@ -579,7 +579,7 @@ import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-d
     SuivreLeadComponent,
     GestionOperationComponent,
     GestionSrourcesComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
   ],
   
 
