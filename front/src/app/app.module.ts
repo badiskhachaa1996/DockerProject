@@ -233,6 +233,7 @@ import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
+import { ReadMoreModule } from './other/component/read-more/read-more.module';
 
 @NgModule({
   imports: [
@@ -341,7 +342,7 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
     AgentsModule,
     CommercialModule,
     RhModule,
-
+    ReadMoreModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -473,7 +474,6 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
     ImatchCandidatComponent,
     EntrepriseListComponent,
     CandidatListComponent,
-    ReadMoreComponent,
     // ======= Remboursement
     ListRemboursementComponent,
     ContactRemboursementComponent,
@@ -506,7 +506,6 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
 
   ],
   exports: [
-    ReadMoreComponent,
     PauseReadMoreComponent
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]

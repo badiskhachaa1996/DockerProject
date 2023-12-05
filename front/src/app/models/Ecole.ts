@@ -14,7 +14,6 @@ export class Ecole {
         public cachet?: string,
         public pied_de_page?: string,
         public color?: string,
-        
     ) { }
 
 }

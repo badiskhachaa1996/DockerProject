@@ -131,4 +131,16 @@ export class ListCampusComponent implements OnInit {
       this.showEcoles = r
     })
   }
+  showEcolesStr(campus: CampusR) {
+    let r = "Aucune"
+    campus.ecoles.forEach(ec => {
+      if (ec.ecole_id?.titre) {
+        if (r == 'Aucune')
+          r = ec.ecole_id.titre
+        else
+          r = r + ", " + ec.ecole_id.titre
+      }
+    })
+    return r
+  }
 }
