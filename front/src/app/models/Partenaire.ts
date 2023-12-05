@@ -3,6 +3,8 @@ import { MemberInt } from "./memberInt";
 export class Partenaire {
 
     constructor(
+
+     
         public _id?: string,
         public user_id?: string,
         public code_partenaire?: string,
@@ -35,6 +37,10 @@ export class Partenaire {
         public typePartenaire?: string,
         public groupeWhatsApp?: string,
         public localisation?: string,
-        public manage_by?: MemberInt
+        public manage_by?: MemberInt,
+        public created_by?: string,
+        public code_postale_ent?:string,
+         public adresse_ent?:string,
+         public ville_ent?:string,
     ) { }
 }
