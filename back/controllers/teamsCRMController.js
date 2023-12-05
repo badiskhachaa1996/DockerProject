@@ -75,6 +75,12 @@ app.get("/MI/getByUSERID/:id", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.get("/MI/getByTeamID/:id", (req, res) => {
+    MemberCRM.find({ team_id: req.params.id }).populate('user_id').populate('team_id')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+})
+
 app.delete("/MI/delete/:user_id", (req, res) => {
     MemberCRM.findOneAndRemove({ user_id: req.params.user_id })
         .then((formFromDb) => {

@@ -15,72 +15,72 @@ import {ReinscritComponent} from "./validation-prospects/reinscrit.component";
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'ajout-annee-scolaire',
         component: AddAnneeScolaireComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'annee-scolaire',
         component: ListAnneeScolaireComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ajout-campus',
         component: AddCampusComponent,
         canActivate: [AuthGuardService,],
     },
     {
-        path: '',
+        path: 'campus',
         component: ListCampusComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'campus/:id',
         component: ListCampusComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ajout-diplome',
         component: AddDiplomeComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'diplomes',
         component: ListDiplomeComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'diplomes/:id',
         component: ListDiplomeComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ajout-ecole',
         component: AddEcoleComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ecole',
         component: ListEcoleComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ecole/:id',
         component: ListEcoleComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'ajout-groupe',
         component: AddGroupeComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'groupes',
         component: ListGroupeComponent,
         canActivate: [AuthGuardService],
     },
     {
-        path: '',
+        path: 'validation-inscrit',
         component: ReinscritComponent,
         canActivate: [AuthGuardService],
     },

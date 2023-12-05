@@ -137,7 +137,7 @@
                             {{ rowData.adresse }}
                         </td>
                         <td style="min-width: 14rem;">
-                            WIP
+                            <app-read-more [string]="showEcolesStr(rowData)"></app-read-more>
                         </td>
                         <td>
                             {{rowData.salles.length}}
@@ -160,7 +160,8 @@
                                     <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Ecole <p-sortIcon
                                             field="ecole_id.titre"></p-sortIcon></th>
                                     <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Libellé
-                                        <p-sortIcon field="ecole_id.titre"></p-sortIcon></th>
+                                        <p-sortIcon field="ecole_id.titre"></p-sortIcon>
+                                    </th>
                                     <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon
                                             field="email"></p-sortIcon></th>
                                 </tr>

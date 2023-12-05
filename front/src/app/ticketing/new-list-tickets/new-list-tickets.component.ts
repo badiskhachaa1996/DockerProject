@@ -114,12 +114,13 @@ export class NewListTicketsComponent implements OnInit {
   defaultTicketService = []
   updateTicketList(isFirst = false) {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
-      this.tickets = dataM
+
       dataM.forEach(e => {
         e.origin = 'Mine'
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
+      this.tickets = dataM
       this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
         data.forEach(e => {
           e.origin = 'Assigne'
@@ -436,9 +437,18 @@ export class NewListTicketsComponent implements OnInit {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
     let statut = this.TicketForm.value.statut
-    if (this.ticketAssign)
+    let assigne_by = this.ticketUpdate?.assigne_by
+    let agent_id = this.ticketUpdate?.agent_id
+    if (this.ticketAssign) {
       statut = "En cours de traitement"
-    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by: this.token.id }).subscribe(data => {
+      assigne_by = this.token.id
+      agent_id = this.TicketForm.value.agent_id
+      if (!agent_id && this.dropdownMember.length != 0)
+        agent_id = this.dropdownMember[0].value
+    }
+
+
+    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()

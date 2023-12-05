@@ -23,10 +23,14 @@ import { DocumentsCandidatureViewerComponent } from './documents-candidature-vie
 import { EvaluationComponent } from './evaluation/evaluation.component';
 import { InscriptionComponent } from './gestion-des-inscriptions/inscription/inscription/inscription.component';
 import { PreinscriptionComponent } from './gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
-import {AddGroupeV2Component} from "./configuration/groupes/add-groupe-v2/add-groupe-v2.component";
-import {GroupesComponent} from "./configuration/groupes/groupes.component";
-import {AccordionModule} from "primeng/accordion";
+import { AddGroupeV2Component } from "./configuration/groupes/add-groupe-v2/add-groupe-v2.component";
+import { GroupesComponent } from "./configuration/groupes/groupes.component";
+import { AccordionModule } from "primeng/accordion";
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { LeadDossierModule } from '../admission/lead/lead-dossier/lead-dossier.module';
+import { LeadDossierComponent } from '../admission/lead/lead-dossier/lead-dossier.component';
+import { InputTextarea, InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
     declarations: [
@@ -37,7 +41,7 @@ import { ButtonModule } from 'primeng/button';
         AddGroupeV2Component,
         GroupesComponent
     ],
-    exports:[
+    exports: [
         DocumentsCandidatureViewerComponent,
         EvaluationComponent,
         InscriptionComponent,
@@ -67,7 +71,10 @@ import { ButtonModule } from 'primeng/button';
         CheckboxModule,
         StepsModule,
         AccordionModule,
-        ButtonModule
+        ButtonModule,
+        InputTextModule,
+        LeadDossierModule,
+        InputTextareaModule
     ]
 })
 export class AdminModule { }

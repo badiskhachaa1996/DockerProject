@@ -15,10 +15,13 @@ import { RhService } from 'src/app/services/rh.service';
 export class TeamsCrmComponent implements OnInit {
 
   teams: TeamsCRM[] = [];
+  test:any=[];
   userList = []
   userselected:User;
   visibleAddToTeams: boolean = false;
   selectedTeam: TeamsCRM;
+  membres:MemberCRM[] = [];
+  selectedTeamToAdd: TeamsCRM;
   selectedMember = new MemberCRM();
   formAddToTeams = new FormGroup({
     membre: new FormControl('', ),})
@@ -27,12 +30,18 @@ export class TeamsCrmComponent implements OnInit {
   ngOnInit(): void {
     this.TeamsIntService.TIgetAll().subscribe(data => {
       this.teams = data
-    });
+      this.teams.forEach(team =>{
+        this.TeamsIntService.MIgetByEQUIPEID(team._id).subscribe(data => {
+this.test.push({team,membre:data});
+      })
+      
+    })});
    
     this.rhService.getAgents().then(data => {
       data.forEach(user => {
+        if(user.type ==="Collaborateur" ){
 this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
-      })
+} })
     })
   }
 
@@ -110,7 +119,10 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   }
   initAdd(teams: TeamsCRM){
     this.visibleAddToTeams=true;
-    this.selectedTeam=teams;
+    this.  selectedTeamToAdd=teams;
+    this.TeamsIntService.MIgetByEQUIPEID(teams._id).subscribe(data =>{
+      this.membres=data;
+    })
   }
   initUser(event){
     console.log(event);
@@ -121,15 +133,20 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     console.log(this.userselected);
   }
   addToTeam(){
-this.selectedMember.team_id=this.selectedTeam;
+this.selectedMember.team_id=this.selectedTeamToAdd;
 this.selectedMember.user_id=this.userselected;
 this.TeamsIntService.MIcreate(this.selectedMember).subscribe(data => {
-  this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau membre avec succès` })
+  this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau membre avec succès`
+ })
+ 
 })
-
-
-
-  }
-
+this.TeamsIntService.MIgetByEQUIPEID(this.selectedTeamToAdd._id).subscribe(data =>{
+  this.membres=data;
+})
+}
+  deleteMember(id:string,ri) {
+    this.membres.splice(ri,1);
+    console.log("i am here");
+    this.TeamsIntService.MIdelete(id).subscribe(data => {})}
 
 }

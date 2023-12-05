@@ -10,7 +10,7 @@ export class MemberInt {
         public custom_id?: string,
         public date_creation?: Date,
         public numero_whatapp?: string,
-        public _id?: string
+        public _id?: string    
     ) { }
 
 }

@@ -34,6 +34,7 @@ import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Ticket } from 'src/app/models/Ticket';
 import { Observable, Subscription } from 'rxjs';
+import { RhService } from 'src/app/services/rh.service';
 import {BadgeModule} from 'primeng/badge';
 
 
@@ -44,6 +45,7 @@ import {BadgeModule} from 'primeng/badge';
 })
 export class ListLeadcrmComponent implements OnInit {
   token;
+  equipe: string;
   filterPays = [
     { label: 'Tous les pays', value: null }
   ]
@@ -102,12 +104,19 @@ export class ListLeadcrmComponent implements OnInit {
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
     private TeamCRMService: TeamsCrmService, private UserService: AuthService, private Products: GestionProduitsService, private EmailTypeS: EmailTypeService,
     private router: Router, private ServiceServ: ServService, private TicketService: TicketService, private SujetService: SujetService,
-    private admissionService: AdmissionService, private OperationService: GestionOperationService,private sourceService:GestionSourcesServices) { }
+    private admissionService: AdmissionService, private OperationService: GestionOperationService,private sourceService:GestionSourcesServices,private rhService:RhService) { }
   leads: LeadCRM[] = []
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
   }
   ngOnInit(): void {
+    this.rhService.getAgents().then(data => {
+      data.forEach(user => {
+        if(user.type ==="Collaborateur" ){
+this.memberList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+} })
+    })
+  
     this.LCS.getAll().subscribe(data => {
       this.leads = data
       console.log(this.leads);
@@ -169,6 +178,7 @@ export class ListLeadcrmComponent implements OnInit {
           this.formationList.push({ label: d.nom, value: d._id })
         })
       })
+      
       this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
         if (dataS)
           this.UserService.getAllByService(dataS.dataService._id).subscribe(data => {
@@ -179,6 +189,7 @@ export class ListLeadcrmComponent implements OnInit {
               this.filterAffecte.push({ label: `${val.firstname} ${val.lastname.toUpperCase()}`, value: val._id })
             })
           })
+
         else
           console.error('Pas de service Commercial')
       })
@@ -220,6 +231,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
 
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
@@ -227,7 +239,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
     produit: new FormControl(''),
-    operation:new FormControl(''),
+    
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
     note_qualification: new FormControl(''),
@@ -235,9 +247,8 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
   private eventsSubscription: Subscription;
   @Input() newLead: Observable<LeadCRM>;
   @Output() suivreLead = new EventEmitter<LeadCRM>();
-  initFollow(lead
-    :
-    LeadCRM
+  @Output() myLead = new EventEmitter<LeadCRM>();
+  initFollow(lead:LeadCRM
   ) {
     console.log(lead);
     this.suivreLead.emit(lead)
@@ -460,8 +471,13 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
   }
 
   onAutoAffect(lead: LeadCRM) {
-    this.LCS.update({ _id: lead._id, affected_to_member: this.token.id, affected_date: new Date() }).subscribe(data => {
+    this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(data => {
+      this.equipe=data.team_id?.nom
+    })
+    setTimeout(() =>{
+    this.LCS.update({ _id: lead._id, affected_to_member: this.token.id, affected_date: new Date(),equipe:this.equipe }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.myLead.emit(data);
       this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
         this.SujetService.getByLabel('Prospection').subscribe(sujet => {
           let newTicket = new Ticket(
@@ -491,11 +507,19 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
 
       })
       this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
+    })},10);
+
+  }
+  findTeams(value){
+    console.log(value)
+    this.TeamCRMService.MIgetByUSERID(value).subscribe(r=>{
+      this.equipe=r.team_id.nom
+      console.log(this.equipe);
     })
   }
-
   onUpdateAffect() {
-    this.LCS.update({ ...this.affectForm.value, affected_date: new Date() }).subscribe(data => {
+    
+    this.LCS.update({ ...this.affectForm.value, affected_date: new Date() ,equipe:this.equipe}).subscribe(data => {
       this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
       this.affectForm.reset()
       this.SujetService.getByLabel('Prospection').subscribe(sujet => {
@@ -872,5 +896,6 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
       this.showAddWhatNumberlInput = false
     }
   }
+
 
 }
