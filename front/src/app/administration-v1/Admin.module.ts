@@ -30,6 +30,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { LeadDossierModule } from '../admission/lead/lead-dossier/lead-dossier.module';
 import { LeadDossierComponent } from '../admission/lead/lead-dossier/lead-dossier.component';
+import { InputTextarea, InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
     declarations: [
@@ -72,7 +73,8 @@ import { LeadDossierComponent } from '../admission/lead/lead-dossier/lead-dossie
         AccordionModule,
         ButtonModule,
         InputTextModule,
-        LeadDossierModule
+        LeadDossierModule,
+        InputTextareaModule
     ]
 })
 export class AdminModule { }
