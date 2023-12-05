@@ -22,7 +22,7 @@ let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a03
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod") && !argProd.includes("prod2")) {
+  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod1") && !argProd.includes("prod2")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
