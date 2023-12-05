@@ -114,12 +114,13 @@ export class NewListTicketsComponent implements OnInit {
   defaultTicketService = []
   updateTicketList(isFirst = false) {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
-      this.tickets = dataM
+
       dataM.forEach(e => {
         e.origin = 'Mine'
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
+      this.tickets = dataM
       this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
         data.forEach(e => {
           e.origin = 'Assigne'

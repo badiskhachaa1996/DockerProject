@@ -39,6 +39,10 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TimelineModule } from 'primeng/timeline';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TooltipModule } from 'primeng/tooltip';
 @NgModule({
     declarations: [
         AdmissionIntComponent,
@@ -83,7 +87,11 @@ import { ButtonModule } from 'primeng/button';
         SidebarModule,
         TimelineModule,
         ChartModule,
-        ButtonModule
+        ButtonModule,
+        SkeletonModule,
+        InputTextModule,
+        InputTextareaModule,
+        TooltipModule,
     ]
 })
 export class InternationalModule { }
