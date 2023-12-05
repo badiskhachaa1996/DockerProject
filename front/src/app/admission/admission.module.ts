@@ -28,6 +28,7 @@ import { LeadEvaluationComponent } from "./lead/lead-evaluation/lead-evaluation.
 import { InformationsComponent } from '../informations/informations.component';
 import { Fieldset, FieldsetModule } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
+import { InputText, InputTextModule } from 'primeng/inputtext';
 @NgModule({
     declarations: [
         FormationAdmissionComponent,
@@ -61,7 +62,8 @@ import { ButtonModule } from 'primeng/button';
         SidebarModule,
         TimelineModule,
         FieldsetModule,
-        ButtonModule
+        ButtonModule,
+        InputTextModule,
     ]
 })
 export class AdmissionModule { }
