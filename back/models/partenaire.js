@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 // création du schéma de la table etudiant 
 const sch = mongoose.Schema({
+   
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
     code_partenaire: { type: String },
     nom: { type: String },
@@ -37,7 +38,11 @@ const sch = mongoose.Schema({
     typePartenaire: { type: String },
     groupeWhatsApp: { type: String },
     localisation: { type: String },
-    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "memberInt" }
+    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "memberInt" },
+    created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    ville_ent:{ type: String },
+    code_postale_ent:{ type: String},
+    adresse_ent:{ type: String},
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
