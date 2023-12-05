@@ -234,6 +234,10 @@ import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
+import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
+import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
 
 @NgModule({
   imports: [
@@ -491,6 +495,10 @@ import { ReadMoreModule } from './other/component/read-more/read-more.module';
     LogementComponent,
     GestionLogementComponent,
     BookingV2Component,
+    SuivreLeadComponent,
+    GestionOperationComponent,
+    GestionSrourcesComponent,
+    ConfirmDialogComponent,
     PauseReadMoreComponent,
     PrincipaleListComponent
   ],
