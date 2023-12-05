@@ -1,6 +1,7 @@
 
 <!-- File Upload Inputs:
  -->
+
 <div class="col-12">
     <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
         accept=".jpg,.png,.jpeg" style="display: none;" pInputFile />
@@ -12,9 +13,12 @@
 <!--end of  File Upload Inputs -->
 <p-toast></p-toast>
 <div class="grid">
+    <div class="meun">
+        <ul></ul>
+    </div>
     <!-- bouton attribuer partenaire yhezna lel Partenaire gérer par :
   -->
-    <div class="col-12 grid card" *ngIf="managePartenaire">
+    <div  class="col-12 grid card" *ngIf="managePartenaire">
         <h4 class="col-12" style="text-align: center;">Partenaire gérer par : </h4>
         <p-dropdown class="col-12" filter="true" placeholder="Choisissez un membre de l'équipe international"
             [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}" filter="true"
@@ -46,20 +50,20 @@
                                 style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
                                     style="border-radius: 50px;" /></a>
                         </div>
-                        <div class="col-12 md:col-6 grid">
-                            <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
+                        <div class="Data">
+                            <p class="data" ><strong>Téléphone:</strong><br>
                                 {{idPartenaireToUpdate?.indicatifPhone}} {{idPartenaireToUpdate?.phone}}</p>
-                            <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
+                            <p class="data"><strong>WhatsApp:</strong><br>
                                 {{idPartenaireToUpdate?.indicatifWhatsapp}} {{idPartenaireToUpdate?.WhatsApp}}
                             </p>
-                            <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
+                            <p class="data"><strong>Site Web:</strong><br>
                                 {{idPartenaireToUpdate?.site_web}}</p>
-                            <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
+                            <p class="data"><strong>Facebook:</strong><br>
                                 {{idPartenaireToUpdate?.facebook}}
                             </p>
-                            <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
+                            <p class="data"><strong>Pays:</strong><br>
                                 {{idPartenaireToUpdate?.Pays}}</p>
-                            <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
+                            <p class="data"><strong>Services:</strong><br>
                                 {{idPartenaireToUpdate?.Services}}
                             </p>
 
@@ -81,35 +85,35 @@
                                         height="150" style="border-radius: 50px;" /></a>
                             </div>
                             <div class="col-12 md:col-6 grid">
-                                <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
-                                    <input type="text" pInputText placeholder="+33"
+                                <p class="data"><strong>Téléphone:</strong><br>
+                                    <input class="myInput" type="text" pInputText placeholder="+33"
                                         formControlName="indicatifPhone" /><br>
                                     <input type="text" pInputText placeholder="0612345678" formControlName="phone" />
                                 </p>
-                                <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
-                                    <input type="text" pInputText placeholder="+33"
+                                <p class="data"><strong>WhatsApp:</strong><br>
+                                    <input class="myInput" type="text" pInputText placeholder="+33"
                                         formControlName="indicatifWhatsapp" /><br>
-                                    <input type="text" pInputText placeholder="0612345678" formControlName="WhatsApp" />
+                                    <input class="myInput" type="text" pInputText placeholder="0612345678" formControlName="WhatsApp" />
                                 </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                <p class="data"><strong>Site Web:</strong><br>
+                                    <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
                                         formControlName="site_web" />
                                 </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                <p class="data"><strong>Facebook:</strong><br>
+                                    <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
                                         formControlName="facebook" />
                                 </p>
-                                <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
+                                <p class="data"><strong>Pays:</strong><br>
                                     <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
                                         optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
                                         filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
                                 </p>
-                                <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                <p class="data"><strong>Services:</strong><br>
+                                    <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
                                         formControlName="Services" />
                                 </p>
 
-                                <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
+                                <p class="data"><strong>Description:</strong><br>
                                     <textarea pInputTextarea formControlName="description" placeholder=""></textarea>
                                 </p>
                             </div>
@@ -427,7 +431,7 @@
                         <td  style="min-width: 12rem;">({{ rowData?.indicatifWhatsapp}}) {{rowData?.WhatsApp}}</td>
                         <td  style="min-width: 12rem;">{{rowData?.facebook}}</td>
                         <td  style="min-width: 12rem;">{{rowData?.site_web}}</td>
-                        <td  style="min-width: 12rem;"> {{rowData?.code_postale_ent}} - {{rowData?.ville_ent}} - {{rowData?.adresse_ent}} </td>
+                        <td  style="min-width: 12rem;"> {{rowData?.adresse_ent}}  - {{rowData?.code_postale_ent}} - {{rowData?.ville_ent}}</td>
                     </tr>
                     </ng-template>
                     </p-table>
