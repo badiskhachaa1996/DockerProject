@@ -295,6 +295,12 @@
                             <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                                 tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
+                        <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
+                            <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
+                                tooltipPosition="bottom" (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket>
@@ -540,7 +546,10 @@
                             {{getDelaiTraitrement(ticket)}}
                         </td>
                         <td *ngIf="ticket.origin=='Mine'" [ngClass]="{'urgent-end':ticket.priorite}">
-                            
+                            <i pTooltip="Modifier" style="cursor: pointer;" class="pi pi-pencil mr-2"
+                                tooltipPosition="bottom" (click)="onUpdate(ticket)" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                tooltipPosition="bottom" (click)="delete(ticket,ri)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
