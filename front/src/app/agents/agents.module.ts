@@ -14,6 +14,7 @@ import { DialogModule } from "primeng/dialog";
 import { ToastModule } from "primeng/toast";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ButtonModule } from 'primeng/button';
         ToastModule,
         ReactiveFormsModule,
         FormsModule,
-        ButtonModule
+        ButtonModule,
+        InputTextModule
     ]
 })
 export class AgentsModule { }
