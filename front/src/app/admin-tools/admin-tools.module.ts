@@ -10,6 +10,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { TableModule } from "primeng/table";
 import { MultiSelectModule } from "primeng/multiselect";
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { ButtonModule } from 'primeng/button';
         DropdownModule,
         TableModule,
         MultiSelectModule,
-        ButtonModule
+        ButtonModule,
+        InputTextModule,
     ]
 })
 export class AdminToolsModule { }
