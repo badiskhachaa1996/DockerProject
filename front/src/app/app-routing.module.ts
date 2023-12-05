@@ -130,11 +130,8 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
-<<<<<<< HEAD
 import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
-=======
 import { CriteresComponent } from './crm/criteres/criteres.component';
->>>>>>> 82629d57a43db08c36a7b8894161285826621d57
 const routes: Routes = [
     {
         path: '',
@@ -512,65 +509,6 @@ const routes: Routes = [
 
             /* Module CRM */
 
-<<<<<<< HEAD
-            {
-                path: 'crm/leads/liste',
-                component: ListLeadcrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/liste',
-                component: CrmListComponent,
-                canActivate: [AuthGuardService],
-            },
-            
-            {
-                path: 'crm/leads/liste-non-attribue',
-                component: LeadsNonAttribuesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/mes-leads/liste/:id',
-                component: MesLeadsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/teams',
-                component: TeamsCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/member',
-                component: MemberCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/import',
-                component: ImportCrmComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/non-qualifies',
-                component: LeadsNonQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/pre-qualifies',
-                component: LeadsPrequalifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/leads/qualifies',
-                component: LeadsQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'crm/mes-leads/non-qualifies/:id',
-                component: LeadsNonQualifiesComponent,
-                canActivate: [AuthGuardService],
-            },
-=======
->>>>>>> 82629d57a43db08c36a7b8894161285826621d57
 
 
 
