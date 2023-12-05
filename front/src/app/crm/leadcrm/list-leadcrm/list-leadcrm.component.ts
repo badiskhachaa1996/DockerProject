@@ -246,6 +246,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
   private eventsSubscription: Subscription;
   @Input() newLead: Observable<LeadCRM>;
   @Output() suivreLead = new EventEmitter<LeadCRM>();
+  @Output() myLead = new EventEmitter<LeadCRM>();
   initFollow(lead
     :
     LeadCRM
@@ -477,6 +478,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
     setTimeout(() =>{
     this.LCS.update({ _id: lead._id, affected_to_member: this.token.id, affected_date: new Date(),equipe:this.equipe }).subscribe(data => {
       this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.myLead.emit(data);
       this.UserService.getByEmailIMS('ims.app@intedgroup.com').subscribe(u => {
         this.SujetService.getByLabel('Prospection').subscribe(sujet => {
           let newTicket = new Ticket(
@@ -507,6 +509,7 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
       })
       this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })},10);
+
   }
   findTeams(value){
     console.log(value)
@@ -894,5 +897,6 @@ this.filterEquipe.push({label:val.nom,value:val.nom});
       this.showAddWhatNumberlInput = false
     }
   }
+  
 
 }

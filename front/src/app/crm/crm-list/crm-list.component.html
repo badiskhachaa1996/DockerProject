@@ -4,11 +4,11 @@
     </p-tabPanel>
 
     <p-tabPanel header="Admin">
-        <app-list-leadcrm (suivreLead)="suivreLead($event)" [newLead]="eventsSubject.asObservable()"></app-list-leadcrm>
+        <app-list-leadcrm (suivreLead)="suivreLead($event)" [newLead]="eventsSubject.asObservable()" (myLead)="autoLead($event)"></app-list-leadcrm>
     </p-tabPanel>
 
     <p-tabPanel header="Mes lead">
-        <app-mes-leads (suivreLead)="suivreLead($event)"></app-mes-leads>
+        <app-mes-leads (suivreLead)="suivreLead($event)" [myLead]="eventsLead.asObservable()"></app-mes-leads>
     </p-tabPanel>
     <p-tabPanel header="{{lead.prenom}} {{lead.nom}}" *ngFor="let lead of leadList" [closable]="true">
         <app-suivre-lead [LEAD_ID]="lead._id"></app-suivre-lead>
