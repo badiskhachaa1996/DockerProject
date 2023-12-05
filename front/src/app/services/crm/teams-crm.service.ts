@@ -48,6 +48,10 @@ export class TeamsCrmService {
     let registerUrl = this.apiUrl + 'MI/getByUSERID/' + id;
     return this.http.get<MemberCRM>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
+  MIgetByEQUIPEID(id: string) {
+    let registerUrl = this.apiUrl + 'MI/getByTeamID/' + id;
+    return this.http.get<MemberCRM[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
 
   MIgetAll() {
     let registerUrl = this.apiUrl + 'MI/getAll';

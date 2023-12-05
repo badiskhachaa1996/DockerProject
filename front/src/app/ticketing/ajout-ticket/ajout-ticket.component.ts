@@ -18,6 +18,7 @@ import { Task } from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Service } from 'src/app/models/Service';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-ajout-ticket',
@@ -58,7 +59,17 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Beug', value: "Beug" },
     { label: 'Autre', value: "Autre" },
   ];
-
+  siteDropdown: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
   serviceSelected: Service
   service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
@@ -72,12 +83,13 @@ export class AjoutTicketComponent implements OnInit {
     demande: new FormControl('',),
     campus: new FormControl('',),
     filiere: new FormControl('',),
+    site: new FormControl('')
   })
   token;
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
-  ];;
+  ];
   // Haute priorité / Moyenne priorité / Basse priorité / Priorité normale
   prioriteDropdown: any[] = [
     { label: 'Urgent', value: "Urgent" },
@@ -161,8 +173,10 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute, private diplomeService: DiplomeService,
-    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService) { }
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService,
+    private router: Router, private route: ActivatedRoute, private diplomeService: DiplomeService,
+    private SujetService: SujetService, private Socket: SocketService, private CollaborateurService: RhService,
+    private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService) { }
   serviceDic = {}
   serviceDicTrue = {}
   sujetDic = {}
@@ -172,6 +186,18 @@ export class AjoutTicketComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
       this.USER = data
+    })
+    this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
+      if (r) {
+        let site = ''
+        if (Array.isArray(r.localisation) && r.localisation.length != 0)
+          site = r.localisation[0]
+        else if (!Array.isArray(r.localisation)) {
+          let buffer: any = r.localisation
+          site = buffer
+        }
+        this.TicketForm.patchValue({ site })
+      }
     })
     this.SujetService.getAll().subscribe(data => {
       data.forEach(element => {
@@ -229,66 +255,47 @@ export class AjoutTicketComponent implements OnInit {
     })
 
   }
-
+  showSite = false
   onSubjectChange() {
     const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value];
+    const service = this.serviceDic[this.TicketForm.get('service_id').value]
 
-    if (this.serviceDic[this.TicketForm.get('service_id').value] === "Support informatique") {
-      this.showTypeDropdown = false;
-      this.showCampusDropdown = false;
+    this.showTypeDropdown = false;
+    this.showCampusDropdown = false;
+    this.showModuleDropdown = false;
+    this.showFiliereDropdown = false;
+    this.showDemandeDropdown = false;
+    this.showSite = false
 
-    } else if (this.serviceDic[this.TicketForm.get('service_id').value] === "Pédagogie") {
-      console.log("*****************************")
-      this.showTypeDropdown = false;
+    if (service === "Pédagogie") {
       this.showCampusDropdown = true;
-      this.showModuleDropdown = false;
       this.showFiliereDropdown = true;
-    } else if (this.serviceDic[this.TicketForm.get('service_id').value] === "Administration") {
-      this.showTypeDropdown = false;
+    } else if (service === "Administration") {
       this.showCampusDropdown = true;
-      this.showModuleDropdown = false;
-      this.showFiliereDropdown = false;
-    }
-    else {
-      this.showFiliereDropdown = false;
-      this.showTypeDropdown = false;
-      this.showCampusDropdown = false
-      this.showModuleDropdown = false;
-    }
+    } else if (service === 'Ressources Humaines')
+      this.showSite = true
     if (selectedSubject === "IMS") {
       this.showTypeDropdown = true;
-      this.showFiliereDropdown = false;
       this.showModuleDropdown = true;
-      this.showCampusDropdown = false;
-      this.showDemandeDropdown = false;
       this.showTypeDropdown = true;
-      this.TicketForm.get('module').setValidators([Validators.required]);
-      this.TicketForm.get('module').updateValueAndValidity();
     } else if (selectedSubject === "Ypareo") {
-      this.showFiliereDropdown = false;
       this.showDemandeDropdown = true;
-      this.showModuleDropdown = false;
-      this.showCampusDropdown = false;
       this.demandeDropdown = this.YpareoDropdown;
     } else if (selectedSubject === "Microsoft") {
-      this.showFiliereDropdown = false;
       this.showDemandeDropdown = true;
-      this.showModuleDropdown = false;
-      this.showCampusDropdown = false;
       this.demandeDropdown = this.MicrosoftDropdown
     } else if (selectedSubject === "Site internet") {
-      this.showFiliereDropdown = false;
       this.showDemandeDropdown = true;
-      this.showModuleDropdown = false;
-      this.showCampusDropdown = false;
       this.demandeDropdown = this.SiteinternetDropdown;
     }
-    else {
 
+    if (this.showModuleDropdown) {
+      this.TicketForm.get('module').setValidators([Validators.required]);
+      this.TicketForm.get('module').updateValueAndValidity();
+    } else {
       this.TicketForm.get('module').clearValidators();
       this.TicketForm.get('module').updateValueAndValidity();
       this.TicketForm.get('module').reset();
-      this.showModuleDropdown = false;
     }
   };
 

@@ -181,6 +181,6 @@ export class StageCeoComponent implements OnInit {
   // méthode de redirection vers la page des assiduités
   showPresence(id: string): void
   {
-    this.router.navigate(["details/" + id]);
+    this.router.navigate(["pedagogie/details/" + id]);
   }
 }

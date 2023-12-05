@@ -250,7 +250,7 @@ export class MatchingComponent implements OnInit {
   seeCV(cv: CV) {
     console.log(cv)
     this.cv.emit({ ID: cv._id, label: `CV - ${cv?.user_id?.firstname} ${cv?.user_id.lastname}` })
-    //this.router.navigate(['cv', cv_id])
+    //this.router.navigate(['skillsnet/cv', cv_id])
   }
   takeRDV(match: Matching) {
     //OFFER LA

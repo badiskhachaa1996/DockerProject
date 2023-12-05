@@ -57,7 +57,7 @@
                         ]
                     },
                     "configurations": {
-                        "production": {
+                        "prod": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -74,6 +74,27 @@
                                 {
                                     "replace": "src/environments/environment.ts",
                                     "with": "src/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "prod2": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "30mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "600kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod2.ts"
                                 }
                             ],
                             "outputHashing": "all"
@@ -133,13 +154,19 @@
                             "namedChunks": true
                         }
                     },
-                    "defaultConfiguration": "local"
+                    "defaultConfiguration": "prod"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                      "browserTarget": "sakai:build"
+                    },
                     "configurations": {
                         "prod": {
                             "browserTarget": "sakai:build:prod"
+                        },
+                        "prod2": {
+                            "browserTarget": "sakai:build:prod2"
                         },
                         "qa": {
                             "browserTarget": "sakai:build:qa"
@@ -174,11 +201,9 @@
                         "styles": [
                             "src/styles.css",
                             "node_modules/@fullcalendar/common/main.css",
-                            "src/styles.scss",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
                             "node_modules/@fullcalendar/timegrid/main.min.css",
-                            "node_modules/@fullcalendar/common/main.css",
                             "node_modules/@fullcalendar/daygrid/main.css",
                             "node_modules/@fullcalendar/timegrid/main.css",
                             "node_modules/@fullcalendar/list/main.css",

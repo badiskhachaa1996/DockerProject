@@ -328,7 +328,7 @@ export class NewEntreprisesComponent implements OnInit {
   }
 
   onRedirect() {
-    this.router.navigate(['ajout-entreprise']);
+    this.router.navigate(['/skillsnet/ajout-entreprise']);
   }
 
   // méthode de redirection vers le formulaire de création d'entreprise
@@ -361,7 +361,7 @@ export class NewEntreprisesComponent implements OnInit {
       })
   }
   InitMatching(entreprise: Entreprise) {
-    this.router.navigate(['imatch/annonce/entreprise', entreprise._id])
+    this.router.navigate(['skillsnet/annonce/entreprise', entreprise._id])
   }
 
   activeIndex1 = 1

@@ -1,49 +1,322 @@
-<div class="grid col-12 card">
-    <div class="col-4">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-4">
-                <div>
-                    <span class="block text-500 font-medium mb-4">Nombre total des projets</span>
-                    <div class="text-900 font-medium text-xl">{{nbr_project }}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-shield text-blue-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-4">
-                <div>
-                    <span class="block text-500 font-medium mb-4">Nombre total des projets en cours:</span>
-                    <div class="text-900 font-medium text-xl">{{nbr_project}}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-replay text-cyan-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-4">
-                <div>
-                    <span class="block text-500 font-medium mb-4">Nombre total des Projets cloturés</span>
-                    <div class="text-900 font-medium text-xl">{{nbr_projectCloturer }}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-check-square text-green-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
+<p-tabView [(activeIndex)]="selectedTabIndex">
+    <p-tabPanel header="Créer">
+        <div class="card">
 
 
-</div>
+            <h3 class="text-center">Nouveau projet</h3>
+            <form class="p-formgrid grid p-fluid" [formGroup]="formAddProject" (ngSubmit)="addProject()">
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="titre">Titre du projet <span style="color: red">*</span></label>
+                    <textarea formControlName="titre" pInputTextarea placeholder="Donnez un titre à votre projet"
+                        autoResize rows="2" cols="40"></textarea>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Responsable <span style="color: red">*</span></label>
+                    <p-dropdown formControlName="responsable" [options]="responsableListe" filter="true"
+                        placeholder="responsable" [showClear]="true"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="debut">Début <span style="color: red">*</span></label>
+                    <p-calendar formControlName="debut" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="fin">Fin <span style="color: red">*</span></label>
+                    <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                </div>
+
+                <div class="field col-12 ">
+                    <label htmlFor="description">Description <span style="color: red">*</span></label>
+                    <textarea formControlName="description" pInputTextarea
+                        placeholder="Donnez une description à votre projet" autoResize rows="4" cols="30"></textarea>
+                </div>
+                <div class="field col-12 md:col-10"></div>
+                <div class="field col-12 md:col-2">
+                    <button pButton pRipple type="submit" class="my-2" label="Enregistrer"
+                        [disabled]="formAddProject.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Dashboard">
+        <div class="grid col-12 card">
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Nombre total des projets {{nbr_project
+                                }}</span>
+
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-shield text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Nombre total des projets en cours
+                                {{nbr_project}}</span>
+
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-replay text-cyan-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Nombre total des Projets cloturés
+                                {{nbr_projectCloturer }}</span>
+
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-check-square text-green-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [value]="project" [paginator]="true"
+            rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
+            [globalFilterFields]="['project_id', 'titre','sujet']" responsiveLayout="scroll"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
+                        (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
+                        emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
+
+
+
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th pSortableColumn="project_id" style="text-align:center"> ID Projet <p-sortIcon field="customid">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="titre" style="text-align:center"> Titre <p-sortIcon field="titre">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="created_date" style="text-align:center"> Date de création <p-sortIcon
+                            field="created_date">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="createur_id.lastname" style="text-align:center"> Crée par <p-sortIcon
+                            field="user_id">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="responsable projet" style="text-align:center"> Responsable Projet <p-sortIcon
+                            field="service">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="sujet" style="text-align:center"> Etat <p-sortIcon field="sujet">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="priorite" style="text-align:center">Avancement <p-sortIcon field="priorite">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="priorite" style="text-align:center"> Actions <p-sortIcon field="priorite">
+                        </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-project let-expanded="expanded" let-ri="rowIndex">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="project"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td>
+                        {{project.identifian}}
+                    </td>
+                    <td>
+                        {{project.titre}}
+                    </td>
+                    <td>
+                        {{project.created_date | date:'dd MMMM yy'}}
+                    </td>
+
+                    <td>
+                        {{project?.createur | titlecase}}
+                    </td>
+                    <td>
+                        {{project?.responsable | titlecase}}
+                    </td>
+
+                    <td>
+                        <p-tag *ngIf="project.etat == null" icon="pi pi-times" severity="success" [value]="'En cours'">
+                        </p-tag>
+                        <p-tag *ngIf="project.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
+                            [value]="project.statut">
+                        </p-tag>
+                        <p-tag *ngIf="project.statut == 'cloturer'" icon="pi pi-check-square" severity="success"
+                            [value]="project.statut">
+                        </p-tag>
+                    </td>
+                    <td>
+                        {{project.avancement| number:'1.1-1'}} %
+                    </td>
+                    <td>
+                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
+                            (click)="initialisation_project(project)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
+                            (click)="delete(project._id,ri)" aria-hidden="true"></i>
+                        <i pTooltip="activités" style="margin-left: 3%; cursor: pointer;" class="pi pi-align-justify"
+                            (click)=" showTaskList(project) ; showtache=true" aria-hidden="true"></i>
+                        <i pTooltip="ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
+                            (click)="showRessources(project._id)" aria-hidden="true"></i>
+                        <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
+                            (click)="showBudget(project._id)" aria-hidden="true"></i>
+
+
+                    </td>
+                </tr>
+            </ng-template>
+
+
+
+            <ng-template pTemplate="rowexpansion" let-ticket>
+
+                <tr>
+                    <td colspan="9">
+                        <p-table class="col-12" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                <tr>
+                    <th> Description </th>
+                    <th> Date de debut </th>
+                    <th> Date de fin </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>{{ticket.description}}</td>
+                    <td>{{ticket.debut| date:'dd MMMM yy'}}</td>
+                    <td>{{ticket.fin| date:'dd MMMM yy'}}</td>
+
+                </tr>
+
+            </ng-template>
+
+
+        </p-table>
+
+        </td>
+        </tr>
+
+
+
+
+        </ng-template>
+
+
+        </p-table>
+    </p-tabPanel>
+    <p-tabPanel header="Reporting">
+        <app-dashboard-project-v2></app-dashboard-project-v2>
+    </p-tabPanel>
+    <p-tabPanel style="width: 100%;" header="Project -  {{projectSelected?.titre}}"
+        *ngFor="let projectSelected of projectSelecteds " [closable]="true">
+        <div class="grid col-12">
+            <div class="col-4 "><p-card header="To DO ">
+                    <ng-container *ngFor="let t of taskToDo">
+                        <p-card header={{t?.libelle}}><br>
+
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
+                        </p-card><br>
+                    </ng-container>
+                    <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true" (click)="showAddTacheForm=true"></p-button>
+                </p-card>
+            </div>
+            <div class="col-4 ">
+                <p-card header="Doing ">
+                    <ng-container *ngFor="let t of task">
+                        <p-card header={{t?.libelle}}><br>
+
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
+                        </p-card><br>
+                    </ng-container>
+                </p-card>
+            </div>
+            <div class="col-4 ">
+                <p-card header="Done ">
+                    <ng-container *ngFor="let t of task">
+                        <p-card header={{t?.libelle}}><br>
+
+                            <div class="grid col-12">
+                                <div class="col-9">
+                                    {{t.description_task}}
+                                </div>
+                                <div class="col-3">
+                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                </div>
+                                <div class="col-6">
+                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
+                                </div>
+                                <div class="col-6">
+                                    <p-button></p-button>
+                                </div>
+                            </div>
+                        </p-card><br>
+                    </ng-container>
+                </p-card>
+            </div>
+
+
+        </div>
+
+    </p-tabPanel>
+
+
+
+
+</p-tabView>
 
 
 
@@ -334,13 +607,8 @@
 
 
 
-<div *ngIf="showAddTacheForm" class="card">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showAddTacheForm = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-
-    <h3 class="text-center">Nouvelle activité pour ce project</h3>
-    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project._id)">
+<p-dialog header="Nouvelle activité pour ce project" [(visible)]="showAddTacheForm" >
+    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
 
         <div class="field col-12 md:col-12">
             <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
@@ -351,7 +619,7 @@
         <div class="field col-12">
             <label>Priorité <span style="color: red">*</span></label>
             <p-dropdown formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
-                [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                [showClear]="true" ></p-dropdown>
         </div>
 
         <div class="field col-12 md:col-6">
@@ -371,8 +639,32 @@
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
     </form>
-</div>
-
+</p-dialog>
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
+    <div class="grid col-12">
+        <div class="col-9">
+            Assigné à
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            Urgent
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            Nombre des heures
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            DDL
+        </div>
+        <div class="col-3"></div>
+        <div class="col-9">
+            description
+        </div>
+        <div class="col-3"></div>
+        
+    </div>
+</p-sidebar>
 
 <div *ngIf="showCreateticket" class="col-12 card grid">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
@@ -622,143 +914,3 @@
         </div>
     </form>
 </div>
-<p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [value]="project" [paginator]="true" rowExpandMode="single"
-    [pageLinks]="5" selectionMode="single" class="col-12" [globalFilterFields]="['project_id', 'titre','sujet']"
-    responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-    <ng-template pTemplate="caption">
-        <div class="flex justify-content-between flex-column sm:flex-row">
-            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                placeholder="Recherche" />
-
-            <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
-                (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
-                emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
-
-            <button pButton pRipple label="Nouveau projet" style="float: right;" class="p-button-outlined mb-2"
-                (click)="showAddProjectForm = true"></button>
-
-        </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-        <tr>
-            <th style="width: 3rem"></th>
-            <th pSortableColumn="project_id" style="text-align:center"> ID Projet <p-sortIcon field="customid">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="titre" style="text-align:center"> Titre <p-sortIcon field="titre">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="created_date" style="text-align:center"> Date de création <p-sortIcon
-                    field="created_date">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="createur_id.lastname" style="text-align:center"> Crée par <p-sortIcon field="user_id">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="responsable projet" style="text-align:center"> Responsable Projet <p-sortIcon
-                    field="service">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="sujet" style="text-align:center"> Etat <p-sortIcon field="sujet">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="priorite" style="text-align:center">Avancement <p-sortIcon field="priorite">
-                </p-sortIcon>
-            </th>
-            <th pSortableColumn="priorite" style="text-align:center"> Actions <p-sortIcon field="priorite">
-                </p-sortIcon>
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-project let-expanded="expanded" let-ri="rowIndex">
-        <tr>
-            <td>
-                <button type="button" pButton pRipple [pRowToggler]="project"
-                    class="p-button-text p-button-rounded p-button-plain"
-                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
-                </button>
-            </td>
-            <td>
-                {{project.identifian}}
-            </td>
-            <td>
-                {{project.titre}}
-            </td>
-            <td>
-                {{project.created_date | date:'dd MMMM yy'}}
-            </td>
-
-            <td>
-                {{project?.createur | titlecase}}
-            </td>
-            <td>
-                {{project?.responsable | titlecase}}
-            </td>
-
-            <td>
-                <p-tag *ngIf="project.etat == null" icon="pi pi-times" severity="success" [value]="'en cour'">
-                </p-tag>
-                <p-tag *ngIf="project.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
-                    [value]="project.statut">
-                </p-tag>
-                <p-tag *ngIf="project.statut == 'cloturer'" icon="pi pi-check-square" severity="success"
-                    [value]="project.statut">
-                </p-tag>
-            </td>
-            <td>
-                {{project.avancement| number:'1.1-1'}} %
-            </td>
-            <td>
-                <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
-                    (click)="initialisation_project(project)" aria-hidden="true"></i>
-                <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
-                    (click)="delete(project._id,ri)" aria-hidden="true"></i>
-                <i pTooltip="activités" style="margin-left: 3%; cursor: pointer;" class="pi pi-align-justify"
-                    (click)=" showTaskList(project._id) ; showtache=true" aria-hidden="true"></i>
-                <i pTooltip="ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
-                    (click)="showRessources(project._id)" aria-hidden="true"></i>
-                <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
-                    (click)="showBudget(project._id)" aria-hidden="true"></i>
-
-
-            </td>
-        </tr>
-    </ng-template>
-
-
-
-    <ng-template pTemplate="rowexpansion" let-ticket>
-
-        <tr>
-            <td colspan="9">
-                <p-table class="col-12" styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="header">
-        <tr>
-            <th> Description </th>
-            <th> Date de debut </th>
-            <th> Date de fin </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-        <tr>
-            <td>{{ticket.description}}</td>
-            <td>{{ticket.debut| date:'dd MMMM yy'}}</td>
-            <td>{{ticket.fin| date:'dd MMMM yy'}}</td>
-
-        </tr>
-
-    </ng-template>
-
-
-</p-table>
-
-</td>
-</tr>
-
-
-
-
-</ng-template>
-
-
-</p-table>

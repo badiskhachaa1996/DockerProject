@@ -390,7 +390,7 @@ export class ListeContratsComponent implements OnInit {
   }
 
   showPresence(alternant_id) {
-    this.router.navigate(["details/" + alternant_id]);
+    this.router.navigate(["pedagogie/details/" + alternant_id]);
   }
   ShowAddNewCA() {
     this.onInitRegisterNewCA()

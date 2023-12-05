@@ -8,16 +8,28 @@ const jwt = require("jsonwebtoken");
 // var CronJob = require('cron').CronJob;
 app.use(bodyParser.json({ limit: "20mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
+app.use(express.static('public', {
+  etag: true, // Just being explicit about the default.
+  lastModified: true,  // Just being explicit about the default.
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      // All of the project's HTML files end in .html
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  },
+}));
 let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod")) {
+  if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod") && !argProd.includes("prod2")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
   } else if (argProd.includes("qa")) {
     origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
+  } else if (argProd.includes("prod2")) {
+    origin = ["https://51.68.215.184", "https://prod2-ims.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",
