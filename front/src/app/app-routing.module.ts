@@ -247,6 +247,7 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import {GestionSrourcesComponent} from "./crm/gestion-srources/gestion-srources.component";
 import {GestionOperationComponent} from "./crm/gestion-operation/gestion-operation.component";
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
+import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
 const routes: Routes = [
     {
         path: '',
@@ -279,6 +280,10 @@ const routes: Routes = [
                 path: 'admin/ajout-de-partenaire',
                 component: ListPartenaireComponent,
                 canActivate: [AuthGuardService],
+            },  {
+                path: 'listpartenaires',
+                component: PrincipaleListComponent,
+               
             },
             {
                 path: 'collaborateur',
@@ -544,20 +549,18 @@ const routes: Routes = [
             },
 
 
-            {
-                path: 'ajout-remboursement',
-                component: AddRemboussementComponent,
+           
 
-            }, //Remboursement
-
-            // {
-            //     path: 'list-remboursement',
-            //     component: RemboursementListComponent,
-            //     canActivate: [AuthGuardService],
-            // },
+           
             {
                 path: 'remboursements',
                 component: ListRemboursementComponent,
+                canActivate: [AuthGuardService],
+            },
+              
+            {
+                path: 'ajout-remboursement',
+                component: AddRemboussementComponent,
                 canActivate: [AuthGuardService],
             },
 
@@ -972,6 +975,7 @@ const routes: Routes = [
                 component: CrmListComponent,
                 canActivate: [AuthGuardService],
             },
+            
             {
                 path: 'crm/leads/liste-non-attribue',
                 component: LeadsNonAttribuesComponent,
@@ -1294,6 +1298,7 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+    
     { path: 'formulaire-remboursement', component: AddRemboursementPublicComponent },
 
 ]

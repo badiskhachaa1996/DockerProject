@@ -411,9 +411,12 @@ import { GestionOperationComponent } from './crm/gestion-operation/gestion-opera
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 import { AddGroupeV2Component } from './administration-v1/configuration/groupes/add-groupe-v2/add-groupe-v2.component';
+import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [
+    ClipboardModule,
     ReactiveFormsModule,
     NgxCaptchaModule,
     CaptchaModule,
@@ -844,7 +847,8 @@ import { AddGroupeV2Component } from './administration-v1/configuration/groupes/
     GestionOperationComponent,
     GestionSrourcesComponent,
     GroupesComponent,
-    AddGroupeV2Component
+    AddGroupeV2Component,
+    PrincipaleListComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
