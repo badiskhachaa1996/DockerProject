@@ -28,6 +28,8 @@ import { GroupesComponent } from "./configuration/groupes/groupes.component";
 import { AccordionModule } from "primeng/accordion";
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { LeadDossierModule } from '../admission/lead/lead-dossier/lead-dossier.module';
+import { LeadDossierComponent } from '../admission/lead/lead-dossier/lead-dossier.component';
 
 @NgModule({
     declarations: [
@@ -69,7 +71,8 @@ import { InputTextModule } from 'primeng/inputtext';
         StepsModule,
         AccordionModule,
         ButtonModule,
-        InputTextModule
+        InputTextModule,
+        LeadDossierModule
     ]
 })
 export class AdminModule { }
