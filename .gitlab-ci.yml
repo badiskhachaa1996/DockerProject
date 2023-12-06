@@ -30,6 +30,10 @@ install_node_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -44,6 +48,10 @@ install_angular_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
   script:
     - cd front
     - rm -rf node_modules/
@@ -60,6 +68,10 @@ manual_install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -73,6 +85,10 @@ manual_install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
   script:
     - cd front
     - rm -rf node_modules/
@@ -88,6 +104,10 @@ manual_install_node_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -101,6 +121,10 @@ manual_install_angular_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
   script:
     - cd front
     - rm -rf node_modules/
@@ -116,6 +140,10 @@ manual_install_node_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -129,6 +157,10 @@ manual_install_angular_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
   script:
     - cd front
     - rm -rf node_modules/
@@ -170,6 +202,11 @@ build_angular_on_dev:
   stage: Build
   tags:
     - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
 
   script:
       - cd front
@@ -188,6 +225,11 @@ build_angular_on_qa:
   stage: Build
   tags:
     - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
 
   script:
       - cd front
@@ -206,6 +248,11 @@ manual_build_angular_on_prod2:
   stage: Build
   tags:
     - prod2-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
 
   script:
       - cd front
@@ -225,6 +272,11 @@ manual_build_angular_on_prod1:
   stage: Build
   tags:
     - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
 
   script:
       - cd front
@@ -312,7 +364,7 @@ deploy_node_to_dev:
     - dev-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --dev
@@ -341,7 +393,7 @@ deploy_node_to_qa:
     - qa-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --qa
@@ -371,7 +423,7 @@ manual_deploy_node_to_prod2:
     - prod2-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
@@ -402,7 +454,7 @@ manual_deploy_node_to_prod1:
     - prod1-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
