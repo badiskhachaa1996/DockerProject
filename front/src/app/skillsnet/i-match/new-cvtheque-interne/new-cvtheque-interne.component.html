@@ -293,14 +293,14 @@
 
                                 <td style="min-width: 12rem;">
                                     {{ cv?.profil?.libelle || cv?.competences[0]?.profile_id?.libelle ||
-                                    'Profil'}} 
+                                    'Profil'}}
                                 </td>
                                 <td style="min-width: 12rem;">
                                     {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
                                 </td>
                                 <td class="text-center" style="min-width: 8rem;">
                                     <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
-                                        (click)="onInitUpdate(cv)" tooltipPosition="bottom"></i>
+                                        tooltipPosition="bottom" (click)="onInitUpdate(cv)"></i>
                                     <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
                                         (click)="deleteCV(cv)" tooltipPosition="bottom"></i>
                                     <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV"

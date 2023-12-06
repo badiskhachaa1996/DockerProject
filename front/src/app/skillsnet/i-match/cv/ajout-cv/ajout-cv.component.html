@@ -75,13 +75,14 @@
                         </div>-->
                     <div class="field col-12">
                         <label htmlFor="profil">Profil</label>
-                        <p-dropdown id="profil" [options]="profilsList" formControlName="profil" (onChange)="filterCompetencesList()"
-                            [(ngModel)]="profilSelected"></p-dropdown>
+                        <p-dropdown id="profil" [options]="profilsList" formControlName="profil"
+                            (onChange)="filterCompetencesList()" [(ngModel)]="profilSelected"></p-dropdown>
                     </div>
 
                     <div class="field col-10">
                         <label>Compétences</label>
-                        <p-multiSelect [options]="competencesList" [(ngModel)]="selectedMultiCpt" [showToggleAll]="false" [itemSize]="20" [virtualScroll]="true"
+                        <p-multiSelect [options]="competencesList" [(ngModel)]="selectedMultiCpt"
+                            [showToggleAll]="false" [itemSize]="20" [virtualScroll]="true"
                             defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
                             formControlName="competences">
                             <ng-template let-value pTemplate="selectedItems">
@@ -710,11 +711,7 @@
     </div>
     <div class="page-footer"></div>
 </div>
-<p-dialog header="Compétences" [(visible)]="displayAddSkill" [modal]="true" [style]="{width: '75vw'}"
-    [draggable]="false" [resizable]="false" (onHide)="refreshSkills()">
+<p-dialog [(visible)]="displayAddSkill" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false"
+    (onHide)="refreshSkills()">
     <app-skills-management></app-skills-management>
-    <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="displayAddSkill=false;refreshSkills()" label="Validez"
-            styleClass="p-button-text"></p-button>
-    </ng-template>
 </p-dialog>
