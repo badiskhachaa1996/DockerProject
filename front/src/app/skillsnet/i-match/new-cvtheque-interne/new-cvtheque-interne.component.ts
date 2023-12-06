@@ -358,12 +358,13 @@ export class NewCvthequeInterneComponent implements OnInit {
         r = false
       }
       if (this.filter_value.search) {
+        let name = `${val?.user_id?.lastname?.toLowerCase()} ${val?.user_id?.firstname?.toLowerCase()} ${val?.user_id?.firstname?.toLowerCase()} ${val?.user_id?.lastname?.toLowerCase()} ${val?.profil?.libelle}`
         if (!val?.a_propos?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
           !val?.centre_interets?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
           !val?.user_id?.lastname?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
           !val?.user_id?.firstname?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
           !val?.mobilite_lieu?.includes(this.filter_value.search.toLowerCase()) &&
-          !val?.profil?.libelle.includes(this.filter_value.search.toLowerCase()) &&
+          !name.includes(this.filter_value.search.toLowerCase()) &&
           !strprofile.toLowerCase().includes(this.filter_value.search.toLowerCase()))
           r = false
       }
@@ -431,10 +432,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     //localStorage.setItem('seeEditBTNCV', 'true')
     //this.router.navigate(['i-match/cv', cv._id])
     this.cvList.push({ label: "CV - " + cv?.user_id?.lastname + " " + cv?.user_id?.firstname, CV_ID: cv._id })
-    console.log(this.activeIndex1)
     setTimeout(() => {
       this.activeIndex1 = 2 + this.cvList.length + this.matchingList.length
-      console.log(this.activeIndex1)
     }, 5)
 
   }
@@ -465,8 +464,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     return r
   }
 
-  onPrinting(){
-    this.cvToUpdate=null
+  onPrinting() {
+    this.cvToUpdate = null
   }
 
 

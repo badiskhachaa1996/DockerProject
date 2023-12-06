@@ -1,8 +1,10 @@
 <div *ngIf="cv && user" class="imatch-main-page">
     <div class="page-content">
         <div class="top-header container">
-            <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour</a>
-            <a *ngIf="showEditBtn" (click)="gotoEdit()" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-cog"></i>Modifier</a>
+            <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i
+                    class="pi pi-arrow-left"></i>Retour</a>
+            <a *ngIf="showEditBtn" (click)="gotoEdit()" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i
+                    class="pi pi-cog"></i>Modifier</a>
             <a (click)="takeARendezVous()" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
         </div>
         <div class="header">
@@ -30,7 +32,8 @@
                     <div class="cv-main-info">
                         <h1 class="cv-name">{{user.firstname.substring(0, 1)}}. {{user.lastname.substring(0, 2)}}.</h1>
                         <hr>
-                        <h1 class="cv-profile">{{cv.competences[0].profile_id.libelle || "Profile non spécifié"}}</h1>
+                        <h1 class="cv-profile"> {{ cv?.profil?.libelle || cv?.competences[0]?.profile_id?.libelle ||
+                            'Profil'}}</h1>
                     </div>
                 </div>
                 <div class="competences-block">
@@ -51,14 +54,15 @@
                                 <p class="comp">{{cv.competences[2]?.libelle}}</p>
                             </div>
                         </div>
-                        <div *ngIf="(cv.competences.length > 3)" >
+                        <div *ngIf="(cv.competences.length > 3)">
                             <div *ngIf="showingmore" class="row gx-5 competence">
                                 <div class="col-md-4 col-12" *ngFor="let competence of cv.competences | slice:3">
                                     <p class="comp">{{competence.libelle}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="(cv.competences.length > 3) && !showingmore" class="bouton-suite" (click)="showMore(cv.competences)">plus</div>
+                        <div *ngIf="(cv.competences.length > 3) && !showingmore" class="bouton-suite"
+                            (click)="showMore(cv.competences)">plus</div>
                         <div *ngIf="showingmore" class="bouton-suite" (click)="showLess(cv.competences)">moins</div>
                     </div>
                     <div class="col-md-4 col-12 block-other border-right">

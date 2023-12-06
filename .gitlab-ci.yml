@@ -364,7 +364,7 @@ deploy_node_to_dev:
     - dev-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --dev
@@ -393,7 +393,7 @@ deploy_node_to_qa:
     - qa-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --qa
@@ -423,7 +423,7 @@ manual_deploy_node_to_prod2:
     - prod2-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
@@ -454,7 +454,7 @@ manual_deploy_node_to_prod1:
     - prod1-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod1

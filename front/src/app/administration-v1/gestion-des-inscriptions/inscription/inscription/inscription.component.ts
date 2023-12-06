@@ -6,7 +6,17 @@ import { MessageService } from 'primeng/api';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { Table } from 'primeng/table';
+import { AuthService } from 'src/app/services/auth.service';
 import mongoose from 'mongoose';
+import { NotificationService } from 'src/app/services/notification.service';
+import { User } from 'src/app/models/User';
+import jwt_decode from "jwt-decode";
+import { Notification } from 'src/app/models/notification';
+import { SocketService } from 'src/app/services/socket.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { FileUpload } from 'primeng/fileupload';
+import { saveAs as importedSaveAs } from "file-saver";
 
 @Component({
   selector: 'app-inscription',
@@ -14,10 +24,13 @@ import mongoose from 'mongoose';
   styleUrls: ['./inscription.component.scss']
 })
 export class InscriptionComponent implements OnInit {
+  token;
   @ViewChild('dt1') dt1: Table | undefined;
   prospects: Prospect[] = [];
   prospectI: Prospect[] = [];
   PROSPECT:Prospect;
+  ListDocuments: String[] = [];
+  ListPiped: String[] = [];
   prospect_acctuelle: Prospect;
   visible: boolean = false;
   visibleC: boolean=false;
@@ -30,6 +43,7 @@ export class InscriptionComponent implements OnInit {
   showdoc:boolean=false;
   showDocAdmin: Prospect = null
   civiliteList = environment.civilite;
+  userConnected:User
   paysList = environment.pays;
   nationList = environment.nationalites;
   Frythme: String; Fcampus: String; Frentree: String; Fecoles: String;
@@ -176,10 +190,12 @@ export class InscriptionComponent implements OnInit {
     type: new FormControl(""),
   })
 
-  constructor(private FAService: FormulaireAdmissionService, private admissionService: AdmissionService, private messageService: MessageService,) { }
+  constructor(private EmailTypeS: EmailTypeService,private commercialService: CommercialPartenaireService,private NotifService: NotificationService,private Socket: SocketService,private UserService: AuthService,private FAService: FormulaireAdmissionService, private admissionService: AdmissionService, private messageService: MessageService,private ToastService: MessageService,) { }
 
   ngOnInit(): void {
     //RECUPERATION PROSPECT
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.getthecrateur();
     this.admissionService.getAllInsDef().subscribe((results => {
       this.prospects = results
     }))
@@ -236,6 +252,13 @@ export class InscriptionComponent implements OnInit {
       })
     }
   };
+  getthecrateur() {
+    this.UserService.getInfoById(this.token.id).subscribe({
+      next: (response) => { this.userConnected = response; },
+      error: (error) => { console.error(error); },
+      complete: () => console.log("information de l'utilisateur connecté récuperé")
+    });
+  }
   //AJOUTER UN COMPTE TEAMS
   onAddTeams() {
     this.prospect_acctuelle.teams = this.compteForm.value.teams
@@ -452,10 +475,7 @@ export class InscriptionComponent implements OnInit {
       this.Fgroupe = false;
     }
   }
-  onShowDoc(procpect:Prospect){
-    this.showdoc=true;
-    this.PROSPECT=procpect;
-  }
+ 
   addDoc() {
     if (this.PROSPECT.documents_autre)
       this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
@@ -470,5 +490,149 @@ export class InscriptionComponent implements OnInit {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
+  }
+  //DOOOOOOOOOOOCument
+  FileUploadAdmin(event: { files: [File], target: EventTarget }) {
+
+    if (this.uploadAdminFileForm.valid && event.files != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+
+      formData.append('id', this.showUploadFile._id)
+      formData.append('date', this.uploadAdminFileForm.value.date)
+      formData.append('note', this.uploadAdminFileForm.value.note)
+      formData.append('nom', this.uploadAdminFileForm.value.nom)
+      formData.append('type', this.uploadAdminFileForm.value.type)
+      formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
+      formData.append('traited_by', this.userConnected?.firstname + ' ' + this.userConnected?.lastname)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.Socket.NewNotifV2(this.showUploadFile.user_id._id, `Un document est disponibe dans votre espace pour le téléchargement `)
+
+        this.NotifService.create(new Notification(null, null, false,
+          `Un document est disponibe dans votre espace pour le téléchargement `,
+          new Date(), this.showUploadFile.user_id._id, null)).subscribe(test => { })
+        if (this.showUploadFile.code_commercial)
+          this.commercialService.getByCode(this.showUploadFile.code_commercial).subscribe(commercial => {
+            if (commercial) {
+              this.Socket.NewNotifV2(commercial.user_id._id, `Un document est disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}`)
+
+              this.NotifService.create(new Notification(null, null, false,
+                `Un document est disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}`,
+                new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+              this.EmailTypeS.defaultEmail({
+                email: commercial.user_id?.email,
+                objet: '[IMS] Admission - Document inscription disponible  d\'un de vos leads ',
+                mail: `
+
+                Cher partenaire,
+
+                Nous avons le plaisir de vous informer qu'un document important est désormais disponible pour l'étudiant ${this.showDocAdmin?.user_id?.firstname} ${this.showDocAdmin?.user_id?.lastname}. Ce document est accessible via notre plateforme en ligne ou peut être récupéré auprès de notre équipe administrative. Nous tenons à vous remercier pour votre collaboration continue dans le suivi et le soutien des étudiants. Votre engagement est essentiel pour assurer leur réussite et leur satisfaction.
+                
+                N'hésitez pas à nous contacter si vous avez des questions supplémentaires ou besoin de plus amples informations.
+                
+                Cordialement,
+              `
+              }).subscribe(() => { })
+            }
+          })
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        if (res.documents_administrative) {
+          if (this.showDocAdmin.documents_administrative)
+            this.showDocAdmin.documents_administrative.push()
+        }
+        this.showDocAdmin.documents_administrative = res.documents_administrative
+        event.target = null;
+        this.showUploadFile = null;
+        this.initDocument(this.PROSPECT);
+        this.fileInput.clear()
+      }, error => {
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+
+  }
+  @ViewChild('fileInput') fileInput: FileUpload;
+  
+  generateCustomID(nom) {
+    let reeldate = new Date();
+
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+
+    nom = nom.substr(0, 2).toUpperCase();
+
+    return 'DOC' + nom + date + random;
+  }
+  initDocument(prospect) {
+    this.PROSPECT = prospect;
+    console.log(this.PROSPECT)
+    this.showDocAdmin = prospect;
+    console.log(prospect)
+    this.DocumentsCandidature = this.PROSPECT.documents_administrative.filter(document =>
+      ["Formulaire de candidature", "Test de Sélection", "Attente"].includes(document.type)
+    );
+
+    this.DocumentsAdministratif = this.PROSPECT.documents_administrative.filter(document =>
+      ["Attestation inscription", "Certificat de scolarité", "Attestation de présence / assiduité", "Réglement intérieur", "Livret d'accueil", "Livret d'accueil", "Autorisation de diffusion et d'utilisation de photographie et vidéos"].includes(document.type)
+    );
+    this.DoccumentProfessionel = this.PROSPECT.documents_administrative.filter(document =>
+      ["Convention de stage", "Attestation de stage", "Satisfaction de stage", "Contrat d'apprentisage", "Convention de formation", "Livret de suivi", "Convocation d'examen", "Bulletin de note", "Suivi post formation-orientation"].includes(document.type)
+    );
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        if (data) {
+          this.ListDocuments = data
+          this.ListPiped = []
+          data.forEach(doc => {
+            let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+            this.ListPiped.push(docname)
+          })
+        }
+
+      },
+      (error) => { console.error(error) }
+    );
+    this.showdoc=true;
+  }
+  downloadAdminFile(path, prospect: Prospect = null) {
+    if (!prospect)
+      this.admissionService.downloadFileAdmin(this.showDocAdmin._id, path).subscribe((data) => {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        var blob = new Blob([byteArray], { type: data.documentType });
+
+        importedSaveAs(blob, path)
+      }, (error) => {
+        console.error(error)
+      })
+    else
+      this.admissionService.downloadFileAdmin(prospect._id, path).subscribe((data) => {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        var blob = new Blob([byteArray], { type: data.documentType });
+
+        importedSaveAs(blob, path)
+      }, (error) => {
+        console.error(error)
+      })
+  }
+  deleteDocument(doc: { date: Date, nom: string, path: string, _id: string }, ri) {
+    this.PROSPECT.documents_administrative.splice(ri, 1)
+    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+      console.log(a)
+    })
+    this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+    this.initDocument(this.PROSPECT);
+  }  docToUpload: { date: Date, nom: string, path: string, _id: string }
+
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile", p: Prospect) {
+    this.docToUpload = doc
+    this.PROSPECT = p
+    document.getElementById(id).click();
   }
 }

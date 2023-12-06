@@ -269,6 +269,11 @@ export class AjoutCvComponent implements OnInit {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
         if (c) {
+          if (c.profil && c.profil._id) {
+            this.profilSelected = c.profil
+            this.filterCompetencesList()
+          }
+
           this.onLoadFile(this.ID)
           this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe', profil: c.profil })
           this.pdfPreviewChosenSchool = c.ecole
@@ -390,6 +395,9 @@ export class AjoutCvComponent implements OnInit {
         response.forEach((competence: Competence) => {
           this.competencesList.push({ label: competence.libelle, value: competence._id, profile: competence.profile_id });
         })
+        this.defaultCompetencesList = this.competencesList
+        if (this.profilSelected)
+          this.filterCompetencesList()
       })
       .catch((error) => { console.error(error); })
 
@@ -607,6 +615,8 @@ export class AjoutCvComponent implements OnInit {
     });
     //cv.video_lien = formValue.video_lien
     cv.source = 'Interne'
+    if (this.profilSelected)
+      cv.profil = this.profilSelected
     this.cvService.putCv(cv).then(data => {
       this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
       this.messageService.add({ severity: 'success', summary: "Mis à jour du CV avec succès" })
@@ -814,8 +824,31 @@ export class AjoutCvComponent implements OnInit {
       })
     }
   }
+  displayAddSkill = false
 
-
+  refreshSkills() {
+    this.competencesList = []
+    this.skillsService.getCompetences()
+      .then((response: Competence[]) => {
+        response.forEach((competence: Competence) => {
+          this.competencesList.push({ label: competence.libelle, value: competence._id, profile: competence.profile_id });
+        })
+        this.defaultCompetencesList = this.competencesList
+        if (this.profilSelected)
+          this.filterCompetencesList()
+      })
+      .catch((error) => { console.error(error); })
+  }
+  defaultCompetencesList: { label: string, value: string, profile: Profile }[] = []
+  filterCompetencesList() {
+    this.competencesList = []
+    console.log(this.defaultCompetencesList, this.profilSelected)
+    this.defaultCompetencesList.forEach(c => {
+      if (c.profile._id == this.profilSelected._id) {
+        this.competencesList.push(c)
+      }
+    })
+  }
   // labelByValue(array, val) {
   //   for i)
   // }
