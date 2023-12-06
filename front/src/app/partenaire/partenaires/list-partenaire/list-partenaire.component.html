@@ -65,7 +65,7 @@
                                         {{idPartenaireToUpdate?.Services}}
                                     </p>
         
-                                    <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
+                                    <p class="data"><strong>Description:</strong><br>
                                         {{idPartenaireToUpdate?.description}}
                                     </p>
                                 </div>
@@ -125,23 +125,23 @@
                         <p-fieldset legend="Information du partenariat">
                             <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoPartenariat">
                                 <form class="col-12 grid" [formGroup]="editInfoPartenariatForm">
-                                    <div class="col-12 md:col-9 grid">
-                                        <p class="col-12 md:col-6 text-center"><strong>Ancienneté:</strong><br>
+                                    <div class="Data">
+                                        <p class="data"><strong>Ancienneté:</strong><br>
                                             <p-dropdown formControlName="statut_anciennete" [options]="dropdownAnciennete"
                                                 placeholder="Choisissez un statut d'anciennete"></p-dropdown>
                                         </p>
-                                        <p class="col-12 md:col-6 text-center"><strong>Contribution:</strong><br>
+                                        <p class="data"><strong>Contribution:</strong><br>
                                             <p-dropdown formControlName="contribution" [options]="dropdownContribution"
                                                 placeholder="Choisissez un statut de contribution"></p-dropdown>
                                         </p>
-                                        <p class="col-12 md:col-6 text-center"><strong>Type Partenaire:</strong><br>
+                                        <p class="data"><strong>Type Partenaire:</strong><br>
                                             <p-dropdown formControlName="typePartenaire" [options]="dropdownType"
                                                 placeholder="Choisissez un type"></p-dropdown>
                                         </p>
-                                        <p class="col-12 md:col-6 text-center"><strong>Groupe WhatsApp:</strong><br>
+                                        <p class="data"><strong>Groupe WhatsApp:</strong><br>
                                             <input type="text" pInputText placeholder="" formControlName="groupeWhatsApp" />
                                         </p>
-                                        <p class="col-12 md:col-6 text-center"><strong>Localisation:</strong><br>
+                                        <p class="data"><strong>Localisation:</strong><br>
                                             <p-dropdown formControlName="localisation" [options]="localisationList"
                                                 placeholder="Choisissez un pays"></p-dropdown>
                                         </p>
@@ -154,20 +154,20 @@
                                 </form>
                             </div>
                             <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoPartenariat">
-                                <div class="col-12 md:col-9 grid">
-                                    <p class="col-12 md:col-4 text-center"><strong>Ancienneté:</strong><br>
+                                <div class="Data">
+                                    <p class="data"><strong>Ancienneté:</strong><br>
                                         {{idPartenaireToUpdate?.statut_anciennete}}</p>
-                                    <p class="col-12 md:col-4 text-center"><strong>Contribution:</strong><br>
+                                    <p class="data"><strong>Contribution:</strong><br>
                                         {{idPartenaireToUpdate?.contribution}}
                                     </p>
-                                    <p class="col-12 md:col-4 text-center"><strong>Date d'ajout:</strong><br>
+                                    <p class="data"><strong>Date d'ajout:</strong><br>
                                         {{idPartenaireToUpdate?.date_creation | date:'dd MMMM yy'}}</p>
-                                    <p class="col-12 md:col-4 text-center"><strong>Type de partenaire:</strong><br>
+                                    <p class="data"><strong>Type de partenaire:</strong><br>
                                         {{idPartenaireToUpdate?.typePartenaire}}</p>
-                                    <p class="col-12 md:col-4 text-center"><strong>Groupe WhatsApp:</strong><br>
+                                    <p class="data"><strong>Groupe WhatsApp:</strong><br>
                                         {{idPartenaireToUpdate?.groupeWhatsApp}}
                                     </p>
-                                    <p class="col-12 md:col-4 text-center"><strong>Localisation:</strong><br>
+                                    <p class="data"><strong>Localisation:</strong><br>
                                         {{idPartenaireToUpdate?.localisation}}
                                     </p>
         
@@ -180,33 +180,33 @@
                         </p-fieldset><br>
                         <p-fieldset legend="Commissions">
                             <div class="grid">
-                                <div class="col-6 text-center">
-                                    <p>
+                                <div class="Data">
+                                    <p class="data">
                                         <strong>Etat de Contrat:
                                             <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
                                                 [(ngModel)]="idPartenaireToUpdate.etat_contrat"
                                                 placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
                                         </strong><br>
                                     </p>
-                                    <button pButton class="mr-2" label="Télécharger le contrat" type="button"
+                                    <button style="background-color:#4a73d9 ;" pButton class="mr-2" label="Télécharger le contrat" type="button"
                                         [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
                                         (click)="downloadContrat()"></button>
-                                    <button pButton label="Ajouter le contrat" (click)="clickFile2()" type="button"></button>
+                                    <button style="background-color:#4a73d9 ;" pButton label="Ajouter le contrat" (click)="clickFile2()" type="button"></button>
                                 </div>
                                 <div class="col-6">
                                     <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">
-                                        <div class="col-12 md:col-6 text-center">
-                                            <p><strong>Description:</strong><br>
+                                        <div class="Data">
+                                            <p class="data"><strong>Description:</strong><br>
                                                 <input type="text" pInputText placeholder="" formControlName="description" />
                                             </p>
                                         </div>
-                                        <div class="col-12 md:col-6 text-center">
-                                            <p><strong>Montant:</strong><br>
+                                        <div class="Data">
+                                            <p class="data"><strong>Montant:</strong><br>
                                                 <input type="text" pInputText placeholder="50€" formControlName="montant" />
                                             </p>
                                         </div>
                                         <div class="col-12 text-center">
-                                            <button pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
+                                            <button style="background-color:#4a73d9 ;" pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
                                                 type="submit"></button>
                                         </div>
                                     </form>
@@ -379,7 +379,7 @@
                                   
                                     <i pTooltip="Gestion de partenaire" tooltipPosition="bottom" class="pi pi-pencil"
                                         style="margin-left: 7px" aria-hidden="true"
-                                        (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData);scrollToTop()"></i>
+                                        (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData);"></i>
                                     <i pTooltip="Attribuer le partenaire" tooltipPosition="bottom" class="pi pi-user-plus"
                                         style="margin-left: 7px" aria-hidden="true"
                                         (click)="initManage(rowData);scrollToTop()"></i>
@@ -548,8 +548,7 @@
     <p-tabPanel header="Inserer">
       <app-partenaire-inscription></app-partenaire-inscription>
     </p-tabPanel>
-    <!-- <p-tabPanel header="Header 3">
-        Content 3
+    <!-- <p-tabPanel header=" Nom du partenaire ">
     </p-tabPanel> -->
 </p-tabView>
 
