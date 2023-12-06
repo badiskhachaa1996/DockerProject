@@ -14,6 +14,7 @@ import { ViewportScroller } from '@angular/common';
   styleUrls: ['./form-crm-ext.component.scss']
 })
 export class FormCrmExtComponent implements OnInit {
+  hideFormations = false;
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -23,7 +24,7 @@ export class FormCrmExtComponent implements OnInit {
     { value: 'Online Meeting' },
     { value: 'Marketing' },
     { value: 'Recyclage' },
-    { value: 'LinkdIn' },
+    { value: 'LinkedIn' },
   ]
   operationDropdown = [
     { value: 'Prospection FRP' },
@@ -122,8 +123,9 @@ export class FormCrmExtComponent implements OnInit {
   ngOnInit(): void {
     this.FAService.EAgetByParams(this.form_origin).subscribe(data => {
       console.log(data)
-      if (!data)
-        this.router.navigate(['/'])
+      this.hideFormations = !data;
+      if (!data) return;
+        //this.router.navigate(['/'])
       this.ECOLE = data
       data.formations.forEach(f => {
         this.FormationList.push({ label: f.nom, value: f.nom })

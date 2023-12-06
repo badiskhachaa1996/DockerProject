@@ -492,7 +492,7 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
         GestionLogementComponent,
         BookingV2Component,
         PauseReadMoreComponent,
-        PrincipaleListComponent
+        PrincipaleListComponent,
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
