@@ -57,7 +57,7 @@
                         ]
                     },
                     "configurations": {
-                        "prod": {
+                        "prod1": {
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -73,7 +73,7 @@
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
+                                    "with": "src/environments/environment.prod1.ts"
                                 }
                             ],
                             "outputHashing": "all"
@@ -154,7 +154,7 @@
                             "namedChunks": true
                         }
                     },
-                    "defaultConfiguration": "prod"
+                    "defaultConfiguration": "prod1"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
@@ -162,8 +162,8 @@
                       "browserTarget": "sakai:build"
                     },
                     "configurations": {
-                        "prod": {
-                            "browserTarget": "sakai:build:prod"
+                        "prod1": {
+                            "browserTarget": "sakai:build:prod1"
                         },
                         "prod2": {
                             "browserTarget": "sakai:build:prod2"

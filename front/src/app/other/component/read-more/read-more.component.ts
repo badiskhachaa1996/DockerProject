@@ -15,6 +15,7 @@ export class ReadMoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.string)
     if (this.string)
       this.string = this.string.toString()
   }

@@ -109,6 +109,7 @@ export class LeadsNonAttribuesComponent implements OnInit {
   showFollow: LeadCRM = null
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation:new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),

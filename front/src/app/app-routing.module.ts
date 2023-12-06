@@ -205,19 +205,7 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole/:id',
+                path: 'administrations',
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
@@ -226,54 +214,9 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'ajout-ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-diplome',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'groupes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
                 path: 'new-groupes',
                 component: GroupesComponent,
                 canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ajout-groupe',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-
-
-
-
-
-            {
-                path: 'validation-inscrit',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
 
             {

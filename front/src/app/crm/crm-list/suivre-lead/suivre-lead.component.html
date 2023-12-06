@@ -183,9 +183,9 @@
                             <a (click)="uploadFile(ri)">Uploader le document</a>
                         </td>
                         <td>
-                            <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                            <i style="padding-left: 3%;" pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
                                 aria-hidden="true" (click)="deleteFile(ri)"> </i>
-                            <i *ngIf="document?.path" pTooltip="Uploader le document" tooltipPosition="bottom"
+                            <i style="padding-left: 3%;" *ngIf="document?.path" pTooltip="Uploader le document" tooltipPosition="bottom"
                                 class="pi pi-cloud-upload" aria-hidden="true" (click)="uploadFile(ri)"> </i>
                         </td>
                     </tr>
@@ -268,6 +268,26 @@
         </p-tabPanel>-->
         
         <p-tabPanel header="Fiche Qualification">
+            <p-dialog header="Modifier la qualification"[(visible)]="visible_qualification" modal="true"
+                            [style]="{width: '50vw'}">
+
+                            <form [formGroup]="formUpdateQualification" class="p-fluid p-formgrid grid col-12">
+                                <div class="field col-6">
+                                    <label>Critére</label>
+                                    <p-multiSelect [options]="critereList" formControlName="critere" 
+                                        placeholder="Choisissez un critére"></p-multiSelect>
+                                </div>
+                                <div class="field col-6">
+                                    <label For="commentaire ">Commentaire </label>
+                                    <textarea pInputTextarea formControlName="commentaire"></textarea>
+                                </div>
+                                <br><br><br><br><br><br><br><br><br><br><br><br>
+                                <div class="col-12">
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onUpdatequalification()"
+                                        label="Enregistrer" [disabled]="formUpdateQualification.invalid"></p-button>
+                                </div>
+                            </form>
+                        </p-dialog>
             <form class="p-fluid p-formgrid grid" [formGroup]="qualifiquationsForm">
                 
                 <div class="field col-12 md:col-3">
@@ -316,9 +336,12 @@
                         
                         
                         <td>
-                            <i pTooltip="Supprimer le contact" tooltipPosition="bottom" class="pi pi-trash"
+                            <i style="padding-left: 3%;" pTooltip="Modifier la qualification" tooltipPosition="bottom" class="pi pi-pencil"
+                            aria-hidden="true" (click)="updatequalification(ri)"> </i>
+                            <i style="padding-left: 3%;" pTooltip="Supprimer la qualification" tooltipPosition="bottom" class="pi pi-trash"
                                 aria-hidden="true" (click)="deletequalification(ri)"> </i>
                         </td>
+
                     </tr>
                 </ng-template>
             </p-table>
@@ -367,6 +390,29 @@
             </form>
         </p-tabPanel>
         <p-tabPanel header="Paiement">
+            <p-dialog header="Modifier la qualification"[(visible)]="visible_paiement" modal="true"
+                            [style]="{width: '50vw'}">
+
+                            <form [formGroup]="formUpdatepaiementForm" class="p-fluid p-formgrid grid col-12">
+                                <div class="field col-12 md:col-3">
+                                    <input pInputText type="number"  formControlName="montant_paye"
+                                    placeholder="Montant" >
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <p-dropdown [options]="typePaiement" formControlName="modalite_paiement" autoWidth="false"
+                                        [style]="{'width':'100%'}" placeholder="Modalité"></p-dropdown>
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    
+                                    <textarea pInputTextarea formControlName="note" placeholder="Note"></textarea>
+                                </div>
+                                <br><br><br><br><br><br>
+                                <div class="col-12">
+                                    <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onUpdatepaiement()"
+                                        label="Enregistrer" [disabled]="formUpdatepaiementForm.invalid"></p-button>
+                                </div>
+                            </form>
+                        </p-dialog>
             <form class="p-fluid p-formgrid grid" [formGroup]="paiementForm">
                 
                 <div class="field col-12 md:col-3">
@@ -457,7 +503,9 @@
                             </p-cellEditor>
                         </td>
                         <td>
-                            <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
+                            <i style="padding-left: 3%;" pTooltip="Modifier le paiement" tooltipPosition="bottom" class="pi pi-pencil"
+                                aria-hidden="true" (click)="Updatepaiement(ri)"> </i>
+                            <i style="padding-left: 3%;" pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
                                 aria-hidden="true" (click)="deletePaiement(ri)"> </i>
                         </td>
                     </tr>

@@ -175,17 +175,27 @@ app.get("/getAllByAnnee/:id", (req, res) => {
 });
 app.get("/downloadCachet/:id", (req, res) => {
     Ecole.findById(req.params.id).then(data => {
-        res.sendFile('storage/ecole/' + data._id + "/cachet.png", { root: "./" })
+        res.sendFile('storage/ecole/' + data._id + "/cachet.png", { root: "./" }, function (err) {
+            if (err)
+                console.error(err)
+        })
     })
 })
 app.get("/downloadLogo/:id", (req, res) => {
     Ecole.findById(req.params.id).then(data => {
-        res.sendFile('storage/ecole/' + data._id + "/logo.png", { root: "./" })
+        res.sendFile('storage/ecole/' + data._id + "/logo.png", { root: "./" }, function (err) {
+            if (err)
+                console.error(err)
+        })
     })
 })
 app.get("/downloadPied/:id", (req, res) => {
     Ecole.findById(req.params.id).then(data => {
-        res.sendFile('storage/ecole/' + data._id + "/pied_de_page.png", { root: "./" })
+        res.sendFile('storage/ecole/' + data._id + "/pied_de_page.png", { root: "./" }, function (err) {
+            if (err)
+                console.error(err)
+        })
+
     })
 })
 

@@ -7,6 +7,7 @@ stages:
   - DEV # auto from develop
   - QA # auto from main
   - PROD2 # manual from main
+  - PROD1 # Current PROD manual from main
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -135,6 +136,42 @@ manual_install_angular_dependencies_on_prod2:
 
 #==========================================================
 
+manual_install_node_dependencies_on_prod1:
+  stage: Install
+  tags:
+    - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - main
+  when: manual
+
+manual_install_angular_dependencies_on_prod1:
+  stage: Install
+  tags:
+    - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - main
+  when: manual
+
+#==========================================================
+
 # sonarqube-check:
 #   image: 
 #     name: sonarsource/sonar-scanner-cli:latest
@@ -229,6 +266,30 @@ manual_build_angular_on_prod2:
     expire_in: 1 hour
   when: manual
 
+#==========================================================
+
+manual_build_angular_on_prod1:
+  stage: Build
+  tags:
+    - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - front/node_modules/
+    policy: pull
+
+  script:
+      - cd front
+      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod1
+  only:
+    - main
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - front/dist
+    expire_in: 1 hour
+  when: manual
+
 #spotbugs-sast:
 #  dependencies:
 #    - build_angular
@@ -303,7 +364,7 @@ deploy_node_to_dev:
     - dev-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --dev
@@ -332,7 +393,7 @@ deploy_node_to_qa:
     - qa-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --qa
@@ -362,10 +423,41 @@ manual_deploy_node_to_prod2:
     - prod2-shell
   script:
     - cd back
-    - ln -s ~/storage storage
+    - ln -s /home/ubuntu/storage storage
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
+   # - pm2 logs index
+  only:
+    - main
+  when: manual
+
+#==========================================================
+
+manual_deploy_angular_to_prod1:
+  stage: PROD1
+  dependencies:
+    - manual_build_angular_on_prod1
+  tags:
+    - prod1-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - main
+  when: manual
+  
+manual_deploy_node_to_prod1:
+  stage: PROD1
+
+  tags:
+    - prod1-shell
+  script:
+    - cd back
+    - ln -s /home/ubuntu/storage storage
+    - npm install
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod1
    # - pm2 logs index
   only:
     - main

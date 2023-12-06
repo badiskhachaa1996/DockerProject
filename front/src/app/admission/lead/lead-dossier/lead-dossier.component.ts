@@ -24,9 +24,11 @@ export class LeadDossierComponent implements OnInit {
   ngOnInit(): void {
     if (!this.ID)
       this.ID = this.PROSPECT_ID
+    console.log(this.ID,this.PROSPECT_ID)
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
+        console.log(this.PROSPECT)
         this.checkIfDossierComplet()
         if (!this.PROSPECT.etat_dossier)
           this.PROSPECT.etat_dossier = "En attente"
@@ -142,7 +144,7 @@ export class LeadDossierComponent implements OnInit {
 
     if (!this.resideFr)
       this.documentsObligatoires.push('Test de niveau en Français - TCF ou DELF')
-    
+
     this.PROSPECT.documents_dossier.forEach(val => {
       if (this.documentsObligatoires.includes(val.nom) && !val.path)
         r = true
