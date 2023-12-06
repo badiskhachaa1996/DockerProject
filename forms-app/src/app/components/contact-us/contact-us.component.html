@@ -31,11 +31,11 @@
   </p-dropdown>
 </div>
 
-<div class="field col-12 md:col-6">
-  <label>Formation souhaitée</label>
-  <p-dropdown placeholder="Choisissez une formation" formControlName="formation" [options]="FormationList"
-              autoWidth="false" [style]="{'width':'100%'}">
-  </p-dropdown>
+    <div class="field col-12 md:col-6" [hidden]="hideFormations">
+      <label>Formation souhaitée</label>
+      <p-dropdown placeholder="Choisissez une formation" formControlName="formation" [options]="FormationList"
+                  autoWidth="false" [style]="{'width':'100%'}">
+      </p-dropdown>
     </div>
     <div class="field col-12">
       <label>Message</label>

@@ -13,7 +13,7 @@ import {ContactUsService} from "../../services/contact-us.service";
   styleUrls: ['./contact-us.component.scss']
 })
 export class ContactUsComponent implements OnInit {
-
+  hideFormations = false;
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -23,7 +23,7 @@ export class ContactUsComponent implements OnInit {
     { value: 'Online Meeting' },
     { value: 'Marketing' },
     { value: 'Recyclage' },
-    { value: 'LinkdIn' },
+    { value: 'LinkedIn' },
   ]
   operationDropdown = [
     { value: 'Prospection FRP' },
@@ -80,20 +80,22 @@ export class ContactUsComponent implements OnInit {
   })
 
   prospects = []
-  form_origin: string | null = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic studinfo
+  form_origin: string = this.route.snapshot.paramMap.get('ecole')!; //eduhorizons estya adg espic studinfo
 
   onAdd() {
     let numero_whatsapp = ''
     if (this.addForm.invalid) {
+      //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé' });
       this.viewportScroller.scrollToAnchor('EmailForm');
     } else {
       if (this.addForm.value.whatsapp.includes('Oui'))
         numero_whatsapp = this.addForm.value.numero_phone
-      this.CUService.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web `, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
         },
         ((error) => {
+          //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
           console.error(error);
         }))
     }
@@ -112,31 +114,28 @@ export class ContactUsComponent implements OnInit {
   }
 
 
-  constructor(private CUService: ContactUsService, private viewportScroller: ViewportScroller,
-              private route: ActivatedRoute, private router: Router) { }
-
-  ECOLE!: EcoleAdmission
-  RENTREE!: RentreeAdmission[]
-  FormationList: { Label: string; value: string }[] = [
-    { Label: 'Test1', value: 'Value1' },
-    { Label: 'Test2', value: 'Value2' },
-  ];
+  constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
+              private route: ActivatedRoute, private router: Router) {
+    this.ECOLE = new EcoleAdmission();
+    this.RENTREE = new RentreeAdmission();
+  }
+  ECOLE: EcoleAdmission
+  RENTREE: RentreeAdmission
+  FormationList: any[] = []
   ngOnInit(): void {
-    /*
-    console.log(this.form_origin);
-    if (this.form_origin) {
-    this.CUService.EAgetByParams(this.form_origin).subscribe(data => {
+    this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
       console.log(data)
-      if (!data)
-        this.router.navigate(['/'])
+      this.hideFormations = !data;
+      if (!data) return;
+      //this.router.navigate(['/'])
       this.ECOLE = data
       data.formations?.forEach(f => {
-        if (f.nom)
-          this.FormationList.push({Label: f.nom, value: f.nom})
+        if (f.nom !== undefined) {
+          this.FormationList.push({label: f.nom, value: f.nom})
+        }
       })
+
     })
-  }
-     */
   }
 
 }
