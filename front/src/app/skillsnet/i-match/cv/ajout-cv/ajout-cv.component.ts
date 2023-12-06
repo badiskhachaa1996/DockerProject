@@ -315,11 +315,13 @@ export class AjoutCvComponent implements OnInit {
       this.dicPicture = data.files // {id:{ file: string, extension: string }}
       data.ids.forEach(id => {
         const reader = new FileReader();
-        const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          this.dicPicture[id].url = reader.result;
+        if (data.files[id]) {
+          const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            this.dicPicture[id].url = reader.result;
+          }
         }
       })
     })
