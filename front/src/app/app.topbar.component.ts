@@ -191,7 +191,7 @@ export class AppTopBarComponent implements OnInit {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
-      this.isAgent = userconnected.role == 'Agent' || userconnected.role == 'Responsable'
+      this.isAgent = (userconnected.role == 'Agent' && userconnected.type != 'Commercial') || userconnected.role == 'Responsable'
       this.isAdmin = userconnected.role == 'Admin'
       this.isProspect = userconnected.type == 'Prospect'
       this.isCEO = userconnected.type == "CEO Entreprise";
