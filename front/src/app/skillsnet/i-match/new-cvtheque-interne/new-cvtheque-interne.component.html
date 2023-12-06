@@ -292,7 +292,8 @@
                                 </td>
 
                                 <td style="min-width: 12rem;">
-                                    {{cv.competences[0]?.profile_id?.libelle}}
+                                    {{ cv?.profil?.libelle || cv?.competences[0]?.profile_id?.libelle ||
+                                    'Profil'}} 
                                 </td>
                                 <td style="min-width: 12rem;">
                                     {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
@@ -452,7 +453,8 @@
                                         <div class="card-main-info">
                                             <div class="cv-card-title">
                                                 <h4 style="font-weight: bold; width: 100%">
-                                                    {{cv?.competences[0]?.profile_id?.libelle || "Profil"}}
+                                                    {{ cv?.profil?.libelle || cv?.competences[0]?.profile_id?.libelle ||
+                                                    'Profil'}}
                                                 </h4>
                                                 <h5 style="width: 100%">{{cv?.user_id?.firstname | titlecase}}
                                                     {{cv?.user_id?.lastname | uppercase}}</h5>
@@ -507,7 +509,7 @@
                 (UPDATE)="updateCV($event)"></app-see-cv-externe>
         </p-tabPanel>
         <p-tabPanel [header]="cv.label" *ngFor="let cv of updateCVList" [closable]="true">
-            <app-ajout-cv [CV_USER_ID]="cv.CV_USER_ID"  (PRINTING)="onPrinting($event)"></app-ajout-cv>
+            <app-ajout-cv [CV_USER_ID]="cv.CV_USER_ID" (PRINTING)="onPrinting($event)"></app-ajout-cv>
         </p-tabPanel>
         <p-tabPanel [header]="rdv.label" *ngFor="let rdv of rdvList" [closable]="true">
             <app-rdv-calendar-interne [ID]="rdv.ID"></app-rdv-calendar-interne>
