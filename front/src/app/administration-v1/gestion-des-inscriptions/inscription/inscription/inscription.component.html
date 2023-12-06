@@ -322,7 +322,7 @@
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-at m-1" pTooltip="Compte"
                         (click)="onShowCompte(prospect); " aria-hidden="true" tooltipPosition="bottom"></i>
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-server m-1" pTooltip="Document"
-                        aria-hidden="true" tooltipPosition="bottom" (click)="onShowDoc(prospect)"></i>
+                        aria-hidden="true" tooltipPosition="bottom" (click)="initDocument(prospect)"></i>
                     <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1" pTooltip="Paiement"
                         aria-hidden="true" tooltipPosition="bottom"></i>
                     <i style="padding-left: 3%;color: rgb(72, 72, 255);
@@ -540,6 +540,9 @@
             (click)="clearFilter()"></button>
     </div>
 </p-sidebar>
+
+
+
 <p-dialog header="Documents de l'étudiant" [(visible)]="showdoc">
     <p-accordion [(activeIndex)]="selectedTabIndex">
         <p-dialog header="Documents de Candidature" [(visible)]="visibleC">
@@ -631,14 +634,14 @@
             </p-table>
 
         </p-accordionTab>
-        <p-accordionTab>
+        <p-accordionTab *ngIf="PROSPECT">
             <ng-template pTemplate="header">
                 <div>
                     <span style="font-weight: bold;">ADMISSIONS</span> &nbsp;
                 </div>
 
             </ng-template>
-            <!--<app-lead-dossier [PROSPECT_ID]="PROSPECT?._id"></app-lead-dossier>-->
+            <app-lead-dossier [PROSPECT_ID]="PROSPECT?._id"></app-lead-dossier>
         </p-accordionTab>
         <p-accordionTab>
             <p-dialog header="Documents du dossier administratif" [(visible)]="visibleADM">
@@ -819,4 +822,5 @@
             </p-table>
         </p-accordionTab>
     </p-accordion>
+    
 </p-dialog>
