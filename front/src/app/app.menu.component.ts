@@ -2631,6 +2631,7 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: ['crm/liste'],
                                         },
+                                        
                                         /*{
                                             label: 'Qualification',
                                             icon: 'pi pi-star',
@@ -5217,6 +5218,11 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
                                             routerLink: ['crm/liste'],
+                                        },
+                                        {
+                                            label: 'reportinggg',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['crm/reporting'],
                                         },/*
                                         {
                                             label: 'Qualification',

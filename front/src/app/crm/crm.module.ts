@@ -39,6 +39,7 @@ import { MemberCrmComponent } from './teams-crm/member-crm/member-crm.component'
 import { ChartModule } from 'primeng/chart';
 import {CriteresComponent} from "./criteres/criteres.component";
 import { TooltipModule } from 'primeng/tooltip';
+import { ReportingComponent } from './reporting/reporting.component';
 
 
 
@@ -64,7 +65,8 @@ import { TooltipModule } from 'primeng/tooltip';
         TeamsCrmComponent,
         VentesCRMComponent,
         MemberCrmComponent,
-        CriteresComponent
+        CriteresComponent,
+        ReportingComponent
     ],
     exports: [
         SuivreLeadComponent,
@@ -87,7 +89,8 @@ import { TooltipModule } from 'primeng/tooltip';
         TeamsCrmComponent,
         VentesCRMComponent,
         MemberCrmComponent,
-        CriteresComponent
+        CriteresComponent,
+        ReportingComponent,
     ],
     imports: [
         CommonModule,

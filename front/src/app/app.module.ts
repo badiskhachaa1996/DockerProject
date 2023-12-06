@@ -77,6 +77,8 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
+
+
 import { TerminalModule } from 'primeng/terminal';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TimelineModule } from 'primeng/timeline';
@@ -238,6 +240,7 @@ import { SuivreLeadComponent } from './crm/crm-list/suivre-lead/suivre-lead.comp
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { GestionOperationComponent } from './crm/gestion-operation/gestion-operation.component';
 import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srources.component';
+import { ReportingComponent } from './crm/reporting/reporting.component';
 
 @NgModule({
   imports: [
@@ -375,6 +378,7 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     ),
   ],
   declarations: [
+    ReportingComponent,
     AppComponent,
     AppMainComponent,
     AppTopBarComponent,
@@ -495,9 +499,6 @@ import { GestionSrourcesComponent } from './crm/gestion-srources/gestion-srource
     LogementComponent,
     GestionLogementComponent,
     BookingV2Component,
-    SuivreLeadComponent,
-    GestionOperationComponent,
-    GestionSrourcesComponent,
     ConfirmDialogComponent,
     PauseReadMoreComponent,
     PrincipaleListComponent
