@@ -1,253 +1,4 @@
 <div class="card">
-    <div class="col-12 card" *ngIf="showEmail">
-        <div style="width: 100%;text-align: right;">
-            <i class="pi pi-times-circle" style=" color: red; cursor: pointer;" (click)="showEmail = null"
-                aria-hidden="true"> </i>
-        </div>
-        <p-tabView>
-            <p-tabPanel header="Email personnalisé">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
-                    <div class="field col-6">
-                        <label>Objet: </label>
-                        <input type="text" formControlName="objet" pInputText>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email du destinataire: </label>
-                        <p>{{prospectSendTo.user_id.email_perso}}</p>
-                    </div>
-                    <div class="field col-12">
-                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email de l'envoyeur: </label>
-                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
-                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email(s)en cc: </label>
-                        <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com , email2.email.com"></p-chips>
-                    </div>
-                    <div class="field col-12">
-                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
-                            #selectedFilePJ style="display: none;" pInputFile />
-                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
-                            dataKey="_id" class="col-12" responsiveLayout="scroll">
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th>
-                                        Date d'upload
-                                    </th>
-                                    <th>
-                                        Nom du document
-                                    </th>
-                                    <th>
-                                        Lien de téléchargement
-                                    </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-                                <tr>
-                                    <td>
-                                        {{rowData.date | date:'dd MMMM yy'}}
-                                    </td>
-                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
-                                        {{rowData.nom}}
-                                    </td>
-                                    <td
-                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
-                                        {{rowData?.path}}
-                                    </td>
-                                    <td
-                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
-                                        Téléverser le fichier s'il vous plaît
-                                    </td>
-                                    <td *ngIf="rowData.path">
-                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
-                                        {{rowData.path}}
-                                    </td>
-                                    <td *ngIf="!rowData.path">
-                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
-                                    </td>
-                                    <td>
-                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
-                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
-                                            (click)="onUploadPJ(rowData)">
-                                        </i>
-                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
-                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
-                                        </i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                        <div class="mt-2 col-12">
-                            <button pButton (click)="onAddPj()" icon="pi pi-paperclip"
-                                pTooltip="Ajouter une pièce jointe" tooltipPosition="bottom" autoWidth="false"></button>
-                        </div>
-                    </div>
-                    <button pButton [disabled]="formEmailPerso.invalid" pTooltip="Envoyer l'email"
-                        tooltipPosition="bottom" (click)="onEmailPerso()" icon="pi pi-send"></button>
-                </form>
-            </p-tabPanel>
-            <p-tabPanel header="Depuis un mail type">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
-                    <div class="field col-12">
-                        <label>Email Type: </label>
-                        <p-dropdown placeholder="Choisissez un mail type" filter="true"
-                            (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
-                            [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="field col-6">
-                        <label>Objet: </label>
-                        <input type="text" formControlName="objet" pInputText>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email du destinataire: </label>
-                        <p>{{prospectSendTo.user_id.email_perso}}</p>
-                    </div>
-                    <div class="field col-12">
-                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email de l'envoyeur: </label>
-                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
-                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
-                        </p-dropdown>
-                    </div>
-                    <div class="field col-6">
-                        <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
-                        <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com,email2.email.com"></p-chips>
-                    </div>
-                    <div class="field col-12">
-                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
-                            #selectedFilePJ style="display: none;" pInputFile />
-                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
-                            dataKey="_id" class="col-12" responsiveLayout="scroll">
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th>
-                                        Date d'upload
-                                    </th>
-                                    <th>
-                                        Nom du document
-                                    </th>
-                                    <th>
-                                        Lien de téléchargement
-                                    </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
-                                <tr>
-                                    <td>
-                                        {{rowData.date | date:'dd MMMM yy'}}
-                                    </td>
-                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
-                                        {{rowData.nom}}
-                                    </td>
-                                    <td
-                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
-                                        {{rowData?.path}}
-                                    </td>
-                                    <td
-                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
-                                        Téléverser le fichier s'il vous plaît
-                                    </td>
-                                    <td *ngIf="rowData.path">
-                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
-                                        {{rowData.path}}
-                                    </td>
-                                    <td *ngIf="!rowData.path">
-                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
-                                    </td>
-                                    <td>
-                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
-                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
-                                            (click)="onUploadPJ(rowData)">
-                                        </i>
-                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
-                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
-                                        </i>
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                        <div class="mt-2 col-12">
-                            <button pButton (click)="onAddPj()" icon="pi pi-paperclip"
-                                pTooltip="Ajouter une pièce jointe" tooltipPosition="bottom" autoWidth="false"></button>
-                        </div>
-                    </div>
-                    <button pButton [disabled]="formEmailType.invalid" icon="pi pi-send" pTooltip="Envoyer l'email"
-                        tooltipPosition="bottom" (click)="onEmailType()"></button>
-                </form>
-            </p-tabPanel>
-            <p-tabPanel header="Historique des emails">
-                <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="historiqueEmails"
-                    [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
-                    styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="width: 3rem" scope="col"></th>
-                            <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                                Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
-                            </th>
-                            <th pSortableColumn="objet" scope="col" style="text-align: center;">
-                                Objet du mail <p-sortIcon field="objet"></p-sortIcon>
-                            </th>
-                            <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
-                                Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
-                            </th>
-                            <th pSortableColumn="cc" scope="col" style="text-align: center;">
-                                Envoyé à <p-sortIcon field="cc"></p-sortIcon>
-                            </th>
-                            <th pSortableColumn="send_from" scope="col" style="text-align: center;">
-                                Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
-                            </th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-email let-expanded="expanded">
-                        <tr>
-
-                            <td>
-                                <button type="button" pButton pRipple [pRowToggler]="email"
-                                    class="p-button-text p-button-rounded p-button-plain"
-                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                            </td>
-                            <td>
-                                {{email.date_creation|date:'dd MMMM yy'}}
-                            </td>
-                            <td>
-                                {{email.objet}}
-                            </td>
-                            <td>
-                                {{email?.send_by?.firstname | titlecase}} {{email?.send_by?.lastname | uppercase}}
-                            </td>
-                            <td>
-                                <strong>{{prospectSendTo?.user_id?.email_perso }}</strong> {{cc}}
-                            </td>
-                            <td>
-                                {{email.send_from}}
-                            </td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="rowexpansion" let-email>
-                        <div [innerHTML]="email.body">
-
-                        </div>
-                    </ng-template>
-                </p-table>
-            </p-tabPanel>
-        </p-tabView>
-    </div>
     <div *ngIf="showupdateLeadForm" class="col-12 card">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
             (click)="showupdateLeadForm = null" aria-hidden="true"> </i>
@@ -712,7 +463,7 @@
                                         (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
                                         style="padding-left: 3%" aria-hidden="true"
-                                        (click)="initSendEmail(prospect);scrollToTop()">
+                                        (click)="onMails(prospect);scrollToTop()">
                                     </i>
                                     <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
                                         style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
@@ -1254,7 +1005,7 @@
                                         (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
                                         style="padding-left: 3%" aria-hidden="true"
-                                        (click)="initSendEmail(prospect);scrollToTop()">
+                                        (click)="onMails(prospect);scrollToTop()">
                                     </i>
                                     <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
                                         style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
@@ -2553,429 +2304,687 @@
         <p-tabPanel style="width: 100%;" *ngFor="let prospectOnglet of detailsProspects" [closable]="true"
             header="Détails - {{prospectOnglet?.user_id?.firstname}} {{prospectOnglet?.user_id?.lastname}}">
             <p-table #dt1 [value]="[prospectOnglet]" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
-            rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
+                [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
 
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width: 5em"></th>
-                    <th pSortableColumn="id">
-                        ID<p-sortIcon field="id"> </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="nom">
-                        Prénom et Nom<p-sortIcon field="nom"> </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="choix">
-                        Choix académique <p-sortIcon field="choix"> </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="rythme">
-                        Rythme <p-sortIcon field="rythme"> </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="decision">
-                        Décision admission<p-sortIcon field="decision"> </p-sortIcon>
-                    </th>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 5em"></th>
+                        <th pSortableColumn="id">
+                            ID<p-sortIcon field="id"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom">
+                            Prénom et Nom<p-sortIcon field="nom"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="choix">
+                            Choix académique <p-sortIcon field="choix"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rythme">
+                            Rythme <p-sortIcon field="rythme"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="decision">
+                            Décision admission<p-sortIcon field="decision"> </p-sortIcon>
+                        </th>
 
-                    <th pSortableColumn="paiement">
-                        Paiement<p-sortIcon field="paiement"> </p-sortIcon>
-                    </th>
+                        <th pSortableColumn="paiement">
+                            Paiement<p-sortIcon field="paiement"> </p-sortIcon>
+                        </th>
 
-                    <th pSortableColumn="etape">
-                        Etape<p-sortIcon field="etape"> </p-sortIcon>
-                    </th>
+                        <th pSortableColumn="etape">
+                            Etape<p-sortIcon field="etape"> </p-sortIcon>
+                        </th>
 
-                    <th pSortableColumn="date">
-                        Date d'inscription<p-sortIcon field="date">
-                        </p-sortIcon>
+                        <th pSortableColumn="date">
+                            Date d'inscription<p-sortIcon field="date">
+                            </p-sortIcon>
 
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-prospect>
-                <tr>
-                    <td>
-                        <button type="button" pButton pRipple [pRowToggler]="prospect"
-                            (click)="rowExpand(prospect)"
-                            class="p-button-text p-button-rounded p-button-plain" [icon]="
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="prospect" (click)="rowExpand(prospect)"
+                                class="p-button-text p-button-rounded p-button-plain" [icon]="
                             expanded
                                 ? 'pi pi-chevron-down'
                                 : 'pi pi-chevron-right'
                         "></button>
-                    </td>
-                    <td>
-                        {{ prospect.customid}}
-                    </td>
-                    <td>
-                        {{ prospect?.user_id?.firstname | titlecase }}
-                        {{ prospect?.user_id?.lastname | uppercase }}
-                    </td>
-                    <td>
-                        {{generateChoixLabel(prospect)}}
-                    </td>
-                    <td>
-                        {{prospect.rythme_formation}}
-                    </td>
-                    <td>
-                        {{ prospect?.niveau}}
-                    </td>
-                    <td>
-                        {{ calculPayement(prospect)}}
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="phaseDropdown"
-                                    [(ngModel)]="prospect.phase_candidature" appendTo="body"
-                                    (onChange)="UPDATEProspect(prospect)"
-                                    placeholder="Choisissez une étape"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{prospect.phase_candidature}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        {{ prospect?.date_creation | date:'dd MMMM yy'}}
-                    </td>
-                    <td>
-                        <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
-                            style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
-                            value="1" pTooltip="Candidature" aria-hidden="true"
-                            (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
-                        <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
-                            style="padding-left: 3%" aria-hidden="true"
-                            (click)="initSendEmail(prospect);scrollToTop()">
-                        </i>
-                        <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
-                            style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
-                            pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect)"
-                            tooltipPosition="bottom"></i>
+                        </td>
+                        <td>
+                            {{ prospect.customid}}
+                        </td>
+                        <td>
+                            {{ prospect?.user_id?.firstname | titlecase }}
+                            {{ prospect?.user_id?.lastname | uppercase }}
+                        </td>
+                        <td>
+                            {{generateChoixLabel(prospect)}}
+                        </td>
+                        <td>
+                            {{prospect.rythme_formation}}
+                        </td>
+                        <td>
+                            {{ prospect?.niveau}}
+                        </td>
+                        <td>
+                            {{ calculPayement(prospect)}}
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="phaseDropdown" [(ngModel)]="prospect.phase_candidature"
+                                        appendTo="body" (onChange)="UPDATEProspect(prospect)"
+                                        placeholder="Choisissez une étape"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{prospect.phase_candidature}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            {{ prospect?.date_creation | date:'dd MMMM yy'}}
+                        </td>
+                        <td>
+                            <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge value="1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect)"
+                                tooltipPosition="bottom"></i>
+                            <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
+                                style="padding-left: 3%" aria-hidden="true" (click)="onMails(prospect);scrollToTop()">
+                            </i>
+                            <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
+                                style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
+                                pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect)"
+                                tooltipPosition="bottom"></i>
 
-                        <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
-                            (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement"
-                            aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
+                                (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
 
-                        <i pTooltip="Documents administratif" tooltipPosition="bottom"
-                            class="pi pi-file m-1" (click)="AddDocumentOnglet(prospect);"
-                            aria-hidden="true"></i>
+                            <i pTooltip="Documents administratif" tooltipPosition="bottom" class="pi pi-file m-1"
+                                (click)="AddDocumentOnglet(prospect);" aria-hidden="true"></i>
 
-                        <i style="padding-left: 3%; " class="pi pi-building m-1" pTooltip="Admission"
-                            (click)="onshowDossier(prospect)" aria-hidden="true"
-                            tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%; " class="pi pi-building m-1" pTooltip="Admission"
+                                (click)="onshowDossier(prospect)" aria-hidden="true" tooltipPosition="bottom"></i>
 
-                        <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                            <i style="padding-left: 3%;color: rgb(72, 72, 255);
                         " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
-                            pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+                                pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
 
-                        <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
-                            (click)="deletePro(prospect)" pTooltip="Supprimer" aria-hidden="true"
-                            tooltipPosition="bottom"></i>
-                    </td>
-                </tr>
+                            <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
+                                (click)="deletePro(prospect)" pTooltip="Supprimer" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-user>
+                    <tr>
+                        <td colspan="10">
+
+
+                            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                                Détails
+                            </h5>
+                            <p-table responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Prénom et Nom </th>
+                        <th>Date de naissance</th>
+                        <th>Pays de résidence</th>
+                        <th>Nationalité</th>
+                        <th>Action</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ user.customid }}</td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText placeholder="Prénom"
+                                        [(value)]="user.user_id.firstname">
+                                    <input type="text" pInputText placeholder="Nom" [(value)]="user.user_id.lastname">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user?.user_id?.firstname | titlecase }}
+                                    {{ user?.user_id?.lastname | uppercase }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="date" pInputText placeholder="Date de naissance"
+                                        [(value)]="user.date_naissance">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{
+                                    user.date_naissance | date:'dd MMMM yy'
+                                    }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
+                                        placeholder="Pays" optionValue="value" optionLabel="value" appendTo="body"
+                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
+                                        optionDisabled="actif"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.user_id.pays_adresse}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [(ngModel)]="user.user_id.nationnalite" [options]="nationList"
+                                        emptyFilterMessage="Pas de nationalité trouvé" appendTo="body"
+                                        filterPlaceholder="Nationalité" filter="true"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.user_id.nationnalite}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td>
+                            <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                                (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Contact
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Adresse mail</th>
+                        <th>Adresse mail école </th>
+                        <th>numéro de téléphone</th>
+                        <th>Adresse</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            <ng-container *ngIf="user.user_id.email!=user.user_id.email_perso">
+                                {{ user.user_id.email}}
+                            </ng-container>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText placeholder="Téléphone"
+                                        [(value)]="user.user_id.phone">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.user_id.phone}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText placeholder="Rue"
+                                        [(value)]="user.user_id.rue_adresse">
+                                    <input type="text" pInputText placeholder="Ville"
+                                        [(value)]="user.user_id.ville_adresse">
+                                    <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
+                                        placeholder="Pays" optionValue="value" optionLabel="value" appendTo="body"
+                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
+                                        optionDisabled="actif"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.user_id.rue_adresse}} {{user.user_id.ville_adresse}}, {{
+                                    user.user_id.pays_adresse}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                                (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Choix académique
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Session</th>
+                        <th>Ecole </th>
+                        <th>Campus</th>
+                        <th>Formation</th>
+                        <th>Groupe</th>
+                        <th>Rythme</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="rentreeList" appendTo="body"
+                                        [(ngModel)]="user.rentree_scolaire"
+                                        placeholder="Choisissez la rentrée scolaire">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.rentree_scolaire}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="EcoleListRework" appendTo="body"
+                                        placeholder="Choisissez l'école du lead"
+                                        (onChange)="onSelectEcole(user.type_form)"
+                                        [(ngModel)]="user.type_form"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.type_form | titlecase}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="campusDropdown" appendTo="body" optionLabel="value"
+                                        optionValue="value" [(ngModel)]="user.campus_choix_1"
+                                        placeholder="Choisissez un campus">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.campus_choix_1}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="programeFrDropdown" appendTo="body"
+                                        placeholder="Choissiez un programme français" [filter]="true" [group]="true"
+                                        [style]="{'width':'100%'}" autoWidth="false"
+                                        [(ngModel)]="user.formation"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.formation}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            {{ user.groupe}}
+                        </td>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="typeFormationDropdown" optionValue="value"
+                                        optionLabel="value" autoWidth="false" placeholder="Choisissez un rythme"
+                                        [style]="{'width':'100%'}" appendTo="body"
+                                        [(ngModel)]="user.rythme_formation"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.rythme_formation}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                                (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Source
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Source</th>
+                        <th>Commercial </th>
+                        <th>Adresse mail</th>
+                        <th>Téléphone</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText placeholder="Formation" [(value)]="user.source">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{ user.source}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            {{ commercialOwned?.user_id?.firstname}} {{ commercialOwned?.user_id?.lastname}}
+                        </td>
+                        <td>
+                            {{ commercialOwned?.user_id?.email}}
+                        </td>
+                        <td>
+                            {{ commercialOwned?.user_id?.indicatif}} {{ commercialOwned?.user_id?.phone}}
+                        </td>
+
+                        <td>
+                            <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                                (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            </td>
+            </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-user>
-                <tr>
-                    <td colspan="10">
 
+            </p-table>
+        </p-tabPanel>
+        <p-tabPanel style="width: 100%;" *ngFor="let prospectOnglet of mailsProspects" [closable]="true"
+            header="Mail - {{prospectOnglet?.user_id?.firstname}} {{prospectOnglet?.user_id?.lastname}}">
+            <div class="col-12 card" *ngIf="showEmail">
+                <p-tabView>
+                    <p-tabPanel header="Email personnalisé">
+                        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
+                            <div class="field col-6">
+                                <label>Objet: </label>
+                                <input type="text" formControlName="objet" pInputText>
+                            </div>
+                            <div class="field col-6">
+                                <label>Destinataire: </label>
+                                <p>{{prospectSendTo.user_id.email_perso}}</p>
+                            </div>
+                            <div class="field col-12">
+                                <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                            </div>
+                            <div class="field col-6">
+                                <label>Envoyé par: </label>
+                                <p-dropdown placeholder="Choisissez une adresse mail" filter="true"
+                                    formControlName="send_from" [options]="mailDropdown" autoWidth="false"
+                                    [style]="{'width':'100%'}">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-6">
+                                <label>CC: (Écrivez un , après chaque email)</label>
+                                <p-chips formControlName="cc" separator=","
+                                    placeholder="email1@email.com , email2.email.com"></p-chips>
+                            </div>
+                            <div class="field col-12">
+                                <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
+                                    #selectedFilePJ style="display: none;" pInputFile />
+                                <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes"
+                                    responsiveLayout="scroll" dataKey="_id" class="col-12" responsiveLayout="scroll">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Date d'upload
+                                            </th>
+                                            <th>
+                                                Nom du document
+                                            </th>
+                                            <th>
+                                                Lien de téléchargement
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                        <tr>
+                                            <td>
+                                                {{rowData.date | date:'dd MMMM yy'}}
+                                            </td>
+                                            <td
+                                                *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                                {{rowData.nom}}
+                                            </td>
+                                            <td
+                                                *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                                {{rowData?.path}}
+                                            </td>
+                                            <td
+                                                *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                                Téléverser le fichier s'il vous plaît
+                                            </td>
+                                            <td *ngIf="rowData.path">
+                                                <a style="cursor: pointer;"
+                                                    (click)="downloadPJFile(rowData)">Télécharger</a>
+                                                {{rowData.path}}
+                                            </td>
+                                            <td *ngIf="!rowData.path">
+                                                <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                            </td>
+                                            <td>
+                                                <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                                    class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                                    (click)="onUploadPJ(rowData)">
+                                                </i>
+                                                <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                                    class="pi pi-trash mr-2" style="cursor: pointer;"
+                                                    (click)="onDeletePJ(ri)">
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <div style="width: 100%;">
+                                <button pButton (click)="onAddPj()" icon="pi pi-paperclip"
+                                    pTooltip="Ajouter une pièce jointe" tooltipPosition="bottom"
+                                    autoWidth="false"></button>
+                                <div style="float: right;">
+                                    <button pButton [disabled]="formEmailPerso.invalid" icon="pi pi-send"
+                                        pTooltip="Envoyer l'email" tooltipPosition="bottom"
+                                        (click)="onEmailPerso()"></button>
+                                </div>
+                            </div>
+                        </form>
+                    </p-tabPanel>
+                    <p-tabPanel header="Depuis un mail type">
+                        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
+                            <div class="field col-12">
+                                <label>Email Type: </label>
+                                <p-dropdown placeholder="Choisissez un mail type" filter="true"
+                                    (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
+                                    [style]="{'width':'100%'}">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-6">
+                                <label>Objet: </label>
+                                <input type="text" formControlName="objet" pInputText>
+                            </div>
+                            <div class="field col-6">
+                                <label>Destinataire: </label>
+                                <p>{{prospectSendTo.user_id.email_perso}}</p>
+                            </div>
+                            <div class="field col-12">
+                                <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                            </div>
+                            <div class="field col-6">
+                                <label>Envoyé par: </label>
+                                <p-dropdown placeholder="Choisissez une adresse mail" filter="true"
+                                    formControlName="send_from" [options]="mailDropdown" autoWidth="false"
+                                    [style]="{'width':'100%'}">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-6">
+                                <label>CC: (Écrivez un , après chaque email)</label>
+                                <p-chips formControlName="cc" separator=","
+                                    placeholder="email1@email.com,email2.email.com"></p-chips>
+                            </div>
+                            <div class="field col-12">
+                                <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
+                                    #selectedFilePJ style="display: none;" pInputFile />
+                                <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes"
+                                    responsiveLayout="scroll" dataKey="_id" class="col-12" responsiveLayout="scroll">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Date d'upload
+                                            </th>
+                                            <th>
+                                                Nom du document
+                                            </th>
+                                            <th>
+                                                Lien de téléchargement
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                        <tr>
+                                            <td>
+                                                {{rowData.date | date:'dd MMMM yy'}}
+                                            </td>
+                                            <td
+                                                *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                                {{rowData.nom}}
+                                            </td>
+                                            <td
+                                                *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                                {{rowData?.path}}
+                                            </td>
+                                            <td
+                                                *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                                Téléverser le fichier s'il vous plaît
+                                            </td>
+                                            <td *ngIf="rowData.path">
+                                                <a style="cursor: pointer;"
+                                                    (click)="downloadPJFile(rowData)">Télécharger</a>
+                                                {{rowData.path}}
+                                            </td>
+                                            <td *ngIf="!rowData.path">
+                                                <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                            </td>
+                                            <td>
+                                                <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                                    class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                                    (click)="onUploadPJ(rowData)">
+                                                </i>
+                                                <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                                    class="pi pi-trash mr-2" style="cursor: pointer;"
+                                                    (click)="onDeletePJ(ri)">
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
 
-                        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
-                            Détails
-                        </h5>
-                        <p-table responsiveLayout="scroll">
+                            </div>
+                            <div style="width: 100%;">
+                                <button pButton (click)="onAddPj()" icon="pi pi-paperclip"
+                                    pTooltip="Ajouter une pièce jointe" tooltipPosition="bottom"
+                                    autoWidth="false"></button>
+                                <div style="float: right;">
+                                    <button pButton [disabled]="formEmailType.invalid" icon="pi pi-send"
+                                        pTooltip="Envoyer l'email" tooltipPosition="bottom"
+                                        (click)="onEmailType()"></button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </p-tabPanel>
+                    <p-tabPanel header="Historique des emails">
+                        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
+                            [value]="historiqueEmails" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                            class="col-12" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                             <ng-template pTemplate="header">
-                <tr>
+                                <tr>
+                                    <th style="width: 3rem" scope="col"></th>
+                                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                        Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="objet" scope="col" style="text-align: center;">
+                                        Objet du mail <p-sortIcon field="objet"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
+                                        Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="cc" scope="col" style="text-align: center;">
+                                        Envoyé à <p-sortIcon field="cc"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="send_from" scope="col" style="text-align: center;">
+                                        Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-email let-expanded="expanded">
+                                <tr>
 
-                    <th>ID</th>
-                    <th>Prénom et Nom </th>
-                    <th>Date de naissance</th>
-                    <th>Pays de résidence</th>
-                    <th>Nationalité</th>
-                    <th>Action</th>
+                                    <td>
+                                        <button type="button" pButton pRipple [pRowToggler]="email"
+                                            class="p-button-text p-button-rounded p-button-plain"
+                                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                    </td>
+                                    <td>
+                                        {{email.date_creation|date:'dd MMMM yy'}}
+                                    </td>
+                                    <td>
+                                        {{email.objet}}
+                                    </td>
+                                    <td>
+                                        {{email?.send_by?.firstname | titlecase}} {{email?.send_by?.lastname |
+                                        uppercase}}
+                                    </td>
+                                    <td>
+                                        <strong>{{prospectSendTo?.user_id?.email_perso }}</strong> {{cc}}
+                                    </td>
+                                    <td>
+                                        {{email.send_from}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="rowexpansion" let-email>
+                                <div [innerHTML]="email.body">
 
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td>{{ user.customid }}</td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input type="text" pInputText placeholder="Prénom"
-                                    [(value)]="user.user_id.firstname">
-                                <input type="text" pInputText placeholder="Nom"
-                                    [(value)]="user.user_id.lastname">
+                                </div>
                             </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user?.user_id?.firstname | titlecase }}
-                                {{ user?.user_id?.lastname | uppercase }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input type="date" pInputText placeholder="Date de naissance"
-                                    [(value)]="user.date_naissance">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{
-                                user.date_naissance | date:'dd MMMM yy'
-                                }}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
-                                    placeholder="Pays" optionValue="value" optionLabel="value"
-                                    appendTo="body" emptyFilterMessage="Pas de pays trouvé"
-                                    filterPlaceholder="Pays" filter="true"
-                                    optionDisabled="actif"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.user_id.pays_adresse}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [(ngModel)]="user.user_id.nationnalite" [options]="nationList"
-                                    emptyFilterMessage="Pas de nationalité trouvé" appendTo="body"
-                                    filterPlaceholder="Nationalité" filter="true"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.user_id.nationnalite}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-
-                    <td>
-                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
-                            aria-hidden="true" tooltipPosition="bottom"></i>
-                    </td>
-                </tr>
-
-
-            </ng-template>
-
-        </p-table>
-        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
-            Contact
-        </h5>
-        <p-table responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Adresse mail</th>
-                    <th>Adresse mail école </th>
-                    <th>numéro de téléphone</th>
-                    <th>Adresse</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td>
-                        {{ user.user_id.email_perso}}
-                    </td>
-                    <td>
-                        <ng-container *ngIf="user.user_id.email!=user.user_id.email_perso">
-                            {{ user.user_id.email}}
-                        </ng-container>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input type="text" pInputText placeholder="Téléphone"
-                                    [(value)]="user.user_id.phone">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.user_id.phone}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input type="text" pInputText placeholder="Rue"
-                                    [(value)]="user.user_id.rue_adresse">
-                                <input type="text" pInputText placeholder="Ville"
-                                    [(value)]="user.user_id.ville_adresse">
-                                <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
-                                    placeholder="Pays" optionValue="value" optionLabel="value"
-                                    appendTo="body" emptyFilterMessage="Pas de pays trouvé"
-                                    filterPlaceholder="Pays" filter="true"
-                                    optionDisabled="actif"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.user_id.rue_adresse}} {{user.user_id.ville_adresse}}, {{
-                                user.user_id.pays_adresse}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
-                            aria-hidden="true" tooltipPosition="bottom"></i>
-                    </td>
-
-                </tr>
-
-
-            </ng-template>
-
-        </p-table>
-        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
-            Choix académique
-        </h5>
-        <p-table responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Session</th>
-                    <th>Ecole </th>
-                    <th>Campus</th>
-                    <th>Formation</th>
-                    <th>Groupe</th>
-                    <th>Rythme</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="rentreeList" appendTo="body"
-                                    [(ngModel)]="user.rentree_scolaire"
-                                    placeholder="Choisissez la rentrée scolaire">
-                                </p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.rentree_scolaire}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="EcoleListRework" appendTo="body"
-                                    placeholder="Choisissez l'école du lead"
-                                    (onChange)="onSelectEcole(user.type_form)"
-                                    [(ngModel)]="user.type_form"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.type_form | titlecase}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="campusDropdown" appendTo="body" optionLabel="value"
-                                    optionValue="value" [(ngModel)]="user.campus_choix_1"
-                                    placeholder="Choisissez un campus">
-                                </p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.campus_choix_1}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="programeFrDropdown" appendTo="body"
-                                    placeholder="Choissiez un programme français" [filter]="true"
-                                    [group]="true" [style]="{'width':'100%'}" autoWidth="false"
-                                    [(ngModel)]="user.formation"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.formation}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        {{ user.groupe}}
-                    </td>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="typeFormationDropdown" optionValue="value"
-                                    optionLabel="value" autoWidth="false" placeholder="Choisissez un rythme"
-                                    [style]="{'width':'100%'}" appendTo="body"
-                                    [(ngModel)]="user.rythme_formation"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.rythme_formation}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
-                            aria-hidden="true" tooltipPosition="bottom"></i>
-                    </td>
-
-                </tr>
-
-
-            </ng-template>
-
-        </p-table>
-        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
-            Source
-        </h5>
-        <p-table responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Source</th>
-                    <th>Commercial </th>
-                    <th>Adresse mail</th>
-                    <th>Téléphone</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input type="text" pInputText placeholder="Formation"
-                                    [(value)]="user.source">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{ user.source}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        {{ commercialOwned?.user_id?.firstname}} {{ commercialOwned?.user_id?.lastname}}
-                    </td>
-                    <td>
-                        {{ commercialOwned?.user_id?.email}}
-                    </td>
-                    <td>
-                        {{ commercialOwned?.user_id?.indicatif}} {{ commercialOwned?.user_id?.phone}}
-                    </td>
-
-                    <td>
-                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
-                            aria-hidden="true" tooltipPosition="bottom"></i>
-                    </td>
-
-                </tr>
-
-
-            </ng-template>
-
-        </p-table>
-        </td>
-        </tr>
-    </ng-template>
-
-    </p-table>
+                        </p-table>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
         </p-tabPanel>
     </p-tabView>
 </div>
@@ -3014,7 +3023,7 @@
             (click)="clearFilter()"></button>
     </div>
 </p-sidebar>
-<p-dialog header="Paiements" [(visible)]="seePaiements" [modal]="true">
+<p-dialog header="Paiements" [(visible)]="seePaiements" [modal]="true" (onHide)="savePaiement()">
     <input type="file" (change)="FileUploadPaiement($event.target.files)" id="UploadPaiement" #UploadPaiement
         style="display: none;" pInputFile />
     <h5 *ngIf="showPaiement?.user_id" style="font-weight: bold;color:#37BAD4"> Paiement effectués par {{
@@ -3050,6 +3059,8 @@
                     <th pSortableColumn="doc" style="text-align: center;">
                         Lien
                     </th>
+
+
                     <th>
                         <div class="flex justify-content-between align-items-center">
                             Action
@@ -3076,8 +3087,8 @@
                     <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
-                                    placeholder="Choisissez la méthode de paiement"
+                                <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type" editable="true"
+                                    placeholder="Choisissez la méthode de paiement" appendTo="body"
                                     (onChange)="changeMontant(ri,$event,'type')"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -3088,14 +3099,9 @@
                     <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
-                                    *ngIf="['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
-                                    placeholder="Choisissez le motif du paiement"
+                                <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif" editable="true"
+                                    placeholder="Choisissez le motif du paiement" appendTo="body"
                                     (onChange)="changeMontant(ri,$event,'motif')"></p-dropdown>
-                                <input
-                                    *ngIf="!['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
-                                    type="text" pInputText (change)="changeMontant(ri,$event.target,'motif')"
-                                    placeholder="Motif" [(value)]="paiement.motif">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{paiement.motif}}
@@ -3113,9 +3119,11 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
+
                     <td>
-                        <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
-                            fichier</a>
+                        <i *ngIf="paiement.doc" pTooltip="Télécharger le document" tooltipPosition="bottom"
+                            class="pi pi-file" (click)="downloadFilePayment(paiement,ri)"
+                            style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                         <a *ngIf="!paiement.doc" (click)="uploadFilePayement(paiement,ri)">Uploader un fichier</a>
                     </td>
                     <td>
@@ -3125,15 +3133,8 @@
                 </tr>
             </ng-template>
         </p-table>
-        <div class="col-4">
-            <button type="button" (click)="onAddPayement()" pButton icon="pi pi-plus"></button>
-        </div>
+        <button type="button" (click)="onAddPayement()" pButton icon="pi pi-plus"></button>
 
-        <div class="col-4">
-        </div>
-        <div class="col-4">
-            <button pButton icon="pi pi-save" (click)="savePaiement()"></button>
-        </div>
     </div>
     <input type="file" (change)="FileUploadPaiementProgram($event.target.files)" id="UploadPaiementProgram"
         #UploadPaiementProgram style="display: none;" pInputFile />
@@ -3167,6 +3168,9 @@
                     <th pSortableColumn="doc" style="text-align: center;">
                         Lien
                     </th>
+                    <th pSortableColumn="num_cheque" style="text-align: center;">
+                        N° Cheque
+                    </th>
                     <th>
                         <div class="flex justify-content-between align-items-center">
                             Action
@@ -3193,8 +3197,8 @@
                     <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
-                                    placeholder="Choisissez la méthode de paiement"
+                                <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type" editable="true"
+                                    placeholder="Choisissez la méthode de paiement" appendTo="body"
                                     (onChange)="changeMontantProgram(ri,$event,'type')"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -3205,14 +3209,9 @@
                     <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
-                                    *ngIf="['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
-                                    placeholder="Choisissez le motif du paiement"
+                                <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif" editable="true"
+                                    placeholder="Choisissez le motif du paiement" appendTo="body"
                                     (onChange)="changeMontantProgram(ri,$event,'motif')"></p-dropdown>
-                                <input
-                                    *ngIf="!['Préinscription','Avance scolarité','Scolarité',''].includes(paiement.motif)"
-                                    type="text" pInputText (change)="changeMontantProgram(ri,$event.target,'motif')"
-                                    placeholder="Motif" [(value)]="paiement.motif">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{paiement.motif}}
@@ -3234,7 +3233,7 @@
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typeEtat" [(ngModel)]="paiement.etat"
-                                    placeholder="Choisissez l'état du paiement"
+                                    placeholder="Choisissez l'état du paiement" appendTo="body"
                                     (onChange)="changeMontantProgram(ri,$event,'etat')"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
@@ -3243,10 +3242,22 @@
                         </p-cellEditor>
                     </td>
                     <td>
-                        <a *ngIf="paiement.doc" (click)="downloadFilePayment(paiement,ri)">Télécharger le
-                            fichier</a>
+                        <i *ngIf="paiement.doc" pTooltip="Télécharger le document" tooltipPosition="bottom"
+                            class="pi pi-file" (click)="downloadFilePayment(paiement,ri)"
+                            style="margin-left: 2%;color: green;" aria-hidden="true"></i>
                         <a *ngIf="!paiement.doc" (click)="uploadFilePayementProgram(paiement,ri)">Uploader un
                             fichier</a>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText (input)="changeMontantProgram(ri,$event,'num_cheque')"
+                                    [(value)]="paiement.num_cheque">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{paiement.num_cheque}}
+                            </ng-template>
+                        </p-cellEditor>
                     </td>
                     <td>
                         <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
@@ -3255,14 +3266,6 @@
                 </tr>
             </ng-template>
         </p-table>
-        <div class="col-4">
-            <button type="button" (click)="onAddPayementProgram()" pButton icon="pi pi-plus"></button>
-        </div>
-
-        <div class="col-4">
-        </div>
-        <div class="col-4">
-            <button pButton icon="pi pi-save" (click)="savePaiement()"></button>
-        </div>
+        <button type="button" (click)="onAddPayementProgram()" pButton icon="pi pi-plus"></button>
     </div>
 </p-dialog>

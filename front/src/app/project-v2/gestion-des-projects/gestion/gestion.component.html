@@ -2,7 +2,6 @@
     <p-tabPanel header="Créer">
         <div class="card">
 
-
             <h3 class="text-center">Nouveau projet</h3>
             <form class="p-formgrid grid p-fluid" [formGroup]="formAddProject" (ngSubmit)="addProject()">
 
@@ -103,8 +102,6 @@
                         (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
                         emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
 
-
-
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -184,18 +181,15 @@
                             (click)="delete(project._id,ri)" aria-hidden="true"></i>
                         <i pTooltip="activités" style="margin-left: 3%; cursor: pointer;" class="pi pi-align-justify"
                             (click)=" showTaskList(project) ; showtache=true" aria-hidden="true"></i>
-                        <i pTooltip="ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
+                        <i pTooltip="Ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
                             (click)="showRessources(project._id)" aria-hidden="true"></i>
-                        <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
+                        <i pTooltip="Budget" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
                             (click)="showBudget(project._id)" aria-hidden="true"></i>
 
 
                     </td>
                 </tr>
             </ng-template>
-
-
-
             <ng-template pTemplate="rowexpansion" let-ticket>
 
                 <tr>
@@ -318,11 +312,6 @@
 
 </p-tabView>
 
-
-
-
-
-
 <div *ngIf="showUpdateTacheForm">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
         (click)="showUpdateTacheForm = false; showOtherTextArea = false;"></i>
@@ -409,39 +398,12 @@
     </form>
 </div>
 
-<div *ngIf="showUpdateBudgetForm">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showUpdateBudgetForm = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-    <h3 class="text-center">Modifier ce budget</h3>
-    <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="onUpdatebudget()">
-
-        <div class="field col-12 md:col-12">
-            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
-            <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
-                rows="2" cols="40"></textarea>
-        </div>
-
-        <div class="field col-12 md:col-6">
-            <label htmlFor="charge">charge <span style="color: red">*</span></label>
-            <input formControlName="charge" pInputText type="number" id="depense">
-        </div>
-
-        <div class="field col-12 md:col-6">
-            <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
-            <input formControlName="depense" pInputText type="number" id="depense">
-        </div>
 
 
-        <button pButton pRipple type="submit" class="my-2" label="Modifier" [disabled]="formAddbudget.invalid"></button>
-    </form>
-</div>
 
+<p-dialog header="Mettre à jour le budget" [(visible)]="displayBudjetDialog" (onHide)="onHideAddBudget()" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
 <div *ngIf="showAddBudgetForm">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showAddBudgetForm = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-    <h3 class="text-center">Ajouter un Budget</h3>
+    <h3 class="text-center">Budget : {{currentProject.titre}}</h3>
     <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="addBudget()">
 
         <div class="field col-12 md:col-12">
@@ -457,109 +419,193 @@
             <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
             <input formControlName="depense" pInputText type="number" id="depense">
         </div>
+        <div class="field col-12 ">
+            <label>Pièce Jointe:</label>
+            <div>
+                <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                              chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
+                              [auto]="true">
+                </p-fileUpload>
+            </div>
+
+            <div>
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">
+                        {{ file.name }} - {{ file.size }} bytes
+                        <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
+                           pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
+                                uploadedFiles.splice(
+                                    uploadedFiles.indexOf(file)
+                                )
+                            " aria-hidden="true">
+                        </i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
 
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddbudget.invalid"></button>
     </form>
 </div>
 
+    <div *ngIf="showbudget" class="card">
+        <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+           (click)="showbudget = false; showOtherTextArea = false;"></i>
+        <div style="float: right"></div>
+        <h3 class="text-center">Budget : <span *ngIf="currentProject">{{currentProject.titre}}</span></h3>
+        <button pButton pRipple label="Nouveau budget" style="float: right;" class="p-button-outlined mb-2"
+                (click)="showAddBudgetForm = true"></button>
 
-<div *ngIf="showbudget" class="card">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showbudget = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-    <h3 class="text-center">Le budget </h3>
-    <button pButton pRipple label="Nouveau budget" style="float: right;" class="p-button-outlined mb-2"
-        (click)="showAddBudgetForm = true"></button>
 
-
-    <div style="float: right"></div>
-    <div class="grid col-12 ">
-        <div class="col-4">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-4">
-                    <div>
-                        <span class="block text-500 font-medium mb-4">Budget estimé</span>
-                        <div class="text-900 font-medium text-xl">{{budget_charge }}</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-money-bill text-blue-500 text-xl"></i>
+        <div style="float: right"></div>
+        <div class="grid col-12 ">
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Budget estimé</span>
+                            <div class="text-900 font-medium text-xl">{{budget_charge }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-money-bill text-blue-500 text-xl"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-4">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-4">
-                    <div>
-                        <span class="block text-500 font-medium mb-4">Dépenses</span>
-                        <div class="text-900 font-medium text-xl">{{budgect_depense }}</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-minus text-cyan-500 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-4">
-                    <div>
-                        <span class="block text-500 font-medium mb-4">Balance</span>
-                        <div class="text-900 font-medium text-xl">{{budget_charge - budgect_depense }}</div>
-                    </div>
-                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
-                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                        <i class="pi pi-money-bill text-green-500 text-xl"></i>
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Dépenses</span>
+                            <div class="text-900 font-medium text-xl">{{budgect_depense }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-minus text-cyan-500 text-xl"></i>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-4">
+                        <div>
+                            <span class="block text-500 font-medium mb-4">Balance</span>
+                            <div class="text-900 font-medium text-xl">{{budget_charge - budgect_depense }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-money-bill text-green-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div *ngIf="showUpdateBudgetForm">
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+               (click)="showUpdateBudgetForm = false; showOtherTextArea = false;"></i>
+            <div style="float: right"></div>
+            <h3 class="text-center">Modifier ce budget</h3>
+            <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="onUpdatebudget()">
+
+                <div class="field col-12 md:col-12">
+                    <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
+                    <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
+                              rows="2" cols="40"></textarea>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="charge">charge <span style="color: red">*</span></label>
+                    <input formControlName="charge" pInputText type="number" id="depense">
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
+                    <input formControlName="depense" pInputText type="number" id="depense">
+                </div>
+
+                <div class="field col-12 ">
+                    <label>Pièce Jointe:</label>
+                    <div>
+                        <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                                      chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
+                                      [auto]="true">
+                        </p-fileUpload>
+                    </div>
+
+                    <div>
+                        <ul *ngIf="uploadedFiles.length">
+                            <li *ngFor="let file of uploadedFiles">
+                                {{ file.name }} - {{ file.size }} bytes
+                                <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
+                                   pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
+                                uploadedFiles.splice(
+                                    uploadedFiles.indexOf(file)
+                                )
+                            " aria-hidden="true">
+                                </i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <button pButton pRipple type="submit" class="my-2" label="Modifier" [disabled]="formAddbudget.invalid"></button>
+            </form>
         </div>
 
 
+        <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="budget" [paginator]="true" rowExpandMode="single"
+                 [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+                 styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th pSortableColumn="libelle" style="text-align:center"> Libellé <p-sortIcon field="date_ajout">
+                    </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="charge" style="text-align:center"> charge <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="deponse" style="text-align:center"> Dépense <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="deponse" style="text-align:center"> Document <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="action" style="text-align:center"> Action <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-budget let-rir="rowIndex">
+                <tr>
+                    <td>{{budget?.libelle}}</td>
+                    <td>{{budget?.charge}}</td>
+                    <td>{{budget?.depense}}</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
+                           (click)="initialisation_b(budget)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
+                           (click)="delete_b(budget._id,rir)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+
+
+        </p-table>
     </div>
-    <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="budget" [paginator]="true" rowExpandMode="single"
-        [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
-        styleClass="p-datatable-gridlines">
-        <ng-template pTemplate="header">
-            <tr>
 
-                <th pSortableColumn="libelle" style="text-align:center"> Libellé <p-sortIcon field="date_ajout">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="charge" style="text-align:center"> charge <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="deponse" style="text-align:center"> Dépense <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="action" style="text-align:center"> Action <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                </th>
-            </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-budget let-rir="rowIndex">
-            <tr>
-                <td>{{budget.libelle}}</td>
-                <td>{{budget.charge}}</td>
-                <td>{{budget.depense}}</td>
-                <td>
-                    <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
-                        (click)="initialisation_b(budget)" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete_b(budget._id,rir)" aria-hidden="true"></i>
-                </td>
-            </tr>
-        </ng-template>
-
-
-    </p-table>
-
-
-</div>
+</p-dialog>
 
 
 <div *ngIf="showressources" class="card">
@@ -640,6 +686,8 @@
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
     </form>
 </p-dialog>
+
+
 <p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
     <div class="grid col-12">
         <div class="col-9">
@@ -662,7 +710,7 @@
             description
         </div>
         <div class="col-3"></div>
-        
+
     </div>
 </p-sidebar>
 
@@ -825,13 +873,10 @@
 </div>
 
 
+<p-dialog header="Modifier le budget" (onHide)="onHideUpdateProject()"  [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
 
 <div *ngIf="showUpdateProjectForm">
-    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-        (click)="showUpdateProjectForm = false; showOtherTextArea = false;"></i>
-    <div style="float: right"></div>
-
-    <h3 class="text-center">Modifier ce projet</h3>
+    <h3 class="text-center">Modifier le projet : {{currentProject.titre }} </h3>
     <form class="p-formgrid grid p-fluid" [formGroup]="formAddProject" (ngSubmit)="UpdateProject()">
 
         <div class="field col-12 md:col-12">
@@ -868,7 +913,7 @@
     </form>
 </div>
 
-
+</p-dialog>
 
 
 

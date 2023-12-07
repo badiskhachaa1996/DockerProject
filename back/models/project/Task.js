@@ -9,11 +9,18 @@ const taskSchema = mongoose.Schema({
     number_of_hour:                 { type: Number, required: false }, 
     avancement:                     { type: Number, required: false }, 
     date_limite:                    { type: Date, required: false },
-    etat:                           { type: String, required  : false },
+    etat:                           { type: String, required  : false,default: "En attente de traitement" },
     priorite:                       { type: String, required  : false },
     consignes:                      { type:[String], required: false},
     validation:                     { type: String, required: false},
-    identifian:                     { type: String, required: false}
+    identifian:                     { type: String, required: false},
+    urgent:                         { type: Boolean, required:false},
+    documents: {
+        type: [{
+            nom: { type: String, required: false },
+            path: { type: String, required: false },
+        }],
+    },
 
 });
 

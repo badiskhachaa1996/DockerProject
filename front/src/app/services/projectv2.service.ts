@@ -326,6 +326,7 @@ deleteRessources(id: string): Promise<any>
 
 deleteBudget(id: string): Promise<any> 
     {
+      
       const url = `${this.apiUrl}/delete-budget/${id}`
   
       return new Promise<any>((resolve, reject) => {
@@ -336,6 +337,25 @@ deleteBudget(id: string): Promise<any>
         });
       });
     }
+
+
+//document
+uploadFile(formData: FormData) {
+  const url = `${this.apiUrl}/uploadFile/`;
+  
+  return this.httpClient.post<Task>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
+downloadFile(_id: string, file_id: string, path: string) {
+  const url = `${this.apiUrl}/downloadFile/${_id}/${file_id}/${path}`
+
+  return this.httpClient.get<{ file: string, documentType: string }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
+insertDB(data: { toInsert: Task[], toUpdate: Task[] }) {
+  let registreUrl = this.apiUrl + "insertDB"
+  return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
 
 }
 

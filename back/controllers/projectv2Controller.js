@@ -5,6 +5,10 @@ const { Task } = require("./../models/project/Task");
 const { Ressources } = require("./../models/project/Ressources");
 const { Budget } = require("./../models/project/Budget");
 const { Ticket } = require("../models/ticket");
+const multer = require('multer');
+const fs = require("fs")
+var mime = require('mime-types')
+const path = require('path');
 
 
 
@@ -172,8 +176,7 @@ app.delete("/delete-ressources/:id", (req, res, next) => {
 
 // create new Budget
 app.post("/post-budget", (req, res, next) => {
-    const budget = new Budget({ ...req.body });
-
+   const budget = new Budget({ ...req.body, documents: req.body.documents});
     budget.save()
     .then((budgetCreated) => { res.status(201).json({ budget: budgetCreated, success: 'Budget créée' }); })
     .catch((error) => { console.error(error); res.status(500).send({ error: 'Impossible de créer un neveaux budget' }); });
@@ -196,9 +199,9 @@ app.get("/get-budget/:id", (req, res, next) => {
 
 // update budget        
 app.put("/put-budget", (req, res, next) => {
-    const budget = new Budget({ ...req.body });
 
-    Budget.updateOne({ _id: budget._id }, { ...req.body })
+    const budget = new Budget({ ...req.body, documents: req.body.documents});
+    Budget.updateOne({ _id: budget._id }, { ...req.body, document: req.files.documents})
     .then((budgetUpdated) => { res.status(201).json({ budget: budgetUpdated, success: 'budget mis à jour' }); })
     .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour ce  budget' }); });
 });
@@ -209,6 +212,56 @@ app.delete("/delete-budget/:id", (req, res, next) => {
     .then((response) => { res.status(200).json({ success: 'Budget supprimé' }) })
     .catch((error) => {console.error(error); res.status(400).json({ error: 'Impossible de supprimer ce Budget' });})
 });
+//document 
+app.get("/downloadFile/:_id/:file_id/:name", (req, res, next) => {
+    let pathFile = `storage/task/${req.params.file_id}/${req.params._id}/${req.params.name}`;
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+});
+
+const st = multer.diskStorage({
+    destination: (req, file, callback) => {
+        let id = req.body.document_id;
+        let storage = `storage/task/${id}/${req.body._id}`;
+
+        if (!fs.existsSync(storage)) {
+            fs.mkdirSync(storage, { recursive: true });
+        }
+        callback(null, storage);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.originalname}`);
+    }
+});
+
+const uploadConfig = multer({ storage: st });
+app.post("/uploadFile", uploadConfig.single('file'), (req, res, next) => {
+    const file = req.file;
+
+    if (!file) {
+        const error = new Error('Aucun fichier choisis');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.status(201).send({ message: "C'est bon" });
+});
+
+app.post("/insertDB", (req, res) => {
+    Task.insertMany(req.body.toInsert).then(docs => {
+        req.body.toUpdate.forEach(val => {
+            Task.findByIdAndUpdate(val._id, { ...val }).exec()
+        })
+        res.send(docs)
+    })
+})
+
+
 
 
 

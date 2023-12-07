@@ -382,6 +382,16 @@ export class PreinscriptionComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
+    this.EmailTypeS.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.mailDropdown.push({ label: val.email, value: val })
+      })
+    })
+    this.EmailTypeS.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
     this.EvaluationService.getevaluations().then(evaluations => {
       console.log(evaluations)
       evaluations.forEach(ev => {
@@ -813,11 +823,31 @@ export class PreinscriptionComponent implements OnInit {
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`
   }
-  onTabClose(e) {
-    this.proscteList.splice(e.index - 4, 1)
-    this.UserService.update({ _id: this.token.id, savedAdministration: this.proscteList }).subscribe(r => {
+  handleChange(event) {
+    //console.log(event)
+    console.log(this.proscteList)
+    if (this.selectedTabIndex > (3 + this.proscteList.length) && this.selectedTabIndex <= (3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length)) {
 
-    })
+      let p: Prospect = this.docProspectList[this.selectedTabIndex - (4 + this.proscteList.length)]
+      this.initDocument(p)
+      //this.onshowDossier(p)
+    } else if (this.selectedTabIndex > (3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length)) {
+      let p: Prospect = this.mailsProspects[this.selectedTabIndex - (4 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length)]
+      this.initSendEmail(p)
+    }
+
+    this.onUpdateFiltre()
+  }
+  onTabClose(e) {
+
+    if (e.index > (3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length)) {
+      this.mailsProspects.splice(e.index - (4 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length))
+    } else {
+      this.proscteList.splice(e.index - 4, 1)
+      this.UserService.update({ _id: this.token.id, savedAdministration: this.proscteList }).subscribe(r => {
+
+      })
+    }
   }
   onSelectEtat(event: any, procpect: Prospect) {
     if (event && event.value)
@@ -1240,7 +1270,10 @@ export class PreinscriptionComponent implements OnInit {
         if (commercial && commercial.partenaire_id)
           this.partenaireOwned = commercial.partenaire_id
       })
-    this.initalPayement = prospect?.payement
+    if (prospect?.payement)
+      this.initalPayement = prospect?.payement
+    else
+      this.initalPayement = []
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
@@ -1299,11 +1332,11 @@ export class PreinscriptionComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "" })
+    this.payementList.push({ type: "", montant: null, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "" })
   }
   changeMontant(i, event, type) {
 
-    if (type == "date") {
+    if (type == "date" || type == "num_cheque") {
       this.payementList[i][type] = event.target.value;
     } else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
@@ -1375,11 +1408,11 @@ export class PreinscriptionComponent implements OnInit {
     if (this.payementProgramList == null) {
       this.payementProgramList = []
     }
-    this.payementProgramList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "Programmé" })
+    this.payementProgramList.push({ type: "", montant: null, date: "", ID: this.generateIDPaiement(), doc: null, motif: "", etat: "Programmé", num_cheque: "" })
   }
   changeMontantProgram(i, event, type) {
 
-    if (type == "date") {
+    if (type == "date" || type == "num_cheque") {
       this.payementProgramList[i][type] = event.target.value;
     } else if (type == "montant") {
       this.payementProgramList[i][type] = parseInt(event.target.value);
@@ -1445,6 +1478,9 @@ export class PreinscriptionComponent implements OnInit {
         this.historiqueEmails.push(data2)
         this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
       })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Une erreur est survenu', detail: error.error?.errno })
     })
 
   }
@@ -1456,6 +1492,9 @@ export class PreinscriptionComponent implements OnInit {
         this.historiqueEmails.push(data2)
         this.ToastService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
       })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Une erreur est survenu', detail: error.error?.errno })
     })
 
   }
@@ -1464,16 +1503,6 @@ export class PreinscriptionComponent implements OnInit {
     this.prospectSendTo = prospect
     this.EmailTypeS.HEgetAllTo(this.prospectSendTo._id).subscribe(data => {
       this.historiqueEmails = data
-    })
-    this.EmailTypeS.getAll().subscribe(data => {
-      data.forEach(val => {
-        this.mailDropdown.push({ label: val.email, value: val })
-      })
-    })
-    this.EmailTypeS.MTgetAll().subscribe(data => {
-      data.forEach(e => {
-        this.mailTypeDropdown.push({ label: e.objet, value: e })
-      })
     })
   }
 
@@ -1490,7 +1519,7 @@ export class PreinscriptionComponent implements OnInit {
 
   //Gestion des PJs
   onDeletePJ(ri) {
-    delete this.piece_jointes[ri]
+    this.piece_jointes.splice(ri, 1)
   }
 
   uploadFilePJ: {
@@ -1555,17 +1584,7 @@ export class PreinscriptionComponent implements OnInit {
     }, 5)
 
   }
-  handleChange(event) {
-    //console.log(event)
-    console.log(this.proscteList)
-    if (this.selectedTabIndex > (3 + this.proscteList.length)) {
 
-      let p: Prospect = this.docProspectList[this.selectedTabIndex - (4 + this.proscteList.length)]
-      this.initDocument(p)
-      //this.onshowDossier(p)
-    } else
-      this.onUpdateFiltre()
-  }
   initDocument(prospect) {
     this.PROSPECT = prospect;
     this.showDocAdmin = prospect;
@@ -1873,6 +1892,7 @@ export class PreinscriptionComponent implements OnInit {
       r = r + prospect.type_form
   }
   detailsProspects = []
+
   onDetails(prospect: Prospect) {
     let ids = []
     this.detailsProspects.forEach(p => {
@@ -1889,5 +1909,23 @@ export class PreinscriptionComponent implements OnInit {
 
     }
 
+  }
+
+  mailsProspects = []
+  onMails(prospect: Prospect) {
+    let ids = []
+    this.mailsProspects.forEach(p => {
+      ids.push(p._id)
+    })
+    this.initSendEmail(prospect)
+    if (ids.includes(prospect._id)) {
+      this.selectedTabIndex = 4 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length + ids.indexOf(prospect._id)
+    } else {
+      this.mailsProspects.push(prospect)
+      setTimeout(() => {
+        this.selectedTabIndex = 3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length + this.mailsProspects.length
+      }, 5)
+
+    }
   }
 }
