@@ -375,7 +375,7 @@ deploy_node_to_dev:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --dev
-    - pm2 logs index
+    # - pm2 logs index
   only:
     - develop
 
@@ -404,7 +404,7 @@ deploy_node_to_qa:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --qa
-    - pm2 logs index
+    # - pm2 logs index
   only:
     - main
 
@@ -433,7 +433,7 @@ deploy_node_to_prod2:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
-    - pm2 logs index
+    # - pm2 logs index
   only:
     - main
 
