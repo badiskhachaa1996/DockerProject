@@ -468,17 +468,17 @@
                             </div>
                         </div>
                     </p-fieldset><br>
-                    <p-fieldset legend="Commissions">
+                    <p-fieldset legend="Commissions" style="width: 1px; height: 1px;">
                         <div class="grid">
-                            <div class="Data">
-                                <p class="data">
+                            <div class="firsttable" style="width: 10px; ">
+                                <div class="inside" style="margin-right: 50%;">
                                     <strong>Etat de Contrat:
-                                        <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
+                                        <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()" class="p-element p-inputwrapper ng-tns-c55-11 ng-star-inserted"
                                             [(ngModel)]="idPartenaireToUpdate.etat_contrat"
                                             placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
-                                    </strong><br>41
-                                </p>
-                                <div class="clickable">
+                                    </strong><br>
+                                </div>
+                                <div class="clickable" style="margin-left: 20%; margin-top: auto;">
                                 <button
                                         pTooltip="Télécharger le contrat"
                                         style="
@@ -523,24 +523,25 @@
 
                             </div>
                             </div>
-                            <div class="col-6">
-                                <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">
-                                    <div class="Data">
-                                        <p class="data"><strong>Description:</strong><br>
-                                            <input type="text" pInputText placeholder="" formControlName="description" />
+
+                            <div class="container" style="display: flex; flex-direction: row; align-items: center; margin-top: 11%; margin-right: 250%; margin-trim: 6px;">
+                                <form class="" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()" style="display: flex; flex-direction: row; align-items: center;">
+                                    <div style="margin-right: 10px;">
+                                        <p><strong>Description:</strong><br>
+                                            <input type="text" pInputText placeholder="" formControlName="description" style="width: 500px; padding: 8px;height: 100px;" />
                                         </p>
                                     </div>
-                                    <div class="Data">
-                                        <p class="data"><strong>Montant:</strong><br>
-                                            <input type="text" pInputText placeholder="50€" formControlName="montant" />
+                                    <div style="margin-right: 10px;" >
+                                        <p><strong>Montant:</strong><br>
+                                            <input type="text" pInputText placeholder="50€" formControlName="montant" style="width: 500px; padding: 8px;height: 100px;" />
                                         </p>
                                     </div>
-                                    <div class="commission">
-                                        <button class="btnadd" style="background-color:#37BAD4  ; margin-left: 0%; margin-top: 10px;" pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
-                                            type="submit"></button>
+                                    <div class="col-12 text-center" >
+                                        <button pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid" type="submit"></button>
                                     </div>
                                 </form>
                             </div>
+                            
     
                             <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row"
                                 dataKey="_id">
