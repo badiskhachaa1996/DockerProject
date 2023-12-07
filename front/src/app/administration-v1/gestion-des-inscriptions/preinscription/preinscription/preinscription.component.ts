@@ -518,8 +518,12 @@ export class PreinscriptionComponent implements OnInit {
       complete: () => console.log("information de l'utilisateur connecté récuperé")
     });
   }
-  onSelectEcole() {
-    this.FAService.EAgetByParams(this.newLeadForm.value.ecole || this.updateLeadForm.value.type_form).subscribe(data => {
+  onSelectEcole(ecole = null) {
+    if (!ecole && !this.ProspectToUpdate)
+      ecole = this.newLeadForm.value.ecole
+    if (!ecole && this.ProspectToUpdate)
+      ecole = this.updateLeadForm.value.type_form
+    this.FAService.EAgetByParams(ecole).subscribe(data => {
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         let dicFilFr = {}
         let fFrList = []
@@ -822,6 +826,17 @@ export class PreinscriptionComponent implements OnInit {
       procpect.etat_dossier = event
 
     this.admissionService.updateV2(procpect).subscribe(data => console.log(data))
+  }
+  UPDATEProspect(p: Prospect) {
+    if (p.user_id.pays_adresse == 'France')
+      p.source = 'Local'
+    else
+      p.source = 'International'
+    this.admissionService.updateV2(p).subscribe(data => {
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour avec succès' })
+    }, error => {
+      this.ToastService.add({ severity: 'error', summary: 'Mis à jour erroné', detail: error.error })
+    })
   }
   deletePro(prospect: Prospect) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?'))
@@ -1204,37 +1219,7 @@ export class PreinscriptionComponent implements OnInit {
         if (commercial && commercial.user_id)
           this.commercialOwned = commercial
       })
-    //
-    this.FAService.EAgetByParams(prospect.type_form).subscribe(data => {
-      this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
-        this.RENTREE = dataEcoles
-        let dicFilFr = {}
-        let fFrList = []
-        data.formations.forEach(f => {
-          if (dicFilFr[f.filiere]) {
-            dicFilFr[f.filiere].push({ label: f.nom, value: f.nom })
-          } else {
-            dicFilFr[f.filiere] = [{ label: f.nom, value: f.nom }]
-            fFrList.push(f.filiere)
-          }
-        })
-        fFrList.forEach(f => {
-          let ft = f
-          if (f == undefined || f == "undefined")
-            f = "Autre"
-          this.programeFrDropdown.push(
-            { label: f, value: f, items: dicFilFr[ft] }
-          )
-        })
-        dataEcoles.forEach(rentre => {
-          this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
-        })
-      })
-      this.campusDropdown = []
-      data.campus.forEach(c => {
-        this.campusDropdown.push({ label: c, value: c })
-      })
-    })
+    this.onSelectEcole(prospect.type_form)
   }
   initPaiement(prospect: Prospect) {
     this.showPaiement = prospect
@@ -1572,9 +1557,9 @@ export class PreinscriptionComponent implements OnInit {
   }
   handleChange(event) {
     //console.log(event)
-console.log(this.proscteList)
+    console.log(this.proscteList)
     if (this.selectedTabIndex > (3 + this.proscteList.length)) {
-      
+
       let p: Prospect = this.docProspectList[this.selectedTabIndex - (4 + this.proscteList.length)]
       this.initDocument(p)
       //this.onshowDossier(p)
@@ -1876,5 +1861,33 @@ console.log(this.proscteList)
       prospect = r
       this.ToastService.add({ severity: 'success', summary: 'Evaluation supprimé du Lead avec succès' })
     })
+  }
+
+  generateChoixLabel(prospect: Prospect) {
+    let r = ""
+    if (prospect.formation)
+      r = r + prospect.formation + ","
+    if (prospect.campus_choix_1)
+      r = r + prospect.campus_choix_1 + ","
+    if (prospect.type_form)
+      r = r + prospect.type_form
+  }
+  detailsProspects = []
+  onDetails(prospect: Prospect) {
+    let ids = []
+    this.detailsProspects.forEach(p => {
+      ids.push(p._id)
+    })
+
+    if (ids.includes(prospect._id)) {
+      this.selectedTabIndex = 4 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + ids.indexOf(prospect._id)
+    } else {
+      this.detailsProspects.push(prospect)
+      setTimeout(() => {
+        this.selectedTabIndex = 3 + this.proscteList.length + this.docProspectList.length + this.candidatureList.length + this.detailsProspects.length
+      }, 5)
+
+    }
+
   }
 }
