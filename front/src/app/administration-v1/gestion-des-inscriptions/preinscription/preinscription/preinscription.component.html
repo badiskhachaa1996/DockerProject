@@ -676,8 +676,7 @@
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
                                 <td>
-                                    {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
-                                    {{prospect.type_form|titlecase}}
+                                    {{generateChoixLabel(prospect)}}
                                 </td>
                                 <td>
                                     {{prospect?.rythme_formation}}
@@ -690,7 +689,7 @@
                                 </td>
 
 
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="phaseDropdown"
@@ -761,7 +760,7 @@
                         <ng-template pTemplate="emptymessage">
                             <tr>
                                 <td>{{ user.customid }}</td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Prénom"
@@ -775,7 +774,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="date" pInputText placeholder="Date de naissance"
@@ -788,7 +787,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
@@ -802,7 +801,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [(ngModel)]="user.user_id.nationnalite" [options]="nationList"
@@ -817,9 +816,8 @@
 
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
                             </tr>
 
@@ -850,7 +848,7 @@
                                         {{ user.user_id.email}}
                                     </ng-container>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Téléphone"
@@ -861,13 +859,13 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Rue"
-                                                [(value)]="user.user_id.rue_adresse">
+                                                [(ngModel)]="user.user_id.rue_adresse">
                                             <input type="text" pInputText placeholder="Ville"
-                                                [(value)]="user.user_id.ville_adresse">
+                                                [(ngModel)]="user.user_id.ville_adresse">
                                             <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
                                                 placeholder="Pays" optionValue="value" optionLabel="value"
                                                 appendTo="body" emptyFilterMessage="Pas de pays trouvé"
@@ -882,9 +880,8 @@
                                 </td>
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -910,36 +907,52 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.formation">
+                                            <p-dropdown [options]="rentreeList" appendTo="body"
+                                                [(ngModel)]="user.rentree_scolaire"
+                                                placeholder="Choisissez la rentrée scolaire">
+                                            </p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{ user.formation}}
+                                            {{ user.rentree_scolaire}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ user.type_form | titlecase}}
-                                </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Campus"
-                                                [(value)]="user.campus_choix_1">
+                                            <p-dropdown [options]="EcoleListRework" appendTo="body"
+                                                placeholder="Choisissez l'école du lead"
+                                                (onChange)="onSelectEcole(user.type_form)"
+                                                [(ngModel)]="user.type_form"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ user.type_form | titlecase}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="campusDropdown" appendTo="body" optionLabel="value"
+                                                optionValue="value" [(ngModel)]="user.campus_choix_1"
+                                                placeholder="Choisissez un campus">
+                                            </p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.campus_choix_1}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.formation">
+                                            <p-dropdown [options]="programeFrDropdown" appendTo="body"
+                                                placeholder="Choissiez un programme français" [filter]="true"
+                                                [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                                                [(ngModel)]="user.formation"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.formation}}
@@ -949,7 +962,7 @@
                                 <td>
                                     {{ user.groupe}}
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="typeFormationDropdown" optionValue="value"
@@ -964,9 +977,8 @@
                                 </td>
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -990,7 +1002,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Formation"
@@ -1013,9 +1025,8 @@
 
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -1060,9 +1071,9 @@
                                 [ngClass]="{'insc-def':prospect.phase_candidature=='Inscription définitive','non-traite':prospect.phase_candidature=='Non traité','other':(prospect.phase_candidature!='Non traité' && prospect.phase_candidature!='Inscription définitive' )}">
                                 <p>{{prospect.phase_candidature}}</p>
                             </div>
-                            <div class="col-12 grid">
+                            <div class="col-12 grid" style="margin: 0;">
                                 <div class="col-4">
-                                    <p-button label="Admission" icon="pi pi-users" [style]="{'width':'100%'}"
+                                    <p-button label="Dossier" icon="pi pi-users" [style]="{'width':'100%'}"
                                         (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
                                 </div>
                                 <div class="col-4">
@@ -1071,8 +1082,8 @@
                                 </div>
 
                                 <div class="col-4">
-                                    <p-button label="Détail" icon="pi pi-briefcase" [style]="{'width':'100%'}"
-                                        (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
+                                    <p-button label="Détails" icon="pi pi-briefcase" [style]="{'width':'100%'}"
+                                        (click)="onDetails(prospect)" autoWidth="false"></p-button>
                                 </div>
 
                             </div>
@@ -1209,8 +1220,7 @@
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
                                 <td>
-                                    {{prospect.rentree_scolaire}}, {{ prospect.formation}}, {{prospect.campus_choix_1}},
-                                    {{prospect.type_form|titlecase}}
+                                    {{generateChoixLabel(prospect)}}
                                 </td>
                                 <td>
                                     {{prospect.rythme_formation}}
@@ -1221,12 +1231,12 @@
                                 <td>
                                     {{ calculPayement(prospect)}}
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="phaseDropdown"
                                                 [(ngModel)]="prospect.phase_candidature" appendTo="body"
-                                                (onChange)="onSelectEtat(prospect.etat_dossier,prospect)"
+                                                (onChange)="UPDATEProspect(prospect)"
                                                 placeholder="Choisissez une étape"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -1297,7 +1307,7 @@
                         <ng-template pTemplate="emptymessage">
                             <tr>
                                 <td>{{ user.customid }}</td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Prénom"
@@ -1311,7 +1321,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="date" pInputText placeholder="Date de naissance"
@@ -1324,7 +1334,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
@@ -1338,7 +1348,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [(ngModel)]="user.user_id.nationnalite" [options]="nationList"
@@ -1353,9 +1363,8 @@
 
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
                             </tr>
 
@@ -1386,7 +1395,7 @@
                                         {{ user.user_id.email}}
                                     </ng-container>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Téléphone"
@@ -1397,7 +1406,7 @@
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Rue"
@@ -1418,9 +1427,8 @@
                                 </td>
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -1446,36 +1454,52 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.formation">
+                                            <p-dropdown [options]="rentreeList" appendTo="body"
+                                                [(ngModel)]="user.rentree_scolaire"
+                                                placeholder="Choisissez la rentrée scolaire">
+                                            </p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{ user.formation}}
+                                            {{ user.rentree_scolaire}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ user.type_form | titlecase}}
-                                </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Campus"
-                                                [(value)]="user.campus_choix_1">
+                                            <p-dropdown [options]="EcoleListRework" appendTo="body"
+                                                placeholder="Choisissez l'école du lead"
+                                                (onChange)="onSelectEcole(user.type_form)"
+                                                [(ngModel)]="user.type_form"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ user.type_form | titlecase}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="campusDropdown" appendTo="body" optionLabel="value"
+                                                optionValue="value" [(ngModel)]="user.campus_choix_1"
+                                                placeholder="Choisissez un campus">
+                                            </p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.campus_choix_1}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.formation">
+                                            <p-dropdown [options]="programeFrDropdown" appendTo="body"
+                                                placeholder="Choissiez un programme français" [filter]="true"
+                                                [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                                                [(ngModel)]="user.formation"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.formation}}
@@ -1485,12 +1509,12 @@
                                 <td>
                                     {{ user.groupe}}
                                 </td>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <p-dropdown [options]="typeFormationDropdown" optionValue="value"
                                                 optionLabel="value" autoWidth="false" placeholder="Choisissez un rythme"
-                                                [style]="{'width':'100%'}" ppendTo="body"
+                                                [style]="{'width':'100%'}" appendTo="body"
                                                 [(ngModel)]="user.rythme_formation"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -1500,9 +1524,8 @@
                                 </td>
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -1526,7 +1549,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td pEditableColumn>
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
                                             <input type="text" pInputText placeholder="Formation"
@@ -1549,9 +1572,8 @@
 
                                 <td>
                                     <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
-                                        (click)="onSelectEtat(user.etat_dossier,user);"
-                                        pTooltip="Sauvegardez les modification" aria-hidden="true"
-                                        tooltipPosition="bottom"></i>
+                                        (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                                        aria-hidden="true" tooltipPosition="bottom"></i>
                                 </td>
 
                             </tr>
@@ -1596,9 +1618,9 @@
                                 [ngClass]="{'insc-def':prospect.phase_candidature=='Inscription définitive','non-traite':prospect.phase_candidature=='Non traité','other':(prospect.phase_candidature!='Non traité' && prospect.phase_candidature!='Inscription définitive' )}">
                                 <p>{{prospect.phase_candidature}}</p>
                             </div>
-                            <div class="col-12 grid">
+                            <div class="col-12 grid" style="margin: 0;">
                                 <div class="col-4">
-                                    <p-button label="Admission" icon="pi pi-users" [style]="{'width':'100%'}"
+                                    <p-button label="Dossier" icon="pi pi-users" [style]="{'width':'100%'}"
                                         (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
                                 </div>
                                 <div class="col-4">
@@ -1607,8 +1629,8 @@
                                 </div>
 
                                 <div class="col-4">
-                                    <p-button label="Détail" icon="pi pi-briefcase" [style]="{'width':'100%'}"
-                                        (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
+                                    <p-button label="Détails" icon="pi pi-briefcase" [style]="{'width':'100%'}"
+                                        (click)="onDetails(prospect)" autoWidth="false"></p-button>
                                 </div>
 
                             </div>
@@ -1691,12 +1713,12 @@
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>ville:<span style="color:red"> *</span></label>
+                        <label>Ville:<span style="color:red"> *</span></label>
                         <input formControlName="ville" placeholder="ville" pInputText>
                     </div>
                     <div class="field col-12 md:col-6">
 
-                        <label>code postale:<span style="color:red"> *</span></label>
+                        <label>Code postale:<span style="color:red"> *</span></label>
                         <input formControlName="codep" placeholder="code postale" pInputText>
                     </div>
 
@@ -2528,6 +2550,433 @@
             header="CANDIDATURE - {{PROSPECT?.user_id?.firstname}} {{PROSPECT?.user_id?.lastname}}">
             <app-lead-candidature [PROSPECTID]="PROSPECT._id"></app-lead-candidature>
         </p-tabPanel>
+        <p-tabPanel style="width: 100%;" *ngFor="let prospectOnglet of detailsProspects" [closable]="true"
+            header="Détails - {{prospectOnglet?.user_id?.firstname}} {{prospectOnglet?.user_id?.lastname}}">
+            <p-table #dt1 [value]="[prospectOnglet]" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
+            rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 5em"></th>
+                    <th pSortableColumn="id">
+                        ID<p-sortIcon field="id"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nom">
+                        Prénom et Nom<p-sortIcon field="nom"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="choix">
+                        Choix académique <p-sortIcon field="choix"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="rythme">
+                        Rythme <p-sortIcon field="rythme"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="decision">
+                        Décision admission<p-sortIcon field="decision"> </p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="paiement">
+                        Paiement<p-sortIcon field="paiement"> </p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="etape">
+                        Etape<p-sortIcon field="etape"> </p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="date">
+                        Date d'inscription<p-sortIcon field="date">
+                        </p-sortIcon>
+
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-prospect>
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="prospect"
+                            (click)="rowExpand(prospect)"
+                            class="p-button-text p-button-rounded p-button-plain" [icon]="
+                            expanded
+                                ? 'pi pi-chevron-down'
+                                : 'pi pi-chevron-right'
+                        "></button>
+                    </td>
+                    <td>
+                        {{ prospect.customid}}
+                    </td>
+                    <td>
+                        {{ prospect?.user_id?.firstname | titlecase }}
+                        {{ prospect?.user_id?.lastname | uppercase }}
+                    </td>
+                    <td>
+                        {{generateChoixLabel(prospect)}}
+                    </td>
+                    <td>
+                        {{prospect.rythme_formation}}
+                    </td>
+                    <td>
+                        {{ prospect?.niveau}}
+                    </td>
+                    <td>
+                        {{ calculPayement(prospect)}}
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="phaseDropdown"
+                                    [(ngModel)]="prospect.phase_candidature" appendTo="body"
+                                    (onChange)="UPDATEProspect(prospect)"
+                                    placeholder="Choisissez une étape"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{prospect.phase_candidature}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        {{ prospect?.date_creation | date:'dd MMMM yy'}}
+                    </td>
+                    <td>
+                        <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
+                            style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
+                            value="1" pTooltip="Candidature" aria-hidden="true"
+                            (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
+                        <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
+                            style="padding-left: 3%" aria-hidden="true"
+                            (click)="initSendEmail(prospect);scrollToTop()">
+                        </i>
+                        <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
+                            style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
+                            pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect)"
+                            tooltipPosition="bottom"></i>
+
+                        <i style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-euro m-1"
+                            (click)="initPaiement(prospect);scrollToTop()" pTooltip="Paiement"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+
+                        <i pTooltip="Documents administratif" tooltipPosition="bottom"
+                            class="pi pi-file m-1" (click)="AddDocumentOnglet(prospect);"
+                            aria-hidden="true"></i>
+
+                        <i style="padding-left: 3%; " class="pi pi-building m-1" pTooltip="Admission"
+                            (click)="onshowDossier(prospect)" aria-hidden="true"
+                            tooltipPosition="bottom"></i>
+
+                        <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                        " class="pi pi-pencil m-1" (click)="initupdateLeadForm(prospect); scrollToTop()"
+                            pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+
+                        <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
+                            (click)="deletePro(prospect)" pTooltip="Supprimer" aria-hidden="true"
+                            tooltipPosition="bottom"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-user>
+                <tr>
+                    <td colspan="10">
+
+
+                        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                            Détails
+                        </h5>
+                        <p-table responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                <tr>
+
+                    <th>ID</th>
+                    <th>Prénom et Nom </th>
+                    <th>Date de naissance</th>
+                    <th>Pays de résidence</th>
+                    <th>Nationalité</th>
+                    <th>Action</th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>{{ user.customid }}</td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText placeholder="Prénom"
+                                    [(value)]="user.user_id.firstname">
+                                <input type="text" pInputText placeholder="Nom"
+                                    [(value)]="user.user_id.lastname">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user?.user_id?.firstname | titlecase }}
+                                {{ user?.user_id?.lastname | uppercase }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="date" pInputText placeholder="Date de naissance"
+                                    [(value)]="user.date_naissance">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{
+                                user.date_naissance | date:'dd MMMM yy'
+                                }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
+                                    placeholder="Pays" optionValue="value" optionLabel="value"
+                                    appendTo="body" emptyFilterMessage="Pas de pays trouvé"
+                                    filterPlaceholder="Pays" filter="true"
+                                    optionDisabled="actif"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.user_id.pays_adresse}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [(ngModel)]="user.user_id.nationnalite" [options]="nationList"
+                                    emptyFilterMessage="Pas de nationalité trouvé" appendTo="body"
+                                    filterPlaceholder="Nationalité" filter="true"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.user_id.nationnalite}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+
+                    <td>
+                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                    </td>
+                </tr>
+
+
+            </ng-template>
+
+        </p-table>
+        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+            Contact
+        </h5>
+        <p-table responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Adresse mail</th>
+                    <th>Adresse mail école </th>
+                    <th>numéro de téléphone</th>
+                    <th>Adresse</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>
+                        {{ user.user_id.email_perso}}
+                    </td>
+                    <td>
+                        <ng-container *ngIf="user.user_id.email!=user.user_id.email_perso">
+                            {{ user.user_id.email}}
+                        </ng-container>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText placeholder="Téléphone"
+                                    [(value)]="user.user_id.phone">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.user_id.phone}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText placeholder="Rue"
+                                    [(value)]="user.user_id.rue_adresse">
+                                <input type="text" pInputText placeholder="Ville"
+                                    [(value)]="user.user_id.ville_adresse">
+                                <p-dropdown [(ngModel)]="user.user_id.pays_adresse" [options]="paysList"
+                                    placeholder="Pays" optionValue="value" optionLabel="value"
+                                    appendTo="body" emptyFilterMessage="Pas de pays trouvé"
+                                    filterPlaceholder="Pays" filter="true"
+                                    optionDisabled="actif"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.user_id.rue_adresse}} {{user.user_id.ville_adresse}}, {{
+                                user.user_id.pays_adresse}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                    </td>
+
+                </tr>
+
+
+            </ng-template>
+
+        </p-table>
+        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+            Choix académique
+        </h5>
+        <p-table responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Session</th>
+                    <th>Ecole </th>
+                    <th>Campus</th>
+                    <th>Formation</th>
+                    <th>Groupe</th>
+                    <th>Rythme</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="rentreeList" appendTo="body"
+                                    [(ngModel)]="user.rentree_scolaire"
+                                    placeholder="Choisissez la rentrée scolaire">
+                                </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.rentree_scolaire}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="EcoleListRework" appendTo="body"
+                                    placeholder="Choisissez l'école du lead"
+                                    (onChange)="onSelectEcole(user.type_form)"
+                                    [(ngModel)]="user.type_form"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.type_form | titlecase}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="campusDropdown" appendTo="body" optionLabel="value"
+                                    optionValue="value" [(ngModel)]="user.campus_choix_1"
+                                    placeholder="Choisissez un campus">
+                                </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.campus_choix_1}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="programeFrDropdown" appendTo="body"
+                                    placeholder="Choissiez un programme français" [filter]="true"
+                                    [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                                    [(ngModel)]="user.formation"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.formation}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        {{ user.groupe}}
+                    </td>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="typeFormationDropdown" optionValue="value"
+                                    optionLabel="value" autoWidth="false" placeholder="Choisissez un rythme"
+                                    [style]="{'width':'100%'}" appendTo="body"
+                                    [(ngModel)]="user.rythme_formation"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.rythme_formation}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                    </td>
+
+                </tr>
+
+
+            </ng-template>
+
+        </p-table>
+        <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+            Source
+        </h5>
+        <p-table responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Source</th>
+                    <th>Commercial </th>
+                    <th>Adresse mail</th>
+                    <th>Téléphone</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText placeholder="Formation"
+                                    [(value)]="user.source">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ user.source}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        {{ commercialOwned?.user_id?.firstname}} {{ commercialOwned?.user_id?.lastname}}
+                    </td>
+                    <td>
+                        {{ commercialOwned?.user_id?.email}}
+                    </td>
+                    <td>
+                        {{ commercialOwned?.user_id?.indicatif}} {{ commercialOwned?.user_id?.phone}}
+                    </td>
+
+                    <td>
+                        <i style="padding-left: 3%;color: green;" class="pi pi-save m-1"
+                            (click)="UPDATEProspect(user);" pTooltip="Sauvegardez les modification"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                    </td>
+
+                </tr>
+
+
+            </ng-template>
+
+        </p-table>
+        </td>
+        </tr>
+    </ng-template>
+
+    </p-table>
+        </p-tabPanel>
     </p-tabView>
 </div>
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
@@ -2613,7 +3062,7 @@
                     <td>
                         {{paiement?.ID}}
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input type="number" (change)="changeMontant(ri,$event,'montant')"
@@ -2624,7 +3073,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
@@ -2636,7 +3085,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
@@ -2653,7 +3102,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input type="date" pInputText (change)="changeMontant(ri,$event,'date')"
@@ -2730,7 +3179,7 @@
                     <!--<td>
                     {{paiement?.ID}}
                 </td>-->
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input type="number" (change)="changeMontantProgram(ri,$event,'montant')"
@@ -2741,7 +3190,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
@@ -2753,7 +3202,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typeMotif" [(ngModel)]="paiement.motif"
@@ -2770,7 +3219,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input type="date" pInputText (change)="changeMontantProgram(ri,$event,'date')"
@@ -2781,7 +3230,7 @@
                             </ng-template>
                         </p-cellEditor>
                     </td>
-                    <td pEditableColumn>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="typeEtat" [(ngModel)]="paiement.etat"

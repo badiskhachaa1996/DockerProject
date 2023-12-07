@@ -948,7 +948,13 @@ app.put("/updateV2", (req, res, next) => {
                         date_creation: new Date()
                     })
                     hl.save().then(h => { console.log(h) })
-                    res.status(201).send(prospectsFromDb)
+                    if (req.body.user_id)
+                        User.findByIdAndUpdate(req.body.user_id._id, { ...req.body.user_id }).then(userEdited => {
+                            prospectsFromDb.user_id = userEdited
+                            res.status(201).send(prospectsFromDb)
+                        })
+                    else
+                        res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error); });
         })
