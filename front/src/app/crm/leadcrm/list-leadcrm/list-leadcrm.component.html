@@ -54,7 +54,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <p-dropdown [options]="memberList" [(ngModel)]="contact.contact_by"
+                                        <p-dropdown [options]="memberList" [(ngModel)]="contact.contact_by" filter="true"
                                             placeholder="Choisissez un membre"></p-dropdown>
                                     </ng-template>
                                     <ng-template pTemplate="output">
@@ -369,7 +369,7 @@
             <div class="field col-12">
                 <label>Affecter à :</label>
                 <p-dropdown [options]="memberList" formControlName="affected_to_member" autoWidth="false"
-                    [filter]="true" [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
+                   (onChange)="findTeams($event.value)" [filter]="true" [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
             </div>
             <div class="col-12 grid">
                 <div class="md:col-2 md:col-offset-4 col-4 col-offset-4">
@@ -387,49 +387,47 @@
             rowExpandMode="single" responsiveLayout="scroll" styleClass="p-datatable-customers">
             <ng-template pTemplate="caption">
                 <div class="fp-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-4  ">
+                    <div class="field col-12 md:col-3  ">
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="h-auto " style="width:100%" />
                     </div>
-                    <div class="field col-12 md:col-4 ">
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterEquipe" filter="true"
                             (onChange)="dt1.filter($event.value, 'equipe', 'equals');"
                             emptyFilterMessage="Pas de auteur trouvé" filterPlaceholder="Choisissez un auteur"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-1 "></div>
-                    <div class="field col-12 md:col-3 " >
+                   <!-- <div class="field col-12 md:col-3 " >
                         <p style="padding: 5px; border:0px lightgray solid;"> <span style="font-weight: bold;">Leads
                                 selectionnés </span><span style="color:blue;" > {{filteredLeadsCount}}</span></p>
                                 
-                    </div>
-                    <div class="field col-12 md:col-4 ">
+                    </div>-->
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterAuteur" filter="true"
                             (onChange)="dt1.filter($event.value, 'created_by._id', 'equals');"
                             emptyFilterMessage="Pas de auteur trouvé" filterPlaceholder="Choisissez un auteur"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-4 ">
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterPays" filter="true"
                             (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                             emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-4 ">
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterSource" filter="true"
                             (onChange)="dt1.filter($event.value, 'source', 'equals');"
                             emptyFilterMessage="Pas de source trouvé"
                             filterPlaceholder="Choisissez une source"></p-dropdown>
                     </div>
-                </div>
-                <div class="fp-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-4 ">
+               
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterAffecte" filter="true"
                             (onChange)="dt1.filter($event.value, 'affected_to_member._id', 'equals');"
                             emptyFilterMessage="Pas de commercial trouvé"
                             filterPlaceholder="Choisissez un membre"></p-dropdown>
                     </div>
 
-                    <div class="field col-12 md:col-4 ">
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="filterQualification" filter="true"
                             (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
                             emptyFilterMessage="Pas de qualification trouvé"
@@ -438,7 +436,7 @@
 
                     
 
-                    <div class="field col-12 md:col-4 ">
+                    <div class="field col-12 md:col-3 ">
                         <p-dropdown [style]="{'width':'100%'}" [options]="statutDossierList" filter="true"
                             (onChange)="dt1.filter($event.value, 'statut_dossier', 'equals');"
                             emptyFilterMessage="Pas de modalité trouvé"
@@ -532,10 +530,10 @@
                      <td *ngIf="AccessLevel!='Spectateur'">
                         <i pTooltip="Fiche lead" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                        <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-user-plus mr-2"
                             *ngIf="AccessLevel=='Responsable' || AccessLevel=='Super-Admin'"
                             (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Auto-Assignation" tooltipPosition="bottom" class="pi pi-user-plus mr-2"
+                        <i pTooltip="Auto-Assignation" tooltipPosition="bottom" class="pi pi-cog mr-2"
                             *ngIf="token && token.id!=lead?.affected_to_member?._id" (click)="onAutoAffect(lead);"
                             aria-hidden="true"></i>
                         <i class="pi pi-pencil mr-2" (click)="updateLead(lead._id)" pTooltip="Modifier le lead"

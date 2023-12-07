@@ -12,7 +12,8 @@
         <!-- <p>Bien à vous </p> -->
         <div   style="justify-content: end; display: flex; width: 100%;" *ngIf="showUpdateForm ||isNewDemande"><button *ngIf="currentDemande" pButton pRipple  icon="pi pi-times"  style="background-color: transparent; color: gray;"  (click)="cancelForm()"></button>
         </div>
-    <div class="col-12 grid">
+        <!-- <button cdkCopyToClipboard="{{ copy(value) }}">Click to copy</button> -->
+        <div class="col-12 grid">
         <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement">
             <h3 class="col-12" style="text-align: start;"> Etudiant</h3>
             <div class="field col-12 md:col-4">

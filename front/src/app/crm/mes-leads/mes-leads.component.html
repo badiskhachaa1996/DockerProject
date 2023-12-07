@@ -512,6 +512,10 @@
                            pTooltip="Modifier le lead" aria-hidden="true" tooltipPosition="bottom"></i>
                         <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(lead);"
                            pTooltip="Supprimer le lead" aria-hidden="true" tooltipPosition="bottom"></i>
+
+                           <!--button pop up formaulaire pour ajouter une tache à un lead -->
+                          <!-- <p-button label="Ajouter Tâche" (onClick)="showDialog()"></p-button> -->
+                           <i class="pi pi-plus" pTooltip="Ajouter Tâche" (click)="showDialog()" style="margin: 5px;"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -595,4 +599,83 @@
             </ng-template>
         </p-table>
     </div>
+
+
+    <p-dialog header=" Liste des taches " [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
+        <form [formGroup]="Updatetache">
+            <div *ngIf="editingRappelIndex !== null" class="modify-task-message">
+                <p>{{ 'Tache numéro ' + rappels[editingRappelIndex]?.id }}</p>
+              </div>
+            <div class="p-fluid form-inline">
+              <!-- Champ de description -->
+            
+              <div class="p-field flex-grow-1 mr-2">
+                <input id="rappelDescription" type="text" pInputText [(ngModel)]="rappel.description" formControlName="description" placeholder="Description" required>
+              </div>
+              
+              <!-- Champ de date limite -->
+              <div class="p-field mr-2">
+                <input id="rappelDueDate" type="date" pInputText [(ngModel)]="rappel.dueDate"  formControlName="date" required>
+              </div>
+        
+              <!-- Bouton Ajouter / Enregistrer les Modifications -->
+              <div class="p-field">
+                <button *ngIf="editingRappelIndex === null" pButton type="button" label="Ajouter" (click)="addRappel()" style="width: 100px;"></button>
+                <button *ngIf="editingRappelIndex !== null" pButton type="button" label="Enregistrer" (click)="saveRappelChanges()" style="width: 100px;"></button>
+              </div>
+            </div>
+          </form>
+    
+        <!-- Tableau pour afficher les tâches -->
+        <div *ngIf="rappels.length > 0">
+          
+
+
+           <!-- Tableau PrimeNG avec tri sur une seule colonne -->
+           <p-table [value]="rappels" [paginator]="true" [rows]="3" [totalRecords]="rappels.length" sortMode="single" [style]="{'margin-top': '20px'}" class="table-style">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Numéro</th>
+                <th pSortableColumn="description">Description
+                  <p-sortIcon field="description"></p-sortIcon>
+                </th>
+                <th pSortableColumn="dueDate">Date limite
+                  <p-sortIcon field="dueDate"></p-sortIcon>
+                </th>
+                <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
+                  Statut
+                  <p-sortIcon field="statut"></p-sortIcon>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rappel let-i="rowIndex">
+              <tr>
+                <td>{{ rappel.id }}</td>
+                <td>{{ rappel.description }}</td>
+                <td>{{ rappel.dueDate | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
+                  <p-dropdown [options]="avancementList" [(ngModel)]="rappel.decision_avancement"
+  autoWidth="false" (onChange)="onDropdownChange()" class="fixed-dropdown">
+</p-dropdown>
+                </td>
+                <td>
+                  <i class="pi pi-pencil" pTooltip="Modifier Tâche" (click)="editRappel(i)" style="margin: 5px;"></i>
+                  <i class="pi pi-trash" (click)="confirmDelete(i)"></i>
+
+
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          
+
+            
+        </div>
+       
+
+    </p-dialog> 
+    
+    
 </div>

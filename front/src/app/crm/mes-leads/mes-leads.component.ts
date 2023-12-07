@@ -1,7 +1,7 @@
 
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl,  UntypedFormGroup, Validators } from '@angular/forms';
-
+import { Component, EventEmitter, OnInit, Output, ViewChild,Input } from '@angular/core';
+import { FormControl,  FormGroup,  UntypedFormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -14,12 +14,122 @@ import { ActivatedRoute } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from 'jwt-decode';
+import { ConfirmationService } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-mes-leads',
   templateUrl: './mes-leads.component.html',
   styleUrls: ['./mes-leads.component.scss']
 })
 export class MesLeadsComponent implements OnInit {
+  private eventsSubscription: Subscription;
+  @Input() myLead: Observable<LeadCRM>;
+
+
+  // la propriété displayDialog pour contrôler l'affichage du pop-up
+  displayDialog: boolean = false;
+
+
+  // la méthode showDialog() pour activer le pop-up.
+showDialog() {
+  this.displayDialog = true;
+}
+
+
+//une méthode addTask() qui sera appelée lorsque le bouton "Ajouter" du formulaire est cliqué. Cette méthode peut traiter les données du formulaire et les ajouter à un tableau de tâches
+    
+description : string;
+
+rappel: {
+  id: number,
+  dueDate: any,  // Ajustez le type au besoin (par exemple, Date ou string)
+  description: string
+} = {
+  id: 0,
+  dueDate: null,
+  description: ''
+};
+
+
+rappels: Array<{ id: number, dueDate: any, description: string }> = [];
+editingRappelIndex: number | null = null;
+
+  generateNewId(): number {
+    // Generate a random number between 1000 and 9999
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+
+  saveRappelChanges() {
+    if (this.editingRappelIndex !== null) {
+      this.rappels[this.editingRappelIndex] = { ...this.rappel };
+      this.editingRappelIndex = null;
+      this.rappel = { id: 0, dueDate: null, description: '' };
+      this.saveRappels();
+    }
+  }
+
+  addRappel() {
+    if (this.editingRappelIndex !== null) {
+      // Mise à jour d'un rappel existant
+      this.rappels[this.editingRappelIndex] = { ...this.rappel };
+      this.editingRappelIndex = null;
+    } else {
+      // Ajout d'un nouveau rappel avec un ID généré
+      const newId = this.generateNewId();
+      this.rappels.push({ ...this.rappel, id: newId });
+      // Trier les rappels ici si nécessaire
+      this.rappels.sort((a, b) => b.dueDate - a.dueDate);
+    }
+    this.rappel = { id: 0, description: '', dueDate: null }; // Réinitialiser le rappel
+    this.saveRappels(); // Sauvegarder les rappels
+  }
+
+  editRappel(index: number) {
+    this.editingRappelIndex = index;  // Store the index of the rappel being edited
+    this.rappel = this.cloneRappel(this.rappels[index]);  // Clone the rappel for editing
+console.log(this.cloneRappel(this.rappels[index]))
+this.description = this.rappels[index].description
+console.log(this.description)
+this.Updatetache.patchValue({
+  description:this.description
+})
+  }
+  
+
+
+  confirmDelete(rappelIndex: number) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+      this.deleteRappel(rappelIndex);
+    }
+  }
+
+  deleteRappel(index: number) {
+    this.rappels.splice(index, 1);
+    this.saveRappels();
+  }
+
+  saveRappels() {
+    localStorage.setItem('rappels', JSON.stringify(this.rappels));
+  }
+ 
+  private generateUniqueId(): number {
+    // Replace this with your own logic for generating unique IDs
+    return new Date().getTime();
+  }
+
+  private cloneRappel(rappel: any): any {
+    // Ici, nous clonons explicitement chaque propriété pour éviter les erreurs
+    return {
+      id: rappel.id,
+      dueDate: rappel.dueDate,
+      description: rappel.description,
+      // Ajoutez toutes les autres propriétés nécessaires ici
+    };
+  }
+
+
+
   token;
 
   filterPays = [
@@ -52,10 +162,18 @@ export class MesLeadsComponent implements OnInit {
 
   filterQualification = [
     { label: 'Tous les qualifications', value: null },
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
-    { label: 'Non qualifié', value: 'Non qualifié' },
-    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
-    { label: 'Qualifié', value: 'Qualifié' },
+    
+    { label: 'Non traitée', value: 'Non qualifié' },
+    //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'traitée', value: 'Qualifié' },
+  ]
+
+  filterAvancement = [
+    { label: 'Tous les avancements', value: null },
+    
+    { label: 'Non traiée', value: 'Non traiée' },
+    { label: 'En cours ', value: 'en cours' },
+    { label: 'Traitée', value: 'traitée' },
   ]
 
   filterPaiement = [
@@ -82,7 +200,7 @@ export class MesLeadsComponent implements OnInit {
 
   ID = this.route.snapshot.paramMap.get('id');
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+  constructor(private confirmationService: ConfirmationService,private LCS: LeadcrmService,private datePipe: DatePipe, private ToastService: MessageService, private UserService: AuthService, private ServiceServ: ServService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -111,31 +229,55 @@ export class MesLeadsComponent implements OnInit {
       else
         console.error('Pas de service Commercial')
     })
+
+    //taches
+    this.token = jwt_decode(localStorage.getItem('token'));
+     // Charger les tâches sauvegardées
+     this.rappels = JSON.parse(localStorage.getItem('rappels')) || [];
+     
+     this.rappels.reverse();
+     this.eventsSubscription = this.myLead.subscribe((lead) => {
+      this.leads.push(lead)
+    });
+    
   }
+
+
+
 
   //Follow Form
   showFollow: LeadCRM = null
   followForm = new UntypedFormGroup({
     _id: new FormControl('', Validators.required),
+    operation: new FormControl(''),
+    produit: new FormControl(''),
     rythme: new FormControl(''),
     ecole: new FormControl(''),
     formation: new FormControl(''),
     campus: new FormControl(''),
     eduhorizon: new FormControl(''),
     note_choix: new FormControl(''),
-
-    produit: new FormControl(''),
     criteres_qualification: new FormControl(''),
     decision_qualification: new FormControl(''),
+    decision_avancement: new FormControl(''),
+
     note_qualification: new FormControl(''),
   })
-
+Updatetache=new FormGroup({
+  date:new FormControl('',Validators.required),
+  description:new FormControl(''),
+});
 
   @Output() suivreLead = new EventEmitter<LeadCRM>();
 
   initFollow(lead: LeadCRM) {
     this.suivreLead.emit(lead)
   }
+
+  onDropdownChange() {
+    this.saveRappels();
+  }
+
 
   onUpdateFollow() {
     this.LCS.update({ ...this.followForm.value, contacts: this.showFollow.contacts, ventes: this.showFollow.ventes, mailing: this.showFollow.mailing, documents: this.showFollow.documents }).subscribe(data => {
@@ -291,11 +433,21 @@ export class MesLeadsComponent implements OnInit {
   ]
   //En attente de traitement ;Non qualifié, Pré-qualifié, Qualifié
   decisionList = [
-    { label: 'En attente de traitement', value: 'En attente de traitement' },
-    { label: 'Non qualifié', value: 'Non qualifié' },
-    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
-    { label: 'Qualifié', value: 'Qualifié' },
+    
+    { label: 'Non traitée', value: 'Non qualifié' },
+    //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'traitée', value: 'Qualifié' },
   ]
+
+
+  avancementList = [
+    
+    { label: 'Non traiée', value: 'Non traiée' },
+    { label: 'en cours', value: 'en cours' },
+    { label: 'traitée', value: 'traitée' },
+  ]
+  
+
   //Affect Form
   showAffect: LeadCRM = null
   affectForm = new UntypedFormGroup({

@@ -49,7 +49,7 @@ export class MemberCrmComponent implements OnInit {
     this.UserService.getAll().subscribe(users => {
       //Imagine tu dois charger toute la DB .........
       users.forEach(user => {
-        if (user && user.type=="Collaborateur")
+        if (user && user.type==="Collaborateur")
           this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
       })
     })

@@ -231,7 +231,7 @@ import { AdministrationModule } from './administration/administration.module';
 import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
-import { LinksModule } from './links/links.module';
+import { ReadMoreModule } from './other/component/read-more/read-more.module';
 
 @NgModule({
     imports: [
@@ -340,7 +340,7 @@ import { LinksModule } from './links/links.module';
         AgentsModule,
         CommercialModule,
         RhModule,
-
+        ReadMoreModule,
         MsalModule.forRoot(
             new PublicClientApplication({
                 auth: {
@@ -473,7 +473,6 @@ import { LinksModule } from './links/links.module';
         ImatchCandidatComponent,
         EntrepriseListComponent,
         CandidatListComponent,
-        ReadMoreComponent,
         // ======= Remboursement
         ListRemboursementComponent,
         ContactRemboursementComponent,
@@ -491,7 +490,7 @@ import { LinksModule } from './links/links.module';
         LogementComponent,
         GestionLogementComponent,
         BookingV2Component,
-        PauseReadMoreComponent
+        PauseReadMoreComponent,
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -502,13 +501,16 @@ import { LinksModule } from './links/links.module';
         multi: true,
     },
     [CountryService]
-
     ],
+
+
+
+    bootstrap: [AppComponent, MsalRedirectComponent],
+
     exports: [
-        ReadMoreComponent,
         PauseReadMoreComponent
     ],
-    bootstrap: [AppComponent, MsalRedirectComponent]
+
 })
 export class AppModule {
     constructor() {

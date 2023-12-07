@@ -5086,7 +5086,6 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
-                console.log("HIHI")
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
                         this.CandidatureService.getByLead(p?._id).subscribe(c => {
@@ -6073,7 +6072,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Campus',
                                             icon: 'pi pi-map-marker',
-                                            routerLink: ['/campus']
+                                            routerLink: ['/administrations/campus']
                                         },
                                         {
                                             label: 'Formation',

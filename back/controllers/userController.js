@@ -29,6 +29,8 @@ if (process.argv[2]) {
     origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
   } else if (argProd.includes("qa")) {
     origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
+  } else if (argProd.includes("prod2")) {
+    origin = ["https://51.68.215.184", "https://prod2-ims.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",

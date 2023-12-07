@@ -146,10 +146,16 @@ const routes: Routes = [
                 component: DashboardComponent,
                 canActivate: [AuthGuardService],
             },
+
+            {
+                path: 'crm',
+                loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
+                
+
+            },
             {
                 path: 'pedagogie',
                 loadChildren: () => import('./pedagogie/pedagogie.module').then(m => m.PedagogieModule)
-
             },
             {
                 path: 'skillsnet',
@@ -182,7 +188,7 @@ const routes: Routes = [
                 path: 'admin/ajout-de-partenaire',
                 component: ListPartenaireComponent,
                 canActivate: [AuthGuardService],
-            },
+            },  
             {
                 path: 'collaborateur',
                 component: ListCollaborateurComponent,
@@ -199,19 +205,7 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-annee-scolaire',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ecole/:id',
+                path: 'administrations',
                 loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
             {
@@ -220,54 +214,9 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'ajout-ecole',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'campus/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-campus',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'diplomes/:id',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'ajout-diplome',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
-                path: 'groupes',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-            {
                 path: 'new-groupes',
                 component: GroupesComponent,
                 canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ajout-groupe',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
-            },
-
-
-
-
-
-            {
-                path: 'validation-inscrit',
-                loadChildren: () => import('./administration/administration.module').then(m => m.AdministrationModule)
             },
 
             {
@@ -305,20 +254,18 @@ const routes: Routes = [
 
 
 
-            {
-                path: 'ajout-remboursement',
-                component: AddRemboussementComponent,
+           
 
-            }, //Remboursement
-
-            // {
-            //     path: 'list-remboursement',
-            //     component: RemboursementListComponent,
-            //     canActivate: [AuthGuardService],
-            // },
+           
             {
                 path: 'remboursements',
                 component: ListRemboursementComponent,
+                canActivate: [AuthGuardService],
+            },
+              
+            {
+                path: 'ajout-remboursement',
+                component: AddRemboussementComponent,
                 canActivate: [AuthGuardService],
             },
 
@@ -501,10 +448,7 @@ const routes: Routes = [
 
             /* Module CRM */
 
-            {
-                path: 'crm',
-                loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
-            },
+
 
 
 
@@ -663,6 +607,7 @@ const routes: Routes = [
 
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+    
     { path: 'formulaire-remboursement', component: AddRemboursementPublicComponent },
 
 ]

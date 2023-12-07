@@ -111,21 +111,23 @@ export class NewListTicketsComponent implements OnInit {
   sujetDic = {}
   serviceDic = {}
   createurList = []
+  defaultTicketService = []
   updateTicketList(isFirst = false) {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
-      this.tickets = dataM
+
       dataM.forEach(e => {
         e.origin = 'Mine'
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
+      this.tickets = dataM
       this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
         data.forEach(e => {
           e.origin = 'Assigne'
           e.documents_service.forEach(ds => { ds.by = "Agent" })
           e.documents = e.documents.concat(e.documents_service)
         })
-        this.ticketsService = data
+        this.tickets = this.tickets.concat(data)
         console.log(data)
         let service_dic = {};
         this.USER.roles_list.forEach((val) => {
@@ -146,7 +148,7 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            this.ticketsService = this.ticketsService.concat(nonassigne)
+            this.ticketsService = nonassigne
             this.TicketService.getAllAssigneV2(serviceList || []).subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
@@ -169,9 +171,10 @@ export class NewListTicketsComponent implements OnInit {
                 else
                   return 1
               })
-
-              this.defaultTicket = this.ticketsService
-              this.filteredValues = this.ticketsService
+              this.defaultTicket = this.tickets
+              this.defaultTicketService = this.ticketsService
+              this.filteredValues = this.tickets
+              this.filteredValuesService = this.ticketsService
               this.onFilterTicket()
               let tempDate = new Date()
               tempDate.setDate(tempDate.getDate() - 2)
@@ -188,10 +191,11 @@ export class NewListTicketsComponent implements OnInit {
                     let buffer: any = r.localisation
                     site = buffer
                   }
-                  if (site) {
+                  if (site && this.UserServiceDic['Ressources Humaines'] && this.UserServiceDic['Ressources Humaines'] == 'Responsable') {
                     this.selectedSite = site
-                    this.dt1.filter(site, 'site', 'equals')
-                    this.dt2.filter(site, 'site', 'equals')
+                    this.dt1.filter(site, 'site', 'in')
+                    if (this.dt2)
+                      this.dt2.filter(site, 'site', 'in')
                   }
 
                 })
@@ -206,7 +210,7 @@ export class NewListTicketsComponent implements OnInit {
               e.documents_service.forEach(ds => { ds.by = "Agent" })
               e.documents = e.documents.concat(e.documents_service)
             })
-            this.ticketsService.concat(nonassigne)
+            this.ticketsService = nonassigne
             this.TicketService.getAllAssigneAdmin().subscribe(allAssigne => {
               allAssigne.forEach(e => {
                 e.origin = 'Assigne Service'
@@ -227,7 +231,8 @@ export class NewListTicketsComponent implements OnInit {
                 else
                   return 1
               })
-              this.defaultTicket = this.ticketsService
+              this.defaultTicket = this.tickets
+              this.defaultTicketService = this.ticketsService
               this.onFilterTicket()
               if (isFirst) {
                 this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
@@ -238,10 +243,11 @@ export class NewListTicketsComponent implements OnInit {
                     let buffer: any = r.localisation
                     site = buffer
                   }
-                  if (site) {
+                  if (site && this.UserServiceDic['Ressources Humaines'] && this.UserServiceDic['Ressources Humaines'] == 'Responsable') {
                     this.selectedSite = site
                     this.dt1.filter(site, 'site', 'equals')
-                    this.dt2.filter(site, 'site', 'equals')
+                    if (this.dt2)
+                      this.dt2.filter(site, 'site', 'equals')
                   }
 
                 })
@@ -259,11 +265,12 @@ export class NewListTicketsComponent implements OnInit {
     })
 
   }
-  roleAccess = 'Spectateur'
+  roleAccess = ''
   filterBase = []//'En attente de traitement', 'En cours de traitement'
   @ViewChild('dt1', { static: true }) dt1: Table;
   @ViewChild('dt2', { static: true }) dt2: Table;
   hideTicket = true
+  UserServiceDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     if (this.router.url == '/ticketing/mes-tickets-services')
@@ -272,7 +279,7 @@ export class NewListTicketsComponent implements OnInit {
 
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
-      this.isAgent = (r.role != 'user')
+      this.isAgent = (r.role != 'user' && r.type != 'Commercial')
       if (r.haveNewAccess)
         if ((r.type == 'Reponsable' || r.type == 'Collaborateur' || r.type == 'Formateur' || r.type_supp.includes('Collaborateur') || r.type_supp.includes('Reponsable')))
           this.isAgent = true
@@ -284,10 +291,12 @@ export class NewListTicketsComponent implements OnInit {
           if (!service_dic[val.module])
             service_dic[val.module] = val.role
         })
+        this.UserServiceDic = service_dic
         this.roleAccess = 'Admin'
         if (service_dic['Ticketing'])
           this.roleAccess = service_dic['Ticketing']
-      }
+      } else
+        this.roleAccess = "Spectateur"
       this.ticketsOnglets = r.savedTicket
       if (this.TICKETID)
         this.TicketService.getPopulate(this.TICKETID).subscribe(ticket => {
@@ -428,9 +437,18 @@ export class NewListTicketsComponent implements OnInit {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
     let statut = this.TicketForm.value.statut
-    if (this.ticketAssign)
+    let assigne_by = this.ticketUpdate?.assigne_by
+    let agent_id = this.ticketUpdate?.agent_id
+    if (this.ticketAssign) {
       statut = "En cours de traitement"
-    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by: this.token.id }).subscribe(data => {
+      assigne_by = this.token.id
+      agent_id = this.TicketForm.value.agent_id
+      if (!agent_id && this.dropdownMember.length != 0)
+        agent_id = this.dropdownMember[0].value
+    }
+
+
+    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
@@ -619,8 +637,8 @@ export class NewListTicketsComponent implements OnInit {
         this.messageList = messages
       })
     }
-    else if (event.index > 1)
-      this.MessageService.getAllByTicketID(this.ticketsOnglets[event.index - 2]._id).subscribe(messages => {
+    else if (event.index > 2)
+      this.MessageService.getAllByTicketID(this.ticketsOnglets[event.index - 3]._id).subscribe(messages => {
         this.messageList = messages
       })
   }
@@ -667,14 +685,14 @@ export class NewListTicketsComponent implements OnInit {
   defaultTicket = []
   onFilterTicket() {
     this.ticketsService = []
-    /*if (this.filterType.indexOf('Assigne Service') != -1)
+    this.tickets = []
+    if (this.filterType.indexOf('Assigne Service') != -1)
       this.filterType.splice(this.filterType.indexOf('Assigne Service'), 1)
     if (!this.filterType.includes('Non Assigne') && this.filterType.indexOf('Assigne Service') == -1)
       this.filterType.push('Assigne Service')
-    console.log(this.filterType)*/
     this.createurList = []
     let ids = []
-    this.defaultTicket.forEach((t: Ticket) => {
+    this.defaultTicketService.forEach((t: Ticket) => {
       let r = true
       if (this.filterStatutTicket.includes("Urgent")) {
         r = t.priorite
@@ -697,8 +715,35 @@ export class NewListTicketsComponent implements OnInit {
         }
       }
     })
+    this.defaultTicket.forEach((t: Ticket) => {
+      let r = true
+      if (this.filterStatutTicket.includes("Urgent")) {
+        r = t.priorite
+      }
+      if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
+        let tempDate = new Date()
+        tempDate.setDate(tempDate.getDate() - 2)
+        if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
+          r = false
+      }
+      if (this.filterType.includes(t.origin) == false) {
+        r = false
+      }
+
+      if (r) {
+        this.tickets.push(t)
+        if (t.createur_id && !ids.includes(t.createur_id._id)) {
+          ids.push(t.createur_id._id)
+          this.createurList.push({ label: `${t.createur_id.firstname} ${t.createur_id.lastname}`, value: t.createur_id._id })
+        }
+      }
+    })
     setTimeout(() => {
-      this.filteredValues = this.dt2._value
+      this.filteredValues = this.dt1._value
+      if (this.dt2)
+        this.filteredValuesService = this.dt2._value
+      else
+        this.filteredValuesService = this.ticketsService
     }, 5)
 
     this.hideTicket = false
@@ -815,11 +860,17 @@ export class NewListTicketsComponent implements OnInit {
   }
   activeIndex1 = 1
   filteredValues = []
+  filteredValuesService = []
   onAddTicket(e) {
     this.updateTicketList()
   }
-  onFilter(event, dt) {
-    this.filteredValues = event.filteredValue;
+  onFilter(event, dt: Table, id: string) {
+    if (id == "dt1")
+      this.filteredValues = event.filteredValue
+    else if (id == "dt2")
+      this.filteredValuesService = event.filteredValue
+    else
+      console.log(dt, event)
   }
   filiereDropdown: any[] = [];
   showPedagogieFilter() {
@@ -847,5 +898,6 @@ export class NewListTicketsComponent implements OnInit {
     console.log(r)
     return r
   }
+
 }
 

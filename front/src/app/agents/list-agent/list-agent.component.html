@@ -2,7 +2,7 @@
     <h5 class="col-12">Liste des agents</h5><!-- NOUVEAU -->
     <p-table #dt1 [value]="agents" dataKey="_id" responsiveLayout="scroll" class="col-12" rowExpandMode="single"
         [globalFilterFields]="['lastname', 'email', 'firstname', 'site_web']" [rows]="8" [paginator]="true"
-        [totalRecords]="agents.length" styleClass="p-datatable-gridlines">
+        styleClass="p-datatable-gridlines">
         <ng-template pTemplate="caption">
             <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                 placeholder="Recherche" />

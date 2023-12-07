@@ -37,6 +37,10 @@ import { CeoEntrepriseGuard } from "../dev-components/guards/ceo-entreprise.guar
 import { TuteurEntrepriseGuard } from "../dev-components/guards/tuteur-entreprise.guard";
 const routes: Routes = [
     {
+        path: 'etudiants',
+        component: ListEtudiantComponent
+    },
+    {
         path: 'entreprises',
         component: ListEntrepriseComponent,
         canActivate: [AuthGuardService],
@@ -114,9 +118,9 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
     },
 
-    { path: 'pedagogie/emploi-du-temps', component: EmploiDuTempsComponent },
+    { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
     {
-        path: 'pedagogie/emploi-du-temps/:type/:id',
+        path: 'emploi-du-temps/:type/:id',
         component: EmploiDuTempsComponent,
     },
     {
@@ -124,7 +128,7 @@ const routes: Routes = [
         component: EmergementComponent,
         canActivate: [AuthGuardService],
     },
-    ,
+
     {
         path: 'resultat-qs',
         component: ResultatComponent,
@@ -174,11 +178,7 @@ const routes: Routes = [
         component: AddEtudiantComponent,
         canActivate: [AuthGuardService],
     },
-    {
-        path: 'etudiants',
-        component: ListEtudiantComponent,
-        canActivate: [AuthGuardService],
-    },
+
     {
         path: 'etudiants/:code',
         component: ListEtudiantComponent,
@@ -208,7 +208,7 @@ const routes: Routes = [
         path: 'liste-contrats',
         component: ListeContratsComponent,
         canActivate: [TuteurEntrepriseGuard],
-    },
+    }
 ]
 @NgModule({
     imports: [RouterModule.forChild(routes)],

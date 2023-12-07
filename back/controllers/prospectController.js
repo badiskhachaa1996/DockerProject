@@ -53,6 +53,8 @@ if (process.argv[2]) {
         origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
     } else if (argProd.includes("qa")) {
         origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
+    } else if (argProd.includes("prod2")) {
+        origin = ["https://51.68.215.184", "https://prod2-ims.intedgroup.com"];
     } else (
         origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
     )
@@ -946,7 +948,13 @@ app.put("/updateV2", (req, res, next) => {
                         date_creation: new Date()
                     })
                     hl.save().then(h => { console.log(h) })
-                    res.status(201).send(prospectsFromDb)
+                    if (req.body.user_id)
+                        User.findByIdAndUpdate(req.body.user_id._id, { ...req.body.user_id }).then(userEdited => {
+                            prospectsFromDb.user_id = userEdited
+                            res.status(201).send(prospectsFromDb)
+                        })
+                    else
+                        res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error); });
         })

@@ -10,6 +10,7 @@ import { CaptchaModule } from 'primeng/captcha';
 import { FormBuilder, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 
 
@@ -20,6 +21,9 @@ import { MessageService } from 'primeng/api';
 })
 
 export class AddRemboussementComponent implements OnInit {
+
+
+
 
 
 
@@ -38,6 +42,7 @@ export class AddRemboussementComponent implements OnInit {
     private userService: AuthService,
   ) { }
 
+  
 
   docList = [
     {
@@ -242,7 +247,6 @@ export class AddRemboussementComponent implements OnInit {
     }
 
   }
-
 
 
 
@@ -467,5 +471,10 @@ export class AddRemboussementComponent implements OnInit {
       this.docList[index].added_by = u.firstname + ' ' + u.lastname
     })
   }
+  // value = 'http://localhost:4200/#/formulaire-remboursement'
+  // copy(value) {
+  //   return `${value}`;
+  // }
+
 
 }

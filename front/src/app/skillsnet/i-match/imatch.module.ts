@@ -45,6 +45,10 @@ import { SeeCvExterneComponent } from './see-cv-externe/see-cv-externe.component
 import { IMatchComponent } from './i-match.component';
 import { ExterneSkillsnetComponent } from '../externe-skillsnet/externe-skillsnet.component';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ReadMoreModule } from 'src/app/other/component/read-more/read-more.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { SkillsManagementModule } from '../skills-management/skills-management.module';
 @NgModule({
     declarations: [
         CvComponent,
@@ -89,7 +93,11 @@ import { FieldsetModule } from 'primeng/fieldset';
         DataViewModule,
         CheckboxModule,
         StepsModule,
-        FieldsetModule
+        FieldsetModule,
+        ReadMoreModule,
+        InputTextModule,
+        ButtonModule,
+        SkillsManagementModule
     ]
 })
 export class IMatchModule { }
