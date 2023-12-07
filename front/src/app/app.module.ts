@@ -233,7 +233,6 @@ import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
-import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
 
 @NgModule({
     imports: [
@@ -492,7 +491,6 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
         GestionLogementComponent,
         BookingV2Component,
         PauseReadMoreComponent,
-        PrincipaleListComponent,
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
