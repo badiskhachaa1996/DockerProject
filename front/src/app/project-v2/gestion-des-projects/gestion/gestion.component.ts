@@ -21,6 +21,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { ActivatedRoute } from '@angular/router';
+import {Ticket} from "../../../models/Ticket";
 
 @Component({
   selector: 'app-gestion',
@@ -570,14 +571,24 @@ export class GestionComponent implements OnInit {
     if (this.formAddbudget.invalid)
       return; {
     }
+      let documents = []
+      this.uploadedFiles.forEach(element => {
+          documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+      });
     const newBudjet = {
       libelle: this.formAddbudget.get('libelle').value,
       charge: this.formAddbudget.get('charge').value,
       depense: this.formAddbudget.get('depense').value,
-      project_id: this.projectIdForTask,}
-    this.projectService.postBudget(newBudjet);
+        project_id: this.projectIdForTask
+      }
+    this.projectService.postBudget({...newBudjet, documents: documents})
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
-    this.formAddbudget.reset()
+    this.budget =  [...this.budget, newBudjet];
+      // Calcul du budget total
+      this.budgect_depense =  this.budget.reduce((acc, b) => acc + (b.depense || 0), 0);
+      this.budget_charge =  this.budget.reduce((acc, b) => acc + (b.charge || 0), 0);
+      this.uploadedFiles = [];
+      this.formAddbudget.reset()
       this.listeprojets()
 
 
@@ -606,15 +617,14 @@ export class GestionComponent implements OnInit {
     //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
   initialisation_b(budget: Budget) {
       this.currentProject = this.project.find(p => p._id == budget.project_id);
-      console.log(this.currentProject);
       this.displayBudjetDialog = true;
       this.showUpdateBudgetForm = true;
       this.budgetid = budget._id;
       this.formAddbudget = this.formBuilder.group({
-      libelle: budget.libelle,
-      charge: budget.charge,
-      depense: budget.depense
-    });
+          libelle: budget.libelle,
+          charge: budget.charge,
+          depense: budget.depense
+      });
   }
 
     async onUpdatebudget() {
@@ -624,23 +634,22 @@ export class GestionComponent implements OnInit {
                 _id: this.budgetid,
                 libelle: this.formAddbudget.get('libelle').value,
                 charge: this.formAddbudget.get('charge').value,
-                depense: this.formAddbudget.get('depense').value
+                depense: this.formAddbudget.get('depense').value,
+                document : this.uploadedFiles[0].name
             };
 
             await this.projectService.putBudget(updateData);
-
             // Affichage du message de succès
             this.messageService.add({severity: 'success', summary: 'success', detail: 'modification réussie'});
+
+            this.budget =  [...this.budget.filter(b => b._id != this.budgetid), updateData];
 
             // Réinitialisation du formulaire
             this.formAddbudget.reset();
 
-            // Récupération du budget mis à jour
-            const updatedBudget = await this.projectService.getBudgetByIdProject(this.currentProject._id);
-
-            this.budget = updatedBudget;
-            this.budget_charge = updatedBudget.reduce((acc, curr) => acc + (curr.charge || 0), 0);
-            this.budgect_depense = updatedBudget.reduce((acc, curr) => acc + (curr.depense || 0), 0);
+            // Calcul du budget total
+            this.budgect_depense =  this.budget.reduce((acc, b) => acc + (b.depense || 0), 0);
+            this.budget_charge =  this.budget.reduce((acc, b) => acc + (b.charge || 0), 0);
 
             // Mise à jour du projet actuel
             this.currentProject = this.project.find(p => p._id == this.currentProject._id);
@@ -718,7 +727,9 @@ onSelectService() {
   console.log(this.TicketForm.value.service_id)
 }
 onUpload(event: { files: File[] }, fileUpload: FileUpload) {
-  this.uploadedFiles.push(event.files[0])
+    for (let file of event.files) {
+        this.uploadedFiles.push(file);
+    }
   fileUpload.clear()
 }
 
@@ -757,11 +768,13 @@ console.log ("hello");
     onHideUpdateProject (){
         this.showUpdateProjectForm = false;
         this.formAddProject.reset();
+        this.uploadedFiles = [];
     }
 
     onHideAddBudget (){
         this.showAddBudgetForm = false;
         this.formAddbudget.reset();
+        this.uploadedFiles = [];
     }
 
 }

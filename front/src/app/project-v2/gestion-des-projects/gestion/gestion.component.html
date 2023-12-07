@@ -312,11 +312,6 @@
 
 </p-tabView>
 
-
-
-
-
-
 <div *ngIf="showUpdateTacheForm">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
         (click)="showUpdateTacheForm = false; showOtherTextArea = false;"></i>
@@ -424,6 +419,31 @@
             <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
             <input formControlName="depense" pInputText type="number" id="depense">
         </div>
+        <div class="field col-12 ">
+            <label>Pièce Jointe:</label>
+            <div>
+                <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                              chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
+                              [auto]="true">
+                </p-fileUpload>
+            </div>
+
+            <div>
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">
+                        {{ file.name }} - {{ file.size }} bytes
+                        <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
+                           pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
+                                uploadedFiles.splice(
+                                    uploadedFiles.indexOf(file)
+                                )
+                            " aria-hidden="true">
+                        </i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
 
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddbudget.invalid"></button>
@@ -508,6 +528,32 @@
                     <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
                     <input formControlName="depense" pInputText type="number" id="depense">
                 </div>
+
+                <div class="field col-12 ">
+                    <label>Pièce Jointe:</label>
+                    <div>
+                        <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                                      chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
+                                      [auto]="true">
+                        </p-fileUpload>
+                    </div>
+
+                    <div>
+                        <ul *ngIf="uploadedFiles.length">
+                            <li *ngFor="let file of uploadedFiles">
+                                {{ file.name }} - {{ file.size }} bytes
+                                <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
+                                   pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
+                                uploadedFiles.splice(
+                                    uploadedFiles.indexOf(file)
+                                )
+                            " aria-hidden="true">
+                                </i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
 
                 <button pButton pRipple type="submit" class="my-2" label="Modifier" [disabled]="formAddbudget.invalid"></button>
             </form>
