@@ -113,7 +113,163 @@ export class LeadCandidatureComponent implements OnInit {
       <title>IEG | Dossier de candidature</title>
       <meta name="description" content="Dossier de candidature pour IntedGroup">
       <style>
-      <!-- moved css to scss file -->
+      body {
+        background: rgb(204,204,204); 
+        font-family: 'DM Serif Text', serif;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+      }
+      page {
+        background: white;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 0.5cm;
+        box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+      }
+      page[size="A4"] {  
+        width: 21cm;
+        height: 32cm; 
+      }
+      
+      .page-container {
+        height: 100%;
+        width: 100%;
+      }
+      
+      h3 {
+        color: #0a2f41;
+      }
+      .container {
+        padding: 10mm 20mm;
+      }
+      
+      .header {
+        display: flex;
+        align-items: center;
+      }
+      
+      .logo img {
+        width: 150px;
+        display: inline-block;
+      }
+      
+      .header .title {
+        border-left: 0.5mm solid #0a2f41;
+        padding: 3mm 5mm;
+        margin-left: 5mm;
+        display: inline-block;
+      }
+      
+      .header .title h1 {
+        color: #444444;
+        font-weight: 700;
+        margin-top: 0;
+        font-size: 28px;
+        margin-bottom: 0;
+      }
+      
+      .header .title h2 {
+        color: #444444;
+        margin: 0;
+        font-size: 16px;
+      }
+      
+      .coord-candidat {
+        margin-top: 50px;
+      }
+      .coord-candidat h2 {
+        color: white;
+        background-color: #0a2f41;
+        text-align: center;
+        border-radius: 1mm;
+        padding: 5px 0;
+        font-size: 14px;
+        width: 100%;
+      }
+      
+      
+      .coord-candidat .content-coord {
+        border: 0.5mm solid #0a2f41;
+        border-radius: 1mm;
+        padding: 5mm;
+        margin-bottom: 10mm;
+      }
+      
+      .lign-coord {
+        width: 100%;
+      }
+      
+      .title-coord {
+        display: inline-block;
+        color: #0a2f41;
+        width: 60%;
+      }
+      
+      
+      .response-coord {
+        display: inline-block;
+        width: 30%;
+      }
+      
+      p {
+        margin-top: 0;
+      }
+      .last {
+        margin: 0;
+      }
+      
+      .title-coord {
+        font-weight: bold;
+      }
+      
+      .footer-page {
+        position: relative;
+       bottom: -30px;
+      }
+      .footer-page p {
+        font-size: 10px;
+        color: #777777;
+        margin: 0;
+        font-weight: 500;
+        text-align: center;
+      }
+      
+      section h3 {
+        margin-top: 30px;
+      }
+      
+      
+      .section-title {
+        background-color: #eaeaea;
+        border: 1px solid #0a2f41;
+        border-radius: 10px;
+        color: #0a2f41;
+        padding: 20px 0;
+        font-weight: 600;
+        font-size: 20px;
+        text-align: center;
+      }
+      
+      .section-answer {
+        border: 1px solid #444444;
+        border-radius: 1mm;
+        padding: 2mm;
+        min-height: 100px;
+      }
+      
+      .response-short {
+        font-weight: 400;
+        color: black;
+      }
+      
+      
+      
+      @media print {
+        body, page {
+          margin: 0;
+          box-shadow: 0;
+        }
+      }
       </style>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

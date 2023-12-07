@@ -121,6 +121,18 @@ export class SkillsService {
     });
   }
 
+  delete(id: string) {
+    const url = `${this.apiUrl}/delete/${id}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.delete<Competence>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Competence récuperé')
+      });
+    });
+  }
+
   // recuperation de la liste des compétences d'un profile
   getCompetenceByProfil(id: string) {
     const url = `${this.apiUrl}/get-competence-by-profile/${id}`;
