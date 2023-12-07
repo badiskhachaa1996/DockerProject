@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
+
+:host {
+  display: block;
+}
+
+body {
+  background: lightslategrey !important;
+  padding: 0;
+  font-family: "Montserrat", Arial, sans-serif;
+  color: white;
+  margin-bottom: 50px;
+
+}
+
+
+label {
+  font-weight: 400;
+}
+
+
+.legend {
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #515151;
+}
+
+.form-control {
+  font-family: "Montserrat", Arial, sans-serif;
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #7FB7D2;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #d5d8dc;
+  border-radius: 0;
+}
+
+.form-control:focus {
+  outline: 0;
+  border: 1px solid #d5d8dc;
+  border-radius: 5px
+}
+
+
+.form-control::-webkit-input-placeholder {
+  color: #797979;
+}
+
+.form-control:-moz-placeholder {
+  color: #797979;
+}
+
+.form-control::-moz-placeholder {
+  color: #797979;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #797979;
+}
+
+.control-label {
+  font-weight: 400;
+}
+
+.btn {
+  background-color: #2e77ba;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
+  font-family: "Montserrat", Arial, sans-serif;
+  font-weight: 600;
+  box-shadow: 0 0 0 !important;
+  padding: 16px 32px;
+  width: 100%;
+  margin-top: 20px;
+  color: white;
+  background-color: #D95525;
+  outline: 0;
+}
+
+
+.btn:hover, .btn:active, .btn:focus {
+  border: 0 !important;
+  outline: 0 !important;
+  background-color: #2e77ba;
+}

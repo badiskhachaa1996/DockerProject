@@ -1,20 +1,21 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {environment} from "../../../environments/environment";
-import {EcoleAdmission} from "../../models/EcoleAdmission";
-import {RentreeAdmission} from "../../models/RentreeAdmission";
+import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from "@angular/forms";
+import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ContactUsService} from "../../services/contact-us.service";
+import {EcoleAdmission} from "../../models/EcoleAdmission";
+import {RentreeAdmission} from "../../models/RentreeAdmission";
 
 @Component({
-  selector: 'app-contact-us',
-  templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.scss'],
+  selector: 'app-contact-us-medasup',
+  templateUrl: './contact-us-medasup.component.html',
+  styleUrls: ['./contact-us-medasup.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactUsComponent implements OnInit {
+export class ContactUsMedasupComponent implements OnInit {
   hideFormations = false;
+  aFormGroup!: UntypedFormGroup;
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -116,14 +117,20 @@ export class ContactUsComponent implements OnInit {
 
 
   constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
-              private route: ActivatedRoute, private router: Router) {
+              private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
     this.ECOLE = new EcoleAdmission();
     this.RENTREE = new RentreeAdmission();
   }
   ECOLE: EcoleAdmission
   RENTREE: RentreeAdmission
   FormationList: any[] = []
+  siteKey = environment.recaptchaKey
   ngOnInit(): void {
+
+    this.aFormGroup = this.formBuilder.group({
+      recaptcha: ['', Validators.required]
+    });
+
     this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
       console.log(data)
       this.hideFormations = !data;

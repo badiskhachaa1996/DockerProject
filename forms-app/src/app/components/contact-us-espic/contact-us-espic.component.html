@@ -1,0 +1,60 @@
+<div class="grid col-12"
+     style="max-width: 100%;max-height: 100%;padding-left: 1.5rem;margin-top: 3%;margin-bottom: 3%;">
+  <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
+    <div class="field col-12 md:col-6">
+      <label>Nom <span style="color: red;"> * </span></label>
+      <input pInputText formControlName="nom" type="text" placeholder="Ex: Smith" />
+    </div>
+    <div class="field col-12 md:col-6">
+      <label>Prénom <span style="color: red;"> * </span></label>
+      <input pInputText formControlName="prenom" type="text" placeholder="Ex: John" />
+    </div>
+    <div class="field col-12" id="EmailForm">
+      <label>Email <span style="color: red;"> * </span></label>
+      <input pInputText id="lastname" formControlName="email" type="text" placeholder="Ex: email@gmail.com" />
+    </div>
+    <div class="field col-8">
+      <label>Numéro de téléphone</label>
+      <input pInputText id="lastname" formControlName="numero_phone" type="number" placeholder="Ex: 683121415" />
+    </div>
+    <div class="field col-4">
+      <label>WhatsApp</label><br>
+      <p-radioButton name="whatsapp" value="Oui" formControlName="whatsapp" inputId="city1"></p-radioButton>
+      <label for="city1">Oui</label><br>
+      <p-radioButton name="whatsapp" value="Non" formControlName="whatsapp" inputId="city2"></p-radioButton>
+      <label for="city2">Non</label>
+    </div>
+    <div class="field col-12 md:col-6">
+      <label>Niveau d'études</label>
+      <p-dropdown placeholder="Choisissez un niveau" formControlName="dernier_niveau_academique"
+                  [options]="nivDropdown" autoWidth="false" [style]="{'width':'100%'}">
+      </p-dropdown>
+    </div>
+
+    <div class="field col-12 md:col-6" [hidden]="hideFormations">
+      <label>Formation souhaitée</label>
+      <p-dropdown placeholder="Choisissez une formation" formControlName="formation" [options]="FormationList"
+                  autoWidth="false" [style]="{'width':'100%'}">
+      </p-dropdown>
+    </div>
+    <div class="field col-12">
+      <label>Message</label>
+      <textarea rows="5" cols="30" pInputTextarea formControlName="note_choix"></textarea>
+    </div>
+
+
+
+
+
+    <div class="md:col-2  md:col-offset-5 col-4  col-offset-4">
+      <form [formGroup]="aFormGroup">
+        <ngx-recaptcha2 #captchaElem
+                        [siteKey]="siteKey"
+                        formControlName="recaptcha">
+        </ngx-recaptcha2>
+      </form>
+      <button [disabled]="!(aFormGroup) || aFormGroup.invalid"
+              pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
+    </div>
+  </form>
+</div>
