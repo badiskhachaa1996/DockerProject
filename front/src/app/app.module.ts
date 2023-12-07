@@ -230,6 +230,7 @@ import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
+import { LinksModule } from './links/links.module';
 
 @NgModule({
     imports: [
@@ -365,7 +366,7 @@ import { ReadMoreModule } from './other/component/read-more/read-more.module';
                 ]),
             }
         ),
-          LinksModule,
+        LinksModule,
     ],
     declarations: [
         AppComponent,
