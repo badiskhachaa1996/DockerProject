@@ -1,20 +1,18 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {EcoleAdmission} from "../../models/EcoleAdmission";
-import {RentreeAdmission} from "../../models/RentreeAdmission";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ContactUsService} from "../../services/contact-us.service";
+import {EcoleAdmission} from "../../models/EcoleAdmission";
+import {RentreeAdmission} from "../../models/RentreeAdmission";
 
 @Component({
-  selector: 'app-contact-us',
-  templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-contact-us-simple',
+  templateUrl: './contact-us-simple.component.html',
+  styleUrls: ['./contact-us-simple.component.scss']
 })
-export class ContactUsComponent implements OnInit {
-  hideFormations = false;
+export class ContactUsSimpleComponent implements OnInit {
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -74,7 +72,9 @@ export class ContactUsComponent implements OnInit {
     prenom: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
     numero_phone: new FormControl(''),
+    dernier_niveau_academique: new FormControl(''),
     whatsapp: new FormControl("Non"),
+    formation: new FormControl(''),
     note_choix: new FormControl('')
   })
 
@@ -89,7 +89,7 @@ export class ContactUsComponent implements OnInit {
     } else {
       if (this.addForm.value.whatsapp.includes('Oui'))
         numero_whatsapp = this.addForm.value.numero_phone
-      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `External`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
         },
@@ -115,26 +115,8 @@ export class ContactUsComponent implements OnInit {
 
   constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
               private route: ActivatedRoute, private router: Router) {
-    this.ECOLE = new EcoleAdmission();
-    this.RENTREE = new RentreeAdmission();
   }
-  ECOLE: EcoleAdmission
-  RENTREE: RentreeAdmission
-  FormationList: any[] = []
   ngOnInit(): void {
-    this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
-      console.log(data)
-      this.hideFormations = !data;
-      if (!data) return;
-      //this.router.navigate(['/'])
-      this.ECOLE = data
-      data.formations?.forEach(f => {
-        if (f.nom !== undefined) {
-          this.FormationList.push({label: f.nom, value: f.nom})
-        }
-      })
-
-    })
   }
 
 }

@@ -18,6 +18,7 @@ import { ContactUsMedasupComponent } from './components/contact-us-medasup/conta
 import { ContactUsIcbsComponent } from './components/contact-us-icbs/contact-us-icbs.component';
 import { ContactUsIegComponent } from './components/contact-us-ieg/contact-us-ieg.component';
 import {NgxCaptchaModule} from "ngx-captcha";
+import { ContactUsSimpleComponent } from './components/contact-us-simple/contact-us-simple.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {NgxCaptchaModule} from "ngx-captcha";
     ContactUsMedasupComponent,
     ContactUsIcbsComponent,
     ContactUsIegComponent,
+    ContactUsSimpleComponent,
 
   ],
   imports: [
