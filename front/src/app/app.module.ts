@@ -200,7 +200,6 @@ import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-int
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
-import { LinksComponent } from './links/links.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
@@ -232,6 +231,7 @@ import { AdministrationModule } from './administration/administration.module';
 import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
+import { LinksModule } from './links/links.module';
 
 @NgModule({
     imports: [
@@ -367,6 +367,7 @@ import { RhModule } from "./rh/rh.module";
                 ]),
             }
         ),
+          LinksModule,
     ],
     declarations: [
         AppComponent,
@@ -467,7 +468,7 @@ import { RhModule } from "./rh/rh.module";
         GenOutroComponent,
         GendocViewComponent,
         FormulaireFrontComponent,
-        LinksComponent,
+        //LinksComponent,
         ImatchEntrepriseComponent,
         ImatchCandidatComponent,
         EntrepriseListComponent,
