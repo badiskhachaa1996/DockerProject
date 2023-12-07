@@ -27,6 +27,8 @@ import { ToggleButtonModule } from "primeng/togglebutton";
 import { ButtonModule } from "primeng/button";
 import { FullCalendarModule } from "primeng/fullcalendar";
 import { ReadMoreModule } from '../other/component/read-more/read-more.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 
 
@@ -74,7 +76,9 @@ import { ReadMoreModule } from '../other/component/read-more/read-more.module';
         ToggleButtonModule,
         ButtonModule,
         FullCalendarModule,
-        ReadMoreModule
+        ReadMoreModule,
+        InputTextModule,
+        InputTextareaModule
     ]
 })
 export class RhModule { }

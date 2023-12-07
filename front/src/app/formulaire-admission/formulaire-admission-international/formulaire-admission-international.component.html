@@ -153,68 +153,10 @@
                                             chiffres sont acceptés</span>
                                     </div>
                                 </div>
-                                <!--<div class="field col-12 md:col-3">
-                                    <label For="indicatif">Indicatif WhatsApp</label>
-                                    <input pInputText id="indicatif" type="text" placeholder="+33"
-                                        formControlName="indicatif_whatsapp" />
-                                    <div
-                                        *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
-                                        <span style="color: red;" class="error"
-                                            *ngIf="indicatif_whatsapp.errors?.required">* L'indicatif est
-                                            obligatoire</span>
-                                        <span style="color: red;" class="error"
-                                            *ngIf="indicatif_whatsapp.errors?.pattern">*
-                                            Seul les chiffres sont acceptés</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-9">
-                                    <label For="telephone">Numéro WhatsApp </label>
-                                    <input pInputText id="telephone" type="text"
-                                        placeholder="Entrez votre numéro de téléphone"
-                                        formControlName="numero_whatsapp" />
-                                    <div
-                                        *ngIf="numero_whatsapp.invalid && (numero_whatsapp.touched || numero_whatsapp.dirty)">
-                                        <span style="color: red;" class="error"
-                                            *ngIf="numero_whatsapp.errors?.required">*
-                                            Le numéro whatsApp est obligatoire</span>
-                                        <span style="color: red;" class="error"
-                                            *ngIf="numero_whatsapp.errors?.pattern">*
-                                            Seul les chiffres sont acceptés</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-3">
-                                    <label For="indicatif">Indicatif Telegram</label>
-                                    <input pInputText id="indicatif" type="text" placeholder="+33"
-                                        formControlName="indicatif_telegram" />
-                                    <div
-                                        *ngIf="indicatif_telegram.invalid && (indicatif_telegram.touched || indicatif_telegram.dirty)">
-                                        <span style="color: red;" class="error"
-                                            *ngIf="indicatif_telegram.errors?.required">* L'indicatif est
-                                            obligatoire</span>
-                                        <span style="color: red;" class="error"
-                                            *ngIf="indicatif_telegram.errors?.pattern">*
-                                            Seul les chiffres sont acceptés</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-9">
-                                    <label For="telephone">Numéro Telegram </label>
-                                    <input pInputText id="telephone" type="text"
-                                        placeholder="Entrez votre numéro de téléphone"
-                                        formControlName="numero_telegram" />
-                                    <div
-                                        *ngIf="numero_telegram.invalid && (numero_telegram.touched || numero_telegram.dirty)">
-                                        <span style="color: red;" class="error"
-                                            *ngIf="numero_telegram.errors?.required">*
-                                            Le numéro whatsApp est obligatoire</span>
-                                        <span style="color: red;" class="error"
-                                            *ngIf="numero_telegram.errors?.pattern">*
-                                            Seul les chiffres sont acceptés</span>
-                                    </div>
-                                </div>-->
                             </div>
                         </div>
-                        <div>
-                            <button pButton type="button" label="Suivant" style="float: right;"
+                        <div style="text-align: right;">
+                            <button pButton type="button" label="Suivant"
                                 [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null || 
                             pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid || emailExist || numero_telegram.invalid || indicatif_telegram.invalid "
                                 (click)="nextPage();verifEmailInBD()"></button>
@@ -227,8 +169,7 @@
                         <small>Pour mieux évaluer votre candidature, nous avons besoins de connaître votre parcours
                             académique.</small><br>
                     </div>
-                    <div class="card"
-                        [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="card" [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
                                 <div class="field col-12 md:col-5">
@@ -277,19 +218,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <button pButton type="button" label="Précedent" style="float: left;"
-                                (click)="previousPage()"></button>
+                        <div style="text-align: left; width: 50%;">
+                            <button pButton type="button" label="Précedent" (click)="previousPage()"></button>
+                        </div>
+                        <div style="text-align: right; width: 50%;">
                             <button pButton type="button" label="Suivant"
                                 [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid ||languages_en.invalid || languages_fr.invalid  || is_professional_experience.invalid"
-                                style="float: right;" (click)="nextPage()"></button>
+                                (click)="nextPage()"></button>
                         </div>
                     </div>
                 </div>
 
                 <div *ngIf="ActiveIndex==2">
-                    <div class="col-12 card"
-                        [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="col-12 card" [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
 
@@ -364,14 +305,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <!--ormulaireAdmissionComponent_div_27_Template (formulaire-admission.component.html:353:29)-->
-                            <button pButton type=" button" label="Précedent" style="float: left;"
-                                (click)="previousPage()">
-                            </button>
-                            <button pButton type="button" label="Suivant"
-                                [disabled]="formation.invalid || rythme_formation.invalid"
-                                style="float: right;" (click)="nextPage()"></button>
+                        <div style="text-align: left; width: 100%;">
+                            <button pButton type="button" label="Précedent" (click)="previousPage()"></button>
+                            <div style="float: right;">
+                                <button pButton type="button" label="Suivant"
+                                    [disabled]="formation.invalid || rythme_formation.invalid" style="float: right;"
+                                    (click)="nextPage()"></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -465,12 +405,13 @@
                                     la brochure</a>
                             </div>
                         </div>
-                        <div>
-                            <button pButton type="button" label="Précedent" style="float: left;"
-                                (click)="previousPage()"></button>
-                            <button pButton type="button" label="Suivant"
-                                [disabled]="isGarant.invalid || nomGarant.invalid || prenomGarant.invalid"
-                                style="float: right;" (click)="nextPage()"></button>
+                        <div style="text-align: left; width: 100%;">
+                            <button pButton type="button" label="Précedent" (click)="previousPage()"></button>
+                            <div style="float: right;">
+                                <button pButton type="button" label="Suivant"
+                                    [disabled]="isGarant.invalid || nomGarant.invalid || prenomGarant.invalid"
+                                    style="float: right;" (click)="nextPage()"></button>
+                            </div>
                         </div>
                     </p-fieldset>
                 </div>
@@ -531,12 +472,13 @@
                                 </div>
                             </div>
                         </div><br>
-                        <div>
-                            <button pButton type="button" label="Précedent" style="float: left;"
-                                (click)="previousPage()"></button>
-                            <button pButton type="button" label="Suivant"
-                                [disabled]="donneePerso.value==false"
+
+                        <div style="text-align: left; width: 100%;">
+                            <button pButton type="button" label="Précedent" (click)="previousPage()"></button>
+                            <div style="float: right;">
+                                <button pButton type="button" label="Suivant" [disabled]="donneePerso.value==false"
                                 type="submit" style="float: right;"></button>
+                            </div>
                         </div>
                     </div>
                 </div>

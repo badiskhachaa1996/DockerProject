@@ -62,6 +62,12 @@ app.get("/get-competences", (req, res) => {
         .catch((error) => { res.status(500).send(error.message) });
 });
 
+app.delete("/delete/:id", (req, res) => {
+    Competence.findByIdAndRemove(req.params.id)
+        .then((competences) => { res.status(200).send(competences); })
+        .catch((error) => { res.status(500).send(error.message) });
+});
+
 // recuperation d'une competence via son id
 app.get("/get-competence/:id", (req, res) => {
     Competence.findOne({ _id: req.params.id })

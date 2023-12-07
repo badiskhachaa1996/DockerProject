@@ -6,8 +6,8 @@ stages:
 #  - Docker
   - DEV # auto from develop
   - QA # auto from main
-  - PROD2 # manual from main
-  - PROD1 # Current PROD manual from main
+  - PROD2 # auto from main
+  - PROD1 # Current PROD, MANUAL from main
 
 #variables:
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
@@ -64,7 +64,7 @@ install_angular_dependencies_on_dev:
 
 #==========================================================
 
-manual_install_node_dependencies_on_qa:
+install_node_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -79,9 +79,10 @@ manual_install_node_dependencies_on_qa:
   only:
     refs:
       - main
-  when: manual
+    changes:
+      - back/package.json
 
-manual_install_angular_dependencies_on_qa:
+install_angular_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
@@ -96,11 +97,12 @@ manual_install_angular_dependencies_on_qa:
   only:
     refs:
       - main
-  when: manual
+    changes:
+      - front/package.json
 
 #==========================================================
 
-manual_install_node_dependencies_on_prod2:
+install_node_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
@@ -115,9 +117,10 @@ manual_install_node_dependencies_on_prod2:
   only:
     refs:
       - main
-  when: manual
+    changes:
+      - back/package.json
 
-manual_install_angular_dependencies_on_prod2:
+install_angular_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
@@ -132,7 +135,8 @@ manual_install_angular_dependencies_on_prod2:
   only:
     refs:
       - main
-  when: manual
+    changes:
+      - front/package.json
 
 #==========================================================
 
@@ -151,6 +155,8 @@ manual_install_node_dependencies_on_prod1:
   only:
     refs:
       - main
+    changes:
+      - back/package.json
   when: manual
 
 manual_install_angular_dependencies_on_prod1:
@@ -168,6 +174,8 @@ manual_install_angular_dependencies_on_prod1:
   only:
     refs:
       - main
+    changes:
+      - front/package.json
   when: manual
 
 #==========================================================
@@ -244,7 +252,7 @@ build_angular_on_qa:
 
 #==========================================================
 
-manual_build_angular_on_prod2:
+build_angular_on_prod2:
   stage: Build
   tags:
     - prod2-shell
@@ -264,7 +272,6 @@ manual_build_angular_on_prod2:
     paths:
       - front/dist
     expire_in: 1 hour
-  when: manual
 
 #==========================================================
 
@@ -368,7 +375,7 @@ deploy_node_to_dev:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --dev
-   # - pm2 logs index
+    - pm2 logs index
   only:
     - develop
 
@@ -397,16 +404,16 @@ deploy_node_to_qa:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --qa
-   # - pm2 logs index
+    - pm2 logs index
   only:
     - main
 
 #==========================================================
 
-manual_deploy_angular_to_prod2:
+deploy_angular_to_prod2:
   stage: PROD2
   dependencies:
-    - manual_build_angular_on_prod2
+    - build_angular_on_prod2
   tags:
     - prod2-shell
   script:
@@ -414,9 +421,8 @@ manual_deploy_angular_to_prod2:
     - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
-  when: manual
   
-manual_deploy_node_to_prod2:
+deploy_node_to_prod2:
   stage: PROD2
 
   tags:
@@ -427,10 +433,9 @@ manual_deploy_node_to_prod2:
     - npm install
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
-   # - pm2 logs index
+    - pm2 logs index
   only:
     - main
-  when: manual
 
 #==========================================================
 
@@ -456,9 +461,9 @@ manual_deploy_node_to_prod1:
     - cd back
     - ln -s /home/ubuntu/storage storage
     - npm install
-    - pm2 delete index
+    - pm2 delete 0
     - pm2 start index.js --time -- --prod1
-   # - pm2 logs index
+    # - pm2 logs index
   only:
     - main
   when: manual

@@ -14,7 +14,7 @@
 }
 
 .data strong {
-    color: #4a73d9;
+    color:#37BAD4 ;
 }
 
 
@@ -30,12 +30,49 @@ textarea {
 }
 
 a {
-    color: #122d4b;
+    color: #06748a ;
     text-decoration: none;
     cursor: pointer;
 }
 p {
+    width:50%;
     margin-bottom: 10px; /* Adjust the value as needed */
     margin-left: 10px; /* Adjust the value as needed */
+
+}
+.links {
+    display: flex;
+}
+.links p.inline-block {
+    display: inline-block;
+    margin-right: 20px; /* Adjust the margin as needed for spacing */
+}
+.numbers {
+    display: flex;
+}
+.numbers p.inline-block {
+    display: inline-block;
+    margin-right: 20px; /* Adjust the margin as needed for spacing */
+}
+.rest {
+    display: flex;
+}
+.rest p.inline-block {
+    display: inline-block;
+    margin-right: 20px; /* Adjust the margin as needed for spacing */
+}
+.clickable{
+    width: 20px;
+    display: flex;
+    
+}
+.profile{
+    width: 15%;
+}
+.commission{
+    margin-left: 20px;
+}
+.btnadd{
+    margin-left: 200%;
 
 }

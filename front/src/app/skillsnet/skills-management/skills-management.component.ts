@@ -32,7 +32,6 @@ export class SkillsManagementComponent implements OnInit {
   competenceToUpdate: Competence;
   showCompetenceTable: boolean = false;
 
-  loadingProfile: boolean = true;
   loadingCompetence: boolean = true;
 
 
@@ -44,12 +43,12 @@ export class SkillsManagementComponent implements OnInit {
 
     // initialisation du formulaire d'ajout de profiles
     this.formAddProfile = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.maxLength(20)]],
+      libelle: ['', [Validators.required]],
     });
 
     // initialisation du formulaire de mise à jour de profile
     this.formUpdateProfile = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.maxLength(20)]],
+      libelle: ['', [Validators.required]],
     });
 
     // initialisation du formulaire d'ajout de competence
@@ -70,7 +69,6 @@ export class SkillsManagementComponent implements OnInit {
     this.skillsService.getProfiles()
       .then((response: Profile[]) => {
         this.profiles = response;
-        this.loadingProfile = false;
 
         response.forEach((profile: Profile) => {
           this.dropdownProfile.push({ label: profile.libelle, value: profile._id });
@@ -176,5 +174,12 @@ export class SkillsManagementComponent implements OnInit {
         this.messageService.add({ severity: "success", summary: "Compétence modifié" });
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: "error", summary: "Impossible de modifier la compétence" }); });
+  }
+
+  onDeleteSkill(competence: Competence) {
+    if (confirm('Etes-vous sûr de vouloir supprimer ' + competence?.libelle + ' ?'))
+      this.skillsService.delete(competence._id).then(r => {
+        this.competences.splice(this.competences.indexOf(competence), 1)
+      })
   }
 }
