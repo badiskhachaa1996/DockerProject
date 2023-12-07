@@ -471,10 +471,10 @@ export class AddRemboussementComponent implements OnInit {
       this.docList[index].added_by = u.firstname + ' ' + u.lastname
     })
   }
-  value = 'http://localhost:4200/#/formulaire-remboursement'
-  copy(value) {
-    return `${value}`;
-  }
+  // value = 'http://localhost:4200/#/formulaire-remboursement'
+  // copy(value) {
+  //   return `${value}`;
+  // }
 
 
 }

@@ -1,543 +1,602 @@
-
-<!-- File Upload Inputs:
- -->
-<div class="col-12">
-    <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
-        accept=".jpg,.png,.jpeg" style="display: none;" pInputFile />
-</div>
-<div class="col-12">
-    <input type="file" (change)="FileUpload2($event.target.files)" id="selectedFile2" #selectedFile2
-        style="display: none;" pInputFile />
-</div>
-<!--end of  File Upload Inputs -->
-<p-toast></p-toast>
-<div class="grid">
-    <!-- bouton attribuer partenaire yhezna lel Partenaire gérer par :
-  -->
-    <div class="col-12 grid card" *ngIf="managePartenaire">
-        <h4 class="col-12" style="text-align: center;">Partenaire gérer par : </h4>
-        <p-dropdown class="col-12" filter="true" placeholder="Choisissez un membre de l'équipe international"
-            [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}" filter="true"
-            [(ngModel)]="managePartenaire.manage_by._id" (onChange)="onSelectManage($event.value)"
-            emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Phase">
-        </p-dropdown>
-    </div>
-      <!--fin bouton attribuer partenaire yhezna lel Partenaire gérer par :
-  -->
-
-
-  <!-- bouton yhezna lel modifier ce partenaire -->
-    <div class="col-12" *ngIf="showFormModifPartenaire">
-        <div class="card">
-            <h4 style="text-align: center;">Modifier ce partenaire </h4>
-            <div style="text-align: center;">
-                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                        style="color: red;"> * </span> sont obligatoires</small>
-            </div>
-            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="showFormModifPartenaire = false;editInfoCommercial=false;editInfoPartenariat=false"
-                aria-hidden="true"></i>
-
-            <div class="card">
-                <p-fieldset legend="Information Entreprise">
-                    <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoCommercial">
-                        <div class="col-12 md:col-3">
-                            <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
-                                style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
-                                    style="border-radius: 50px;" /></a>
-                        </div>
-                        <div class="col-12 md:col-6 grid">
-                            <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
-                                {{idPartenaireToUpdate?.indicatifPhone}} {{idPartenaireToUpdate?.phone}}</p>
-                            <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
-                                {{idPartenaireToUpdate?.indicatifWhatsapp}} {{idPartenaireToUpdate?.WhatsApp}}
-                            </p>
-                            <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
-                                {{idPartenaireToUpdate?.site_web}}</p>
-                            <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
-                                {{idPartenaireToUpdate?.facebook}}
-                            </p>
-                            <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
-                                {{idPartenaireToUpdate?.Pays}}</p>
-                            <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
-                                {{idPartenaireToUpdate?.Services}}
-                            </p>
-
-                            <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
-                                {{idPartenaireToUpdate?.description}}
-                            </p>
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <p style="cursor: pointer;"><a (click)="initEditCommercialForm()">Modifier les
-                                    informations</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoCommercial">
-                        <form class="col-12 grid" [formGroup]="editInfoCommercialForm">
-                            <div class="col-12 md:col-3">
-                                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
-                                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150"
-                                        height="150" style="border-radius: 50px;" /></a>
-                            </div>
-                            <div class="col-12 md:col-6 grid">
-                                <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
-                                    <input type="text" pInputText placeholder="+33"
-                                        formControlName="indicatifPhone" /><br>
-                                    <input type="text" pInputText placeholder="0612345678" formControlName="phone" />
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
-                                    <input type="text" pInputText placeholder="+33"
-                                        formControlName="indicatifWhatsapp" /><br>
-                                    <input type="text" pInputText placeholder="0612345678" formControlName="WhatsApp" />
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
-                                        formControlName="site_web" />
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
-                                        formControlName="facebook" />
-                                </p>
-                                <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
-                                    <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
-                                        optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
-                                        filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
-                                </p>
-                                <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
-                                    <input type="text" pInputText placeholder="https://www.example.com"
-                                        formControlName="Services" />
-                                </p>
-
-                                <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
-                                    <textarea pInputTextarea formControlName="description" placeholder=""></textarea>
-                                </p>
-                            </div>
-                            <div class="col-12 md:col-3">
-                                <p style="cursor: pointer;"><a (click)="saveEditCommercialInfo()">Enregistrer les
-                                        informations</a></p>
-                            </div>
-                        </form>
-                    </div>
-                </p-fieldset><br>
-                <p-fieldset legend="Information du partenariat">
-                    <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoPartenariat">
-                        <form class="col-12 grid" [formGroup]="editInfoPartenariatForm">
-                            <div class="col-12 md:col-9 grid">
-                                <p class="col-12 md:col-6 text-center"><strong>Ancienneté:</strong><br>
-                                    <p-dropdown formControlName="statut_anciennete" [options]="dropdownAnciennete"
-                                        placeholder="Choisissez un statut d'anciennete"></p-dropdown>
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Contribution:</strong><br>
-                                    <p-dropdown formControlName="contribution" [options]="dropdownContribution"
-                                        placeholder="Choisissez un statut de contribution"></p-dropdown>
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Type Partenaire:</strong><br>
-                                    <p-dropdown formControlName="typePartenaire" [options]="dropdownType"
-                                        placeholder="Choisissez un type"></p-dropdown>
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Groupe WhatsApp:</strong><br>
-                                    <input type="text" pInputText placeholder="" formControlName="groupeWhatsApp" />
-                                </p>
-                                <p class="col-12 md:col-6 text-center"><strong>Localisation:</strong><br>
-                                    <p-dropdown formControlName="localisation" [options]="localisationList"
-                                        placeholder="Choisissez un pays"></p-dropdown>
-                                </p>
-                            </div>
-                            <div class="col-12 md:col-3">
-                                <p style="cursor: pointer;"><a (click)="saveEditPartenariatForm()">Sauvegarder les
-                                        informations</a>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoPartenariat">
-                        <div class="col-12 md:col-9 grid">
-                            <p class="col-12 md:col-4 text-center"><strong>Ancienneté:</strong><br>
-                                {{idPartenaireToUpdate?.statut_anciennete}}</p>
-                            <p class="col-12 md:col-4 text-center"><strong>Contribution:</strong><br>
-                                {{idPartenaireToUpdate?.contribution}}
-                            </p>
-                            <p class="col-12 md:col-4 text-center"><strong>Date d'ajout:</strong><br>
-                                {{idPartenaireToUpdate?.date_creation | date:'dd MMMM yy'}}</p>
-                            <p class="col-12 md:col-4 text-center"><strong>Type de partenaire:</strong><br>
-                                {{idPartenaireToUpdate?.typePartenaire}}</p>
-                            <p class="col-12 md:col-4 text-center"><strong>Groupe WhatsApp:</strong><br>
-                                {{idPartenaireToUpdate?.groupeWhatsApp}}
-                            </p>
-                            <p class="col-12 md:col-4 text-center"><strong>Localisation:</strong><br>
-                                {{idPartenaireToUpdate?.localisation}}
-                            </p>
-
-                        </div>
-                        <div class="col-12 md:col-3">
-                            <p style="cursor: pointer;"><a (click)="initEditPartenariatForm()">Modifier les informations</a>
-                            </p>
-                        </div>
-                    </div>
-                </p-fieldset><br>
-                <p-fieldset legend="Commissions">
-                    <div class="grid">
-                        <div class="col-6 text-center">
-                            <p>
-                                <strong>Etat de Contrat:
-                                    <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
-                                        [(ngModel)]="idPartenaireToUpdate.etat_contrat"
-                                        placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
-                                </strong><br>
-                            </p>
-                            <button pButton class="mr-2" label="Télécharger le contrat" type="button"
-                                [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
-                                (click)="downloadContrat()"></button>
-                            <button pButton label="Ajouter le contrat" (click)="clickFile2()" type="button"></button>
-                        </div>
-                        <div class="col-6">
-                            <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">
-                                <div class="col-12 md:col-6 text-center">
-                                    <p><strong>Description:</strong><br>
-                                        <input type="text" pInputText placeholder="" formControlName="description" />
-                                    </p>
-                                </div>
-                                <div class="col-12 md:col-6 text-center">
-                                    <p><strong>Montant:</strong><br>
-                                        <input type="text" pInputText placeholder="50€" formControlName="montant" />
-                                    </p>
-                                </div>
-                                <div class="col-12 text-center">
-                                    <button pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
-                                        type="submit"></button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row"
-                            dataKey="_id">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>Description</th>
-                                    <th>Montant</th>
-                                    <th>Action</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-co let-editing="editing" let-ri="rowIndex">
-                                <tr [pEditableRow]="co">
-                                    <td>
-                                        <p-cellEditor>
-                                            <ng-template pTemplate="input">
-                                                <input pInputText type="text" [(ngModel)]="co.description">
-                                            </ng-template>
-                                            <ng-template pTemplate="output">
-                                                {{co.description}}
-                                            </ng-template>
-                                        </p-cellEditor>
-                                    </td>
-                                    <td>
-                                        <p-cellEditor>
-                                            <ng-template pTemplate="input">
-                                                <input pInputText type="text" [(ngModel)]="co.montant">
-                                            </ng-template>
-                                            <ng-template pTemplate="output">
-                                                {{co.montant}}
-                                            </ng-template>
-                                        </p-cellEditor>
-                                    </td>
-                                    <td>
-                                        <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
-                                            class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
-                                        <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
-                                            type="button" pInitEditableRow class="pi pi-pencil"
-                                            (click)="onRowEditInit(co)"></i>
-                                        <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
-                                            *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
-                                            (click)="onRowEditSave(co)"></i>
-                                        <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
-                                            type="button" pCancelEditableRow class="pi pi-times"
-                                            (click)="onRowEditCancel(co, ri)"></i>
-
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-
-                </p-fieldset>
-            </div>
+<p-tabView [(activeIndex)]="activeIndex1"  (onClose)="handleClose($event)">
+    <p-tabPanel header="Liste">
+        <div class="col-12">
+            <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
+                accept=".jpg,.png,.jpeg" style="display: none;" pInputFile />
         </div>
-    </div>
-      <!-- fin de bouton yhezna lel modifier ce partenaire -->
-
-
-    <div class="col-12">
-        <div class="card">
-            <!-- bouton d'ajout "d'insertion" -->
-            <div style="float: right" *ngIf="AccessLevel!='Spectateur'">
-                <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
+        <div class="col-12">
+            <input type="file" (change)="FileUpload2($event.target.files)" id="selectedFile2" #selectedFile2
+                style="display: none;" pInputFile />
+        </div>
+        <p-toast></p-toast>
+        <div class="grid">
+            <div class="meun">
+                <ul></ul>
             </div>
-
-
-
-            <!-- la liste partenaire -->
-            <h5>Liste des partenaires</h5>
-            <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="8" [rowHover]="true"
-                [totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5" [expandedRowKeys]="expandedRows"
-                rowExpandMode="single"
-                [globalFilterFields]="['nom','email','site','ville','Pays','etat_contrat','contribution','statut_anciennete','user_id.lastname','user_id.firstname']"
-                responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines" [(selection)]="selectedInsert">
-
-
-                <ng-template pTemplate="caption">
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" />
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAnciennete" filter="true"
-                        placeholder="Ancienneté" (onChange)="dt1.filter($event.value, 'statut_anciennete', 'equals');"
-                        emptyFilterMessage="Pas de statut d'ancienneté trouvé"
-                        filterPlaceholder="Statut d'ancienneté"></p-dropdown>
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterContribution" filter="true"
-                        placeholder="Contribution" (onChange)="dt1.filter($event.value, 'contribution', 'equals'); "
-                        emptyFilterMessage="Pas de contribution trouvé" filterPlaceholder="Contribution"></p-dropdown>
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterEtat" filter="true"
-                        placeholder="Etat de Contrat" (onChange)="dt1.filter($event.value, 'etat_contrat', 'equals');"
-                        emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Etat de Contrat"></p-dropdown>
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true" placeholder="Pays"
-                        (onChange)="dt1.filter($event.value, 'localisation', 'equals');"
-                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"></p-dropdown>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 5rem"></th>
        
-                        
-                        <!-- <th pSortableColumn="date_creation" style="text-align: center;"> Date d'inscription <p-sortIcon
-                                field="date_creation">
-                            </p-sortIcon>
-                        </th> -->
-                        <!-- <th pSortableColumn="code_partenaire" style="text-align: center;"> ID <p-sortIcon
-                                field="code_partenaire">
-                            </p-sortIcon>
-                        </th> -->
-                        <th pSortableColumn="typePartenaire" style="text-align: center;">Partenaire <p-sortIcon
-                            field="typePartenaire">
-                        </p-sortIcon>
-                    </th>
-                       
-                        <th pSortableColumn="typePartenaire" style="text-align: center;">Type  <p-sortIcon
-                            field="typePartenaire">
-                        </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="Services" style="text-align: center;">Activité  <p-sortIcon
-                        field="Services">
-                    </p-sortIcon>
-                </th>
-                        <th pSortableColumn="user_id" style="text-align: center;"> Représentant  <p-sortIcon
-                                field="user_id">
-                            </p-sortIcon>
-                        </th>
-                        <th pSortableColumn="manage_by.user_id.firstname" style="text-align: center;">Localisation:
-                            <p-sortIcon field="manage_by.user_id.firstname">
-                            </p-sortIcon>
-                        </th>
-                       
-                    <th pSortableColumn="manage_by.user_id.firstname" style="text-align: center;">Gérer par:
-                        <p-sortIcon field="manage_by.user_id.firstname">
-                        </p-sortIcon>
-                    </th>
+            <div  class="col-12 grid card" *ngIf="managePartenaire">
+                <h4 class="col-12" style="text-align: center;">Partenaire gérer par : </h4>
+                <p-dropdown class="col-12" filter="true" placeholder="Choisissez un membre de l'équipe international"
+                    [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}" filter="true"
+                    [(ngModel)]="managePartenaire.manage_by._id" (onChange)="onSelectManage($event.value)"
+                    emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Phase">
+                </p-dropdown>
+            </div>
+         
+        
+        
+            <div class="col-12">
+                <div class="card">
+                    <!-- bouton d'ajout "d'insertion" -->
                   
-                       
-                        <th style="text-align: center;" *ngIf="AccessLevel!='Spectateur'">Action</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
-                    
-                    <tr>
-                        <td style="width: 5rem;">
-                            <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                          </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.nom}}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.type}}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.Services}}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.user_id?.civilite}} {{ rowData?.user_id?.firstname}}  {{ rowData?.user_id?.lastname}}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.localisation}}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            {{ rowData?.manage_by?.user_id?.firstname}} {{ rowData?.manage_by?.user_id?.lastname}}
-                        </td>
-                      
+        
+        
+                    <!-- la liste partenaire -->
+                    <h5>Liste des partenaires</h5>
+                    <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="8" [rowHover]="true"
+                        [totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5" [expandedRowKeys]="expandedRows"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['nom','email','site','ville','Pays','etat_contrat','contribution','statut_anciennete','user_id.lastname','user_id.firstname']"
+                        responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines" [(selection)]="selectedInsert">
+        
+        
+                        <ng-template pTemplate="caption">
+                            <div style="display: flex; align-items: center;">
+                                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Recherche" style="margin-right: 5px; width: auto; height: 42px; margin-bottom: 1px;" />
                         
-                       
-                        <td style="min-width: 10rem;" *ngIf="AccessLevel!='Spectateur'">
+                                <p-dropdown [style]="{'margin':'5px'}" [options]="filterAnciennete" filter="true"
+                                    placeholder="Ancienneté" (onChange)="dt1.filter($event.value, 'statut_anciennete', 'equals');"
+                                    emptyFilterMessage="Pas de statut d'ancienneté trouvé"
+                                    filterPlaceholder="Statut d'ancienneté"></p-dropdown>
+                        
+                                <p-dropdown [style]="{'margin':'5px'}" [options]="filterContribution" filter="true"
+                                    placeholder="Contribution" (onChange)="dt1.filter($event.value, 'contribution', 'equals'); "
+                                    emptyFilterMessage="Pas de contribution trouvé" filterPlaceholder="Contribution"></p-dropdown>
+                        
+                                <p-dropdown [style]="{'margin':'5px'}" [options]="filterEtat" filter="true"
+                                    placeholder="Etat de Contrat" (onChange)="dt1.filter($event.value, 'etat_contrat', 'equals');"
+                                    emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Etat de Contrat"></p-dropdown>
+                        
+                                <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true" placeholder="Pays"
+                                    (onChange)="dt1.filter($event.value, 'localisation', 'equals');"
+                                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"></p-dropdown>
+                            </div>
+                        </ng-template>
+                        
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 5rem"></th>
+               
+                                
+                                <!-- <th pSortableColumn="date_creation" style="text-align: center;"> Date d'inscription <p-sortIcon
+                                        field="date_creation">
+                                    </p-sortIcon>
+                                </th> -->
+                                <!-- <th pSortableColumn="code_partenaire" style="text-align: center;"> ID <p-sortIcon
+                                        field="code_partenaire">
+                                    </p-sortIcon>
+                                </th> -->
+                                <th pSortableColumn="typePartenaire" style="text-align: center;">Partenaire <p-sortIcon
+                                    field="typePartenaire">
+                                </p-sortIcon>
+                            </th>
+                               
+                                <th pSortableColumn="typePartenaire" style="text-align: center;">Type  <p-sortIcon
+                                    field="typePartenaire">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="Services" style="text-align: center;">Activité  <p-sortIcon
+                                field="Services">
+                            </p-sortIcon>
+                        </th>
+                                <th pSortableColumn="user_id" style="text-align: center;"> Représentant  <p-sortIcon
+                                        field="user_id">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="manage_by.user_id.firstname" style="text-align: center;">Localisation:
+                                    <p-sortIcon field="manage_by.user_id.firstname">
+                                    </p-sortIcon>
+                                </th>
+                               
+                            <th pSortableColumn="manage_by.user_id.firstname" style="text-align: center;">Gérer par:
+                                <p-sortIcon field="manage_by.user_id.firstname">
+                                </p-sortIcon>
+                            </th>
                           
-                            <i pTooltip="Gestion de partenaire" tooltipPosition="bottom" class="pi pi-pencil"
-                                style="margin-left: 7px" aria-hidden="true"
-                                (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData);scrollToTop()"></i>
-                            <i pTooltip="Attribuer le partenaire" tooltipPosition="bottom" class="pi pi-user-plus"
-                                style="margin-left: 7px" aria-hidden="true"
-                                (click)="initManage(rowData);scrollToTop()"></i>
-                            <i pTooltip="Afficher la liste des leads" tooltipPosition="bottom" class="pi pi-envelope"
-                                (click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i pTooltip="Afficher la liste des alternants" tooltipPosition="bottom"
-                                class="pi pi-briefcase" (click)="seeAlternants(rowData)" aria-hidden="true"
-                                style="margin-left: 7px"></i>
-                            <i pTooltip="Afficher la liste des commercials" tooltipPosition="bottom"
-                                style="margin-left: 7px" class="pi pi-sitemap" (click)="seeUnderPartenaire(rowData)"
-                                aria-hidden="true"></i>
-                            <i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
-                                (click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"
-                                *ngIf="canDelete"></i>
-                        </td>
-                    </tr>
-                    </ng-template>
-                   
-        <!--  -->
-
-        <!--  -->
-        <!--  -->
-
-                <ng-template pTemplate="rowexpansion" let-rowData>
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="p-3">
-                                <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
-                                    styleClass="p-datatable-gridlines">
-                                    <ng-template pTemplate="header">
-                                        <h5>Contact et adresse :</h5>
-                                          <tr>
-                                            <th>Email </th>
-                                            <th>Téléphone</th>
-                                            <th>WhatsApp</th>
-                                            <th>Facebook </th>
-                                            <th>Site web</th>
-                                            <th>Adresse </th>
-                    </tr>
-                    </ng-template>
-    
-                    <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td  style="min-width: 12rem;">{{rowData?.email}}</td>
-                        <td  style="min-width: 12rem;">({{ rowData?.indicatifPhone}}) {{rowData?.phone }}</td>
-                        <td  style="min-width: 12rem;">({{ rowData?.indicatifWhatsapp}}) {{rowData?.WhatsApp}}</td>
-                        <td  style="min-width: 12rem;">{{rowData?.facebook}}</td>
-                        <td  style="min-width: 12rem;">{{rowData?.site_web}}</td>
-                        <td  style="min-width: 12rem;"> {{rowData?.code_postale_ent}} - {{rowData?.ville_ent}} - {{rowData?.adresse_ent}} </td>
-                    </tr>
-                    </ng-template>
-                    </p-table>
-                    </div>
-                    </td>
-                    </tr>
-
-                        <tr>
-                            <td colspan="7">
-                                <div class="p-3">
-                                    <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
-                                        styleClass="p-datatable-gridlines">
-                                        <ng-template pTemplate="header">
-                                            <h5>Historique </h5>
-                        <tr>
-                            <th>Créé le</th>
-                            <th> Créé par</th>
-                            <th> Dernière connexion </th>
+                               
+                                <th style="text-align: center;" *ngIf="AccessLevel!='Spectateur'">Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                             
-                        </tr>
-                    </ng-template>
-                
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td>{{rowData?.date_creation | date:'dd-MM-yyyy'}}</td>
-                            <td> {{ rowData?.created_by?.firstname}} {{ rowData?.created_by?.lastname}}</td>
-                            
-                        </tr>
-                    </ng-template>
-                </p-table>
-                </div>
-                </td>
-                </tr>
-
-<!--  -->
-<!--  -->
-<!--  -->
-
+                            <tr>
+                                <td style="width: 5rem;">
+                                    <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                  </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.nom}}
+                                </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.type}}
+                                </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.Services}}
+                                </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.user_id?.civilite}} {{ rowData?.user_id?.firstname}}  {{ rowData?.user_id?.lastname}}
+                                </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.localisation}}
+                                </td>
+                                <td style="min-width: 14rem;">
+                                    {{ rowData?.manage_by?.user_id?.firstname}} {{ rowData?.manage_by?.user_id?.lastname}}
+                                </td>
+                              
+                                
+                               
+                                <td style="min-width: 10rem;" *ngIf="AccessLevel!='Spectateur'">
+                                  
+                                    <i pTooltip="Gestion de partenaire" tooltipPosition="bottom" class="pi pi-pencil"
+                                        style="margin-left: 7px"  
+                                        (click)=" showFormModifyPartenaire(rowData) ;  idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData);"></i>
+                                    <i pTooltip="Attribuer le partenaire" tooltipPosition="bottom" class="pi pi-user-plus"
+                                        style="margin-left: 7px" aria-hidden="true"
+                                        (click)="initManage(rowData);scrollToTop()"></i>
+                                    <i pTooltip="Afficher la liste des leads" tooltipPosition="bottom" class="pi pi-envelope"
+                                        (click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+                                    <i pTooltip="Afficher la liste des alternants" tooltipPosition="bottom"
+                                        class="pi pi-briefcase" (click)="seeAlternants(rowData)" aria-hidden="true"
+                                        style="margin-left: 7px"></i>
+                                    <i pTooltip="Afficher la liste des commercials" tooltipPosition="bottom"
+                                        style="margin-left: 7px" class="pi pi-sitemap" (click)="seeUnderPartenaire(rowData)"
+                                        aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
+                                        (click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"
+                                        *ngIf="canDelete"></i>
+                                </td>
+                            </tr>
+                            </ng-template>
+                           
+                <!--  -->
+        
+                <!--  -->
+                <!--  -->
+        
+                        <ng-template pTemplate="rowexpansion" let-rowData>
+        
                             <tr>
                                 <td colspan="7">
                                     <div class="p-3">
                                         <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
                                             styleClass="p-datatable-gridlines">
                                             <ng-template pTemplate="header">
-                                                <h5>Détails partenariat  </h5>
-                                                <tr>
-                                                    <th>Pays d'activité  </th>
-                                                    <th>Ancienneté</th>
-                                                
-                                                    <th>Contribution</th>
-                                                    <th> Etat contrat </th>
-                                                    <th>Groupe WhatsApp</th>
+                                                <h5>Contact et adresse :</h5>
+                                                  <tr>
+                                                    <th>Email </th>
+                                                    <th>Téléphone</th>
+                                                    <th>WhatsApp</th>
+                                                    <th>Facebook </th>
+                                                    <th>Site web</th>
+                                                    <th>Adresse </th>
                             </tr>
                             </ng-template>
-
+            
                             <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td>{{rowData.Pays}}</td>
-                                <td>{{rowData.statut_anciennete}}</td>
-                                <td>{{rowData.contribution}}</td>
-                                <td>{{rowData.etat_contrat}}</td>
-                                <td>{{rowData.groupeWhatsApp}}</td>
+                                <td  style="min-width: 12rem;">{{rowData?.email}}</td>
+                                <td  style="min-width: 12rem;">({{ rowData?.indicatifPhone}}) {{rowData?.phone }}</td>
+                                <td  style="min-width: 12rem;">({{ rowData?.indicatifWhatsapp}}) {{rowData?.WhatsApp}}</td>
+                                <td  style="min-width: 12rem;">{{rowData?.facebook}}</td>
+                                <td  style="min-width: 12rem;">{{rowData?.site_web}}</td>
+                                <td  style="min-width: 12rem;"> {{rowData?.adresse_ent}}  - {{rowData?.code_postale_ent}} - {{rowData?.ville_ent}}</td>
                             </tr>
                             </ng-template>
                             </p-table>
                             </div>
                             </td>
                             </tr>
-
-
-
-
-
-                    <tr>
-                        <td colspan="7">
-                            <div class="p-3">
-                                <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
-                                    styleClass="p-datatable-gridlines">
-                                    <ng-template pTemplate="header">
-                                        <h5>Mention légale </h5>
-                    <tr>
-                        <th>Type</th>
-                        <th>Format juridique</th>
-                        <th>TVA</th>
-                        <th>SIREN</th>
-                        <th>SIRET</th>
-                        <th>Code APE</th>
-                        <th>Service proposés</th>
-                        <th>Pays d'activité</th>
-                    </tr>
+        
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="p-3">
+                                            <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
+                                                styleClass="p-datatable-gridlines">
+                                                <ng-template pTemplate="header">
+                                                    <h5>Historique </h5>
+                                <tr>
+                                    <th>Créé le</th>
+                                    <th> Créé par</th>
+                                    <th> Dernière connexion </th>
+                                    
+                                </tr>
+                            </ng-template>
+                        
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td>{{rowData?.date_creation | date:'dd-MM-yyyy'}}</td>
+                                    <td> {{ rowData?.created_by?.firstname}} {{ rowData?.created_by?.lastname}}</td>
+                                    
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        </div>
+                        </td>
+                        </tr>
+        
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="p-3">
+                                                <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
+                                                    styleClass="p-datatable-gridlines">
+                                                    <ng-template pTemplate="header">
+                                                        <h5>Détails partenariat  </h5>
+                                                        <tr>
+                                                            <th>Pays d'activité  </th>
+                                                            <th>Ancienneté</th>
+                                                        
+                                                            <th>Contribution</th>
+                                                            <th> Etat contrat </th>
+                                                            <th>Groupe WhatsApp</th>
+                                    </tr>
+                                    </ng-template>
+        
+                                    <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td>{{rowData.Pays}}</td>
+                                        <td>{{rowData.statut_anciennete}}</td>
+                                        <td>{{rowData.contribution}}</td>
+                                        <td>{{rowData.etat_contrat}}</td>
+                                        <td>{{rowData.groupeWhatsApp}}</td>
+                                    </tr>
+                                    </ng-template>
+                                    </p-table>
+                                    </div>
+                                    </td>
+                                    </tr>
+        
+        
+        
+        
+        
+                            <tr>
+                                <td colspan="7">
+                                    <div class="p-3">
+                                        <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
+                                            styleClass="p-datatable-gridlines">
+                                            <ng-template pTemplate="header">
+                                                <h5>Mention légale </h5>
+                            <tr>
+                                <th>Type</th>
+                                <th>Format juridique</th>
+                                <th>TVA</th>
+                                <th>SIREN</th>
+                                <th>SIRET</th>
+                                <th>Code APE</th>
+                                <th>Service proposés</th>
+                                <th>Pays d'activité</th>
+                            </tr>
+                        </ng-template>
+                       
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{rowData.type}}</td>
+                                <td>{{rowData.format_juridique}}</td>
+                                <td>{{rowData.number_TVA}}</td>
+                                <td>{{rowData.SIREN}}</td>
+                                <td>{{rowData.SIRET}}</td>
+                                <td>{{rowData.APE}}</td>
+                                <td>{{rowData.Services}}</td>
+                                <td>{{rowData.Pays}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                </td>
+                </tr>
                 </ng-template>
-               
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{rowData.type}}</td>
-                        <td>{{rowData.format_juridique}}</td>
-                        <td>{{rowData.number_TVA}}</td>
-                        <td>{{rowData.SIREN}}</td>
-                        <td>{{rowData.SIRET}}</td>
-                        <td>{{rowData.APE}}</td>
-                        <td>{{rowData.Services}}</td>
-                        <td>{{rowData.Pays}}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
+                </p-table>
+            </div>
         </div>
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
-    </div>
-</div>
-</div>
+        </div>
+        
+    </p-tabPanel>
+    <p-tabPanel header="Ajouter">
+      <app-partenaire-inscription></app-partenaire-inscription>
+    </p-tabPanel>
+   
+    <p-tabPanel header=" Nom du partenaire "  [closable]="true">
+        <div class="col-12"  *ngIf="showFormModifPartenaire">
+            <div class="card">
+                
+               
+    
+                <div class="card">
+                    <p-fieldset legend="Information Entreprise">
+                        <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoCommercial">
+                            <div class="profile">
+                                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
+                                        style="border-radius: 50px;" /></a>
+                            </div>
+                            <div class="Data">
+                                <div class="numbers">
+                                <p class="data" ><strong>Téléphone:</strong><br>
+                                    {{idPartenaireToUpdate?.indicatifPhone}} {{idPartenaireToUpdate?.phone}}</p>
+                                
+                                <p class="data"><strong>WhatsApp:</strong><br>
+                                    {{idPartenaireToUpdate?.indicatifWhatsapp}} {{idPartenaireToUpdate?.WhatsApp}}
+                                </p>
+                            </div>
+                            <div class="links">
+                                <p class="data"><strong>Site Web:</strong><br>
+                                    {{idPartenaireToUpdate?.site_web}}</p>
+                               
+                              
+                                <p class="data"><strong>Facebook:</strong><br>
+                                    {{idPartenaireToUpdate?.facebook}}
+                                </p>
+                            </div>
+                            <div class="rest">
+                                <p class="data"><strong>Pays:</strong><br>
+                                    {{idPartenaireToUpdate?.Pays}}</p>
+                             
+                              
+                                <p class="data"><strong>Services:</strong><br>
+                                    {{idPartenaireToUpdate?.Services}}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="data"><strong>Description:</strong><br>
+                                    {{idPartenaireToUpdate?.description}}
+                                </p>
+                            </div>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <p  style="cursor: pointer;"><a (click)="initEditCommercialForm()"><i class="pi pi-pencil mr-2 clickable-element"></i></a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoCommercial">
+                            <form class="col-12 grid" [formGroup]="editInfoCommercialForm">
+                                <div class="col-12 md:col-3">
+                                    <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                                        style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150"
+                                            height="150" style="border-radius: 50px;" /></a>
+                                </div>
+                                <div class="col-12 md:col-6 grid">
+                                    <p class="data"><strong>Téléphone:</strong><br>
+                                        <input class="myInput" type="text" pInputText placeholder="+33"
+                                            formControlName="indicatifPhone" /><br>
+                                        <input type="text" pInputText placeholder="0612345678" formControlName="phone" />
+                                    </p>
+                                    <p class="data"><strong>WhatsApp:</strong><br>
+                                        <input class="myInput" type="text" pInputText placeholder="+33"
+                                            formControlName="indicatifWhatsapp" /><br>
+                                        <input class="myInput" type="text" pInputText placeholder="0612345678" formControlName="WhatsApp" />
+                                    </p>
+                                    <p class="data"><strong>Site Web:</strong><br>
+                                        <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
+                                            formControlName="site_web" />
+                                    </p>
+                                    <p class="data"><strong>Facebook:</strong><br>
+                                        <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
+                                            formControlName="facebook" />
+                                    </p>
+                                    <p class="data"><strong>Pays:</strong><br>
+                                        <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
+                                            optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                            filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
+                                    </p>
+                                    <p class="data"><strong>Services:</strong><br>
+                                        <input class="myInput" type="text" pInputText placeholder="https://www.example.com"
+                                            formControlName="Services" />
+                                    </p>
+    
+                                    <p class="data"><strong>Description:</strong><br>
+                                        <textarea  pInputTextarea formControlName="description" placeholder=""></textarea>
+                                    </p>
+                                </div>
+                                <div class="col-12 md:col-3">
+                                    <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded" (click)="saveEditCommercialInfo()"></button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </p-fieldset><br>
+                    <p-fieldset legend="Information du partenariat">
+                        <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoPartenariat">
+                            <form class="col-12 grid" [formGroup]="editInfoPartenariatForm">
+                                <div class="Data">
+                                    <p class="data"><strong>Ancienneté:</strong><br>
+                                        <p-dropdown formControlName="statut_anciennete" [options]="dropdownAnciennete"
+                                            placeholder="Choisissez un statut d'anciennete"></p-dropdown>
+                                    </p>
+                                    <p class="data"><strong>Contribution:</strong><br>
+                                        <p-dropdown formControlName="contribution" [options]="dropdownContribution"
+                                            placeholder="Choisissez un statut de contribution"></p-dropdown>
+                                    </p>
+                                    <p class="data"><strong>Type Partenaire:</strong><br>
+                                        <p-dropdown formControlName="typePartenaire" [options]="dropdownType"
+                                            placeholder="Choisissez un type"></p-dropdown>
+                                    </p>
+                                    <p class="data"><strong>Groupe WhatsApp:</strong><br>
+                                        <input type="text" pInputText placeholder="" formControlName="groupeWhatsApp" />
+                                    </p>
+                                    <p class="data"><strong>Localisation:</strong><br>
+                                        <p-dropdown formControlName="localisation" [options]="localisationList"
+                                            placeholder="Choisissez un pays"></p-dropdown>
+                                    </p>
+                                </div>
+                                <div class="col-12 md:col-3">
+                                    <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded" (click)="saveEditPartenariatForm()"></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoPartenariat">
+                            <div class="Data">
+                                <div class="numbers">
+                                <p class="data"><strong>Ancienneté:</strong><br>
+                                    {{idPartenaireToUpdate?.statut_anciennete}}</p>
+                                <p class="data"><strong>Contribution:</strong><br>
+                                    {{idPartenaireToUpdate?.contribution}}
+                                </p>
+                            </div>
+                            <div class="links">
+                                <p class="data"><strong>Date d'ajout:</strong><br>
+                                    {{idPartenaireToUpdate?.date_creation | date:'dd MMMM yy'}}</p>
+                                <p class="data"><strong>Type de partenaire:</strong><br>
+                                    {{idPartenaireToUpdate?.typePartenaire}}</p>
+                                </div>
+                                <div class="rest">
+                                <p class="data"><strong>Groupe WhatsApp:</strong><br>
+                                    {{idPartenaireToUpdate?.groupeWhatsApp}}
+                                </p>
+                                <p class="data"><strong>Localisation:</strong><br>
+                                    {{idPartenaireToUpdate?.localisation}}
+                                </p>
+                            </div>
+    
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <p style="cursor: pointer;"><a (click)="initEditPartenariatForm()"><i class="pi pi-pencil mr-2 clickable-element"></i></a>
+                                </p>
+                            </div>
+                        </div>
+                    </p-fieldset><br>
+                    <p-fieldset legend="Commissions">
+                        <div class="grid">
+                            <div class="Data">
+                                <p class="data">
+                                    <strong>Etat de Contrat:
+                                        <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
+                                            [(ngModel)]="idPartenaireToUpdate.etat_contrat"
+                                            placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
+                                    </strong><br>41
+                                </p>
+                                <div class="clickable">
+                                <button
+                                        pTooltip="Télécharger le contrat"
+                                        style="
+                                            background-color: #37BAD4;
+                                            color: #fff;
+                                            padding: 10px 20px;
+                                            border: none;
+                                            border-radius: 5px;
+                                            cursor: pointer;
+                                            font-size: 14px;
+                                            transition: background-color 0.3s ease;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                             margin-right: 10px; 
+                                        "
+                                        [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
+                                        (click)="downloadContrat()"
+                                    >
+                                        <i class="pi pi-arrow-down" style="margin-right: 5px;"></i> 
+                                    </button>
+
+                                    <button
+                                    pTooltip="Télécharger le contrat"
+                                    style="
+                                        background-color: #37BAD4;
+                                        color: #fff;
+                                        padding: 10px 20px;
+                                        border: none;
+                                        border-radius: 5px;
+                                        cursor: pointer;
+                                        font-size: 14px;
+                                        transition: background-color 0.3s ease;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    "
+                                    [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
+                                    (click)="clickFile2()" >
+                                    <i class="pi pi-plus" style="margin-right: 5px;"></i> 
+                                </button>
+
+                            </div>
+                            </div>
+                            <div class="col-6">
+                                <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">
+                                    <div class="Data">
+                                        <p class="data"><strong>Description:</strong><br>
+                                            <input type="text" pInputText placeholder="" formControlName="description" />
+                                        </p>
+                                    </div>
+                                    <div class="Data">
+                                        <p class="data"><strong>Montant:</strong><br>
+                                            <input type="text" pInputText placeholder="50€" formControlName="montant" />
+                                        </p>
+                                    </div>
+                                    <div class="commission">
+                                        <button class="btnadd" style="background-color:#37BAD4  ; margin-left: 0%; margin-top: 10px;" pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
+                                            type="submit"></button>
+                                    </div>
+                                </form>
+                            </div>
+    
+                            <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row"
+                                dataKey="_id">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Montant</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-co let-editing="editing" let-ri="rowIndex">
+                                    <tr [pEditableRow]="co">
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input pInputText type="text" [(ngModel)]="co.description">
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{co.description}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td>
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input pInputText type="text" [(ngModel)]="co.montant">
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{co.montant}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td>
+                                            <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
+                                                class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
+                                            <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
+                                                type="button" pInitEditableRow class="pi pi-pencil"
+                                                (click)="onRowEditInit(co)"></i>
+                                            <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
+                                                *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
+                                                (click)="onRowEditSave(co)"></i>
+                                            <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
+                                                type="button" pCancelEditableRow class="pi pi-times"
+                                                (click)="onRowEditCancel(co, ri)"></i>
+    
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+    
+                    </p-fieldset>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+
+
