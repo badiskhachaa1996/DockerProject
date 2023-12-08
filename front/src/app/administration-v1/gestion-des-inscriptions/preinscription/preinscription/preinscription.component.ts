@@ -154,6 +154,29 @@ export class PreinscriptionComponent implements OnInit {
     { value: "Inscription définitive", label: "Inscription définitive" },
     { value: "Recours", label: "Recours" },
   ]
+  etapeDropdownLoc = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription - Inscription définitive", label: "Pré-inscription - Inscription définitive" },
+
+  ]
+  filterEtapeLoc = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownLoc
+  ]
+
+  etapeDropdownInt = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Orientation", label: "Orientation" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription", label: "Pré-inscription" },
+    { value: "Visa", label: "Visa" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+  ]
+  filterEtapeInt = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownInt
+  ]
 
   phaseDropdown = [
     { value: 'Non traité', label: "Non traité" },
@@ -1896,6 +1919,7 @@ export class PreinscriptionComponent implements OnInit {
       r = r + prospect.campus_choix_1 + ","
     if (prospect.type_form)
       r = r + prospect.type_form
+    return r
   }
   detailsProspects = []
 

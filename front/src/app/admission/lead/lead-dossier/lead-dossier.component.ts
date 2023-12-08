@@ -24,11 +24,9 @@ export class LeadDossierComponent implements OnInit {
   ngOnInit(): void {
     if (!this.ID)
       this.ID = this.PROSPECT_ID
-    console.log(this.ID,this.PROSPECT_ID)
     if (this.ID)
       this.ProspectService.getPopulate(this.ID).subscribe(data => {
         this.PROSPECT = data
-        console.log(this.PROSPECT)
         this.checkIfDossierComplet()
         if (!this.PROSPECT.etat_dossier)
           this.PROSPECT.etat_dossier = "En attente"
@@ -46,7 +44,7 @@ export class LeadDossierComponent implements OnInit {
     })
   }
   docToUpload: { date: Date, nom: string, path: string, _id: string }
-  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFileLeadDossier") {
     if (!this.docToUpload) {
       this.docToUpload = doc
       document.getElementById(id).click();
@@ -58,6 +56,7 @@ export class LeadDossierComponent implements OnInit {
 
   uploadFile(event: File[]) {
     let formData = new FormData()
+    console.log(this.PROSPECT)
     formData.append('id', this.PROSPECT._id);
     formData.append('document', `${this.docToUpload.nom}`);
     formData.append('file', event[0]);
