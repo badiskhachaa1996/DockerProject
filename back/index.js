@@ -25,11 +25,11 @@ if (process.argv[2]) {
   if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod1") && !argProd.includes("prod2")) {
     dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
-    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com"];
+    origin = ["https://141.94.71.25", "https://dev-ims.intedgroup.com", "https://dev-formss.intedgroup.com"];
   } else if (argProd.includes("qa")) {
-    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com"];
+    origin = ["https://152.228.219.55", "https://qa-ims.intedgroup.com", "https://qa-forms.intedgroup.com"];
   } else if (argProd.includes("prod2")) {
-    origin = ["https://51.68.215.184", "https://prod2-ims.intedgroup.com"];
+    origin = ["https://51.68.215.184", "https://prod2-ims.intedgroup.com", "https://prod2-forms.intedgroup.com"];
   } else
     origin = [
       "https://ims.estya.com",
@@ -42,6 +42,7 @@ if (process.argv[2]) {
       "https://login.eduhorizons.com",
       "https://ims.adgeducation.com",
       "https://ims.intedgroup.com",
+      "https://forms.intedgroup.com",
       "https://t.dev.estya.com",
       "https://wio.fr/",
       "https://studinfo.com"

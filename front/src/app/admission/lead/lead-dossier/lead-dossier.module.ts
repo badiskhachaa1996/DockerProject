@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { LeadDossierComponent } from './lead-dossier.component';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { LeadDossierComponent } from './lead-dossier.component';
         SelectButtonModule,
         ButtonModule,
         InputTextModule,
-        TooltipModule
+        TooltipModule,
+        CheckboxModule
     ]
 })
 export class LeadDossierModule { }
