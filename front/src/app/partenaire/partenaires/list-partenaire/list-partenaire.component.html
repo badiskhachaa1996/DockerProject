@@ -506,28 +506,25 @@
 
                                                 <div class="container" style="display: flex; flex-direction: row; align-items: center; ">
                                                     <form class="" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()" style="display: flex; flex-direction: row; align-items: center;">
-                                                        <div style="margin-right: 10px; margin-top: 20px;
-                                                        color: #495057;
-                                                        border: 1px solid #ced4da;
-                                                        padding: 15px;
-                                                        border-radius: 8px;
+                                                        <div style="margin-right: 10px; margin-top: 30px;
+                                                      
+                                                     
+                                                     
                                                         background-color: #f8f9fa; ">
                                                             <p><strong>Description:</strong><br>
-                                                                <input type="text" pInputText placeholder="" formControlName="description" style="width: 500px; padding: 8px;height: 100px;" />
+                                                                <input type="text" pInputText placeholder="" formControlName="description"  style="width: auto; padding: 8px;height: 42px;" />
                                                             </p>
                                                         </div>
-                                                        <div style="margin-right: 10px; margin-top: 20px;
-                                                        color: #495057;
-                                                        border: 1px solid #ced4da;
-                                                        padding: 15px;
-                                                        border-radius: 8px;
+                                                        <div style="margin-right: 10px; margin-top: 30px;
+                                                      
+                                                      
                                                         background-color: #f8f9fa;" >
                                                             <p><strong>Montant:</strong><br>
-                                                                <input type="text" pInputText placeholder="50€" formControlName="montant" style="width: 500px; padding: 8px;height: 100px;" />
+                                                                <input type="text" pInputText placeholder="50€" formControlName="montant" style="width: auto; padding: 2px;height: 42px;" />
                                                             </p>
                                                         </div>
                                                         <div class="col-12 text-center" >
-                                                            <button style="margin-right:80%;" pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid" type="submit"></button>
+                                                            <button style="margin-right:80%;margin-top:5%;" pButton label="Ajouter " [disabled]="ajoutCommission.invalid" type="submit"></button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -564,20 +561,26 @@
                                                                     </ng-template>
                                                                 </p-cellEditor>
                                                             </td>
-                                                            <td>
+                                                            <td >
                                                                 <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
-                                                                    class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
+                                                                class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
+                                                                <span style="margin-right: 10px;"></span>
+
                                                                 <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
                                                                     type="button" pInitEditableRow class="pi pi-pencil"
                                                                     (click)="onRowEditInit(co)"></i>
+                                                                    <span style="margin-right: 10px;"></span>
+
                                                                 <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
                                                                     *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
                                                                     (click)="onRowEditSave(co)"></i>
+                                                                    <span style="margin-right: 10px;"></span>
+
                                                                 <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
                                                                     type="button" pCancelEditableRow class="pi pi-times"
                                                                     (click)="onRowEditCancel(co, ri)"></i>
                         
-                                                            </td>
+                                                            </td> 
                                                         </tr>
                                                     </ng-template>
                                                 </p-table>
