@@ -285,7 +285,8 @@ const routes: Routes = [
             /**informations */
             //{ path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
-            { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
+            //{ path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
+            { path: 'Links', loadChildren: () => import('./links/links.module').then(m => m.LinksModule)  },
 
 
             //{ path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },

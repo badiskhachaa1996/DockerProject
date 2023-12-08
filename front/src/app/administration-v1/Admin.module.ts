@@ -31,6 +31,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { LeadDossierModule } from '../admission/lead/lead-dossier/lead-dossier.module';
 import { LeadDossierComponent } from '../admission/lead/lead-dossier/lead-dossier.component';
 import { InputTextarea, InputTextareaModule } from 'primeng/inputtextarea';
+import { ChipsModule } from 'primeng/chips';
+import { EditorModule } from 'primeng/editor';
+import { LeadCandidatureModule } from '../admission/lead/lead-candidature/lead-candidature.module';
+import { TagModule } from 'primeng/tag';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
     declarations: [
@@ -74,7 +79,12 @@ import { InputTextarea, InputTextareaModule } from 'primeng/inputtextarea';
         ButtonModule,
         InputTextModule,
         LeadDossierModule,
-        InputTextareaModule
+        InputTextareaModule,
+        ChipsModule,
+        EditorModule,
+        LeadCandidatureModule,
+        TagModule,
+        BadgeModule
     ]
 })
 export class AdminModule { }

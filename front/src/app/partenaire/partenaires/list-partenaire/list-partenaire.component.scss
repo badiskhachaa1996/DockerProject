@@ -62,7 +62,7 @@ p {
     margin-right: 20px; /* Adjust the margin as needed for spacing */
 }
 .clickable{
-    width: 20px;
+    width: 1px;
     display: flex;
     
 }
@@ -72,7 +72,12 @@ p {
 .commission{
     margin-left: 20px;
 }
-.btnadd{
-    margin-left: 200%;
+.inside{
+    display: flex; align-items: center; gap: 40px; 
+}
+.things{
+    display: flex; 
+    align-items: center;
+    gap: 10px;
 
 }
