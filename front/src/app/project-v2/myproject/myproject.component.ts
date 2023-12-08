@@ -106,7 +106,7 @@ export class MyprojectComponent implements OnInit {
     this.formAddConsigne = this.formBuilder.group({
       consigne: [''],
     })
-    //recuperation des info 
+    //recuperation des info
     this.getallinformation();
     this.ticketList=[];
   }
@@ -170,7 +170,7 @@ export class MyprojectComponent implements OnInit {
       })
   };
 
-  //envoi du forulaire creation de project 
+  //envoi du forulaire creation de project
   findProject() {
     if (this.formFindProject.invalid) {
       // Vérifier si le formulaire est invalide, si oui, ne rien faire
@@ -189,7 +189,7 @@ export class MyprojectComponent implements OnInit {
             this.task = datatache;
             console.log(this.task);
             this.task.forEach(t => {
-              if(t?.task_id?.project_id?._id===project_id[0]){                
+              if(t?.task_id?.project_id?._id===project_id[0]){
               if (t.statut == "Traité") {
                 t.avancement = 100
                 this.projectService.putTask(t);
@@ -197,7 +197,7 @@ export class MyprojectComponent implements OnInit {
               if (collaborateur_id) {
               if (t.agent_id?._id==collaborateur_id) {
                 if (t.statut === "En attente de traitement") {
-                  
+
                   this.tasktodo.push(t);
                   console.log(this.tasktodo);
                 }
@@ -229,9 +229,9 @@ export class MyprojectComponent implements OnInit {
           })
       });
     this.showproject = true
-    
+
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'PROJET TROUVER' })
-    
+
 
   }
   showDialogd(task:Ticket) {
@@ -242,9 +242,9 @@ export class MyprojectComponent implements OnInit {
     this.visible = true;
     this.actual_task=task;
     this.task_consignes=task.consignes;
-   
-    
-  
+
+
+
   }
 
   save(severity: string, task: any) {
@@ -267,7 +267,7 @@ export class MyprojectComponent implements OnInit {
     }
     if (this.tasktoupdate) {
       this.tasktoupdate.statut = "En attente de traitement";
-     
+
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
@@ -302,7 +302,7 @@ export class MyprojectComponent implements OnInit {
     }
     if (this.tasktoupdate) {
       this.tasktoupdate.statut = "En cour de traitement";
-   
+
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
@@ -330,7 +330,7 @@ export class MyprojectComponent implements OnInit {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
-   
+
     if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
@@ -368,10 +368,10 @@ export class MyprojectComponent implements OnInit {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
-   
+
     if (this.tasktoupdate) {
       this.tasktoupdate.statut = "archiver";
-     
+
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
@@ -411,13 +411,13 @@ export class MyprojectComponent implements OnInit {
   getColorForStatus(statut: string): string {
     switch (statut) {
       case 'En attente de traitement':
-        return 'orange'; 
+        return 'orange';
       case 'En cours de traitement':
         return 'green';
       case 'fin de traitement':
-        return 'gray'; 
+        return 'gray';
       default:
-        return 'black'; 
+        return 'black';
     }
   }
   addConsigne(task: Ticket){
@@ -449,7 +449,7 @@ export class MyprojectComponent implements OnInit {
     );;
   }
   this.formAddConsigne.reset();
-  this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })                    
+  this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
 }
   initialisation_c(c,rir){
     this.formAddConsigne=this.formBuilder.group({
@@ -481,7 +481,7 @@ export class MyprojectComponent implements OnInit {
   getColorForValidation(validation){
     switch (validation) {
       case 'La activité n’est pas validée':
-        return 'red'; 
+        return 'red';
     default: return'green';
 
   }}

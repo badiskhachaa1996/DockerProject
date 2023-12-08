@@ -176,8 +176,7 @@ app.delete("/delete-ressources/:id", (req, res, next) => {
 
 // create new Budget
 app.post("/post-budget", (req, res, next) => {
-    const budget = new Budget({ ...req.body });
-
+   const budget = new Budget({ ...req.body, documents: req.body.documents});
     budget.save()
     .then((budgetCreated) => { res.status(201).json({ budget: budgetCreated, success: 'Budget créée' }); })
     .catch((error) => { console.error(error); res.status(500).send({ error: 'Impossible de créer un neveaux budget' }); });
@@ -200,9 +199,9 @@ app.get("/get-budget/:id", (req, res, next) => {
 
 // update budget        
 app.put("/put-budget", (req, res, next) => {
-    const budget = new Budget({ ...req.body });
 
-    Budget.updateOne({ _id: budget._id }, { ...req.body })
+    const budget = new Budget({ ...req.body, documents: req.body.documents});
+    Budget.updateOne({ _id: budget._id }, { ...req.body, document: req.files.documents})
     .then((budgetUpdated) => { res.status(201).json({ budget: budgetUpdated, success: 'budget mis à jour' }); })
     .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour ce  budget' }); });
 });
