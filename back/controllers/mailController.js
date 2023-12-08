@@ -282,12 +282,12 @@ app.post('/sendPerso', (req, res) => {
                 html,
                 attachments
             };
-            console.log(mailOptions)
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.error(error);
-                }
-                res.send(mailOptions)
+                    res.status(500).send(error)
+                } else
+                    res.send(mailOptions)
             });
         }
 

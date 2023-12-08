@@ -441,14 +441,16 @@ export class AddRemboussementComponent implements OnInit {
     }
 
 
-    getDocOwner(index, id) {
-        this.userService.getPopulate(id).subscribe(u => {
-            this.docList[index].added_by = u.firstname + ' ' + u.lastname
-        })
-    }
-    value = 'http://localhost:4200/#/formulaire-remboursement'
-    copy(value) {
-        return `${value}`;
-    }
+
+
+  getDocOwner(index, id) {
+    this.userService.getPopulate(id).subscribe(u => {
+      this.docList[index].added_by = u.firstname + ' ' + u.lastname
+    })
+  }
+  value = 'http://localhost:4200/#/formulaire-remboursement'
+  copy(value) {
+    return `${value}`;
+  }
 
 }

@@ -35,6 +35,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { Fieldset, FieldsetModule } from 'primeng/fieldset';
+import { SkillsManagementModule } from './skills-management/skills-management.module';
 @NgModule({
     declarations: [
         AnnonceViewerComponent,
@@ -47,7 +48,6 @@ import { Fieldset, FieldsetModule } from 'primeng/fieldset';
         MesOffresComponent,
         MesRendezVousComponent,
         NewEntreprisesComponent,
-        SkillsManagementComponent,
         SuiviCandidatComponent,
         VoirCvComponent,
         VoirDetailsOffreComponent,
@@ -74,7 +74,8 @@ import { Fieldset, FieldsetModule } from 'primeng/fieldset';
         DataViewModule,
         CheckboxModule,
         StepsModule,
-        FieldsetModule
+        FieldsetModule,
+        SkillsManagementModule
     ]
 })
 export class SkillsNetModule { }

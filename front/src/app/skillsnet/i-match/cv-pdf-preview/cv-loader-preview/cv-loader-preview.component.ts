@@ -27,6 +27,7 @@ export class CvLoaderPreviewComponent implements OnInit {
     }, false);
     this.CVService.getByID(this.CV_ID).subscribe(cv => {
       this.CV = cv.dataCv
+      console.log(this.CV.profil)
       if (this.CV.profil)
         this.profil = this.CV.profil.libelle
       else if (this.CV.competences && this.CV.competences.length != 0 && this.CV.competences[0]?.profile_id)

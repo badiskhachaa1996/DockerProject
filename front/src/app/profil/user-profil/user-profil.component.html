@@ -116,22 +116,31 @@
 
     <div class="col-12">
         <div class="card col-12">
+            <div style="text-align: right;width: 100%;">
+                <p-button icon="pi pi-pencil" pTooltip="Modifier vos informations" tooltipPosition="bottom"
+                    (click)="ToggleUpdate();scrollToTop()" aria-hidden="true"></p-button>
+                <p-button icon="pi pi-lock" class="ml-1" pTooltip="Modifier votre mot de passe" tooltipPosition="bottom"
+                    (click)="ToggleUpdatepwd()" aria-hidden="true" *ngIf="userco?.password!=null"></p-button>
+
+            </div>
             <h2>Profil</h2>
-            <div style="display: flex;">
-                <div class=" card col-6 ">
+            <div style="display: flex;" class="grid">
+                <div class="col-6">
                     <div class="p-fluid p-formgrid grid">
 
-                        <div class="col-6 md-1">
+                        <div class="field col-6">
                             <img [src]="imageToShow" (click)="clickFile()" alt="Profil" width="100" height="100"
                                 style="border-radius: 100px" />
                             <br><br>
                             <strong>{{dataMC?.jobTitle}}</strong>
                             <br>
-                            <a (click)="seeOrga()">Afficher l'organisation -></a>
+                            <a *ngIf="!infoCommercial" (click)="seeOrga()">Afficher l'organisation -></a>
                         </div>
                         <div class="col-6 md-5">
                             <figcaption>
-                                {{userco?.firstname | titlecase}} {{userco?.lastname | uppercase}}<br>
+                                <h4 style="font-weight: bold;">{{userco?.firstname | titlecase}} {{userco?.lastname |
+                                    uppercase}} </h4>
+                                <span *ngIf="infoCommercial">{{infoCommercial?.code_commercial_partenaire}}<br></span>
                                 <span>{{ userco?.mention }}</span><br>
                                 <br><br><br><br>
                                 <span [ngStyle]="{
@@ -167,26 +176,27 @@
                     </div>
                 </div>
 
-                <div class="card col-6">
+                <div class="col-6">
                     <div class="p-fluid p-formgrid grid">
-                        <div class="col-6 md-3">
+                        <div class="col-6 md-3" *ngIf="userco.email">
                             <i class="pi pi-envelope"></i>
                             <strong>&nbsp;&nbsp;Email entreprise</strong><br>
-                            {{ userco?.email ? userco.email : userco?.email }}
+                            {{userco.email }}
                         </div>
-                        <div class="col-6 md-3">
+                        <div class="col-6 md-3" *ngIf="userco.email_perso">
                             <i class="pi pi-id-card"></i>
                             <strong>&nbsp;&nbsp;Email personnelle</strong><br>
-                            {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
+                            {{ userco.email_perso }}
                         </div>
                         <div class="col-6 md-3" *ngIf="userco.phone">
                             <i class="pi pi-phone"></i>
-                            <strong>Téléphone</strong><br> {{ userco?.indicatif }} {{ userco?.phone }}
+                            <strong>&nbsp;&nbsp;Téléphone</strong><br> {{ userco?.indicatif }} {{ userco?.phone }}
                         </div>
                         <div class="col-6 md-3" *ngIf="userco.rue_adresse">
                             <i class="pi pi-map-marker"></i>
-                            <strong>Adresse</strong><br> {{ userco.numero_adresse }} {{ userco.rue_adresse }} {{
-                            userco.postal_adresse }}, {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
+                            <strong>&nbsp;&nbsp;Adresse</strong><br> {{ userco?.numero_adresse }} {{ userco?.rue_adresse
+                            }} {{
+                            userco?.postal_adresse }}, {{ userco?.ville_adresse }}/ {{ userco?.pays_adresse }}
                         </div>
 
 
@@ -265,44 +275,20 @@
                             {{ entrepriseDic[userco.entreprise]?.r_sociale }}
                         </div>
 
-                        <div class="col-12 md:col-4" *ngIf="
-                            infoCommercial &&
-                            infoCommercial.code_commercial_partenaire
-                        ">
-                            <strong>ID Commercial:</strong>
-                            {{ infoCommercial.code_commercial_partenaire }}
-                        </div>
-
                         <div class="col-12" *ngIf="
                             demandeConseiller &&
                             demandeConseiller.conseiller_id &&
                             demandeConseiller.activated
                         ">
                             <strong>Conseiller:</strong>
-                            {{
-                            demandeConseiller.conseiller_id.firstname
-                            | titlecase
-                            }}
-                            {{
-                            demandeConseiller.conseiller_id.lastname | uppercase
-                            }}
+                            {{demandeConseiller.conseiller_id.firstname| titlecase}}
+                            {{demandeConseiller.conseiller_id.lastname | uppercase}}
                         </div>
                         <div class="col-12" *ngIf="
                             demandeConseiller && !demandeConseiller.activated
                         ">
                             <strong>Conseiller:</strong> Votre demande est en
                             attente de validation
-                        </div>
-
-                        <div class="md:col-10"></div>
-                        <div class="col-12 md:col-2">
-                            <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations"
-                                tooltipPosition="bottom" (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px"
-                                aria-hidden="true">Editer</p-button>
-
-                            <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
-                                (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
-                                aria-hidden="true"></i>
                         </div>
 
                     </div>

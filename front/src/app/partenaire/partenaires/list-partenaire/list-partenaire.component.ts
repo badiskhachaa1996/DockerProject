@@ -4,6 +4,7 @@ import { Table } from 'primeng/table';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from "file-saver";
+import {TabViewModule} from 'primeng/tabview';
 
 import { MessageService as ToastService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -39,13 +40,18 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 })
 export class ListPartenaireComponent implements OnInit {
   selectedInsert: Partenaire | null = null; 
-
+  activeIndex1: number = 0;
   expandedRows = {};
   FjTopatch: any;
   Ttopatch: any;
   partenaires = []
   users = {}
   token;
+  currenData 
+  handleClose(e) {
+
+        e.close();
+ }
   showFormAddPartenaire = false
   statutList = environment.typeUser
   civiliteList = environment.civilite;
@@ -224,6 +230,9 @@ export class ListPartenaireComponent implements OnInit {
       indicatif_whatsapp: rowData.indicatifWhatsapp,
     });
   }
+ 
+
+
 
   //Méthode d'initialisation du formulaire de modification d'un partenaire
   onInitFormModifPartenaire() {
@@ -314,6 +323,19 @@ export class ListPartenaireComponent implements OnInit {
 
     this.formModifPartenaire.reset();
     this.showFormModifPartenaire = false;
+   
+
+
+  }
+
+
+
+  showFormModifyPartenaire(rowData: any) {
+    this.showFormModifPartenaire = true;
+    this.activeIndex1 = 2;
+    this.idPartenaireToUpdate = rowData;
+    this.onGetbyId(rowData);
+    this.loadPP(rowData);
   }
 
   onRedirect() {
