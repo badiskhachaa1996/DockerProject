@@ -48,7 +48,8 @@
                         formControlName="recaptcha">
         </ngx-recaptcha2>
       </form>
-      <button pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
+      <button [disabled]="!(aFormGroup) || aFormGroup.invalid"
+        pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
     </div>
   </form>
 </div>
