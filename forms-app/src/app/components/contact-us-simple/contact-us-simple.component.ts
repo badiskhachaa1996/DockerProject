@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ContactUsService} from "../../services/contact-us.service";
@@ -10,7 +10,8 @@ import {RentreeAdmission} from "../../models/RentreeAdmission";
 @Component({
   selector: 'app-contact-us-simple',
   templateUrl: './contact-us-simple.component.html',
-  styleUrls: ['./contact-us-simple.component.scss']
+  styleUrls: ['./contact-us-simple.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ContactUsSimpleComponent implements OnInit {
   sourceDropdown = [
