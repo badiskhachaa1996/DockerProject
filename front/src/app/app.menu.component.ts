@@ -4570,7 +4570,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Dashboard',
                                         icon: 'pi pi-chart-line'
                                         , routerLink: ['/dashboard/partenaire']
-                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
+                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['rh/actualite-notifications'] },
                                 ]
                             },
                         )
