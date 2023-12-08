@@ -196,7 +196,7 @@ const prospect_schema = new mongoose.Schema({
     },
     phase_candidature: {
         type: String,
-        default: "Non traité"
+        default: "Nouveau"
     },
     agent_sourcing_id: {
         type: mongoose.Schema.Types.ObjectId,

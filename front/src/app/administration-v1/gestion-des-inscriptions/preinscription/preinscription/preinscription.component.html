@@ -323,8 +323,8 @@
                             </div>
                             <div *ngIf="filtre_value.source" class="field col-4">
                                 <label for="rythme">Etape</label> <br>
-                                <p-dropdown [style]="{'width':'17em'}" [options]="sourceFiltre" filter="true"
-                                    [(ngModel)]="filtre_value.source" (onChange)="onUpdateFiltre()"
+                                <p-dropdown [style]="{'width':'17em'}" [options]="filterEtapeLoc" filter="true"
+                                    [(ngModel)]="filtre_value.phase_candidature" (onChange)="onUpdateFiltre()"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
 
@@ -360,7 +360,7 @@
                                 filterPlaceholder="Rôle"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
-                            <p-dropdown [style]="{'width':'100%'}" [options]="filterPhase" filter="true"
+                            <p-dropdown [style]="{'width':'100%'}" [options]="filterEtapeLoc" filter="true"
                                 [(ngModel)]="filtre_value.phase" (onChange)="onUpdateFiltre()"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
@@ -389,8 +389,8 @@
                                 <th pSortableColumn="rythme">
                                     Rythme <p-sortIcon field="rythme"> </p-sortIcon>
                                 </th>
-                                <th pSortableColumn="decision">
-                                    Décision admission<p-sortIcon field="decision"> </p-sortIcon>
+                                <th pSortableColumn="decision_admission">
+                                    Décision admission<p-sortIcon field="decision_admission"> </p-sortIcon>
                                 </th>
 
                                 <th>
@@ -433,7 +433,7 @@
                                     {{prospect?.rythme_formation}}
                                 </td>
                                 <td>
-                                    {{ prospect?.decision_admission}}
+                                    {{ prospect?.decision?.decision_admission || prospect?.decision_admission}}
                                 </td>
                                 <td>
                                     {{ calculPayement(prospect)}}
@@ -443,9 +443,9 @@
                                 <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-dropdown [options]="phaseDropdown"
+                                            <p-dropdown [options]="etapeDropdownLoc"
                                                 [(ngModel)]="prospect.phase_candidature" appendTo="body"
-                                                (onChange)="onSelectEtat(prospect.etat_dossier,prospect)"
+                                                (onChange)="UPDATEProspect(prospect)"
                                                 placeholder="Choisissez une étape"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
@@ -854,11 +854,11 @@
                             </div>
                             <div class="col-12 grid" style="margin: 0;">
                                 <div class="col-4">
-                                    <p-button label="Dossier" icon="pi pi-users" [style]="{'width':'100%'}"
+                                    <p-button label="Admission" icon="pi pi-users" [style]="{'width':'100%'}"
                                         (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
                                 </div>
                                 <div class="col-4">
-                                    <p-button label="Document" icon="pi pi-file" [style]="{'width':'100%'}"
+                                    <p-button label="DOC" icon="pi pi-file" [style]="{'width':'100%'}"
                                         (click)="AddDocumentOnglet(prospect);" autoWidth="false"></p-button>
                                 </div>
 
@@ -892,7 +892,7 @@
                             </div>
                             <div *ngIf="filtre_value.phase" class="field col-4">
                                 <label for="rythme">Etape</label> <br>
-                                <p-dropdown [style]="{'width':'17em'}" [options]="filterPhase" filter="true"
+                                <p-dropdown [style]="{'width':'17em'}" [options]="filterEtapeInt" filter="true"
                                     [(ngModel)]="filtre_value.phase" (onChange)="onUpdateFiltre()"
                                     emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                             </div>
@@ -933,7 +933,7 @@
                                 emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
                         </div>
                         <div class="md:col-2 col-12">
-                            <p-dropdown [style]="{'width':'100%'}" [options]="filterPhase" filter="true"
+                            <p-dropdown [style]="{'width':'100%'}" [options]="filterEtapeInt" filter="true"
                                 [(ngModel)]="filtre_value.phase" (onChange)="onUpdateFiltre()"
                                 emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
                         </div>
@@ -963,7 +963,7 @@
                                 <th pSortableColumn="rythme">
                                     Rythme <p-sortIcon field="rythme"> </p-sortIcon>
                                 </th>
-                                <th pSortableColumn="decision">
+                                <th pSortableColumn="decision_admission">
                                     Décision admission<p-sortIcon field="decision"> </p-sortIcon>
                                 </th>
 
@@ -1007,7 +1007,7 @@
                                     {{prospect.rythme_formation}}
                                 </td>
                                 <td>
-                                    {{ prospect?.niveau}}
+                                    {{ prospect?.decision?.decision_admission || prospect?.decision_admission}}
                                 </td>
                                 <td>
                                     {{ calculPayement(prospect)}}
@@ -1015,7 +1015,7 @@
                                 <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <p-dropdown [options]="phaseDropdown"
+                                            <p-dropdown [options]="etapeDropdownInt"
                                                 [(ngModel)]="prospect.phase_candidature" appendTo="body"
                                                 (onChange)="UPDATEProspect(prospect)"
                                                 placeholder="Choisissez une étape"></p-dropdown>
@@ -1431,11 +1431,11 @@
                             </div>
                             <div class="col-12 grid" style="margin: 0;">
                                 <div class="col-4">
-                                    <p-button label="Dossier" icon="pi pi-users" [style]="{'width':'100%'}"
+                                    <p-button label="Admission" icon="pi pi-users" [style]="{'width':'100%'}"
                                         (click)="onshowDossier(prospect)" autoWidth="false"></p-button>
                                 </div>
                                 <div class="col-4">
-                                    <p-button label="Document" icon="pi pi-file" [style]="{'width':'100%'}"
+                                    <p-button label="DOC" icon="pi pi-file" [style]="{'width':'100%'}"
                                         (click)="AddDocumentOnglet(prospect);" autoWidth="false"></p-button>
                                 </div>
 
@@ -1668,23 +1668,32 @@
                                 </div>
                             </form>
                         </p-dialog>
-
-                        <h4 style="text-align: center;" *ngIf="PROSPECT.etat_dossier === 'Complet'">Etat du
-                            dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
-                                (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
-                        </h4>
-                        <h4 style="text-align: center;"
-                            *ngIf="PROSPECT.etat_dossier === 'En attente' || !PROSPECT.etat_dossier || PROSPECT.etat_dossier==='En cours de traitement'">
-                            Etat
-                            du dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
-                                (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown> </h4>
-                        <h4 style="text-align: center;" *ngIf="PROSPECT.etat_dossier === 'Manquant'">Etat du
-                            dossier <p-dropdown [options]="etat_dossierDropdown"
-                                placeholder="Choisissez l'etat du dossier" [(ngModel)]="PROSPECT.etat_dossier"
-                                (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
-                        </h4>
+                        <div *ngIf="PROSPECT.etat_dossier === 'Complet'" class="grid">
+                            <h4 class="col-6">
+                                <label>&nbsp;</label> <br>
+                                Etat du dossier : Complet
+                            </h4>
+                            <div class="col-6">
+                                <label>Note</label> <br>
+                                <textarea pInputTextarea [(ngModel)]="PROSPECT.note_dossier"
+                                    (blur)="UPDATEProspect(PROSPECT)"></textarea>
+                            </div>
+                        </div>
+                        <div *ngIf="PROSPECT.etat_dossier != 'Complet'" class="grid">
+                            <div class="col-6">
+                                <h4>
+                                    Etat du dossier <br>
+                                </h4>
+                                <p-dropdown [options]="etat_dossierDropdown" placeholder="Choisissez l'etat du dossier"
+                                    [(ngModel)]="PROSPECT.etat_dossier"
+                                    (onChange)="onSelectEtat($event,PROSPECT)"></p-dropdown>
+                            </div>
+                            <div class="col-6">
+                                <label>Note</label> <br>
+                                <textarea pInputTextarea [(ngModel)]="PROSPECT.note_dossier"
+                                    (blur)="UPDATEProspect(PROSPECT)"></textarea>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile"
                                 #selectedFile style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
@@ -2382,8 +2391,8 @@
                         <th pSortableColumn="rythme">
                             Rythme <p-sortIcon field="rythme"> </p-sortIcon>
                         </th>
-                        <th pSortableColumn="decision">
-                            Décision admission<p-sortIcon field="decision"> </p-sortIcon>
+                        <th pSortableColumn="decision_admission">
+                            Décision admission<p-sortIcon field="decision_admission"> </p-sortIcon>
                         </th>
 
                         <th pSortableColumn="paiement">
@@ -2425,7 +2434,7 @@
                             {{prospect.rythme_formation}}
                         </td>
                         <td>
-                            {{ prospect?.niveau}}
+                            {{ prospect?.decision?.decision_admission || prospect?.decision_admission}}
                         </td>
                         <td>
                             {{ calculPayement(prospect)}}
@@ -2433,8 +2442,13 @@
                         <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown [options]="phaseDropdown" [(ngModel)]="prospect.phase_candidature"
-                                        appendTo="body" (onChange)="UPDATEProspect(prospect)"
+                                    <p-dropdown [options]="etapeDropdownLoc" [(ngModel)]="prospect.phase_candidature"
+                                        *ngIf="prospect.lead_type == 'Local'" appendTo="body"
+                                        (onChange)="UPDATEProspect(prospect)"
+                                        placeholder="Choisissez une étape"></p-dropdown>
+                                    <p-dropdown [options]="etapeDropdownInt" [(ngModel)]="prospect.phase_candidature"
+                                        *ngIf="prospect.lead_type != 'Local'" appendTo="body"
+                                        (onChange)="UPDATEProspect(prospect)"
                                         placeholder="Choisissez une étape"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -3066,7 +3080,7 @@
         <p-dropdown [style]="{'width':'27em'}" [options]="formationsFitre" filter="true"
             (onChange)="onUpdateFiltre()" emptyFilterMessage="Role non trouvé"
             filterPlaceholder="Rôle"></p-dropdown><br><br><br><br><br>-->
-        <p-dropdown [style]="{'width':'27em'}" [options]="filterPhase" filter="true" (onChange)="onUpdateFiltre()"
+        <p-dropdown [style]="{'width':'27em'}" [options]="filterEtapeInt" filter="true" (onChange)="onUpdateFiltre()"
             [(ngModel)]="filtre_value.phase" emptyFilterMessage="Etape non trouvé"
             filterPlaceholder="Etape"></p-dropdown><br><br><br><br><br>
         <p-dropdown [style]="{'width':'27em'}" [options]="sourceFiltre" filter="true" [(ngModel)]="filtre_value.source"

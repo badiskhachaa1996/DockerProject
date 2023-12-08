@@ -84,7 +84,8 @@ import { BadgeModule } from 'primeng/badge';
         EditorModule,
         LeadCandidatureModule,
         TagModule,
-        BadgeModule
+        BadgeModule,
+        CheckboxModule
     ]
 })
 export class AdminModule { }
