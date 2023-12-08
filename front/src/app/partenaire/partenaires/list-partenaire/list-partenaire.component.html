@@ -468,136 +468,126 @@
                             </div>
                         </div>
                     </p-fieldset><br>
-                    <p-fieldset legend="Commissions" style="width: 1px; height: 1px;">
-                        <div class="grid">
-                            <div class="firsttable" style="width: 10px; ">
-                                <div class="inside" style="margin-right: 50%;">
-                                    <strong>Etat de Contrat:
-                                        <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()" class="p-element p-inputwrapper ng-tns-c55-11 ng-star-inserted"
-                                            [(ngModel)]="idPartenaireToUpdate.etat_contrat"
-                                            placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
-                                    </strong><br>
+                                        <p-fieldset legend="Commissions">
+                                            <div class="main" >
+                                                <div class="things" >
+                                                    <div class="inside"  >
+                                                        <strong >Etat de Contrat:</strong>
+                                                      
+                                                            <p-dropdown  [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"  [(ngModel)]="idPartenaireToUpdate.etat_contrat"
+                                                                placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
+                                                        
+                                                                <span *ngIf="idPartenaireToUpdate?.pathEtatContrat && !uploadedFileName">
+                                                                    {{ idPartenaireToUpdate.pathEtatContrat }}
+                                                                  </span>
+                                                                  <p *ngIf="uploadedFileName" style="margin-top: 10px;">
+                                                                    {{ uploadedFileName }}
+                                                                  </p>
+                                                                  
+                                                    </div>
+                                                    <div class="clickable" >
+                                                    <button
+                                                            pTooltip="Télécharger le contrat"
+                                                            style="  background-color: #37BAD4; color: #fff; padding: 10px 20px; border: none; border-radius: 5px;cursor: pointer; font-size: 14px;   transition: background-color 0.3s ease; display: flex; align-items: center;justify-content: center;margin-right: 10px;  "
+                                                            [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
+                                                            (click)="downloadContrat()" >
+                                                            <i class="pi pi-arrow-down" style="margin-right: 5px;"></i> 
+                                                        </button>
+
+                                                        <button
+                                                        pTooltip="Ajouter un contrat"
+                                                        style="  background-color: #37BAD4; color: #fff;  padding: 10px 20px;  border: none;   border-radius: 5px;   cursor: pointer;  font-size: 14px;  transition: background-color 0.3s ease; display: flex;  align-items: center;   justify-content: center; "
+                                                        [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
+                                                        (click)="clickFile2()" >
+                                                        <i class="pi pi-plus" style="margin-right: 5px;"></i> 
+                                                    </button>
+                                                </div>
+                                                </div>
+
+                                                <div class="container" style="display: flex; flex-direction: row; align-items: center; ">
+                                                    <form class="" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()" style="display: flex; flex-direction: row; align-items: center;">
+                                                        <div style="margin-right: 10px; margin-top: 20px;
+                                                        color: #495057;
+                                                        border: 1px solid #ced4da;
+                                                        padding: 15px;
+                                                        border-radius: 8px;
+                                                        background-color: #f8f9fa; ">
+                                                            <p><strong>Description:</strong><br>
+                                                                <input type="text" pInputText placeholder="" formControlName="description" style="width: 500px; padding: 8px;height: 100px;" />
+                                                            </p>
+                                                        </div>
+                                                        <div style="margin-right: 10px; margin-top: 20px;
+                                                        color: #495057;
+                                                        border: 1px solid #ced4da;
+                                                        padding: 15px;
+                                                        border-radius: 8px;
+                                                        background-color: #f8f9fa;" >
+                                                            <p><strong>Montant:</strong><br>
+                                                                <input type="text" pInputText placeholder="50€" formControlName="montant" style="width: 500px; padding: 8px;height: 100px;" />
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-12 text-center" >
+                                                            <button style="margin-right:80%;" pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid" type="submit"></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
+                        
+                                                <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row"
+                                                    dataKey="_id">
+                                                    <ng-template pTemplate="header">
+                                                        <tr>
+                                                            <th>Description</th>
+                                                            <th>Montant</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-co let-editing="editing" let-ri="rowIndex">
+                                                        <tr [pEditableRow]="co">
+                                                            <td>
+                                                                <p-cellEditor>
+                                                                    <ng-template pTemplate="input">
+                                                                        <input pInputText type="text" [(ngModel)]="co.description">
+                                                                    </ng-template>
+                                                                    <ng-template pTemplate="output">
+                                                                        {{co.description}}
+                                                                    </ng-template>
+                                                                </p-cellEditor>
+                                                            </td>
+                                                            <td>
+                                                                <p-cellEditor>
+                                                                    <ng-template pTemplate="input">
+                                                                        <input pInputText type="text" [(ngModel)]="co.montant">
+                                                                    </ng-template>
+                                                                    <ng-template pTemplate="output">
+                                                                        {{co.montant}}
+                                                                    </ng-template>
+                                                                </p-cellEditor>
+                                                            </td>
+                                                            <td>
+                                                                <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
+                                                                    class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
+                                                                <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
+                                                                    type="button" pInitEditableRow class="pi pi-pencil"
+                                                                    (click)="onRowEditInit(co)"></i>
+                                                                <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
+                                                                    *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
+                                                                    (click)="onRowEditSave(co)"></i>
+                                                                <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
+                                                                    type="button" pCancelEditableRow class="pi pi-times"
+                                                                    (click)="onRowEditCancel(co, ri)"></i>
+                        
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                        
+                                        </p-fieldset>
+                                    </div>
                                 </div>
-                                <div class="clickable" style="margin-left: 20%; margin-top: auto;">
-                                <button
-                                        pTooltip="Télécharger le contrat"
-                                        style="
-                                            background-color: #37BAD4;
-                                            color: #fff;
-                                            padding: 10px 20px;
-                                            border: none;
-                                            border-radius: 5px;
-                                            cursor: pointer;
-                                            font-size: 14px;
-                                            transition: background-color 0.3s ease;
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                             margin-right: 10px; 
-                                        "
-                                        [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
-                                        (click)="downloadContrat()"
-                                    >
-                                        <i class="pi pi-arrow-down" style="margin-right: 5px;"></i> 
-                                    </button>
-
-                                    <button
-                                    pTooltip="Télécharger le contrat"
-                                    style="
-                                        background-color: #37BAD4;
-                                        color: #fff;
-                                        padding: 10px 20px;
-                                        border: none;
-                                        border-radius: 5px;
-                                        cursor: pointer;
-                                        font-size: 14px;
-                                        transition: background-color 0.3s ease;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                    "
-                                    [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
-                                    (click)="clickFile2()" >
-                                    <i class="pi pi-plus" style="margin-right: 5px;"></i> 
-                                </button>
-
                             </div>
-                            </div>
-
-                            <div class="container" style="display: flex; flex-direction: row; align-items: center; margin-top: 11%; margin-right: 250%; margin-trim: 6px;">
-                                <form class="" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()" style="display: flex; flex-direction: row; align-items: center;">
-                                    <div style="margin-right: 10px;">
-                                        <p><strong>Description:</strong><br>
-                                            <input type="text" pInputText placeholder="" formControlName="description" style="width: 500px; padding: 8px;height: 100px;" />
-                                        </p>
-                                    </div>
-                                    <div style="margin-right: 10px;" >
-                                        <p><strong>Montant:</strong><br>
-                                            <input type="text" pInputText placeholder="50€" formControlName="montant" style="width: 500px; padding: 8px;height: 100px;" />
-                                        </p>
-                                    </div>
-                                    <div class="col-12 text-center" >
-                                        <button pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid" type="submit"></button>
-                                    </div>
-                                </form>
-                            </div>
-                            
-    
-                            <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row"
-                                dataKey="_id">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Description</th>
-                                        <th>Montant</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-co let-editing="editing" let-ri="rowIndex">
-                                    <tr [pEditableRow]="co">
-                                        <td>
-                                            <p-cellEditor>
-                                                <ng-template pTemplate="input">
-                                                    <input pInputText type="text" [(ngModel)]="co.description">
-                                                </ng-template>
-                                                <ng-template pTemplate="output">
-                                                    {{co.description}}
-                                                </ng-template>
-                                            </p-cellEditor>
-                                        </td>
-                                        <td>
-                                            <p-cellEditor>
-                                                <ng-template pTemplate="input">
-                                                    <input pInputText type="text" [(ngModel)]="co.montant">
-                                                </ng-template>
-                                                <ng-template pTemplate="output">
-                                                    {{co.montant}}
-                                                </ng-template>
-                                            </p-cellEditor>
-                                        </td>
-                                        <td>
-                                            <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
-                                                class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
-                                            <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
-                                                type="button" pInitEditableRow class="pi pi-pencil"
-                                                (click)="onRowEditInit(co)"></i>
-                                            <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
-                                                *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
-                                                (click)="onRowEditSave(co)"></i>
-                                            <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
-                                                type="button" pCancelEditableRow class="pi pi-times"
-                                                (click)="onRowEditCancel(co, ri)"></i>
-    
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                        </div>
-    
-                    </p-fieldset>
-                </div>
-            </div>
-        </div>
-    </p-tabPanel>
-</p-tabView>
+                        </p-tabPanel>
+                    </p-tabView>
 
 

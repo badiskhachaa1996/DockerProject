@@ -529,14 +529,18 @@ export class GestionComponent implements OnInit {
     }
     this.projectService.postRessources(newRessources)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
-    this.formAddressources.reset();}
+    this.ressources =[...this.ressources, newRessources];
+      this.formAddressources.reset();
+      this.showAddRessourcesForm = false;
+      }
 
   showRessources(project_id) {
     this.showressources = true;
     this.projectIdForTask = project_id;
     this.projectService.getRessourcesByIdProject(project_id).then((data) => {
       this.ressources = [];
-      this.ressources = data;})
+      this.ressources = data;
+    })
   }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
@@ -602,6 +606,7 @@ export class GestionComponent implements OnInit {
         this.projectService.getBudgetByIdProject(project_id).then((data) => {
             this.budget = [];
             this.budget = data;
+            console.log(this.budget);
             this.budget_charge = 0;
             this.budgect_depense = 0;
             for (let j = 0; j < data.length; j = j + 1) {
@@ -612,6 +617,8 @@ export class GestionComponent implements OnInit {
                 this.currentProject = this.project.find(p => p._id == project_id);
             }
         });
+
+
     }
 
     //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
@@ -776,5 +783,28 @@ console.log ("hello");
         this.formAddbudget.reset();
         this.uploadedFiles = [];
     }
+
+    onHideRessources (){
+        this.showAddRessourcesForm = false;
+        this.formAddressources.reset();
+        this.uploadedFiles = [];
+    }
+
+    onDownloadBudgetFile(_id: string, file_id: string, path: string) {
+
+      console.log(_id, file_id, path);
+
+      this.projectService.downloadFile(_id, file_id, path).subscribe(
+            data => {
+                console.log(data);
+            },
+            error => {
+                console.error(error);
+                this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenue' });
+            }
+        );
+    }
+
+
 
 }
