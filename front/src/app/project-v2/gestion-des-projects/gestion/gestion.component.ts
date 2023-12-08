@@ -50,6 +50,7 @@ export class GestionComponent implements OnInit {
   private ressources_id!: string;
   private budgetid!: string;
   docAdded:boolean=false;
+  test:boolean=true;
   avancement_p: number = 0;
   avancement_t: number = 0;
   displayTache: boolean = false;
@@ -123,7 +124,7 @@ export class GestionComponent implements OnInit {
   })
   taskToShowForm = new FormGroup({
     attribuate_to: new FormControl(),
-    
+    urgent:new FormControl(),
     number_of_hour: new FormControl(),
     date_limite: new FormControl(),
     description_task: new FormControl('',),
@@ -510,6 +511,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   }
 
   onChange(){
+    this.test=false;
     this.TaskToShow.attribuate_to=[];
   for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
     this.TaskToShow.attribuate_to.push(this.taskToShowForm.value.attribuate_to[i]);
@@ -520,8 +522,9 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   this.TaskToShow.description_task=this.taskToShowForm.value?.description_task;
   const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id);if (indexToRemove !== -1) {this.taskToDo[indexToRemove]=this.TaskToShow;}
     this.projectService.putTask(this.TaskToShow).then(response => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: 'Affectation réussie' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
     })
+    this.test=true;
   }
 
   deleteTask(id, ri) {
@@ -572,11 +575,12 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     for (let i = 0; i < this.TaskToShow.attribuate_to.length;i++) {
       this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
     };
-    this.urgent=this.TaskToShow?.urgent
+    this.urgent=Boolean(this.TaskToShow?.urgent);
     console.log(this.urgent);
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
       attribuate_to:this.AtributateTable,
+      urgent:this.TaskToShow.urgent,
       description_task: this.TaskToShow.description_task,
       date_limite: this.conersiondate(this.TaskToShow.date_limite),
 
