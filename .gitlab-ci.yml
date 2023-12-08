@@ -545,7 +545,7 @@ deploy_forms-app_to_dev:
     - dev-shell
   script:
     - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html/forms-app
+    - sudo mv -f forms-app/dist /var/www/html
   only:
     - develop
 
@@ -586,7 +586,7 @@ deploy_forms-app_to_qa:
     - qa-shell
   script:
     - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html/forms-app
+    - sudo mv -f forms-app/dist /var/www/html
   only:
     - main
 
@@ -627,7 +627,7 @@ deploy_forms-app_to_prod2:
     - prod2-shell
   script:
     - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html/forms-app
+    - sudo mv -f forms-app/dist /var/www/html
   only:
     - main
 
@@ -670,7 +670,7 @@ manual_deploy_forms-app_to_prod1:
     - prod1-shell
   script:
     - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html/forms-app
+    - sudo mv -f forms-app/dist /var/www/html
   only:
     - main
   when: manual
