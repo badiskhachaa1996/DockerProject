@@ -224,6 +224,20 @@ app.get("/downloadFile/:_id/:file_id/:name", (req, res, next) => {
     res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
 });
 
+
+// get one file of one budget
+app.get("/get-budget-file/:id", (req, res, next) => {
+    let pathFile = `storage/task/${req.params.id}`;
+
+    Budget.findOne({ _id: req.params.id })
+    .then(
+
+
+    )
+    .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperé le budget' }); });
+});
+
+
 const st = multer.diskStorage({
     destination: (req, file, callback) => {
         let id = req.body.document_id;
@@ -260,6 +274,8 @@ app.post("/insertDB", (req, res) => {
         res.send(docs)
     })
 })
+
+
 
 
 
