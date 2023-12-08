@@ -1,0 +1,106 @@
+
+@media (min-width: 992px) {
+    .layout-wrapper {
+        &.layout-overlay {
+            .layout-main-container {
+                margin-left: 0;
+            }
+
+            .layout-sidebar {
+                transform: translateX(-100%);
+                left: 0;
+                top: 0;
+                height: 100vh;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+            &.layout-overlay-sidebar-active {
+                .layout-sidebar {
+                    transform: translateX(0);
+                }
+            }
+        }
+
+        &.layout-static {
+            .layout-main-container {
+                margin-left: 300px;
+            }
+
+            &.layout-static-sidebar-inactive {
+                .layout-sidebar {
+                    transform: translateX(-220px);
+                    left: 0;
+                }
+
+                .layout-main-container {
+                    margin-left: 80px;
+                }
+            }
+        }
+
+        .layout-mask {
+            display: none;
+        }
+    }
+}
+
+.nav-burger-mobile {
+    display: none;
+}
+
+
+@media (max-width: 1000px) {
+
+    .nav-burger-mobile {
+        display: block;
+    }
+    
+    .layout-wrapper {
+        .layout-main-container {
+            margin-left: 0;
+        }
+
+        .layout-sidebar {
+            transform: translateX(-100%);
+            left: 0;
+            top: 2rem;
+            padding-top: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .layout-mask {
+            z-index: 998;
+            background-color: var(--mask-bg);
+
+            &.layout-mask-enter-from,
+            &.layout-mask-leave-to {
+                background-color: transparent;
+            }
+        }
+
+        &.layout-mobile-sidebar-active {
+            .layout-sidebar {
+                transform: translateX(0);
+            }
+
+            .layout-mask {
+                display: block;
+            }
+        }
+    }
+
+    .body-overflow-hidden {
+        overflow: hidden;
+    }
+
+    .layout-main-container {
+        padding: 5rem 1rem 1rem 1rem;
+    }
+
+    .footer-content {
+        text-align: center;
+    }
+
+}
