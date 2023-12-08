@@ -1,11 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from "@angular/forms";
 import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EcoleAdmission} from "../../models/EcoleAdmission";
-import {RentreeAdmission} from "../../models/RentreeAdmission";
 
 @Component({
   selector: 'app-contact-us-simple',
@@ -14,6 +12,7 @@ import {RentreeAdmission} from "../../models/RentreeAdmission";
   encapsulation: ViewEncapsulation.None
 })
 export class ContactUsSimpleComponent implements OnInit {
+  aFormGroup!: UntypedFormGroup;
   sourceDropdown = [
     { value: 'Facebook' },
     { value: 'WhatsApp' },
@@ -115,9 +114,13 @@ export class ContactUsSimpleComponent implements OnInit {
 
 
   constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
-              private route: ActivatedRoute, private router: Router) {
+              private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
   }
+  siteKey = environment.recaptchaKey
   ngOnInit(): void {
+    this.aFormGroup = this.formBuilder.group({
+      recaptcha: ['', Validators.required]
+    });
   }
 
 }

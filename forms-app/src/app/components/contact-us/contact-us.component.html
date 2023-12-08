@@ -41,8 +41,18 @@
       <label>Message</label>
       <textarea rows="5" cols="30" pInputTextarea formControlName="note_choix"></textarea>
     </div>
-    <div class="md:col-2  md:col-offset-5 col-4  col-offset-4">
-      <button pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
+    <div class="md:col-2  md:col-offset-5 col-4  col-offset-4 div-container">
+
+      <form [formGroup]="aFormGroup">
+        <ngx-recaptcha2 #captchaElem
+                        [siteKey]="siteKey"
+                        formControlName="recaptcha">
+        </ngx-recaptcha2>
+      </form>
+
+
+      <button [disabled]="!(aFormGroup) || aFormGroup.invalid"
+        pButton type="submit" label="Envoyer" (click)="onAdd()"></button>
     </div>
   </form>
 </div>
