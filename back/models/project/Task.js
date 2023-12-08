@@ -14,7 +14,7 @@ const taskSchema = mongoose.Schema({
     consignes:                      { type:[String], required: false},
     validation:                     { type: String, required: false},
     identifian:                     { type: String, required: false},
-    urgent:                         { type: Boolean, required:false},
+    urgent:                         { type: Boolean, required:false,default: false},
     documents: {
         type: [{
             nom: { type: String, required: false },
