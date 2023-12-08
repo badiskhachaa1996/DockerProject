@@ -48,6 +48,8 @@ export class ListPartenaireComponent implements OnInit {
   users = {}
   token;
   currenData 
+  uploadedFileName: string;
+
   handleClose(e) {
 
         e.close();
@@ -372,10 +374,20 @@ export class ListPartenaireComponent implements OnInit {
       formData.append('id', this.idPartenaireToUpdate._id)
       formData.append('file', event[0])
       this.PartenaireService.uploadEtatContrat(formData).subscribe(data => {
+        this.resetFileInput(event);
+        this.uploadedFileName = event[0].name;
         this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
+      
       })
     }
   }
+  resetFileInput(event) {
+    if (event && event.length > 0) {
+      event[0].value = "";
+      
+    }
+  }
+  
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
