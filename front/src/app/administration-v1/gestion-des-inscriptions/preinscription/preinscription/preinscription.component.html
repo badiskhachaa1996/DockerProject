@@ -756,22 +756,52 @@
                                 <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.source">
+                                            <p-dropdown [options]="sourceList" placeholder="Choisissez une source"
+                                                [(ngModel)]="user.source"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.source}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.firstname}} {{ commercialOwned?.user_id?.lastname}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.firstname}} {{
+                                            commercialOwned?.user_id?.lastname}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.email}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.email}} {{
+                                            commercialOwned?.user_id?.email_perso}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.indicatif}} {{ commercialOwned?.user_id?.phone}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.indicatif}} {{
+                                            commercialOwned?.user_id?.phone}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
 
                                 <td>
@@ -999,14 +1029,14 @@
                                     {{ prospect?.date_creation | date:'dd MMMM yy'}}
                                 </td>
                                 <td>
-                                    <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
-                                        style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
-                                        value="1" pTooltip="Candidature" aria-hidden="true"
-                                        (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-at m-1"
                                         style="padding-left: 3%" aria-hidden="true"
                                         (click)="onMails(prospect);scrollToTop()">
                                     </i>
+                                    <i *ngIf="candidatureDic && candidatureDic[prospect._id]"
+                                        style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1" pBadge
+                                        value="1" pTooltip="Candidature" aria-hidden="true"
+                                        (click)="goToCandidature(prospect)" tooltipPosition="bottom"></i>
                                     <i *ngIf="!candidatureDic || !candidatureDic[prospect._id]"
                                         style="padding-left: 3%;color: rgb(11, 36, 0);" class="pi pi-book m-1"
                                         pTooltip="Candidature" aria-hidden="true" (click)="goToCandidature(prospect)"
@@ -1303,22 +1333,52 @@
                                 <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText placeholder="Formation"
-                                                [(value)]="user.source">
+                                            <p-dropdown [options]="sourceList" placeholder="Choisissez une source"
+                                                [(ngModel)]="user.source"></p-dropdown>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{ user.source}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.firstname}} {{ commercialOwned?.user_id?.lastname}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.firstname}} {{
+                                            commercialOwned?.user_id?.lastname}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.email}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.email}} {{
+                                            commercialOwned?.user_id?.email_perso}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
-                                <td>
-                                    {{ commercialOwned?.user_id?.indicatif}} {{ commercialOwned?.user_id?.phone}}
+                                <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="commercialListObject" filter="true"
+                                                placeholder="Choisissez le commercial qui a ajouté le lead"
+                                                [(ngModel)]="commercialOwned"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{ commercialOwned?.user_id?.indicatif}} {{
+                                            commercialOwned?.user_id?.phone}}
+                                        </ng-template>
+                                    </p-cellEditor>
                                 </td>
 
                                 <td>
