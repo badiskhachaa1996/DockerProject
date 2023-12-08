@@ -518,6 +518,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
 
   }
   this.TaskToShow.number_of_hour=this.taskToShowForm.value?.number_of_hour;
+  
   this.TaskToShow.date_limite=this.taskToShowForm.value?.date_limite;
   this.TaskToShow.description_task=this.taskToShowForm.value?.description_task;
   const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id);if (indexToRemove !== -1) {this.taskToDo[indexToRemove]=this.TaskToShow;}
