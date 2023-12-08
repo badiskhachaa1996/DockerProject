@@ -61,6 +61,7 @@ install_angular_dependencies_on_dev:
       - develop
     changes:
       - front/package.json
+  when: manual
 
 install_forms-app_dependencies_on_dev:
   stage: Install
@@ -77,8 +78,8 @@ install_forms-app_dependencies_on_dev:
   only:
     refs:
       - develop
-    changes:
-      - forms-app/package.json
+    #changes:
+     # - forms-app/package.json
 
 #==========================================================
 
@@ -133,8 +134,8 @@ install_forms-app_dependencies_on_qa:
   only:
     refs:
       - develop
-    changes:
-      - forms-app/package.json
+    #changes:
+     # - forms-app/package.json
 
 #==========================================================
 
@@ -189,8 +190,8 @@ install_forms-app_dependencies_on_prod2:
   only:
     refs:
       - develop
-    changes:
-      - forms-app/package.json
+    #changes:
+     # - forms-app/package.json
 
 #==========================================================
 
@@ -247,8 +248,8 @@ manual_install_forms-app_dependencies_on_prod1:
   only:
     refs:
       - main
-    changes:
-      - forms-app/package.json
+    #changes:
+    #  - forms-app/package.json
   when: manual
 
 #==========================================================
