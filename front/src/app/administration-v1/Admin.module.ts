@@ -34,6 +34,8 @@ import { InputTextarea, InputTextareaModule } from 'primeng/inputtextarea';
 import { ChipsModule } from 'primeng/chips';
 import { EditorModule } from 'primeng/editor';
 import { LeadCandidatureModule } from '../admission/lead/lead-candidature/lead-candidature.module';
+import { TagModule } from 'primeng/tag';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
     declarations: [
@@ -80,7 +82,9 @@ import { LeadCandidatureModule } from '../admission/lead/lead-candidature/lead-c
         InputTextareaModule,
         ChipsModule,
         EditorModule,
-        LeadCandidatureModule
+        LeadCandidatureModule,
+        TagModule,
+        BadgeModule
     ]
 })
 export class AdminModule { }

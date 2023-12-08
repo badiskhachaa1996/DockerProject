@@ -379,6 +379,7 @@ export class PreinscriptionComponent implements OnInit {
   AddEval = false
   EvaluationDropdown = [{ label: 'Choisissez une évaluation', value: null }]
   evaluationDic = {}
+  commercialListObject = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
@@ -447,8 +448,11 @@ export class PreinscriptionComponent implements OnInit {
         this.commercialService.getAllPopulate().subscribe(commercials => {
           commercials.forEach(commercial => {
             let { user_id }: any = commercial
-            if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire)
+            if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire) {
               this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+              this.commercialListObject.push({ label: `${user_id.firstname} ${user_id.lastname}`, value: commercial })
+            }
+
           })
           this.rhService.getCollaborateurs()
             .then((response) => {
@@ -859,9 +863,11 @@ export class PreinscriptionComponent implements OnInit {
   }
   UPDATEProspect(p: Prospect) {
     if (p.user_id.pays_adresse == 'France')
-      p.source = 'Local'
+      p.lead_type = 'Local'
     else
-      p.source = 'International'
+      p.lead_type = 'International'
+    if (this.commercialOwned)
+      p.code_commercial = this.commercialOwned.code_commercial_partenaire
     this.admissionService.updateV2(p).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour avec succès' })
     }, error => {
