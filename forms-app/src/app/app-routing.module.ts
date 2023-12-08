@@ -10,9 +10,9 @@ import {ContactUsSimpleComponent} from "./components/contact-us-simple/contact-u
 
 const routes: Routes = [
   //{ path: 'contact-form/:ecole', component: ContactUsComponent },
-  { path: 'contact-form-simple', component: ContactUsSimpleComponent },
+  { path: 'contact-form', component: ContactUsSimpleComponent },
   { path: 'contact-form/espic', component: ContactUsEspicComponent },
-  { path: 'contact-form/in tuns', component: ContactUsIntunsComponent },
+  { path: 'contact-form/intuns', component: ContactUsIntunsComponent },
   { path: 'contact-form/adg', component: ContactUsAdgComponent },
   { path: 'contact-form/medasup', component: ContactUsAdgComponent },
   { path: 'contact-form/icbs', component: ContactUsIcbsComponent },
