@@ -1,13 +1,13 @@
 {
-  "name": "back",
-  "version": "1.0.0",
-  "description": "Back Text pour ticketing",
+  "name": "ims-back",
+  "version": "1.0.1",
+  "description": "Back IMS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
-  "author": "Team Dev",
+  "author": "IMS Dev",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
