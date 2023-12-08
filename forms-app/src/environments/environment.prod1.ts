@@ -1,10 +1,10 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
+// `ng build --configuration=prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   recaptchaKey: '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU ',
-  origin: "http://localhost:3000/soc/",
+  origin: "https://forms.intedgroup.com/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
   User: null,
   filterFR: {
@@ -54,51 +54,6 @@ export const environment = {
     "emptyMessage": 'Aucun résultat',
     "emptyFilterMessage": 'Aucun résultat'
   },
-
-  motif :[
-    {label: 'Refus de visa', value: 'Refus de visa'},
-    {label: 'Alternance',value: 'Alternance'},
-    {label: 'Dossier rejeté par capmus France',value: 'Dossier rejeté par capmus France'},
-    {label: 'Paiement en double',value: 'Paiement en double'},
-    {label: 'Autre',value: 'Autre'},
-
-  ],
-  paymentType : [
-    { label: 'Virement', value: 'Virement' },
-    { label: 'Chèque', value: 'Chèque' },
-    { label: 'Compensation', value: 'Compensation' },
-    { label:'Autre', value: 'Autre'},
-
-  ],
-
-  availableStatus : [
-    {
-      label: "Nouvelle",
-      value: 'new'
-    },
-    {
-      label: "En cours ",
-      value: 'in-progress'
-    },
-    {
-      label: "Refusée",
-      value: 'declined'
-    },
-    {
-      label: "Acceptée",
-      value: 'accepted'
-    },
-    {
-      label: "Orienté",
-      value: 'oriented'
-    },
-    {
-      label: "Remboursé",
-      value: 'refunded'
-    }
-
-  ],
-
   fr: {
     firstDayOfWeek: 0,
     dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -119,9 +74,9 @@ export const environment = {
     "#c1db8c",
     "#6e9422",
     "#abb39b",
+    "#b6e657",
     "#B2C787",
     "#8c9678",
-    "#b6e657"
   ],
   role: [
     { value: 'Agent' },
@@ -134,129 +89,14 @@ export const environment = {
     { value: "Alternant/Stagiaire" },
   ],
 
-  schoolList: [
-    { value: 'ESTYA' },
-    { value: 'ADG Education' },
-    { value: 'ESPIC' },
-    { value: 'J\'ai besoin d\'orientation' },
-  ],
-
-  formations: [
-
-    { value: "BTS MCO" },
-    { value: "BTS NDR" },
-    { value: "RNCP MUM" },
-    { value: "RNCP NTC" },
-    { value: "RNCP MERCD" },
-    { value: "RNCP CMD" },
-    { value: "RNCP MCI" },
-    { value: "RNCP MCI CI" },
-    { value: "RNCP MCI IA" },
-    { value: "BTS SIO" },
-    { value: "BTS WEB" },
-    { value: "RNCP Réseaux" },
-    { value: "RNCP Développeur" },
-    { value: "RNCP AIS" },
-    { value: "MPI Big Data" },
-    { value: "MPI CyberSecurité" },
-    { value: "RNCP ARH" },
-    { value: "BTS Assurance" },
-    { value: "BTS Banque" },
-    { value: "BTS CG" },
-    { value: "RNCP GCF" },
-    { value: "BTS PME" },
-    { value: "BTS Notariat" },
-    { value: "DCG" },
-    { value: "DCGS" },
-    { value: "RNCP MRH" },
-    { value: "RNCP BIM" },
-    { value: "BTS MEC" },
-    { value: "Bachelor BIM" },
-    { value: "BTS Hôtellerie-Restauration" },
-    { value: "BTS SPSSS" },
-    { value: "RNCP RET" },
-
-  ],
   campus: [
-    { value: "France - Paris" },
-    { value: "France - Montpellier" },
-    { value: "UAE - Dubai" },
-    { value: "Canada - Montréal" },
-    { value: "Angleterre - Londres" },
-    { value: "Tunisie - Tunis" },
-    { value: "Espagne - Valencia" },
-    { value: "Malte" },
-    { value: "Grèce" },
-    { value: "Maroc - Rabat" },
-    { value: "En Ligne (365)" },
-  ],
-
-  programme: [
-    { value: "Programme Français" },
-    { value: "Programme Anglais" },
-  ],
-
-  entreprisesList: [
-    { value: "Elitelabs" },
-    { value: "ESTYA" },
-    { value: "ADG" },
-    { value: "Autre" }
-  ],
-
-  civilite: [
-    { id: 1, value: 'Monsieur', label: 'Mr' },
-    { id: 2, value: 'Madame', label: 'Mme' },
-    { id: 3, value: 'Autre', label: 'Autre' },
-  ],
-  civiliteEN: [
-    { id: 1, value: 'Mr', label: 'Mr' },
-    { id: 2, value: 'Ms', label: 'Ms' },
-    { id: 3, value: 'Other', label: 'Other' },
-  ],
-
-  niveau_academic: [
-    { id: 1, value: 'Pré-bac', label: 'Pré-bac' },
-    { id: 2, value: 'Bac+2', label: 'Bac+2' },
-    { id: 3, value: 'Bac+3', label: 'Bac+3' },
-    { id: 4, value: 'Bac+4', label: 'Bac+4' },
-    { id: 5, value: 'Bac+5', label: 'Bac+5' },
-  ],
-
-  statut_actuel: [
-    { id: 1, value: 'Etudiant', label: 'Etudiant' },
-    { id: 2, value: 'Salarié', label: 'Salarié' },
-    { id: 3, value: 'Au chômage', label: 'Au chômage' },
-    { id: 4, value: 'Autre', label: 'Autre' },
-  ],
-
-  profil: [
-    { value: 'Salarié', label: 'Salarié' },
-    { value: 'Apprenti', label: 'Apprenti' },
-    { value: 'Demandeur d\'emploi', label: 'Demandeur d\'emploi' },
-    { value: 'Particulier', label: 'Particulier' },
-    { value: 'Contrat de professionnalisation', label: 'Contrat de professionnalisation' },
-    { value: 'Autre', label: 'Autre' },
-  ],
-
-  statut: [
-    { value: 'En cours de traitement', label: 'En cours de traitement' },
-    { value: 'En attente d\'une réponse', label: 'En attente d\'une réponse' },
-    { value: 'Traité', label: 'Traité' },
-  ],
-
-  sujetTicketing: [
-    { value: "Attestation d'emploi et Certificat de travail", label: "Attestation d'emploi et Certificat de travail" },
-    { value: "Déclarer un arrêt de travail", label: 'Déclarer un arrêt de travail' },
-    { value: "Renouvellement de contrat", label: "Renouvellement de contrat" },
-    { value: "Demander ses BDS", label: "Demander ses BDS" },
-    { value: "Démission", label: "Démission" },
-    { value: "Domiciliation de salaire", label: "Domiciliation de salaire" },
-    { value: "Attestation de salaire", label: "Attestation de salaire" },
-    { value: "Avenant de contrat", label: "Avenant de contrat" },
-    { value: "Ticket resto", label: "Ticket resto" },
-    { value: "Avenant de contrat", label: "Avenant de contrat" },
-    { value: "Prévoyance et mutuelle", label: "Prévoyance et mutuelle" },
-
+    { value: "Paris" },
+    { value: "Montpellier" },
+    { value: "Dubai" },
+    { value: "Montréal" },
+    { value: "Londres" },
+    { value: "Tunis" },
+    { value: "En Ligne(365)" }
   ],
 
   isoCodes: [
@@ -521,229 +361,6 @@ export const environment = {
     { value: "ZW", label: "Zimbabwe", prep: "au" }
   ],
 
-  dicNationaliteCode: [
-    { 'Aruba': 'ABW' }, // TODO
-    { 'Afghane': 'AFG' },
-    { 'Angolaise': 'AGO' },
-    { 'Anguilla': 'AIA' }, // TODO
-    { 'Åland Islands': 'ALA' }, // TODO
-    { 'Albanaise': 'ALB' },
-    { 'Andorra': 'AND' }, // TODO
-    { 'United Arab Emirates': 'ARE' }, // TODO
-    { 'Argentine': 'ARG' },
-    { 'Armenia': 'ARM' }, // TODO
-    { 'American Samoa': 'ASM' }, // TODO
-    { 'Antarctica': 'ATA' }, // TODO
-    { 'French Southern Territories': 'ATF' }, // TODO
-    { 'Antiguaise et barbudienne': 'ATG' },
-    { 'Australienne': 'AUS' },
-    { 'Autrichienne': 'AUT' },
-    { 'Azerbaïdjanaise': 'AZE' },
-    { 'Burundaise': 'BDI' },
-    { 'Belge': 'BEL' },
-    { 'Beninoise': 'BEN' },
-    { 'Bonaire, Sint Eustatius and Saba': 'BES' }, //TODO
-    { 'Burkinabe': 'BFA' },
-    { 'Bangladaise': 'BGD' },
-    { 'Bulgare': 'BGR' },
-    { 'Bahreinienne': 'BHR' },
-    { 'Bahamienne': 'BHS' },
-    { 'Bosnienne': 'BIH' },
-    { 'Saint BarthÃ©lemy': 'BLM' }, //TODO
-    { 'Bielorusse': 'BLR' },
-    { 'Belizienne': 'BLZ' },
-    { 'Bermuda': 'BMU' },//TODO
-    { 'Bolivienne': 'BOL' },
-    { 'Brazil': 'BRA' },//TODO
-    { 'Barbadienne': 'BRB' },
-    { 'Brunei Darussalam': 'BRN' },//TODO
-    { 'Bhoutanaise': 'BTN' },
-    { 'Bouvet Island': 'BVT' },//TODO
-    { 'Botswanaise': 'BWA' },
-    { 'Centrafricaine': 'CAF' },
-    { 'Canadienne': 'CAN' },
-    { 'Cocos (Keeling) Islands': 'CCK' },//TODO
-    { 'Suisse': 'CHE' },
-    { 'Chilienne': 'CHL' },
-    { 'Chinoise': 'CHN' },
-    { "Ivoirienne": 'CIV' },
-    { 'Camerounaise': 'CMR' },
-    { 'Congolaise': 'COD' },
-    { 'Congolais': 'COG' },
-    { 'Cook Islands': 'COK' },//TODO
-    { 'Colombienne': 'COL' },
-    { 'Comorienne': 'COM' },
-    { 'Cap-verdienn': 'CPV' },
-    { 'Costaricaine': 'CRI' },
-    { 'Cubaine': 'CUB' },
-    { 'Curaçao': 'CUW' },//TODO
-    { 'Christmas Island': 'CXR' },//TODO
-    { 'Cayman Islands': 'CYM' },//TODO
-    { 'Cyprus': 'CYP' },//TODO Chypriote
-    { 'Czech Republic': 'CZE' }, //TODO Croate
-    { 'Allemande': 'DEU' },
-    { 'Djiboutienne': 'DJI' },
-    { 'Dominiquaise': 'DMA' },
-    { 'Danoise': 'DNK' }, { 'Dominicaine': 'DOM' }, { 'Algerienne': 'DZA' },
-    { 'Equatorienne': 'ECU' }, { 'Egyptienne': 'EGY' }, { 'Erythreenne': 'ERI' },
-    { 'Western Sahara': 'ESH' },//TODO
-    { 'Espagnole': 'ESP' },
-    { 'Estonienne': 'EST' }, { 'Ethiopienne': 'ETH' }, { 'Finlandaise': 'FIN' },
-    { 'Fidjienne': 'FJI' },
-    { 'Falkland Islands (Malvinas)': 'FLK' },//TODO
-    { 'Française': 'FRA' },
-    { 'Faroe Islands': 'FRO' }, //TODO
-    { 'Micronesia, Federated States of': 'FSM' },//TODO
-    { 'Gambienne': 'GAB' },
-    { 'Britannique': 'GBR' },
-    { 'Georgienne': 'GEO' },
-    { 'Guernsey': 'GGY' }, //TODO
-    { 'Ghaneenne': 'GHA' },
-    { 'Gibraltar': 'GIB' },//TODO
-    { 'Guineenne': 'GIN' },
-    { 'Guadeloupe': 'GLP' },//TODO
-    { 'Gambia': 'GMB' },//TODO
-    { 'Guinea-Bissau': 'GNB' },//TODO
-    { 'Equatorial Guinea': 'GNQ' },//TODO
-    { 'Grecque': 'GRC' }, { 'Grenadienne': 'GRD' },
-    { 'Greenland': 'GRL' },//TODO
-    { 'Guatemalteque': 'GTM' },
-    { 'French Guiana': 'GUF' },//TODO
-    { 'Guam': 'GUM' },//TODO
-    { 'Guyanienne': 'GUY' },
-    { 'Hong Kong': 'HKG' },//TODO
-    { 'Heard Island and McDonald Islands': 'HMD' },//TODO
-    { 'Hondurienne': 'HND' },
-    { 'Croate': 'HRV' },
-    { 'Haïtienne': 'HTI' },
-    { 'Hongroise': 'HUN' },
-    { 'Indonesienne': 'IDN' },
-    { 'Isle of Man': 'IMN' },//TODO
-    { 'Indienne': 'IND' },
-    { 'British Indian Ocean Territory': 'IOT' },//TODO
-    { 'Irlandaise': 'IRL' },//TODO
-    { 'Iran, Islamic Republic of': 'IRN' }, //TODO
-    { 'Irakienne': 'IRQ' },
-    { 'Islandaise': 'ISL' },
-    { 'Israel': 'ISR' },
-    { 'Italienne': 'ITA' },
-    { 'Jamaïcaine': 'JAM' },
-    { 'Jersey': 'JEY' },//TODO
-    { 'Jordanienne': 'JOR' }, { 'Japonaise': 'JPN' },
-    { 'Kazakhstanaise': 'KAZ' }, { 'Kenyane': 'KEN' }, { 'Kirghize': 'KGZ' },
-    { 'Cambodgienne': 'KHM' },
-    { 'Kiribatienne': 'KIR' }, { 'Kittitienne-et-nevicienne': 'KNA' },
-    { 'Korea, Republic of': 'KOR' }, //TODO
-    { 'Kuwait': 'KWT' },//TODO Koweitienne
-    { "Lao People's Democratic Republic": 'LAO' }, //TODO Laotienne
-    { 'Libanaise': 'LBN' },
-    { 'Liberienne': 'LBR' },
-    { 'Libyenne': 'LBY' },
-    { 'Saint Lucia': 'LCA' }, //TODO
-    { 'Liechtensteinoise': 'LIE' },
-    { 'Sri Lanka': 'LKA' },//TODO
-    { 'Lesothane': 'LSO' },
-    { 'Lituanienne': 'LTU' }, { 'Luxembourgeoise': 'LUX' },
-    { 'Latvia': 'LVA' },  //TODO
-    { 'Macao': 'MAC' }, //TODO
-    { 'Saint-Martinois': 'MAF' },
-    { 'Morocco': 'MAR' }, //TODO
-    { 'Monaco': 'MCO' }, //TODO
-    { 'Moldave': 'MDA' },
-    { 'Madagascar': 'MDG' },//TODO
-    { 'Maldivienne': 'MDV' },
-    { 'Mexicaine': 'MEX' },
-    { 'Marshall Islands': 'MHL' },//TODO
-    { 'Macedonia, the former Yugoslav Republic of': 'MKD' },//TODO
-    { 'Malienne': 'MLI' },
-    { 'Maltaise': 'MLT' },
-    { 'Myanmar': 'MMR' },//TODO
-    { 'Montenegrine': 'MNE' },
-    { 'Mongole': 'MNG' },
-    { 'Northern Mariana Islands': 'MNP' },//TODO
-    { 'Mozambicaine': 'MOZ' }, { 'Mauritanienne': 'MRT' },
-    { 'Montserrat': 'MSR' },//TODO
-    { 'Martinique': 'MTQ' },//TODO
-    { 'Mauritius': 'MUS' },//TODO
-    { 'Malawienne': 'MWI' },//TODO
-    { 'Malaisienne': 'MYS' },
-    { 'Mayotte': 'MYT' },//TODO
-    { 'Namibienne': 'NAM' },
-    { 'New Caledonia': 'NCL' },//TODO
-    { 'Nigerienne': 'NER' },
-    { 'Norfolk Island': 'NFK' },//TODO
-    { 'Nigeriane': 'NGA' },
-    { 'Nicaraguayenne': 'NIC' },
-    { 'Niue': 'NIU' },//TODO Niuéenne
-    { 'Néerlandaise': 'NLD' },
-    { 'Norvegienne': 'NOR' }, { 'Nepalaise': 'NPL' },
-    { 'Nauruane': 'NRU' }, { 'Neo-zelandaise': 'NZL' },
-    { 'Omanaise': 'OMN' }, { 'Pakistanaise': 'PAK' }, { 'Panameenne': 'PAN' },
-    { 'Pitcairn': 'PCN' },//TODO Pitcairnaise
-    { 'Peruvienne': 'PER' }, { 'Philippine': 'PHL' },
-    { 'Palau': 'PLW' },
-    { 'Papouane-neoguineenne': 'PNG' },
-    { 'Polonaise': 'POL' }, { 'Portoricaine': 'PRI' },
-    { "Korea, Democratic People's Republic of": 'PRK' },
-    { 'Portugaise': 'PRT' }, { 'Paraguayenne': 'PRY' }, { 'Palestinienne': 'PSE' },
-    { 'French Polynesia': 'PYF' },//TODO Polynésiens
-    { 'Qatarienne': 'QAT' },
-    { 'Réunion': 'REU' },//TODO Réunionnais
-    { 'Roumaine': 'ROU' },
-    { 'Russe': 'RUS' }, { 'Rwandaise': 'RWA' },
-    { 'Saoudienne': 'SAU' },
-    { 'Soudanaise': 'SDN' }, { 'Senegalaise': 'SEN' },
-    { 'Singapourienne': 'SGP' },
-    { 'South Georgia and the South Sandwich Islands': 'SGS' },//TODO
-    { 'Hellenique': 'SHN' },
-    { 'Svalbard and Jan Mayen': 'SJM' },//TODO
-    { 'Salomonaise': 'SLB' },
-    { 'Sierra-leonaise': 'SLE' },
-    { 'El Salvador': 'SLV' },
-    { 'San Marino': 'SMR' },
-    { 'Somalienne': 'SOM' },
-    { 'Miquelonais': 'SPM' },
-    { 'Serbe': 'SRB' },
-    { 'Saoudienne': 'SSD' },
-    { 'Santomeenne': 'STP' },
-    { 'Surinamaise': 'SUR' },
-    { 'Slovaque': 'SVK' }, { 'Slovene': 'SVN' }, { 'Suedoise': 'SWE' },
-    { 'Swazie': 'SWZ' },
-    { 'Sint Maarten (Dutch part)': 'SXM' },//TODO
-    { 'Seychelloise': 'SYC' },
-    { 'Syrienne': 'SYR' },
-    { 'Turks and Caicos Islands': 'TCA' }, //TODO
-    { 'Tchadienne': 'TCD' },
-    { 'Togolaise': 'TGO' },
-    { 'Thaïlandaise': 'THA' },
-    { 'Tadjike': 'TJK' },
-    { 'Tokelau': 'TKL' },
-    { 'Turkmene': 'TKM' },
-    { 'Est-timoraise': 'TLS' },
-    { 'Tonguienne': 'TON' }, { 'Trinidadienne': 'TTO' }, { 'Tunisienne': 'TUN' },
-    { 'Turque': 'TUR' }, { 'Tuvaluane': 'TUV' }, { 'Taiwanaise': 'TWN' },
-    { 'Tanzanienne': 'TZA' },
-    { 'Ougandaise': 'UGA' },
-    { 'Ukrainienne': 'UKR' },
-    { 'United States Minor Outlying Islands': 'UMI' }, //TODO
-    { 'Uruguayenne': 'URY' },
-    { 'Americaine': 'USA' },
-    { 'Ouzbeke': 'UZB' },
-    { 'Holy See (Vatican City State)': 'VAT' },//TODO
-    { 'Saint-vincentaise-et-grenadine': 'VCT' },
-    { 'Venezuelienne': 'VEN' },
-    { 'Virgin Islands, British': 'VGB' },//TODO
-    { 'Virgin Islands, U.S.': 'VIR' }, //TODO
-    { 'Vietnamienne': 'VNM' },
-    { 'Vanuatu': 'VUT' },
-    { 'Wallis and Futuna': 'WLF' },
-    { 'Samoane': 'WSM' },
-    { 'Yemenite': 'YEM' },
-    { 'Sud-africaine': 'ZAF' },
-    { 'Zambienne': 'ZMB' },
-    { 'Zimbabweenne': 'ZWE' }
-  ],
-
   pays: [ //default [76]
     { value: 'Aruba', label: 'Aruba' },
     { value: 'Afghanistan', label: 'Afghanistan' },
@@ -998,99 +615,99 @@ export const environment = {
   ],
 
   paysEnglish: [
-    { label: "Afghanistan", value: "Afghanistan" },
-    { label: "Albania", value: "Albania" },
-    { label: "Algeria", value: "Algeria" },
-    { label: "American Samoa", value: "American Samoa" },
-    { label: "Andorra", value: "Andorra" },
-    { label: "Angola", value: "Angola" },
-    { label: "Anguilla", value: "Anguilla" },
-    { label: "Antarctica", value: "Antarctica" },
-    { label: "Antigua and Barbuda", value: "Antigua and Barbuda" },
-    { label: "Argentina", value: "Argentina" },
-    { label: "Armenia", value: "Armenia" },
-    { label: "Aruba", value: "Aruba" },
-    { label: "Australia", value: "Australia" },
-    { label: "Austria", value: "Austria" },
-    { label: "Azerbaijan", value: "Azerbaijan" },
-    { label: "Bahamas", value: "Bahamas" },
-    { label: "Bahrain", value: "Bahrain" },
-    { label: "Bangladesh", value: "Bangladesh" },
-    { label: "Barbados", value: "Barbados" },
-    { label: "Belarus", value: "Belarus" },
-    { label: "Belgium", value: "Belgium" },
-    { label: "Belize", value: "Belize" },
-    { label: "Benin", value: "Benin" },
-    { label: "Bermuda", value: "Bermuda" },
-    { label: "Bhutan", value: "Bhutan" },
-    { label: "Bolivia", value: "Bolivia" },
-    { label: "Bosnia and Herzegovina", value: "Bosnia and Herzegovina" },
-    { label: "Botswana", value: "Botswana" },
-    { label: "Bouvet Island", value: "Bouvet Island" },
-    { label: "Brazil", value: "Brazil" },
-    { label: "British Indian Ocean Territory", value: "British Indian Ocean Territory" },
-    { label: "Brunei", value: "Brunei" },
-    { label: "Bulgaria", value: "Bulgaria" },
-    { label: "Burkina Faso", value: "Burkina Faso" },
-    { label: "Burundi", value: "Burundi" },
-    { label: "Cambodia", value: "Cambodia" },
-    { label: "Cameroon", value: "Cameroon" },
-    { label: "Canada", value: "Canada" },
-    { label: "Cape Verde", value: "Cape Verde" },
-    { label: "Cayman Islands", value: "Cayman Islands" },
-    { label: "Central African Republic", value: "Central African Republic" },
-    { label: "Chad", value: "Chad" },
-    { label: "Chile", value: "Chile" },
-    { label: "China", value: "China" },
-    { label: "Christmas Island", value: "Christmas Island" },
-    { label: "Cocos (Keeling) Islands", value: "Cocos (Keeling) Islands" },
-    { label: "Colombia", value: "Colombia" },
-    { label: "Comoros", value: "Comoros" },
-    { label: "Congo", value: "Congo" },
-    { label: "Cook Islands", value: "Cook Islands" },
-    { label: "Costa Rica", value: "Costa Rica" },
-    { label: "Côte d'Ivoire", value: "Côte d'Ivoire" },
-    { label: "Croatia (Hrvatska)", value: "Croatia (Hrvatska)" },
-    { label: "Cuba", value: "Cuba" },
-    { label: "Cyprus", value: "Cyprus" },
-    { label: "Czech Republic", value: "Czech Republic" },
-    { label: "Congo (DRC)", value: "Congo (DRC)" },
-    { label: "Denmark", value: "Denmark" },
-    { label: "Djibouti", value: "Djibouti" },
-    { label: "Dominica", value: "Dominica" },
-    { label: "Dominican Republic", value: "Dominican Republic" },
-    { label: "East Timor", value: "East Timor" },
-    { label: "Ecuador", value: "Ecuador" },
-    { label: "Egypt", value: "Egypt" },
-    { label: "El Salvador", value: "El Salvador" },
-    { label: "Equatorial Guinea", value: "Equatorial Guinea" },
-    { label: "Eritrea", value: "Eritrea" },
-    { label: "Estonia", value: "Estonia" },
-    { label: "Ethiopia", value: "Ethiopia" },
-    { label: "Falkland Islands (Islas Malvinas)", value: "Falkland Islands (Islas Malvinas)" },
-    { label: "Faroe Islands", value: "Faroe Islands" },
-    { label: "Fiji Islands", value: "Fiji Islands" },
-    { label: "Finland", value: "Finland" },
-    { label: "France", value: "France" },
-    { label: "French Guiana", value: "French Guiana" },
-    { label: "French Polynesia", value: "French Polynesia" },
-    { label: "French Southern and Antarctic Lands", value: "French Southern and Antarctic Lands" },
-    { label: "Gabon", value: "Gabon" },
-    { label: "Gambia", value: "Gambia" },
-    { label: "Georgia", value: "Georgia" },
-    { label: "Germany", value: "Germany" },
-    { label: "Ghana", value: "Ghana" },
-    { label: "Gibraltar", value: "Gibraltar" },
-    { label: "Greece", value: "Greece" },
-    { label: "Greenland", value: "Greenland" },
-    { label: "Grenada", value: "Grenada" },
-    { label: "Guadeloupe", value: "Guadeloupe" },
-    { label: "Guam", value: "Guam" },
-    { label: "Guatemala", value: "Guatemala" },
-    { label: "Guinea", value: "Guinea" },
-    { label: "Guinea-Bissau", value: "Guinea-Bissau" },
-    { label: "Guyana", value: "Guyana" },
-    { label: "Haiti", value: "Haiti" },
+    { label: "Afghanistan" , value: "Afghanistan" },
+    { label: "Albania" , value: "Albania" },
+    { label: "Algeria" , value: "Algeria" },
+    { label: "American Samoa" , value: "American Samoa" },
+    { label: "Andorra" , value: "Andorra" },
+    { label: "Angola" , value: "Angola" },
+    { label: "Anguilla" , value: "Anguilla" },
+    { label: "Antarctica" , value: "Antarctica" },
+    { label: "Antigua and Barbuda" , value: "Antigua and Barbuda" },
+    { label: "Argentina" , value: "Argentina" },
+    { label: "Armenia" , value: "Armenia" },
+    { label: "Aruba" , value: "Aruba" },
+    { label: "Australia" , value: "Australia" },
+    { label: "Austria" , value: "Austria" },
+    { label: "Azerbaijan" , value: "Azerbaijan" },
+    { label: "Bahamas" , value: "Bahamas" },
+    { label: "Bahrain" , value: "Bahrain" },
+    { label: "Bangladesh" , value: "Bangladesh" },
+    { label: "Barbados" , value: "Barbados" },
+    { label: "Belarus" , value: "Belarus" },
+    { label: "Belgium" , value: "Belgium" },
+    { label: "Belize" , value: "Belize" },
+    { label: "Benin" , value: "Benin" },
+    { label: "Bermuda" , value: "Bermuda" },
+    { label: "Bhutan" , value: "Bhutan" },
+    { label: "Bolivia" , value: "Bolivia" },
+    { label: "Bosnia and Herzegovina" , value: "Bosnia and Herzegovina" },
+    { label: "Botswana" , value: "Botswana" },
+    { label: "Bouvet Island" , value: "Bouvet Island" },
+    { label: "Brazil" , value: "Brazil" },
+    { label: "British Indian Ocean Territory" , value: "British Indian Ocean Territory" },
+    { label: "Brunei" , value: "Brunei" },
+    { label: "Bulgaria" , value: "Bulgaria" },
+    { label: "Burkina Faso" , value: "Burkina Faso" },
+    { label: "Burundi" , value: "Burundi" },
+    { label: "Cambodia" , value: "Cambodia" },
+    { label: "Cameroon" , value: "Cameroon" },
+    { label: "Canada" , value: "Canada" },
+    { label: "Cape Verde" , value: "Cape Verde" },
+    { label: "Cayman Islands" , value: "Cayman Islands" },
+    { label: "Central African Republic" , value: "Central African Republic" },
+    { label: "Chad" , value: "Chad" },
+    { label: "Chile" , value: "Chile" },
+    { label: "China" , value: "China" },
+    { label: "Christmas Island" , value: "Christmas Island" },
+    { label: "Cocos (Keeling) Islands" , value: "Cocos (Keeling) Islands" },
+    { label: "Colombia" , value: "Colombia" },
+    { label: "Comoros" , value: "Comoros" },
+    { label: "Congo" , value: "Congo" },
+    { label: "Cook Islands" , value: "Cook Islands" },
+    { label: "Costa Rica" , value: "Costa Rica" },
+    { label: "Côte d'Ivoire" , value: "Côte d'Ivoire" },
+    { label: "Croatia (Hrvatska)" , value: "Croatia (Hrvatska)" },
+    { label: "Cuba" , value: "Cuba" },
+    { label: "Cyprus" , value: "Cyprus" },
+    { label: "Czech Republic" , value: "Czech Republic" },
+    { label: "Congo (DRC)" , value: "Congo (DRC)" },
+    { label: "Denmark" , value: "Denmark" },
+    { label: "Djibouti" , value: "Djibouti" },
+    { label: "Dominica" , value: "Dominica" },
+    { label: "Dominican Republic" , value: "Dominican Republic" },
+    { label: "East Timor" , value: "East Timor" },
+    { label: "Ecuador" , value: "Ecuador" },
+    { label: "Egypt" , value: "Egypt" },
+    { label: "El Salvador" , value: "El Salvador" },
+    { label: "Equatorial Guinea" , value: "Equatorial Guinea" },
+    { label: "Eritrea" , value: "Eritrea" },
+    { label: "Estonia" , value: "Estonia" },
+    { label: "Ethiopia" , value: "Ethiopia" },
+    { label: "Falkland Islands (Islas Malvinas)" , value: "Falkland Islands (Islas Malvinas)" },
+    { label: "Faroe Islands" , value: "Faroe Islands" },
+    { label: "Fiji Islands" , value: "Fiji Islands" },
+    { label: "Finland" , value: "Finland" },
+    { label: "France" , value: "France" },
+    { label: "French Guiana" , value: "French Guiana" },
+    { label: "French Polynesia" , value: "French Polynesia" },
+    { label: "French Southern and Antarctic Lands" , value: "French Southern and Antarctic Lands" },
+    { label: "Gabon" , value: "Gabon" },
+    { label: "Gambia" , value: "Gambia" },
+    { label: "Georgia" , value: "Georgia" },
+    { label: "Germany" , value: "Germany" },
+    { label: "Ghana" , value: "Ghana" },
+    { label: "Gibraltar" , value: "Gibraltar" },
+    { label: "Greece" , value: "Greece" },
+    { label: "Greenland" , value: "Greenland" },
+    { label: "Grenada" , value: "Grenada" },
+    { label: "Guadeloupe" , value: "Guadeloupe" },
+    { label: "Guam" , value: "Guam" },
+    { label: "Guatemala" , value: "Guatemala" },
+    { label: "Guinea" , value: "Guinea" },
+    { label: "Guinea-Bissau" , value: "Guinea-Bissau" },
+    { label: "Guyana" , value: "Guyana" },
+    { label: "Haiti" , value: "Haiti" },
     { label: "Heard Island and McDonald Islands", value: "Heard Island and McDonald Islands" },
     { label: "Honduras", value: "Honduras" },
     { label: "Hong Kong SAR", value: "Hong Kong SAR" },
@@ -1236,9 +853,334 @@ export const environment = {
     { label: "Zimbabwe", value: "Zimbabwe" },
   ],
 
+  formations: [
+    { value: "BTS MCO" },
+    { value: "BTS NDR" },
+    { value: "RNCP MUM" },
+    { value: "RNCP NTC" },
+    { value: "RNCP MERCD" },
+    { value: "RNCP CMD" },
+    { value: "RNCP MCI" },
+    { value: "RNCP MCI CI" },
+    { value: "RNCP MCI IA" },
+    { value: "BTS SIO" },
+    { value: "BTS WEB" },
+    { value: "RNCP Réseaux" },
+    { value: "RNCP Développeur" },
+    { value: "RNCP AIS" },
+    { value: "MPI Big Data" },
+    { value: "MPI CyberSecurité" },
+    { value: "RNCP ARH" },
+    { value: "BTS Assurance" },
+    { value: "BTS Banque" },
+    { value: "BTS CG" },
+    { value: "RNCP GCF" },
+    { value: "BTS PME" },
+    { value: "BTS Notariat" },
+    { value: "DCG" },
+    { value: "DCGS" },
+    { value: "RNCP MRH" },
+    { value: "RNCP BIM" },
+    { value: "BTS MEC" },
+    { value: "Bachelor BIM" },
+    { value: "BTS Hôtellerie-Restauration" },
+    { value: "BTS SPSSS" },
+    { value: "RNCP RET" },
+  ],
+
+  entreprisesList: [
+    { value: "Elitelabs" },
+    { value: "ESTYA" },
+    { value: "ADG" },
+    { value: "Autre" }
+  ],
+
+  programme: [
+    { value: "Programme Français" },
+    { value: "Programme Anglais" },
+  ],
+
+  niveau_academic: [
+    { id: 1, value: 'Pré-bac', label: 'Pré-bac' },
+    { id: 2, value: 'Bac+2', label: 'Bac+2' },
+    { id: 3, value: 'Bac+3', label: 'Bac+3' },
+    { id: 4, value: 'Bac+4', label: 'Bac+4' },
+    { id: 5, value: 'Bac+5', label: 'Bac+5' },
+  ],
+
+  statut_actuel: [
+    { id: 1, value: 'Etudiant', label: 'Etudiant' },
+    { id: 2, value: 'Salarié', label: 'Salarié' },
+    { id: 3, value: 'Au chômage', label: 'Au chômage' },
+    { id: 4, value: 'Autre', label: 'Autre' },
+  ],
+
+  civilite: [
+    { id: 1, value: 'Monsieur', label: 'Mr' },
+    { id: 2, value: 'Madame', label: 'Mme' },
+    { id: 3, value: 'Autre', label: 'Autre' },
+  ],
+  civiliteEN: [
+    { id: 1, value: 'Mr', label: 'Mr' },
+    { id: 2, value: 'Ms', label: 'Ms' },
+    { id: 3, value: 'Other', label: 'Other' },
+  ],
+
+  profil: [
+    { value: 'Salarié', label: 'Salarié' },
+    { value: 'Apprenti', label: 'Apprenti' },
+    { value: 'Demandeur d\'emploi', label: 'Demandeur d\'emploi'},
+    { value: 'Particulier', label: 'Particulier'},
+    { value: 'Contrat de professionnalisation', label: 'Contrat de professionnalisation' },
+    { value: 'Autre', label: 'Autre' },
+  ],
+
+  statut: [
+    { value: 'En cours de traitement', label: 'En cours de traitement' },
+    { value: 'En attente d\'une réponse', label: 'En attente d\'une réponse' },
+    { value: 'Traité', label: 'Traité' },
+  ],
+
+  sujetTicketing: [
+    { value: "Attestation d'emploi et Certificat de travail", label: "Attestation d'emploi et Certificat de travail" },
+    { value: "Déclarer un arrêt de travail", label: 'Déclarer un arrêt de travail' },
+    { value: "Renouvellement de contrat", label: "Renouvellement de contrat" },
+    { value: "Demander ses BDS", label: "Demander ses BDS" },
+    { value: "Démission", label: "Démission" },
+    { value: "Domiciliation de salaire", label: "Domiciliation de salaire" },
+    { value: "Attestation de salaire", label: "Attestation de salaire" },
+    { value: "Avenant de contrat", label: "Avenant de contrat" },
+    { value: "Ticket resto", label: "Ticket resto" },
+    { value: "Avenant de contrat", label: "Avenant de contrat" },
+    { value: "Prévoyance et mutuelle", label: "Prévoyance et mutuelle" },
+
+  ],
+
+  dicNationaliteCode: [
+    { 'Aruba': 'ABW' }, // TODO
+    { 'Afghane': 'AFG' },
+    { 'Angolaise': 'AGO' },
+    { 'Anguilla': 'AIA' }, // TODO
+    { 'Åland Islands': 'ALA' }, // TODO
+    { 'Albanaise': 'ALB' },
+    { 'Andorra': 'AND' }, // TODO
+    { 'United Arab Emirates': 'ARE' }, // TODO
+    { 'Argentine': 'ARG' },
+    { 'Armenia': 'ARM' }, // TODO
+    { 'American Samoa': 'ASM' }, // TODO
+    { 'Antarctica': 'ATA' }, // TODO
+    { 'French Southern Territories': 'ATF' }, // TODO
+    { 'Antiguaise et barbudienne': 'ATG' },
+    { 'Australienne': 'AUS' },
+    { 'Autrichienne': 'AUT' },
+    { 'Azerbaïdjanaise': 'AZE' },
+    { 'Burundaise': 'BDI' },
+    { 'Belge': 'BEL' },
+    { 'Beninoise': 'BEN' },
+    { 'Bonaire, Sint Eustatius and Saba': 'BES' }, //TODO
+    { 'Burkinabe': 'BFA' },
+    { 'Bangladaise': 'BGD' },
+    { 'Bulgare': 'BGR' },
+    { 'Bahreinienne': 'BHR' },
+    { 'Bahamienne': 'BHS' },
+    { 'Bosnienne': 'BIH' },
+    { 'Saint BarthÃ©lemy': 'BLM' }, //TODO
+    { 'Bielorusse': 'BLR' },
+    { 'Belizienne': 'BLZ' },
+    { 'Bermuda': 'BMU' },//TODO
+    { 'Bolivienne': 'BOL' },
+    { 'Brazil': 'BRA' },//TODO
+    { 'Barbadienne': 'BRB' },
+    { 'Brunei Darussalam': 'BRN' },//TODO
+    { 'Bhoutanaise': 'BTN' },
+    { 'Bouvet Island': 'BVT' },//TODO
+    { 'Botswanaise': 'BWA' },
+    { 'Centrafricaine': 'CAF' },
+    { 'Canadienne': 'CAN' },
+    { 'Cocos (Keeling) Islands': 'CCK' },//TODO
+    { 'Suisse': 'CHE' },
+    { 'Chilienne': 'CHL' },
+    { 'Chinoise': 'CHN' },
+    { "Ivoirienne": 'CIV' },
+    { 'Camerounaise': 'CMR' },
+    { 'Congolaise': 'COD' },
+    { 'Congolais': 'COG' },
+    { 'Cook Islands': 'COK' },//TODO
+    { 'Colombienne': 'COL' },
+    { 'Comorienne': 'COM' },
+    { 'Cap-verdienn': 'CPV' },
+    { 'Costaricaine': 'CRI' },
+    { 'Cubaine': 'CUB' },
+    { 'Curaçao': 'CUW' },//TODO
+    { 'Christmas Island': 'CXR' },//TODO
+    { 'Cayman Islands': 'CYM' },//TODO
+    { 'Cyprus': 'CYP' },//TODO Chypriote
+    { 'Czech Republic': 'CZE' }, //TODO Croate
+    { 'Allemande': 'DEU' },
+    { 'Djiboutienne': 'DJI' },
+    { 'Dominiquaise': 'DMA' },
+    { 'Danoise': 'DNK' }, { 'Dominicaine': 'DOM' }, { 'Algerienne': 'DZA' },
+    { 'Equatorienne': 'ECU' }, { 'Egyptienne': 'EGY' }, { 'Erythreenne': 'ERI' },
+    { 'Western Sahara': 'ESH' },//TODO
+    { 'Espagnole': 'ESP' },
+    { 'Estonienne': 'EST' }, { 'Ethiopienne': 'ETH' }, { 'Finlandaise': 'FIN' },
+    { 'Fidjienne': 'FJI' },
+    { 'Falkland Islands (Malvinas)': 'FLK' },//TODO
+    { 'Française': 'FRA' },
+    { 'Faroe Islands': 'FRO' }, //TODO
+    { 'Micronesia, Federated States of': 'FSM' },//TODO
+    { 'Gambienne': 'GAB' },
+    { 'Britannique': 'GBR' },
+    { 'Georgienne': 'GEO' },
+    { 'Guernsey': 'GGY' }, //TODO
+    { 'Ghaneenne': 'GHA' },
+    { 'Gibraltar': 'GIB' },//TODO
+    { 'Guineenne': 'GIN' },
+    { 'Guadeloupe': 'GLP' },//TODO
+    { 'Gambia': 'GMB' },//TODO
+    { 'Guinea-Bissau': 'GNB' },//TODO
+    { 'Equatorial Guinea': 'GNQ' },//TODO
+    { 'Grecque': 'GRC' }, { 'Grenadienne': 'GRD' },
+    { 'Greenland': 'GRL' },//TODO
+    { 'Guatemalteque': 'GTM' },
+    { 'French Guiana': 'GUF' },//TODO
+    { 'Guam': 'GUM' },//TODO
+    { 'Guyanienne': 'GUY' },
+    { 'Hong Kong': 'HKG' },//TODO
+    { 'Heard Island and McDonald Islands': 'HMD' },//TODO
+    { 'Hondurienne': 'HND' },
+    { 'Croate': 'HRV' },
+    { 'Haïtienne': 'HTI' },
+    { 'Hongroise': 'HUN' },
+    { 'Indonesienne': 'IDN' },
+    { 'Isle of Man': 'IMN' },//TODO
+    { 'Indienne': 'IND' },
+    { 'British Indian Ocean Territory': 'IOT' },//TODO
+    { 'Irlandaise': 'IRL' },//TODO
+    { 'Iran, Islamic Republic of': 'IRN' }, //TODO
+    { 'Irakienne': 'IRQ' },
+    { 'Islandaise': 'ISL' },
+    { 'Israel': 'ISR' },
+    { 'Italienne': 'ITA' },
+    { 'Jamaïcaine': 'JAM' },
+    { 'Jersey': 'JEY' },//TODO
+    { 'Jordanienne': 'JOR' }, { 'Japonaise': 'JPN' },
+    { 'Kazakhstanaise': 'KAZ' }, { 'Kenyane': 'KEN' }, { 'Kirghize': 'KGZ' },
+    { 'Cambodgienne': 'KHM' },
+    { 'Kiribatienne': 'KIR' }, { 'Kittitienne-et-nevicienne': 'KNA' },
+    { 'Korea, Republic of': 'KOR' }, //TODO
+    { 'Kuwait': 'KWT' },//TODO Koweitienne
+    { "Lao People's Democratic Republic": 'LAO' }, //TODO Laotienne
+    { 'Libanaise': 'LBN' },
+    { 'Liberienne': 'LBR' },
+    { 'Libyenne': 'LBY' },
+    { 'Saint Lucia': 'LCA' }, //TODO
+    { 'Liechtensteinoise': 'LIE' },
+    { 'Sri Lanka': 'LKA' },//TODO
+    { 'Lesothane': 'LSO' },
+    { 'Lituanienne': 'LTU' }, { 'Luxembourgeoise': 'LUX' },
+    { 'Latvia': 'LVA' },  //TODO
+    { 'Macao': 'MAC' }, //TODO
+    { 'Saint-Martinois': 'MAF' },
+    { 'Morocco': 'MAR' }, //TODO
+    { 'Monaco': 'MCO' }, //TODO
+    { 'Moldave': 'MDA' },
+    { 'Madagascar': 'MDG' },//TODO
+    { 'Maldivienne': 'MDV' },
+    { 'Mexicaine': 'MEX' },
+    { 'Marshall Islands': 'MHL' },//TODO
+    { 'Macedonia, the former Yugoslav Republic of': 'MKD' },//TODO
+    { 'Malienne': 'MLI' },
+    { 'Maltaise': 'MLT' },
+    { 'Myanmar': 'MMR' },//TODO
+    { 'Montenegrine': 'MNE' },
+    { 'Mongole': 'MNG' },
+    { 'Northern Mariana Islands': 'MNP' },//TODO
+    { 'Mozambicaine': 'MOZ' }, { 'Mauritanienne': 'MRT' },
+    { 'Montserrat': 'MSR' },//TODO
+    { 'Martinique': 'MTQ' },//TODO
+    { 'Mauritius': 'MUS' },//TODO
+    { 'Malawienne': 'MWI' },//TODO
+    { 'Malaisienne': 'MYS' },
+    { 'Mayotte': 'MYT' },//TODO
+    { 'Namibienne': 'NAM' },
+    { 'New Caledonia': 'NCL' },//TODO
+    { 'Nigerienne': 'NER' },
+    { 'Norfolk Island': 'NFK' },//TODO
+    { 'Nigeriane': 'NGA' },
+    { 'Nicaraguayenne': 'NIC' },
+    { 'Niue': 'NIU' },//TODO Niuéenne
+    { 'Néerlandaise': 'NLD' },
+    { 'Norvegienne': 'NOR' }, { 'Nepalaise': 'NPL' },
+    { 'Nauruane': 'NRU' }, { 'Neo-zelandaise': 'NZL' },
+    { 'Omanaise': 'OMN' }, { 'Pakistanaise': 'PAK' }, { 'Panameenne': 'PAN' },
+    { 'Pitcairn': 'PCN' },//TODO Pitcairnaise
+    { 'Peruvienne': 'PER' }, { 'Philippine': 'PHL' },
+    { 'Palau': 'PLW' },
+    { 'Papouane-neoguineenne': 'PNG' },
+    { 'Polonaise': 'POL' }, { 'Portoricaine': 'PRI' },
+    { "Korea, Democratic People's Republic of": 'PRK' },
+    { 'Portugaise': 'PRT' }, { 'Paraguayenne': 'PRY' }, { 'Palestinienne': 'PSE' },
+    { 'French Polynesia': 'PYF' },//TODO Polynésiens
+    { 'Qatarienne': 'QAT' },
+    { 'Réunion': 'REU' },//TODO Réunionnais
+    { 'Roumaine': 'ROU' },
+    { 'Russe': 'RUS' }, { 'Rwandaise': 'RWA' },
+    { 'Saoudienne': 'SAU' },
+    { 'Soudanaise': 'SDN' }, { 'Senegalaise': 'SEN' },
+    { 'Singapourienne': 'SGP' },
+    { 'South Georgia and the South Sandwich Islands': 'SGS' },//TODO
+    { 'Hellenique': 'SHN' },
+    { 'Svalbard and Jan Mayen': 'SJM' },//TODO
+    { 'Salomonaise': 'SLB' },
+    { 'Sierra-leonaise': 'SLE' },
+    { 'El Salvador': 'SLV' },
+    { 'San Marino': 'SMR' },
+    { 'Somalienne': 'SOM' },
+    { 'Miquelonais': 'SPM' },
+    { 'Serbe': 'SRB' },
+    { 'Saoudienne': 'SSD' },
+    { 'Santomeenne': 'STP' },
+    { 'Surinamaise': 'SUR' },
+    { 'Slovaque': 'SVK' }, { 'Slovene': 'SVN' }, { 'Suedoise': 'SWE' },
+    { 'Swazie': 'SWZ' },
+    { 'Sint Maarten (Dutch part)': 'SXM' },//TODO
+    { 'Seychelloise': 'SYC' },
+    { 'Syrienne': 'SYR' },
+    { 'Turks and Caicos Islands': 'TCA' }, //TODO
+    { 'Tchadienne': 'TCD' },
+    { 'Togolaise': 'TGO' },
+    { 'Thaïlandaise': 'THA' },
+    { 'Tadjike': 'TJK' },
+    { 'Tokelau': 'TKL' },
+    { 'Turkmene': 'TKM' },
+    { 'Est-timoraise': 'TLS' },
+    { 'Tonguienne': 'TON' }, { 'Trinidadienne': 'TTO' }, { 'Tunisienne': 'TUN' },
+    { 'Turque': 'TUR' }, { 'Tuvaluane': 'TUV' }, { 'Taiwanaise': 'TWN' },
+    { 'Tanzanienne': 'TZA' },
+    { 'Ougandaise': 'UGA' },
+    { 'Ukrainienne': 'UKR' },
+    { 'United States Minor Outlying Islands': 'UMI' }, //TODO
+    { 'Uruguayenne': 'URY' },
+    { 'Americaine': 'USA' },
+    { 'Ouzbeke': 'UZB' },
+    { 'Holy See (Vatican City State)': 'VAT' },//TODO
+    { 'Saint-vincentaise-et-grenadine': 'VCT' },
+    { 'Venezuelienne': 'VEN' },
+    { 'Virgin Islands, British': 'VGB' },//TODO
+    { 'Virgin Islands, U.S.': 'VIR' }, //TODO
+    { 'Vietnamienne': 'VNM' },
+    { 'Vanuatu': 'VUT' },
+    { 'Wallis and Futuna': 'WLF' },
+    { 'Samoane': 'WSM' },
+    { 'Yemenite': 'YEM' },
+    { 'Sud-africaine': 'ZAF' },
+    { 'Zambienne': 'ZMB' }, { 'Zimbabweenne': 'ZWE' }
+  ],
+
 
   nationalites: [
-    //{ value: null, label: 'Choisissez une nationalité' },
+    //{ value: "", label: "Choisissez une nationalité" },
     { value: "Afghane", label: 'Afghane' },
     { value: "Albanaise", label: 'Albanaise' },
     { value: "Algerienne", label: 'Algerienne' },
@@ -1435,7 +1377,6 @@ export const environment = {
     { value: "Zimbabweenne", label: 'Zimbabweenne' },
 
   ],
-
   nationalities: [
     { value: "Afghan", label: 'Afghan' },
     { value: "Albanian", label: 'Albanian' },
@@ -1828,7 +1769,6 @@ export const environment = {
     { value: "Zimbabweenne", label: 'Zimbabweenne' },
 
   ],
-
   entreprises: [
     { value: "ESTYA Education", label: 'ESTYA Education' },
     { value: "ESTYA Training", label: 'ESTYA Training' },
@@ -1836,16 +1776,16 @@ export const environment = {
 
   ],
   status: [
-    { value: 'À traiter' },
-    { value: 'En cours de traitement' },
-    { value: 'En attente de retour' },
-    { value: 'Clôturé' },
+    { label: "À traiter", value: 'À traiter' },
+    { label: "En cours de traitement", value: 'En cours de traitement' },
+    { label: "En attente de retour", value: 'En attente de retour' },
+    { label: "Clôturé", value: 'Clôturé' }
   ],
-  etat_annee: [
-    { value: 'Nouvelle' },
-    { value: 'Active' },
-    { value: 'Archivée' },
 
+  etat_annee: [
+    { label: "Nouvelle", value: 'Nouvelle' },
+    { label: "Active", value: 'Active' },
+    { label: "Archivée", value: 'Archivée' },
   ],
 
   programeFrDropdown:
@@ -1888,7 +1828,6 @@ export const environment = {
       { value: "Level 7 - Health and Social care Management", }
 
     ],
-
   ADGprogrameFrDropdown:
     [
       { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" },
@@ -2002,5 +1941,56 @@ export const environment = {
     { value: "Coordinateur BIM du Bâtiment" },
     { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
     { value: "Formations continues IPERIA" }
-  ]
+  ],
+  motif :[
+    {label: 'Refus de visa', value: 'Refus de visa'},
+    {label: 'Alternance',value: 'Alternance'},
+    {label: 'Dossier rejeté par capmus France',value: 'Dossier rejeté par capmus France'},
+    {label: 'Paiement en double',value: 'Paiement en double'},
+    {label: 'Autre',value: 'Autre'},
+
+  ],
+  paymentType : [
+    { label: 'Virement', value: 'Virement' },
+    { label: 'Chèque', value: 'Chèque' },
+    { label: 'Compensation', value: 'Compensation' },
+    { label:'Autre', value: 'Autre'},
+
+  ],
+
+  availableStatus : [
+    {
+      label: "Nouvelle",
+      value: 'new'
+    },
+    {
+      label: "En cours ",
+      value: 'in-progress'
+    },
+    {
+      label: "Refusée",
+      value: 'declined'
+    },
+    {
+      label: "Acceptée",
+      value: 'accepted'
+    },
+    {
+      label: "Orienté",
+      value: 'oriented'
+    },
+    {
+      label: "Remboursé",
+      value: 'refunded'
+    }
+
+  ],
 };
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
