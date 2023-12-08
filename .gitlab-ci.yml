@@ -356,7 +356,7 @@ build_forms-app_on_qa:
 
   script:
       - cd forms-app
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=dev
+      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - main
   artifacts:
