@@ -19,7 +19,7 @@ app.use(express.static('public', {
   },
 }));
 let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
-let origin = ["http://localhost:4200"];
+let origin = ["http://localhost:4200","http://localhost:4210"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
   if (!argProd.includes("dev") && !argProd.includes("qa") && !argProd.includes("prod1") && !argProd.includes("prod2")) {
