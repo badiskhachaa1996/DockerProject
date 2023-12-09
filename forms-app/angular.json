@@ -135,19 +135,19 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
               "prod1": {
-                  "browserTarget": "sakai:build:prod1"
+                  "browserTarget": "forms-app:build:prod1"
               },
               "prod2": {
-                  "browserTarget": "sakai:build:prod2"
+                  "browserTarget": "forms-app:build:prod2"
               },
               "qa": {
-                  "browserTarget": "sakai:build:qa"
+                  "browserTarget": "forms-app:build:qa"
               },
               "dev": {
-                  "browserTarget": "sakai:build:dev"
+                  "browserTarget": "forms-app:build:dev"
               },
               "local": {
-                  "browserTarget": "sakai:build:local"
+                  "browserTarget": "forms-app:build:local"
               }
           },
           "defaultConfiguration": "local",
