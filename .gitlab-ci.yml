@@ -26,12 +26,12 @@ stages:
 
 #==========================================================
 
-install_node_dependencies_on_dev:
+install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
     paths:
       - back/node_modules/
   script:
@@ -44,12 +44,12 @@ install_node_dependencies_on_dev:
     changes:
       - back/package.json
 
-install_angular_dependencies_on_dev:
+install_front_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
   script:
@@ -67,7 +67,7 @@ install_forms-app_dependencies_on_dev:
   tags:
     - dev-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
   script:
@@ -82,12 +82,12 @@ install_forms-app_dependencies_on_dev:
 
 #==========================================================
 
-install_node_dependencies_on_qa:
+install_back_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
     paths:
       - back/node_modules/
   script:
@@ -100,12 +100,12 @@ install_node_dependencies_on_qa:
     changes:
       - back/package.json
 
-install_angular_dependencies_on_qa:
+install_front_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
   script:
@@ -123,7 +123,7 @@ install_forms-app_dependencies_on_qa:
   tags:
     - qa-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
   script:
@@ -138,12 +138,12 @@ install_forms-app_dependencies_on_qa:
 
 #==========================================================
 
-install_node_dependencies_on_prod2:
+install_back_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
     paths:
       - back/node_modules/
   script:
@@ -156,12 +156,12 @@ install_node_dependencies_on_prod2:
     changes:
       - back/package.json
 
-install_angular_dependencies_on_prod2:
+install_front_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
   script:
@@ -179,7 +179,7 @@ install_forms-app_dependencies_on_prod2:
   tags:
     - prod2-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
   script:
@@ -194,12 +194,12 @@ install_forms-app_dependencies_on_prod2:
 
 #==========================================================
 
-manual_install_node_dependencies_on_prod1:
+manual_install_back_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
     paths:
       - back/node_modules/
   script:
@@ -213,12 +213,12 @@ manual_install_node_dependencies_on_prod1:
       - back/package.json
   when: manual
 
-manual_install_angular_dependencies_on_prod1:
+manual_install_front_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
   script:
@@ -237,7 +237,7 @@ manual_install_forms-app_dependencies_on_prod1:
   tags:
     - prod1-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
   script:
@@ -279,12 +279,12 @@ manual_install_forms-app_dependencies_on_prod1:
 
 #==========================================================
 
-build_angular_on_dev:
+build_front_on_dev:
   stage: Build
   tags:
     - dev-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
     policy: pull
@@ -305,7 +305,7 @@ build_forms-app_on_dev:
   tags:
     - dev-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
     policy: pull
@@ -323,12 +323,12 @@ build_forms-app_on_dev:
 
 #==========================================================
 
-build_angular_on_qa:
+build_front_on_qa:
   stage: Build
   tags:
     - qa-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
     policy: pull
@@ -349,7 +349,7 @@ build_forms-app_on_qa:
   tags:
     - qa-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
     policy: pull
@@ -367,12 +367,12 @@ build_forms-app_on_qa:
 
 #==========================================================
 
-build_angular_on_prod2:
+build_front_on_prod2:
   stage: Build
   tags:
     - prod2-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
     policy: pull
@@ -393,7 +393,7 @@ build_forms-app_on_prod2:
   tags:
     - prod2-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
     policy: pull
@@ -411,12 +411,12 @@ build_forms-app_on_prod2:
 
 #==========================================================
 
-manual_build_angular_on_prod1:
+manual_build_front_on_prod1:
   stage: Build
   tags:
     - prod1-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
     policy: pull
@@ -438,7 +438,7 @@ manual_build_forms-app_on_prod1:
   tags:
     - prod1-shell
   cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
     policy: pull
@@ -510,7 +510,7 @@ manual_build_forms-app_on_prod1:
 
 #==========================================================
   
-deploy_node_to_dev:
+deploy_back_to_dev:
   stage: DEV
 
   tags:
@@ -525,10 +525,10 @@ deploy_node_to_dev:
   only:
     - develop
 
-deploy_angular_to_dev:
+deploy_front_to_dev:
   stage: DEV
   dependencies: 
-    - build_angular_on_dev
+    - build_front_on_dev
   tags:
     - dev-shell
   script:
@@ -544,14 +544,14 @@ deploy_forms-app_to_dev:
   tags:
     - dev-shell
   script:
-    - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html
+    - sudo rm -r /var/www/html/ims/forms-app
+    - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
   only:
     - develop
 
 #==========================================================
 
-deploy_node_to_qa:
+deploy_back_to_qa:
   stage: QA
 
   tags:
@@ -566,10 +566,10 @@ deploy_node_to_qa:
   only:
     - main
 
-deploy_angular_to_qa:
+deploy_front_to_qa:
   stage: QA
   dependencies: 
-    - build_angular_on_qa
+    - build_front_on_qa
   tags:
     - qa-shell
   script:
@@ -585,14 +585,14 @@ deploy_forms-app_to_qa:
   tags:
     - qa-shell
   script:
-    - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html
+    - sudo rm -r /var/www/html/ims/forms-app
+    - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
   only:
     - main
 
 #==========================================================
   
-deploy_node_to_prod2:
+deploy_back_to_prod2:
   stage: PROD2
 
   tags:
@@ -607,10 +607,10 @@ deploy_node_to_prod2:
   only:
     - main
 
-deploy_angular_to_prod2:
+deploy_front_to_prod2:
   stage: PROD2
   dependencies:
-    - build_angular_on_prod2
+    - build_front_on_prod2
   tags:
     - prod2-shell
   script:
@@ -626,14 +626,14 @@ deploy_forms-app_to_prod2:
   tags:
     - prod2-shell
   script:
-    - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html
+    - sudo rm -r /var/www/html/ims/forms-app
+    - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
   only:
     - main
 
 #==========================================================
   
-manual_deploy_node_to_prod1:
+manual_deploy_back_to_prod1:
   stage: PROD1
 
   tags:
@@ -649,10 +649,10 @@ manual_deploy_node_to_prod1:
     - main
   when: manual
 
-manual_deploy_angular_to_prod1:
+manual_deploy_front_to_prod1:
   stage: PROD1
   dependencies:
-    - manual_build_angular_on_prod1
+    - manual_build_front_on_prod1
   tags:
     - prod1-shell
   script:
@@ -669,8 +669,8 @@ manual_deploy_forms-app_to_prod1:
   tags:
     - prod1-shell
   script:
-    - sudo rm -r /var/www/html/forms-app
-    - sudo mv -f forms-app/dist /var/www/html
+    - sudo rm -r /var/www/html/ims/forms-app
+    - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
   only:
     - main
   when: manual
