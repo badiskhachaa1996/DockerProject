@@ -40,6 +40,7 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
     { label: 'Commercial', value: 'Commercial' },
     { label: 'Visitor', value: 'Visitor' },
+    { label: 'Prospect', value: 'Prospect' },
     //ACCES V3
     { label: 'Collaborateur', value: 'Collaborateur' },
     { label: 'Responsable', value: 'Responsable' },

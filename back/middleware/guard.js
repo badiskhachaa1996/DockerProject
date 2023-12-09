@@ -11,7 +11,7 @@ function haveAccess(lvl, headers, callback) {
     }
 
     User.findOne({ _id: token.id }, (err, user) => {
-        if (user && (headers.origin == "https://ticket.estya.com" || headers.origin == "http://localhost:4200")) {
+        if (user && (headers.origin == "https://ticket.estya.com" || headers.origin == "http://localhost:4200" || headers.origin == "http://localhost:4210")) {
             if (lvl == "Admin") {
                 callback(user.role == "Admin")
             } else if (lvl == "Responsable") {

@@ -1,6 +1,9 @@
+<input type="file" (change)="FileUpload($event.target.files)" id="selectedFilesuivre" #selectedFilesuivre
+    style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 <p-tabView [(activeIndex)]="selectedTabIndex">
     <p-tabPanel header="Créer">
         <div class="card">
+
 
             <h3 class="text-center">Nouveau projet</h3>
             <form class="p-formgrid grid p-fluid" [formGroup]="formAddProject" (ngSubmit)="addProject()">
@@ -102,6 +105,8 @@
                         (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
                         emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
 
+
+
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -181,19 +186,22 @@
                             (click)="delete(project._id,ri)" aria-hidden="true"></i>
                         <i pTooltip="activités" style="margin-left: 3%; cursor: pointer;" class="pi pi-align-justify"
                             (click)=" showTaskList(project) ; showtache=true" aria-hidden="true"></i>
-                        <i pTooltip="Ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
+                        <i pTooltip="ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
                             (click)="showRessources(project._id)" aria-hidden="true"></i>
-                        <i pTooltip="Budget" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
+                        <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
                             (click)="showBudget(project._id)" aria-hidden="true"></i>
 
 
                     </td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-ticket>
 
+
+
+            <ng-template pTemplate="rowexpansion" let-ticket>    
                 <tr>
                     <td colspan="9">
+                        <h4>{{ticket.titre}}</h4>
                         <p-table class="col-12" styleClass="p-datatable-gridlines">
                             <ng-template pTemplate="header">
                 <tr>
@@ -231,72 +239,150 @@
     </p-tabPanel>
     <p-tabPanel style="width: 100%;" header="Project -  {{projectSelected?.titre}}"
         *ngFor="let projectSelected of projectSelecteds " [closable]="true">
-        <div class="grid col-12">
-            <div class="col-4 "><p-card header="To DO ">
-                    <ng-container *ngFor="let t of taskToDo">
-                        <p-card header={{t?.libelle}}><br>
+        <p-card>
+            <div class="grid col-12">
+                <div class="col-3">
+                    <label for="avancement"> <strong> Avancement</strong></label>
+                    {{projectSelected?.avancement| number:'1.1-1'}} %
 
+                </div>
+                
+                    <div class="col-3">
+                       <strong>Responsable : </strong>{{projectSelected.responsable}}
+                    </div>
+                    <div class="col-3">
+                        <strong> Créé le : </strong>{{projectSelected.created_date| date:'dd MMMM yy' }}
+                    </div>
+                    <div class="col-3">
+                        <strong> Créé par :</strong> {{projectSelected.createur}}
+                    
+                </div>
+            </div>
+        </p-card>
+        <div class="grid col-12">
+            <div class="col-4 ">
+                <p-card header="To DO " class="card-todo">
+                    <ng-container *ngFor="let t of taskToDo">
+                        <p-card>
+                            <p-card-header>
+                                <div class="grid col-12">
+                                    <div class="col-11">
+                                        <strong> {{t?.libelle}}</strong>
+                                    </div>
+                                    <div class="col-1">
+                                        <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
+                                    </div>
+                                </div>
+                            </p-card-header>
                             <div class="grid col-12">
-                                <div class="col-9">
+                                <div class="col-12">
                                     {{t.description_task}}
                                 </div>
-                                <div class="col-3">
-                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+
+                                <div class="col-12">
+                                    Assigné à
+                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                    </ng-container>
                                 </div>
-                                <div class="col-6">
-                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
-                                </div>
-                                <div class="col-6">
-                                    <p-button></p-button>
-                                </div>
+
+
                             </div>
+                            <p-card-footer>
+                                <div class="grid col-12">
+                                    <div class="col-11"></div>
+                                    <div class="col-1">
+                                        <i class="pi pi-arrow-right" style="color: green" (click)="ToDoing(t)"></i>
+                                    </div>
+                                </div>
+                            </p-card-footer>
                         </p-card><br>
                     </ng-container>
-                    <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true" (click)="showAddTacheForm=true"></p-button>
+                    <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true"
+                        (click)="showAddTacheForm=true"></p-button>
                 </p-card>
             </div>
             <div class="col-4 ">
                 <p-card header="Doing ">
-                    <ng-container *ngFor="let t of task">
-                        <p-card header={{t?.libelle}}><br>
+                    <ng-container *ngFor="let t of taskDoing">
+                        <p-card>
+                            <p-card-header>
+                                <div class="grid col-12">
+                                    <div class="col-11">
+                                        <strong> {{t?.libelle}}</strong>
+                                    </div>
+                                    <div class="col-1">
+                                        <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
+                                    </div>
+                                </div>
+                            </p-card-header>
 
                             <div class="grid col-12">
-                                <div class="col-9">
+                                <div class="col-12">
                                     {{t.description_task}}
                                 </div>
-                                <div class="col-3">
-                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+                                <div *ngIf="test" class="col-12">
+                                    Assigné à
+                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                    </ng-container>
                                 </div>
-                                <div class="col-6">
-                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
-                                </div>
-                                <div class="col-6">
-                                    <p-button></p-button>
-                                </div>
+
+
                             </div>
+                            <p-card-footer>
+                                <div class="grid col-12">
+                                    <div class="col-1">
+                                        <i class="pi pi-arrow-left" style="color: green" (click)="ToToDo(t)"></i>
+                                    </div>
+                                    <div class="col-10"></div>
+                                    <div class="col-1">
+                                        <i class="pi pi-arrow-right" style="color: green" (click)="ToDone(t)"></i>
+                                    </div>
+                                </div>
+                            </p-card-footer>
                         </p-card><br>
                     </ng-container>
                 </p-card>
             </div>
             <div class="col-4 ">
                 <p-card header="Done ">
-                    <ng-container *ngFor="let t of task">
-                        <p-card header={{t?.libelle}}><br>
+                    <ng-container *ngFor="let t of taskDone">
+                        <p-card>
+                            <p-card-header>
+                                <div class="grid col-12">
+                                    <div class="col-11">
+                                        <strong> {{t?.libelle}}</strong>
+                                    </div>
+                                    <div class="col-1">
+                                        <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
+                                    </div>
+                                </div>
+                            </p-card-header>
 
                             <div class="grid col-12">
-                                <div class="col-9">
+                                <div class="col-12">
                                     {{t.description_task}}
                                 </div>
-                                <div class="col-3">
-                                    <i class="pi pi-ellipsis-h" style="color: green" (click)="displayTache=true"></i>
+
+                                <div class="col-12">
+                                    Assigné à
+                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                    </ng-container>
                                 </div>
-                                <div class="col-6">
-                                    Assigné à {{t?.attribuate_to[0]?.firstname}} {{t?.attribuate_to[0]?.lastname}}
-                                </div>
-                                <div class="col-6">
-                                    <p-button></p-button>
-                                </div>
+
                             </div>
+                            <p-card-footer>
+                                <div class="grid col-12">
+                                    <div class="col-1">
+                                        <i class="pi pi-arrow-left" style="color: green" (click)="ToDoing(t)"></i>
+                                    </div>
+                                    <div class="col-11">
+
+                                    </div>
+                                </div>
+                            </p-card-footer>
                         </p-card><br>
                     </ng-container>
                 </p-card>
@@ -311,6 +397,11 @@
 
 
 </p-tabView>
+
+
+
+
+
 
 <div *ngIf="showUpdateTacheForm">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
@@ -398,12 +489,39 @@
     </form>
 </div>
 
+<div *ngIf="showUpdateBudgetForm">
+    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        (click)="showUpdateBudgetForm = false; showOtherTextArea = false;"></i>
+    <div style="float: right"></div>
+    <h3 class="text-center">Modifier ce budget</h3>
+    <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="onUpdatebudget()">
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
+            <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
+                rows="2" cols="40"></textarea>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label htmlFor="charge">charge <span style="color: red">*</span></label>
+            <input formControlName="charge" pInputText type="number" id="depense">
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
+            <input formControlName="depense" pInputText type="number" id="depense">
+        </div>
 
 
+        <button pButton pRipple type="submit" class="my-2" label="Modifier" [disabled]="formAddbudget.invalid"></button>
+    </form>
+</div>
 
-<p-dialog header="Mettre à jour le budget" [(visible)]="displayBudjetDialog" (onHide)="onHideAddBudget()" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
 <div *ngIf="showAddBudgetForm">
-    <h3 class="text-center">Budget : {{currentProject.titre}}</h3>
+    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        (click)="showAddBudgetForm = false; showOtherTextArea = false;"></i>
+    <div style="float: right"></div>
+    <h3 class="text-center">Ajouter un Budget</h3>
     <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="addBudget()">
 
         <div class="field col-12 md:col-12">
@@ -419,193 +537,109 @@
             <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
             <input formControlName="depense" pInputText type="number" id="depense">
         </div>
-        <div class="field col-12 ">
-            <label>Pièce Jointe:</label>
-            <div>
-                <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
-                              chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
-                              [auto]="true">
-                </p-fileUpload>
-            </div>
-
-            <div>
-                <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles">
-                        {{ file.name }} - {{ file.size }} bytes
-                        <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
-                           pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
-                                uploadedFiles.splice(
-                                    uploadedFiles.indexOf(file)
-                                )
-                            " aria-hidden="true">
-                        </i>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
 
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddbudget.invalid"></button>
     </form>
 </div>
 
-    <div *ngIf="showbudget" class="card">
-        <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-           (click)="showbudget = false; showOtherTextArea = false;"></i>
-        <div style="float: right"></div>
-        <h3 class="text-center">Budget : <span *ngIf="currentProject">{{currentProject.titre}}</span></h3>
-        <button pButton pRipple label="Nouveau budget" style="float: right;" class="p-button-outlined mb-2"
-                (click)="showAddBudgetForm = true"></button>
+
+<div *ngIf="showbudget" class="card">
+    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        (click)="showbudget = false; showOtherTextArea = false;"></i>
+    <div style="float: right"></div>
+    <h3 class="text-center">Le budget </h3>
+    <button pButton pRipple label="Nouveau budget" style="float: right;" class="p-button-outlined mb-2"
+        (click)="showAddBudgetForm = true"></button>
 
 
-        <div style="float: right"></div>
-        <div class="grid col-12 ">
-            <div class="col-4">
-                <div class="card mb-0">
-                    <div class="flex justify-content-between mb-4">
-                        <div>
-                            <span class="block text-500 font-medium mb-4">Budget estimé</span>
-                            <div class="text-900 font-medium text-xl">{{budget_charge }}</div>
-                        </div>
-                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                            <i class="pi pi-money-bill text-blue-500 text-xl"></i>
-                        </div>
+    <div style="float: right"></div>
+    <div class="grid col-12 ">
+        <div class="col-4">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-4">
+                    <div>
+                        <span class="block text-500 font-medium mb-4">Budget estimé</span>
+                        <div class="text-900 font-medium text-xl">{{budget_charge }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-money-bill text-blue-500 text-xl"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="card mb-0">
-                    <div class="flex justify-content-between mb-4">
-                        <div>
-                            <span class="block text-500 font-medium mb-4">Dépenses</span>
-                            <div class="text-900 font-medium text-xl">{{budgect_depense }}</div>
-                        </div>
-                        <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                            <i class="pi pi-minus text-cyan-500 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card mb-0">
-                    <div class="flex justify-content-between mb-4">
-                        <div>
-                            <span class="block text-500 font-medium mb-4">Balance</span>
-                            <div class="text-900 font-medium text-xl">{{budget_charge - budgect_depense }}</div>
-                        </div>
-                        <div class="flex align-items-center justify-content-center bg-green-100 border-round"
-                             [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                            <i class="pi pi-money-bill text-green-500 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
-        <div *ngIf="showUpdateBudgetForm">
-            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
-               (click)="showUpdateBudgetForm = false; showOtherTextArea = false;"></i>
-            <div style="float: right"></div>
-            <h3 class="text-center">Modifier ce budget</h3>
-            <form class="p-formgrid grid p-fluid" [formGroup]="formAddbudget" (ngSubmit)="onUpdatebudget()">
-
-                <div class="field col-12 md:col-12">
-                    <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
-                    <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
-                              rows="2" cols="40"></textarea>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="charge">charge <span style="color: red">*</span></label>
-                    <input formControlName="charge" pInputText type="number" id="depense">
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="depense">Dépense <span style="color: red">*</span></label>
-                    <input formControlName="depense" pInputText type="number" id="depense">
-                </div>
-
-                <div class="field col-12 ">
-                    <label>Pièce Jointe:</label>
+        <div class="col-4">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-4">
                     <div>
-                        <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
-                                      chooseIcon="pi pi-paperclip" maxFileSize="10000000" [style]="{ width: '5%' }" autoWidth="false"
-                                      [auto]="true">
-                        </p-fileUpload>
+                        <span class="block text-500 font-medium mb-4">Dépenses</span>
+                        <div class="text-900 font-medium text-xl">{{budgect_depense }}</div>
                     </div>
-
-                    <div>
-                        <ul *ngIf="uploadedFiles.length">
-                            <li *ngFor="let file of uploadedFiles">
-                                {{ file.name }} - {{ file.size }} bytes
-                                <i class="pi pi-trash" style="float: right; color: red; cursor: pointer"
-                                   pTooltip="Supprimer le fichier" tooltipPosition="bottom" (click)="
-                                uploadedFiles.splice(
-                                    uploadedFiles.indexOf(file)
-                                )
-                            " aria-hidden="true">
-                                </i>
-                            </li>
-                        </ul>
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-minus text-cyan-500 text-xl"></i>
                     </div>
                 </div>
-
-
-                <button pButton pRipple type="submit" class="my-2" label="Modifier" [disabled]="formAddbudget.invalid"></button>
-            </form>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-4">
+                    <div>
+                        <span class="block text-500 font-medium mb-4">Balance</span>
+                        <div class="text-900 font-medium text-xl">{{budget_charge - budgect_depense }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-money-bill text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
-        <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="budget" [paginator]="true" rowExpandMode="single"
-                 [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
-                 styleClass="p-datatable-gridlines">
-            <ng-template pTemplate="header">
-                <tr>
-
-                    <th pSortableColumn="libelle" style="text-align:center"> Libellé <p-sortIcon field="date_ajout">
-                    </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="charge" style="text-align:center"> charge <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="deponse" style="text-align:center"> Dépense <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="deponse" style="text-align:center"> Document <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="action" style="text-align:center"> Action <p-sortIcon field="user_id">
-                    </p-sortIcon>
-                    </th>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-budget let-rir="rowIndex">
-                <tr>
-                    <td>{{budget?.libelle}}</td>
-                    <td>{{budget?.charge}}</td>
-                    <td>{{budget?.depense}}</td>
-                    <td>
-
-                    </td>
-                    <td>
-                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
-                           (click)="initialisation_b(budget)" aria-hidden="true"></i>
-                        <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
-                           (click)="delete_b(budget._id,rir)" aria-hidden="true"></i>
-                    </td>
-                </tr>
-            </ng-template>
-
-
-        </p-table>
     </div>
+    <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="budget" [paginator]="true" rowExpandMode="single"
+        [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
 
-</p-dialog>
+                <th pSortableColumn="libelle" style="text-align:center"> Libellé <p-sortIcon field="date_ajout">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="charge" style="text-align:center"> charge <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="deponse" style="text-align:center"> Dépense <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="action" style="text-align:center"> Action <p-sortIcon field="user_id">
+                    </p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-budget let-rir="rowIndex">
+            <tr>
+                <td>{{budget.libelle}}</td>
+                <td>{{budget.charge}}</td>
+                <td>{{budget.depense}}</td>
+                <td>
+                    <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
+                        (click)="initialisation_b(budget)" aria-hidden="true"></i>
+                    <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
+                        (click)="delete_b(budget._id,rir)" aria-hidden="true"></i>
+                </td>
+            </tr>
+        </ng-template>
+
+
+    </p-table>
+
+
+</div>
 
 
 <div *ngIf="showressources" class="card">
@@ -653,65 +687,154 @@
 
 
 
-<p-dialog header="Nouvelle activité pour ce project" [(visible)]="showAddTacheForm" >
-    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
-
-        <div class="field col-12 md:col-12">
-            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
-            <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
-                rows="2" cols="40"></textarea>
+<p-dialog header="Nouvelle activité pour ce project" [(visible)]="showAddTacheForm" [style]="{width: '40%'}">
+    <form [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
+<div class="grid col-12">
+        <div class="col-12 ">
+            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label><br>
+            <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize>
         </div>
+
+        <div class="col-12">
+            <label>Priorité <span style="color: red">*</span></label><br>
+            <p-dropdown [style]="{width: '100%'}" formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
+                [showClear]="true"></p-dropdown>
+        </div><br>
+        
+
+        <div class="col-12">
+            <label htmlFor="number_of_hour">Nombre d'heurs <span style="color: red">*</span></label>
+            <input [style]="{width: '100%'}" formControlName="number_of_hour" pInputText type="number" id="nb_jour">
+        </div><br><br>
+        <div class="col-12">
+            <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
+            <input [style]="{width: '100%'}" pInputText type="date"  formControlName="date_limite" >
+        </div><br>
 
         <div class="field col-12">
-            <label>Priorité <span style="color: red">*</span></label>
-            <p-dropdown formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
-                [showClear]="true" ></p-dropdown>
-        </div>
-
-        <div class="field col-12 md:col-6">
-            <label htmlFor="number_of_hour">Nombre d'heurs <span style="color: red">*</span></label>
-            <input formControlName="number_of_hour" pInputText type="number" id="nb_jour">
-        </div>
-        <div class="field col-12 md:col-6">
-            <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
-            <p-calendar formControlName="date_limite" [showIcon]="true" [showButtonBar]="true"></p-calendar>
-        </div>
-
-        <div class="field col-12 ">
-            <label htmlFor="description">Description <span style="color: red">*</span></label>
-            <textarea formControlName="description" pInputTextarea placeholder="Donnez une discription à votre activité"
+            <label htmlFor="description">Description <span style="color: red">*</span></label><br>
+            <textarea [style]="{width: '100%'}" formControlName="description" pInputTextarea placeholder="Donnez une discription à votre activité"
                 autoResize rows="4" cols="30"></textarea>
-        </div>
+        </div><br>
 
         <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
+    </div>
     </form>
 </p-dialog>
-
-
 <p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
-    <div class="grid col-12">
-        <div class="col-9">
-            Assigné à
+    <form [formGroup]="taskToShowForm" class="p-fluid p-formgrid grid col-12">
+        <div class="grid col-12" *ngIf="TaskToShow">
+
+            <div class="grid col-12">
+                <label>Assigné à :</label><br>
+                <div class="col-11">
+                    <p-multiSelect  [options]="userList" formControlName="attribuate_to"
+                        filter="true"></p-multiSelect>
+                </div>
+                <div class="col-1">
+                <i style="padding-top: 50%; color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onChange()" pTooltip="Modifier" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+                </div>
+            </div>
+
+            
+
+            <div class="col-12">
+                <label>Nombre des heures :</label><br>
+                <input pInputText type="number"   autoWidth="false" [style]="{'width':'90%'}" formControlName="number_of_hour" 
+                    placeholder="10" />
+                <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onChange()" pTooltip="Modifier" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+            </div>
+
+            <div class="col-12">
+                <label>DDL :</label><br>
+                <input pInputText type="date" autoWidth="false" [style]="{'width':'90%'}" formControlName="date_limite"
+                    filter="true" placeholder="etudiant@intedgroup.com" />
+                <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onChange()" pTooltip="Modifier" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+            </div>
+            <div class="col-12">
+                <label>description : :</label><br>
+                <textarea pInputText autoWidth="false" [style]="{'width':'90%'}" formControlName="description_task"
+                    filter="true" placeholder="Donnez une description "  ></textarea>
+                <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onChange()" pTooltip="Modifier" aria-hidden="true"
+                    tooltipPosition="bottom"></i>
+            </div>
+            <div class="col-12">
+                <label>Urgent :</label><br><br>
+                <div class="row align-items-center">
+                    <p-checkbox [binary]="true" formControlName="urgent" [(ngModel)]="urgent" (onChange)="onCheckboxChange($event)"></p-checkbox>
+                    <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                    " class="pi pi-pencil m-1" (click)="onChange()" pTooltip="Modifier" aria-hidden="true"
+                        tooltipPosition="bottom"></i>
+                </div>
+            </div>
         </div>
-        <div class="col-3"></div>
-        <div class="col-9">
-            Urgent
-        </div>
-        <div class="col-3"></div>
-        <div class="col-9">
-            Nombre des heures
-        </div>
-        <div class="col-3"></div>
-        <div class="col-9">
-            DDL
-        </div>
-        <div class="col-3"></div>
-        <div class="col-9">
-            description
-        </div>
-        <div class="col-3"></div>
+    </form>
+    <div>
+        <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom">
+                        </p-sortIcon>
+                    </th>
+                    <th>
+                        Lien
+                    </th>
+
+                    <th style="text-align: center;">
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-document let-ri="rowIndex">
+                <tr [pEditableRow]="document">
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" pInputText [(ngModel)]="document.nom">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{document?.nom}} &nbsp;
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td *ngIf="document?.path">
+                        <a (click)="downloadFile(ri)">Télécharger le document</a>
+                    </td>
+                    <td *ngIf="!document?.path">
+                        <a (click)="uploadFile(ri)">Uploader le document</a>
+                    </td>
+                    <td>
+                        <i style="padding-left: 3%;" pTooltip="Supprimer le document" tooltipPosition="bottom"
+                            class="pi pi-trash mr-2" aria-hidden="true" (click)="deleteFile(ri)"> </i>
+                        <i style="padding-left: 3%;" *ngIf="document?.path" pTooltip="Uploader le document"
+                            tooltipPosition="bottom" class="pi pi-cloud-upload" aria-hidden="true"
+                            (click)="uploadFile(ri)"> </i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
 
     </div>
+    <div>
+        <button pButton label={{buttonName}} (click)="onAddDocumment()"></button>
+    </div><br><br>
+    <div class="grid col-12">
+    <div class="col-6">
+        <button pButton label="Supprimer" (click)="deleteTaskFromSiderbar()" class="p-button-danger"></button>
+    </div>
+    <div  class="col-6">
+        <button pButton label="Archiver"   icon="pi pi-check" class="p-button"></button>
+    </div>
+</div>
+
 </p-sidebar>
 
 <div *ngIf="showCreateticket" class="col-12 card grid">
@@ -775,6 +898,7 @@
 </div>
 
 
+<!--
 <div *ngIf="showtache" class="card">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
         (click)="showtache = false; showOtherTextArea = false;"></i>
@@ -870,13 +994,16 @@
 
 
         </p-table>
-</div>
+</div>-->
 
 
-<p-dialog header="Modifier le budget" (onHide)="onHideUpdateProject()"  [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"class="custom-dialog">
 
 <div *ngIf="showUpdateProjectForm">
-    <h3 class="text-center">Modifier le projet : {{currentProject.titre }} </h3>
+    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        (click)="showUpdateProjectForm = false; showOtherTextArea = false;"></i>
+    <div style="float: right"></div>
+
+    <h3 class="text-center">Modifier ce projet</h3>
     <form class="p-formgrid grid p-fluid" [formGroup]="formAddProject" (ngSubmit)="UpdateProject()">
 
         <div class="field col-12 md:col-12">
@@ -913,7 +1040,7 @@
     </form>
 </div>
 
-</p-dialog>
+
 
 
 

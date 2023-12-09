@@ -154,6 +154,29 @@ export class PreinscriptionComponent implements OnInit {
     { value: "Inscription définitive", label: "Inscription définitive" },
     { value: "Recours", label: "Recours" },
   ]
+  etapeDropdownLoc = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription - Inscription définitive", label: "Pré-inscription - Inscription définitive" },
+
+  ]
+  filterEtapeLoc = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownLoc
+  ]
+
+  etapeDropdownInt = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Orientation", label: "Orientation" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription", label: "Pré-inscription" },
+    { value: "Visa", label: "Visa" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+  ]
+  filterEtapeInt = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownInt
+  ]
 
   phaseDropdown = [
     { value: 'Non traité', label: "Non traité" },
@@ -379,6 +402,7 @@ export class PreinscriptionComponent implements OnInit {
   AddEval = false
   EvaluationDropdown = [{ label: 'Choisissez une évaluation', value: null }]
   evaluationDic = {}
+  commercialListObject = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getthecrateur();
@@ -447,8 +471,11 @@ export class PreinscriptionComponent implements OnInit {
         this.commercialService.getAllPopulate().subscribe(commercials => {
           commercials.forEach(commercial => {
             let { user_id }: any = commercial
-            if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire)
+            if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire) {
               this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+              this.commercialListObject.push({ label: `${user_id.firstname} ${user_id.lastname}`, value: commercial })
+            }
+
           })
           this.rhService.getCollaborateurs()
             .then((response) => {
@@ -859,9 +886,11 @@ export class PreinscriptionComponent implements OnInit {
   }
   UPDATEProspect(p: Prospect) {
     if (p.user_id.pays_adresse == 'France')
-      p.source = 'Local'
+      p.lead_type = 'Local'
     else
-      p.source = 'International'
+      p.lead_type = 'International'
+    if (this.commercialOwned)
+      p.code_commercial = this.commercialOwned.code_commercial_partenaire
     this.admissionService.updateV2(p).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour avec succès' })
     }, error => {
@@ -1890,6 +1919,7 @@ export class PreinscriptionComponent implements OnInit {
       r = r + prospect.campus_choix_1 + ","
     if (prospect.type_form)
       r = r + prospect.type_form
+    return r
   }
   detailsProspects = []
 
