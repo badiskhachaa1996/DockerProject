@@ -40,6 +40,9 @@ import { ChartModule } from 'primeng/chart';
 import {CriteresComponent} from "./criteres/criteres.component";
 import { TooltipModule } from 'primeng/tooltip';
 import { ReportingComponent } from './reporting/reporting.component';
+import { CalendarModule } from 'primeng/calendar';
+
+
 
 
 
@@ -93,6 +96,7 @@ import { ReportingComponent } from './reporting/reporting.component';
         ReportingComponent,
     ],
     imports: [
+        CalendarModule,
         CommonModule,
         CrmRoutingModule,
         ToastModule,

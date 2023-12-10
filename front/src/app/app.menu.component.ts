@@ -5220,8 +5220,8 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['crm/liste'],
                                         },
                                         {
-                                            label: 'reportinggg',
-                                            icon: 'pi pi-users',
+                                            label: 'Reporting',
+                                            icon: 'pi pi-chart-line',
                                             routerLink: ['crm/reporting'],
                                         },/*
                                         {
