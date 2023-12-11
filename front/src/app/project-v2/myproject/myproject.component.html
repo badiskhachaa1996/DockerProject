@@ -19,12 +19,12 @@
         <div class="col-3"><strong>ID:</strong> {{selectedProject?.identifian}}</div>
         <div class="col-3"><strong>Date de création:</strong> {{selectedProject?.created_date| date:'dd MMMM yy'}}</div>
         <div class="col-3"><strong>Date de fin estimé:</strong>{{selectedProject?.fin| date:'dd MMMM yy'}} </div>
-        <div class="col-3"><strong>Nombre d'heurs restante:{{heur_total-heur_realiser| number:'2.2-2'}}</strong></div>
+        <div class="col-3"><strong>Nombre d'heures restantes:{{heur_total-heur_realiser| number:'2.2-2'}}</strong></div>
     </div>
     <div class="grid col-12">
         <div class="col-3"><strong>Nom: </strong>{{selectedProject?.titre}}</div>
         <div class="col-3"><strong>Date de début :</strong>{{selectedProject?.debut| date:'dd MMMM yy'}}</div>
-        <div class="col-3"><strong>Nombre d'heurs realisés: {{heur_realiser| number:'2.2-2'}}</strong></div>
+        <div class="col-3"><strong>Nombre d'heures realisées: {{heur_realiser| number:'2.2-2'}}</strong></div>
         <div class="col-3"><strong>Avancement: <p-progressBar
                     [value]="selectedProject?.avancement"></p-progressBar></strong></div>
     </div>
@@ -68,7 +68,7 @@
                                             date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                        <th>nombre d'heures estimées:<span style="color:#878787">
                                                 {{task?.task_id?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task?.statut)}">{{
@@ -234,7 +234,7 @@
                                             date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                        <th>nombre d'heures estimées:<span style="color:#878787">
                                                 {{task?.task_id?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task?.statut)}">{{
@@ -400,7 +400,7 @@
                                             date:'dd MMMM yy'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                        <th>nombre d'heures estimées:<span style="color:#878787">
                                                 {{task?.task_id?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task?.statut)}">{{

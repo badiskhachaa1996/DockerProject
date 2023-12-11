@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  recaptchaKey: '6LeR3hgpAAAAAFs7Tyh3IIhpnyBpzs1AgAcOM6aU ',
+  recaptchaKey: '6LeINi0pAAAAAF_WQ7EZaQ9RdYoZZ5Rn4XLuDUe7',
   origin: "http://localhost:3000/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
   User: null,
