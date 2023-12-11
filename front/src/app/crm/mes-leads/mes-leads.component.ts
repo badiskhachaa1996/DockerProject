@@ -164,7 +164,7 @@ this.Updatetache.patchValue({
     { label: 'Tous les qualifications', value: null },
     
     { label: 'Non traitée', value: 'Non qualifié' },
-    //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'traitée', value: 'Qualifié' },
   ]
 

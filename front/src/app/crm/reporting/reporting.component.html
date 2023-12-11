@@ -1,0 +1,99 @@
+<div class="filters-container">
+    <div class="grid col-12">
+        <h1 class="col-12" style="text-align: center;text-align: center;
+        text-decoration: underline;
+        font-family: inherit;
+        color: #050567;">Reporting</h1>
+        
+        <div class="col-filter">
+            <label class="labelName">Date: Du..jusqu'au..</label><br>
+            <p-calendar [style]="{'width':'100%'}" [(ngModel)]="dates" selectionMode="range" (onSelect)="onFiltreDate()"></p-calendar>
+        </div>
+
+        <div class="col-filter">
+            <label class="labelName">Sélectionner un membre</label><br>
+            <p-dropdown filter="true" placeholder="membres" autoWidth="false"
+            [style]="{'width':'100%'}" [options]="membreFiltre"
+            (onChange)="onFiltreMembre($event)"
+            emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Membre">
+</p-dropdown>
+            
+
+        </div>
+        <div class="col-filter">
+            <label class="labelName">Sélectionner une équipe</label><br>
+            <p-dropdown filter="true" placeholder="équipes"  autoWidth="false" 
+                [style]="{'width':'100%'}" [options]="equipeFilte"  (onChange)="onFiltreEquipe($event)"
+                emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole">
+            </p-dropdown>
+        </div>
+    </div>
+</div>
+
+
+<div class="reporting-container">
+
+
+ <!-- Tableau 1 : Général -->
+ <p-table [value]="generalData" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption"> Général </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Insertion</th>
+            <th>Attribué</th>
+            <th>Intéressé</th>
+            <th>Qualifié</th>
+            <th>Paiement</th>
+            <th>Chiffré</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{ insertion }}</td>
+            <td>{{ attribue }}</td>
+            <td>{{ interesse }}</td>
+            <td>{{ qualifie }}</td>
+            <td>{{ paiement }}</td>
+            <td>{{ chiffre }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+ <!-- Tableau 2 : Qualification -->
+ <p-table [value]="qualificationData" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption"> Qualification </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Qualifié</th>
+            <th>Non Qualifié</th>
+            <th>Pré-Qualifié</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{ qualifie }}</td>
+            <td>{{nonQualifie }}</td>
+            <td>{{ preQualfie }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<!-- Tableau 3 : Contact -->
+<p-table [value]="contactData" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption"> Contacts </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Contacté</th>
+            <th>Joignable</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>{{contacte }}</td>
+            <td>{{ joignable }}</td>
+        </tr>
+    </ng-template>
+    
+</p-table>
+</div>
