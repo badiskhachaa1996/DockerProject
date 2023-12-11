@@ -178,6 +178,11 @@ this.memberList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}
           this.formationList.push({ label: d.nom, value: d._id })
         })
       })
+      this.TeamCRMService.MIgetAll().subscribe(data=>{
+        data.forEach(membre=>{
+          this.filterAffecte.push({ label: `${membre.user_id.firstname} ${membre.user_id.lastname} | ${membre.user_id?.type}`, value: membre.user_id._id })
+        })
+      })
       
       this.ServiceServ.getAServiceByLabel('Commercial').subscribe(dataS => {
         if (dataS)

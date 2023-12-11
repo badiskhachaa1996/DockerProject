@@ -2608,6 +2608,139 @@ export class AppMenuComponent implements OnInit {
                                     label: 'CRM',
                                     icon: 'pi pi-database',
                                     items: [
+                                        /* {
+                                             label: 'Insertion',
+                                             icon: 'pi pi-user-plus',
+                                             items: [
+                                                 /*{
+                                                  label: 'Ajouter un lead',
+                                                  icon: 'pi pi-user-plus',
+                                                  routerLink: [
+                                                      'crm/leads/ajout',
+                                                  ],
+                                              }, 
+                                                 {
+                                                     label: 'Importer',
+                                                     icon: 'pi pi-database',
+                                                     routerLink: ['crm/import'],
+                                                 },
+                                             ],
+                                         },*/
+                                        {
+                                            label: 'Liste des leads',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['crm/liste'],
+                                        },
+                                        
+                                        /*{
+                                            label: 'Qualification',
+                                            icon: 'pi pi-star',
+                                            items: [
+                                                {
+                                                    label: 'Les leads non qualifiés',
+                                                    icon: 'pi pi-star-fill',
+                                                    routerLink: [
+                                                        'crm/leads/non-qualifies',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Les leads préqualifiés',
+                                                    icon: 'pi pi-star',
+                                                    routerLink: [
+                                                        'crm/leads/pre-qualifies',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Les leads qualifiés',
+                                                    icon: 'pi pi-star',
+                                                    routerLink: ['crm/leads/qualifies'],
+                                                },
+                                                {
+                                                    label: 'Les ventes',
+                                                    icon: 'pi pi-chart-line',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Communication',
+                                            icon: 'pi pi-share-alt',
+                                            items: [
+                                                {
+                                                    label: 'Facebook',
+                                                    icon: 'pi pi-facebook',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'Instagram',
+                                                    icon: 'pi pi-instagram',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'WhatsApp',
+                                                    icon: 'pi pi-whatsapp',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'ChatBot',
+                                                    icon: 'pi pi-comments',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Target',
+                                            icon: 'pi pi-flag',
+                                            items: [
+                                                {
+                                                    label: 'Configuration',
+                                                    icon: 'pi pi-cog',
+                                                    routerLink: [
+                                                        'crm/target/configuration',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'My target',
+                                                    icon: 'pi pi-user',
+                                                    routerLink: [
+                                                        'crm/target/my-target',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Dashboard Général',
+                                                    icon: 'pi pi-chart-pie',
+                                                    routerLink: [
+                                                        'crm/target/dashboard',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Mes taches',
+                                            icon: 'pi pi-briefcase',
+                                            items: [],
+                                        },
+                                        {
+                                            label: 'Support Commercial',
+                                            icon: 'pi pi-comment',
+                                            items: [
+                                                {
+                                                    label: 'Mails Type',
+                                                    icon: 'pi pi-envelope',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'Discours',
+                                                    icon: 'pi pi-comment',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Pipeline',
+                                            icon: 'pi pi-filter',
+                                            items: [],
+                                        },*/
                                         {
                                             label: 'Configuration',
                                             icon: 'pi pi-cog',
@@ -5078,7 +5211,124 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
                                             routerLink: ['crm/liste'],
-                                        }, {
+                                        },
+                                        {
+                                            label: 'Reporting',
+                                            icon: 'pi pi-chart-line',
+                                            routerLink: ['crm/reporting'],
+                                        },/*
+                                        {
+                                            label: 'Qualification',
+                                            icon: 'pi pi-star',
+                                            items: [
+                                                {
+                                                    label: 'Les leads non qualifiés',
+                                                    icon: 'pi pi-star-fill',
+                                                    routerLink: [
+                                                        'crm/leads/non-qualifies',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Les leads préqualifiés',
+                                                    icon: 'pi pi-star',
+                                                    routerLink: [
+                                                        'crm/leads/pre-qualifies',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Les leads qualifiés',
+                                                    icon: 'pi pi-star',
+                                                    routerLink: [
+                                                        'crm/leads/qualifies',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Les ventes',
+                                                    icon: 'pi pi-chart-line',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Communication',
+                                            icon: 'pi pi-share-alt',
+                                            items: [
+                                                {
+                                                    label: 'Facebook',
+                                                    icon: 'pi pi-facebook',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'Instagram',
+                                                    icon: 'pi pi-instagram',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'WhatsApp',
+                                                    icon: 'pi pi-whatsapp',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'ChatBot',
+                                                    icon: 'pi pi-comments',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Target',
+                                            icon: 'pi pi-flag',
+                                            items: [
+                                                {
+                                                    label: 'Configuration',
+                                                    icon: 'pi pi-cog',
+                                                    routerLink: [
+                                                        'crm/target/configuration',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'My target',
+                                                    icon: 'pi pi-user',
+                                                    routerLink: [
+                                                        'crm/target/my-target',
+                                                    ],
+                                                },
+                                                {
+                                                    label: 'Dashboard Général',
+                                                    icon: 'pi pi-chart-pie',
+                                                    routerLink: [
+                                                        'crm/target/dashboard',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Mes taches',
+                                            icon: 'pi pi-briefcase',
+                                            items: [],
+                                        },
+                                        {
+                                            label: 'Support Commercial',
+                                            icon: 'pi pi-comment',
+                                            items: [
+                                                {
+                                                    label: 'Mails Type',
+                                                    icon: 'pi pi-envelope',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'Discours',
+                                                    icon: 'pi pi-comment',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Pipeline',
+                                            icon: 'pi pi-filter',
+                                            items: [],
+                                        },
+                                        */{
                                             label: 'Configuration',
                                             icon: 'pi pi-cog',
                                             items: [
