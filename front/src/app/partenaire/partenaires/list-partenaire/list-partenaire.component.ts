@@ -4,7 +4,7 @@ import { Table } from 'primeng/table';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from "file-saver";
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
 
 import { MessageService as ToastService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -18,6 +18,7 @@ import jwt_decode from "jwt-decode";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -39,21 +40,21 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
     `]
 })
 export class ListPartenaireComponent implements OnInit {
-  selectedInsert: Partenaire | null = null; 
+  selectedInsert: Partenaire | null = null;
   activeIndex1: number = 0;
   expandedRows = {};
   FjTopatch: any;
   Ttopatch: any;
-  partenaires = []
+  partenaires: Partenaire[] = []
   users = {}
   token;
-  currenData 
+  currenData
   uploadedFileName: string;
 
   handleClose(e) {
 
-        e.close();
- }
+    e.close();
+  }
   showFormAddPartenaire = false
   statutList = environment.typeUser
   civiliteList = environment.civilite;
@@ -148,16 +149,29 @@ export class ListPartenaireComponent implements OnInit {
     })
   }
 
+  partenaireDic = {}
 
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
     })
-    this.UserService.getAll().subscribe(dataU => {
+    this.CService.getAllPopulate().subscribe((commercials: CommercialPartenaire[]) => {
+      commercials.forEach(c => {
+        if (c.user_id && c.partenaire_id && c.user_id.last_connexion) {
+          if (this.partenaireDic[c.partenaire_id._id]) {
+            if (new Date(c.user_id.last_connexion).getTime() > new Date(this.partenaireDic[c.partenaire_id._id]).getTime())
+              this.partenaireDic[c.partenaire_id._id] = new Date(c.user_id.last_connexion)
+          } else {
+            this.partenaireDic[c.partenaire_id._id] = new Date(c.user_id.last_connexion)
+          }
+        }
+      })
+    })
+    /*this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {
         this.users[u._id] = u
       })
-    })
+    })*/
   }
 
   seePreRecruted(rowData: Partenaire) {
@@ -232,7 +246,7 @@ export class ListPartenaireComponent implements OnInit {
       indicatif_whatsapp: rowData.indicatifWhatsapp,
     });
   }
- 
+
 
 
 
@@ -325,7 +339,7 @@ export class ListPartenaireComponent implements OnInit {
 
     this.formModifPartenaire.reset();
     this.showFormModifPartenaire = false;
-   
+
 
 
   }
@@ -377,17 +391,17 @@ export class ListPartenaireComponent implements OnInit {
         this.resetFileInput(event);
         this.uploadedFileName = event[0].name;
         this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
-      
+
       })
     }
   }
   resetFileInput(event) {
     if (event && event.length > 0) {
       event[0].value = "";
-      
+
     }
   }
-  
+
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
