@@ -30,6 +30,12 @@ import { PrimeIcons, MenuItem } from 'primeng/api';
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
+  colors: string[] = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+
+  handleColorClick(color: string): void {
+    console.log(`Color clicked: ${color}`);
+    // Ajoutez votre logique ici pour gérer le clic sur la couleur
+  }
 
   tasks = [
     { label: 'Tâche 1', value: 'task1', category: 'todo' },
@@ -44,7 +50,8 @@ export class GestionComponent implements OnInit {
   doneTasks = this.tasks.filter(task => task.category === 'done');
   TaskToShow: Task;
   buttonName:string="Ajouter";
-  AtributateTable:any[]=[]
+  AtributateTable:any[]=[];
+  initAttribuateTo:any[]=[];;
   private task_id!: string;
   private project_id!: string;
   private ressources_id!: string;
@@ -128,6 +135,7 @@ export class GestionComponent implements OnInit {
     number_of_hour: new FormControl(),
     date_limite: new FormControl(),
     description_task: new FormControl('',),
+    tag: new FormControl(''),
 
 
 
@@ -371,6 +379,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         this.projectService.putProject(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' })
       this.formAddProject.reset();
+      this. showUpdateProjectForm=false;
       const indexToRemove = this.project.findIndex(project => project._id === this.project_id);if (indexToRemove !== -1) {this.project[indexToRemove]=data;}
     })
   }
@@ -512,13 +521,18 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
 
   onChange(){
     this.test=false;
-    this.TaskToShow.attribuate_to=[];
+    
+    this.initAttribuateTo=[]
   for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
-    this.TaskToShow.attribuate_to.push(this.taskToShowForm.value.attribuate_to[i]);
+    this.initAttribuateTo.push(this.taskToShowForm.value.attribuate_to[i]);
+    
 
   }
-  this.TaskToShow.number_of_hour=this.taskToShowForm.value?.number_of_hour;
+  this.TaskToShow.attribuate_to=this.initAttribuateTo;
   
+  this.TaskToShow.number_of_hour=this.taskToShowForm.value?.number_of_hour;
+  this.TaskToShow.tag=this.taskToShowForm.value?.tag;
+
   this.TaskToShow.date_limite=this.taskToShowForm.value?.date_limite;
   this.TaskToShow.description_task=this.taskToShowForm.value?.description_task;
   const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id);if (indexToRemove !== -1) {this.taskToDo[indexToRemove]=this.TaskToShow;}
