@@ -69,12 +69,12 @@ export class LeadcrmService {
     let registreUrl = this.apiUrl + "getAllNonQualifies";
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-
+// does not work must check
   getAllPreQualifies() {
     let registreUrl = this.apiUrl + "getAllPreQualifies";
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-
+  // does not work !! must check
   getAllQualifies() {
     let registreUrl = this.apiUrl + "getAllQualifies";
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

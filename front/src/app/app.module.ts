@@ -77,6 +77,8 @@ import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
+
+
 import { TerminalModule } from 'primeng/terminal';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TimelineModule } from 'primeng/timeline';
@@ -232,8 +234,11 @@ import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
 import { LinksModule } from './links/links.module';
 
+
+
 @NgModule({
     imports: [
+        EditorModule,
         ReactiveFormsModule,
         NgxCaptchaModule,
         CaptchaModule,

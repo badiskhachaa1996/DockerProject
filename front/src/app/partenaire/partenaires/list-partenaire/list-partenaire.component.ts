@@ -19,6 +19,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { RhService } from 'src/app/services/rh.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -122,7 +124,7 @@ export class ListPartenaireComponent implements OnInit {
   AccessLevel = "Spectateur"
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
-    private MIService: TeamsIntService) { }
+    private MIService: TeamsIntService , private rHservise:RhService ,private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
@@ -132,7 +134,7 @@ export class ListPartenaireComponent implements OnInit {
     this.updateList();
     this.filterPays = [{ label: 'Tous les pays', value: null }].concat(this.paysList)
     this.onInitFormModifPartenaire()
-    this.MIService.MIgetAll().subscribe(data => {
+    this.rHservise.getCollaborateurs().then(data => {
       data.forEach(d => {
         if (d.user_id)
           this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
@@ -573,7 +575,9 @@ export class ListPartenaireComponent implements OnInit {
   onSelectManage(id: string) {
     this.PartenaireService.newUpdate({ manage_by: id, _id: this.managePartenaire._id }).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Attribution du partenaire avec succès' })
-      this.managePartenaire = null
+      
+      this.cd.detectChanges();
+
     })
   }
 

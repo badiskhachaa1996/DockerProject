@@ -21,11 +21,16 @@ import { LeadsNonQualifiesComponent } from './leads-non-qualifies/leads-non-qual
 import { TeamsCrmComponent } from './teams-crm/teams-crm.component';
 import { MemberCrmComponent } from './teams-crm/member-crm/member-crm.component';
 import { ImportCrmComponent } from './import-crm/import-crm.component';
+import { ReportingComponent } from './reporting/reporting.component';
 
 const routes: Routes = [
     {
         path: 'liste',
         component: CrmListComponent
+    },
+    {
+        path: 'reporting',
+        component: ReportingComponent,
     },
     {
         path: 'leads/update/:id', // Utilisez un paramètre de route pour l'ID ajouter par Nazif

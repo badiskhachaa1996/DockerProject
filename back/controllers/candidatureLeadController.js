@@ -11,12 +11,8 @@ app.post("/create", (req, res) => {
         .then((FFSaved) => {
             CandidatureLead.findById(FFSaved._id).populate('lead_id').then(newCandidature => {
                 if (req.body.signature && req.body.signature != null && req.body.signature != '') {
-                    fs.mkdir("./storage/signatureCandidature/",
-                        { recursive: true }, (err3) => {
-                            if (err3) {
-                                console.error(err3);
-                            }
-                        });
+                    if (!fs.existsSync("storage/signatureCandidature/"))
+                        fs.mkdirSync("storage/signatureCandidature/", { recursive: true });
                     fs.writeFile("storage/signatureCandidature/" + FFSaved._id + ".png", req.body.signature, 'base64', function (err2) {
                         if (err2) {
                             console.error(err2);
@@ -31,6 +27,8 @@ app.post("/create", (req, res) => {
 })
 
 app.get('/downloadSignature/:id', (req, res) => {
+    if (!fs.existsSync("storage/signatureCandidature/"))
+        fs.mkdirSync("storage/signatureCandidature/", { recursive: true });
     let pathFile = "storage/signatureCandidature/" + req.params.id + ".png"
     let file = fs.readFileSync(
         pathFile,
@@ -63,11 +61,11 @@ app.put("/update", (req, res) => {
             CandidatureLead.findById(doc._id).populate('lead_id').then(newCandidature => {
                 res.status(201).send(newCandidature)
             })
-        else{
-            console.error(err); 
+        else {
+            console.error(err);
             res.status(500).send({ ...req.body, err });
         }
-            
+
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 

@@ -38,10 +38,12 @@ this.test.push({team,membre:data});
     })});
    
     this.rhService.getAgents().then(data => {
+      console.log(data)
       data.forEach(user => {
-        if(user.type ==="Collaborateur" ){
+        
+        console.log(user);
 this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
-} })
+ })
     })
   }
 

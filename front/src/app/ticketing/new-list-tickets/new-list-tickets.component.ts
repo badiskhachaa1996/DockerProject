@@ -24,6 +24,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { Table } from 'primeng/table';
 import { error } from 'console';
 import { RhService } from 'src/app/services/rh.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -36,7 +37,7 @@ export class NewListTicketsComponent implements OnInit {
     { value: "Marne", label: "Marne" },
     { value: 'Montpelier', label: "Montpelier" },
   ];
-  serviceFiltered: string[] = []
+  serviceFiltered: string = ""
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
@@ -50,7 +51,7 @@ export class NewListTicketsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
     private NotifService: NotificationService, private Socket: SocketService, private router: Router,
-    private MessageService: MessageService, private diplomeService: DiplomeService, private CollaborateurService: RhService) { }
+    private MessageService: MessageService, private CollaborateurService: RhService, private FiliereService: FormulaireAdmissionService) { }
   tickets: Ticket[] = []
   ticketsService: Ticket[] = []
   ticketsOnglets = []
@@ -80,7 +81,9 @@ export class NewListTicketsComponent implements OnInit {
   token: any;
   demandeDropdown: any;
   showDemandeDropdown: boolean = false;
-  filterService = [];
+  filterService = [
+    { label: 'Tous les services', value: null }
+  ];
   filtreSujet = [
   ];
   filterStatut = [
@@ -108,6 +111,23 @@ export class NewListTicketsComponent implements OnInit {
   ]
   filterAgent = [
   ]
+  filterAux1 = []
+  filterAux2 = []
+  selectedService: Service;
+  onChangeService() {
+    this.selectedService = this.serviceDicService[this.serviceFiltered]
+    console.log(this.serviceFiltered)
+    this.filterAux1 = [{ label: `Tous les ${this.selectedService.extraInfo.title1}`, value: null }]
+    if (this.selectedService.extra1)
+      this.selectedService.extra1.forEach(extra => {
+        this.filterAux1.push({ label: extra, value: extra })
+      })
+    this.filterAux2 = [{ label: `Tous les ${this.selectedService.extraInfo.title2}`, value: null }]
+    if (this.selectedService.extra2)
+      this.selectedService.extra2.forEach(extra => {
+        this.filterAux2.push({ label: extra, value: extra })
+      })
+  }
   sujetDic = {}
   serviceDic = {}
   createurList = []
@@ -271,6 +291,7 @@ export class NewListTicketsComponent implements OnInit {
   @ViewChild('dt2', { static: true }) dt2: Table;
   hideTicket = true
   UserServiceDic = {}
+  serviceDicService = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
     if (this.router.url == '/ticketing/mes-tickets-services')
@@ -320,6 +341,7 @@ export class NewListTicketsComponent implements OnInit {
         this.serviceDropdown.push({ label: val.label, value: val._id })
         this.filterService.push({ label: val.label, value: val._id })
         this.serviceDic[val._id] = val.label
+        this.serviceDicService[val._id] = val
       })
       this.SujetService.getAll().subscribe(dataSujet => {
         let serviceSujetDic = {}
@@ -341,10 +363,9 @@ export class NewListTicketsComponent implements OnInit {
         })
       })
     })
-
-    this.diplomeService.getAll().subscribe(data => {
+    this.FiliereService.FAgetAll().subscribe(data => {
       data.forEach(d => {
-        this.filiereDropdown.push({ value: d._id, label: d.titre })
+        this.filiereDropdown.push({ value: d._id, label: d.nom })
       })
     })
     this.AuthService.getAllAgentPopulate().subscribe(users => {
@@ -668,7 +689,6 @@ export class NewListTicketsComponent implements OnInit {
     this.TicketService.update({ ...ticket }).subscribe(t => {
       this.updateTicketList()
     })
-    console.log(ticket)
     this.TicketService.sendMailUpdateStatut({ id: ticket.customid, statut: ticket.statut, createur_id: ticket.createur_id }).subscribe(() => { })
   }
   deleteTicket(ticket: Ticket) {
@@ -875,10 +895,9 @@ export class NewListTicketsComponent implements OnInit {
   filiereDropdown: any[] = [];
   showPedagogieFilter() {
     let r = false
-    this.serviceFiltered.forEach(s => {
-      if (this.serviceDic[s] == 'Pédagogie' || this.serviceDic[s] == 'Pedagogie' || this.serviceDic[s] == 'Administration')
+    if (this.serviceFiltered)
+      if (this.serviceDic[this.serviceFiltered] == 'Pédagogie' || this.serviceDic[this.serviceFiltered] == 'Pedagogie' || this.serviceDic[this.serviceFiltered] == 'Administration')
         r = true
-    })
     return r
   }
   filterDate(tab, val) {
@@ -895,7 +914,6 @@ export class NewListTicketsComponent implements OnInit {
       if (u._id == id)
         r = index
     })
-    console.log(r)
     return r
   }
 

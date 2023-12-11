@@ -2,6 +2,29 @@
     background-color: rgb(193, 193, 250);
     color: white;
 }
-.card-todo {
-    background: lightcoral !important ;/* Couleur pour To Do */
+:host ::ng-deep .card-todo .p-component {
+    background: rgb(241, 241, 241) !important ;/* Couleur pour To Do */
 }
+:host ::ng-deep .card-doing .p-component {
+    background: rgb(241, 241, 241) !important ;/* Couleur pour To Doing */
+}
+:host ::ng-deep .card-done .p-component {
+    background: rgb(241, 241, 241) !important ;/* Couleur pour To Done */
+}
+.color-square {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    cursor: pointer;
+    border: 1px solid #000;
+  }
+
+  :host ::ng-deep .card-todo .p-card .p-component{
+    background-color: rgb(255, 174, 174) !important;
+  }
+  :host ::ng-deep .card-doing .p-card .p-component{
+    background-color: rgb(181, 245, 255) !important;
+  }
+  :host ::ng-deep .card-done .p-card .p-component{
+    background-color: rgb(158, 255, 160) !important;
+  }

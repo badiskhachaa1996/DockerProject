@@ -1,0 +1,46 @@
+.reporting-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .p-table {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+  
+  .filters-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .col-filter {
+    flex: 1 1 calc(33.333% - 20px); /* Chaque filtre prendra un tiers de l'espace disponible */
+    max-width: calc(33.333% - 20px); /* Avec un maximum de largeur fixe */
+    box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur totale */
+  }
+  
+  @media screen and (max-width: 768px) {
+    .col-filter {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
+  }
+  .labelName {
+    margin-bottom: 15px;
+    font-size: small;
+  }
+
+  

@@ -160,6 +160,8 @@ app.post('/uploadOptionnelFile', uploadOptionnel.single('file'), (req, res, next
 }, (error) => { res.status(500).send(error); })
 
 app.get("/downloadFile/:id/:directory/:path", (req, res) => {
+    if (!fs.existsSync("storage/alternantsPartenaire/" + req.params.directory + "/" + req.params.id + "/"))
+        fs.mkdirSync("storage/alternantsPartenaire/" + req.params.directory + "/" + req.params.id + "/", { recursive: true });
     let pathFile = "storage/alternantsPartenaire/" + req.params.directory + "/" + req.params.id + "/" + req.params.path
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
@@ -173,6 +175,8 @@ app.get("/downloadFile/:id/:directory/:path", (req, res) => {
 
 
 app.get("/deleteOptioFile/:id/:path", (req, res) => {
+    if (!fs.existsSync("storage/alternantsPartenaire/optionnel/" + req.params.id + "/"))
+        fs.mkdirSync("storage/alternantsPartenaire/optionnel/" + req.params.id + "/", { recursive: true });
     let pathFile = "storage/alternantsPartenaire/optionnel/" + req.params.id + "/" + req.params.path
     try {
         fs.unlinkSync(pathFile)
@@ -194,6 +198,8 @@ app.get("/deleteOptioFile/:id/:path", (req, res) => {
 });
 
 app.get("/deleteRequisFile/:id/:path", (req, res) => {
+    if (!fs.existsSync("storage/alternantsPartenaire/requis/" + req.params.id + "/"))
+        fs.mkdirSync("storage/alternantsPartenaire/requis/" + req.params.id + "/", { recursive: true });
     let pathFile = "storage/alternantsPartenaire/requis/" + req.params.id + "/" + req.params.path
     try {
         fs.unlinkSync(pathFile)

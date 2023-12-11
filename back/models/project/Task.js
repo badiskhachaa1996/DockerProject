@@ -16,11 +16,13 @@ const taskSchema = mongoose.Schema({
     identifian:                     { type: String, required: false},
     urgent:                         { type: Boolean, required:false,default: false},
     documents: {
-        type: [{
-            nom: { type: String, required: false },
-            path: { type: String, required: false },
-        }],
-    },
+                                    type: [{
+                                            nom: { type: String, required: false },
+                                            path: { type: String, required: false },
+                                        }],
+                                                                                    },
+    tag:                            {type: String, required:false},
+    color:                          { type: String, required: false},
 
 });
 
