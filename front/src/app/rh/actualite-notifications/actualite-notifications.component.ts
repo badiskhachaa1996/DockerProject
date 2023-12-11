@@ -8,7 +8,7 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
 import jwt_decode from "jwt-decode";
 import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
 import { ActualiteRH } from 'src/app/models/ActualiteRH';
-import {EditorModule} from 'primeng/editor';
+import { EditorModule } from 'primeng/editor';
 
 @Component({
   selector: 'app-actualite-notifications',
@@ -18,9 +18,6 @@ import {EditorModule} from 'primeng/editor';
 export class ActualiteNotificationsComponent implements OnInit {
 
 
-  text1: string = '....';
-    
-  text2: string;
 
 
   token;

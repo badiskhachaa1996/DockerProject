@@ -234,8 +234,11 @@ import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
 import { LinksModule } from './links/links.module';
 
+
+
 @NgModule({
     imports: [
+        EditorModule,
         ReactiveFormsModule,
         NgxCaptchaModule,
         CaptchaModule,
