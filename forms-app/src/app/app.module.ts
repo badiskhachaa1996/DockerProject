@@ -19,6 +19,10 @@ import { ContactUsIcbsComponent } from './components/contact-us-icbs/contact-us-
 import { ContactUsIegComponent } from './components/contact-us-ieg/contact-us-ieg.component';
 import {NgxCaptchaModule} from "ngx-captcha";
 import { ContactUsSimpleComponent } from './components/contact-us-simple/contact-us-simple.component';
+import {MessagesModule} from "primeng/messages";
+import {ToastModule} from "primeng/toast";
+import { MessageService } from 'primeng/api';
+import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-icbs-eng.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,7 @@ import { ContactUsSimpleComponent } from './components/contact-us-simple/contact
     ContactUsIcbsComponent,
     ContactUsIegComponent,
     ContactUsSimpleComponent,
+    ContactIcbsEngComponent,
 
   ],
   imports: [
@@ -46,9 +51,11 @@ import { ContactUsSimpleComponent } from './components/contact-us-simple/contact
     DropdownModule,
     ButtonModule,
     InputTextareaModule,
+    MessagesModule,
+    ToastModule,
 
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

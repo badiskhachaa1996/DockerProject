@@ -6,6 +6,7 @@ import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-contact-us-intuns',
@@ -94,7 +95,7 @@ export class ContactUsIntunsComponent implements OnInit {
         numero_whatsapp = this.addForm.value.numero_phone
       this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
-          //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+          this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
         },
         ((error) => {
           //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
@@ -116,7 +117,7 @@ export class ContactUsIntunsComponent implements OnInit {
   }
 
 
-  constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
+  constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller, private ToastService: MessageService,
               private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
     this.ECOLE = new EcoleAdmission();
     this.RENTREE = new RentreeAdmission();
