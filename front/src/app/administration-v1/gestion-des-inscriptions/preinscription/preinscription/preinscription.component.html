@@ -2820,8 +2820,7 @@
                             </div>
                             <div class="field col-6">
                                 <label>CC: (Écrivez un , après chaque email)</label>
-                                <p-chips formControlName="cc" separator=","
-                                    placeholder="email1@email.com , email2.email.com"></p-chips>
+                                <input type="text" pInputText formControlName="cc" placeholder="Ex: email@gmail.com,email2@hotmail.fr" />
                             </div>
                             <div class="field col-12">
                                 <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
@@ -2924,8 +2923,7 @@
                             </div>
                             <div class="field col-6">
                                 <label>CC: (Écrivez un , après chaque email)</label>
-                                <p-chips formControlName="cc" separator=","
-                                    placeholder="email1@email.com,email2.email.com"></p-chips>
+                                <input type="text" pInputText formControlName="cc" placeholder="Ex: email@gmail.com,email2@hotmail.fr" />
                             </div>
                             <div class="field col-12">
                                 <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
