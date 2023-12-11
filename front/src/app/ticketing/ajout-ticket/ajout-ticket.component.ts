@@ -19,6 +19,7 @@ import { ProjectService } from 'src/app/services/projectv2.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Service } from 'src/app/models/Service';
 import { RhService } from 'src/app/services/rh.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-ajout-ticket',
@@ -176,7 +177,7 @@ export class AjoutTicketComponent implements OnInit {
   constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService,
     private router: Router, private route: ActivatedRoute, private diplomeService: DiplomeService,
     private SujetService: SujetService, private Socket: SocketService, private CollaborateurService: RhService,
-    private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService) { }
+    private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService, private FiliereService: FormulaireAdmissionService) { }
   serviceDic = {}
   serviceDicTrue = {}
   sujetDic = {}
@@ -248,9 +249,9 @@ export class AjoutTicketComponent implements OnInit {
 
       }
     });
-    this.diplomeService.getAll().subscribe(data => {
+    this.FiliereService.FAgetAll().subscribe(data => {
       data.forEach(d => {
-        this.filiereDropdown.push({ value: d._id, label: d.titre })
+        this.filiereDropdown.push({ value: d._id, label: d.nom })
       })
     })
 

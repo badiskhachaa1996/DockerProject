@@ -31,6 +31,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { LeadDossierModule } from './lead/lead-dossier/lead-dossier.module';
 import { LeadCandidatureModule } from './lead/lead-candidature/lead-candidature.module';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TooltipModule } from 'primeng/tooltip';
 @NgModule({
     declarations: [
         FormationAdmissionComponent,
@@ -65,7 +67,9 @@ import { LeadCandidatureModule } from './lead/lead-candidature/lead-candidature.
         ButtonModule,
         InputTextModule,
         LeadDossierModule,
-        LeadCandidatureModule
+        LeadCandidatureModule,
+        InputTextareaModule,
+        TooltipModule
     ]
 })
 export class AdmissionModule { }
