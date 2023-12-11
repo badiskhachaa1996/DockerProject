@@ -236,6 +236,8 @@ app.get("/getProfilePicture/:id", (req, res) => {
 
         if (cp && cp.pathImageProfil) {
             try {
+                if (!fs.existsSync("storage/Partenaire/photo/" + cp.id + "/"))
+                    fs.mkdirSync("storage/Partenaire/photo/" + cp.id + "/", { recursive: true });
                 let file = fs.readFileSync(
                     "storage/Partenaire/photo/" + cp.id + "/" + cp.pathImageProfil,
                     { encoding: "base64" },
@@ -305,7 +307,10 @@ app.post('/uploadContrat/:id', uploadContrat.single('file'), (req, res, next) =>
 }, (error) => { res.status(500).send(error); })
 
 app.get("/downloadContrat/:id", (req, res) => {
+
     let pathFile = "storage/commercial/contrat/" + req.params.id
+    if (!fs.existsSync(pathFile))
+        fs.mkdirSync(pathFile, { recursive: true });
     fs.readdir(pathFile, (err, files) => {
         if (err) {
             return console.error(err);
