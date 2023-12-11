@@ -2797,6 +2797,7 @@
             header="Mail - {{prospectOnglet?.user_id?.firstname}} {{prospectOnglet?.user_id?.lastname}}">
             <div class="col-12 card" *ngIf="showEmail">
                 <p-tabView>
+                    <!-- patie pour envoyer un mail -->
                     <p-tabPanel header="Email personnalisé">
                         <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
                             <div class="field col-6">
@@ -2819,8 +2820,7 @@
                             </div>
                             <div class="field col-6">
                                 <label>CC: (Écrivez un , après chaque email)</label>
-                                <p-chips formControlName="cc" separator=","
-                                    placeholder="email1@email.com , email2.email.com"></p-chips>
+                                <input type="text" pInputText formControlName="cc" placeholder="Ex: email@gmail.com,email2@hotmail.fr" />
                             </div>
                             <div class="field col-12">
                                 <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
@@ -2923,8 +2923,7 @@
                             </div>
                             <div class="field col-6">
                                 <label>CC: (Écrivez un , après chaque email)</label>
-                                <p-chips formControlName="cc" separator=","
-                                    placeholder="email1@email.com,email2.email.com"></p-chips>
+                                <input type="text" pInputText formControlName="cc" placeholder="Ex: email@gmail.com,email2@hotmail.fr" />
                             </div>
                             <div class="field col-12">
                                 <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFilePJ"
