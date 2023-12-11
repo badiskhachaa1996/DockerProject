@@ -4,6 +4,7 @@ import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from 
 import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-contact-us-simple',
@@ -91,7 +92,7 @@ export class ContactUsSimpleComponent implements OnInit {
         numero_whatsapp = this.addForm.value.numero_phone
       this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `External`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
-          //this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
+          this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
         },
         ((error) => {
           //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
@@ -113,7 +114,7 @@ export class ContactUsSimpleComponent implements OnInit {
   }
 
 
-  constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller,
+  constructor(private LCS: ContactUsService,  private viewportScroller: ViewportScroller, private ToastService: MessageService,
               private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {
   }
   siteKey = environment.recaptchaKey

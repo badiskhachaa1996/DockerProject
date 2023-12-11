@@ -1,76 +1,23 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {environment} from "../../../environments/environment";
 import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from "@angular/forms";
+import {environment} from "../../../environments/environment";
 import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
+import {MessageService} from "primeng/api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
-import {MessageService} from "primeng/api";
 
 @Component({
-  selector: 'app-contact-us-ieg',
-  templateUrl: './contact-us-ieg.component.html',
-  styleUrls: ['./contact-us-ieg.component.scss'],
+  selector: 'app-contact-icbs-eng',
+  templateUrl: './contact-icbs-eng.component.html',
+  styleUrls: ['./contact-icbs-eng.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactUsIegComponent implements OnInit {
+export class ContactIcbsEngComponent implements OnInit {
   hideFormations = false;
   aFormGroup!: UntypedFormGroup;
-  sourceDropdown = [
-    { value: 'Facebook' },
-    { value: 'WhatsApp' },
-    { value: 'Appel Telephonique' },
-    { value: 'Mail' },
-    { value: 'Visite au site' },
-    { value: 'Online Meeting' },
-    { value: 'Marketing' },
-    { value: 'Recyclage' },
-    { value: 'LinkedIn' },
-  ]
-  operationDropdown = [
-    { value: 'Prospection FRP' },
-    { value: 'Prospection ENP' },
-    { value: 'Prospection ICBS Malte' },
-    { value: 'Prospection ICBS Dubai' },
-    { value: 'Prospection Alternant' },
-  ]
-  civiliteDropdown = [
-    { value: 'Monsieur' },
-    { value: 'Madame' },
-    { value: 'Autre' },
-  ]
-  nationaliteDropdown = environment.nationalites
-  paysDropdown = environment.pays
-  nivDropdown = [
-    { label: 'Pré-bac', value: 'Pré-bac' },
-    { label: 'Bac +1', value: 'Bac +1' },
-    { label: 'Bac +2', value: 'Bac +2' },
-    { label: 'Bac +3', value: 'Bac +3' },
-    { label: 'Bac +4', value: 'Bac +4' },
-    { label: 'Bac +5', value: 'Bac +5' },
-  ];
-  statutList =
-    [
-      { label: 'Etudiant', value: 'Etudiant' },
-      { label: 'Salarié', value: 'Salarié' },
-      { label: 'Au chômage', value: 'Au chômage' },
-      { label: 'Autre', value: 'Autre' },
-    ];
-  niveauFR =
-    [
-      { label: "Langue maternelle", value: "Langue maternelle" },
-      { label: "J’ai une attestation de niveau (TCF DALF DELF..)", value: "J’ai une attestation de niveau (TCF DALF DELF..)" },
-      { label: "Aucun de ces choix", value: "Aucun de ces choix" },
-    ]
-  niveauEN =
-    [
-      { label: "Langue maternelle", value: "Langue maternelle" },
-      { label: "Avancé", value: "Avancé" },
-      { label: "Intermédiaire", value: "Intermédiaire" },
-      { label: "Basique", value: "Basique" },
-      { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
-    ]
+
   addForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -95,7 +42,7 @@ export class ContactUsIegComponent implements OnInit {
         numero_whatsapp = this.addForm.value.numero_phone
       this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
-          this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
+          this.ToastService.add({ severity: "success", summary: "We have successfully received your inquiry! We will get back to you as soon as possible." })
         },
         ((error) => {
           //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: error?.error });
@@ -128,9 +75,11 @@ export class ContactUsIegComponent implements OnInit {
   siteKey = environment.recaptchaKey
   ngOnInit(): void {
 
+
     this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });
+
     this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
       console.log(data)
       this.hideFormations = !data;
