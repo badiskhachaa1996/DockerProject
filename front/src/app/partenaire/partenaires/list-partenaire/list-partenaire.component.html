@@ -231,7 +231,11 @@
                     <tr>
                         <td>{{rowData?.date_creation | date:'dd-MM-yyyy'}}</td>
                         <td> {{ rowData?.created_by?.firstname}} {{ rowData?.created_by?.lastname}}</td>
-                        <td>{{rowData?.user_id?.last_connection | date:'dd MMMM yy hh:mm'}}</td>
+                        <td *ngIf="partenaireDic && partenaireDic[rowData?._id]">{{partenaireDic[rowData?._id] |
+                            date:'dd MMMM yy hh:mm'}}</td>
+                        <td *ngIf="!partenaireDic || !partenaireDic[rowData?._id]">
+                            {{rowData?.user_id?.last_connection | date:'dd MMMM yy hh:mm'}}
+                        </td>
                     </tr>
                 </ng-template>
                 </p-table>

@@ -18,6 +18,7 @@ import jwt_decode from "jwt-decode";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -148,16 +149,29 @@ export class ListPartenaireComponent implements OnInit {
     })
   }
 
+  partenaireDic = {}
 
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
     })
-    this.UserService.getAll().subscribe(dataU => {
+    this.CService.getAllPopulate().subscribe((commercials: CommercialPartenaire[]) => {
+      commercials.forEach(c => {
+        if (c.user_id && c.partenaire_id && c.user_id.last_connexion) {
+          if (this.partenaireDic[c.partenaire_id._id]) {
+            if (new Date(c.user_id.last_connexion).getTime() > new Date(this.partenaireDic[c.partenaire_id._id]).getTime())
+              this.partenaireDic[c.partenaire_id._id] = new Date(c.user_id.last_connexion)
+          } else {
+            this.partenaireDic[c.partenaire_id._id] = new Date(c.user_id.last_connexion)
+          }
+        }
+      })
+    })
+    /*this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {
         this.users[u._id] = u
       })
-    })
+    })*/
   }
 
   seePreRecruted(rowData: Partenaire) {

@@ -1,7 +1,9 @@
+import { Partenaire } from "./Partenaire";
+
 export class CommercialPartenaire {
     constructor(
         public _id?: string,
-        public partenaire_id?: string,
+        public partenaire_id?: any,
         public user_id?: any,
         public code_commercial_partenaire?: string,
         public statut?: string,
