@@ -202,6 +202,8 @@ app.post('/upload-justificatif', uploadJustificatif.single('file'), (req, res) =
 
 // méthode de téléchargement du justificatif
 app.get("/download-justificatif/:id", (req, res) => {
+    if (!fs.existsSync(`./storage/justificatif-conge/${req.params.id}/`))
+        fs.mkdirSync(`./storage/justificatif-conge/${req.params.id}/`, { recursive: true });
     res.download(
         `./storage/justificatif-conge/${req.params.id}/justificatif.pdf`,
         function (err) {

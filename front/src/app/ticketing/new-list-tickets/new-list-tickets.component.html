@@ -476,12 +476,12 @@
                             [placeholder]="selectedService.extraInfo.title2"></p-dropdown>
 
                         <p-multiSelect [style]="{'width':'12em'}" [options]="campusDropdown" filter="true"
-                            *ngIf="showPedagogieFilter()" [showClear]="true" (onClear)="dt1.filter('', 'campus', 'in');"
-                            (onChange)="dt1.filter($event.value, 'campus', 'in');" placeholder="Campus"></p-multiSelect>
+                            *ngIf="showPedagogieFilter()" [showClear]="true" (onClear)="dt2.filter('', 'campus', 'in');"
+                            (onChange)="dt2.filter($event.value, 'campus', 'in');" placeholder="Campus"></p-multiSelect>
                         <p-multiSelect [style]="{'width':'12em'}" [options]="filiereDropdown" filter="true"
                             *ngIf="showPedagogieFilter()" [showClear]="true"
-                            (onClear)="dt1.filter('', 'filiere', 'in');"
-                            (onChange)="dt1.filter($event.value, 'filiere', 'in');"
+                            (onClear)="dt2.filter('', 'filiere', 'in');"
+                            (onChange)="dt2.filter($event.value, 'filiere', 'in');"
                             placeholder="Filière"></p-multiSelect>
 
                     </div>
