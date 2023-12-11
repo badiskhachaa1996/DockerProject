@@ -6,13 +6,13 @@
         color: #050567;">Reporting</h1>
         
         <div class="col-filter">
-            <label class="labelName">Date: Du..jusqu'au..</label><br>
-            <p-calendar [style]="{'width':'100%'}" [(ngModel)]="dates" selectionMode="range" (onSelect)="onFiltreDate()"></p-calendar>
+            <i class="pi pi-calendar"></i><label class="labelName">Date</label><br>
+            <p-calendar styleClass="styleFliter" [style]="{'width':'100%'}" [(ngModel)]="dates" selectionMode="range" (onSelect)="onFiltreDate()"></p-calendar>
         </div>
 
         <div class="col-filter">
-            <label class="labelName">Sélectionner un membre</label><br>
-            <p-dropdown filter="true" placeholder="membres" autoWidth="false"
+            <i class="pi pi-user"></i><label class="labelName">membre</label><br>
+            <p-dropdown styleClass="styleFliter"  filter="true" placeholder="membres" autoWidth="false"
             [style]="{'width':'100%'}" [options]="membreFiltre"
             (onChange)="onFiltreMembre($event)"
             emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Membre">
@@ -21,12 +21,16 @@
 
         </div>
         <div class="col-filter">
-            <label class="labelName">Sélectionner une équipe</label><br>
-            <p-dropdown filter="true" placeholder="équipes"  autoWidth="false" 
+            <i class="pi pi-users"></i><label class="labelName">équipes</label><br>
+            <p-dropdown styleClass="styleFliter" filter="true" placeholder="équipes"  autoWidth="false" 
                 [style]="{'width':'100%'}" [options]="equipeFilte"  (onChange)="onFiltreEquipe($event)"
                 emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole">
             </p-dropdown>
         </div>
+
+        <button class="buttonR"  (click)="reinitialiserFiltres()">Réinitialiser les Filtres</button>
+
+
     </div>
 </div>
 
