@@ -24,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ReadMoreModule } from '../other/component/read-more/read-more.module';
+import { VirtualScrollerModule } from 'primeng/virtualscroller';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { ReadMoreModule } from '../other/component/read-more/read-more.module';
         TooltipModule,
         InputTextModule,
         InputTextareaModule,
-        ReadMoreModule
+        ReadMoreModule,
+        VirtualScrollerModule
     ]
 })
 export class TicketingModule { }
