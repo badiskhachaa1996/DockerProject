@@ -24,6 +24,7 @@ import { Notification } from 'src/app/models/notification';
 import { ActivatedRoute } from '@angular/router';
 import { PrimeIcons, MenuItem } from 'primeng/api';
 
+
 @Component({
   selector: 'app-gestion',
   templateUrl: './gestion.component.html',
@@ -220,7 +221,8 @@ export class GestionComponent implements OnInit {
       priorite: ['', Validators.required],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      urgent: [false, Validators.required],
     });
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
@@ -403,6 +405,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
       identifian: costumid_,
+      urgent:this.formAddTache.get('urgent').value,
     }
     this.projectService.postTask(newTache).then((resultat) => {
       this.taskToDo.push(resultat.task);
@@ -451,6 +454,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
       number_of_hour: task.number_of_hour,
       date_limite: new Date(new_date),
       description: task.description_task,
+      
 
     });
   }
