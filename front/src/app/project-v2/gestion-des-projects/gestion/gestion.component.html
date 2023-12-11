@@ -276,7 +276,7 @@
                             </p-card-header>
                             <div class="grid col-12">
                                 <div class="col-12">
-                                    {{t.description_task}}
+                                    <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>   
                                 </div>
 
                                 <div class="col-12">
@@ -697,11 +697,7 @@
             <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize>
         </div>
 
-        <div class="col-12">
-            <label>Priorité <span style="color: red">*</span></label><br>
-            <p-dropdown [style]="{width: '100%'}" formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
-                [showClear]="true"></p-dropdown>
-        </div><br>
+        
         
 
         <div class="col-12">
@@ -744,36 +740,27 @@
                 
                 </div>
             </div>
-
-            
-
             <div class="col-12">
-                <label>Nombre des heures :</label><br>
+                <label>Durée estimée (h):</label><br>
                 <input pInputText type="number"   autoWidth="false" [style]="{'width':'90%'}" formControlName="number_of_hour" 
                     placeholder="10" (input)="onChange()"/>
-               
             </div>
-
             <div class="col-12">
                 <label>DDL :</label><br>
                 <input pInputText type="date" autoWidth="false" [style]="{'width':'90%'}" formControlName="date_limite"
                     filter="true" placeholder="etudiant@intedgroup.com" (input)="onChange()" />
-                
             </div>
             <div class="col-12">
-                <label>description :</label><br>
+                <label>Description :</label><br>
                 <textarea pInputText autoWidth="false" [style]="{'width':'90%'}" formControlName="description_task"
                     filter="true" placeholder="Donnez une description " (input)="onChange()" ></textarea>
-                
             </div>
             <div class="col-12">
-                <label>Urgent :</label><br><br>
                 <div class="row align-items-center">
-                    <p-checkbox [binary]="true" formControlName="urgent"  [(ngModel)]="urgent" (onChange)="onCheckboxChange($event);onChange()"></p-checkbox>
+                    <p-checkbox  label="Urgent"[binary]="true" formControlName="urgent"   (onChange)="onCheckboxChange($event);onChange()"></p-checkbox>
                 </div>
             </div>
         </div>
-
     </form>
     <div>
         <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
@@ -823,7 +810,7 @@
 
     </div>
     <div>
-        <button pButton label={{buttonName}} (click)="onAddDocumment()"></button>
+        <button pButton label={{buttonName}} icon="pi pi-paperclip" (click)="onAddDocumment()"></button>
     </div><br><br>
     <div class="grid col-12">
     <div class="col-6">
