@@ -4,7 +4,7 @@ import { Table } from 'primeng/table';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from "file-saver";
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
 
 import { MessageService as ToastService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -39,21 +39,21 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
     `]
 })
 export class ListPartenaireComponent implements OnInit {
-  selectedInsert: Partenaire | null = null; 
+  selectedInsert: Partenaire | null = null;
   activeIndex1: number = 0;
   expandedRows = {};
   FjTopatch: any;
   Ttopatch: any;
-  partenaires = []
+  partenaires: Partenaire[] = []
   users = {}
   token;
-  currenData 
+  currenData
   uploadedFileName: string;
 
   handleClose(e) {
 
-        e.close();
- }
+    e.close();
+  }
   showFormAddPartenaire = false
   statutList = environment.typeUser
   civiliteList = environment.civilite;
@@ -232,7 +232,7 @@ export class ListPartenaireComponent implements OnInit {
       indicatif_whatsapp: rowData.indicatifWhatsapp,
     });
   }
- 
+
 
 
 
@@ -325,7 +325,7 @@ export class ListPartenaireComponent implements OnInit {
 
     this.formModifPartenaire.reset();
     this.showFormModifPartenaire = false;
-   
+
 
 
   }
@@ -377,17 +377,17 @@ export class ListPartenaireComponent implements OnInit {
         this.resetFileInput(event);
         this.uploadedFileName = event[0].name;
         this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
-      
+
       })
     }
   }
   resetFileInput(event) {
     if (event && event.length > 0) {
       event[0].value = "";
-      
+
     }
   }
-  
+
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
