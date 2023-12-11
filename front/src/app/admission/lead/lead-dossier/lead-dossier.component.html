@@ -1,7 +1,7 @@
 <div class="col-12">
-    <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile style="display: none;"
+    <input type="file" (change)="uploadFile($event.target.files)" id="selectedFileLeadDossier" #selectedFileLeadDossier style="display: none;"
         accept=".png, .jpg, .jpeg, .jfif" pInputFile />
-    <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther
+    <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOtherLeadDossier" #selectedFileOtherLeadDossier
         style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 </div>
 <div class="card grid" *ngIf="PROSPECT">
@@ -12,7 +12,7 @@
         Sans remplir tous les documents obligatoires, votre dossier ne sera pas traité par l'équipe d'admission.<br>
         Etat du dossier : <strong>{{PROSPECT.etat_dossier}}</strong>
     </p>-->
-    <div class="card col-12 grid">
+    <div class="col-12 grid">
         <div class="col-6">
             Je réside en France
             <p-checkbox [(ngModel)]="resideFr" [binary]="true" inputId="binary"
@@ -80,7 +80,7 @@
                 <td style="width: 10%;">
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-plus"
                         *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici' && !docToUpload"
-                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
+                        (click)="initUpload(doc,'selectedFileOtherLeadDossier')" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Fichier en cours de chargement ..." tooltipPosition="bottom"
                         class="pi pi-spin pi-spinner" *ngIf="docToUpload" (click)="initUpload(doc)"
                         style="margin-left: 2%;color: grey;" aria-hidden="true"></i>

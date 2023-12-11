@@ -948,7 +948,13 @@ app.put("/updateV2", (req, res, next) => {
                         date_creation: new Date()
                     })
                     hl.save().then(h => { console.log(h) })
-                    res.status(201).send(prospectsFromDb)
+                    if (req.body.user_id)
+                        User.findByIdAndUpdate(req.body.user_id._id, { ...req.body.user_id }).then(userEdited => {
+                            prospectsFromDb.user_id = userEdited
+                            res.status(201).send(prospectsFromDb)
+                        })
+                    else
+                        res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error); });
         })
@@ -1594,28 +1600,30 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
                     console.log(pay);
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
-                        if (pay.method == 'Lien de paiement')
-                            stats_paiements.inscription.lien += 1
-                        else if (pay.method == 'Compensation')
-                            stats_paiements.inscription.compensation += 1
-                        else if (pay?.method.includes('Virement'))
-                            stats_paiements.inscription.virement += 1
-                        else if (pay.method.includes('Espèce'))
-                            stats_paiements.inscription.espece += 1
-                        else if (pay.method.includes('Chèque'))
-                            stats_paiements.inscription.cheque += 1
+                        if (pay?.method)
+                            if (pay.method == 'Lien de paiement')
+                                stats_paiements.inscription.lien += 1
+                            else if (pay.method == 'Compensation')
+                                stats_paiements.inscription.compensation += 1
+                            else if (pay.method.includes('Virement'))
+                                stats_paiements.inscription.virement += 1
+                            else if (pay.method.includes('Espèce'))
+                                stats_paiements.inscription.espece += 1
+                            else if (pay.method.includes('Chèque'))
+                                stats_paiements.inscription.cheque += 1
                     } else {
                         stats_paiements.preinscription.total += 1
-                        if (pay.method == 'Lien de paiement')
-                            stats_paiements.preinscription.lien += 1
-                        else if (pay.method == 'Compensation')
-                            stats_paiements.preinscription.compensation += 1
-                        else if (pay.method?.includes('Virement'))
-                            stats_paiements.preinscription.virement += 1
-                        else if (pay.method?.includes('Espèce'))
-                            stats_paiements.preinscription.espece += 1
-                        else if (pay.method?.includes('Chèque'))
-                            stats_paiements.preinscription.cheque += 1
+                        if (pay?.method)
+                            if (pay.method == 'Lien de paiement')
+                                stats_paiements.preinscription.lien += 1
+                            else if (pay.method == 'Compensation')
+                                stats_paiements.preinscription.compensation += 1
+                            else if (pay.method?.includes('Virement'))
+                                stats_paiements.preinscription.virement += 1
+                            else if (pay.method?.includes('Espèce'))
+                                stats_paiements.preinscription.espece += 1
+                            else if (pay.method?.includes('Chèque'))
+                                stats_paiements.preinscription.cheque += 1
                     }
                 })
         })

@@ -1,0 +1,27 @@
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import 'primeng/resources/themes/saga-blue/theme.css';
+@import 'primeng/resources/primeng.min.css';
+
+
+
+ngx-recaptcha2 {
+  display: inline-block;
+  width: 100%; /* Set the width to 100% to match the container */
+  height: 36px; /* Adjust the height to match your button */
+}
+
+/* If you want to adjust the size of the reCAPTCHA iframe, use the following */
+ngx-recaptcha2 iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.div-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

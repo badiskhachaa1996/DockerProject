@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrincipaleListComponent } from './principale-list.component';
+import { ContactUsIcbsComponent } from './contact-us-icbs.component';
 
-describe('PrincipaleListComponent', () => {
-  let component: PrincipaleListComponent;
-  let fixture: ComponentFixture<PrincipaleListComponent>;
+describe('ContactUsIcbsComponent', () => {
+  let component: ContactUsIcbsComponent;
+  let fixture: ComponentFixture<ContactUsIcbsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrincipaleListComponent ]
+      declarations: [ ContactUsIcbsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PrincipaleListComponent);
+    fixture = TestBed.createComponent(ContactUsIcbsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

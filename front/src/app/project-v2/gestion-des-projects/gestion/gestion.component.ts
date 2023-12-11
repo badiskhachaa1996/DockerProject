@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl,FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/User';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { AuthService } from 'src/app/services/auth.service';
@@ -7,6 +7,7 @@ import { RhService } from 'src/app/services/rh.service';
 import { MessageService } from 'primeng/api';
 import { Project } from 'src/app/models/Project';
 import { Task } from 'src/app/models/project/Task';
+import { saveAs } from "file-saver";
 import { Ressources } from 'src/app/models/project/Ressources';
 import { Budget } from 'src/app/models/project/Budget';
 import { ProjectService } from 'src/app/services/projectv2.service';
@@ -21,6 +22,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { ActivatedRoute } from '@angular/router';
+import { PrimeIcons, MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-gestion',
@@ -28,7 +30,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
-  
+
   tasks = [
     { label: 'Tâche 1', value: 'task1', category: 'todo' },
     { label: 'Tâche 2', value: 'task2', category: 'todo' },
@@ -40,11 +42,15 @@ export class GestionComponent implements OnInit {
   todoTasks = this.tasks.filter(task => task.category === 'todo');
   doingTasks = this.tasks.filter(task => task.category === 'doing');
   doneTasks = this.tasks.filter(task => task.category === 'done');
-
+  TaskToShow: Task;
+  buttonName:string="Ajouter";
+  AtributateTable:any[]=[]
   private task_id!: string;
   private project_id!: string;
   private ressources_id!: string;
   private budgetid!: string;
+  docAdded:boolean=false;
+  test:boolean=true;
   avancement_p: number = 0;
   avancement_t: number = 0;
   displayTache: boolean = false;
@@ -52,6 +58,7 @@ export class GestionComponent implements OnInit {
   showressources: boolean = false;
   showCreateticket: boolean = false;
   showbudget: boolean = false;
+  urgent:boolean;
   selectedTabIndex: number = 1;
   selectedTabIndex1: number = 0;
   showUpdateProjectForm: boolean = false;
@@ -65,15 +72,16 @@ export class GestionComponent implements OnInit {
   formAddbudget!: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
+  userList:any[]=[];
   task!: Task[];
-  taskToDo:Task[]=[];
-  taskDoing: Task[]=[];
-  taskDone: Task[]=[];
+  taskToDo: Task[] = [];
+  taskDoing: Task[] = [];
+  taskDone: Task[] = [];
   ressources!: Ressources[];
   budget!: Budget[];
   userConnected!: User;
   token: any;
-  projectSelecteds:Project[]=[];
+  projectSelecteds: Project[] = [];
   showTachesTable: boolean = false;
   showtache: boolean = false;
   showAddTacheForm: boolean = false;
@@ -114,6 +122,16 @@ export class GestionComponent implements OnInit {
     description: new FormControl<string>('', Validators.required),
     priorite: new FormControl<string>('', Validators.required)
   })
+  taskToShowForm = new FormGroup({
+    attribuate_to: new FormControl(),
+    urgent:new FormControl(),
+    number_of_hour: new FormControl(),
+    date_limite: new FormControl(),
+    description_task: new FormControl('',),
+
+
+
+  })
   uploadedFiles: File[] = [];
   constructor(
     private formBuilder: FormBuilder,
@@ -121,7 +139,7 @@ export class GestionComponent implements OnInit {
     private messageService: MessageService,
     private projectService: ProjectService,
     private router: Router,
-    private rhService:RhService,
+    private rhService: RhService,
     private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private route: ActivatedRoute,
     private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService,
 
@@ -172,8 +190,8 @@ export class GestionComponent implements OnInit {
     this.TicketService.getAll().subscribe(data => {
       data.forEach(val => {
         // Assurez-vous que l'ID du ticket n'est pas déjà présent dans le tableau
-        if (!val.task_id.ticketId.includes(val._id)) {
-          val.task_id.ticketId.push(val._id);
+        if (!val?.task_id?.ticketId?.includes(val._id)) {
+          val?.task_id?.ticketId?.push(val._id);
           this.projectService.putTask(val.task_id);
         }
       });
@@ -186,12 +204,12 @@ export class GestionComponent implements OnInit {
       fin: ['', Validators.required],
       description: ['', Validators.required]
     });
-     //PATIE CREE UN TICKET 
-     
+    //PATIE CREE UN TICKET 
+
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
-      priorite: ['',Validators.required],
+      priorite: ['', Validators.required],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
       description: ['', Validators.required]
@@ -208,8 +226,13 @@ export class GestionComponent implements OnInit {
       depense: ['', Validators.required],
     })
     //INITIALISATION DU FORMULAIRE budget 
+    this.rhService.getAgents().then(data => {
+      data.forEach(user => {
+        if(user.type ==="Collaborateur" ){
+this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+} })
+    })
 
- 
 
   }
   //recuperation de user qui vas cree le formulaire
@@ -272,7 +295,7 @@ export class GestionComponent implements OnInit {
     }
     // Construire l'objet à envoyer au serveur avec les données du formulaire
     const currentDate = new Date();
-    const costumid_="P"+currentDate.getTime();  
+    const costumid_ = "P" + currentDate.getTime();
     const newProject = {
       titre: this.formAddProject.get('titre').value,
       createur_id: this.userConnected._id,
@@ -284,9 +307,11 @@ export class GestionComponent implements OnInit {
       responsable: this.formAddProject.get('responsable').value[1],
       description: this.formAddProject.get('description').value,
       avancement: 0,
-      identifian:costumid_,
+      identifian: costumid_,
     };
-    this.projectService.postProject(newProject);
+    this.projectService.postProject(newProject).then(response => {
+      this.project.push(response.project);
+    });
     this.formAddProject.reset();
     this.listeprojets();
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
@@ -328,8 +353,8 @@ export class GestionComponent implements OnInit {
     const new_Date_fin = `${yearf}-${monthf}-${dayf}`;
     this.formAddProject = this.formBuilder.group({
       titre: project.titre,
-      responsable:this.responsableListe,
-       debut: new Date(new_Date_d),
+      responsable: this.responsableListe,
+      debut: new Date(new_Date_d),
       fin: new Date(new_Date_fin),
       description: project.description
     });
@@ -337,7 +362,6 @@ export class GestionComponent implements OnInit {
   }
   UpdateProject() {
     this.projectService.getProject(this.project_id).then((data) => {
-
       data.titre = this.formAddProject.get('titre').value,
         data.debut = this.formAddProject.get('debut').value,
         data.fin = this.formAddProject.get('fin').value,
@@ -347,13 +371,15 @@ export class GestionComponent implements OnInit {
         this.projectService.putProject(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' })
       this.formAddProject.reset();
+      const indexToRemove = this.project.findIndex(project => project._id === this.project_id);if (indexToRemove !== -1) {this.project[indexToRemove]=data;}
+    })
+  }
 
-    })  }
-  //PATIE TACHES
+  //PATIE TACHES********************************************
   addTache(project_id) {
-       
+
     const currentDate = new Date();
-    const costumid_="T"+currentDate.getTime();
+    const costumid_ = "T" + currentDate.getTime();
     if (this.formAddTache.invalid)
       return; {
     }
@@ -366,10 +392,12 @@ export class GestionComponent implements OnInit {
       description_task: this.formAddTache.get('description').value,
       avancement: 0,
       project_id: this.projectIdForTask,
-      validation:"La tâche n’est pas validée",
+      validation: "La tâche n’est pas validée",
       identifian: costumid_,
     }
-    this.projectService.postTask(newTache)
+    this.projectService.postTask(newTache).then((resultat) => {
+      this.taskToDo.push(resultat.task);
+    })
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
     this.formAddTache.reset();
 
@@ -377,7 +405,7 @@ export class GestionComponent implements OnInit {
   }
 
   showTaskList(project) {
-   
+
     this.projectSelecteds.push(project);
     this.projectService.getTasksByIdProject(project._id).then((data) => {
       this.task = [];
@@ -388,10 +416,12 @@ export class GestionComponent implements OnInit {
         if (d.etat === "En attente de traitement") {
           console.log(d.attribuate_to)
           this.taskToDo.push(d);
-        } 
+        } else if (d.etat === "En cours de traitement") {
+          this.taskDoing.push(d);
+        } else { this.taskDone.push(d) }
       });
       console.log(this.taskToDo);
-      this.selectedTabIndex=3;
+      this.selectedTabIndex = 3;
     });
   }
 
@@ -415,7 +445,7 @@ export class GestionComponent implements OnInit {
 
     });
   }
-
+//modifier la tache 
   onUpdatetask() {
 
     this.projectService.getTask(this.task_id).then((data) => {
@@ -427,58 +457,79 @@ export class GestionComponent implements OnInit {
 
         this.projectService.putTask(data)
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'Modification réussie' });
-      this.formAddTache.reset();})};
+      this.formAddTache.reset();
+    })
+  };
 
-      transformtask(task: Task) {
-        // Utilisez Promise.all pour attendre que les deux requêtes asynchrones soient terminées.
-        Promise.all([
-          this.projectService.getProjects(),
-          this.projectService.getTasksByIdProject(task.project_id._id)
-        ]).then(([projectData, taskData]) => {
-          this.projectListe = [];
-          projectData.forEach(project => {
-            if (project?.responsable_id == this.userConnected?._id) {
-              const newprojet = {
-                label: `${project.titre}`,
-                value: project._id
-              };
-              this.projectListe.push(newprojet);
-            }
-          });
-      
-          taskData.forEach(t => {
-            const newtask = {
-              label: `${t.libelle}`,
-              value: t._id
-            };
-            this.taskListe.push(newtask);
-          });
-      
-          console.log(task.libelle);
-      
-          this.TicketForm.patchValue({
-            project: task.project_id._id,
-            task_id: task._id,
-            description: task.libelle+":"+task.description_task,
-            priorite: task.priorite,
-          });
-      
-          this.showCreateticket = true;
-        });
-      }
-      
+  transformtask(task: Task) {
+    // Utilisez Promise.all pour attendre que les deux requêtes asynchrones soient terminées.
+    Promise.all([
+      this.projectService.getProjects(),
+      this.projectService.getTasksByIdProject(task.project_id._id)
+    ]).then(([projectData, taskData]) => {
+      this.projectListe = [];
+      projectData.forEach(project => {
+        if (project?.responsable_id == this.userConnected?._id) {
+          const newprojet = {
+            label: `${project.titre}`,
+            value: project._id
+          };
+          this.projectListe.push(newprojet);
+        }
+      });
+
+      taskData.forEach(t => {
+        const newtask = {
+          label: `${t.libelle}`,
+          value: t._id
+        };
+        this.taskListe.push(newtask);
+      });
+
+      console.log(task.libelle);
+
+      this.TicketForm.patchValue({
+        project: task.project_id._id,
+        task_id: task._id,
+        description: task.libelle + ":" + task.description_task,
+        priorite: task.priorite,
+      });
+
+      this.showCreateticket = true;
+    });
+  }
+
   affectertask(task: Task) {
     this.TicketForm = this.formBuilder.group({
-      project:task.project_id,
-      task_id:task._id,
+      project: task.project_id,
+      task_id: task._id,
       sujet_id: null,
       service_id: null,
-      description:task.description_task,
+      description: task.description_task,
       priorite: task.priorite
-  })}
+    })
+  }
+
+  onChange(){
+    this.test=false;
+    this.TaskToShow.attribuate_to=[];
+  for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
+    this.TaskToShow.attribuate_to.push(this.taskToShowForm.value.attribuate_to[i]);
+
+  }
+  this.TaskToShow.number_of_hour=this.taskToShowForm.value?.number_of_hour;
+  
+  this.TaskToShow.date_limite=this.taskToShowForm.value?.date_limite;
+  this.TaskToShow.description_task=this.taskToShowForm.value?.description_task;
+  const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id);if (indexToRemove !== -1) {this.taskToDo[indexToRemove]=this.TaskToShow;}
+    this.projectService.putTask(this.TaskToShow).then(response => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
+    })
+    this.test=true;
+  }
 
   deleteTask(id, ri) {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cette tache ?")) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
       this.projectService.deleteTask(id)
         .then(data => {
           // The Promise is resolved successfully
@@ -491,22 +542,85 @@ export class GestionComponent implements OnInit {
         });
     }
   }
+  deleteTaskFromSiderbar(){
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
+      this.projectService.deleteTask(this.TaskToShow._id).then(() => {
+        this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie'});
+      })
+    }
+    
+  }
   taches(id, ri) {
     this.showTachesTable = true;
   }
-  calculeAvancementTache(){
+
+  calculeAvancementTache() {
     this.projectService.getTasks().then(tasks => {
-    
-    tasks.forEach(task => {
-      for (let i = 0; i < task.ticketId.length; i++) {
-        this.avancement_t=this.avancement_t+task.ticketId[i].avancement/ task.ticketId.length;
+
+      tasks.forEach(task => {
+        for (let i = 0; i < task.ticketId.length; i++) {
+          this.avancement_t = this.avancement_t + task.ticketId[i].avancement / task.ticketId.length;
+        }
+        task.avancement = this.avancement_t;
+        this.projectService.putTask(task);
+        this.avancement_t = 0;
       }
-      task.avancement = this.avancement_t;
-            this.projectService.putTask(task);
-            this.avancement_t = 0;
+      )
     }
-    )}
     )
+  }
+  // Affichage tache
+  onShowTache(task: Task) {
+    this.TaskToShow = task;
+    this.AtributateTable=[]
+    for (let i = 0; i < this.TaskToShow.attribuate_to.length;i++) {
+      this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
+    };
+    this.urgent=Boolean(this.TaskToShow?.urgent);
+    console.log(this.urgent);
+    this.taskToShowForm.patchValue({
+      number_of_hour: this.TaskToShow.number_of_hour,
+      attribuate_to:this.AtributateTable,
+      urgent:this.TaskToShow.urgent,
+      description_task: this.TaskToShow.description_task,
+      date_limite: this.conersiondate(this.TaskToShow.date_limite),
+
+    })
+    this.displayTache = true;
+
+  }
+  //passer une tache en doing
+  ToDoing(t: Task) {
+    
+    if(t.etat==="En attente de traitement"){
+    const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskToDo.splice(indexToRemove, 1);}
+  }else{    const indexToRemove = this.taskDone.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDone.splice(indexToRemove, 1);}}
+    t.etat = "En cours de traitement"
+    this.taskDoing.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
+    });
+  }
+  //passer une tache a Done
+  ToDone(t: Task) {
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDoing.splice(indexToRemove, 1);}
+    t.etat = "Traiter"
+    this.taskDone.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: '  Done' })
+    });
+  }
+  //passer une tache dans TODO
+  ToToDo(t: Task) {
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDoing.splice(indexToRemove, 1);}
+    t.etat = "En attente de traitement"
+    this.taskToDo.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
+    });
+  }
+  onCheckboxChange(event){
+    if (event.checked){this.TaskToShow.urgent=true;}else{this.TaskToShow.urgent=false;}
   }
   //PARTIE RESSOURCES
   addRessources() {
@@ -520,14 +634,16 @@ export class GestionComponent implements OnInit {
     }
     this.projectService.postRessources(newRessources)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
-    this.formAddressources.reset();}
+    this.formAddressources.reset();
+  }
 
   showRessources(project_id) {
     this.showressources = true;
     this.projectIdForTask = project_id;
     this.projectService.getRessourcesByIdProject(project_id).then((data) => {
       this.ressources = [];
-      this.ressources = data;})
+      this.ressources = data;
+    })
   }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
@@ -536,7 +652,9 @@ export class GestionComponent implements OnInit {
     this.ressources_id = ressources._id;
     this.formAddressources = this.formBuilder.group({
       nom: ressources.nom,
-      importance: ressources.importance});}
+      importance: ressources.importance
+    });
+  }
 
   onUpdateressources() {
     this.projectService.getRessources(this.ressources_id).then((data) => {
@@ -544,7 +662,8 @@ export class GestionComponent implements OnInit {
         data.importance = this.formAddressources.get('importance').value,
         this.projectService.putRessources(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' });
-      this.formAddressources.reset();})
+      this.formAddressources.reset();
+    })
   };
 
   delete_r(ressources_id, rir) {
@@ -553,10 +672,14 @@ export class GestionComponent implements OnInit {
         .then(data => {
           // The Promise is resolved successfully
           this.ressources.splice(rir, 1);
-          this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' })})
+          this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' })
+        })
         .catch(error => {
           // Handle errors from the Promise if needed
-          console.log('Error:', error);});}}
+          console.log('Error:', error);
+        });
+    }
+  }
   //PARTIE BUDGET  
   addBudget() {
     if (this.formAddbudget.invalid)
@@ -566,10 +689,12 @@ export class GestionComponent implements OnInit {
       libelle: this.formAddbudget.get('libelle').value,
       charge: this.formAddbudget.get('charge').value,
       depense: this.formAddbudget.get('depense').value,
-      project_id: this.projectIdForTask,}
+      project_id: this.projectIdForTask,
+    }
     this.projectService.postBudget(newBudjet);
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
-    this.formAddbudget.reset();}
+    this.formAddbudget.reset();
+  }
 
   showBudget(project_id) {
     this.showbudget = true;
@@ -582,7 +707,9 @@ export class GestionComponent implements OnInit {
       for (let j = 0; j < data.length + 1; j = j + 1) {
         this.budgect_depense = this.budgect_depense + data[j].depense;
         this.budget_charge = this.budget_charge + data[j].charge;
-      }})}
+      }
+    })
+  }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
   initialisation_b(budget: Budget) {
@@ -603,7 +730,8 @@ export class GestionComponent implements OnInit {
         data.depense = this.formAddbudget.get('depense').value,
         this.projectService.putBudget(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' });
-      this.formAddbudget.reset();})
+      this.formAddbudget.reset();
+    })
   };
 
   delete_b(budget_id, rir) {
@@ -617,90 +745,164 @@ export class GestionComponent implements OnInit {
         .catch(error => {
           // Handle errors from the Promise if needed
           console.log('Error:', error);
-        });}}
-
-//PARTIE CREATION DE TICKET
-onAdd() {
-  let documents = []
-  this.uploadedFiles.forEach(element => {
-    documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
-  });
-  this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id ,avancement:0,validation:"L'activité n’est pas validée" }).subscribe(data => {
-    this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
-
-    let d = new Date()
-    this.Socket.NewNotifV2('Ticketing - Super-Admin', `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`)
-    this.NotificationService.createV2(new Notification(null, null, false, `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`, new Date(), null, this.TicketForm.value.service_id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
-    this.TicketForm.reset()
-    this.uploadedFiles.forEach((element, idx) => {
-      let formData = new FormData()
-      formData.append('ticket_id', data.doc._id)
-      formData.append('document_id', documents[idx]._id)
-      formData.append('file', element)
-      formData.append('path', element.name)
-      this.TicketService.addFile(formData).subscribe(data => {
-        this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
-      })
-    });
-
-    
-    if (this.itsTask) {
-
-      this.projectService.getTask(this.taskID).then((datat) => {
-        datat.ticketId.push(data.doc._id);
-        this.projectService.putTask(datat);
-
-      })
-      this.router.navigate(['/gestion-project'])
+        });
     }
-  })
-  this.TicketForm.reset();
-}
-onSelectService() {
-  this.sujetDropdown = []
-  this.SujetService.getAllByServiceID(this.TicketForm.value.service_id).subscribe(data => {
-    data.forEach(val => {
-      this.sujetDropdown.push({ label: val.label, value: val._id })
-    })
-  })
-  console.log(this.TicketForm.get('service_id').value);
-  console.log(this.TicketForm.value.service_id)
-}
-onUpload(event: { files: File[] }, fileUpload: FileUpload) {
-  this.uploadedFiles.push(event.files[0])
-  fileUpload.clear()
-}
+  }
 
-onProjectSelected(event) {
-  console.log ("hello");
-  this.taskSelected = null
-  this.taskListe = [];
-  const projectID = event.value;
-  this.projectService.getTasksByIdProject(projectID)
-    .then(data => {
-      data.forEach(t => {
-        const newtask = {
-          label: `${t.libelle}`,
-          value: [t._id]
-        };
-        this.taskListe.push(newtask);
-
-      })
+  //PARTIE CREATION DE TICKET
+  onAdd() {
+    let documents = []
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
+    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id, avancement: 0, validation: "L'activité n’est pas validée" }).subscribe(data => {
+      this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
-}
-onSelectedTache(event) {
-console.log ("hello");
-  const taskID = event.value;
-  console.log ("hello");
-  this.projectService.getTask(taskID).then(data => {
-    this.taskSelected = data;
-    console.log(this.taskSelected)
-    this.TicketForm.patchValue({
-      description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,  
-      priorite: this.taskSelected.priorite,  
-  })
+      let d = new Date()
+      this.Socket.NewNotifV2('Ticketing - Super-Admin', `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`)
+      this.NotificationService.createV2(new Notification(null, null, false, `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`, new Date(), null, this.TicketForm.value.service_id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
+      this.TicketForm.reset()
+      this.uploadedFiles.forEach((element, idx) => {
+        let formData = new FormData()
+        formData.append('ticket_id', data.doc._id)
+        formData.append('document_id', documents[idx]._id)
+        formData.append('file', element)
+        formData.append('path', element.name)
+        this.TicketService.addFile(formData).subscribe(data => {
+          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
+        })
+      });
 
-})}
+
+      if (this.itsTask) {
+
+        this.projectService.getTask(this.taskID).then((datat) => {
+          datat.ticketId.push(data.doc._id);
+          this.projectService.putTask(datat);
+
+        })
+        this.router.navigate(['/gestion-project'])
+      }
+    })
+    this.TicketForm.reset();
+  }
+  onSelectService() {
+    this.sujetDropdown = []
+    this.SujetService.getAllByServiceID(this.TicketForm.value.service_id).subscribe(data => {
+      data.forEach(val => {
+        this.sujetDropdown.push({ label: val.label, value: val._id })
+      })
+    })
+    console.log(this.TicketForm.get('service_id').value);
+    console.log(this.TicketForm.value.service_id)
+  }
+  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+    this.uploadedFiles.push(event.files[0])
+    fileUpload.clear()
+  }
+
+  onProjectSelected(event) {
+    console.log("hello");
+    this.taskSelected = null
+    this.taskListe = [];
+    const projectID = event.value;
+    this.projectService.getTasksByIdProject(projectID)
+      .then(data => {
+        data.forEach(t => {
+          const newtask = {
+            label: `${t.libelle}`,
+            value: [t._id]
+          };
+          this.taskListe.push(newtask);
+
+        })
+      });
+
+  }
+  onSelectedTache(event) {
+    console.log("hello");
+    const taskID = event.value;
+    console.log("hello");
+    this.projectService.getTask(taskID).then(data => {
+      this.taskSelected = data;
+      console.log(this.taskSelected)
+      this.TicketForm.patchValue({
+        description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
+        priorite: this.taskSelected.priorite,
+      })
+
+    })
+  }
+  conersiondate(a) {
+    const dateObjectl = new Date(a); // Conversion en objet Date
+    const year = dateObjectl.getFullYear();
+    const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const day = String(dateObjectl.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`
+  }
+
+  //Document
+  indexDocuments = 0
+  downloadFile(index) {
+    this.indexDocuments = index
+    console.log(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path)
+    this.projectService.downloadFile(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), this.TaskToShow.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+  uploadFile(index) {
+    this.indexDocuments = index
+    document.getElementById('selectedFilesuivre').click();
+  }
+  deleteFile(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce document  ?")){
+    this.TaskToShow.documents.splice(index, 1)
+    
+    this.projectService.putTask(this.TaskToShow).then(data => {
+      
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+    });}
+  }
+  onAddDocumment() {
+    if (!this.docAdded) {
+      this.docAdded = true;
+      this.onAddDocuments();
+      this.buttonName = "Enregistrer"
+
+    } else {
+      this.docAdded = false;
+      this.onUpdateFollow();
+      this.buttonName = "Ajouter"
+    }
+
+  }
+  onAddDocuments() {
+    this.TaskToShow.documents.push({ nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+  onUpdateFollow() {
+    
+  }
+  FileUpload(event) {
+    console.log(event)
+    if (event != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('document_id', this.TaskToShow.documents[this.indexDocuments]._id)
+      formData.append('_id', this.TaskToShow._id)
+      formData.append('file', event[0])
+      this.projectService.uploadFile(formData).subscribe(res => {
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.TaskToShow.documents[this.indexDocuments].path = event[0].name
+        event = null;
+        //this.fileInput.clear()
+      }, error => {
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
 
 }

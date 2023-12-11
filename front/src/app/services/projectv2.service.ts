@@ -13,7 +13,7 @@ import { Budget } from 'src/app/models/project/Budget';
     providedIn: 'root'
 })
 export class ProjectService {
-    
+
     apiUrl = `${environment.origin}projet`;
 
     constructor(private httpClient: HttpClient) { }
@@ -57,7 +57,7 @@ export class ProjectService {
     getProject(id: string): Promise<Project>
     {
       const url = `${this.apiUrl}/get-project/${id}`;
-  
+
       return new Promise<Project>((resolve, reject) => {
         this.httpClient.get<Project>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
           next: (response) => resolve(response),
@@ -68,7 +68,7 @@ export class ProjectService {
     }
 
     // update project
-  putProject(project: Project): Promise<any> 
+  putProject(project: Project): Promise<any>
   {
     const url = `${this.apiUrl}/put-project`;
 
@@ -129,7 +129,7 @@ getTasks(): Promise<Task[]>
    getTask(id: string): Promise<Task>
    {
      const url = `${this.apiUrl}/get-task/${id}`;
- 
+
      return new Promise<Task>((resolve, reject) => {
        this.httpClient.get<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
          next: (response) => resolve(response),
@@ -180,10 +180,10 @@ getTaskbyagent(id: string): Promise<Task[]>
   }
 
     // suppression d'une tache
-    deleteTask(id: string): Promise<any> 
+    deleteTask(id: string): Promise<any>
     {
       const url = `${this.apiUrl}/delete-task/${id}`
-  
+
       return new Promise<any>((resolve, reject) => {
         this.httpClient.delete<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
           next: (response) => resolve(response),
@@ -209,7 +209,7 @@ getTaskbyagent(id: string): Promise<Task[]>
       });
     });
   }
-//get ressources by id project 
+//get ressources by id project
   getRessourcesByIdProject(id: string): Promise<Ressources[]>
   {
     const url = `${this.apiUrl}/get-ressourcess/${id}`;
@@ -226,7 +226,7 @@ getTaskbyagent(id: string): Promise<Task[]>
   getRessources(id: string): Promise<Ressources>
    {
      const url = `${this.apiUrl}/get-ressources/${id}`;
- 
+
      return new Promise<Ressources>((resolve, reject) => {
        this.httpClient.get<Ressources>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
          next: (response) => resolve(response),
@@ -253,10 +253,10 @@ putRessources(ressources: Ressources): Promise<any>
 
 //delete ressources
 
-deleteRessources(id: string): Promise<any> 
+deleteRessources(id: string): Promise<any>
     {
       const url = `${this.apiUrl}/delete-ressources/${id}`
-  
+
       return new Promise<any>((resolve, reject) => {
         this.httpClient.delete<Ressources>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
           next: (response) => resolve(response),
@@ -281,7 +281,7 @@ deleteRessources(id: string): Promise<any>
       });
     });
   }
-//get Budget by id project 
+//get Budget by id project
   getBudgetByIdProject(id: string): Promise<Budget[]>
   {
     const url = `${this.apiUrl}/get-budgets/${id}`;
@@ -324,10 +324,11 @@ deleteRessources(id: string): Promise<any>
 
 //delete budget
 
-deleteBudget(id: string): Promise<any> 
+deleteBudget(id: string): Promise<any>
     {
+
       const url = `${this.apiUrl}/delete-budget/${id}`
-  
+
       return new Promise<any>((resolve, reject) => {
         this.httpClient.delete<Budget>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
           next: (response) => resolve(response),
@@ -336,6 +337,33 @@ deleteBudget(id: string): Promise<any>
         });
       });
     }
+
+
+//document
+uploadFile(formData: FormData) {
+  const url = `${this.apiUrl}/uploadFile/`;
+
+  return this.httpClient.post<Task>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
+downloadFile(_id: string, file_id: string, path: string) {
+  const url = `${this.apiUrl}/downloadFile/${_id}/${file_id}/${path}`
+
+  return this.httpClient.get<{ file: string, documentType: string }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
+insertDB(data: { toInsert: Task[], toUpdate: Task[] }) {
+  let registreUrl = this.apiUrl + "insertDB"
+  return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
+
+// '/get-budget-file/:id'
+downloadFileOfBudget(_id: string) {
+    const url = `${this.apiUrl}/get-budget-file/${_id}`
+    return this.httpClient.get<{ file: string, documentType: string }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+}
+
 
 }
 

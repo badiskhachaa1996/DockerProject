@@ -15,5 +15,11 @@ export class Task{
         public consignes?: any[],
         public validation?: string,
         public identifian?: string,
+        public urgent?: boolean,
+        public documents?: {
+            _id?: string,
+            nom?: string,
+            path?: string,
+        }[],
     ){}
 }

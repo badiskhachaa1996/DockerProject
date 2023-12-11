@@ -202,12 +202,10 @@ import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-int
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
-import { LinksComponent } from './links/links.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
-import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NgModule } from '@angular/core';
 import { ListRemboursementComponent } from './remboursement/list-remboursement/list-remboursement.component';
 import { DataCleComponent } from './remboursement/list-remboursement/data-cle/data-cle.component';
@@ -219,7 +217,6 @@ import { PayementInformationComponent } from './remboursement/list-remboursement
 import { InformationRemboursementComponent } from './remboursement/list-remboursement/information-remboursement/information-remboursement.component';
 import { UploadRemboursementDocComponent } from './remboursement/add-remboursement/upload-remboursement-doc/upload-remboursement-doc.component';
 import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
-import { PreviewCandidatureComponent } from './admission/lead/preview-candidature/preview-candidature.component';
 import { UploadButtonComponent } from './remboursement/upload-button/upload-button.component';
 import { AddRemboursementPublicComponent } from './remboursement/add-remboursement-public/add-remboursement-public.component';
 import { CaptchaModule } from 'primeng/captcha';
@@ -235,7 +232,7 @@ import { AgentsModule } from "./agents/agents.module";
 import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
-import { PrincipaleListComponent } from './partenaire/partenaires/principale-list/principale-list.component';
+import { LinksModule } from './links/links.module';
 
 @NgModule({
     imports: [
@@ -371,6 +368,7 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
                 ]),
             }
         ),
+        LinksModule,
     ],
     declarations: [
         AppComponent,
@@ -471,7 +469,7 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
         GenOutroComponent,
         GendocViewComponent,
         FormulaireFrontComponent,
-        LinksComponent,
+        //LinksComponent,
         ImatchEntrepriseComponent,
         ImatchCandidatComponent,
         EntrepriseListComponent,
@@ -486,7 +484,6 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
         PayementInformationComponent,
         InformationRemboursementComponent,
         UploadRemboursementDocComponent,
-        PreviewCandidatureComponent,
         UploadButtonComponent,
         AddRemboursementPublicComponent,
         AddRemboussementComponent,
@@ -494,7 +491,6 @@ import { PrincipaleListComponent } from './partenaire/partenaires/principale-lis
         GestionLogementComponent,
         BookingV2Component,
         PauseReadMoreComponent,
-        PrincipaleListComponent
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

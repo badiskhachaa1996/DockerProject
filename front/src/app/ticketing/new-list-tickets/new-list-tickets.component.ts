@@ -279,7 +279,7 @@ export class NewListTicketsComponent implements OnInit {
 
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
-      this.isAgent = (r.role != 'user')
+      this.isAgent = (r.role != 'user' && r.type != 'Commercial')
       if (r.haveNewAccess)
         if ((r.type == 'Reponsable' || r.type == 'Collaborateur' || r.type == 'Formateur' || r.type_supp.includes('Collaborateur') || r.type_supp.includes('Reponsable')))
           this.isAgent = true
