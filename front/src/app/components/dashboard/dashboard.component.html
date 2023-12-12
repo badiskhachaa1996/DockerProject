@@ -84,8 +84,10 @@
                 <p-contextMenu #contextMenu [target]="ico" [model]="menuCalenders" [appendTo]="'body'"></p-contextMenu>
             </div>
 
+
             <p-tabView [(activeIndex)]="selectedTabIndex">
                 <p-tabPanel header="Actualités">
+                    <!--
                     <p-table [value]="actualites" dataKey="_id" [rows]="4" [rowHover]="true" #dtactua
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="caption">
@@ -128,7 +130,42 @@
                             </tr>
                         </ng-template>
                     </p-table>
+                    -->
+
+                        <div class="grid">
+                            <div class="g-col-4" *ngFor="let actualite of actualites">
+                                <div class="card offre-card mt-3">
+                                    <div class="card-body">
+                                        <ng-template #defaultImage>
+                                            <div class="img-card" style="background-image: url('../../../assets/images/default.png');"></div>
+                                        </ng-template>
+                                        <p style="font-size: 12px; color: rgb(99, 99, 99);">
+                                            Publié le: {{actualite?.date_creation | date :'dd MMMM yyyy' }}
+                                        </p>
+                                        <p style="font-size: 12px; color: rgb(99, 99, 99);">
+                                            Campus: {{actualite.campus}}
+                                        </p>
+                                        <p style="font-size: 12px; color: rgb(99, 99, 99);">
+                                            Titre: <app-read-more [string]="actualite?.titre" [size_max]=30></app-read-more>
+                                        </p>
+                                        <p style="font-size: 12px; color: rgb(99, 99, 99);">
+                                            Description: <app-read-more [string]="actualite.description" [size_max]=60></app-read-more>
+                                        </p>
+                                        <a class="btn btn-primary" (click)="seeDetails(actualite)">
+                                            Détails
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                 </p-tabPanel>
+
+
+
+
                 <p-tabPanel header="CRA" *ngIf="showCRA">
 
                     <div class="card">
@@ -414,11 +451,11 @@
                                 <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                                 (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                                 emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
-            
+
                             <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
                                 (onChange)="dt1.filter($event.value, 'source', 'equals');" emptyFilterMessage="Pas de source trouvé"
                                 filterPlaceholder="Choisissez une source"></p-dropdown>
-            
+
                             <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
                                 (onChange)="dt1.filter($event.value, 'operation', 'equals');"
                                 emptyFilterMessage="Pas d'opération trouvé"
@@ -1661,11 +1698,11 @@
                                     <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                                     (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                                     emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
-                
+
                                 <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
                                     (onChange)="dt1.filter($event.value, 'source', 'equals');" emptyFilterMessage="Pas de source trouvé"
                                     filterPlaceholder="Choisissez une source"></p-dropdown>
-                
+
                                 <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
                                     (onChange)="dt1.filter($event.value, 'operation', 'equals');"
                                     emptyFilterMessage="Pas d'opération trouvé"
@@ -1776,9 +1813,9 @@
                             </ng-template>
                         </p-table>
                         </td>
-    
+
                         </tr>
-    
+
                         <tr>
                             <td colspan="10">
                                 <h5>Documents</h5>
@@ -1834,13 +1871,13 @@
                         </p-table>
                         </td>
                         </tr>
-    
+
                         </ng-template>
                         </p-table>
                     </p-tabPanel>
-    
+
                     <p-tabPanel header="Mes documents" *ngIf="user">
-    
+
                         <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
                             styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                             <ng-template pTemplate="header">
