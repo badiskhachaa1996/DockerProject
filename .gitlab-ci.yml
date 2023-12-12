@@ -506,22 +506,6 @@ manual_build_forms-app_on_prod1:
 
 #==========================================================
   
-deploy_back_to_dev:
-  stage: DEV
-  dependencies: 
-    - install_back_dependencies_on_dev
-  tags:
-    - dev-shell
-  script:
-    - cd back
-    - ln -s /home/gitlab-runner/storage storage
-    - npm ci
-    - pm2 delete index
-    - pm2 start index.js --time -- --dev
-    - pm2 save
-  only:
-    - develop
-
 deploy_front_to_dev:
   stage: DEV
   dependencies: 
@@ -546,23 +530,23 @@ deploy_forms-app_to_dev:
   only:
     - develop
 
-#==========================================================
-
-deploy_back_to_qa:
-  stage: QA
+deploy_back_to_dev:
+  stage: DEV
   dependencies: 
-    - install_back_dependencies_on_qa
+    - install_back_dependencies_on_dev
   tags:
-    - qa-shell
+    - dev-shell
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --qa
+    - pm2 start index.js --time -- --dev
     - pm2 save
   only:
-    - main
+    - develop
+
+#==========================================================
 
 deploy_front_to_qa:
   stage: QA
@@ -588,24 +572,24 @@ deploy_forms-app_to_qa:
   only:
     - main
 
-#==========================================================
-  
-deploy_back_to_prod2:
-  stage: PROD2
+deploy_back_to_qa:
+  stage: QA
   dependencies: 
-    - install_back_dependencies_on_prod2
+    - install_back_dependencies_on_qa
   tags:
-    - prod2-shell
+    - qa-shell
   script:
     - cd back
-    - ln -s /home/ubuntu/storage storage
+    - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --prod2
+    - pm2 start index.js --time -- --qa
     - pm2 save
   only:
     - main
 
+#==========================================================
+  
 deploy_front_to_prod2:
   stage: PROD2
   dependencies:
@@ -630,25 +614,24 @@ deploy_forms-app_to_prod2:
   only:
     - main
 
-#==========================================================
-  
-manual_deploy_back_to_prod1:
-  stage: PROD1
+deploy_back_to_prod2:
+  stage: PROD2
   dependencies: 
-    - manual_install_back_dependencies_on_prod1
+    - install_back_dependencies_on_prod2
   tags:
-    - prod1-shell
+    - prod2-shell
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --prod1
+    - pm2 start index.js --time -- --prod2
     - pm2 save
   only:
     - main
-  when: manual
 
+#==========================================================
+  
 manual_deploy_front_to_prod1:
   stage: PROD1
   dependencies:
@@ -671,6 +654,23 @@ manual_deploy_forms-app_to_prod1:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - main
+  when: manual
+
+manual_deploy_back_to_prod1:
+  stage: PROD1
+  dependencies: 
+    - manual_install_back_dependencies_on_prod1
+  tags:
+    - prod1-shell
+  script:
+    - cd back
+    - ln -s /home/ubuntu/storage storage
+    - npm ci
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod1
+    - pm2 save
   only:
     - main
   when: manual
