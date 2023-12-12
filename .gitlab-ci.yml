@@ -508,9 +508,10 @@ manual_build_forms-app_on_prod1:
   
 deploy_back_to_dev:
   stage: DEV
+  dependencies: 
+    - install_back_dependencies_on_dev
   tags:
     - dev-shell
-
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
@@ -549,9 +550,10 @@ deploy_forms-app_to_dev:
 
 deploy_back_to_qa:
   stage: QA
+  dependencies: 
+    - install_back_dependencies_on_qa
   tags:
     - qa-shell
-
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
@@ -590,9 +592,10 @@ deploy_forms-app_to_qa:
   
 deploy_back_to_prod2:
   stage: PROD2
+  dependencies: 
+    - install_back_dependencies_on_prod2
   tags:
     - prod2-shell
-
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
@@ -631,9 +634,10 @@ deploy_forms-app_to_prod2:
   
 manual_deploy_back_to_prod1:
   stage: PROD1
+  dependencies: 
+    - manual_install_back_dependencies_on_prod1
   tags:
     - prod1-shell
-
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
