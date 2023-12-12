@@ -35,7 +35,7 @@ export class ReportingComponent implements OnInit {
   contacte : number = 0;
   nonContacte : number = 0;
 
-  equipeFilte=[{ label: 'Toutes les équipe', value: null }];
+  equipeFilte=[{ label: 'toutes les équipes', value: null }];
   membreFiltre=[{ label: 'tous les membres', value: null }];
   
 
