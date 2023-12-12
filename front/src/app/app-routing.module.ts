@@ -150,7 +150,7 @@ const routes: Routes = [
             {
                 path: 'crm',
                 loadChildren: () => import('./crm/crm.module').then(m => m.CRMModule),
-                
+
 
             },
             {
@@ -188,7 +188,7 @@ const routes: Routes = [
                 path: 'admin/ajout-de-partenaire',
                 component: ListPartenaireComponent,
                 canActivate: [AuthGuardService],
-            },  
+            },
             {
                 path: 'collaborateur',
                 component: ListCollaborateurComponent,
@@ -254,15 +254,15 @@ const routes: Routes = [
 
 
 
-           
 
-           
+
+
             {
                 path: 'remboursements',
                 component: ListRemboursementComponent,
                 canActivate: [AuthGuardService],
             },
-              
+
             {
                 path: 'ajout-remboursement',
                 component: AddRemboussementComponent,
@@ -607,7 +607,7 @@ const routes: Routes = [
 
 
     { path: 'document/:id_doc', component: GendocViewComponent },
-    
+
     { path: 'formulaire-remboursement', component: AddRemboursementPublicComponent },
 
 ]

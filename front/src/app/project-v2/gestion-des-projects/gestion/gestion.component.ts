@@ -5,9 +5,9 @@ import { Collaborateur } from 'src/app/models/Collaborateur';
 import { AuthService } from 'src/app/services/auth.service';
 import { RhService } from 'src/app/services/rh.service';
 import { MessageService } from 'primeng/api';
+import { saveAs } from "file-saver";
 import { Project } from 'src/app/models/Project';
 import { Task } from 'src/app/models/project/Task';
-import { saveAs } from "file-saver";
 import { Ressources } from 'src/app/models/project/Ressources';
 import { Budget } from 'src/app/models/project/Budget';
 import { ProjectService } from 'src/app/services/projectv2.service';
@@ -22,8 +22,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { ActivatedRoute } from '@angular/router';
-import { PrimeIcons, MenuItem } from 'primeng/api';
-
+import { Ticket } from "../../../models/Ticket";
 
 @Component({
   selector: 'app-gestion',
@@ -31,12 +30,6 @@ import { PrimeIcons, MenuItem } from 'primeng/api';
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
-  colors: string[] = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-
-  handleColorClick(color: string): void {
-    console.log(`Color clicked: ${color}`);
-    // Ajoutez votre logique ici pour gérer le clic sur la couleur
-  }
 
   tasks = [
     { label: 'Tâche 1', value: 'task1', category: 'todo' },
@@ -66,7 +59,6 @@ export class GestionComponent implements OnInit {
   showressources: boolean = false;
   showCreateticket: boolean = false;
   showbudget: boolean = false;
-  urgent: boolean;
   selectedTabIndex: number = 1;
   selectedTabIndex1: number = 0;
   showUpdateProjectForm: boolean = false;
@@ -111,17 +103,14 @@ export class GestionComponent implements OnInit {
   taskListe: any[] = [
 
   ];
-  sujetDropdown: any[] = [
-  ];
-  projectListe: any[] = [
-
-  ];
+  sujetDropdown: any[] = [];
+  projectListe: any[] = [];
   prioriteDropdown: any[] = [
     { label: 'Urgent', value: "Urgent" },
     { label: 'Trés urgent', value: "Trés urgent" },
   ];
-  serviceDropdown: any[] = [
-  ];
+  serviceDropdown: any[] = [];
+  currentProject: Project;
   TicketForm = new FormGroup({
     project: new FormControl<any>('', Validators.required),
     task_id: new FormControl<string>('', Validators.required),
@@ -142,6 +131,8 @@ export class GestionComponent implements OnInit {
 
   })
   uploadedFiles: File[] = [];
+  displayDialog: boolean = false;
+  displayBudjetDialog: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private userService: AuthService,
@@ -166,6 +157,7 @@ export class GestionComponent implements OnInit {
     this.projectService.getProjects().then((data) => {
       this.project = [];
       this.project = data;
+
     })
     //recuperation du nombre de project
     this.listeprojets();
@@ -199,8 +191,8 @@ export class GestionComponent implements OnInit {
     this.TicketService.getAll().subscribe(data => {
       data.forEach(val => {
         // Assurez-vous que l'ID du ticket n'est pas déjà présent dans le tableau
-        if (!val?.task_id?.ticketId?.includes(val._id)) {
-          val?.task_id?.ticketId?.push(val._id);
+        if (!val.task_id.ticketId.includes(val._id)) {
+          val.task_id.ticketId.push(val._id);
           this.projectService.putTask(val.task_id);
         }
       });
@@ -213,7 +205,7 @@ export class GestionComponent implements OnInit {
       fin: ['', Validators.required],
       description: ['', Validators.required]
     });
-    //PATIE CREE UN TICKET 
+    //PATIE CREE UN TICKET
 
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
@@ -221,15 +213,14 @@ export class GestionComponent implements OnInit {
       priorite: ['', Validators.required],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
-      description: ['', Validators.required],
-      urgent: [false, Validators.required],
+      description: ['', Validators.required]
     });
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
       nom: ['', Validators.required],
       importance: ['', Validators.required],
     })
-    //INITIALISATION DU FORMULAIRE budget 
+    //INITIALISATION DU FORMULAIRE budget
     this.formAddbudget = this.formBuilder.group({
       libelle: ['', Validators.required],
       charge: ['', Validators.required],
@@ -303,7 +294,7 @@ export class GestionComponent implements OnInit {
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
   }
-  //envoi du forulaire creation de project 
+  //envoi du forulaire creation de project
   addProject() {
     if (this.formAddProject.invalid) {
       // Vérifier si le formulaire est invalide, si oui, ne rien faire
@@ -325,13 +316,14 @@ export class GestionComponent implements OnInit {
       avancement: 0,
       identifian: costumid_,
     };
-    this.projectService.postProject(newProject).then(response => {
-      this.project.push(response.project);
-    });
+    this.projectService.postProject(newProject);
     this.formAddProject.reset();
     this.listeprojets();
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
-    this.listeprojets();
+    this.projectService.getProjects().then((data) => {
+      this.project = [];
+      this.project = data;
+    })
   }
 
   delete(id, ri) {
@@ -350,7 +342,9 @@ export class GestionComponent implements OnInit {
   }
 
   initialisation_project(project: Project) {
+    this.displayDialog = true;
     this.showUpdateProjectForm = true;
+    this.currentProject = project;
 
     this.project_id = project._id;
     const debut = project.debut; // Supposons que project.debut soit une date valide
@@ -359,7 +353,7 @@ export class GestionComponent implements OnInit {
     const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObject.getDate()).padStart(2, '0');
     const new_Date_d = `${year}-${month}-${day}`;
-    //pour fin 
+    //pour fin
     this.project_id = project._id;
     const fin = project.fin; // Supposons que project.debut soit une date valide
     const dateObjectf = new Date(fin); // Conversion en objet Date
@@ -390,9 +384,13 @@ export class GestionComponent implements OnInit {
       this.showUpdateProjectForm = false;
       const indexToRemove = this.project.findIndex(project => project._id === this.project_id); if (indexToRemove !== -1) { this.project[indexToRemove] = data; }
     })
+    this.projectService.getProjects().then((data) => {
+      this.project = data;
+    })
   }
 
-  //PATIE TACHES********************************************
+
+  //PATIE TACHES
   addTache(project_id) {
 
     const currentDate = new Date();
@@ -411,11 +409,8 @@ export class GestionComponent implements OnInit {
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
       identifian: costumid_,
-      urgent: this.formAddTache.get('urgent').value,
     }
-    this.projectService.postTask(newTache).then((resultat) => {
-      this.taskToDo.push(resultat.task);
-    })
+    this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
     this.formAddTache.reset();
 
@@ -434,9 +429,7 @@ export class GestionComponent implements OnInit {
         if (d.etat === "En attente de traitement") {
           console.log(d.attribuate_to)
           this.taskToDo.push(d);
-        } else if (d.etat === "En cours de traitement") {
-          this.taskDoing.push(d);
-        } else { this.taskDone.push(d) }
+        }
       });
       console.log(this.taskToDo);
       this.selectedTabIndex = 3;
@@ -529,27 +522,8 @@ export class GestionComponent implements OnInit {
     })
   }
 
-  onChange() {
-    this.test = false;
-    this.TaskToShow.attribuate_to = [];
-    console.log(this.dicUsers, this.taskToShowForm.value.attribuate_to)
-    for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
-      this.TaskToShow.attribuate_to.push(this.dicUsers[this.taskToShowForm.value.attribuate_to[i]]);
-
-    }
-    this.TaskToShow.number_of_hour = this.taskToShowForm.value?.number_of_hour;
-
-    this.TaskToShow.date_limite = this.taskToShowForm.value?.date_limite;
-    this.TaskToShow.description_task = this.taskToShowForm.value?.description_task;
-    const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskToDo[indexToRemove] = this.TaskToShow; }
-    this.projectService.putTask(this.TaskToShow).then(response => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
-    })
-    this.test = true;
-  }
-
   deleteTask(id, ri) {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette tache ?")) {
       this.projectService.deleteTask(id)
         .then(data => {
           // The Promise is resolved successfully
@@ -573,7 +547,6 @@ export class GestionComponent implements OnInit {
   taches(id, ri) {
     this.showTachesTable = true;
   }
-
   calculeAvancementTache() {
     this.projectService.getTasks().then(tasks => {
 
@@ -596,8 +569,7 @@ export class GestionComponent implements OnInit {
     for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
       this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
     };
-    this.urgent = Boolean(this.TaskToShow?.urgent);
-    console.log(this.urgent);
+
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
       attribuate_to: this.AtributateTable,
@@ -653,7 +625,9 @@ export class GestionComponent implements OnInit {
     }
     this.projectService.postRessources(newRessources)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
+    this.ressources = [...this.ressources, newRessources];
     this.formAddressources.reset();
+    this.showAddRessourcesForm = false;
   }
 
   showRessources(project_id) {
@@ -699,39 +673,62 @@ export class GestionComponent implements OnInit {
         });
     }
   }
-  //PARTIE BUDGET  
+  //PARTIE BUDGET
   addBudget() {
     if (this.formAddbudget.invalid)
       return; {
     }
+    let documents = []
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+    });
     const newBudjet = {
       libelle: this.formAddbudget.get('libelle').value,
       charge: this.formAddbudget.get('charge').value,
       depense: this.formAddbudget.get('depense').value,
-      project_id: this.projectIdForTask,
+      project_id: this.projectIdForTask
     }
-    this.projectService.postBudget(newBudjet);
+    this.projectService.postBudget({ ...newBudjet, documents: documents })
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
-    this.formAddbudget.reset();
+    this.budget = [...this.budget, newBudjet];
+    // Calcul du budget total
+    this.budgect_depense = this.budget.reduce((acc, b) => acc + (b.depense || 0), 0);
+    this.budget_charge = this.budget.reduce((acc, b) => acc + (b.charge || 0), 0);
+    this.uploadedFiles = [];
+    this.formAddbudget.reset()
+    this.listeprojets()
+
+
+      ;
   }
 
   showBudget(project_id) {
+    this.currentProject = this.projectSelecteds.find(p => p._id == project_id);
+    this.displayBudjetDialog = true;
     this.showbudget = true;
     this.projectIdForTask = project_id;
     this.projectService.getBudgetByIdProject(project_id).then((data) => {
       this.budget = [];
       this.budget = data;
+      console.log(this.budget);
       this.budget_charge = 0;
       this.budgect_depense = 0;
-      for (let j = 0; j < data.length + 1; j = j + 1) {
-        this.budgect_depense = this.budgect_depense + data[j].depense;
-        this.budget_charge = this.budget_charge + data[j].charge;
+      for (let j = 0; j < data.length; j = j + 1) {
+        if (data[j]) {
+          this.budgect_depense = this.budgect_depense + (data[j].depense || 0);
+          this.budget_charge = this.budget_charge + (data[j].charge || 0);
+        }
+        this.currentProject = this.project.find(p => p._id == project_id);
       }
-    })
+    });
+
+
   }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
   initialisation_b(budget: Budget) {
+    this.currentProject = this.project.find(p => p._id == budget.project_id);
+    this.displayBudjetDialog = true;
     this.showUpdateBudgetForm = true;
     this.budgetid = budget._id;
     this.formAddbudget = this.formBuilder.group({
@@ -741,17 +738,44 @@ export class GestionComponent implements OnInit {
     });
   }
 
-  onUpdatebudget() {
-    this.projectService.getBudget(this.budgetid).then((data) => {
-      data._id = this.budgetid;
-      data.libelle = this.formAddbudget.get('libelle').value,
-        data.charge = this.formAddbudget.get('charge').value,
-        data.depense = this.formAddbudget.get('depense').value,
-        this.projectService.putBudget(data);
+  async onUpdatebudget() {
+    try {
+      // Mise à jour du budget
+      const updateData = {
+        _id: this.budgetid,
+        libelle: this.formAddbudget.get('libelle').value,
+        charge: this.formAddbudget.get('charge').value,
+        depense: this.formAddbudget.get('depense').value,
+        document: this.uploadedFiles[0].name
+      };
+
+      await this.projectService.putBudget(updateData);
+      // Affichage du message de succès
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' });
+
+      this.budget = [...this.budget.filter(b => b._id != this.budgetid), updateData];
+
+      // Réinitialisation du formulaire
       this.formAddbudget.reset();
-    })
+
+      // Calcul du budget total
+      this.budgect_depense = this.budget.reduce((acc, b) => acc + (b.depense || 0), 0);
+      this.budget_charge = this.budget.reduce((acc, b) => acc + (b.charge || 0), 0);
+
+      // Mise à jour du projet actuel
+      this.currentProject = this.project.find(p => p._id == this.currentProject._id);
+
+      console.log(this.budget);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du budget:', error);
+      // Gérer l'erreur ici, par exemple, afficher un message d'erreur
+    }
+
+    // Fermer le formulaire de mise à jour
+    this.showUpdateBudgetForm = false;
   };
+
+
 
   delete_b(budget_id, rir) {
     if (confirm("Êtes-vous sûr de vouloir supprimer ce budget ?")) {
@@ -816,7 +840,9 @@ export class GestionComponent implements OnInit {
     console.log(this.TicketForm.value.service_id)
   }
   onUpload(event: { files: File[] }, fileUpload: FileUpload) {
-    this.uploadedFiles.push(event.files[0])
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+    }
     fileUpload.clear()
   }
 
@@ -849,17 +875,8 @@ export class GestionComponent implements OnInit {
         description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
         priorite: this.taskSelected.priorite,
       })
-
     })
   }
-  conersiondate(a) {
-    const dateObjectl = new Date(a); // Conversion en objet Date
-    const year = dateObjectl.getFullYear();
-    const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
-    const day = String(dateObjectl.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`
-  }
-
   //Document
   indexDocuments = 0
   downloadFile(index) {
@@ -887,19 +904,14 @@ export class GestionComponent implements OnInit {
       });
     }
   }
-  onAddDocumment() {
-    if (!this.docAdded) {
-      this.docAdded = true;
-      this.onAddDocuments();
-      this.buttonName = "Enregistrer"
 
-    } else {
-      this.docAdded = false;
-      this.onUpdateFollow();
-      this.buttonName = "Ajouter"
-    }
-
+  onHideUpdateProject() {
+    this.showUpdateProjectForm = false;
+    this.formAddProject.reset();
+    this.uploadedFiles = [];
   }
+
+
   onAddDocuments() {
     this.TaskToShow.documents.push({ nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
@@ -907,7 +919,6 @@ export class GestionComponent implements OnInit {
 
   }
   FileUpload(event) {
-    console.log(event)
     if (event != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
@@ -924,5 +935,34 @@ export class GestionComponent implements OnInit {
       });
     }
   }
+  onHideAddBudget() {
+    this.showAddBudgetForm = false;
+    this.formAddbudget.reset();
+    this.uploadedFiles = [];
+  }
 
+  onHideRessources() {
+    this.showAddRessourcesForm = false;
+    this.formAddressources.reset();
+    this.uploadedFiles = [];
+  }
+
+  onDownloadBudgetFile(_id: string, file_id: string, path: string) {
+    this.projectService.downloadFile(_id, file_id, path).subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.error(error);
+        this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenue' });
+      }
+    );
+  }
+  conersiondate(a) {
+    const dateObjectl = new Date(a); // Conversion en objet Date
+    const year = dateObjectl.getFullYear();
+    const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const day = String(dateObjectl.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`
+  }
 }

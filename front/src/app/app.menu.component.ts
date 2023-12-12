@@ -48,7 +48,7 @@ export class AppMenuComponent implements OnInit {
         {
             label: 'Espace Personnel',
             icon: 'pi pi-fw pi-home',
-            routerLink: ['/'],
+            routerLink: [''],
         },
         {
             label: 'iMatch',
@@ -2618,7 +2618,7 @@ export class AppMenuComponent implements OnInit {
                                                   routerLink: [
                                                       'crm/leads/ajout',
                                                   ],
-                                              }, 
+                                              },
                                                  {
                                                      label: 'Importer',
                                                      icon: 'pi pi-database',
@@ -2631,7 +2631,6 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: ['crm/liste'],
                                         },
-                                        
                                         /*{
                                             label: 'Qualification',
                                             icon: 'pi pi-star',
@@ -2761,24 +2760,14 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
-                                                    label: 'Gestion des groupes',
-                                                    icon: 'pi pi-list',
-                                                    routerLink: ['/new-groupes']
-                                                },
-                                                {
-                                                    label: 'Gestion des campus',
-                                                    icon: 'pi pi-map-marker',
-                                                    routerLink: ['/administrations/campus']
-                                                },
-                                                {
                                                     label: 'Gestion des sources',
-                                                    icon: 'pi pi-sign-in',
-                                                    routerLink: ['crm/gestion-sources'],
+                                                    icon: 'pi pi-map-marker',
+                                                    routerLink: [''],
                                                 },
                                                 {
                                                     label: 'Gestion des opérations',
                                                     icon: 'pi pi-tablet',
-                                                    routerLink: ['crm/gestion-operations'],
+                                                    routerLink: [''],
                                                 },
                                             ],
                                         },
@@ -4581,7 +4570,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Dashboard',
                                         icon: 'pi pi-chart-line'
                                         , routerLink: ['/dashboard/partenaire']
-                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['rh/actualite-notifications'] },
+                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
                                 ]
                             },
                         )
@@ -5206,16 +5195,28 @@ export class AppMenuComponent implements OnInit {
                                     label: 'CRM',
                                     icon: 'pi pi-database',
                                     items: [
-
+                                        /*{
+                                            label: 'Insertion',
+                                            icon: 'pi pi-user-plus',
+                                            items: [
+                                                /*{
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            },
+                                                {
+                                                    label: 'Importer',
+                                                    icon: 'pi pi-database',
+                                                    routerLink: ['crm/import'],
+                                                },
+                                            ],
+                                        },*/
                                         {
                                             label: 'Liste des leads',
                                             icon: 'pi pi-users',
                                             routerLink: ['crm/liste'],
-                                        },
-                                        {
-                                            label: 'Reporting',
-                                            icon: 'pi pi-chart-line',
-                                            routerLink: ['crm/reporting'],
                                         },/*
                                         {
                                             label: 'Qualification',
@@ -5353,18 +5354,8 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
-                                                    label: 'Gestion des groupes',
-                                                    icon: 'pi pi-list',
-                                                    routerLink: ['/new-groupes']
-                                                },
-                                                {
-                                                    label: 'Gestion des campus',
-                                                    icon: 'pi pi-map-marker',
-                                                    routerLink: ['/administrations/campus']
-                                                },
-                                                {
                                                     label: 'Gestion des sources',
-                                                    icon: 'pi pi-sign-in',
+                                                    icon: 'pi pi-map-marker',
                                                     routerLink: ['crm/gestion-sources'],
                                                 },
                                                 {
@@ -5373,7 +5364,23 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['crm/gestion-operations'],
                                                 },
                                             ],
-                                        },
+                                        },/*
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-tablet',
+                                            items: [
+                                                {
+                                                    label: 'Equipe',
+                                                    icon: 'pi pi-users',
+                                                    routerLink: [''],
+                                                },
+                                                {
+                                                    label: 'Ma performance',
+                                                    icon: 'pi pi-chart-bar',
+                                                    routerLink: [''],
+                                                },
+                                            ],
+                                        },*/
                                     ],
                                 });
                         } else if (role == 'Admin') {
@@ -5381,7 +5388,24 @@ export class AppMenuComponent implements OnInit {
                                 label: 'CRM',
                                 icon: 'pi pi-database',
                                 items: [
-
+                                    /*{
+                                        label: 'Insertion',
+                                        icon: 'pi pi-user-plus',
+                                        items: [
+                                            /*{
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Importer',
+                                                icon: 'pi pi-database',
+                                                routerLink: ['crm/import'],
+                                            },
+                                        ],
+                                    },*/
                                     {
                                         label: 'Liste des leads',
                                         icon: 'pi pi-users',
@@ -5522,9 +5546,22 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-database',
                                 items: [
                                     {
-                                        label: 'Importer',
-                                        icon: 'pi pi-database',
-                                        routerLink: ['crm/import'],
+                                        label: 'Insertion',
+                                        icon: 'pi pi-user-plus',
+                                        items: [
+                                            /*{
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            }, */
+                                            {
+                                                label: 'Importer',
+                                                icon: 'pi pi-database',
+                                                routerLink: ['crm/import'],
+                                            },
+                                        ],
                                     },
                                     {
                                         label: 'Liste des leads',
@@ -6720,24 +6757,14 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['crm/gestion-produits'],
                                                 },
                                                 {
-                                                    label: 'Gestion des groupes',
-                                                    icon: 'pi pi-list',
-                                                    routerLink: ['/new-groupes']
-                                                },
-                                                {
-                                                    label: 'Gestion des campus',
-                                                    icon: 'pi pi-map-marker',
-                                                    routerLink: ['/administrations/campus']
-                                                },
-                                                {
                                                     label: 'Gestion des sources',
-                                                    icon: 'pi pi-sign-in',
-                                                    routerLink: ['crm/gestion-sources'],
+                                                    icon: 'pi pi-map-marker',
+                                                    routerLink: [''],
                                                 },
                                                 {
                                                     label: 'Gestion des opérations',
                                                     icon: 'pi pi-tablet',
-                                                    routerLink: ['crm/gestion-operations'],
+                                                    routerLink: [''],
                                                 },
                                             ],
                                         },
