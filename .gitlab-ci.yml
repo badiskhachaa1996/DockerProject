@@ -291,7 +291,6 @@ build_front_on_dev:
 
   script:
       - cd front
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=dev
   only:
     - develop
@@ -313,7 +312,6 @@ build_forms-app_on_dev:
 
   script:
       - cd forms-app
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=dev
   only:
     - develop
@@ -337,7 +335,6 @@ build_front_on_qa:
 
   script:
       - cd front
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - main
@@ -359,7 +356,6 @@ build_forms-app_on_qa:
 
   script:
       - cd forms-app
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - main
@@ -383,7 +379,6 @@ build_front_on_prod2:
 
   script:
       - cd front
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
@@ -405,7 +400,6 @@ build_forms-app_on_prod2:
 
   script:
       - cd forms-app
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
@@ -429,7 +423,6 @@ manual_build_front_on_prod1:
 
   script:
       - cd front
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=prod1
   only:
     - main
@@ -452,7 +445,6 @@ manual_build_forms-app_on_prod1:
 
   script:
       - cd forms-app
-      - npm ci
       - node node_modules/@angular/cli/bin/ng build --configuration=prod1
   only:
     - main
