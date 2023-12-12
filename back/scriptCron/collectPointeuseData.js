@@ -10,6 +10,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 200000)
         let pathToDirectory = '/var/www/P' //'/var/www/P'
         const directoriesInDIrectory = fs.readdirSync(pathToDirectory, { withFileTypes: true })
             .filter((item) => item.isDirectory())
@@ -75,6 +79,9 @@ mongoose
                             nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, users: data.users
                         }).then(pd => {
                             console.log('Update de ' + serial_number)
+                            if (serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1])
+                                process.exit()
+
                         })
                     } else {
                         let pd = new PointeuseData({
@@ -82,10 +89,14 @@ mongoose
                         })
                         pd.save().then(newPd => {
                             console.log('Ajout de ' + serial_number)
+                            if (serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1])
+                                process.exit()
                         })
                     }
                 } catch (error) {
                     console.error(error)
+                    if (serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1])
+                        process.exit()
                 }
 
             })

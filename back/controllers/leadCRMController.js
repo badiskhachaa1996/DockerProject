@@ -25,8 +25,10 @@ app.post("/create", (req, res) => {
         if (!r)
             f.save()
                 .then((FFSaved) => {
+                    console.log(FFSaved.source, FFSaved)
                     if (FFSaved.source.startsWith('Site Web')) {
                         let ecole = FFSaved.source.replace('Site Web ', '')
+                        console.log(ecole)
                         let mailOptions = {
                             from: 'ims@intedgroup.com',
                             to: FFSaved.email,
