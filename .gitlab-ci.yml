@@ -30,10 +30,7 @@ install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+    
   script:
     - cd back
     - rm -rf node_modules/
@@ -52,6 +49,7 @@ install_front_dependencies_on_dev:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+      
   script:
     - cd front
     - rm -rf node_modules/
@@ -70,6 +68,7 @@ install_forms-app_dependencies_on_dev:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -86,10 +85,7 @@ install_back_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+    
   script:
     - cd back
     - rm -rf node_modules/
@@ -108,6 +104,7 @@ install_front_dependencies_on_qa:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -126,6 +123,7 @@ install_forms-app_dependencies_on_qa:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -142,10 +140,7 @@ install_back_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+
   script:
     - cd back
     - rm -rf node_modules/
@@ -164,6 +159,7 @@ install_front_dependencies_on_prod2:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -182,6 +178,7 @@ install_forms-app_dependencies_on_prod2:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -198,10 +195,7 @@ manual_install_back_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+
   script:
     - cd back
     - rm -rf node_modules/
@@ -221,6 +215,7 @@ manual_install_front_dependencies_on_prod1:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -240,6 +235,7 @@ manual_install_forms-app_dependencies_on_prod1:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -514,11 +510,6 @@ deploy_back_to_dev:
   stage: DEV
   tags:
     - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
 
   script:
     - cd back
@@ -560,11 +551,6 @@ deploy_back_to_qa:
   stage: QA
   tags:
     - qa-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
 
   script:
     - cd back
@@ -606,11 +592,6 @@ deploy_back_to_prod2:
   stage: PROD2
   tags:
     - prod2-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
 
   script:
     - cd back
@@ -652,11 +633,6 @@ manual_deploy_back_to_prod1:
   stage: PROD1
   tags:
     - prod1-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
 
   script:
     - cd back
