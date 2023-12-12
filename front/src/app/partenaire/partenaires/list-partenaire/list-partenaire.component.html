@@ -6,7 +6,7 @@
         </div>
         <div class="col-12">
             <input type="file" (change)="FileUpload2($event.target.files)" id="selectedFile2" #selectedFile2
-                style="display: none;" pInputFile />
+            accept=".jpg,.png,.jpeg,.pdf"   style="display: none;" pInputFile />
         </div>
         <p-toast></p-toast>
         <div class="grid">
@@ -27,9 +27,6 @@
             <div class="col-12">
                 <div class="card">
                     <!-- bouton d'ajout "d'insertion" -->
-
-
-
                     <!-- la liste partenaire -->
                     <h5>Liste des partenaires</h5>
                     <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="8" [rowHover]="true"
@@ -326,7 +323,7 @@
         <app-partenaire-inscription></app-partenaire-inscription>
     </p-tabPanel>
 
-    <p-tabPanel header=" Nom du partenaire " [closable]="true">
+    <p-tabPanel *ngIf="idPartenaireToUpdate" [header]="idPartenaireToUpdate.nom " [closable]="true">
         <div class="col-12" *ngIf="showFormModifPartenaire">
             <div class="card">
 
@@ -336,7 +333,7 @@
                     <p-fieldset legend="Information Entreprise">
                         <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoCommercial">
                             <div class="profile">
-                                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                                <a (click)="selectedFile.click()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
                                     style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150"
                                         height="150" style="border-radius: 50px;" /></a>
                             </div>
@@ -500,7 +497,7 @@
                                     <strong>Etat de Contrat:</strong>
 
                                     <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
-                                        [(ngModel)]="idPartenaireToUpdate.etat_contrat"
+                                        [(ngModel)]="idPartenaireToUpdate.etat_contrat"  
                                         placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
 
                                     <span *ngIf="idPartenaireToUpdate?.pathEtatContrat && !uploadedFileName">
@@ -517,14 +514,16 @@
                                         [disabled]="!idPartenaireToUpdate?.pathEtatContrat" (click)="downloadContrat()">
                                         <i class="pi pi-arrow-down" style="margin-right: 5px;"></i>
                                     </button>
-
+                                    <!-- [disabled]="idPartenaireToUpdate?.pathEtatContrat"  -->
                                     <button pTooltip="Ajouter un contrat"
                                         style="  background-color: #37BAD4; color: #fff;  padding: 10px 20px;  border: none;   border-radius: 5px;   cursor: pointer;  font-size: 14px;  transition: background-color 0.3s ease; display: flex;  align-items: center;   justify-content: center; "
-                                        [disabled]="!idPartenaireToUpdate?.pathEtatContrat" (click)="clickFile2()">
+                                      
+                                        (click)="selectedFile2.click()">
                                         <i class="pi pi-plus" style="margin-right: 5px;"></i>
                                     </button>
                                 </div>
                             </div>
+
 
                             <div class="container" style="display: flex; flex-direction: row; align-items: center; ">
                                 <form class="" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()"
