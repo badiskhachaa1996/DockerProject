@@ -98,6 +98,13 @@ export class BrandsListComponent implements OnInit {
   showUpdate: Brand = null
   showAdd = false
 
+
+
+  closeSupportMarketing(showAddSM) {
+    showAddSM = false;
+  }
+  
+
   initUpdate(brand: Brand) {
     this.updateForm.patchValue({ ...brand })
     this.updateForm.patchValue({ partenaire_id: brand.partenaire_id._id })

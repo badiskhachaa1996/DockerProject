@@ -8,12 +8,17 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
 import jwt_decode from "jwt-decode";
 import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
 import { ActualiteRH } from 'src/app/models/ActualiteRH';
+import { EditorModule } from 'primeng/editor';
+
 @Component({
   selector: 'app-actualite-notifications',
   templateUrl: './actualite-notifications.component.html',
   styleUrls: ['./actualite-notifications.component.scss']
 })
 export class ActualiteNotificationsComponent implements OnInit {
+
+
+
 
   token;
   constructor(private activiteService: ActualiteRHService, private ToastService: MessageService,

@@ -1432,20 +1432,31 @@ app.get("/getLogo/:id", (req, res) => {
 });
 
 app.get('/getAllLogo', (req, res) => {
-  let ids = fs.readdirSync("storage/entreprise/logo")
-  let fileDic = {}
-  ids.forEach(id => {
-    let filenames = fs.readdirSync("storage/entreprise/logo/" + id)
-    if (filenames)
-      fileDic[id] = {
-        file: fs.readFileSync("storage/entreprise/logo/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
-          if (err) return console.error(err);
-        }),
-        extension: mime.contentType(path.extname("storage/entreprise/logo/" + id + "/" + filenames[0])),
-        url: ""
+  let ids = []
+  try {
+    ids = fs.readdirSync("storage/entreprise/logo")
+    let fileDic = {}
+    ids.forEach(id => {
+      let filenames = fs.readdirSync("storage/entreprise/logo/" + id)
+      if (filenames) {
+        try {
+          fileDic[id] = {
+            file: fs.readFileSync("storage/entreprise/logo/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+              if (err) return console.error(err);
+            }),
+            extension: mime.contentType(path.extname("storage/entreprise/logo/" + id + "/" + filenames[0])),
+            url: ""
+          }
+        } catch {
+          console.error("storage/entreprise/logo/" + id + "/" + filenames[0] + " introuvable")
+        }
       }
-  })
-  res.status(200).send({ files: fileDic, ids })
+    })
+    res.status(200).send({ files: fileDic, ids })
+  } catch {
+    res.status(404).send('Dossier storage/entreprise/logo introuvable')
+  }
+
 })
 
 

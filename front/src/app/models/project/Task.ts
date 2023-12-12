@@ -21,5 +21,7 @@ export class Task{
             nom?: string,
             path?: string,
         }[],
+        public tag?: string,
+        public color?: string,
     ){}
 }

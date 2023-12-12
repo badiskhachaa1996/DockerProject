@@ -6,7 +6,7 @@ services:
     environment:
       DB_USER: root
       DB_PASSWORD: 
-      DB_HOST: mongodb #localhost
+      DB_HOST: localhost
       DB_PORT: 27017
       DB_NAME: # FIXME sample-db
     ports: 
@@ -17,7 +17,7 @@ services:
       # - ./db-init.js:/docker-entrypoint-initdb.d/init.js:ro
 
   back:
-    build: /opt/app/ims/back
+    build: back
     restart: always
     environment:
       MONGODB_URI: mongodb://127.0.0.1:27017
@@ -28,11 +28,18 @@ services:
       - '3000:3000'
 
   front:
-    build: /opt/app/ims/front
+    build: front
     restart: always
     ports:
       # local->container
       - '4200:4200'
+
+  forms-app:
+    build: forms-app
+    restart: always
+    ports:
+      # local->container
+      - '4210:4210'
 
 volumes:
   mongo_data: {}

@@ -154,6 +154,29 @@ export class PreinscriptionComponent implements OnInit {
     { value: "Inscription définitive", label: "Inscription définitive" },
     { value: "Recours", label: "Recours" },
   ]
+  etapeDropdownLoc = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription - Inscription définitive", label: "Pré-inscription - Inscription définitive" },
+
+  ]
+  filterEtapeLoc = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownLoc
+  ]
+
+  etapeDropdownInt = [
+    { value: "Nouveau", label: "Nouveau" },
+    { value: "Orientation", label: "Orientation" },
+    { value: "Admission", label: "Admission" },
+    { value: "Pré-inscription", label: "Pré-inscription" },
+    { value: "Visa", label: "Visa" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+  ]
+  filterEtapeInt = [
+    { value: null, label: "Toutes les étapes" },
+    ...this.etapeDropdownInt
+  ]
 
   phaseDropdown = [
     { value: 'Non traité', label: "Non traité" },
@@ -1475,9 +1498,14 @@ export class PreinscriptionComponent implements OnInit {
     cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
+  convertCCIntoList(cc: string) {
+    let arr = cc.split(',')
+    if (arr.length == 0)
+      arr = [cc]
+    return arr
+  }
   onEmailPerso() {
-    console.log(this.formEmailPerso.value)
-    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected, cc: this.convertCCIntoList(this.formEmailPerso.value.cc) }).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
         this.formEmailPerso.reset()
@@ -1491,7 +1519,7 @@ export class PreinscriptionComponent implements OnInit {
 
   }
   onEmailType() {
-    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, cc: this.convertCCIntoList(this.formEmailType.value.cc), send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.ToastService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()
@@ -1896,6 +1924,7 @@ export class PreinscriptionComponent implements OnInit {
       r = r + prospect.campus_choix_1 + ","
     if (prospect.type_form)
       r = r + prospect.type_form
+    return r
   }
   detailsProspects = []
 

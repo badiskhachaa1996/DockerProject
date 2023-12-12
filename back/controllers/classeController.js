@@ -185,6 +185,8 @@ app.post("/upload-calendar", uploadCalendar.single('file'), (req, res) => {
 
 // méthode de téléchargement du document de relance pour un contrat d'alternance
 app.get("/download-calendar/:idGroupe", (req, res) => {
+    if (!fs.existsSync(`storage/groupe/${req.params.idGroupe}`))
+        fs.mkdirSync(`storage/groupe/${req.params.idGroupe}`, { recursive: true });
     res.download(`./storage/groupe/${req.params.idGroupe}/calendrier.pdf`, function (err) {
         if (err) {
             res.status(400).send(err);
