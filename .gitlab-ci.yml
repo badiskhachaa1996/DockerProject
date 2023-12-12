@@ -30,14 +30,14 @@ install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
-#  cache: 
-#    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-#    paths:
-#      - back/node_modules/
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
-#    - npm install
+    - npm install
   only:
     refs:
       - develop
@@ -512,13 +512,17 @@ manual_build_forms-app_on_prod1:
   
 deploy_back_to_dev:
   stage: DEV
-
   tags:
     - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+    policy: pull
+
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
-    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --dev
@@ -554,13 +558,17 @@ deploy_forms-app_to_dev:
 
 deploy_back_to_qa:
   stage: QA
-
   tags:
     - qa-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+    policy: pull
+
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
-    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --qa
@@ -596,13 +604,17 @@ deploy_forms-app_to_qa:
   
 deploy_back_to_prod2:
   stage: PROD2
-
   tags:
     - prod2-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+    policy: pull
+
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
-    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
@@ -638,13 +650,17 @@ deploy_forms-app_to_prod2:
   
 manual_deploy_back_to_prod1:
   stage: PROD1
-
   tags:
     - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+    policy: pull
+
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
-    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
