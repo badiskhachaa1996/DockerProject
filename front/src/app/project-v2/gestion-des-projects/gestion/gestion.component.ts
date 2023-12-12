@@ -610,9 +610,6 @@ export class GestionComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
     });
   }
-  onCheckboxChange(event) {
-    if (event.checked) { this.TaskToShow.urgent = true; } else { this.TaskToShow.urgent = false; }
-  }
   //PARTIE RESSOURCES
   addRessources() {
     if (this.formAddressources.invalid)

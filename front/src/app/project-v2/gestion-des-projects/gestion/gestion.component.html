@@ -716,8 +716,8 @@
                     placeholder="Donnez une discription à votre activité" autoResize rows="4" cols="30"></textarea>
             </div><br>
             <div class="field col-2">
-                <p-checkbox label="Urgent" [binary]="true" formControlName="urgent" [(ngModel)]="urgent"
-                    (onChange)="onCheckboxChange($event)"></p-checkbox>
+                <p-checkbox label="Urgent" [binary]="true" formControlName="urgent"
+                    (onChange)="TaskToShow.urgent = $event.checked"></p-checkbox>
             </div>
             <div class="field col-8">
             </div>
@@ -814,7 +814,7 @@
 
     </div>
     <div>
-        <button pButton label={{buttonName}} icon="pi pi-paperclip" (click)="onAddDocumment()"></button>
+        <!--<button pButton label={{buttonName}} icon="pi pi-paperclip" (click)="onAddDocumment()"></button>-->
     </div><br><br>
     <div class="grid col-12">
         <div class="col-6">
