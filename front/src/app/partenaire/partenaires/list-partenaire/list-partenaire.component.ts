@@ -19,6 +19,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { RhService } from 'src/app/services/rh.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -40,6 +42,8 @@ import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
     `]
 })
 export class ListPartenaireComponent implements OnInit {
+  selectedPartnerName: string | undefined;
+
   selectedInsert: Partenaire | null = null;
   activeIndex1: number = 0;
   expandedRows = {};
@@ -48,6 +52,9 @@ export class ListPartenaireComponent implements OnInit {
   partenaires: Partenaire[] = []
   users = {}
   token;
+
+  rowData: any;
+
   currenData
   uploadedFileName: string;
 
@@ -122,7 +129,7 @@ export class ListPartenaireComponent implements OnInit {
   AccessLevel = "Spectateur"
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
-    private MIService: TeamsIntService) { }
+    private MIService: TeamsIntService , private rHservise:RhService ,private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
@@ -132,7 +139,7 @@ export class ListPartenaireComponent implements OnInit {
     this.updateList();
     this.filterPays = [{ label: 'Tous les pays', value: null }].concat(this.paysList)
     this.onInitFormModifPartenaire()
-    this.MIService.MIgetAll().subscribe(data => {
+    this.rHservise.getCollaborateurs().then(data => {
       data.forEach(d => {
         if (d.user_id)
           this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
@@ -150,6 +157,8 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   partenaireDic = {}
+
+
 
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
@@ -245,6 +254,11 @@ export class ListPartenaireComponent implements OnInit {
       indicatif: rowData.indicatifPhone,
       indicatif_whatsapp: rowData.indicatifWhatsapp,
     });
+  }
+
+
+  updateSelectedPartnerName(name: string | undefined) {
+    this.selectedPartnerName = name;
   }
 
 
@@ -380,18 +394,18 @@ export class ListPartenaireComponent implements OnInit {
   clickFile2() {
     document.getElementById('selectedFile2').click();
   }
-
+ 
   FileUpload2(event) {
     if (event && event.length > 0 && this.idPartenaireToUpdate != null) {
       const formData = new FormData();
-
+ 
       formData.append('id', this.idPartenaireToUpdate._id)
       formData.append('file', event[0])
       this.PartenaireService.uploadEtatContrat(formData).subscribe(data => {
         this.resetFileInput(event);
         this.uploadedFileName = event[0].name;
         this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
-
+ 
       })
     }
   }
@@ -501,19 +515,28 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   onRowEditCancel(product: { _id: string, description: string, montant: string }, index: number) {
+    
     //console.log(product, index, this.commissions[index], this.clonedCommissions[product._id])
     this.commissions[index] = this.clonedCommissions[product._id];
     delete this.clonedCommissions[product._id];
   }
 
   downloadContrat() {
+    console.log('downloadContrat called with id:', this.idPartenaireToUpdate._id);
+
     this.PartenaireService.downloadContrat(this.idPartenaireToUpdate._id)
       .then((response: Blob) => {
+        console.log('Download successful. Response:', response);
+
         let downloadUrl = window.URL.createObjectURL(response);
+        
         saveAs(downloadUrl, this.idPartenaireToUpdate.pathEtatContrat);
         this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
       })
-      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+      .catch((error) => { 
+        console.error('Download failed. Error:', error);
+        this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); 
+      });
   }
   editInfoPartenariat = false
   editInfoPartenariatForm: FormGroup = new FormGroup({
@@ -573,7 +596,9 @@ export class ListPartenaireComponent implements OnInit {
   onSelectManage(id: string) {
     this.PartenaireService.newUpdate({ manage_by: id, _id: this.managePartenaire._id }).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Attribution du partenaire avec succès' })
-      this.managePartenaire = null
+      
+      this.cd.detectChanges();
+
     })
   }
 

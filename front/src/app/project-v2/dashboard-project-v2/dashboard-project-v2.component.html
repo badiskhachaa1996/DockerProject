@@ -1,7 +1,7 @@
 <div class="grid col-12 card">
     <div class="col-3">
         <div class="card mb-0">
-            <label>Nom du responsable :</label>
+            <label>Nom du responsable</label>
             <br>
             <p-dropdown  [options]="responsablesListe" filter="true" placeholder="Choisissez le nom"
             (onChange)="onResponsableSelected($event)"  [showClear]="true"></p-dropdown>
@@ -26,7 +26,7 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">Nombre des projets en cours:</span>
+                    <span class="block text-500 font-medium mb-4">Nombre des projets en cours</span>
                     <div class="text-900 font-medium text-xl">{{nbr_projet_encour}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
@@ -54,7 +54,7 @@
 <div class="grid col-12 card">
     <div class="col-2">
         <div class="card mb-0">
-            <label>Nom du projet :</label>
+            <label>Nom du projet</label>
             <br>
             <p-dropdown  [options]="projectListe" filter="true" placeholder="projet"
             (onChange)="onProjectSelected($event)"  [showClear]="true"></p-dropdown>
@@ -79,7 +79,7 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">Nombre de activités en attente:</span>
+                    <span class="block text-500 font-medium mb-4">Nombre des activités en attente</span>
                     <div class="text-900 font-medium text-xl">{{nbr_tache_attente}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
@@ -93,7 +93,7 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">Nombre de activités en cours</span>
+                    <span class="block text-500 font-medium mb-4">Nombre des activités en cours</span>
                     <div class="text-900 font-medium text-xl">{{nbr_tache_encour}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -107,7 +107,7 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">activités traitées</span>
+                    <span class="block text-500 font-medium mb-4">Activités traitées</span>
                     <div class="text-900 font-medium text-xl">{{nbr_tache_traite}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -135,7 +135,7 @@
 <div class="grid col-12 card">
     <div class="col-3">
         <div class="card mb-0">
-            <label>Nom de la activité:</label>
+            <label>Nom de l'activité</label>
             <br>
             <p-dropdown  [options]="taskListe" filter="true" placeholder="activité"
             (onChange)="onTacheSelected($event)" [showClear]="true"></p-dropdown>

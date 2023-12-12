@@ -198,7 +198,7 @@
 
 
 
-            <ng-template pTemplate="rowexpansion" let-ticket>    
+            <ng-template pTemplate="rowexpansion" let-ticket>
                 <tr>
                     <td colspan="9">
                         <h4>{{ticket.titre}}</h4>
@@ -246,16 +246,16 @@
                     {{projectSelected?.avancement| number:'1.1-1'}} %
 
                 </div>
-                
-                    <div class="col-3">
-                       <strong>Responsable : </strong>{{projectSelected.responsable}}
-                    </div>
-                    <div class="col-3">
-                        <strong> Créé le : </strong>{{projectSelected.created_date| date:'dd MMMM yy' }}
-                    </div>
-                    <div class="col-3">
-                        <strong> Créé par :</strong> {{projectSelected.createur}}
-                    
+
+                <div class="col-3">
+                    <strong>Responsable : </strong>{{projectSelected.responsable}}
+                </div>
+                <div class="col-3">
+                    <strong> Créé le : </strong>{{projectSelected.created_date| date:'dd MMMM yy' }}
+                </div>
+                <div class="col-3">
+                    <strong> Créé par :</strong> {{projectSelected.createur}}
+
                 </div>
             </div>
         </p-card>
@@ -276,7 +276,7 @@
                             </p-card-header>
                             <div class="grid col-12">
                                 <div class="col-12">
-                                    {{t.description_task}}
+                                    <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                 </div>
 
                                 <div class="col-12">
@@ -291,7 +291,7 @@
                             <p-card-footer>
                                 <div class="grid col-12">
                                     <div class="col-11">
-                                        <p-chip  label={{t?.tag}}></p-chip>
+                                        <!--TODO Afficher labels-->
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-arrow-right" style="color: green" (click)="ToDoing(t)"></i>
@@ -691,43 +691,42 @@
 
 <p-dialog header="Nouvelle activité pour ce project" [(visible)]="showAddTacheForm" [style]="{width: '40%'}">
     <form [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
-<div class="grid col-12">
-        <div class="col-12 ">
-            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label><br>
-            <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize>
-        </div>
+        <div class="grid col-12">
+            <div class="col-12 ">
+                <label htmlFor="libelle">Libellé <span style="color: red">*</span></label><br>
+                <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea
+                    placeholder="Donnez un titre à votre projet" autoResize>
+            </div>
 
-        <div class="col-12">
-            <label>Priorité <span style="color: red">*</span></label><br>
-            <p-dropdown [style]="{width: '100%'}" formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
-                [showClear]="true"></p-dropdown>
-        </div><br>
-        
 
-        <div class="col-12">
-            <label htmlFor="number_of_hour">Nombre d'heures <span style="color: red">*</span></label>
-            <input [style]="{width: '100%'}" formControlName="number_of_hour" pInputText type="number" id="nb_jour">
-        </div><br><br>
-        <div class="col-12">
-            <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
-            <input [style]="{width: '100%'}" pInputText type="date"  formControlName="date_limite" >
-        </div><br>
 
-        <div class="field col-12">
-            <label htmlFor="description">Description <span style="color: red">*</span></label><br>
-            <textarea [style]="{width: '100%'}" formControlName="description" pInputTextarea placeholder="Donnez une discription à votre activité"
-                autoResize rows="4" cols="30"></textarea>
-        </div><br>
-        <div class="field col-2">
-         <p-checkbox label="Urgent" [binary]="true" formControlName="urgent" [(ngModel)]="urgent" (onChange)="onCheckboxChange($event)"></p-checkbox>    
-        </div>
-        <div class="field col-8">
-        </div>
-        <div class="field col-2" >
-            <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
 
+            <div class="col-12">
+                <label htmlFor="number_of_hour">Nombre d'heures <span style="color: red">*</span></label>
+                <input [style]="{width: '100%'}" formControlName="number_of_hour" pInputText type="number" id="nb_jour">
+            </div><br><br>
+            <div class="col-12">
+                <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
+                <input [style]="{width: '100%'}" pInputText type="date" formControlName="date_limite">
+            </div><br>
+
+            <div class="field col-12">
+                <label htmlFor="description">Description <span style="color: red">*</span></label><br>
+                <textarea [style]="{width: '100%'}" formControlName="description" pInputTextarea
+                    placeholder="Donnez une discription à votre activité" autoResize rows="4" cols="30"></textarea>
+            </div><br>
+            <div class="field col-2">
+                <p-checkbox label="Urgent" [binary]="true" formControlName="urgent"
+                    (onChange)="TaskToShow.urgent = $event.checked"></p-checkbox>
+            </div>
+            <div class="field col-8">
+            </div>
+            <div class="field col-2">
+                <button pButton pRipple type="submit" class="my-2" label="Ajouter"
+                    [disabled]="formAddTache.invalid"></button>
+
+            </div>
         </div>
-    </div>
     </form>
 </p-dialog>
 <p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
@@ -737,43 +736,35 @@
             <div class="grid col-12">
                 <label>&nbsp; Assigné à :</label><br>
                 <div class="col-11">
-                    <p-multiSelect  [options]="userList" formControlName="attribuate_to"
-                        filter="true"(onChange)="onChange()" ></p-multiSelect>
+                    <p-multiSelect [options]="userList" formControlName="attribuate_to" filter="true"
+                        (onChange)="onChange()"></p-multiSelect>
                 </div>
                 <div class="col-1">
-                
+
                 </div>
             </div>
-
-            
-
             <div class="col-12">
-                <label>Nombre des heures :</label><br>
-                <input pInputText type="number"   autoWidth="false" [style]="{'width':'90%'}" formControlName="number_of_hour" 
-                    placeholder="10" (input)="onChange()"/>
-               
+                <label>Durée estimée (h):</label><br>
+                <input pInputText type="number" autoWidth="false" [style]="{'width':'90%'}"
+                    formControlName="number_of_hour" placeholder="10" (input)="onChange()" />
             </div>
-
             <div class="col-12">
                 <label>DDL :</label><br>
                 <input pInputText type="date" autoWidth="false" [style]="{'width':'90%'}" formControlName="date_limite"
                     filter="true" placeholder="etudiant@intedgroup.com" (input)="onChange()" />
-                
             </div>
             <div class="col-12">
-                <label>description :</label><br>
+                <label>Description :</label><br>
                 <textarea pInputText autoWidth="false" [style]="{'width':'90%'}" formControlName="description_task"
-                    filter="true" placeholder="Donnez une description " (input)="onChange()" ></textarea>
-                
+                    filter="true" placeholder="Donnez une description " (input)="onChange()"></textarea>
             </div>
             <div class="col-12">
-                <label>Urgent :</label><br><br>
                 <div class="row align-items-center">
-                    <p-checkbox [binary]="true" formControlName="urgent"  [(ngModel)]="urgent" (onChange)="onCheckboxChange($event);onChange()"></p-checkbox>
+                    <p-checkbox label="Urgent" [binary]="true" formControlName="urgent"
+                        (onChange)="onCheckboxChange($event);onChange()"></p-checkbox>
                 </div>
             </div>
         </div>
-
     </form>
     <div>
         <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
@@ -823,16 +814,16 @@
 
     </div>
     <div>
-        <button pButton label={{buttonName}} (click)="onAddDocumment()"></button>
+        <!--<button pButton label={{buttonName}} icon="pi pi-paperclip" (click)="onAddDocumment()"></button>-->
     </div><br><br>
     <div class="grid col-12">
-    <div class="col-6">
-        <button pButton label="Supprimer" (click)="deleteTaskFromSiderbar()" class="p-button-danger"></button>
+        <div class="col-6">
+            <button pButton label="Supprimer" (click)="deleteTaskFromSiderbar()" class="p-button-danger"></button>
+        </div>
+        <div class="col-6">
+            <button pButton label="Archiver" icon="pi pi-check" class="p-button"></button>
+        </div>
     </div>
-    <div  class="col-6">
-        <button pButton label="Archiver"   icon="pi pi-check" class="p-button"></button>
-    </div>
-</div>
 
 </p-sidebar>
 

@@ -11,337 +11,176 @@ import { Ticket } from 'src/app/models/Ticket';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DataViewModule, DataViewLayoutOptions } from 'primeng/dataview';
-
+import { FormControl, FormGroup } from '@angular/forms';
+import { saveAs } from "file-saver";
+import mongoose from 'mongoose';
+import { RhService } from 'src/app/services/rh.service';
 @Component({
   selector: 'app-mytask',
   templateUrl: './mytask.component.html',
   styleUrls: ['./mytask.component.scss']
 })
 export class MytaskComponent implements OnInit {
-  layout: string = 'list';
-  value: number = 50;
-  selectedTabIndex: number = 0;
-  task_consignes: any;
-  avancement: number =0;
-  pourcentage_disabled: boolean =true;
-  visible: boolean = false;
-  visible_consigne : boolean = false;
-  tasktodo: any[] = [];
-  taskdone: any[] = [];
-  taskencours: any[] = [];
-  taskarchiver: any[] = [];
-  task!: any[];
-  icone:string="pi-pencil"
-  taskDetails:Ticket;
-  tasktoupdate: Ticket;
-  ticket!: Ticket[];
-  project: Project[] = [];
-  items: MenuItem[];
-  userConnected: User;
-  nbr_consigne:number = 0;
-  token: any;
-  project_id: string; tache_id: string; ticket_id: string; project_titre: string;
-  date_assegnation: string; date_limite: string; nbr_heur: number; etat_traitement: string;
-  etat_avancement: number; description: string; note: string;
-
-  constructor(private userService: AuthService, private messageService: MessageService, private projectService: ProjectService,
-    private ticketService: TicketService, private router: Router) { }
+  token;
+  USER: User
+  taskToDo: Task[] = []
+  taskDoing: Task[] = []
+  taskDone: Task[] = []
+  userList: any[] = []
+  constructor(private userService: AuthService, private ToastService: MessageService, private projectService: ProjectService, private rhService: RhService) { }
 
   ngOnInit(): void {
-    this.items = [
-      {
-        label: 'To Do',
-        icon: 'pi  pi-bars',
-        command: () => {
-          this.todo();
-        }
-      },
-      {
-        label: 'En cours',
-        icon: 'pi pi-refresh',
-        command: () => {
-          this.encours();
-        }
-      },
-      {
-        label: 'Done',
-        icon: 'pi pi-check',
-        command: () => {
-          this.done();
-        }
-
-      },
-      { separator: true },
-      {
-        label: 'Archivés',
-        icon: 'pi pi-thumbs-up',
-        command: () => {
-          this.archiver();
-        }
-
-      }
-    ];
-
-    // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.ticket = [];
-    //recuperation de toute les informations
     this.getAllInformation();
   }
-//recuperation des information  
+  //recuperation des information  
   getAllInformation() {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
-        this.userConnected = response;
-        this.ticketService.getAccAff(this.userConnected._id)
-          .subscribe(datatache => {
-            this.ticket= datatache;
-            
-            this.ticket.forEach(t => {
-              
-              if (t.statut=="Traité"){
-                t.avancement=100
-                this.ticketService.update(t).subscribe(
-                  response => {
-                    // La mise à jour a réussi, vous pouvez effectuer des actions ici
-                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'consigne ajouter' });
-                  },
-                  error => {
-                    // La mise à jour a échoué, gérer les erreurs ici
-                    console.error(error);
-                  }
-                );;;
-              }
-              
-              if (t.statut === "En attente de traitement") {
-                this.tasktodo.push(t);
-                console.log(this.tasktodo)
-                
-                           
-              }
-              if (t.statut === "En cour de traitement") {
-                
-                this.taskencours.push(t);
-              }
-              if (t.statut === "fin de traitement") {
-
-                this.taskdone.push(t);
-              }
-              if (t.statut === "archiver") {
-                this.taskarchiver.push(t);
-              }
-
-            })
+        this.USER = response;
+        this.projectService.getTaskbyagent(this.token.id).then(tasks => {
+          console.log(tasks)
+          tasks.forEach(d => {
+            if (d.etat === "En attente de traitement") {
+              this.taskToDo.push(d);
+            } else if (d.etat === "En cours de traitement") {
+              this.taskDoing.push(d);
+            } else { this.taskDone.push(d) }
           })
+
+        })
       }
     })
-  }
-//afficher le details
-  showDialog(task: Ticket) {
-    console.log(task);
-    this.taskDetails=task;
-    this.visible = true;
-  }
- // afficher les consignes
-showDialogc(task:Task){
-  this.visible_consigne = true;
-  console.log(task)
-  this.task_consignes=task.consignes; 
-  
- 
-  
-}
 
-  save(severity: string, task: any) {
-    this.tasktoupdate = task;
-    this.messageService.add({ severity: severity, summary: 'Success', detail: 'Deplacer' });
-  }
-  todo() {
-
-    if (this.tasktoupdate.statut === "En cour de traitement") {
-      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
-      this.tasktodo.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "fin de traitement") {
-      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
-      this.tasktodo.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "archiver") {
-      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
-      this.tasktodo.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate) {
-      this.tasktoupdate.statut = "En attente de traitement";
-      this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
-
-    }
-    this.tasktoupdate.statut ="En attente de traitement";
-    this.ticketService.update(this.tasktoupdate).subscribe(
-      response => {
-        // La mise à jour a réussi, vous pouvez effectuer des actions ici
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
-      },
-      error => {
-        // La mise à jour a échoué, gérer les erreurs ici
-        console.error(error);
-      }
-    );
-  }
-
-  encours() {
-    if (this.tasktoupdate.statut === "En attente de traitement") {
-      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
-      this.taskencours.push(this.tasktoupdate);
-    }
-
-    if (this.tasktoupdate.statut === "fin de traitement") {
-      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
-      this.taskencours.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "archiver") {
-      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
-      this.taskencours.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate) {
-      this.tasktoupdate.statut = "En cour de traitement";
-      this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
-
-    }
-    this.tasktoupdate.statut ="En cour de traitement";
-    this.ticketService.update(this.tasktoupdate).subscribe(
-      response => {
-        // La mise à jour a réussi, vous pouvez effectuer des actions ici
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
-      },
-      error => {
-        // La mise à jour a échoué, gérer les erreurs ici
-        console.error(error);
-      }
-    );
-
-  }
-
-  done() {
-    if (this.tasktoupdate.statut === "En attente de traitement") {
-      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
-      this.taskdone.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "En cour de traitement") {
-      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
-      this.taskdone.push(this.tasktoupdate);
-    }
-   
-    if (this.tasktoupdate.statut === "archiver") {
-      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
-      this.taskdone.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate) {
-      this.tasktoupdate.statut = "fin de traitement";
-      
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
-
-    }
-    this.tasktoupdate.statut ="fin de traitement";
-    this.ticketService.update(this.tasktoupdate).subscribe(
-      response => {
-        // La mise à jour a réussi, vous pouvez effectuer des actions ici
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
-      },
-      error => {
-        // La mise à jour a échoué, gérer les erreurs ici
-        console.error(error);
-      }
-    );
-    
-  }
-  archiver() {
-    if (this.tasktoupdate.statut === "En attente de traitement") {
-      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
-      this.taskarchiver.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "En cour de traitement") {
-      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
-      this.taskarchiver.push(this.tasktoupdate);
-    }
-    if (this.tasktoupdate.statut === "fin de traitement") {
-      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
-      this.taskarchiver.push(this.tasktoupdate);
-    }
-   
-    if (this.tasktoupdate) {
-      this.tasktoupdate.statut = "archiver";
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
-
-    }
-    this.tasktoupdate.statut ="archiver";
-    this.ticketService.update(this.tasktoupdate).subscribe(
-      response => {
-        // La mise à jour a réussi, vous pouvez effectuer des actions ici
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
-      },
-      error => {
-        // La mise à jour a échoué, gérer les erreurs ici
-        console.error(error);
-      }
-    );
-
-  }
-  //FONCTION POUR MODIFIER LE POURCETAGE
-  modifierpoucentage(task: Ticket) {
-    if (this.pourcentage_disabled){
-      this.pourcentage_disabled = false;
-      this.icone="pi-check"
-    }else {
-      this.pourcentage_disabled = true;
-      this.icone="pi-pencil"
-      this.ticketService.update(task).subscribe(
-        response => {
-          // La mise à jour a réussi, vous pouvez effectuer des actions ici
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
-        },
-        error => {
-          // La mise à jour a échoué, gérer les erreurs ici
-          console.error(error);
+    this.rhService.getAgents().then(data => {
+      data.forEach(user => {
+        if (user.type === "Collaborateur") {
+          this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user })
         }
-      );
+      })
+    })
+  }
+  TaskToShow: Task
+  displayTache = false
+  // Affichage tache
+  onShowTache(task: Task) {
+    this.TaskToShow = task;
+    this.displayTache = true;
   }
 
-    
-    
-
+  ToDoing(t: Task) {
+    if (t.etat === "En attente de traitement") {
+      const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id);
+      if (indexToRemove !== -1)
+        this.taskToDo.splice(indexToRemove, 1);
+    } else {
+      const indexToRemove = this.taskDone.findIndex(task => task._id === t._id);
+      if (indexToRemove !== -1)
+        this.taskDone.splice(indexToRemove, 1);
+    }
+    t.etat = "En cours de traitement"
+    this.taskDoing.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.ToastService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
+    });
   }
 
-  getColorForStatus(statut: string): string {
-    switch (statut) {
-      case 'En attente de traitement':
-        return 'orange'; 
-      case 'En cours de traitement':
-        return 'green';
-      case 'fin de traitement':
-        return 'gray';
-         
-      default:
-        return 'black'; 
+  //passer une tache a Done
+  ToDone(t: Task) {
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);
+    if (indexToRemove !== -1)
+      this.taskDoing.splice(indexToRemove, 1)
+    t.etat = "Traiter"
+    this.taskDone.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.ToastService.add({ severity: 'success', summary: 'success', detail: '  Done' })
+    });
+  }
+  //passer une tache dans TODO
+  ToToDo(t: Task) {
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);
+    if (indexToRemove !== -1)
+      this.taskDoing.splice(indexToRemove, 1);
+    t.etat = "En attente de traitement"
+    this.taskToDo.push(t);
+    this.projectService.putTask(t).then(resultat => {
+      this.ToastService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
+    });
+  }
+  onUpdate() {
+    this.projectService.putTask({ ...this.TaskToShow }).then(r => {
+
+    })
+  }
+
+
+  indexDocuments = 0
+  downloadFile(index) {
+    this.indexDocuments = index
+    console.log(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path)
+    this.projectService.downloadFile(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), this.TaskToShow.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+  uploadFile(index) {
+    this.indexDocuments = index
+    document.getElementById('selectedFilesuivre').click();
+  }
+  deleteFile(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce document  ?")) {
+      this.TaskToShow.documents.splice(index, 1)
+
+      this.projectService.putTask(this.TaskToShow).then(data => {
+
+        this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+      });
     }
   }
-  getColorForValidation(validation){
-    switch (validation) {
-      case "L'activité n’est pas validée":
-        return 'red'; 
-    default: return'green';
+  onAddDocuments() {
+    this.TaskToShow.documents.push({ nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+
+  onAddComment() {
+    this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.USER, date: new Date() })
+  }
+
+  FileUpload(event) {
+    console.log(event)
+    if (event != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('document_id', this.TaskToShow.documents[this.indexDocuments]._id)
+      formData.append('_id', this.TaskToShow._id)
+      formData.append('file', event[0])
+      this.projectService.uploadFile(formData).subscribe(res => {
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.TaskToShow.documents[this.indexDocuments].path = event[0].name
+        event = null;
+        //this.fileInput.clear()
+      }, error => {
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
+  deleteTaskFromSiderbar() {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
+      this.projectService.deleteTask(this.TaskToShow._id).then(() => {
+        this.ToastService.add({ severity: 'success', summary: 'success', detail: ' réussie' });
+      })
+    }
 
   }
-}
-showTicket(task:Task){
-  console.log(task.ticketId[0]._id);
-  this.router.navigate(['/ticketing/gestion/assignes'],{ queryParams: { data: task.ticketId[0]._id } });
-}
+
+  calcDureeEst() {
+    return "XH xxmin"
+  }
+
+  calcDureeMise() {
+    return "XH xxmin"
+  }
 }
