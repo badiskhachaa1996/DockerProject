@@ -30,6 +30,7 @@
     flex: 1 1 calc(33.333% - 20px); /* Chaque filtre prendra un tiers de l'espace disponible */
     max-width: calc(33.333% - 20px); /* Avec un maximum de largeur fixe */
     box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur totale */
+    margin-top: 10px;
   }
   
   @media screen and (max-width: 768px) {
@@ -43,4 +44,14 @@
     font-size: small;
   }
 
-  
+  i{
+    margin-right: 7px;
+  }
+
+  .styleFliter{
+    margin-top: 10px;
+  }
+  .buttonR{
+    border-radius: 29px;
+    margin-left: 460px;
+  }

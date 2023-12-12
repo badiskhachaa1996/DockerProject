@@ -1,385 +1,321 @@
-
-
-<div class="card">
-    
-    <p-tabView [(activeIndex)]="selectedTabIndex">
-        
-        <p-tabPanel header="To Do">
-            
-            <div class="grid col-12" style="background-color: #ffeede;">
-                <ng-container *ngFor="let task of tasktodo">
-                    
-                    <div class="col-6 ">
-                        <p-card>
-                            <p-table responsiveLayout="scroll">
-                                <ng-template pTemplate="header">
-                                    
-                                    <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.task_id?.identifian}}</span></th>
-                                        <th>Libelle:<span style="color:#878787" > {{task?.task_id?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.customid}}</span></th>
-                                    </tr>
-                                    <tr>
-                                        <th>ID Projet :<span style="color:#878787" > {{task?.task_id?.project_id?.identifian}} </span></th>
-                                        <th colspan="2"><span style="color:#878787" >Titre: {{task?.task_id?.project_id?.titre}}</span></th>
-                                    </tr>
-                                    <br />
-                                    <tr>
-                                        <th>Assigné le:<span style="color:#878787" >{{task.date_ajout | date:'dd MMMM yy'}} </span><br></th>
-
-                                        <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
-                                            date:'dd MMMM yy'}} </th>
-                                    </tr>
-                                    <tr>
-                                        <th>nombre d'heures estimées:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
-                                        <th colspan="2" width="10000px"
-                                            [ngStyle]="{'color': getColorForStatus(task.statut)}">{{
-                                            task.statut}}</th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        
-                                        <th >
-                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
-                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
-                                        </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">
-
-                                            {{task.validation}}
-
-                                        </th>
-                                        <br>
-                                        
-                                        <p-dialog header="Consignes" [(visible)]="visible_consigne" [modal]="true"
-                                            [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                            <p-table [rows]="8" [rowHover]="true" [paginator]="true"
-                                                [value]="task_consignes" [paginator]="true" rowExpandMode="single"
-                                                [pageLinks]="5" selectionMode="single" class="col-12"
-                                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th style="width: 3rem"></th>
-                                        <th pSortableColumn="consignes" style="text-align:center">
-                                            consignes
-                                        </th>
-
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let tc let-rir="rowIndex">
-                                    <tr>
-                                        <td>{{ rir + 1 }}</td>
-                                        <td>{{task_consignes[rir]}}</td>
-
-                                    </tr>
-                                </ng-template>
-                                <p class="m-0">
-                                </p>
-                            </p-table>
-                            </p-dialog>
-                            </tr>
-                            <br>
-
-
-
-                            </ng-template>
-
-                            </p-table>
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>
-                                    <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2"></p-button>
-                                </div>
-
-                                <div style="display: flex; justify-content: center;" (onClick)="save('info',task)">
-
-                                    <p-splitButton label="Deplacer" icon="pi pi-send"
-                                        (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
-                                </div>
-                                <div>
-                                    <p-button styleClass="p-button-secondary" (click)="showDialog(task)"
-                                        icon="pi pi-external-link" label="Detail"></p-button>
-                                    <p-dialog header="Details" [(visible)]="visible" [modal]="true" 
-                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                        <p class="m-0">
-
-                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
-                                            <br />
-                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
-                                        </p>
-                                    </p-dialog>
-                                </div>
+<input type="file" (change)="FileUpload($event.target.files)" id="selectedFileDoc" #selectedFileDoc
+    style="display: none;" pInputFile />
+<div class="grid col-12">
+    <div class="col-4 ">
+        <p-card header="To DO({{taskToDo.length}}) " class="card-todo">
+            <ng-container *ngFor="let t of taskToDo">
+                <p-card>
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11" style="text-align: center;">
+                                <strong> {{t?.libelle}}</strong>
+                                <p>{{t?.project_id?.titre}}</p>
                             </div>
-                        </p-card>
-                    </div>
-                    <br />
-                </ng-container>
-            </div>
-        </p-tabPanel>
-
-        <p-tabPanel header="En cours">
-            <div class="grid col-12" style="background-color: #e2e3cc;">
-                <ng-container *ngFor="let task of taskencours">
-
-                    <div class="col-12">
-                        <p-card>
-                            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>ID: <span style="color:#878787" >{{task?.task_id?.identifian}}</span></th>
-                                        <th>Libelle : <span style="color:#878787" >{{task?.task_id?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.customid}}</span></th>
-                                    </tr>
-                                    <tr>
-                                        <th>ID Projet : <span style="color:#878787" >{{task?.task_id?.project_id?.identifian}}</span> </th>
-                                        <th colspan="2">Titre:<span style="color:#878787" > {{task?.task_id?.project_id?.titre}}</span></th>
-                                    </tr>
-                                    <br />
-                                    <tr>
-                                        <th>Assigné le: <span style="color:#878787" > {{task?.date_ajout | date:'dd MMMM yy'}}</span></th>
-
-                                        <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
-                                            date:'dd MMMM yy'}} </th>
-                                    </tr>
-                                    <tr>
-                                        <th>nombre d'heures estimées:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
-                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task?.statut)}">
-                                            {{
-                                            task?.statut}}</th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        
-                                        <th >
-                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
-                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
-                                        </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">{{task.validation}}</th>
-                                        
-                                        <p-dialog header="Consignes" [(visible)]="visible_consigne" [modal]="true"
-                                            [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                            <p-table [rows]="8" [rowHover]="true" [paginator]="true"
-                                                [value]="task_consignes" [paginator]="true" rowExpandMode="single"
-                                                [pageLinks]="5" selectionMode="single" class="col-12"
-                                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th style="width: 3rem"></th>
-                                        <th pSortableColumn="consignes" style="text-align:center">
-                                            consignes
-                                        </th>
-
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let tc let-rir="rowIndex">
-                                    <tr>
-                                        <td>{{ rir + 1 }}</td>
-                                        <td>{{task_consignes[rir]}}</td>
-
-                                    </tr>
-                                </ng-template>
-                                <p class="m-0">
-                                </p>
-                            </p-table>
-                            </p-dialog>
-                            </tr>
-                            <br>
-                            </ng-template>
-                            </p-table>
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>
-                                    <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2"></p-button>
-                                </div>
-                                <div style="display: flex; justify-content: center;">
-                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
-                                        [model]="items"></p-splitButton>
-                                </div>
-                                <div>
-                                    <p-button styleClass="p-button-secondary" (click)="showDialog(task)"
-                                        icon="pi pi-external-link" label="Detail"></p-button>
-                                    <p-dialog header="Details" [(visible)]="visible" [modal]="true" 
-                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                        <p class="m-0">
-                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
-                                            <br />
-                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
-                                        </p>
-                                    </p-dialog>
-                                </div>
+                            <div class="col-1">
+                                <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                             </div>
-                        </p-card>
+                        </div>
+                    </p-card-header>
+                    <div class="grid col-12">
+                        <div class="col-6">
+                            {{t?.date_limite | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+                        </div>
+                        <div class="col-6">
+                            Attribué le : {{t?.attribuate_date | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            Par: {{t?.attribuate_by?.firstname | titlecase}} {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
                     </div>
-                    <br />
-                </ng-container>
-            </div>
-        </p-tabPanel>
-        <p-tabPanel header="Done">
-            <div class="grid col-12" style="background-color: #c8f0cb;">
-                <ng-container *ngFor="let task of taskdone">
-                    <div class="col-6">
-                        <p-card>
-                            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.task_id?.identifian}} </span></th>
-                                        <th>Libelle :<span style="color:#878787" > {{task?.task_id?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
-                                    </tr>
-                                    <tr>
-                                        <th>ID Projet :<span style="color:#878787" > {{task?.task_id?.project_id?.identifian}}</span> </th>
-                                        <th colspan="2">Titre:<span style="color:#878787" >{{task?.task_id?.project_id?.titre}}</span></th>
-                                    </tr>
-                                    <br />
-                                    <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.date_ajout | date:'dd MMMM yy'}}</span><br></ng-container></th>
+                    <p-card-footer>
+                        <div class="grid col-12">
+                            <div class="col-11"></div>
+                            <div class="col-1">
+                                <i class="pi pi-arrow-right" style="color: green" (click)="ToDoing(t)"></i>
+                            </div>
+                        </div>
+                    </p-card-footer>
+                </p-card><br>
+            </ng-container>
+        </p-card>
+    </div>
+    <div class="col-4 ">
+        <p-card header="Doing ({{taskDoing.length}})">
+            <ng-container *ngFor="let t of taskDoing">
+                <p-card>
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11">
+                                <strong> {{t?.libelle}}</strong>
+                            </div>
+                            <div class="col-1">
+                                <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
+                            </div>
+                        </div>
+                    </p-card-header>
 
-                                        <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
-                                            date:'dd MMMM yy'}} </th>
-                                    </tr>
-                                    <tr>
-                                        <th>nombre d'heures estimées:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
-                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task?.statut)}">
-                                            {{
-                                            task?.statut}}</th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        
-                                        <th >
-                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
-                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
-                                        </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">{{task.validation}}</th>
-                                        
-                                        <p-dialog header="Consignes" [(visible)]="visible_consigne" [modal]="true"
-                                            [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                            <p-table [rows]="8" [rowHover]="true" [paginator]="true"
-                                                [value]="task_consignes" [paginator]="true" rowExpandMode="single"
-                                                [pageLinks]="5" selectionMode="single" class="col-12"
-                                                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th style="width: 3rem"></th>
-                                        <th pSortableColumn="consignes" style="text-align:center">
-                                            consignes
-                                        </th>
+                    <div class="grid col-12">
+                        <div class="col-6">
+                            {{t?.date_limite | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+                        </div>
+                        <div class="col-6">
+                            Attribué le : {{t?.attribuate_date | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            Par: {{t?.attribuate_by?.firstname | titlecase}} {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
+                    </div>
+                    <p-card-footer>
+                        <div class="grid col-12">
+                            <div class="col-1">
+                                <i class="pi pi-arrow-left" style="color: green" (click)="ToToDo(t)"></i>
+                            </div>
+                            <div class="col-10"></div>
+                            <div class="col-1">
+                                <i class="pi pi-arrow-right" style="color: green" (click)="ToDone(t)"></i>
+                            </div>
+                        </div>
+                    </p-card-footer>
+                </p-card><br>
+            </ng-container>
+        </p-card>
+    </div>
+    <div class="col-4 ">
+        <p-card header="Done ({{taskDone.length}})">
+            <ng-container *ngFor="let t of taskDone">
+                <p-card>
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11">
+                                <strong> {{t?.libelle}}</strong>
+                            </div>
+                            <div class="col-1">
+                                <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
+                            </div>
+                        </div>
+                    </p-card-header>
 
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let tc let-rir="rowIndex">
-                                    <tr>
-                                        <td>{{ rir + 1 }}</td>
-                                        <td>{{task_consignes[rir]}}</td>
-
-                                    </tr>
-                                </ng-template>
-                                <p class="m-0">
-                                </p>
-                            </p-table>
-                            </p-dialog>
-                            </tr>
-                            <br>
-
-
-
-                            </ng-template>
-
-                            </p-table>
-                            <div style="display: flex; justify-content: space-between;">
-                                
-                                <div>
-                                    <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2 "></p-button>
-                                </div>
-
-                                <div style="display: flex; justify-content: center;">
-                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
-                                        [model]="items"></p-splitButton>
-
-                                </div>
-                                <div>
-                                    <p-button styleClass="p-button-secondary" (click)="showDialog(task)"
-                                        icon="pi pi-external-link" label="Detail"></p-button>
-                                    <p-dialog header="Details" [(visible)]="visible" [modal]="true"
-                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                                        <p class="m-0">
-                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
-                                            <br />
-                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
-
-
-
-
-                                        </p>
-                                    </p-dialog>
-                                </div>
-
+                    <div class="grid col-12">
+                        <div class="col-6">
+                            {{t?.date_limite | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+                        </div>
+                        <div class="col-6">
+                            Attribué le : {{t?.attribuate_date | date:'dd MMMM YY'}}
+                        </div>
+                        <div class="col-6">
+                            Par: {{t?.attribuate_by?.firstname | titlecase}} {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
+                    </div>
+                    <p-card-footer>
+                        <div class="grid col-12">
+                            <div class="col-1">
+                                <i class="pi pi-arrow-left" style="color: green" (click)="ToDoing(t)"></i>
+                            </div>
+                            <div class="col-11">
 
                             </div>
+                        </div>
+                    </p-card-footer>
+                </p-card><br>
+            </ng-container>
+        </p-card>
+    </div>
 
 
-                        </p-card>
-                    </div>
-
-                    <br />
-                </ng-container>
-            </div>
-
-        </p-tabPanel>
-
-        <p-tabPanel header="Archivés">
-            <p-table [value]="taskarchiver" dataKey="_id" [rows]="4" [rowHover]="true"
-                styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>ID</th>
-                        <th>Libelle</th>
-                        <th>ID Ticket</th>
-                        <th>Action</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-task>
-                    <tr>
-                        <td>{{task?.task_id?.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td>{{task?.task_id?.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td><ng-container *ngFor="let t of task">{{t?.customid}} <br></ng-container><br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td>
-
-                            <p-splitButton direction="up" label="Deplacer" icon="pi pi-send"
-                            (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
-                            <br> <br> <br> <br><br> <br><br> <br> <br> <br>
-
-
-
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="4">Aucune information pour le moment.</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td colspan="4">Chargement des informations, merci de patienter...</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </p-tabPanel>
-    </p-tabView>
 </div>
+
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}" (onHide)="onUpdate()">
+
+    <div class="grid col-12" *ngIf="TaskToShow">
+        <div class="col-12">
+            Nombre d'heures estimée:<br>
+            {{TaskToShow.number_of_hour}}H
+        </div>
+        <div class="col-12">
+            Durée mise:<br>
+            {{calcDureeMise()}}
+        </div>
+        <div class="col-12">
+            Avancement:<br>
+            <p-inputNumber [(ngModel)]="TaskToShow.avancement" suffix="%" [showButtons]="true"
+                (onBlur)="onUpdate()"></p-inputNumber>
+        </div>
+        <div class="col-12">
+            Description:<br>
+            {{TaskToShow.description_task}}
+        </div>
+        <div class="col-10">
+            Labels:<br>
+            <p-multiSelect [(ngModel)]="TaskToShow.labels" defaultLabel="Choisissez un label" (onChange)="onUpdate()"
+                autoWidth="false" [options]="labels" [style]="{'width':'100%'}" class="multiselect-custom">
+                <ng-template let-value pTemplate="selectedItems">
+                    <div class="country-item country-item-value" *ngFor="let option of TaskToShow.labels"
+                        [style]="{'background-color':option.color}">
+                        <div>{{option.libelle}}</div>
+                    </div>
+                    <div *ngIf="!TaskToShow.labels || TaskToShow.labels.length === 0" class="country-placeholder">
+                        Choisissez un label
+                    </div>
+                </ng-template>
+                <ng-template let-label pTemplate="item">
+                    <div class="country-item-value" [style]="{'background-color':label.color}">
+                        <div>{{label.libelle}}</div>
+                    </div>
+                </ng-template>
+            </p-multiSelect>
+        </div>
+        <div class="col-2">
+            &nbsp;<br>
+            <button pButton icon="pi pi-cog" (click)="showLabelConfig = true" pTooltip="Configurer les labels"
+                tooltipPosition="bottom"></button>
+        </div>
+    </div>
+    <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.commentaires" class="col-12"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date" style="text-align: center;"> Date <p-sortIcon field="date">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="description" style="text-align: center;">
+                    Commentaire <p-sortIcon field="description">
+                    </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="by" style="text-align: center;">
+                    Commenté par <p-sortIcon field="by">
+                    </p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-commentaire>
+            <tr [pEditableRow]="commentaire">
+                <td>
+                    {{commentaire?.date | date: 'dd MMMM YY'}}
+                </td>
+                <td pEditableColumn pTooltip="Clickez pour modifier" tooltipPosition="bottom">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea *ngIf="commentaire?.by._id==token.id" type="text" pInputTextarea
+                                [(ngModel)]="commentaire.description"></textarea>
+                            <p *ngIf="commentaire?.by._id!=token.id">{{commentaire?.description}}</p>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{commentaire?.description}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    {{commentaire?.by?.firstname | titlecase}} {{commentaire?.by?.lastname | uppercase}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+    <button pButton icon="pi pi-plus" (click)="onAddComment()" pTooltip="Ajouter un commentaire"
+        tooltipPosition="bottom"></button>
+    <br>
+    <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom"
+                        pTooltip="Clickez pour modifier" tooltipPosition="bottom">
+                    </p-sortIcon>
+                </th>
+                <th>
+                    Lien
+                </th>
+
+                <th style="text-align: center;">
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-document let-ri="rowIndex">
+            <tr [pEditableRow]="document">
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input type="text" pInputText [(ngModel)]="document.nom">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{document?.nom}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td *ngIf="document?.path">
+                    <i pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                        (click)="downloadFile(doc)" style="color: green;" aria-hidden="true"></i>
+                </td>
+                <td *ngIf="!document?.path">
+                    <a (click)="uploadFile(ri)">Uploader le document</a>
+                </td>
+                <td>
+                    <i style="padding-left: 3%;" pTooltip="Supprimer le document" tooltipPosition="bottom"
+                        class="pi pi-trash mr-2" aria-hidden="true" (click)="deleteFile(ri)"> </i>
+                    <i style="padding-left: 3%;" *ngIf="document?.path" pTooltip="Uploader le document"
+                        tooltipPosition="bottom" class="pi pi-cloud-upload" aria-hidden="true" (click)="uploadFile(ri)">
+                    </i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+    <button pButton icon="pi pi-plus" (click)="onAddDocuments()" pTooltip="Ajouter un document"
+        tooltipPosition="bottom"></button>
+    <br> <br>
+    <button pButton label="Archiver" icon="pi pi-check" class="p-button"></button>
+
+</p-sidebar>
+
+<p-dialog header="Configuration des labels" [(visible)]="showLabelConfig" [style]="{width: '50vw'}" [modal]="true">
+    <button pButton icon="pi pi-plus" class="p-button" (click)="onAddLabel()"></button>
+    <p-table dataKey="_id" [value]="labels" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom">
+                    </p-sortIcon>
+                </th>
+                <th>
+                    Couleur
+                </th>
+
+                <th style="text-align: center;">
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-label let-ri="rowIndex">
+            <tr [pEditableRow]="label">
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input type="text" pInputText [(ngModel)]="label.libelle" (blur)="onUpdateLabel(label)">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{label?.libelle}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-colorPicker appendTo="body" [(ngModel)]="label.color"
+                        (onHide)="onUpdateLabel(label)"></p-colorPicker>
+                </td>
+                <td>
+                    <i style="padding-left: 3%;" pTooltip="Supprimer le label" tooltipPosition="bottom"
+                        class="pi pi-trash mr-2" aria-hidden="true" (click)="deleteLabel(label)"> </i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

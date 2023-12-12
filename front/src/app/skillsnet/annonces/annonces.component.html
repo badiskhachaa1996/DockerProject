@@ -259,6 +259,7 @@
 		</div>
 	</div>
 
+
 	<!-- Affichage des offres -->
 	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
 		<p-tabPanel header="Ajouter" *ngIf="!isEtudiant">
@@ -374,10 +375,9 @@
 				</div>
 			</form>
 		</p-tabPanel>
-		<p-tabPanel header="Offre">
+		<p-tabPanel header="Offre ">
 			<div class="col-12 ">
 				<div class="card">
-
 					<p-dataView #dv [value]="['']"
 						filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 						layout="grid">
@@ -640,6 +640,7 @@
 											(click)="visibleSidebar = false; seeDetails(annonce)"><i
 												class="pi pi-list"></i>Détails</a>
 									</div>
+
 									<div class="col-7 card-right">
 										<div class="offre-card-main">
 											<h4 *ngIf="annonce?.missionName?.length<43" class="offre-card-title">
@@ -658,7 +659,7 @@
 											</ng-container>
 											<ng-container
 												*ngIf="getStatut(annonce)!='Expiré' && getStatut(annonce)!='Active'">
-												<p-tag styleClass="mb-1 mt-1" icon="pi 
+												<p-tag styleClass="mb-1 mt-1" icon="pi
 										pi-ban" severity="danger" value="Clôturée"></p-tag>
 											</ng-container>
 											<p class="offre-card-lieu">📍 {{annonce?.entreprise_ville }}</p>
@@ -791,6 +792,7 @@
 				</div>
 			</div>
 		</p-tabPanel>
+
 		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList"
 			[closable]="true">
 

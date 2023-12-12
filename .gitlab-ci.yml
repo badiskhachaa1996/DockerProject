@@ -30,10 +30,7 @@ install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+    
   script:
     - cd back
     - rm -rf node_modules/
@@ -52,6 +49,7 @@ install_front_dependencies_on_dev:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+      
   script:
     - cd front
     - rm -rf node_modules/
@@ -70,6 +68,7 @@ install_forms-app_dependencies_on_dev:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -86,10 +85,7 @@ install_back_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+    
   script:
     - cd back
     - rm -rf node_modules/
@@ -108,6 +104,7 @@ install_front_dependencies_on_qa:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -126,6 +123,7 @@ install_forms-app_dependencies_on_qa:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -142,10 +140,7 @@ install_back_dependencies_on_prod2:
   stage: Install
   tags:
     - prod2-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+
   script:
     - cd back
     - rm -rf node_modules/
@@ -164,6 +159,7 @@ install_front_dependencies_on_prod2:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -182,6 +178,7 @@ install_forms-app_dependencies_on_prod2:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -198,10 +195,7 @@ manual_install_back_dependencies_on_prod1:
   stage: Install
   tags:
     - prod1-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+
   script:
     - cd back
     - rm -rf node_modules/
@@ -221,6 +215,7 @@ manual_install_front_dependencies_on_prod1:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
+
   script:
     - cd front
     - rm -rf node_modules/
@@ -240,6 +235,7 @@ manual_install_forms-app_dependencies_on_prod1:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
+
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -510,26 +506,6 @@ manual_build_forms-app_on_prod1:
 
 #==========================================================
   
-deploy_back_to_dev:
-  stage: DEV
-  tags:
-    - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
-
-  script:
-    - cd back
-    - ln -s /home/gitlab-runner/storage storage
-    - npm ci
-    - pm2 delete index
-    - pm2 start index.js --time -- --dev
-    - pm2 save
-  only:
-    - develop
-
 deploy_front_to_dev:
   stage: DEV
   dependencies: 
@@ -554,27 +530,23 @@ deploy_forms-app_to_dev:
   only:
     - develop
 
-#==========================================================
-
-deploy_back_to_qa:
-  stage: QA
+deploy_back_to_dev:
+  stage: DEV
+  dependencies: 
+    - install_back_dependencies_on_dev
   tags:
-    - qa-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
-
+    - dev-shell
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --qa
+    - pm2 start index.js --time -- --dev
     - pm2 save
   only:
-    - main
+    - develop
+
+#==========================================================
 
 deploy_front_to_qa:
   stage: QA
@@ -600,28 +572,24 @@ deploy_forms-app_to_qa:
   only:
     - main
 
-#==========================================================
-  
-deploy_back_to_prod2:
-  stage: PROD2
+deploy_back_to_qa:
+  stage: QA
+  dependencies: 
+    - install_back_dependencies_on_qa
   tags:
-    - prod2-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
-
+    - qa-shell
   script:
     - cd back
-    - ln -s /home/ubuntu/storage storage
+    - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --prod2
+    - pm2 start index.js --time -- --qa
     - pm2 save
   only:
     - main
 
+#==========================================================
+  
 deploy_front_to_prod2:
   stage: PROD2
   dependencies:
@@ -646,29 +614,24 @@ deploy_forms-app_to_prod2:
   only:
     - main
 
-#==========================================================
-  
-manual_deploy_back_to_prod1:
-  stage: PROD1
+deploy_back_to_prod2:
+  stage: PROD2
+  dependencies: 
+    - install_back_dependencies_on_prod2
   tags:
-    - prod1-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
-    policy: pull
-
+    - prod2-shell
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
-    - pm2 start index.js --time -- --prod1
+    - pm2 start index.js --time -- --prod2
     - pm2 save
   only:
     - main
-  when: manual
 
+#==========================================================
+  
 manual_deploy_front_to_prod1:
   stage: PROD1
   dependencies:
@@ -691,6 +654,23 @@ manual_deploy_forms-app_to_prod1:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - main
+  when: manual
+
+manual_deploy_back_to_prod1:
+  stage: PROD1
+  dependencies: 
+    - manual_install_back_dependencies_on_prod1
+  tags:
+    - prod1-shell
+  script:
+    - cd back
+    - ln -s /home/ubuntu/storage storage
+    - npm ci
+    - pm2 delete index
+    - pm2 start index.js --time -- --prod1
+    - pm2 save
   only:
     - main
   when: manual

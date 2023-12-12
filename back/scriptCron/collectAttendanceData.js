@@ -11,6 +11,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 200000)
         let pathToDirectory = '/var/www/P' //'/var/www/P'
         const directoriesInDIrectory = fs.readdirSync(pathToDirectory, { withFileTypes: true })
             .filter((item) => item.isDirectory())
@@ -20,7 +24,6 @@ mongoose
             files.forEach(f => {
                 var linesNb = 0
                 if (f != 'users' && !f.startsWith('config')) {
-
                     let fileData = fs.readFileSync(pathToDirectory + "/" + serial_number + "/" + f).toString()
                     let lines = fileData.split('\n')
                     if (fs.existsSync(pathToDirectory + "/" + serial_number + `/config-${f}.txt`))
@@ -44,8 +47,12 @@ mongoose
                                 })
                                 r.save().then(newPointage => {
                                     console.log('Ajout de ', { ...newPointage._doc })
+                                    if (serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1] && f == files[files.length - 1])
+                                        process.exit()
                                 }, error => {
                                     console.error(error)
+                                    if (serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1] && f == files[files.length - 1])
+                                        process.exit()
                                 })
                             }
                         })
@@ -53,6 +60,8 @@ mongoose
                 }
 
             })
+            if (files.length == 0 && serial_number == directoriesInDIrectory[directoriesInDIrectory.length - 1])
+                process.exit()
         })
         //process.exit()
     })

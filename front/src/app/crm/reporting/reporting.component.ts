@@ -35,8 +35,8 @@ export class ReportingComponent implements OnInit {
   contacte : number = 0;
   nonContacte : number = 0;
 
-  equipeFilte=[{ label: 'Toutes les équipe', value: null }];
-  membreFiltre=[{ label: 'les membres', value: null }];
+  equipeFiltre=[{ label: 'Toutes les équipes', value: null }];
+  membreFiltre=[{ label: 'Tous les membres', value: null }];
   
 
   constructor(private LCS: LeadcrmService,private TeamCRMService: TeamsCrmService,) { }
@@ -53,6 +53,7 @@ export class ReportingComponent implements OnInit {
       this.calculerPaiement();
       this.calculerChiffre();
       this.calculerAttribue();
+      this.reinitialiserFiltres()
     })
     this.calculerNonQualifie();
     
@@ -70,7 +71,7 @@ export class ReportingComponent implements OnInit {
     ];
     this.TeamCRMService.TIgetAll().subscribe(equipes=>{
       equipes.forEach(equipe=>{
-    this.equipeFilte.push({ label: `${equipe.nom}`, value:equipe.nom })
+    this.equipeFiltre.push({ label: `${equipe.nom}`, value:equipe.nom })
       })
     })
 
@@ -98,7 +99,25 @@ export class ReportingComponent implements OnInit {
       
    // })
  // }
-  
+
+ /*reinitialiserFiltres(): void {
+  this.leadsSelected = [...this.leads]; // Copie la liste complète des leads 
+
+  // Recalculer les statistiques avec tous les leads
+  this.calculerPaiement();
+      this.calculerChiffre();
+      this.calculerInterresse();
+      this.calculerJoignable();
+      this.calculerContacte();
+      this.calculerInterresse();
+      this.calculerPreQualifie();
+      this.calculerQualifie();
+      this.calculerInsertion();
+      this.calculerNonQualifie();
+      this.calculerAttribue();
+  // ... les autres appels de fonctions de calcul ...
+}
+  */
   
   calculerNonQualifie(): void  {
    
@@ -118,9 +137,9 @@ export class ReportingComponent implements OnInit {
   
   }
 
-  calculerInsertion(): void {
+  /*calculerInsertion(): void {
     this.insertion = this.leadsSelected.length;
-  }
+  }*/
 
   calculerInterresse(): void  {
    
@@ -185,20 +204,31 @@ export class ReportingComponent implements OnInit {
       this.contacte= contactCount;
     }
 
-    calculerJoignable(): void  {
+  calculerJoignable(): void  {
       let contactCount : number = 0
       this.leadsSelected.forEach(lead => {
         if(lead.contacts.length > 0){
           lead.contacts.forEach(contact => {
+            console.log(contact)
             if (contact["suite_contact"]==="Joignable") {
-              contactCount+= lead.contacts.length;
+              contactCount+= 1 ;
             }
           })
         }
       })
       this.joignable= contactCount;
     }
+    
+    
 
+
+    /*calculerInsertion(): void  {
+      this.insertion= this.filtrerParAttribut(this.leadsSelected,"created_by","_id").length;
+    } */
+    calculerInsertion(): void {
+      this.insertion = this.leadsSelected.filter(lead => 
+        lead.created_by && lead.created_by._id).length;
+    }
 
     calculerPaiement(): void  {
       let paiementCount : number = 0
@@ -258,6 +288,8 @@ export class ReportingComponent implements OnInit {
 
 // filtre equipe 
     leadsSelected:LeadCRM[]=[]
+    
+    /*
     onFiltreEquipe(event){
 this.leadsSelected=[];
       this.leads.forEach(lead=>{
@@ -297,12 +329,21 @@ if(lead.equipe===event.value){
       this.calculerAttribue();
       // ... les autres appels de fonctions de calcul ...
     }
-    
+    */
     onFiltreDate(): void {
-      if (this.dates && this.dates.length === 2) {
-        const [dateDebut, dateFin] = this.dates;
+      if (this.dates && this.dates.length > 0) {
+        let dateDebut, dateFin;
+        if (this.dates.length === 1) {
+          // Si une seule date est sélectionnée, utilisez-la pour le début et la fin
+          dateDebut = this.dates[0];
+          dateFin = this.dates[0];
+        } else {
+          // Si deux dates sont sélectionnées, utilisez la plage
+          [dateDebut, dateFin] = this.dates;
+        }
+    
         this.leadsSelected = this.leads.filter(lead => {
-          const dateLead = new Date(lead.date_creation); // Assurez-vous que cette propriété correspond à la date du lead
+          const dateLead = new Date(lead.date_creation);
           return dateLead >= dateDebut && dateLead <= dateFin;
         });
     
@@ -323,7 +364,44 @@ if(lead.equipe===event.value){
     }
     
 
-
+    onFiltreEquipe(event): void {
+      if (event.value === null) { // Si "Toutes les équipes" est sélectionné
+        this.reinitialiserFiltres();
+      } else {
+        this.leadsSelected = this.leads.filter(lead => lead.equipe === event.value);
+        this.mettreAJourStatistiques();
+      }
+    }
+    
+    onFiltreMembre(event): void {
+      if (event.value === null) { // Si "Tous les membres" est sélectionné
+        this.reinitialiserFiltres();
+      } else {
+        this.leadsSelected = this.leads.filter(lead => 
+          lead.affected_to_member && lead.affected_to_member._id === event.value);
+        this.mettreAJourStatistiques();
+      }
+    }
+    
+    mettreAJourStatistiques(): void {
+      this.calculerPaiement();
+      this.calculerChiffre();
+      this.calculerInterresse();
+      this.calculerJoignable();
+      this.calculerContacte();
+      this.calculerInterresse();
+      this.calculerPreQualifie();
+      this.calculerQualifie();
+      this.calculerInsertion();
+      this.calculerNonQualifie();
+      this.calculerAttribue();
+      // ... les autres appels de fonctions de calcul ...
+    }
+    
+    reinitialiserFiltres(): void {
+      this.leadsSelected = [...this.leads]; // Copie la liste complète des leads
+      this.mettreAJourStatistiques();
+    }
 
 
 

@@ -143,4 +143,6 @@ export class ListCampusComponent implements OnInit {
     })
     return r
   }
+  selectedCampus: Campus
+  afficherSalles = false
 }
