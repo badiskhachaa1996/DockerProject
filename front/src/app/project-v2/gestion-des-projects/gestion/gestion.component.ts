@@ -791,9 +791,6 @@ console.log ("hello");
     }
 
     onDownloadBudgetFile(_id: string, file_id: string, path: string) {
-
-      console.log(_id, file_id, path);
-
       this.projectService.downloadFile(_id, file_id, path).subscribe(
             data => {
                 console.log(data);

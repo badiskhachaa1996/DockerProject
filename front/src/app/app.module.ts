@@ -231,7 +231,6 @@ import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
 import { LinksModule } from './links/links.module';
-
 @NgModule({
     imports: [
         ReactiveFormsModule,
@@ -488,8 +487,7 @@ import { LinksModule } from './links/links.module';
         LogementComponent,
         GestionLogementComponent,
         BookingV2Component,
-        PauseReadMoreComponent,
-    ],
+        PauseReadMoreComponent],
     providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
         MenuService, ConfigService,

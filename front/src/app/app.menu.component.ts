@@ -48,7 +48,7 @@ export class AppMenuComponent implements OnInit {
         {
             label: 'Espace Personnel',
             icon: 'pi pi-fw pi-home',
-            routerLink: ['/'],
+            routerLink: [''],
         },
         {
             label: 'iMatch',
@@ -2618,7 +2618,7 @@ export class AppMenuComponent implements OnInit {
                                                   routerLink: [
                                                       'crm/leads/ajout',
                                                   ],
-                                              }, 
+                                              },
                                                  {
                                                      label: 'Importer',
                                                      icon: 'pi pi-database',
@@ -5205,7 +5205,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: [
                                                     'crm/leads/ajout',
                                                 ],
-                                            }, 
+                                            },
                                                 {
                                                     label: 'Importer',
                                                     icon: 'pi pi-database',
