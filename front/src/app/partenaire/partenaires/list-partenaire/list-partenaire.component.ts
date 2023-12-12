@@ -42,6 +42,8 @@ import { ChangeDetectorRef } from '@angular/core';
     `]
 })
 export class ListPartenaireComponent implements OnInit {
+  selectedPartnerName: string | undefined;
+
   selectedInsert: Partenaire | null = null;
   activeIndex1: number = 0;
   expandedRows = {};
@@ -50,6 +52,9 @@ export class ListPartenaireComponent implements OnInit {
   partenaires: Partenaire[] = []
   users = {}
   token;
+
+  rowData: any;
+
   currenData
   uploadedFileName: string;
 
@@ -153,6 +158,8 @@ export class ListPartenaireComponent implements OnInit {
 
   partenaireDic = {}
 
+
+
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
@@ -247,6 +254,11 @@ export class ListPartenaireComponent implements OnInit {
       indicatif: rowData.indicatifPhone,
       indicatif_whatsapp: rowData.indicatifWhatsapp,
     });
+  }
+
+
+  updateSelectedPartnerName(name: string | undefined) {
+    this.selectedPartnerName = name;
   }
 
 
@@ -382,18 +394,18 @@ export class ListPartenaireComponent implements OnInit {
   clickFile2() {
     document.getElementById('selectedFile2').click();
   }
-
+ 
   FileUpload2(event) {
     if (event && event.length > 0 && this.idPartenaireToUpdate != null) {
       const formData = new FormData();
-
+ 
       formData.append('id', this.idPartenaireToUpdate._id)
       formData.append('file', event[0])
       this.PartenaireService.uploadEtatContrat(formData).subscribe(data => {
         this.resetFileInput(event);
         this.uploadedFileName = event[0].name;
         this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
-
+ 
       })
     }
   }
@@ -503,19 +515,28 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   onRowEditCancel(product: { _id: string, description: string, montant: string }, index: number) {
+    
     //console.log(product, index, this.commissions[index], this.clonedCommissions[product._id])
     this.commissions[index] = this.clonedCommissions[product._id];
     delete this.clonedCommissions[product._id];
   }
 
   downloadContrat() {
+    console.log('downloadContrat called with id:', this.idPartenaireToUpdate._id);
+
     this.PartenaireService.downloadContrat(this.idPartenaireToUpdate._id)
       .then((response: Blob) => {
+        console.log('Download successful. Response:', response);
+
         let downloadUrl = window.URL.createObjectURL(response);
+        
         saveAs(downloadUrl, this.idPartenaireToUpdate.pathEtatContrat);
         this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
       })
-      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+      .catch((error) => { 
+        console.error('Download failed. Error:', error);
+        this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); 
+      });
   }
   editInfoPartenariat = false
   editInfoPartenariatForm: FormGroup = new FormGroup({

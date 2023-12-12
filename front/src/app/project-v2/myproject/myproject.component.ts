@@ -480,7 +480,7 @@ export class MyprojectComponent implements OnInit {
   }}
   getColorForValidation(validation){
     switch (validation) {
-      case 'La activité n’est pas validée':
+      case "L'activité n’est pas validée":
         return 'red';
     default: return'green';
 
