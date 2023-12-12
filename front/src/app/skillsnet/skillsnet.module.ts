@@ -36,6 +36,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { StepsModule } from 'primeng/steps';
 import { Fieldset, FieldsetModule } from 'primeng/fieldset';
 import { SkillsManagementModule } from './skills-management/skills-management.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 @NgModule({
     declarations: [
         AnnonceViewerComponent,
@@ -75,7 +77,9 @@ import { SkillsManagementModule } from './skills-management/skills-management.mo
         CheckboxModule,
         StepsModule,
         FieldsetModule,
-        SkillsManagementModule
+        SkillsManagementModule,
+        InputTextModule,
+        InputTextareaModule
     ]
 })
 export class SkillsNetModule { }
