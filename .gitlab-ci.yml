@@ -518,6 +518,7 @@ deploy_back_to_dev:
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
+    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --dev
@@ -559,6 +560,7 @@ deploy_back_to_qa:
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
+    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --qa
@@ -600,6 +602,7 @@ deploy_back_to_prod2:
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
+    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
@@ -641,6 +644,7 @@ manual_deploy_back_to_prod1:
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
+    - npm install
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
