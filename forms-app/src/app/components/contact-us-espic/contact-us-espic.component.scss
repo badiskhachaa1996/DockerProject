@@ -7,9 +7,10 @@
 }
 
 body {
-  background-color: #fbfcfd;
+  background-color: #fff7f7;
   padding: 20px;
   font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
 }
 
 .legend {
@@ -53,7 +54,8 @@ body {
   font-weight: 600;
 }
 
-.btn {
+
+.p-button-custom {
   background-color: #29295c;
   box-sizing: border-box !important;
   border: 0 !important;
@@ -63,12 +65,24 @@ body {
   box-shadow: 0 0 0 !important;
   padding: 16px 32px;
 }
+.p-button-custom:hover , .p-button-custom:active{
+  background-color: #e0222e !important;
+}
+.p-inputswitch .p-component .p-inputswitch-checked {
+  background-color: red !important;
+}
+/* Assuming .custom-switch is a class that you apply to the container div */
+.custom-switch .ui-inputswitch {
+  /* Change the background color for the switch */
+  background-color: #29295c;
+}
 
-.btn:hover,
-.btn:active,
-.btn:focus {
-  background-color: #1e1e42;
-  opacity: 0.85;
-  border: 0 !important;
-  border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
+.custom-switch .ui-inputswitch .ui-inputswitch-slider {
+  /* Change the color of the switch handle */
+  background-color: #29295c;
+}
+
+.custom-switch .ui-inputswitch:checked + .ui-inputswitch-slider {
+  /* Change the color of the switch handle when it is checked/on */
+  background-color: #29295c;
 }

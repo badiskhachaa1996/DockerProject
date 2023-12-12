@@ -23,6 +23,9 @@ import {MessagesModule} from "primeng/messages";
 import {ToastModule} from "primeng/toast";
 import { MessageService } from 'primeng/api';
 import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-icbs-eng.component';
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {InputSwitchModule} from "primeng/inputswitch";
+import { Ng2TelInputModule } from 'ng2-tel-input'
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-i
     InputTextareaModule,
     MessagesModule,
     ToastModule,
+    ToggleButtonModule,
+    InputSwitchModule,
+    Ng2TelInputModule,
 
   ],
   providers: [MessageService],
