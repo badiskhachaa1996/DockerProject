@@ -13,7 +13,7 @@ const taskSchema = mongoose.Schema({
     priorite:                       { type: String, required  : false },
     consignes:                      { type:[String], required: false},
     validation:                     { type: String, required: false},
-    identifian:                     { type: String, required: false},
+    identifian:                     { type: Number, required: false},
     urgent:                         { type: Boolean, required:false,default: false},
     documents: {
                                     type: [{

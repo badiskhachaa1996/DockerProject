@@ -14,7 +14,7 @@ export class Task{
         public priorite?:       string,
         public consignes?: any[],
         public validation?: string,
-        public identifian?: string,
+        public identifian?: number,
         public urgent?: boolean,
         public documents?: {
             _id?: string,

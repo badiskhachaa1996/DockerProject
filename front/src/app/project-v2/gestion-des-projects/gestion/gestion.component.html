@@ -261,7 +261,17 @@
         </p-card>
         <div class="grid col-12">
             <div class="col-4 ">
-                <p-card header="To DO " class="card-todo">
+                <p-card  class="card-todo">
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11">
+                                <h2><strong>TO DO</strong></h2>
+                            </div>
+                            <div class="col-1">
+                                <span >({{taskToDo.length}})</span>
+                            </div>
+                        </div>
+                    </p-card-header>
                     <ng-container *ngFor="let t of taskToDo">
                         <p-card>
                             <p-card-header>
@@ -276,36 +286,52 @@
                             </p-card-header>
                             <div class="grid col-12">
                                 <div class="col-12">
-                                    <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>   
+                                    {{t.description_task}}
                                 </div>
-
-                                <div class="col-12">
-                                    Assigné à
-                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
-                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                <div class="col-6"></div>
+                                <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <strong>Assigné à ...</strong>
+                                    <ng-container *ngIf="toggleAssignees[t._id]">
+                                        <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                            {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                        </ng-container>
                                     </ng-container>
                                 </div>
-
+                                
 
                             </div>
                             <p-card-footer>
                                 <div class="grid col-12">
-                                    <div class="col-11">
-                                        <p-chip  label={{t?.tag}}></p-chip>
+                                    <div class="col-1">
+                                        
+                                    </div>
+                                    <div class="col-10">
+                                        #{{t.identifian}}
                                     </div>
                                     <div class="col-1">
-                                        <i class="pi pi-arrow-right" style="color: green" (click)="ToDoing(t)"></i>
+                                        <i class="pi pi-arrow-right" pTooltip="Placer dans Doing" pTooltip="Placer dans Doing" style="color: green" (click)="ToDoing(t) "></i>
                                     </div>
                                 </div>
                             </p-card-footer>
                         </p-card><br>
                     </ng-container>
+                    
                     <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true"
-                        (click)="showAddTacheForm=true"></p-button>
+                        (click)="OnShowAddTach(); showAddTacheForm=true"></p-button>
                 </p-card>
             </div>
             <div class="col-4 ">
-                <p-card header="Doing " class="card-doing">
+                <p-card  class="card-doing">
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11">
+                                <h2><strong>Doing</strong></h2>
+                            </div>
+                            <div class="col-1">
+                                <span >({{taskDoing.length}})</span>
+                            </div>
+                        </div>
+                    </p-card-header>
                     <ng-container *ngFor="let t of taskDoing">
                         <p-card>
                             <p-card-header>
@@ -323,23 +349,28 @@
                                 <div class="col-12">
                                     {{t.description_task}}
                                 </div>
-                                <div *ngIf="test" class="col-12">
-                                    Assigné à
-                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
-                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                <div class="col-6"></div>
+                                <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <strong>Assigné à ...</strong>
+                                    <ng-container *ngIf="toggleAssignees[t._id]">
+                                        <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                            {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                        </ng-container>
                                     </ng-container>
                                 </div>
-
+                                
 
                             </div>
                             <p-card-footer>
                                 <div class="grid col-12">
                                     <div class="col-1">
-                                        <i class="pi pi-arrow-left" style="color: green" (click)="ToToDo(t)"></i>
+                                        <i class="pi pi-arrow-left" pTooltip="Placer dans To Do" style="color: green" (click)="ToToDo(t)"></i>
                                     </div>
-                                    <div class="col-10"></div>
+                                    <div class="col-10">
+                                        #{{t.identifian}}
+                                    </div>
                                     <div class="col-1">
-                                        <i class="pi pi-arrow-right" style="color: green" (click)="ToDone(t)"></i>
+                                        <i class="pi pi-arrow-right" style="color: green" pTooltip="Placer dans Done" (click)="ToDone(t)"></i>
                                     </div>
                                 </div>
                             </p-card-footer>
@@ -348,7 +379,17 @@
                 </p-card>
             </div>
             <div class="col-4 ">
-                <p-card header="Done " class="card-done">
+                <p-card  class="card-done" >
+                    <p-card-header>
+                        <div class="grid col-12">
+                            <div class="col-11">
+                                <h2><strong>Done</strong></h2>
+                            </div>
+                            <div class="col-1">
+                                <span >({{taskDone.length}})</span>
+                            </div>
+                        </div>
+                    </p-card-header>
                     <ng-container *ngFor="let t of taskDone">
                         <p-card>
                             <p-card-header>
@@ -366,23 +407,27 @@
                                 <div class="col-12">
                                     {{t.description_task}}
                                 </div>
-
-                                <div class="col-12">
-                                    Assigné à
-                                    <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
-                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                <div class="col-6"></div>
+                                <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <strong>Assigné à ...</strong>
+                                    <ng-container *ngIf="toggleAssignees[t._id]">
+                                        <ng-container *ngFor="let user of t?.attribuate_to; let last = last">
+                                            {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                        </ng-container>
                                     </ng-container>
                                 </div>
+                                
 
                             </div>
                             <p-card-footer>
                                 <div class="grid col-12">
                                     <div class="col-1">
-                                        <i class="pi pi-arrow-left" style="color: green" (click)="ToDoing(t)"></i>
+                                        <i class="pi pi-arrow-left" style="color: green" pTooltip="Placer dans Doing" (click)="ToDoing(t)"></i>
                                     </div>
-                                    <div class="col-11">
-
+                                    <div class="col-10">
+                                        #{{t?.identifian}}
                                     </div>
+                                    <div class="col-1"></div>
                                 </div>
                             </p-card-footer>
                         </p-card><br>
@@ -693,8 +738,8 @@
     <form [formGroup]="formAddTache" (ngSubmit)="addTache(project)">
 <div class="grid col-12">
         <div class="col-12 ">
-            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label><br>
-            <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize>
+            <label htmlFor="libelle">Résumé <span style="color: red">*</span></label><br>
+            <input [style]="{width: '100%'}" formControlName="libelle" pInputTextarea placeholder="Donnez un résumé à l'activité" autoResize>
         </div>
 
         

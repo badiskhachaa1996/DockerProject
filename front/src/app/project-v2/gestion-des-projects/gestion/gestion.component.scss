@@ -6,10 +6,12 @@
     background: rgb(241, 241, 241) !important ;/* Couleur pour To Do */
 }
 :host ::ng-deep .card-doing .p-component {
-    background: rgb(241, 241, 241) !important ;/* Couleur pour To Doing */
+    background: rgb(241, 241, 241) !important ;
+    ;/* Couleur pour To Doing */
 }
 :host ::ng-deep .card-done .p-component {
-    background: rgb(241, 241, 241) !important ;/* Couleur pour To Done */
+    background: rgb(241, 241, 241) !important ;
+    /* Couleur pour To Done */
 }
 .color-square {
     width: 10px;
@@ -19,12 +21,24 @@
     border: 1px solid #000;
   }
 
-  :host ::ng-deep .card-todo .p-card .p-component{
+  :host ::ng-deep .card-todo .p-card .p-component {
     background-color: rgb(255, 174, 174) !important;
+   
+  }
+  :host ::ng-deep .card-todo .p-card .p-component:not(.p-button) {
+   
+    height: 14em;
+  }
+  :host ::ng-deep .p-button .p-component {
+    background-color: rgb(255, 174, 174) !important;   /* Définir la couleur de fond du bouton comme transparent */
   }
   :host ::ng-deep .card-doing .p-card .p-component{
     background-color: rgb(181, 245, 255) !important;
+    height: 14em;
+    
   }
+
   :host ::ng-deep .card-done .p-card .p-component{
     background-color: rgb(158, 255, 160) !important;
+    height: 14em;
   }

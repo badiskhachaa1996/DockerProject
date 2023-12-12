@@ -58,9 +58,11 @@ export class GestionComponent implements OnInit {
   private ressources_id!: string;
   private budgetid!: string;
   docAdded:boolean=false;
+  toggleAssignees: { [taskId: string]: boolean } = {};
   test:boolean=true;
   avancement_p: number = 0;
   avancement_t: number = 0;
+  identifiant:number = 1;
   displayTache: boolean = false;
   showAddProjectForm: boolean = false;
   showressources: boolean = false;
@@ -218,11 +220,11 @@ export class GestionComponent implements OnInit {
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
-      priorite: ['', Validators.required],
+      priorite: ['', ],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
       description: ['', Validators.required],
-      urgent: [false, Validators.required],
+      urgent: [false,],
     });
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
@@ -389,13 +391,8 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   //PATIE TACHES********************************************
   addTache(project_id) {
 
-    const currentDate = new Date();
-    const costumid_ = "T" + currentDate.getTime();
-    if (this.formAddTache.invalid)
-      return; {
-    }
+    if (this.formAddTache.invalid)return; {}
     const newTache = {
-
       libelle: this.formAddTache.get('libelle').value,
       number_of_hour: this.formAddTache.get('number_of_hour').value,
       date_limite: this.formAddTache.get('date_limite').value,
@@ -404,7 +401,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
       avancement: 0,
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
-      identifian: costumid_,
+      identifian: this.identifiant,
       urgent:this.formAddTache.get('urgent').value,
     }
     this.projectService.postTask(newTache).then((resultat) => {
@@ -426,17 +423,24 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
       data.forEach((d) => {
         this.task.push(d);
         if (d.etat === "En attente de traitement") {
-          console.log(d.attribuate_to)
+          
           this.taskToDo.push(d);
         } else if (d.etat === "En cours de traitement") {
           this.taskDoing.push(d);
         } else { this.taskDone.push(d) }
       });
-      console.log(this.taskToDo);
+      
       this.selectedTabIndex = 3;
     });
   }
-
+  OnShowAddTach(){
+    this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
+      if(tasks){
+      this.identifiant=(tasks[tasks.length-1]?.identifian)+1;
+      
+      
+}})
+  }
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
   initialisation(task: Task) {
     const dl = task.date_limite; // Supposons que project.debut soit une date valide
@@ -447,7 +451,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     const new_date = `${year}-${month}-${day}`;
     this.showUpdateTacheForm = true;
     this.task_id = task._id;
-    console.log(new_date);
+    
     this.formAddTache = this.formBuilder.group({
       libelle: task.libelle,
       priorite: task.priorite,
@@ -498,16 +502,12 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         };
         this.taskListe.push(newtask);
       });
-
-      console.log(task.libelle);
-
       this.TicketForm.patchValue({
         project: task.project_id._id,
         task_id: task._id,
         description: task.libelle + ":" + task.description_task,
         priorite: task.priorite,
       });
-
       this.showCreateticket = true;
     });
   }
@@ -595,7 +595,6 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
       this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
     };
     this.urgent=Boolean(this.TaskToShow?.urgent);
-    console.log(this.urgent);
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
       attribuate_to:this.AtributateTable,
@@ -616,7 +615,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     t.etat = "En cours de traitement"
     this.taskDoing.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans  Doing" })
     });
   }
   //passer une tache a Done
@@ -625,7 +624,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     t.etat = "Traiter"
     this.taskDone.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: '  Done' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans  Done" })
     });
   }
   //passer une tache dans TODO
@@ -634,7 +633,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     t.etat = "En attente de traitement"
     this.taskToDo.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans To Do" })
     });
   }
   onCheckboxChange(event){
@@ -811,8 +810,6 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         this.sujetDropdown.push({ label: val.label, value: val._id })
       })
     })
-    console.log(this.TicketForm.get('service_id').value);
-    console.log(this.TicketForm.value.service_id)
   }
   onUpload(event: { files: File[] }, fileUpload: FileUpload) {
     this.uploadedFiles.push(event.files[0])
@@ -820,7 +817,6 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   }
 
   onProjectSelected(event) {
-    console.log("hello");
     this.taskSelected = null
     this.taskListe = [];
     const projectID = event.value;
@@ -838,12 +834,12 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
 
   }
   onSelectedTache(event) {
-    console.log("hello");
+
     const taskID = event.value;
-    console.log("hello");
+   
     this.projectService.getTask(taskID).then(data => {
       this.taskSelected = data;
-      console.log(this.taskSelected)
+      
       this.TicketForm.patchValue({
         description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
         priorite: this.taskSelected.priorite,
@@ -863,7 +859,6 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   indexDocuments = 0
   downloadFile(index) {
     this.indexDocuments = index
-    console.log(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path)
     this.projectService.downloadFile(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       saveAs(new Blob([byteArray], { type: data.documentType }), this.TaskToShow.documents[index].path)
@@ -905,7 +900,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     
   }
   FileUpload(event) {
-    console.log(event)
+    
     if (event != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
