@@ -43,14 +43,14 @@ export class GestionComponent implements OnInit {
   doingTasks = this.tasks.filter(task => task.category === 'doing');
   doneTasks = this.tasks.filter(task => task.category === 'done');
   TaskToShow: Task;
-  buttonName:string="Ajouter";
-  AtributateTable:any[]=[]
+  buttonName: string = "Ajouter";
+  AtributateTable: any[] = []
   private task_id!: string;
   private project_id!: string;
   private ressources_id!: string;
   private budgetid!: string;
-  docAdded:boolean=false;
-  test:boolean=true;
+  docAdded: boolean = false;
+  test: boolean = true;
   avancement_p: number = 0;
   avancement_t: number = 0;
   displayTache: boolean = false;
@@ -58,7 +58,7 @@ export class GestionComponent implements OnInit {
   showressources: boolean = false;
   showCreateticket: boolean = false;
   showbudget: boolean = false;
-  urgent:boolean;
+  urgent: boolean;
   selectedTabIndex: number = 1;
   selectedTabIndex1: number = 0;
   showUpdateProjectForm: boolean = false;
@@ -72,7 +72,7 @@ export class GestionComponent implements OnInit {
   formAddbudget!: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
-  userList:any[]=[];
+  userList: any[] = [];
   task!: Task[];
   taskToDo: Task[] = [];
   taskDoing: Task[] = [];
@@ -124,13 +124,10 @@ export class GestionComponent implements OnInit {
   })
   taskToShowForm = new FormGroup({
     attribuate_to: new FormControl(),
-    urgent:new FormControl(),
+    urgent: new FormControl(),
     number_of_hour: new FormControl(),
     date_limite: new FormControl(),
     description_task: new FormControl('',),
-
-
-
   })
   uploadedFiles: File[] = [];
   constructor(
@@ -228,9 +225,10 @@ export class GestionComponent implements OnInit {
     //INITIALISATION DU FORMULAIRE budget 
     this.rhService.getAgents().then(data => {
       data.forEach(user => {
-        if(user.type ==="Collaborateur" ){
-this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
-} })
+        if (user.type === "Collaborateur") {
+          this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+        }
+      })
     })
 
 
@@ -272,17 +270,22 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         console.error('Error fetching projects:', error);
       });
   }
+  dicUsers = {}
   // recuperation des utilisateur  pour les afficher dans le drop down
   getallusers(): void {
     this.rhService.getCollaborateurs()
       .then((response) => {
         this.responsableListe = [];
         response.forEach((user: Collaborateur) => {
-          const newUser = {
-            label: `${user.user_id.firstname} ${user.user_id.lastname}`,
-            value: [user.user_id._id, user.user_id.firstname + " " + user.user_id.lastname]
-          };
-          this.responsableListe.push(newUser);
+          if(user && user.user_id){
+            const newUser = {
+              label: `${user.user_id.firstname} ${user.user_id.lastname}`,
+              value: [user.user_id._id, user.user_id.firstname + " " + user.user_id.lastname]
+            };
+            this.dicUsers[user.user_id._id] = user.user_id
+            this.responsableListe.push(newUser);
+          }
+
         });
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
@@ -371,7 +374,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         this.projectService.putProject(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' })
       this.formAddProject.reset();
-      const indexToRemove = this.project.findIndex(project => project._id === this.project_id);if (indexToRemove !== -1) {this.project[indexToRemove]=data;}
+      const indexToRemove = this.project.findIndex(project => project._id === this.project_id); if (indexToRemove !== -1) { this.project[indexToRemove] = data; }
     })
   }
 
@@ -445,7 +448,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
 
     });
   }
-//modifier la tache 
+  //modifier la tache 
   onUpdatetask() {
 
     this.projectService.getTask(this.task_id).then((data) => {
@@ -510,22 +513,23 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     })
   }
 
-  onChange(){
-    this.test=false;
-    this.TaskToShow.attribuate_to=[];
-  for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
-    this.TaskToShow.attribuate_to.push(this.taskToShowForm.value.attribuate_to[i]);
+  onChange() {
+    this.test = false;
+    this.TaskToShow.attribuate_to = [];
+    console.log(this.dicUsers,this.taskToShowForm.value.attribuate_to)
+    for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
+      this.TaskToShow.attribuate_to.push(this.dicUsers[this.taskToShowForm.value.attribuate_to[i]]);
 
-  }
-  this.TaskToShow.number_of_hour=this.taskToShowForm.value?.number_of_hour;
-  
-  this.TaskToShow.date_limite=this.taskToShowForm.value?.date_limite;
-  this.TaskToShow.description_task=this.taskToShowForm.value?.description_task;
-  const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id);if (indexToRemove !== -1) {this.taskToDo[indexToRemove]=this.TaskToShow;}
+    }
+    this.TaskToShow.number_of_hour = this.taskToShowForm.value?.number_of_hour;
+
+    this.TaskToShow.date_limite = this.taskToShowForm.value?.date_limite;
+    this.TaskToShow.description_task = this.taskToShowForm.value?.description_task;
+    const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskToDo[indexToRemove] = this.TaskToShow; }
     this.projectService.putTask(this.TaskToShow).then(response => {
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
     })
-    this.test=true;
+    this.test = true;
   }
 
   deleteTask(id, ri) {
@@ -542,13 +546,13 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
         });
     }
   }
-  deleteTaskFromSiderbar(){
+  deleteTaskFromSiderbar() {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
       this.projectService.deleteTask(this.TaskToShow._id).then(() => {
-        this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie'});
+        this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' });
       })
     }
-    
+
   }
   taches(id, ri) {
     this.showTachesTable = true;
@@ -572,29 +576,28 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   // Affichage tache
   onShowTache(task: Task) {
     this.TaskToShow = task;
-    this.AtributateTable=[]
-    for (let i = 0; i < this.TaskToShow.attribuate_to.length;i++) {
+    this.AtributateTable = []
+    for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
       this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
     };
-    this.urgent=Boolean(this.TaskToShow?.urgent);
+    this.urgent = Boolean(this.TaskToShow?.urgent);
     console.log(this.urgent);
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
-      attribuate_to:this.AtributateTable,
-      urgent:this.TaskToShow.urgent,
+      attribuate_to: this.AtributateTable,
+      urgent: this.TaskToShow.urgent,
       description_task: this.TaskToShow.description_task,
       date_limite: this.conersiondate(this.TaskToShow.date_limite),
 
     })
     this.displayTache = true;
-
   }
   //passer une tache en doing
   ToDoing(t: Task) {
-    
-    if(t.etat==="En attente de traitement"){
-    const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskToDo.splice(indexToRemove, 1);}
-  }else{    const indexToRemove = this.taskDone.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDone.splice(indexToRemove, 1);}}
+
+    if (t.etat === "En attente de traitement") {
+      const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskToDo.splice(indexToRemove, 1); }
+    } else { const indexToRemove = this.taskDone.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskDone.splice(indexToRemove, 1); } }
     t.etat = "En cours de traitement"
     this.taskDoing.push(t);
     this.projectService.putTask(t).then(resultat => {
@@ -603,7 +606,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   }
   //passer une tache a Done
   ToDone(t: Task) {
-    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDoing.splice(indexToRemove, 1);}
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskDoing.splice(indexToRemove, 1); }
     t.etat = "Traiter"
     this.taskDone.push(t);
     this.projectService.putTask(t).then(resultat => {
@@ -612,15 +615,15 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
   }
   //passer une tache dans TODO
   ToToDo(t: Task) {
-    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id);if (indexToRemove !== -1) {this.taskDoing.splice(indexToRemove, 1);}
+    const indexToRemove = this.taskDoing.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskDoing.splice(indexToRemove, 1); }
     t.etat = "En attente de traitement"
     this.taskToDo.push(t);
     this.projectService.putTask(t).then(resultat => {
       this.messageService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
     });
   }
-  onCheckboxChange(event){
-    if (event.checked){this.TaskToShow.urgent=true;}else{this.TaskToShow.urgent=false;}
+  onCheckboxChange(event) {
+    if (event.checked) { this.TaskToShow.urgent = true; } else { this.TaskToShow.urgent = false; }
   }
   //PARTIE RESSOURCES
   addRessources() {
@@ -859,13 +862,14 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     document.getElementById('selectedFilesuivre').click();
   }
   deleteFile(index) {
-    if (confirm("Voulez-vous vraiment supprimer ce document  ?")){
-    this.TaskToShow.documents.splice(index, 1)
-    
-    this.projectService.putTask(this.TaskToShow).then(data => {
-      
-      this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
-    });}
+    if (confirm("Voulez-vous vraiment supprimer ce document  ?")) {
+      this.TaskToShow.documents.splice(index, 1)
+
+      this.projectService.putTask(this.TaskToShow).then(data => {
+
+        this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+      });
+    }
   }
   onAddDocumment() {
     if (!this.docAdded) {
@@ -884,7 +888,7 @@ this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`,
     this.TaskToShow.documents.push({ nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
   onUpdateFollow() {
-    
+
   }
   FileUpload(event) {
     console.log(event)

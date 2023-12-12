@@ -32,8 +32,10 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
-        <a href="#/skillsnet/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant || isExterne || isReinscrit">
-            <i class="pi pi-calendar" style="color: #37BAD4;" pTooltip="Mes disponibilités" tooltipPosition="bottom"></i>
+        <a href="#/skillsnet/mes-disponibilites" class="p-link layout-topbar-button"
+            *ngIf="isEtudiant || isExterne || isReinscrit">
+            <i class="pi pi-calendar" style="color: #37BAD4;" pTooltip="Mes disponibilités"
+                tooltipPosition="bottom"></i>
             <span>Mes disponibilités</span>
         </a>
         <a href="#/skillsnet/mes-rendez-vous" class="p-link layout-topbar-button" *ngIf="isCEO">
@@ -43,6 +45,10 @@
         <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="seeCRA">
             <i #cra class="pi pi-calendar" style="color: #37BAD4;" pTooltip="CRA" tooltipPosition="bottom"></i>
             <span>CRA</span>
+        </a>
+        <a href="#/mytask" class="p-link layout-topbar-button" *ngIf="seeCRA">
+            <i #cra class="pi pi-user-edit" style="color: #37BAD4;" pTooltip="Mes Tâches" tooltipPosition="bottom"></i>
+            <span>Mes Tâches</span>
         </a>
         <a href="#/Links" class="p-link layout-topbar-button" *ngIf="seeCRA">
             <i class="pi pi-globe" style="color: #37BAD4;" pTooltip="Links" tooltipPosition="bottom"></i>
