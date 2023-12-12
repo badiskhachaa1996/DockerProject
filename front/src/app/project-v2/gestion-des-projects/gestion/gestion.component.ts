@@ -833,9 +833,29 @@ export class GestionComponent implements OnInit {
         this.sujetDropdown.push({ label: val.label, value: val._id })
       })
     })
-    console.log(this.TicketForm.get('service_id').value);
-    console.log(this.TicketForm.value.service_id)
   }
+
+  onChange(newAttrbution = false) {
+    this.test = false;
+    this.TaskToShow.attribuate_to = [];
+    for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
+      this.TaskToShow.attribuate_to.push(this.dicUsers[this.taskToShowForm.value.attribuate_to[i]]);
+    }
+    if (newAttrbution) {
+      this.TaskToShow.attribuate_by = this.token.id
+      this.TaskToShow.attribuate_date = new Date()
+    }
+    this.TaskToShow.number_of_hour = this.taskToShowForm.value?.number_of_hour;
+
+    this.TaskToShow.date_limite = this.taskToShowForm.value?.date_limite;
+    this.TaskToShow.description_task = this.taskToShowForm.value?.description_task;
+    const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskToDo[indexToRemove] = this.TaskToShow; }
+    this.projectService.putTask(this.TaskToShow).then(response => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
+    })
+    this.test = true;
+  }
+
   onUpload(event: { files: File[] }, fileUpload: FileUpload) {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
@@ -862,9 +882,7 @@ export class GestionComponent implements OnInit {
 
   }
   onSelectedTache(event) {
-    console.log("hello");
     const taskID = event.value;
-    console.log("hello");
     this.projectService.getTask(taskID).then(data => {
       this.taskSelected = data;
       console.log(this.taskSelected)

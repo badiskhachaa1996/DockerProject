@@ -352,7 +352,17 @@ export class ProjectService {
 
   getLabels() {
     const url = `${this.apiUrl}/get-labels`
-    return this.httpClient.get<Label>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<Label[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  updateLabel(label: Label) {
+    const url = `${this.apiUrl}/update-label`
+    return this.httpClient.put<Label>(url, label, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  deleteLabel(id) {
+    const url = `${this.apiUrl}/delete-label/${id}`
+    return this.httpClient.delete<Label>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 

@@ -1,3 +1,5 @@
+<input type="file" (change)="FileUpload($event.target.files)" id="selectedFileDoc" #selectedFileDoc
+    style="display: none;" pInputFile />
 <div class="grid col-12">
     <div class="col-4 ">
         <p-card header="To DO({{taskToDo.length}}) " class="card-todo">
@@ -131,12 +133,12 @@
 
 </div>
 
-<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}">
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}" (onHide)="onUpdate()">
 
     <div class="grid col-12" *ngIf="TaskToShow">
         <div class="col-12">
-            Durée estimée:<br>
-            {{calcDureeEst()}}
+            Nombre d'heures estimée:<br>
+            {{TaskToShow.number_of_hour}}H
         </div>
         <div class="col-12">
             Durée mise:<br>
@@ -153,10 +155,28 @@
         </div>
         <div class="col-10">
             Labels:<br>
-            <p-multiSelect [(ngModel)]="TaskToShow.labels" (onSelect)="onUpdate()"></p-multiSelect> <!--TODO-->
+            <p-multiSelect [(ngModel)]="TaskToShow.labels" defaultLabel="Choisissez un label" (onChange)="onUpdate()"
+                autoWidth="false" [options]="labels" [style]="{'width':'100%'}" class="multiselect-custom">
+                <ng-template let-value pTemplate="selectedItems">
+                    <div class="country-item country-item-value" *ngFor="let option of TaskToShow.labels"
+                        [style]="{'background-color':option.color}">
+                        <div>{{option.libelle}}</div>
+                    </div>
+                    <div *ngIf="!TaskToShow.labels || TaskToShow.labels.length === 0" class="country-placeholder">
+                        Choisissez un label
+                    </div>
+                </ng-template>
+                <ng-template let-label pTemplate="item">
+                    <div class="country-item-value" [style]="{'background-color':label.color}">
+                        <div>{{label.libelle}}</div>
+                    </div>
+                </ng-template>
+            </p-multiSelect>
         </div>
         <div class="col-2">
-
+            &nbsp;<br>
+            <button pButton icon="pi pi-cog" (click)="showLabelConfig = true" pTooltip="Configurer les labels"
+                tooltipPosition="bottom"></button>
         </div>
     </div>
     <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.commentaires" class="col-12"
@@ -182,7 +202,7 @@
                 <td>
                     {{commentaire?.date | date: 'dd MMMM YY'}}
                 </td>
-                <td pEditableColumn>
+                <td pEditableColumn pTooltip="Clickez pour modifier" tooltipPosition="bottom">
                     <p-cellEditor>
                         <ng-template pTemplate="input">
                             <textarea *ngIf="commentaire?.by._id==token.id" type="text" pInputTextarea
@@ -201,13 +221,15 @@
         </ng-template>
     </p-table>
     <br>
-    <button pButton icon="pi pi-plus" (click)="onAddComment()"></button>
+    <button pButton icon="pi pi-plus" (click)="onAddComment()" pTooltip="Ajouter un commentaire"
+        tooltipPosition="bottom"></button>
     <br>
     <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom">
+                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom"
+                        pTooltip="Clickez pour modifier" tooltipPosition="bottom">
                     </p-sortIcon>
                 </th>
                 <th>
@@ -232,7 +254,8 @@
                     </p-cellEditor>
                 </td>
                 <td *ngIf="document?.path">
-                    <a (click)="downloadFile(ri)">Télécharger le document</a>
+                    <i pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
+                        (click)="downloadFile(doc)" style="color: green;" aria-hidden="true"></i>
                 </td>
                 <td *ngIf="!document?.path">
                     <a (click)="uploadFile(ri)">Uploader le document</a>
@@ -248,8 +271,51 @@
         </ng-template>
     </p-table>
     <br>
-    <button pButton icon="pi pi-plus" (click)="onAddDocuments()"></button>
+    <button pButton icon="pi pi-plus" (click)="onAddDocuments()" pTooltip="Ajouter un document"
+        tooltipPosition="bottom"></button>
     <br> <br>
     <button pButton label="Archiver" icon="pi pi-check" class="p-button"></button>
 
 </p-sidebar>
+
+<p-dialog header="Configuration des labels" [(visible)]="showLabelConfig" [style]="{width: '50vw'}" [modal]="true">
+    <button pButton icon="pi pi-plus" class="p-button" (click)="onAddLabel()"></button>
+    <p-table dataKey="_id" [value]="labels" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom">
+                    </p-sortIcon>
+                </th>
+                <th>
+                    Couleur
+                </th>
+
+                <th style="text-align: center;">
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-label let-ri="rowIndex">
+            <tr [pEditableRow]="label">
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input type="text" pInputText [(ngModel)]="label.libelle" (blur)="onUpdateLabel(label)">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{label?.libelle}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-colorPicker appendTo="body" [(ngModel)]="label.color"
+                        (onHide)="onUpdateLabel(label)"></p-colorPicker>
+                </td>
+                <td>
+                    <i style="padding-left: 3%;" pTooltip="Supprimer le label" tooltipPosition="bottom"
+                        class="pi pi-trash mr-2" aria-hidden="true" (click)="deleteLabel(label)"> </i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

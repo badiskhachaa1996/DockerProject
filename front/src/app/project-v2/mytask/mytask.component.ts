@@ -15,6 +15,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { saveAs } from "file-saver";
 import mongoose from 'mongoose';
 import { RhService } from 'src/app/services/rh.service';
+import { Label } from 'src/app/models/project/Label';
 @Component({
   selector: 'app-mytask',
   templateUrl: './mytask.component.html',
@@ -28,7 +29,8 @@ export class MytaskComponent implements OnInit {
   taskDone: Task[] = []
   userList: any[] = []
   constructor(private userService: AuthService, private ToastService: MessageService, private projectService: ProjectService, private rhService: RhService) { }
-
+  showLabelConfig = false
+  labels: Label[] = []
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getAllInformation();
@@ -58,6 +60,10 @@ export class MytaskComponent implements OnInit {
           this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user })
         }
       })
+    })
+
+    this.projectService.getLabels().subscribe(data => {
+      this.labels = data
     })
   }
   TaskToShow: Task
@@ -109,7 +115,7 @@ export class MytaskComponent implements OnInit {
   }
   onUpdate() {
     this.projectService.putTask({ ...this.TaskToShow }).then(r => {
-
+      console.log('Tache modifié')
     })
   }
 
@@ -128,7 +134,7 @@ export class MytaskComponent implements OnInit {
   }
   uploadFile(index) {
     this.indexDocuments = index
-    document.getElementById('selectedFilesuivre').click();
+    document.getElementById('selectedFileDoc').click();
   }
   deleteFile(index) {
     if (confirm("Voulez-vous vraiment supprimer ce document  ?")) {
@@ -176,11 +182,28 @@ export class MytaskComponent implements OnInit {
 
   }
 
-  calcDureeEst() {
-    return "XH xxmin"
+  calcDureeMise() {
+
+    /*let HRestant = (this.TaskToShow.avancement * this.TaskToShow.number_of_hour) / 100
+    let MinRestant = (Math.abs(HRestant) - Math.floor(HRestant)) * 60
+    return `${Math.trunc(HRestant)}H ${Math.trunc(MinRestant)}min`*/
+
+    return "XXH XXmin"
   }
 
-  calcDureeMise() {
-    return "XH xxmin"
+  onAddLabel() {
+    this.projectService.createLabel({ color: '#37BAD4', libelle: 'Label' }).subscribe(r => {
+      this.labels.push(r)
+    })
+  }
+  onUpdateLabel(label) {
+    this.projectService.updateLabel(label).subscribe(r => {
+    })
+  }
+
+  deleteLabel(label) {
+    this.projectService.deleteLabel(label._id).subscribe(r => {
+      this.labels.splice(this.labels.indexOf(label), 1)
+    })
   }
 }
