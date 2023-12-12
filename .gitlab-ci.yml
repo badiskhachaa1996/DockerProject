@@ -291,7 +291,8 @@ build_front_on_dev:
 
   script:
       - cd front
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=dev
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=dev
   only:
     - develop
   artifacts:
@@ -312,7 +313,8 @@ build_forms-app_on_dev:
 
   script:
       - cd forms-app
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=dev
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=dev
   only:
     - develop
   artifacts:
@@ -335,7 +337,8 @@ build_front_on_qa:
 
   script:
       - cd front
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - main
   artifacts:
@@ -356,7 +359,8 @@ build_forms-app_on_qa:
 
   script:
       - cd forms-app
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=qa
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=qa
   only:
     - main
   artifacts:
@@ -379,7 +383,8 @@ build_front_on_prod2:
 
   script:
       - cd front
-      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod2
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
   artifacts:
@@ -400,7 +405,8 @@ build_forms-app_on_prod2:
 
   script:
       - cd forms-app
-      - node --max-old-space-size=4096 node_modules/@angular/cli/bin/ng build --configuration=prod2
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=prod2
   only:
     - main
   artifacts:
@@ -423,7 +429,8 @@ manual_build_front_on_prod1:
 
   script:
       - cd front
-      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod1
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=prod1
   only:
     - main
   artifacts:
@@ -445,7 +452,8 @@ manual_build_forms-app_on_prod1:
 
   script:
       - cd forms-app
-      - node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build --configuration=prod1
+      - npm ci
+      - node node_modules/@angular/cli/bin/ng build --configuration=prod1
   only:
     - main
   artifacts:
@@ -518,7 +526,7 @@ deploy_back_to_dev:
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
-    - npm install
+    - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --dev
     - pm2 save
@@ -559,7 +567,7 @@ deploy_back_to_qa:
   script:
     - cd back
     - ln -s /home/gitlab-runner/storage storage
-    - npm install
+    - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --qa
     - pm2 save
@@ -600,7 +608,7 @@ deploy_back_to_prod2:
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
-    - npm install
+    - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
     - pm2 save
@@ -641,7 +649,7 @@ manual_deploy_back_to_prod1:
   script:
     - cd back
     - ln -s /home/ubuntu/storage storage
-    - npm install
+    - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
     - pm2 save
