@@ -30,14 +30,14 @@ install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
-    paths:
-      - back/node_modules/
+#  cache: 
+#    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+#    paths:
+#      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
-    - npm install
+#    - npm install
   only:
     refs:
       - develop
