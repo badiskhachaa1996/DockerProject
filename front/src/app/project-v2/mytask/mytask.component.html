@@ -151,9 +151,12 @@
             Description:<br>
             {{TaskToShow.description_task}}
         </div>
-        <div class="col-12">
+        <div class="col-10">
             Labels:<br>
             <p-multiSelect [(ngModel)]="TaskToShow.labels" (onSelect)="onUpdate()"></p-multiSelect> <!--TODO-->
+        </div>
+        <div class="col-2">
+
         </div>
     </div>
     <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.commentaires" class="col-12"

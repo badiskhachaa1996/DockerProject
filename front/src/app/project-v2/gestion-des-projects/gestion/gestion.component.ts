@@ -24,12 +24,19 @@ import { Notification } from 'src/app/models/notification';
 import { ActivatedRoute } from '@angular/router';
 import { PrimeIcons, MenuItem } from 'primeng/api';
 
+
 @Component({
   selector: 'app-gestion',
   templateUrl: './gestion.component.html',
   styleUrls: ['./gestion.component.scss'],
 })
 export class GestionComponent implements OnInit {
+  colors: string[] = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+
+  handleColorClick(color: string): void {
+    console.log(`Color clicked: ${color}`);
+    // Ajoutez votre logique ici pour gérer le clic sur la couleur
+  }
 
   tasks = [
     { label: 'Tâche 1', value: 'task1', category: 'todo' },
@@ -44,7 +51,8 @@ export class GestionComponent implements OnInit {
   doneTasks = this.tasks.filter(task => task.category === 'done');
   TaskToShow: Task;
   buttonName: string = "Ajouter";
-  AtributateTable: any[] = []
+  AtributateTable: any[] = [];
+  initAttribuateTo: any[] = [];;
   private task_id!: string;
   private project_id!: string;
   private ressources_id!: string;
@@ -128,6 +136,10 @@ export class GestionComponent implements OnInit {
     number_of_hour: new FormControl(),
     date_limite: new FormControl(),
     description_task: new FormControl('',),
+    tag: new FormControl(''),
+
+
+
   })
   uploadedFiles: File[] = [];
   constructor(
@@ -209,7 +221,8 @@ export class GestionComponent implements OnInit {
       priorite: ['', Validators.required],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      urgent: [false, Validators.required],
     });
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
@@ -277,7 +290,7 @@ export class GestionComponent implements OnInit {
       .then((response) => {
         this.responsableListe = [];
         response.forEach((user: Collaborateur) => {
-          if(user && user.user_id){
+          if (user && user.user_id) {
             const newUser = {
               label: `${user.user_id.firstname} ${user.user_id.lastname}`,
               value: [user.user_id._id, user.user_id.firstname + " " + user.user_id.lastname]
@@ -374,6 +387,7 @@ export class GestionComponent implements OnInit {
         this.projectService.putProject(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' })
       this.formAddProject.reset();
+      this.showUpdateProjectForm = false;
       const indexToRemove = this.project.findIndex(project => project._id === this.project_id); if (indexToRemove !== -1) { this.project[indexToRemove] = data; }
     })
   }
@@ -397,6 +411,7 @@ export class GestionComponent implements OnInit {
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
       identifian: costumid_,
+      urgent: this.formAddTache.get('urgent').value,
     }
     this.projectService.postTask(newTache).then((resultat) => {
       this.taskToDo.push(resultat.task);
@@ -445,6 +460,7 @@ export class GestionComponent implements OnInit {
       number_of_hour: task.number_of_hour,
       date_limite: new Date(new_date),
       description: task.description_task,
+
 
     });
   }
@@ -516,7 +532,7 @@ export class GestionComponent implements OnInit {
   onChange() {
     this.test = false;
     this.TaskToShow.attribuate_to = [];
-    console.log(this.dicUsers,this.taskToShowForm.value.attribuate_to)
+    console.log(this.dicUsers, this.taskToShowForm.value.attribuate_to)
     for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
       this.TaskToShow.attribuate_to.push(this.dicUsers[this.taskToShowForm.value.attribuate_to[i]]);
 

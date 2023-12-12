@@ -1,4 +1,5 @@
 import { User } from "../User";
+import { Label } from "./Label";
 
 export class Task {
     constructor
@@ -30,6 +31,7 @@ export class Task {
                 description?: string,
                 by?: User,
                 date: Date
-            }[]
+            }[],
+            public labels?: Label[],
         ) { }
 }

@@ -9,6 +9,7 @@ const multer = require('multer');
 const fs = require("fs")
 var mime = require('mime-types')
 const path = require('path');
+const { Label } = require("../models/project/Label");
 
 
 
@@ -276,10 +277,28 @@ app.post("/insertDB", (req, res) => {
     })
 })
 
+app.post("/ajout-label", (req, res) => {
+    let label = new Label({ ...req.body })
+    label.save()
+        .then((labelCreated) => {
+            res.status(201).json(labelCreated)
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).json(error);
+                })
+
+        })
+
+})
 
 
+app.get('/get-labels', (req, res) => {
+    Label.find().then(labels => {
+        res.send(labels)
+    })
+})
 
+app.post('/update-label', (req, res) => {
 
-
-
+})
 module.exports = app;

@@ -38,7 +38,7 @@ const sch = mongoose.Schema({
     typePartenaire: { type: String },
     groupeWhatsApp: { type: String },
     localisation: { type: String },
-    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "memberInt" },
+    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "collaborateur" },
     created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     ville_ent:{ type: String },
     code_postale_ent:{ type: String},

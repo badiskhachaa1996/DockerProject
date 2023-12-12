@@ -7,6 +7,7 @@ import {ContactUsAdgComponent} from "./components/contact-us-adg/contact-us-adg.
 import {ContactUsIcbsComponent} from "./components/contact-us-icbs/contact-us-icbs.component";
 import {ContactUsIegComponent} from "./components/contact-us-ieg/contact-us-ieg.component";
 import {ContactUsSimpleComponent} from "./components/contact-us-simple/contact-us-simple.component";
+import {ContactIcbsEngComponent} from "./components/contact-icbs-eng/contact-icbs-eng.component";
 
 const routes: Routes = [
   //{ path: 'contact-form/:ecole', component: ContactUsComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'contact-form/adg', component: ContactUsAdgComponent },
   { path: 'contact-form/medasup', component: ContactUsAdgComponent },
   { path: 'contact-form/icbs', component: ContactUsIcbsComponent },
+  { path: 'contact-form/icbs/eng', component: ContactIcbsEngComponent },
   { path: 'contact-form/ieg', component: ContactUsIegComponent },
 ];
 

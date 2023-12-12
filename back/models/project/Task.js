@@ -32,6 +32,10 @@ const taskSchema = mongoose.Schema({
         }],
         default: []
     },
+    labels: {
+        type: [mongoose.Schema.Types.ObjectId], ref: 'label',
+        default: []
+    }
 });
 
 const Task = mongoose.model('tasks', taskSchema);
