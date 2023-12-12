@@ -68,9 +68,12 @@ body {
 .p-button-custom:hover , .p-button-custom:active{
   background-color: #e0222e !important;
 }
-.p-inputswitch .p-component .p-inputswitch-checked {
-  background-color: red !important;
+
+/* Checked state */
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: #e0222e !important;
 }
+
 /* Assuming .custom-switch is a class that you apply to the container div */
 .custom-switch .ui-inputswitch {
   /* Change the background color for the switch */
