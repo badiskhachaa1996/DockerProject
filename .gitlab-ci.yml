@@ -291,7 +291,7 @@ build_front_on_dev:
   only:
     - develop
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-front
     paths:
       - front/dist
     expire_in: 1 hour
@@ -312,7 +312,7 @@ build_forms-app_on_dev:
   only:
     - develop
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-forms-app
     paths:
       - forms-app/dist
     expire_in: 1 hour
@@ -335,7 +335,7 @@ build_front_on_qa:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-front
     paths:
       - front/dist
     expire_in: 1 hour
@@ -356,7 +356,7 @@ build_forms-app_on_qa:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-forms-app
     paths:
       - forms-app/dist
     expire_in: 1 hour
@@ -379,7 +379,7 @@ build_front_on_prod2:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-front
     paths:
       - front/dist
     expire_in: 1 hour
@@ -400,7 +400,7 @@ build_forms-app_on_prod2:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-forms-app
     paths:
       - forms-app/dist
     expire_in: 1 hour
@@ -423,7 +423,7 @@ manual_build_front_on_prod1:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-front
     paths:
       - front/dist
     expire_in: 1 hour
@@ -445,7 +445,7 @@ manual_build_forms-app_on_prod1:
   only:
     - main
   artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-forms-app
     paths:
       - forms-app/dist
     expire_in: 1 hour

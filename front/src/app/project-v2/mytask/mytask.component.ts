@@ -87,7 +87,7 @@ export class MytaskComponent implements OnInit {
     t.etat = "En cours de traitement"
     this.taskDoing.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.ToastService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
+      //this.ToastService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
     });
   }
 
@@ -99,7 +99,7 @@ export class MytaskComponent implements OnInit {
     t.etat = "Traiter"
     this.taskDone.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.ToastService.add({ severity: 'success', summary: 'success', detail: '  Done' })
+      //this.ToastService.add({ severity: 'success', summary: 'success', detail: '  Done' })
     });
   }
   //passer une tache dans TODO
@@ -110,7 +110,7 @@ export class MytaskComponent implements OnInit {
     t.etat = "En attente de traitement"
     this.taskToDo.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.ToastService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
+      //this.ToastService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
     });
   }
   onUpdate() {
@@ -123,7 +123,6 @@ export class MytaskComponent implements OnInit {
   indexDocuments = 0
   downloadFile(index) {
     this.indexDocuments = index
-    console.log(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path)
     this.projectService.downloadFile(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       saveAs(new Blob([byteArray], { type: data.documentType }), this.TaskToShow.documents[index].path)
@@ -141,8 +140,7 @@ export class MytaskComponent implements OnInit {
       this.TaskToShow.documents.splice(index, 1)
 
       this.projectService.putTask(this.TaskToShow).then(data => {
-
-        this.ToastService.add({ severity: "success", summary: "Mis à jour du lead avec succès" })
+        this.ToastService.add({ severity: "success", summary: "Suppression du document avec succès" })
       });
     }
   }
@@ -166,6 +164,7 @@ export class MytaskComponent implements OnInit {
         this.ToastService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.TaskToShow.documents[this.indexDocuments].path = event[0].name
         event = null;
+        this.onUpdate()
         //this.fileInput.clear()
       }, error => {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
@@ -176,7 +175,7 @@ export class MytaskComponent implements OnInit {
   deleteTaskFromSiderbar() {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
       this.projectService.deleteTask(this.TaskToShow._id).then(() => {
-        this.ToastService.add({ severity: 'success', summary: 'success', detail: ' réussie' });
+        this.ToastService.add({ severity: 'success', summary: 'Suppression de l\'activité avec succès' });
       })
     }
 
@@ -194,6 +193,7 @@ export class MytaskComponent implements OnInit {
   onAddLabel() {
     this.projectService.createLabel({ color: '#37BAD4', libelle: 'Label' }).subscribe(r => {
       this.labels.push(r)
+
     })
   }
   onUpdateLabel(label) {
