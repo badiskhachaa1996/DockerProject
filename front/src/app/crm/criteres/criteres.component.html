@@ -35,7 +35,7 @@
     <div class="col-12 grid" *ngIf="newCritere">
         <div class="card col-12">
 
-            <h4 style="text-align: center;">Ajout d'un nouveau critere </h4>
+            <h4 style="text-align: center;">Ajout d'un nouveau critère </h4>
             <div style="text-align: center;">
                 <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
                         style="color: red;"> * </span> sont obligatoires</small>
@@ -57,7 +57,6 @@
                 <div style="display: flex;">
                     <button pButton label="Valider" type="submit" ></button>
                     
-                    <button pButton type="button" (click)="newCritere = false; createForm.reset()" aria-hidden="true" label="Retour" [style]="{ 'margin-left': '.5em' }"></button>
                     
                     <p-dialog id="dialogValidation" header="Saisie invalid" [(visible)]="alertValidation" [style]="" (onHide)="visible = false">
                         <p>{{ messageValidation }}</p>
@@ -74,7 +73,7 @@
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Créer"
                     (click)="initCreate()"></button>
             </div>
-            <h5>Liste des criteres du CRM</h5>
+            <h5>Liste des critères du CRM</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="criteres" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['nom', 'description']" [rows]="5" [pageLinks]="5" [paginator]="true"
@@ -90,7 +89,7 @@
                         </th> -->
                      
 
-                        <th pSortableColumn="nom">Nom du critere<p-sortIcon field="nom">
+                        <th pSortableColumn="nom">Nom du critère<p-sortIcon field="nom">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="description">Description<p-sortIcon field="description">

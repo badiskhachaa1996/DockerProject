@@ -35,8 +35,8 @@ export class ReportingComponent implements OnInit {
   contacte : number = 0;
   nonContacte : number = 0;
 
-  equipeFilte=[{ label: 'toutes les équipes', value: null }];
-  membreFiltre=[{ label: 'tous les membres', value: null }];
+  equipeFilte=[{ label: 'Toutes les équipes', value: null }];
+  membreFiltre=[{ label: 'Tous les membres', value: null }];
   
 
   constructor(private LCS: LeadcrmService,private TeamCRMService: TeamsCrmService,) { }

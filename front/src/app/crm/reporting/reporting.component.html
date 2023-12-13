@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-filter">
-            <i class="pi pi-user"></i><label class="labelName">membre</label><br>
+            <i class="pi pi-user"></i><label class="labelName">Membres</label><br>
             <p-dropdown styleClass="styleFliter"  filter="true" placeholder="membres" autoWidth="false"
             [style]="{'width':'100%'}" [options]="membreFiltre"
             (onChange)="onFiltreMembre($event)"
@@ -21,7 +21,7 @@
 
         </div>
         <div class="col-filter">
-            <i class="pi pi-users"></i><label class="labelName">équipes</label><br>
+            <i class="pi pi-users"></i><label class="labelName">Équipes</label><br>
             <p-dropdown styleClass="styleFliter" filter="true" placeholder="équipes"  autoWidth="false" 
                 [style]="{'width':'100%'}" [options]="equipeFilte"  (onChange)="onFiltreEquipe($event)"
                 emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole">
