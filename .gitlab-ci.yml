@@ -505,19 +505,7 @@ manual_build_forms-app_on_prod1:
 #       allow_failure: true # FIXME
 
 #==========================================================
-  
-deploy_front_to_dev:
-  stage: DEV
-  dependencies: 
-    - build_front_on_dev
-  tags:
-    - dev-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - develop
-    
+
 deploy_forms-app_to_dev:
   stage: DEV
   dependencies: 
@@ -527,6 +515,18 @@ deploy_forms-app_to_dev:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - develop
+
+deploy_front_to_dev:
+  stage: DEV
+  dependencies: 
+    - build_front_on_dev
+  tags:
+    - dev-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - develop
 
@@ -543,22 +543,15 @@ deploy_back_to_dev:
     - pm2 delete index
     - pm2 start index.js --time -- --dev
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - develop
 
 #==========================================================
-
-deploy_front_to_qa:
-  stage: QA
-  dependencies: 
-    - build_front_on_qa
-  tags:
-    - qa-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
 
 deploy_forms-app_to_qa:
   stage: QA
@@ -569,6 +562,18 @@ deploy_forms-app_to_qa:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - main
+
+deploy_front_to_qa:
+  stage: QA
+  dependencies: 
+    - build_front_on_qa
+  tags:
+    - qa-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
 
@@ -585,23 +590,16 @@ deploy_back_to_qa:
     - pm2 delete index
     - pm2 start index.js --time -- --qa
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
 
 #==========================================================
-  
-deploy_front_to_prod2:
-  stage: PROD2
-  dependencies:
-    - build_front_on_prod2
-  tags:
-    - prod2-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
-    
+      
 deploy_forms-app_to_prod2:
   stage: PROD2
   dependencies:
@@ -611,6 +609,18 @@ deploy_forms-app_to_prod2:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - main
+
+deploy_front_to_prod2:
+  stage: PROD2
+  dependencies:
+    - build_front_on_prod2
+  tags:
+    - prod2-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
 
@@ -627,23 +637,15 @@ deploy_back_to_prod2:
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
 
 #==========================================================
-  
-manual_deploy_front_to_prod1:
-  stage: PROD1
-  dependencies:
-    - manual_build_front_on_prod1
-  tags:
-    - prod1-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
-  when: manual
 
 manual_deploy_forms-app_to_prod1:
   stage: PROD1
@@ -654,6 +656,19 @@ manual_deploy_forms-app_to_prod1:
   script:
     - sudo rm -r /var/www/html/ims/forms-app
     - sudo mv -f forms-app/dist/forms-app /var/www/html/ims
+  only:
+    - main
+  when: manual
+
+manual_deploy_front_to_prod1:
+  stage: PROD1
+  dependencies:
+    - manual_build_front_on_prod1
+  tags:
+    - prod1-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - main
   when: manual
@@ -671,6 +686,11 @@ manual_deploy_back_to_prod1:
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
   when: manual
