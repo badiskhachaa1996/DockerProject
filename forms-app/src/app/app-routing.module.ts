@@ -6,13 +6,14 @@ import {ContactUsIntunsComponent} from "./components/contact-us-intuns/contact-u
 import {ContactUsAdgComponent} from "./components/contact-us-adg/contact-us-adg.component";
 import {ContactUsIcbsComponent} from "./components/contact-us-icbs/contact-us-icbs.component";
 import {ContactUsIegComponent} from "./components/contact-us-ieg/contact-us-ieg.component";
-import {ContactUsSimpleComponent} from "./components/contact-us-simple/contact-us-simple.component";
+import {ContactUsBtechComponent} from "./components/contact-us-btech/contact-us-btech.component";
 import {ContactIcbsEngComponent} from "./components/contact-icbs-eng/contact-icbs-eng.component";
 import {ContactUsMedasupComponent} from "./components/contact-us-medasup/contact-us-medasup.component";
+import {ContactUsIntComponent} from "./components/contact-us-int/contact-us-int.component";
 
 const routes: Routes = [
   //{ path: 'contact-form/:ecole', component: ContactUsComponent },
-  { path: 'contact-form', component: ContactUsSimpleComponent },
+  { path: 'contact-form/btech', component: ContactUsBtechComponent },
   { path: 'contact-form/espic', component: ContactUsEspicComponent },
   { path: 'contact-form/intuns', component: ContactUsIntunsComponent },
   { path: 'contact-form/adg', component: ContactUsAdgComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'contact-form/icbs', component: ContactUsIcbsComponent },
   { path: 'contact-form/icbs/eng', component: ContactIcbsEngComponent },
   { path: 'contact-form/ieg', component: ContactUsIegComponent },
+  { path: 'contact-form/int', component: ContactUsIntComponent },
 ];
 
 
