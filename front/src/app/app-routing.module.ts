@@ -225,8 +225,6 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             }, //Admission
 
-
-
             {
                 path: 'profil',
                 component: UserProfilComponent,
@@ -249,13 +247,6 @@ const routes: Routes = [
                 component: ProspectsIntunsComponent,
                 canActivate: [AuthGuardService],
             },
-
-
-
-
-
-
-
 
             {
                 path: 'remboursements',
@@ -302,8 +293,6 @@ const routes: Routes = [
 
             { path: 'stages', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
             { path: 'stages/:id', loadChildren: () => import('./commercial/commercial.module').then(m => m.CommercialModule) },
-
-
 
             {
                 path: 'matching-externe/:id',
@@ -542,9 +531,6 @@ const routes: Routes = [
     {
         path: 'formulaire-entreprise/:code',
         component: InscriptionEntrepriseComponent,
-    },
-    {
-        path: 'formulaire-crm/:ecole', loadChildren: () => import('./crm/formcrm.module').then(m => m.FormCRMModule)
     },
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'formulaire-mi', component: FormulaireMIComponent },
