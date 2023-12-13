@@ -1,0 +1,91 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,600);
+
+:host {
+  display: block;
+}
+
+body {
+  background-color: #ffffff !important;
+  padding: 20px;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+}
+
+.legend {
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #515151;
+}
+
+.form-control {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  height: 55px;
+  border-radius: 3px;
+  border-color: #d3d3d3;
+}
+
+.form-control:focus {
+  border: 1px solid #93c01f !important;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #797979;
+}
+
+.form-control:-moz-placeholder {
+  color: #797979;
+}
+
+.form-control::-moz-placeholder {
+  color: #797979;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #797979;
+}
+
+.control-label {
+  font-weight: 600;
+}
+
+.btn {
+  background-color: #219a9b !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  box-shadow: 0 0 0 !important;
+  padding: 16px 32px;
+}
+
+.p-button-custom {
+  background-color: #219a9b !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  box-shadow: 0 0 0 !important;
+  padding: 16px 32px;
+}
+
+.btn:hover, .btn:active, .btn:focus {
+  background-color: #93c01f !important;
+  opacity: 0.85;
+  border: 0 !important;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.p-button-custom:hover , .p-button-custom:active{
+  background-color: #93c01f !important;
+}
+
+/* Checked state */
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: #93c01f !important;
+}
