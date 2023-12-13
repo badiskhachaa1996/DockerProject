@@ -1,9 +1,9 @@
 <div class="filters-container">
     <div class="grid col-12">
         <h1 class="col-12" style="text-align: center;text-align: center;
-        text-decoration: underline;
+        
         font-family: inherit;
-        color: #050567;">Reporting</h1>
+        color: #03033b;">Reporting</h1>
         
         <div class="col-filter">
             <i class="pi pi-calendar"></i><label class="labelName">Date</label><br>
@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-filter">
-            <i class="pi pi-user"></i><label class="labelName">membre</label><br>
+            <i class="pi pi-user"></i><label class="labelName">Membres</label><br>
             <p-dropdown styleClass="styleFliter"  filter="true" placeholder="membres" autoWidth="false"
             [style]="{'width':'100%'}" [options]="membreFiltre"
             (onChange)="onFiltreMembre($event)"
@@ -28,8 +28,8 @@
             </p-dropdown>
         </div>
 
-        <button class="buttonR"  (click)="reinitialiserFiltres()">Réinitialiser les Filtres</button>
-
+        
+        <button pButton label="Vider&nbsp;" (click)="reinitialiserFiltres()" class="p-button" icon="pi pi-filter-slash"> </button>
 
     </div>
 </div>
