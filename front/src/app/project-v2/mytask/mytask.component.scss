@@ -1,7 +1,44 @@
-.green-text {
-    color: green;
+:host ::ng-deep .p-multiselect {
+    min-width: 15rem;
 }
 
-.red-text {
-    color: red;
+:host ::ng-deep .multiselect-custom {
+    .p-multiselect-label {
+        padding-top: .25rem;
+        padding-bottom: .25rem;
+    }
+
+    .country-item-value {
+        padding: .25rem .5rem;
+        border-radius: 3px;
+        display: inline-flex;
+        margin-right: .5rem;
+        color: white;
+    }
+
+    .country-placeholder {
+        padding: 0.25rem;
+    }
+}
+.label {
+    padding: .25rem .5rem;
+    border-radius: 3px;
+    display: inline-flex;
+    margin-right: .5rem;
+    color: white;
+}
+:host ::ng-deep .card-todo .p-component {
+    background: rgb(241, 241, 241) !important;
+    /* Couleur pour To Do */
+}
+
+:host ::ng-deep .card-doing .p-component {
+    background: rgb(241, 241, 241) !important;
+    ;
+    /* Couleur pour To Doing */
+}
+
+:host ::ng-deep .card-done .p-component {
+    background: rgb(241, 241, 241) !important;
+    /* Couleur pour To Done */
 }

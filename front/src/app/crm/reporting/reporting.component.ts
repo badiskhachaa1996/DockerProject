@@ -35,7 +35,7 @@ export class ReportingComponent implements OnInit {
   contacte : number = 0;
   nonContacte : number = 0;
 
-  equipeFilte=[{ label: 'Toutes les équipes', value: null }];
+  equipeFiltre=[{ label: 'Toutes les équipes', value: null }];
   membreFiltre=[{ label: 'Tous les membres', value: null }];
   
 
@@ -71,7 +71,7 @@ export class ReportingComponent implements OnInit {
     ];
     this.TeamCRMService.TIgetAll().subscribe(equipes=>{
       equipes.forEach(equipe=>{
-    this.equipeFilte.push({ label: `${equipe.nom}`, value:equipe.nom })
+    this.equipeFiltre.push({ label: `${equipe.nom}`, value:equipe.nom })
       })
     })
 

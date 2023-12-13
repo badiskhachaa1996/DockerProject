@@ -22,15 +22,11 @@ export class ContactIcbsEngComponent implements OnInit {
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
-    numero_phone: new FormControl(''),
-    dernier_niveau_academique: new FormControl(''),
-    whatsapp: new FormControl("Non"),
-    formation: new FormControl(''),
+    numero_phone: new FormControl('+33', Validators.required),
+    whatsapp: new FormControl(false),
     note_choix: new FormControl('')
   })
 
-  prospects = []
-  form_origin: string = this.route.snapshot.paramMap.get('ecole')!; //eduhorizons estya adg espic studinfo
 
   onAdd() {
     let numero_whatsapp = ''
@@ -40,7 +36,7 @@ export class ContactIcbsEngComponent implements OnInit {
     } else {
       if (this.addForm.value.whatsapp.includes('Oui'))
         numero_whatsapp = this.addForm.value.numero_phone
-      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ICBS`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           this.ToastService.add({ severity: "success", summary: "We have successfully received your inquiry! We will get back to you as soon as possible." })
         },
@@ -71,28 +67,12 @@ export class ContactIcbsEngComponent implements OnInit {
   }
   ECOLE: EcoleAdmission
   RENTREE: RentreeAdmission
-  FormationList: any[] = []
   siteKey = environment.recaptchaKey
   ngOnInit(): void {
-
 
     this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });
-
-    this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
-      console.log(data)
-      this.hideFormations = !data;
-      if (!data) return;
-      //this.router.navigate(['/'])
-      this.ECOLE = data
-      data.formations?.forEach(f => {
-        if (f.nom !== undefined) {
-          this.FormationList.push({label: f.nom, value: f.nom})
-        }
-      })
-
-    })
   }
 
 }

@@ -51,9 +51,11 @@ export class GestionComponent implements OnInit {
   private ressources_id!: string;
   private budgetid!: string;
   docAdded: boolean = false;
+  toggleAssignees: { [taskId: string]: boolean } = {};
   test: boolean = true;
   avancement_p: number = 0;
   avancement_t: number = 0;
+  identifiant: number = 1;
   displayTache: boolean = false;
   showAddProjectForm: boolean = false;
   showressources: boolean = false;
@@ -147,6 +149,10 @@ export class GestionComponent implements OnInit {
   serviceDic = {}
   sujetDic = {}
   USER!: User;
+  showLabelConfig = false
+  onAddComment() {
+    this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.USER, date: new Date() })
+  }
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -158,6 +164,10 @@ export class GestionComponent implements OnInit {
       this.project = [];
       this.project = data;
 
+    })
+    //Récupération des labels
+    this.projectService.getLabels().subscribe(data => {
+      this.labels = data
     })
     //recuperation du nombre de project
     this.listeprojets();
@@ -210,10 +220,11 @@ export class GestionComponent implements OnInit {
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
-      priorite: ['', Validators.required],
+      priorite: ['',],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      urgent: [false,],
     });
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
@@ -393,13 +404,8 @@ export class GestionComponent implements OnInit {
   //PATIE TACHES
   addTache(project_id) {
 
-    const currentDate = new Date();
-    const costumid_ = "T" + currentDate.getTime();
-    if (this.formAddTache.invalid)
-      return; {
-    }
+    if (this.formAddTache.invalid) return; { }
     const newTache = {
-
       libelle: this.formAddTache.get('libelle').value,
       number_of_hour: this.formAddTache.get('number_of_hour').value,
       date_limite: this.formAddTache.get('date_limite').value,
@@ -408,11 +414,13 @@ export class GestionComponent implements OnInit {
       avancement: 0,
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
-      identifian: costumid_,
+      identifian: this.identifiant,
+      urgent: this.formAddTache.get('urgent').value,
     }
     this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
     this.formAddTache.reset();
+    this.taskToDo.push(newTache);
 
 
   }
@@ -427,15 +435,26 @@ export class GestionComponent implements OnInit {
       data.forEach((d) => {
         this.task.push(d);
         if (d.etat === "En attente de traitement") {
-          console.log(d.attribuate_to)
           this.taskToDo.push(d);
+        } else if (d.etat === "En cours de traitement") {
+          this.taskDoing.push(d);
+        } else if (d.etat === "Traiter") {
+          this.taskDone.push(d);
         }
       });
-      console.log(this.taskToDo);
-      this.selectedTabIndex = 3;
+
+      this.selectedTabIndex = 3 + this.projectSelecteds.length;
     });
   }
+  OnShowAddTach() {
+    this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
+      if (tasks) {
+        this.identifiant = (tasks[tasks.length - 1]?.identifian) + 1;
 
+
+      }
+    })
+  }
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
   initialisation(task: Task) {
     const dl = task.date_limite; // Supposons que project.debut soit une date valide
@@ -446,7 +465,7 @@ export class GestionComponent implements OnInit {
     const new_date = `${year}-${month}-${day}`;
     this.showUpdateTacheForm = true;
     this.task_id = task._id;
-    console.log(new_date);
+
     this.formAddTache = this.formBuilder.group({
       libelle: task.libelle,
       priorite: task.priorite,
@@ -497,16 +516,12 @@ export class GestionComponent implements OnInit {
         };
         this.taskListe.push(newtask);
       });
-
-      console.log(task.libelle);
-
       this.TicketForm.patchValue({
         project: task.project_id._id,
         task_id: task._id,
         description: task.libelle + ":" + task.description_task,
         priorite: task.priorite,
       });
-
       this.showCreateticket = true;
     });
   }
@@ -569,7 +584,6 @@ export class GestionComponent implements OnInit {
     for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
       this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
     };
-
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
       attribuate_to: this.AtributateTable,
@@ -589,7 +603,7 @@ export class GestionComponent implements OnInit {
     t.etat = "En cours de traitement"
     this.taskDoing.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: ' Doing' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans  Doing" })
     });
   }
   //passer une tache a Done
@@ -598,7 +612,7 @@ export class GestionComponent implements OnInit {
     t.etat = "Traiter"
     this.taskDone.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: '  Done' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans  Done" })
     });
   }
   //passer une tache dans TODO
@@ -607,7 +621,7 @@ export class GestionComponent implements OnInit {
     t.etat = "En attente de traitement"
     this.taskToDo.push(t);
     this.projectService.putTask(t).then(resultat => {
-      this.messageService.add({ severity: 'success', summary: 'success', detail: ' To Do' })
+      this.messageService.add({ severity: 'success', summary: 'success', detail: "L'activité est dans To Do" })
     });
   }
   //PARTIE RESSOURCES
@@ -833,9 +847,29 @@ export class GestionComponent implements OnInit {
         this.sujetDropdown.push({ label: val.label, value: val._id })
       })
     })
-    console.log(this.TicketForm.get('service_id').value);
-    console.log(this.TicketForm.value.service_id)
   }
+
+  onChange(newAttrbution = false) {
+    this.test = false;
+    this.TaskToShow.attribuate_to = [];
+    for (var i = 0; i < this.taskToShowForm.value.attribuate_to.length; i++) {
+      this.TaskToShow.attribuate_to.push(this.dicUsers[this.taskToShowForm.value.attribuate_to[i]]);
+    }
+    if (newAttrbution) {
+      this.TaskToShow.attribuate_by = this.token.id
+      this.TaskToShow.attribuate_date = new Date()
+    }
+    this.TaskToShow.number_of_hour = this.taskToShowForm.value?.number_of_hour;
+
+    this.TaskToShow.date_limite = this.taskToShowForm.value?.date_limite;
+    this.TaskToShow.description_task = this.taskToShowForm.value?.description_task;
+    const indexToRemove = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskToDo[indexToRemove] = this.TaskToShow; }
+    this.projectService.putTask(this.TaskToShow).then(response => {
+      this.messageService.add({ severity: 'success', summary: 'success', detail: 'mise à jour avec succés' })
+    })
+    this.test = true;
+  }
+
   onUpload(event: { files: File[] }, fileUpload: FileUpload) {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
@@ -844,7 +878,6 @@ export class GestionComponent implements OnInit {
   }
 
   onProjectSelected(event) {
-    console.log("hello");
     this.taskSelected = null
     this.taskListe = [];
     const projectID = event.value;
@@ -862,12 +895,10 @@ export class GestionComponent implements OnInit {
 
   }
   onSelectedTache(event) {
-    console.log("hello");
     const taskID = event.value;
-    console.log("hello");
     this.projectService.getTask(taskID).then(data => {
       this.taskSelected = data;
-      console.log(this.taskSelected)
+
       this.TicketForm.patchValue({
         description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
         priorite: this.taskSelected.priorite,
@@ -878,7 +909,6 @@ export class GestionComponent implements OnInit {
   indexDocuments = 0
   downloadFile(index) {
     this.indexDocuments = index
-    console.log(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path)
     this.projectService.downloadFile(this.TaskToShow._id, this.TaskToShow.documents[index]._id, this.TaskToShow.documents[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       saveAs(new Blob([byteArray], { type: data.documentType }), this.TaskToShow.documents[index].path)
@@ -914,6 +944,11 @@ export class GestionComponent implements OnInit {
   }
   onUpdateFollow() {
 
+  }
+  onUpdate() {
+    this.projectService.putTask({ ...this.TaskToShow }).then(r => {
+      console.log('Tache modifié')
+    })
   }
   FileUpload(event) {
     if (event != null) {
@@ -961,5 +996,22 @@ export class GestionComponent implements OnInit {
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`
+  }
+  labels = []
+  onAddLabel() {
+    this.projectService.createLabel({ color: '#37BAD4', libelle: 'Label' }).subscribe(r => {
+      this.labels.push(r)
+
+    })
+  }
+  onUpdateLabel(label) {
+    this.projectService.updateLabel(label).subscribe(r => {
+    })
+  }
+
+  deleteLabel(label) {
+    this.projectService.deleteLabel(label._id).subscribe(r => {
+      this.labels.splice(this.labels.indexOf(label), 1)
+    })
   }
 }

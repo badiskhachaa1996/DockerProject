@@ -114,7 +114,7 @@
                                 field="adresse"></p-sortIcon></th>
                         <th pSortableColumn="email" style="text-align: center;"> Ecole(s) <p-sortIcon
                                 field="email"></p-sortIcon></th>
-                        <th pSortableColumn="salles.length" style="text-align: center;"> Salle <p-sortIcon
+                        <th pSortableColumn="salles.length" style="text-align: center;"> Salle(s) <p-sortIcon
                                 field="salles.length"></p-sortIcon></th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
@@ -139,8 +139,12 @@
                         <td style="min-width: 14rem;">
                             <app-read-more [string]="showEcolesStr(rowData)"></app-read-more>
                         </td>
-                        <td>
-                            {{rowData.salles.length}}
+                        <td *ngIf="rowData.salles.length>0" pTooltip="Voir les salles" style="cursor: pointer;"
+                            tooltipPosition="bottom" (click)="afficherSalles=true;selectedCampus=rowData">
+                            <a>{{rowData.salles.length}}</a>
+                        </td>
+                        <td *ngIf="rowData.salles.length==0">
+                            0
                         </td>
                         <td style="min-width: 10rem;">
                             <i pTooltip="Ajouter une école" tooltipPosition="bottom" class="pi pi-building "
@@ -187,3 +191,15 @@
     </p-tabView>
 
 </div>
+
+<p-dialog [(visible)]="afficherSalles" header="Salle(s) de {{selectedCampus?.libelle}}" [modal]="true"
+    [style]="{width: '50vw'}">
+    <div class="grid" *ngIf="selectedCampus">
+        <div class="col-12 md:col-4" *ngFor="let data of selectedCampus.salles; let i = index">
+            <h5> Salle n°{{i+1}}: </h5>
+            <p>
+                {{data}}
+            </p>
+        </div>
+    </div>
+</p-dialog>

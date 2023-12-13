@@ -6,17 +6,22 @@
 }
 
 body {
-  background: lightslategrey !important;
+  background: linear-gradient(90deg, rgba(20,65,87,1) 0%, rgba(27,77,102,1) 100%) !important;
   padding: 0;
-  font-family: "Montserrat", Arial, sans-serif;
+  font-family: "Montserrat", Arial, sans-serif !important;
   color: white;
   margin-bottom: 50px;
-
 }
 
 
 label {
+  font-family: "Montserrat", Arial, sans-serif!important;
   font-weight: 400;
+}
+
+.label-custom {
+    font-family: "Montserrat", Arial, sans-serif!important;
+    font-weight: 400;
 }
 
 
@@ -40,6 +45,8 @@ label {
   border: none;
   border-bottom: 1px solid #d5d8dc;
   border-radius: 0;
+  margin-bottom: 35px;
+  margin-top: 5px;
 }
 
 .form-control:focus {
@@ -69,7 +76,7 @@ label {
   font-weight: 400;
 }
 
-.btn {
+.p-button-custom {
   background-color: #2e77ba;
   box-sizing: border-box !important;
   border: 0 !important;
@@ -81,7 +88,6 @@ label {
   width: 100%;
   margin-top: 20px;
   color: white;
-  background-color: #D95525;
   outline: 0;
 }
 
@@ -90,4 +96,20 @@ label {
   border: 0 !important;
   outline: 0 !important;
   background-color: #2e77ba;
+}
+
+
+.iti__country-list {
+  position: absolute;
+  z-index: 2;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0 -1px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  background-color: #1e526c;
+  border: 1px solid #2e77ba;
+  white-space: nowrap;
+  max-height: 200px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

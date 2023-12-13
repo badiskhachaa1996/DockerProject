@@ -18,11 +18,15 @@ import { ContactUsMedasupComponent } from './components/contact-us-medasup/conta
 import { ContactUsIcbsComponent } from './components/contact-us-icbs/contact-us-icbs.component';
 import { ContactUsIegComponent } from './components/contact-us-ieg/contact-us-ieg.component';
 import {NgxCaptchaModule} from "ngx-captcha";
-import { ContactUsSimpleComponent } from './components/contact-us-simple/contact-us-simple.component';
+import { ContactUsBtechComponent } from './components/contact-us-btech/contact-us-btech.component';
 import {MessagesModule} from "primeng/messages";
 import {ToastModule} from "primeng/toast";
 import { MessageService } from 'primeng/api';
 import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-icbs-eng.component';
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {InputSwitchModule} from "primeng/inputswitch";
+import { Ng2TelInputModule } from 'ng2-tel-input';
+import { ContactUsIntComponent } from './components/contact-us-int/contact-us-int.component'
 
 @NgModule({
   declarations: [
@@ -34,8 +38,9 @@ import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-i
     ContactUsMedasupComponent,
     ContactUsIcbsComponent,
     ContactUsIegComponent,
-    ContactUsSimpleComponent,
+    ContactUsBtechComponent,
     ContactIcbsEngComponent,
+    ContactUsIntComponent,
 
   ],
   imports: [
@@ -53,6 +58,9 @@ import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-i
     InputTextareaModule,
     MessagesModule,
     ToastModule,
+    ToggleButtonModule,
+    InputSwitchModule,
+    Ng2TelInputModule,
 
   ],
   providers: [MessageService],

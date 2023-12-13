@@ -25,15 +25,6 @@ export class AddCampusComponent implements OnInit {
     libelle: new FormControl('', [Validators.required]),
     adresse: new FormControl('', [Validators.required]),
   });
-
-  salles = []
-
-  onAddSalle() {
-    this.salles.push("")
-  }
-  changeValue(i, value) {
-    this.salles[i] = value
-  }
   token;
 
   constructor(private ecoleService: EcoleService, private messageService: MessageService, private campusService: CampusRService,
@@ -51,11 +42,9 @@ export class AddCampusComponent implements OnInit {
   get adresse() { return this.addcampusForm.get('adresse'); };
 
   saveCampus() {
-    console.log(this.addcampusForm.value)
-    this.campusService.create({ ...this.addcampusForm.value, salles: this.salles }).subscribe((data) => {
+    this.campusService.create({ ...this.addcampusForm.value }).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
       this.addcampusForm.reset();
-      this.salles = []
       this.createCampus.emit(data)
     }, (error) => {
       console.error(error)

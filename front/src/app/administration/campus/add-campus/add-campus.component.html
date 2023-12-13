@@ -17,20 +17,6 @@
                 obligatoire </span>
         </div>
     </div>
-    <div class="field col-12 md:col-12 grid">
-        <div class="field col-12 md:col-6 grid" *ngFor="let data of salles; let i = index">
-            <h5> Salle n°{{i+1}}: </h5>
-            <div class="col-11">
-                <label>Nom de la salle:</label><br>
-                <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]"
-                    placeholder="Salle {{i+1}}" pInputText>
-            </div>
-            <div class="col-1">
-                <i class="pi pi-trash" (click)="salles.splice(i,1)" aria-hidden="true"></i>
-            </div>
-        </div>
-        <button type="button" (click)="onAddSalle()" pButton label="Ajouter une salle"></button>
-    </div>
     <div style="justify-content: right;">
         <button pButton label="Ajouter" type="submit" [disabled]="addcampusForm.invalid"></button>
     </div>

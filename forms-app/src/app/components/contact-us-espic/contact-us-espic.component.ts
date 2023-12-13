@@ -75,15 +75,12 @@ export class ContactUsEspicComponent implements OnInit {
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
-    numero_phone: new FormControl(''),
-    dernier_niveau_academique: new FormControl(''),
-    whatsapp: new FormControl("Non"),
+    numero_phone: new FormControl('+33', Validators.required),
+    whatsapp: new FormControl(false),
     formation: new FormControl(''),
     note_choix: new FormControl('')
   })
 
-  prospects = []
-  form_origin: string = this.route.snapshot.paramMap.get('ecole')!; //eduhorizons estya adg espic studinfo
 
   onAdd() {
     let numero_whatsapp = ''
@@ -91,9 +88,9 @@ export class ContactUsEspicComponent implements OnInit {
       //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé' });
       this.viewportScroller.scrollToAnchor('EmailForm');
     } else {
-      if (this.addForm.value.whatsapp.includes('Oui'))
+      if (this.addForm.value.whatsapp === true)
         numero_whatsapp = this.addForm.value.numero_phone
-      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ${this.ECOLE.titre}`, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ESPIC`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
         },
@@ -133,8 +130,7 @@ export class ContactUsEspicComponent implements OnInit {
       recaptcha: ['', Validators.required]
     });
 
-
-    this.LCS.EAgetByParams(this.form_origin).subscribe(data => {
+    this.LCS.EAgetByParams('espic').subscribe(data => {
       console.log(data)
       this.hideFormations = !data;
       if (!data) return;

@@ -4,20 +4,19 @@ import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from 
 import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
-import {MessageService} from 'primeng/api';
 
 @Component({
-  selector: 'app-contact-us-adg',
-  templateUrl: './contact-us-adg.component.html',
-  styleUrls: ['./contact-us-adg.component.scss'],
+  selector: 'app-contact-us-btech',
+  templateUrl: './contact-us-btech.component.html',
+  styleUrls: ['./contact-us-btech.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactUsAdgComponent implements OnInit {
+export class ContactUsBtechComponent implements OnInit {
   hideFormations = false;
   aFormGroup!: UntypedFormGroup;
-
   addForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -37,7 +36,7 @@ export class ContactUsAdgComponent implements OnInit {
     } else {
       if (this.addForm.value.whatsapp === true)
         numero_whatsapp = this.addForm.value.numero_phone
-      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ADG`, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web BTECH`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
         },
@@ -70,7 +69,6 @@ export class ContactUsAdgComponent implements OnInit {
   RENTREE: RentreeAdmission
   siteKey = environment.recaptchaKey
   ngOnInit(): void {
-
     this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });
