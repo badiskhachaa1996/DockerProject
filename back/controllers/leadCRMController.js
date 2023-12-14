@@ -20,9 +20,7 @@ let transporter = nodemailer.createTransport({
 });
 app.post("/create", (req, res) => {
     delete req.body._id
-    let f = new LeadCRM({ ...req.body })
-    LeadCRM.findOne({ email: req.body.email }).then(r => {
-        if (!r)
+    let f = new LeadCRM({ ...req.body });
             f.save()
                 .then((FFSaved) => {
                     console.log(FFSaved.source, FFSaved)
@@ -62,10 +60,6 @@ app.post("/create", (req, res) => {
 
                 })
                 .catch((error) => { res.status(400).send(error); });
-        else
-            res.status(500).send("Lead existe déjà")
-    })
-
 })
 
 app.get("/getByEmail/:email", (req, res, next) => {
