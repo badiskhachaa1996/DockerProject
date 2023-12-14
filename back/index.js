@@ -295,7 +295,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/ticket/getAllPopulate' ||
       req.originalUrl === '/soc/demanderemboursement/newremb' ||
       req.originalUrl === '/soc/demanderemboursement/upload-docs' ||
-      req.originalUrl == '/soc/LeadCRM/create'
+      req.originalUrl === '/soc/LeadCRM/create'||
+      req.originalUrl === '/webhook'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
@@ -557,6 +558,10 @@ io.on("connection", (socket) => {
     io.emit("CloseUpdProspect", prospect);
   });
 });
+
+// WebhookHandler to receive webhooks
+const webhookHandler = require('./webhookHandler');
+app.use(webhookHandler);
 
 httpServer.listen(3000, () => {
   console.log("SERVEUR START");
