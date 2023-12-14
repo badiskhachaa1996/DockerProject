@@ -594,10 +594,10 @@ export class GestionComponent implements OnInit {
     if (event > 2) {
       console.log(this.projectSelecteds[event - 3]);
       console.log(this.projectSelecteds)
-      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 3]._id).then((data) => {
+      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 4]._id).then((data) => {
         this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
         this.task = data;
-        this.projectIdForTask = this.projectSelecteds[event - 3]._id
+        this.projectIdForTask = this.projectSelecteds[event - 4]._id
         data.forEach((d) => {
           this.task.push(d);
           if (d.etat === "En attente de traitement") {
@@ -1033,7 +1033,7 @@ export class GestionComponent implements OnInit {
     return `${year}-${month}-${day}`
   }
   onCloseTable(event) {
-    this.userConnected.savedProject.splice(event.index - 3, 1)
+    this.userConnected.savedProject.splice(event.index - 4, 1)
     this.AuthService.update(this.userConnected).subscribe(data => { });}
   labels = []
   onAddLabel() {
