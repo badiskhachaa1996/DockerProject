@@ -1,4 +1,4 @@
-<div *ngIf="cv && user" class="imatch-main-page">
+<div class="imatch-main-page">
     <div class="page-content">
         <div class="top-header container">
             <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i
@@ -7,7 +7,7 @@
                     class="pi pi-cog"></i>Modifier</a>
             <a (click)="takeARendezVous()" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
         </div>
-        <div class="header">
+        <div class="header" *ngIf="cv && user && (!cv.showCVPDF || !pdfSrc)">
             <div class="container">
                 <div class="cv-title">
                     <div *ngIf="profilePic;then cv_image else default_image"></div>
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content" *ngIf="cv && user && (!cv.showCVPDF || !pdfSrc)">
             <div class="container">
                 <div class="big-section" *ngIf="cv.education && cv.education.length!=0">
                     <h2>Education</h2>
@@ -136,12 +136,10 @@
                 </div>
             </div>
         </div>
-        <!--<div class="main-footer">
-            <div class="footer container">
-                <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-3 btn-cv-shadow-2"><i
-                        class="pi pi-arrow-left"></i>Retour</a>
-                <a (click)="takeARendezVous()" class="btn-cv btn-cv-4 btn-cv-shadow-2">Prendre un rendez-vous</a>
-            </div>
-        </div>-->
+        <pdf-viewer [src]="pdfSrc" [original-size]="false" *ngIf="cv && user && cv.showCVPDF && pdfSrc"
+            style="min-width: 12.6cm; min-height: 17.82cm"></pdf-viewer>
+        <div *ngIf="!cv || !user">
+            <p-skeleton width="50rem" height="50rem"></p-skeleton>
+        </div>
     </div>
 </div>

@@ -176,6 +176,11 @@ export class AuthService {
     return this.http.post<any>(url, data)
   }
 
+  deletePDP(user_id: string) {
+    let url = this.apiUrl + "deletePDP/" + user_id;
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
   getProfilePicture(id) {
     let url = this.apiUrl + "getProfilePicture/" + id;
     return this.http.get<any>(url)

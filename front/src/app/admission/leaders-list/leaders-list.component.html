@@ -610,7 +610,7 @@
                        
                         <td style="min-width: 14rem;">
 
-                            {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de traitement" }}
+                            {{ prospect.statut_payement }}
                         </td>
 
                         <td style="min-width: 14rem;" *ngIf="prospect.statut_payement">
@@ -619,6 +619,7 @@
                         <td style="min-width: 14rem;" *ngIf="!prospect.statut_payement">
                             Non
                         </td>
+                        
                         <td style="min-width: 14rem;">
 
                            {{ prospect.date_creation | date:'dd MMMM yy' }}
