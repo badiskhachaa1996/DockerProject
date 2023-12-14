@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from "../dev-components/guards/auth-guard";
 import { CrmListComponent } from './crm-list/crm-list.component';
 import { MesLeadsComponent } from './mes-leads/mes-leads.component';
-import { SuivreLeadComponent } from './crm-list/suivre-lead/suivre-lead.component';
+//import { SuivreLeadComponent } from './crm-list/suivre-lead/suivre-lead.component';
 import { ListLeadcrmComponent } from './leadcrm/list-leadcrm/list-leadcrm.component';
 import { AjoutLeadcrmComponent } from './leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { LeadsNonAttribuesComponent } from './leads-non-attribues/leads-non-attribues.component';
