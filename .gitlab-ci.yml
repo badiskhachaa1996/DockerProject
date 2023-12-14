@@ -545,6 +545,7 @@ deploy_back_to_dev:
     - dev-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
@@ -592,6 +593,7 @@ deploy_back_to_qa:
     - qa-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
@@ -639,6 +641,7 @@ deploy_back_to_prod2:
     - prod2-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
@@ -688,6 +691,7 @@ manual_deploy_back_to_prod1:
     - prod1-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
