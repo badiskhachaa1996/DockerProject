@@ -163,7 +163,6 @@ import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
-import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
@@ -232,6 +231,7 @@ import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
 import { LinksModule } from './links/links.module';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 @NgModule({
     imports: [
         ReactiveFormsModule,
@@ -431,7 +431,6 @@ import { CvComponent } from './skillsnet/i-match/cv/cv.component';
         FormulaireExterneSkillsnetComponent,
         POVHorsCommercialComponent,
         ProspectAltFormComponent,
-        AddProspectComponent,
         QuestionnaireFormateurComponent,
         AjoutCollaborateurComponent,
         VentesComponent,
@@ -442,6 +441,7 @@ import { CvComponent } from './skillsnet/i-match/cv/cv.component';
         FormulaireAdmissionInternationalComponent,
         DashboardPartenaireComponent,
         FormulaireIcbsComponent,
+        AddProspectComponent,
         ResultatsFormulaireIcbsComponent,
         FormAdmissionDubaiComponent,
         VersionNonIframeComponent,

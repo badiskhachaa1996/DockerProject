@@ -1,22 +1,23 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {environment} from "../../../environments/environment";
 import {FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators} from "@angular/forms";
 import {ContactUsService} from "../../services/contact-us.service";
 import {ViewportScroller} from "@angular/common";
-import {ActivatedRoute, ActivatedRouteSnapshot, Router} from "@angular/router";
+import {MessageService} from "primeng/api";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
-import {MessageService} from "primeng/api";
+import {environment} from "../../../environments/environment";
 
 @Component({
-  selector: 'app-contact-us-icbs',
-  templateUrl: './contact-us-icbs.component.html',
-  styleUrls: ['./contact-us-icbs.component.scss'],
+  selector: 'app-contact-us-studinfo',
+  templateUrl: './contact-us-studinfo.component.html',
+  styleUrls: ['./contact-us-studinfo.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactUsIcbsComponent implements OnInit {
+export class ContactUsStudinfoComponent implements OnInit {
   hideFormations = false;
   aFormGroup!: UntypedFormGroup;
+
   addForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     prenom: new FormControl('', Validators.required),
@@ -27,22 +28,6 @@ export class ContactUsIcbsComponent implements OnInit {
     note_choix: new FormControl('')
   })
 
-  form_origin: ActivatedRouteSnapshot = this.route.snapshot; //eduhorizons estya adg espic studinfo
-
-  private extractCountryCodeFromUrl(url: string): string {
-
-    // Use a regular expression to match the last part of the path as the country code
-    const regex = /\/([^\/]+)\/?$/;
-
-    // Extract the country code using the regular expression
-    const match = url.match(regex);
-
-    // Check if a match is found and return the country code, or a default value
-    const countryCode = match ? match[1] : 'default';
-
-    return countryCode;
-  }
-
 
   onAdd() {
     let numero_whatsapp = ''
@@ -52,7 +37,7 @@ export class ContactUsIcbsComponent implements OnInit {
     } else {
       if (this.addForm.value.whatsapp === true)
         numero_whatsapp = this.addForm.value.numero_phone
-      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ICBS`, numero_whatsapp }).subscribe(data => {
+      this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web STUDINFO`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()
           this.ToastService.add({ severity: "success", summary: "Nous avons reçu votre demande de renseignement avec succès ! Nous reviendrons vers vous dans les plus brefs délais." })
         },
@@ -85,11 +70,7 @@ export class ContactUsIcbsComponent implements OnInit {
   RENTREE: RentreeAdmission
   siteKey = environment.recaptchaKey
   ngOnInit(): void {
-    console.log(this.form_origin);
-    const currentUrl = 'https://www.icbsglobal.com/mt/contact-us/'; // Replace with the actual URL or use document.referrer
-    const countryCode = this.extractCountryCodeFromUrl(currentUrl);
 
-    console.log(countryCode);
     this.aFormGroup = this.formBuilder.group({
       recaptcha: ['', Validators.required]
     });

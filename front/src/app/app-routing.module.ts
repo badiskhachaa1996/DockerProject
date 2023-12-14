@@ -65,7 +65,6 @@ import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsn
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
 //import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
-import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 //import { StageComponent } from './commercial/stage/stage.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
@@ -132,6 +131,7 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 import { CriteresComponent } from './crm/criteres/criteres.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 const routes: Routes = [
     {
         path: '',
@@ -278,7 +278,7 @@ const routes: Routes = [
             //{ path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
             //{ path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
-            { path: 'Links', loadChildren: () => import('./links/links.module').then(m => m.LinksModule)  },
+            { path: 'Links', loadChildren: () => import('./links/links.module').then(m => m.LinksModule) },
 
 
             //{ path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
