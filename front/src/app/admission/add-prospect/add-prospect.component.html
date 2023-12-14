@@ -89,7 +89,7 @@
                     optionDisabled="actif"></p-dropdown>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Adresse électronique :<span style="color:red"> *</span></label>
+                <label>Email :<span style="color:red"> *</span></label>
                 <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
                     pInputText>
             </div>
@@ -103,8 +103,24 @@
                 <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
                     formControlName="phone" />
             </div>
+            <div class="field col-12 md:col-6">
 
-            <h5 class="col-12" style="text-align: center;">Informations pédagogique</h5><br>
+                <label>Rue:</label>
+                <input formControlName="rue_adresse" placeholder="Ex: 20 Place de l'église" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Ville:</label>
+                <input formControlName="ville_adresse" placeholder="Ex: Paris" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Code postale:</label>
+                <input formControlName="postal_adresse" placeholder="Ex: 14950" pInputText>
+            </div>
+
+
+            <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
 
             <div class="field col-12">
                 <label>Choix du campus <span style="color: red;"> * </span></label>
@@ -142,9 +158,9 @@
         </form>
 
 
-        <div *ngFor="let formData of formDataList">
+        <!-- <div *ngFor="let formData of formDataList">
             {{ formData | json }}
-        </div>
+        </div> -->
         
     </div>
 </div>

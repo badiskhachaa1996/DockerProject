@@ -636,7 +636,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
-                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData?.code_commercial_partenaire] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['listdeslead'] },
                                     ]
                                 },
                                 {
@@ -723,8 +723,8 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Liste des Leads',
                                             icon: 'pi pi-users',
                                             routerLink: [
-                                                'international/partenaire/',
-                                                cData.partenaire_id,
+                                                'listdeslead'
+                                                
                                             ],
                                         },
                                     ],
