@@ -228,9 +228,9 @@
                         <td>{{rowData?.date_creation | date:'dd-MM-yyyy'}}</td>
                         <td> {{ rowData?.created_by?.firstname}} {{ rowData?.created_by?.lastname}}</td>
                         <td *ngIf="partenaireDic && partenaireDic[rowData?._id]">{{partenaireDic[rowData?._id] |
-                            date:'dd MMMM yy hh:mm'}}</td>
+                            date:'dd MMMM yy HH:mm'}}</td>
                         <td *ngIf="!partenaireDic || !partenaireDic[rowData?._id]">
-                            {{rowData?.user_id?.last_connection | date:'dd MMMM yy hh:mm'}}
+                            {{rowData?.user_id?.last_connection | date:'dd MMMM yy HH:mm'}}
                         </td>
                     </tr>
                 </ng-template>
