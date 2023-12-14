@@ -252,7 +252,12 @@ export class GestionComponent implements OnInit {
   //recuperation de user qui vas cree le formulaire
   getthecrateur() {
     this.userService.getInfoById(this.token.id).subscribe({
-      next: (response) => { this.userConnected = response; },
+      next: (response) => {
+        this.userConnected = response;
+        this.userConnected.savedProject.forEach(project => {
+          this.projectSelecteds.push(project);
+        });
+      },
       error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
       complete: () => console.log("information de l'utilisateur connecté récuperé")
     });
@@ -422,15 +427,17 @@ export class GestionComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
     this.formAddTache.reset();
     this.taskToDo.push(newTache);
-
+    this.showAddTacheForm = false;
 
   }
 
-  showTaskList(project) {
-
+  showTaskList(project: Project) {
+    console.log("je suis la");
+    this.userConnected.savedProject.push(project);
+    this.AuthService.update(this.userConnected).subscribe(data => { })
     this.projectSelecteds.push(project);
     this.projectService.getTasksByIdProject(project._id).then((data) => {
-      this.task = [];
+      this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
       this.task = data;
       this.projectIdForTask = project._id;
       data.forEach((d) => {
@@ -449,7 +456,7 @@ export class GestionComponent implements OnInit {
   }
   OnShowAddTach() {
     this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
-      if (tasks) {
+      if (tasks.length > 0) {
         this.identifiant = (tasks[tasks.length - 1]?.identifian) + 1;
 
 
@@ -554,14 +561,19 @@ export class GestionComponent implements OnInit {
   }
   deleteTaskFromSiderbar() {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
+      const indexToRemovedoing = this.taskDoing.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemovedoing !== -1) { this.taskDoing.splice(indexToRemovedoing, 1); }
+      const indexToRemovetodo = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemovetodo !== -1) { this.taskToDo.splice(indexToRemovetodo, 1); }
+      const indexToRemove = this.taskDone.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskDone.splice(indexToRemove, 1); }
       this.projectService.deleteTask(this.TaskToShow._id).then(() => {
         this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' });
       })
     }
 
   }
+
   taches(id, ri) {
     this.showTachesTable = true;
+
   }
   calculeAvancementTache() {
     this.projectService.getTasks().then(tasks => {
@@ -579,6 +591,29 @@ export class GestionComponent implements OnInit {
     )
   }
   // Affichage tache
+  onChangeTabView(event) {
+    if (event > 2) {
+      console.log(this.projectSelecteds[event - 3]);
+      console.log(this.projectSelecteds)
+      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 4]._id).then((data) => {
+        this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
+        this.task = data;
+        this.projectIdForTask = this.projectSelecteds[event - 4]._id
+        data.forEach((d) => {
+          this.task.push(d);
+          if (d.etat === "En attente de traitement") {
+            this.taskToDo.push(d);
+          } else if (d.etat === "En cours de traitement") {
+            this.taskDoing.push(d);
+          } else if (d.etat === "Traiter") {
+            this.taskDone.push(d);
+          }
+        });
+
+
+      });
+    }
+  }
   onShowTache(task: Task) {
     this.TaskToShow = task;
     this.AtributateTable = []
@@ -599,7 +634,7 @@ export class GestionComponent implements OnInit {
   //passer une tache en doing
   ToDoing(t: Task) {
 
-    if (t.etat === "En attente de traitement") {
+    if (t.etat == "En attente de traitement") {
       const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskToDo.splice(indexToRemove, 1); }
     } else { const indexToRemove = this.taskDone.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskDone.splice(indexToRemove, 1); } }
     t.etat = "En cours de traitement"
@@ -723,7 +758,7 @@ export class GestionComponent implements OnInit {
     this.projectService.getBudgetByIdProject(project_id).then((data) => {
       this.budget = [];
       this.budget = data;
-      console.log(this.budget);
+
       this.budget_charge = 0;
       this.budgect_depense = 0;
       for (let j = 0; j < data.length; j = j + 1) {
@@ -778,7 +813,7 @@ export class GestionComponent implements OnInit {
       // Mise à jour du projet actuel
       this.currentProject = this.project.find(p => p._id == this.currentProject._id);
 
-      console.log(this.budget);
+
     } catch (error) {
       console.error('Erreur lors de la mise à jour du budget:', error);
       // Gérer l'erreur ici, par exemple, afficher un message d'erreur
@@ -984,7 +1019,7 @@ export class GestionComponent implements OnInit {
   onDownloadBudgetFile(_id: string, file_id: string, path: string) {
     this.projectService.downloadFile(_id, file_id, path).subscribe(
       data => {
-        console.log(data);
+
       },
       error => {
         console.error(error);
@@ -998,6 +1033,10 @@ export class GestionComponent implements OnInit {
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`
+  }
+  onCloseTable(event) {
+    this.userConnected.savedProject.splice(event.index - 4, 1)
+    this.AuthService.update(this.userConnected).subscribe(data => { });
   }
   labels = []
   onAddLabel() {

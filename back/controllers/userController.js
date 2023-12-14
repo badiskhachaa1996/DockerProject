@@ -209,7 +209,7 @@ app.get("/getById/:id", (req, res) => {
 
 //Recuperation des infos user
 app.get("/getInfoById/:id", (req, res, next) => {
-  User.findOne({ _id: req.params.id })
+  User.findOne({ _id: req.params.id }).populate("savedProject")
     .then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
@@ -223,7 +223,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
   User.findOne({ _id: req.params.id })
-    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedLeadCRM").populate('service_list').populate("roles_ticketing_list.module").populate({ path: "savedAdministration", populate: { path: 'user_id' } }).populate({ path: "savedAdministration", populate: { path: 'evaluations.evaluation_id' } }).populate({ path: "savedAdministration", populate: { path: 'decision.membre' } }).populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
+    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedProject").populate("savedLeadCRM").populate('service_list').populate("roles_ticketing_list.module").populate({ path: "savedAdministration", populate: { path: 'user_id' } }).populate({ path: "savedAdministration", populate: { path: 'evaluations.evaluation_id' } }).populate({ path: "savedAdministration", populate: { path: 'decision.membre' } }).populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
