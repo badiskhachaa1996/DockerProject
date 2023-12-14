@@ -91,7 +91,8 @@ const cvTypeSchema = mongoose.Schema({
     source: { type: String, default: 'Interne' },
     taux: { type: Number, default: 0 },
     ecole: { type: String, default: 'espic' },
-    profil: { type: mongoose.Schema.Types.ObjectId, ref: 'profiles' }
+    profil: { type: mongoose.Schema.Types.ObjectId, ref: 'profiles' },
+    showCVPDF: { type: Boolean, default: false }
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

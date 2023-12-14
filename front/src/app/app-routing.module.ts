@@ -130,6 +130,7 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 import { CriteresComponent } from './crm/criteres/criteres.component';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 const routes: Routes = [
     {
@@ -587,6 +588,7 @@ const routes: Routes = [
     { path: 'document-authentification', component: DocCheckerComponent },
     // Accessible from anywhere
     { path: 'imatch', component: IMatchComponent },
+    { path: 'imatch/cv/:id', component: CvComponent },
     { path: 'imatch/cvtheque', component: ImatchCandidatComponent },
     { path: 'imatch/offres', component: ImatchEntrepriseComponent },
     { path: 'rendez-vous/:user_id', component: RendezVousComponent },

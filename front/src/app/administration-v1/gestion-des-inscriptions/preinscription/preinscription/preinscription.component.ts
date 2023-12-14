@@ -157,7 +157,8 @@ export class PreinscriptionComponent implements OnInit {
   etapeDropdownLoc = [
     { value: "Nouveau", label: "Nouveau" },
     { value: "Admission", label: "Admission" },
-    { value: "Pré-inscription - Inscription définitive", label: "Pré-inscription - Inscription définitive" },
+    { value: "Pré-inscription", label: "Pré-inscription" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
 
   ]
   filterEtapeLoc = [

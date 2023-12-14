@@ -10,8 +10,7 @@ import { ExterneSkillsnetComponent } from "../externe-skillsnet/externe-skillsne
 const routes: Routes = [
     { path: 'generateur-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
     { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
-    { path: 'cv/:id', component: CvComponent },
-    { path: 'i-match/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+    { path: 'externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
     { path: 'cv-etudiant', component: CvEtudiantComponent, canActivate: [AuthGuardService] },
     { path: 'cvtheque-interne', component: NewCvthequeInterneComponent, canActivate: [AuthGuardService] },
     { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
