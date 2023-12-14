@@ -9,7 +9,10 @@ stages:
   - PROD2 # auto from main
   - PROD1 # Current PROD, MANUAL from main
 
-#variables:
+variables:
+# https://docs.gitlab.com/ee/ci/runners/configure_runners.html#git-clean-flags
+  GIT_CLEAN_FLAGS: -ffdx -e back/node_modules/ -e back/storage
+
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
 #  SAST_IMAGE_SUFFIX: '-fips'
 
