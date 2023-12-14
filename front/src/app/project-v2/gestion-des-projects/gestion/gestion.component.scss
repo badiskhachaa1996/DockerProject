@@ -52,10 +52,34 @@
 :host ::ng-deep .card-done .p-card .p-component {
   background-color: rgb(158, 255, 160) !important;
 }
+
 .label {
   padding: .25rem .5rem;
   border-radius: 3px;
   display: inline-flex;
   margin-right: .5rem;
   color: white;
+}
+
+:host ::ng-deep .p-multiselect {
+  min-width: 15rem;
+}
+
+:host ::ng-deep .multiselect-custom {
+  .p-multiselect-label {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+  }
+
+  .country-item-value {
+    padding: .25rem .5rem;
+    border-radius: 3px;
+    display: inline-flex;
+    margin-right: .5rem;
+    color: white;
+  }
+
+  .country-placeholder {
+    padding: 0.25rem;
+  }
 }

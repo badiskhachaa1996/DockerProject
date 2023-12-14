@@ -22,21 +22,48 @@ export class CvComponent implements OnInit {
   profilePic
   showEditBtn = false
   @Input() CV_ID = ""
+  reader: FileReader = new FileReader();
   constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute, private router: Router) {
 
   }
   takeARendezVous() {
     this.router.navigate(['rendez-vous/', this.user._id])
   }
-
+  pdfSrc: any = ''
   ngOnInit(): void {
+    this.reader.addEventListener("load", () => {
+      this.profilePic = this.reader.result;
+    }, false);
     let id = this.route.snapshot.paramMap.get('id')
     if (this.CV_ID)
       id = this.CV_ID
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
-      console.log(this.cv)
       this.user = data.dataCv.user_id
+      if (this.cv.showCVPDF)
+        this.cvservice.downloadCV(this.user._id).then(r => {
+          const byteArray = new Uint8Array(atob(r.file).split('').map(char => char.charCodeAt(0)));
+          var blob = new Blob([byteArray], { type: r.extension });
+          const fileReader = new FileReader();
+          fileReader.onload = () => {
+            this.pdfSrc = new Uint8Array(fileReader.result as ArrayBuffer);
+          };
+          fileReader.readAsArrayBuffer(blob);
+
+        })
+
+      this.UserService.getProfilePicture(this.user._id).subscribe((data) => {
+        if (data.error) {
+          this.profilePic = null
+        } else {
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([byteArray], { type: data.documentType })
+          if (blob) {
+            this.profilePic = null
+            this.reader.readAsDataURL(blob);
+          }
+        }
+      })
       if (!data) {
         this.UserService.getPopulate(id).subscribe(u => {
           this.user = u
@@ -44,16 +71,7 @@ export class CvComponent implements OnInit {
       }
     })
 
-    this.cvservice.getPictureByUser(id).subscribe(data => {
-      this.dicPicture = data // {id:{ file: string, extension: string }}
-      const reader = new FileReader();
-      const byteArray = new Uint8Array(atob(data["fileOne"].file).split('').map(char => char.charCodeAt(0)));
-      let blob: Blob = new Blob([byteArray], { type: data["fileOne"].extension })
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        this.profilePic = reader.result;
-      }
-    })
+
     if (localStorage.getItem('seeEditBTNCV')) {
       localStorage.removeItem('seeEditBTNCV')
       this.showEditBtn = true

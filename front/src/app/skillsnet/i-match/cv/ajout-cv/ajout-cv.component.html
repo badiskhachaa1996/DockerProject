@@ -1,9 +1,8 @@
 <div class="main-page">
     <div class="page-header"></div>
     <div class="page-content">
-        <div class="old-cv" *ngIf="pdfSrc">
-            <pdf-viewer [src]="pdfSrc" class="pdf-viewer-here"></pdf-viewer>
-        </div>
+        <pdf-viewer [src]="pdfSrc" [original-size]="false" *ngIf="pdfSrc"
+            style="min-width: 12.6cm; min-height: 17.82cm"></pdf-viewer>
         <div class="old-cv" *ngIf="!pdfSrc">
             <div class="field col-12">
                 <h1>Joindre un fichier (pdf)</h1>
@@ -11,8 +10,11 @@
                     chooseLabel="Browse" />
             </div>
         </div>
-
-        <div class="input-form-cv" style="height:17.82cm;overflow:scroll">
+        <div *ngIf="ID && !user && !formAddCV.value?.user_id">
+            <p-skeleton width="50rem" height="50rem"></p-skeleton>
+        </div>
+        <div class="input-form-cv" style="height:17.82cm;overflow:scroll"
+            *ngIf="!ID || (user && formAddCV.value?.user_id)">
             <div *ngIf="formAddCV">
                 <h4 class="title-add-cv">Génération de CV</h4>
                 <div class="col-12" *ngIf="!isEtudiant">
@@ -76,13 +78,14 @@
                     <div class="field col-12">
                         <label htmlFor="profil">Profil</label>
                         <p-dropdown id="profil" [options]="profilsList" formControlName="profil"
-                            (onChange)="filterCompetencesList()" [(ngModel)]="profilSelected"></p-dropdown>
+                            (onChange)="filterCompetencesList();onAddCV(false)"
+                            [(ngModel)]="profilSelected"></p-dropdown>
                     </div>
 
                     <div class="field col-10">
                         <label>Compétences</label>
                         <p-multiSelect [options]="competencesList" [(ngModel)]="selectedMultiCpt"
-                            [showToggleAll]="false" [itemSize]="20" [virtualScroll]="true"
+                            [showToggleAll]="false" [itemSize]="20" [virtualScroll]="true" (onChange)="onAddCV(false)"
                             defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
                             formControlName="competences">
                             <ng-template let-value pTemplate="selectedItems">
@@ -109,7 +112,8 @@
                     </div>
                     <div class="field col-12">
                         <label>A propos</label>
-                        <input pInputText type="text" placeholder="Ex: J'adore la vie" formControlName="a_propos" />
+                        <input pInputText type="text" placeholder="Ex: J'adore la vie" formControlName="a_propos"
+                            (blur)="onAddCV(false)" />
                     </div>
 
                     <!--<div class="field col-12 md:col-12">
@@ -138,8 +142,8 @@
                     <div class="field col-12 md:col-12">
                         <label>Langues</label>
                         <p-multiSelect [options]="languesList" [(ngModel)]="selectedMultilang"
-                            defaultLabel="Selectionner les langues" optionLabel="label" class="multiselect-custom"
-                            formControlName="langues">
+                            (onChange)="onAddCV(false)" defaultLabel="Selectionner les langues" optionLabel="label"
+                            class="multiselect-custom" formControlName="langues">
                             <ng-template let-value pTemplate="selectedItems">
                                 <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary border-round mr-2"
                                     *ngFor="let option of selectedMultilang">
@@ -165,34 +169,45 @@
                                 formControlName="video_lien" />
                         </div>-->
 
-                    <div class="field col-6">
+                    <div class="field col-12">
                         <label>Joindre un fichier (pdf)</label>
                         <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
                             (change)="onUpload($event)" chooseLabel="Browse" />
                     </div>
-                    <div class="field col-6">
+                    <div class="field col-12">
+                        <label for="user">Afficher le CV PDF plutôt que celui de l'école ?</label>
+                        <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="showCVPDF"
+                            (onChange)="onAddCV(false)"
+                            [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
+                    </div>
+                    <div class="field col-8">
                         <label>Joindre une photo</label>
                         <input #selectedFile id="selectedFile" multiple type="file" accept="image/*"
                             maxFileSize="10000000" (change)="FileUploadPDP($event)" chooseLabel="Browse" />
                     </div>
+                    <div class="field col-4">
+                        <label>&nbsp;</label>
+                        <button type="button" pButton pRipple icon="pi pi-trash" (click)="deletePhoto()"
+                            pTooltip="Supprimer la photo" tooltipPosition="bottom"></button>
+                    </div>
                     <div class="field col-12">
                         <label>Mobilité - Ville</label>
                         <p-multiSelect [options]="locations" defaultLabel="Lieu" autoWidth="false"
-                            [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
-                            formControlName="mobilite_lieu"></p-multiSelect>
+                            (onChange)="onAddCV(false)" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                            class="w-100" formControlName="mobilite_lieu"></p-multiSelect>
 
                     </div>
 
                     <div class="field col-12">
                         <label>Centres d'intérêt</label>
-                        <input pInputText type="text" placeholder="Ex: Basketball, Littérature"
+                        <input pInputText type="text" placeholder="Ex: Basketball, Littérature" (blur)="onAddCV(false)"
                             formControlName="centre_interets" />
                     </div>
 
 
                     <div class="field col-12">
                         <label>Disponibilité</label>
-                        <p-calendar formControlName="disponibilite" autoWidth="false"
+                        <p-calendar formControlName="disponibilite" autoWidth="false" (onBlur)="onAddCV(false)"
                             [style]="{'width':'100%'}"></p-calendar>
                     </div>
 
@@ -200,25 +215,26 @@
                         <label>Winner lié à ce CV:</label>
                         <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
-                            formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
-                            filterPlaceholder="Recherche"></p-dropdown>
+                            (onChange)="onAddCV(false)" formControlName="winner_id" filter="true"
+                            emptyFilterMessage="Aucun winner trouvé" filterPlaceholder="Recherche"></p-dropdown>
                     </div>
                     <div class="field col-12">
                         <label for="user">Publier votre CV sur iMatch ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
-                            optionValue="value" optionLabel="label"
+                            optionValue="value" optionLabel="label" (onChange)="onAddCV(false)"
                             [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
                     </div>
                     <div class="field col-12">
                         <label for="user">Selectionné un niveau d'étude</label>
                         <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="etudes" [editable]="true"
                             placeholder="Selectionner un niveau" formControlName="niveau_etude" filter="true"
-                            emptyFilterMessage="Aucun niveau trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                            (onChange)="onAddCV(false)" emptyFilterMessage="Aucun niveau trouvé"
+                            filterPlaceholder="Recherche"></p-dropdown>
                     </div>
 
                 </form>
                 <div class="field col-12">
-                    <h3 class="col-12">Expériences professionels</h3>
+                    <h3 class="col-12">Expériences professionnelles</h3>
                     <p-table [value]="experiences_pro" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
                         styleClass="p-datatable-gridlines">
                         <ng-template pTemplate="caption">
@@ -668,8 +684,8 @@
                 </div>
             </div>
         </div>
-        <div class="new-cv">
-            <div class="page-container" id="page-certif">
+        <div class="new-cv" *ngIf="(!ID || (user && formAddCV.value?.user_id)) && !formAddCV.value.showCVPDF">
+            <div class="page-container" id="page-certif" *ngIf="!formAddCV.value.showCVPDF">
                 <app-cv-pdf-preview
                     [student]="{fullName: userName, profile: profilSelected?.libelle || 'Profile non spécifié', imgPDP: imgPDP}"
                     [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
@@ -680,16 +696,8 @@
                     informatiques: informatique 
                 }" [school]="pdfPreviewChosenSchool"></app-cv-pdf-preview>
 
-                <!--<app-cv-pdf-preview *ngIf="!selectedMultiCpt || selectedMultiCpt.length==0"
-                    [student]="{fullName: userName, profile: 'Profile non spécifié', imgPDP: imgPDP}"
-                    [sidebar]="{apropos: formAddCV.value?.a_propos, interets: formAddCV.value?.centre_interets, competences: selectedMultiCpt, langues: selectedMultilang}"
-                    [maintContent]="{
-                    experiences_pro: experiences_pro,
-                    experiences_associatif: experiences_associatif,
-                    educations: education,
-                    informatiques: informatique 
-                }" [school]="pdfPreviewChosenSchool"></app-cv-pdf-preview>-->
             </div>
+
             <div class="grid mt-2 footer-content">
                 <div class="col-4">
                     <button pButton label="Enregistrer" autoWidth="false" [style]="{'width':'100%'}" type="submit"
@@ -706,7 +714,16 @@
 
             </div>
         </div>
+        <pdf-viewer [src]="pdfSrc" [original-size]="false" *ngIf="formAddCV.value.showCVPDF && pdfSrc"
+            style="min-width: 12.6cm; min-height: 17.82cm"></pdf-viewer>
 
+        <div class="page-container" *ngIf="formAddCV.value.showCVPDF && !pdfSrc">
+            <div class="field col-12">
+                <h1>Joindre un fichier (pdf)</h1>
+                <input multiple type="file" accept="application/pdf" maxFileSize="10000000" (change)="onUpload($event)"
+                    chooseLabel="Browse" />
+            </div>
+        </div>
 
     </div>
     <div class="page-footer"></div>
@@ -714,4 +731,95 @@
 <p-dialog [(visible)]="displayAddSkill" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false"
     (onHide)="refreshSkills()">
     <app-skills-management></app-skills-management>
+</p-dialog>
+
+<p-dialog [(visible)]="dialogEXPPRO" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false"
+    (onHide)="onAddCV(false)">
+    <div class="p-fluid p-formgrid grid" *ngIf="dialogEXPPRO">
+        <div class="field col-6 md:col-12 ">
+            <label>Intitulé <span style="color: red">*</span></label>
+            <input type="text" pInputText [(ngModel)]="experiences_pro[idxDialog].intitule_experience"
+                placeholder="Ex: Dévéloppeur Full Stack">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Type de contrat</label>
+            <p-dropdown [options]="typeContratList" [(ngModel)]="experiences_pro[idxDialog].type" appendTo="body"
+                [style]="{'width':'100%'}" autoWidth="false" placeholder="Choisissez le type de contrat"></p-dropdown>
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Description</label>
+            <textarea placeholder="Ex: Dévéloppé Front & Back-End de l'application" pInputTextarea
+                [(ngModel)]="experiences_pro[idxDialog].details"></textarea>
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Etablissement</label>
+            <input type="text" pInputText [(ngModel)]="experiences_pro[idxDialog].structure">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de début</label>
+            <input type="date" pInputText [(ngModel)]="experiences_pro[idxDialog].date_debut">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de fin</label>
+            <input type="date" pInputText [(ngModel)]="experiences_pro[idxDialog].date_fin">
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="dialogEdu" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false"
+    (onHide)="onAddCV(false)">
+    <div class="p-fluid p-formgrid grid" *ngIf="dialogEdu">
+        <div class="field col-6 md:col-12 ">
+            <label>Intitulé <span style="color: red">*</span></label>
+            <input type="text" pInputText [(ngModel)]="education[idxDialog].intitule_experience"
+                placeholder="Ex: Dévéloppeur Full Stack">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Description</label>
+            <textarea pInputTextarea [(ngModel)]="education[idxDialog].details"></textarea>
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Etablissement</label>
+            <input type="text" pInputText [(ngModel)]="education[idxDialog].structure">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de début</label>
+            <input type="date" pInputText [(ngModel)]="education[idxDialog].date_debut">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de fin</label>
+            <input type="date" pInputText [(ngModel)]="education[idxDialog].date_fin">
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="dialogAssos" [modal]="true" [style]="{width: '75vw'}" [draggable]="false" [resizable]="false"
+    (onHide)="onAddCV(false)">
+    <div class="p-fluid p-formgrid grid" *ngIf="dialogEdu">
+        <div class="field col-6 md:col-12 ">
+            <label>Intitulé <span style="color: red">*</span></label>
+            <input type="text" pInputText [(ngModel)]="experiences_associatif[idxDialog].intitule_experience"
+                placeholder="Ex: Dévéloppeur Full Stack">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Type</label>
+            <input type="text" pInputText [(ngModel)]="education[idxDialog].type">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Description</label>
+            <textarea pInputTextarea [(ngModel)]="education[idxDialog].details"></textarea>
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Etablissement</label>
+            <input type="text" pInputText [(ngModel)]="education[idxDialog].structure">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de début</label>
+            <input type="date" pInputText [(ngModel)]="education[idxDialog].date_debut">
+        </div>
+        <div class="field col-6 md:col-12">
+            <label>Date de fin</label>
+            <input type="date" pInputText [(ngModel)]="education[idxDialog].date_fin">
+        </div>
+    </div>
 </p-dialog>

@@ -13,7 +13,7 @@ app.disable("x-powered-by");
 const cvStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
         let id = req.body.id;
-        let storage = `storage/cv/${id}`;
+        let storage = `storage/cv/${id}/`;
 
         if (!fs.existsSync(storage)) {
             fs.mkdirSync(storage, { recursive: true });
@@ -34,7 +34,7 @@ app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
         return next(error);
     }
 
-    res.status(200).send('file');
+    res.status(200).send({ r: 'success' });
 });
 
 app.get("/download-cv/:id", uploadCV.single('file'), (req, res, next) => {

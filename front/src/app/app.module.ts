@@ -230,6 +230,7 @@ import { CommercialModule } from "./commercial/commercial.module";
 import { RhModule } from "./rh/rh.module";
 import { ReadMoreModule } from './other/component/read-more/read-more.module';
 import { LinksModule } from './links/links.module';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 @NgModule({
     imports: [
@@ -447,6 +448,7 @@ import { AddProspectComponent } from './admission/add-prospect/add-prospect.comp
         ConfigurationMailComponent,
         MailTypeComponent,
         MailAutoComponent,
+        CvComponent,
         DocCheckerComponent,
         GestionComponent,
         MytaskComponent,

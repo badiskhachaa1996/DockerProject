@@ -49,9 +49,11 @@ import { ReadMoreModule } from 'src/app/other/component/read-more/read-more.modu
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { SkillsManagementModule } from '../skills-management/skills-management.module';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { SkeletonModule } from 'primeng/skeleton';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 @NgModule({
     declarations: [
-        CvComponent,
         AjoutCvComponent,
         CvPdfPreviewComponent,
         CvPdfContentComponent,
@@ -97,7 +99,10 @@ import { SkillsManagementModule } from '../skills-management/skills-management.m
         ReadMoreModule,
         InputTextModule,
         ButtonModule,
-        SkillsManagementModule
+        SkillsManagementModule,
+        InputTextareaModule,
+        SkeletonModule,
+        PdfViewerModule
     ]
 })
 export class IMatchModule { }

@@ -242,7 +242,8 @@ export class AjoutCvComponent implements OnInit {
       winner_id: [null],
       isPublic: [true],
       niveau_etude: [''],
-      profil: ['']
+      profil: [''],
+      showCVPDF: [false]
     });
     this.reader.addEventListener("load", () => {
       this.imgPDP = this.reader.result;
@@ -416,20 +417,28 @@ export class AjoutCvComponent implements OnInit {
       reader.onload = () => {
         this.pdfSrc = reader.result as string;
       }
+
       let formData = new FormData();
       let id = this.ID
       if (!id)
         id = this.formAddCV.value.user_id
       formData.append('id', id);
       formData.append('file', this.uploadedFiles);
-      this.cvService.postCVBrute(formData)
-        .then(() => {
-          this.messageService.add({ severity: 'Ajout du CV PDF avec succès' })
-        })
-        .catch((error) => {
-          console.error(error)
-        });
-      reader.readAsDataURL(event.target.files[0])
+      console.log(this.uploadedFiles)
+      if (id)
+        this.cvService.postCVBrute(formData)
+          .then(() => {
+            this.messageService.add({ severity: 'success', summary: 'Ajout du CV PDF avec succès' })
+            reader.readAsArrayBuffer(event.target.files[0])
+          })
+          .catch((error) => {
+            this.messageService.add({ severity: 'error', summary: 'Le CV PDF n\'a pas été upload', detail: error?.error })
+            console.error(error)
+          });
+      else
+        this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas choisi d\'étudiant' })
+
+
     }
   }
 
@@ -449,7 +458,7 @@ export class AjoutCvComponent implements OnInit {
   }
 
   // methode d'ajout du cv
-  onAddCV(): void {
+  onAddCV(toClean = true): void {
     // recuperation des données du formulaire
     const formValue = this.formAddCV.value;
     //création du cv
@@ -467,6 +476,7 @@ export class AjoutCvComponent implements OnInit {
     cv.centre_interets = this.formAddCV.value.centre_interets
     cv.mobilite_lieu = this.formAddCV.value.mobilite_lieu
     cv.niveau_etude = this.formAddCV.value.niveau_etude
+    cv.showCVPDF = this.formAddCV.value.showCVPDF
     cv.competences = [];
 
     formValue.competences?.forEach(cpt => {
@@ -491,51 +501,58 @@ export class AjoutCvComponent implements OnInit {
     //cv.video_lien = formValue.video_lien;
     cv.ecole = this.pdfPreviewChosenSchool
     // si un cv brute à été ajouté
-    if (this.uploadedFiles) {
-      cv.filename = this.uploadedFiles.name;
-      let formData = new FormData();
-      formData.append('id', cv.user_id);
-      formData.append('file', this.uploadedFiles);
-      cv.source = 'Interne'
-      //ajout du cv
-      this.cvService.postCv(cv)
-        .then((response: CV) => {
-          this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
+    if (formValue.user_id)
+      if (this.uploadedFiles) {
+        cv.filename = this.uploadedFiles.name;
+        let formData = new FormData();
+        formData.append('id', cv.user_id);
+        formData.append('file', this.uploadedFiles);
+        cv.source = 'Interne'
+        //ajout du cv
+        this.cvService.postCv(cv)
+          .then((response: CV) => {
+            this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
 
-          // envoi du fichier brute
-          this.cvService.postCVBrute(formData)
-            .then(() => {
+            // envoi du fichier brute
+            this.cvService.postCVBrute(formData)
+              .then(() => {
 
-            })
-            .catch((error) => {
+              })
+              .catch((error) => {
+                if (toClean) {
+                  if (!this.isEtudiant)
+                    this.formAddCV.reset();
+                  this.showFormAddCV = false;
+                  this.onGetAllClasses();
+                }
+
+              });
+          })
+          .catch((error) => {
+            this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
+            console.error(error);
+          });
+
+      } else {
+        //ajout du cv
+
+        cv.source = 'Interne'
+        this.cvService.postCv(cv)
+          .then((response: CV) => {
+            this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
+            if (toClean) {
               if (!this.isEtudiant)
                 this.formAddCV.reset();
               this.showFormAddCV = false;
               this.onGetAllClasses();
-            });
-        })
-        .catch((error) => {
-          this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
-          console.error(error);
-        });
+            }
 
-    } else {
-      //ajout du cv
-
-      cv.source = 'Interne'
-      this.cvService.postCv(cv)
-        .then((response: CV) => {
-          this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
-          if (!this.isEtudiant)
-            this.formAddCV.reset();
-          this.showFormAddCV = false;
-          this.onGetAllClasses();
-        })
-        .catch((error) => {
-          this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
-          console.error(error);
-        });
-    }
+          })
+          .catch((error) => {
+            this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
+            console.error(error);
+          });
+      }
   }
 
 
@@ -635,9 +652,12 @@ export class AjoutCvComponent implements OnInit {
   }
 
   experiences_pro = []
-
+  dialogEXPPRO = false
+  idxDialog = 0
   addExpPro() {
     this.experiences_pro.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+    this.idxDialog = this.experiences_pro.length - 1
+    this.dialogEXPPRO = true
   }
 
   deleteExpPro(idx) {
@@ -645,9 +665,11 @@ export class AjoutCvComponent implements OnInit {
   }
 
   education = []
-
+  dialogEdu = false
   addEdu() {
     this.education.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+    this.idxDialog = this.education.length - 1
+    this.dialogEdu = true
   }
 
   deleteEdu(idx) {
@@ -655,9 +677,11 @@ export class AjoutCvComponent implements OnInit {
   }
 
   experiences_associatif = []
-
+  dialogAssos = false
   addExpAss() {
     this.experiences_associatif.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+    this.idxDialog = this.experiences_associatif.length - 1
+    this.dialogAssos = true
   }
 
   deleteExpAss(idx) {
@@ -807,6 +831,12 @@ export class AjoutCvComponent implements OnInit {
   }
   imgPDP;
   reader: FileReader = new FileReader();
+  deletePhoto() {
+    if (this.formAddCV.value.user_id)
+      this.userService.deletePDP(this.formAddCV.value.user_id).subscribe(r => {
+        this.imgPDP = null
+      })
+  }
   FileUploadPDP(event) {
     console.log(this.formAddCV.value.user_id, event)
     if (event.target.files.length > 0 && this.formAddCV.value.user_id) {
