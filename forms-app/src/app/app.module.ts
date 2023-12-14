@@ -26,7 +26,8 @@ import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-i
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {InputSwitchModule} from "primeng/inputswitch";
 import { Ng2TelInputModule } from 'ng2-tel-input';
-import { ContactUsIntComponent } from './components/contact-us-int/contact-us-int.component'
+import { ContactUsIntComponent } from './components/contact-us-int/contact-us-int.component';
+import { ContactUsStudinfoComponent } from './components/contact-us-studinfo/contact-us-studinfo.component'
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ContactUsIntComponent } from './components/contact-us-int/contact-us-in
     ContactUsBtechComponent,
     ContactIcbsEngComponent,
     ContactUsIntComponent,
+    ContactUsStudinfoComponent,
 
   ],
   imports: [
