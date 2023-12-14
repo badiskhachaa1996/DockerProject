@@ -115,7 +115,7 @@ export class MytaskComponent implements OnInit {
   }
   onUpdate() {
     this.projectService.putTask({ ...this.TaskToShow }).then(r => {
-      console.log('Tache modifié')
+      console.log('Tache modifié', r)
     })
   }
 
@@ -153,7 +153,6 @@ export class MytaskComponent implements OnInit {
   }
 
   FileUpload(event) {
-    console.log(event)
     if (event != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
@@ -167,7 +166,7 @@ export class MytaskComponent implements OnInit {
         this.onUpdate()
         //this.fileInput.clear()
       }, error => {
-        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+        this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé, le poids du fichier ne doit pas excéder 20mb' });
       });
     }
   }
