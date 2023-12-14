@@ -13,9 +13,9 @@ const projectv2Schema = mongoose.Schema({
     creator_id:                 { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
     responsable_id:             { type: mongoose.Schema.Types.ObjectId, ref: 'user' , required: false},
     responsable:                { type: String, required: false},
-    etat:                       { type: String, required: false },
+    etat:                       { type: String, required: false,default: "En cours" },
     avancement:                 { type: Number, required: false }, 
-    identifian:                   { type: String, required: false},
+    identifian:                 { type: String, required: false},
 
 
 
