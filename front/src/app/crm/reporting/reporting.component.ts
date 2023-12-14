@@ -35,8 +35,9 @@ export class ReportingComponent implements OnInit {
   contacte : number = 0;
   nonContacte : number = 0;
 
-  equipeFiltre=[{ label: 'Toutes les équipes', value: null }];
-  membreFiltre=[{ label: 'Tous les membres', value: null }];
+  equipeFiltre=[{ label: 'toutes les équipes', value: null }];
+  membreFiltre=[{ label: 'tous les membres', value: null }];
+  selectedMemberId: any;
   
 
   constructor(private LCS: LeadcrmService,private TeamCRMService: TeamsCrmService,) { }
@@ -158,9 +159,18 @@ export class ReportingComponent implements OnInit {
   //}
 
   calculerAttribue(): void {
-    this.attribue = this.leadsSelected.filter(lead => lead.affected_to_member && lead.affected_to_member._id).length;
+    this.attribue = this.leadsSelected.filter(lead => 
+      lead.affected_to_member && lead.affected_to_member._id).length;
   }
-  
+ /* calculerInsertion(): void {
+    console.log(this)
+    this.insertion = this.leads.filter(lead => lead.created_by==this.acteur).length;
+    console.log(this.insertion)
+  }*/
+  calculerInsertion(): void {
+    this.insertion = this.leadsSelected.filter(lead => 
+      lead.created_by && lead.created_by._id).length;
+  }
 
   calculerPreQualifie(): void  {
    
@@ -225,10 +235,7 @@ export class ReportingComponent implements OnInit {
     /*calculerInsertion(): void  {
       this.insertion= this.filtrerParAttribut(this.leadsSelected,"created_by","_id").length;
     } */
-    calculerInsertion(): void {
-      this.insertion = this.leadsSelected.filter(lead => 
-        lead.created_by && lead.created_by._id).length;
-    }
+    
 
     calculerPaiement(): void  {
       let paiementCount : number = 0
@@ -372,16 +379,19 @@ if(lead.equipe===event.value){
         this.mettreAJourStatistiques();
       }
     }
+
+   
+    
     
     onFiltreMembre(event): void {
-      if (event.value === null) { // Si "Tous les membres" est sélectionné
-        this.reinitialiserFiltres();
-      } else {
-        this.leadsSelected = this.leads.filter(lead => 
-          lead.affected_to_member && lead.affected_to_member._id === event.value);
-        this.mettreAJourStatistiques();
-      }
-    }
+
+      this.leadsSelected = this.leads.filter(lead => 
+        lead.affected_to_member && lead.affected_to_member._id === event.value|| 
+        lead.created_by && lead.created_by._id === event.value)
+    // Update statistics based on the selected member
+    this.mettreAJourStatistiques();
+  
+}
     
     mettreAJourStatistiques(): void {
       this.calculerPaiement();
