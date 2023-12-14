@@ -287,11 +287,13 @@
                                     </div>
                                 </div>
                                 <div class="grid col-12" *ngIf="t.labels">
-                                    <div *ngFor="let l of t.labels;let index = index" class="col-3">
-                                        <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                            {{l.libelle}}
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
                             <div class="grid col-12">
@@ -355,11 +357,13 @@
                                     </div>
                                 </div>
                                 <div class="grid col-12" *ngIf="t.labels">
-                                    <div *ngFor="let l of t.labels;let index = index" class="col-3">
-                                        <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                            {{l.libelle}}
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
 
@@ -422,11 +426,13 @@
                                     </div>
                                 </div>
                                 <div class="grid col-12" *ngIf="t.labels">
-                                    <div *ngFor="let l of t.labels;let index = index" class="col-3">
-                                        <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                            {{l.libelle}}
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
 
