@@ -196,15 +196,16 @@ export class GestionComponent implements OnInit {
         })
       })
     }
-    this.calculeAvancementTache()
+    //this.calculeAvancementTache()
     //ajouter les tickets au taches correspondtes
     this.TicketService.getAll().subscribe(data => {
       data.forEach(val => {
         // Assurez-vous que l'ID du ticket n'est pas déjà présent dans le tableau
-        if (!val.task_id.ticketId.includes(val._id)) {
-          val.task_id.ticketId.push(val._id);
-          this.projectService.putTask(val.task_id);
-        }
+        if (val.task_id)
+          if (!val.task_id.ticketId.includes(val._id)) {
+            val.task_id.ticketId.push(val._id);
+            this.projectService.putTask(val.task_id);
+          }
       });
     });
     //INITIALISATION DU FORMULAIRE Project
@@ -480,13 +481,13 @@ export class GestionComponent implements OnInit {
   onUpdatetask() {
 
     this.projectService.getTask(this.task_id).then((data) => {
-      data.libelle = this.formAddTache.get('libelle').value,
-        data.number_of_hour = this.formAddTache.get('number_of_hour').value,
-        data.date_limite = this.formAddTache.get('date_limite').value,
-        data.priorite = this.formAddTache.get('priorite').value,
-        data.description_task = this.formAddTache.get('description').value,
+      data.libelle = this.formAddTache.get('libelle').value
+      data.number_of_hour = this.formAddTache.get('number_of_hour').value
+      data.date_limite = this.formAddTache.get('date_limite').value
+      data.priorite = this.formAddTache.get('priorite').value
+      data.description_task = this.formAddTache.get('description').value
 
-        this.projectService.putTask(data)
+      this.projectService.putTask(data)
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'Modification réussie' });
       this.formAddTache.reset();
     })
@@ -582,7 +583,8 @@ export class GestionComponent implements OnInit {
     this.TaskToShow = task;
     this.AtributateTable = []
     for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
-      this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
+      if (this.TaskToShow.attribuate_to[i])
+        this.AtributateTable.push(this.TaskToShow.attribuate_to[i]._id);
     };
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,

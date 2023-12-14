@@ -16,12 +16,12 @@
             <ng-container *ngFor="let t of taskToDo">
                 <p-card>
                     <p-card-header>
-                        <div class="grid col-12">
+                        <div class="grid col-12" style="padding-bottom: 0;">
                             <p class="col-1">
                                 #{{t.identifian}}
                             </p>
-                            <div class="col-10" style="text-align: center;">
-                                <strong> {{t?.libelle}}</strong>
+                            <div class="col-10" style="text-align: center;padding-bottom: 0;">
+                                <strong> {{t?.libelle}} : {{t?.avancement}}%</strong>
                                 <p>{{t?.project_id?.titre}}</p>
                             </div>
                             <div class="col-1">
@@ -38,27 +38,24 @@
                             </ng-container>
                         </div>
                     </p-card-header>
-                    <div class="grid col-12">
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>DDL :</strong><br>
-                            {{t?.date_limite | date:'dd MMMM YY'}}
-                        </div>
-
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
-                            {{t?.attribuate_by?.lastname | uppercase}}
-                        </div>
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>&nbsp;</strong><br>
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
-                        </div>
-                    </div>
                     <p-card-footer>
                         <div class="grid col-12">
-                            <div class="col-11"></div>
+                            <div class="col-3" style="font-size: 10px;">
+                                <strong>DDL :</strong><br>
+                                {{t?.date_limite | date:'dd MMMM YY'}}
+                            </div>
+
+                            <div class="col-3" style="font-size:10px;">
+                                <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
+                            </div>
+                            <div class="col-3" style="font-size: 10px;">
+                                <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
+                                {{t?.attribuate_by?.lastname | uppercase}}
+                            </div>
+                            <div class="col-2" style="font-size:10px;">
+                                <strong>&nbsp;</strong><br>
+                                {{(t?.urgent)?'Urgent':'Non Urgent'}}
+                            </div>
                             <div class="col-1">
                                 <i class="pi pi-arrow-right" style="color: green" (click)="ToDoing(t)"></i>
                             </div>
@@ -83,12 +80,12 @@
             <ng-container *ngFor="let t of taskDoing">
                 <p-card>
                     <p-card-header>
-                        <div class="grid col-12">
+                        <div class="grid col-12" style="padding-bottom: 0;">
                             <p class="col-1">
                                 #{{t.identifian}}
                             </p>
-                            <div class="col-10" style="text-align: center;">
-                                <strong> {{t?.libelle}}</strong>
+                            <div class="col-10" style="text-align: center;padding-bottom: 0;">
+                                <strong> {{t?.libelle}} : {{t?.avancement}}%</strong>
                                 <p>{{t?.project_id?.titre}}</p>
                             </div>
                             <div class="col-1">
@@ -105,31 +102,27 @@
                             </ng-container>
                         </div>
                     </p-card-header>
-
-                    <div class="grid col-12">
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>DDL :</strong><br>
-                            {{t?.date_limite | date:'dd MMMM YY'}}
-                        </div>
-
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
-                            {{t?.attribuate_by?.lastname | uppercase}}
-                        </div>
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>&nbsp;</strong><br>
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
-                        </div>
-                    </div>
                     <p-card-footer>
                         <div class="grid col-12">
                             <div class="col-1">
                                 <i class="pi pi-arrow-left" style="color: green" (click)="ToToDo(t)"></i>
                             </div>
-                            <div class="col-10"></div>
+                            <div class="col-3" style="font-size: 10px;">
+                                <strong>DDL :</strong><br>
+                                {{t?.date_limite | date:'dd MMMM YY'}}
+                            </div>
+
+                            <div class="col-3" style="font-size:10px;">
+                                <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
+                            </div>
+                            <div class="col-2" style="font-size: 10px;">
+                                <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
+                                {{t?.attribuate_by?.lastname | uppercase}}
+                            </div>
+                            <div class="col-2" style="font-size:10px;">
+                                <strong>&nbsp;</strong><br>
+                                {{(t?.urgent)?'Urgent':'Non Urgent'}}
+                            </div>
                             <div class="col-1">
                                 <i class="pi pi-arrow-right" style="color: green" (click)="ToDone(t)"></i>
                             </div>
@@ -154,12 +147,12 @@
             <ng-container *ngFor="let t of taskDone">
                 <p-card>
                     <p-card-header>
-                        <div class="grid col-12">
+                        <div class="grid col-12" style="padding-bottom: 0;">
                             <p class="col-1">
                                 #{{t.identifian}}
                             </p>
-                            <div class="col-10" style="text-align: center;">
-                                <strong> {{t?.libelle}}</strong>
+                            <div class="col-10" style="text-align: center;padding-bottom: 0;">
+                                <strong> {{t?.libelle}} : {{t?.avancement}}%</strong>
                                 <p>{{t?.project_id?.titre}}</p>
                             </div>
                             <div class="col-1">
@@ -176,32 +169,26 @@
                             </ng-container>
                         </div>
                     </p-card-header>
-
-                    <div class="grid col-12">
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>DDL :</strong><br>
-                            {{t?.date_limite | date:'dd MMMM YY'}}
-                        </div>
-
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-3" style="font-size: 10px;">
-                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
-                            {{t?.attribuate_by?.lastname | uppercase}}
-                        </div>
-                        <div class="col-3" style="font-size:10px;">
-                            <strong>&nbsp;</strong><br>
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
-                        </div>
-                    </div>
                     <p-card-footer>
                         <div class="grid col-12">
                             <div class="col-1">
                                 <i class="pi pi-arrow-left" style="color: green" (click)="ToDoing(t)"></i>
                             </div>
-                            <div class="col-11">
+                            <div class="col-3" style="font-size: 10px;">
+                                <strong>DDL :</strong><br>
+                                {{t?.date_limite | date:'dd MMMM YY'}}
+                            </div>
 
+                            <div class="col-3" style="font-size:10px;">
+                                <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
+                            </div>
+                            <div class="col-3" style="font-size: 10px;">
+                                <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
+                                {{t?.attribuate_by?.lastname | uppercase}}
+                            </div>
+                            <div class="col-2" style="font-size:10px;">
+                                <strong>&nbsp;</strong><br>
+                                {{(t?.urgent)?'Urgent':'Non Urgent'}}
                             </div>
                         </div>
                     </p-card-footer>
@@ -213,30 +200,29 @@
 
 </div>
 
-<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}" (onHide)="onUpdate()">
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'40em'}" (onHide)="onUpdate()">
 
     <div class="grid col-12" *ngIf="TaskToShow">
         <div class="col-12">
-            Nombre d'heures estimée:<br>
-            {{TaskToShow.number_of_hour}}H
+            <span style="font-weight: bold;">Nombre d'heures estimée:&nbsp;</span>{{TaskToShow.number_of_hour}}H
         </div>
         <div class="col-12">
-            Durée mise:<br>
-            {{calcDureeMise()}}
+            <span style="font-weight: bold;">Durée mise:&nbsp;</span>{{calcDureeMise()}}
+
         </div>
         <div class="col-12">
-            Avancement:<br>
+            <span style="font-weight: bold;">Avancement:</span><br>
             <p-inputNumber [(ngModel)]="TaskToShow.avancement" suffix="%" [showButtons]="true"
                 (onBlur)="onUpdate()"></p-inputNumber>
         </div>
         <div class="col-12">
-            Description:<br>
-            {{TaskToShow.description_task}}
+            <span style="font-weight: bold;">Description:</span><br>
+            <app-read-more [string]="TaskToShow.description_task"></app-read-more>
         </div>
         <div class="col-10">
-            Labels:<br>
+            <span style="font-weight: bold;">Labels:</span><br>
             <p-multiSelect [(ngModel)]="TaskToShow.labels" defaultLabel="Choisissez un label" (onChange)="onUpdate()"
-                autoWidth="false" [options]="labels" [style]="{'width':'100%'}" class="multiselect-custom">
+                autoWidth="false" [options]="labels" [style]="{'width':'75%'}" class="multiselect-custom">
                 <ng-template let-value pTemplate="selectedItems">
                     <div class="country-item country-item-value" *ngFor="let option of TaskToShow.labels"
                         [style]="{'background-color':option.color}">
@@ -254,7 +240,7 @@
             </p-multiSelect>
         </div>
         <div class="col-2">
-            &nbsp;<br>
+            <span style="font-weight: bold;">&nbsp;</span>
             <button pButton icon="pi pi-cog" (click)="showLabelConfig = true" pTooltip="Configurer les labels"
                 tooltipPosition="bottom"></button>
         </div>
@@ -267,7 +253,7 @@
                     </p-sortIcon>
                 </th>
                 <th pSortableColumn="description" style="text-align: center;">
-                    Commentaire <p-sortIcon field="description">
+                    Contenu <p-sortIcon field="description">
                     </p-sortIcon>
                 </th>
 
@@ -280,17 +266,18 @@
         <ng-template pTemplate="body" let-commentaire>
             <tr [pEditableRow]="commentaire">
                 <td>
-                    {{commentaire?.date | date: 'dd MMMM YY'}}
+                    {{commentaire?.date | date: 'dd/MM/YY'}}
                 </td>
                 <td pEditableColumn pTooltip="Clickez pour modifier" tooltipPosition="bottom">
                     <p-cellEditor>
                         <ng-template pTemplate="input">
                             <textarea *ngIf="commentaire?.by._id==token.id" type="text" pInputTextarea
                                 (blur)="onUpdate()" [(ngModel)]="commentaire.description"></textarea>
-                            <p *ngIf="commentaire?.by._id!=token.id">{{commentaire?.description}}</p>
+                            <app-read-more *ngIf="commentaire?.by._id!=token.id"
+                                [string]="commentaire?.description"></app-read-more>
                         </ng-template>
                         <ng-template pTemplate="output">
-                            {{commentaire?.description}} &nbsp;
+                            <app-read-more [string]="commentaire?.description"></app-read-more> &nbsp;
                         </ng-template>
                     </p-cellEditor>
                 </td>
@@ -335,7 +322,7 @@
                 </td>
                 <td *ngIf="document?.path">
                     <i pTooltip="Télécharger le document" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="downloadFile(doc)" style="color: green;" aria-hidden="true"></i>
+                        (click)="downloadFile(ri)" style="color: green;" aria-hidden="true"></i>
                 </td>
                 <td *ngIf="!document?.path">
                     <a (click)="uploadFile(ri)">Uploader le document</a>
