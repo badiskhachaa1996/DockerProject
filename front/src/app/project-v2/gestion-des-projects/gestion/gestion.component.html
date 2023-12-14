@@ -65,7 +65,7 @@
                     <div class="flex justify-content-between mb-4">
                         <div>
                             <span class="block text-500 font-medium mb-4">Nombre total des projets en cours
-                                {{nbr_project}}</span>
+                                {{nbr_projectEnCour}}</span>
 
                         </div>
                         <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
@@ -168,13 +168,13 @@
                     </td>
 
                     <td>
-                        <p-tag *ngIf="project.etat == null" icon="pi pi-times" severity="success" [value]="'En cours'">
+                        <p-tag *ngIf="project.etat == 'En cours'" icon="pi pi-times" severity="success" [value]="'En cours'">
                         </p-tag>
                         <p-tag *ngIf="project.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
                             [value]="project.statut">
                         </p-tag>
-                        <p-tag *ngIf="project.statut == 'cloturer'" icon="pi pi-check-square" severity="success"
-                            [value]="project.statut">
+                        <p-tag *ngIf="project.etat == 'Clôturé'" icon="pi pi-check-square" severity="success"
+                            [value]="project.etat">
                         </p-tag>
                     </td>
                     <td>
