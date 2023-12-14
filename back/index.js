@@ -45,7 +45,8 @@ if (process.argv[2]) {
       "https://forms.intedgroup.com",
       "https://t.dev.estya.com",
       "https://wio.fr/",
-      "https://studinfo.com"
+      "https://studinfo.com",
+       "https://iegchat.comunikcrm.info/"
     ];
 }
 app.use(cors({ origin: origin }));
@@ -296,7 +297,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/demanderemboursement/newremb' ||
       req.originalUrl === '/soc/demanderemboursement/upload-docs' ||
       req.originalUrl === '/soc/LeadCRM/create'||
-      req.originalUrl === '/webhook'
+      req.originalUrl === '/soc/webhook'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
