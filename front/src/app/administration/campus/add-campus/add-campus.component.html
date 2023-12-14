@@ -1,4 +1,4 @@
-<form class="p-fluid p-formgrid grid" [formGroup]="addcampusForm" (ngSubmit)="saveCampus()" style="width: 100%;">
+<form class="p-fluid p-formgrid grid card" [formGroup]="addcampusForm" (ngSubmit)="saveCampus()" style="width: 100%;">
     <div class="field col-12 md:col-6">
         <label for="libelle">Libellé <span style="color: red;"> * </span></label>
         <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Nom du campus" />
@@ -9,7 +9,7 @@
                 campus n'est pas dans le bon format </span>
         </div>
     </div>
-    <div class="field col-12 md:col-4">
+    <div class="field col-12 md:col-6">
         <label for="adress">Adresse <span style="color: red;"> * </span></label>
         <input pInputText id="adress" type="text" formControlName="adresse" placeholder="Adresse du siége du campus" />
         <div *ngIf="adresse.invalid && ( adresse.touched || adresse.dirty)">

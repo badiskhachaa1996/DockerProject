@@ -11,6 +11,7 @@ body {
   font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
 }
 
+
 .legend {
   font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 20px;
@@ -27,7 +28,7 @@ body {
 }
 
 .form-control:focus {
-  border: 1px solid #f9a21e !important;
+  border: 1px solid #c59c63;
   box-shadow: none;
   outline: 0 none;
 }
@@ -53,7 +54,7 @@ body {
 }
 
 .btn {
-  background-color: #d98018 !important;
+  background-color: #c59c63 !important;
   box-sizing: border-box !important;
   border: 0 !important;
   border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
@@ -64,7 +65,7 @@ body {
 }
 
 .p-button-custom {
-  background-color: #f9a21e !important;
+  background-color: #c59c63 !important;
   box-sizing: border-box !important;
   border: 0 !important;
   border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
@@ -75,17 +76,17 @@ body {
 }
 
 .btn:hover, .btn:active, .btn:focus {
-  background-color: #d98018 !important;
+  background-color: #bb935e !important;
   opacity: 0.85;
   border: 0 !important;
   border-bottom: 3px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .p-button-custom:hover , .p-button-custom:active{
-  background-color: #d98018 !important;
+  background-color: #bb935e !important;
 }
 
 /* Checked state */
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
-  background-color: #f9a21e !important;
+  background-color: #c59c63 !important;
 }

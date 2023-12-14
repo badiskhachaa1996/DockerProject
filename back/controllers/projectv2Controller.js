@@ -72,14 +72,14 @@ app.post("/post-task", (req, res, next) => {
 });
 // get all Tasks
 app.get("/gettasks", (req, res, next) => {
-    Task.find()?.populate('project_id')?.populate('attribuate_to').populate('ticketId').populate('labels')
+    Task.find()?.populate('project_id')?.populate('attribuate_to').populate('ticketId').populate('attribuate_by').populate('labels')
         .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
         .catch((error) => { console.error(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
 });
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
     console.log(req.params.id);
-    Task.find({ project_id: req.params.id }).populate('labels').populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate({
+    Task.find({ project_id: req.params.id }).populate('labels').populate('attribuate_by').populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate({
         path: 'ticketId',
         populate: {
             path: 'agent_id', // Assuming agent_id is the field you want to populate
@@ -91,7 +91,7 @@ app.get("/get-tasks/:id", (req, res, next) => {
 
 // get task by id task
 app.get("/get-task/:id", (req, res, next) => {
-    Task.findOne({ _id: req.params.id }).populate('labels').populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate({
+    Task.findOne({ _id: req.params.id }).populate('labels').populate('attribuate_by').populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate({
         path: 'ticketId',
         populate: {
             path: 'agent_id', // Assuming agent_id is the field you want to populate
@@ -102,22 +102,22 @@ app.get("/get-task/:id", (req, res, next) => {
 });
 // get task by id ticket
 app.get("/get-tasks-by-id-ticket/:id", (req, res, next) => {
-    Task.findOne({ ticketId: req.params.id })?.populate('project_id')?.populate('attribuate_to').populate('labels')
+    Task.findOne({ ticketId: req.params.id })?.populate('project_id')?.populate('attribuate_to').populate('labels').populate('attribuate_by')
         .then((taskFromDb) => { res.status(200).send(taskFromDb) })
         .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });
 // get task by id agent
 app.get("/get-tasks-by-id-agent/:id", (req, res, next) => {
-    Task.find({ attribuate_to: { $in: req.params.id } })?.populate('project_id')?.populate('ticketId').populate('attribuate_to').populate('labels').populate('commentaires.by')
+    Task.find({ attribuate_to: { $in: req.params.id } })?.populate('project_id')?.populate('ticketId').populate('attribuate_to').populate('attribuate_by').populate('labels').populate('commentaires.by')
         .then((taskFromDb) => { res.status(200).send(taskFromDb) })
         .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });
 // update task 
 app.put("/put-task", (req, res, next) => {
     const task = new Task({ ...req.body });
-
-    Task.updateOne({ _id: task._id }, { ...req.body })
-        .then((taskUpdated) => { res.status(201).json({ task: taskUpdated, success: 'Tâche mis à jour' }); })
+    console.log(req.body)
+    Task.findByIdAndUpdate(task._id, { ...req.body }, { new: true })
+        .then((taskUpdated) => { res.status(201).json(taskUpdated); })
         .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour cette tâche' }); });
 });
 

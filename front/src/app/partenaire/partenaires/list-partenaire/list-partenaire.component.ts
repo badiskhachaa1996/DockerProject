@@ -392,6 +392,8 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   clickFile2() {
+
+    
     document.getElementById('selectedFile2').click();
   }
  

@@ -83,112 +83,111 @@
             </ng-template>
         </p-table>
     </div>
-    <p-tabView style="width: 100%;">
-        <p-tabPanel header="Ajouter" style="width: 100%;">
-            <app-add-campus (createCampus)="onAddCampus($event)"></app-add-campus>
-        </p-tabPanel>
-        <p-tabPanel header="Liste" [selected]="true" style="width: 100%;">
-            <p-table #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single" dataKey="_id" [rows]="8"
-                [rowHover]="true" [paginator]="true" [pageLinks]="5" rowExpandMode="single"
-                [globalFilterFields]="['libelle','email','site','ville','pays']" responsiveLayout="scroll"
-                styleClass="p-datatable-gridlines">
+    <div class="col-12" *ngIf="showAdd">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+            (click)="showAdd=false;" aria-hidden="true"> </i>
+        <app-add-campus (createCampus)="onAddCampus($event)"></app-add-campus>
+    </div>
 
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
+    <p-table class="col-12" #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single" dataKey="_id" [rows]="8"
+        [rowHover]="true" [paginator]="true" [pageLinks]="5" rowExpandMode="single"
+        [globalFilterFields]="['libelle','email','site','ville','pays']" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+                <button type="button" pButton icon="pi pi-plus" (click)="showAdd=true"></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+
+                </th>
+                <th pSortableColumn="libelle" style="text-align: center;"> Libellé <p-sortIcon
+                        field="libelle"></p-sortIcon></th>
+                <th pSortableColumn="adresse" style="text-align: center;"> Adresse <p-sortIcon
+                        field="adresse"></p-sortIcon></th>
+                <th pSortableColumn="email" style="text-align: center;"> Ecole(s) <p-sortIcon
+                        field="email"></p-sortIcon></th>
+                <th pSortableColumn="salles.length" style="text-align: center;"> Salle(s) <p-sortIcon
+                        field="salles.length"></p-sortIcon></th>
+                <th>
+                    <div class="flex justify-content-between align-items-center">
+                        Action
                     </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-
-                        </th>
-                        <th pSortableColumn="libelle" style="text-align: center;"> Libellé <p-sortIcon
-                                field="libelle"></p-sortIcon></th>
-                        <th pSortableColumn="adresse" style="text-align: center;"> Adresse <p-sortIcon
-                                field="adresse"></p-sortIcon></th>
-                        <th pSortableColumn="email" style="text-align: center;"> Ecole(s) <p-sortIcon
-                                field="email"></p-sortIcon></th>
-                        <th pSortableColumn="salles.length" style="text-align: center;"> Salle(s) <p-sortIcon
-                                field="salles.length"></p-sortIcon></th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Action
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
-                    <tr>
-                        <td>
-                            <button type="button" pButton pRipple [pRowToggler]="rowData"
-                                class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{rowData.libelle}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{ rowData.adresse }}
-                        </td>
-                        <td style="min-width: 14rem;">
-                            <app-read-more [string]="showEcolesStr(rowData)"></app-read-more>
-                        </td>
-                        <td *ngIf="rowData.salles.length>0" pTooltip="Voir les salles" style="cursor: pointer;"
-                            tooltipPosition="bottom" (click)="afficherSalles=true;selectedCampus=rowData">
-                            <a>{{rowData.salles.length}}</a>
-                        </td>
-                        <td *ngIf="rowData.salles.length==0">
-                            0
-                        </td>
-                        <td style="min-width: 10rem;">
-                            <i pTooltip="Ajouter une école" tooltipPosition="bottom" class="pi pi-building "
-                                (click)="onAddEcole(rowData)" aria-hidden="true"></i>
-                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil ml-2"
-                                (click)="showModify(rowData)" aria-hidden="true"></i>
-                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash ml-2"
-                                (click)="delete(rowData)" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="rowexpansion" let-rowData>
-                    <td colspan="6">
-                        <p-table dataKey="_id" [value]="rowData.ecoles" styleClass="p-datatable-gridlines">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Ecole <p-sortIcon
-                                            field="ecole_id.titre"></p-sortIcon></th>
-                                    <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Libellé
-                                        <p-sortIcon field="ecole_id.titre"></p-sortIcon>
-                                    </th>
-                                    <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon
-                                            field="email"></p-sortIcon></th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body" let-ecole>
-                                <tr>
-                                    <td>
-                                        {{ecole?.ecole_id?.titre}}
-                                    </td>
-                                    <td>
-                                        {{ecole?.ecole_id?.titre}} - {{rowData?.libelle}}
-                                    </td>
-                                    <td>
-                                        {{ecole?.email}}
-                                    </td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </td>
-                </ng-template>
-            </p-table>
-        </p-tabPanel>
-    </p-tabView>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+            <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="rowData"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td style="min-width: 12rem;">
+                    {{rowData.libelle}}
+                </td>
+                <td style="min-width: 12rem;">
+                    {{ rowData.adresse }}
+                </td>
+                <td style="min-width: 14rem;">
+                    <app-read-more [string]="showEcolesStr(rowData)"></app-read-more>
+                </td>
+                <td *ngIf="rowData.salles.length>0" pTooltip="Voir les salles" style="cursor: pointer;"
+                    tooltipPosition="bottom" (click)="afficherSalles=true;selectedCampus=rowData">
+                    <a>{{rowData.salles.length}}</a>
+                </td>
+                <td *ngIf="rowData.salles.length==0">
+                    0
+                </td>
+                <td style="min-width: 10rem;">
+                    <i pTooltip="Ajouter une école" tooltipPosition="bottom" class="pi pi-building "
+                        (click)="onAddEcole(rowData)" aria-hidden="true"></i>
+                    <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil ml-2"
+                        (click)="showModify(rowData)" aria-hidden="true"></i>
+                    <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash ml-2" (click)="delete(rowData)"
+                        aria-hidden="true"></i>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-rowData>
+            <td colspan="6">
+                <p-table dataKey="_id" [value]="rowData.ecoles" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Ecole <p-sortIcon
+                                    field="ecole_id.titre"></p-sortIcon></th>
+                            <th pSortableColumn="ecole_id.titre" style="text-align: center;"> Libellé
+                                <p-sortIcon field="ecole_id.titre"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon
+                                    field="email"></p-sortIcon></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-ecole>
+                        <tr>
+                            <td>
+                                {{ecole?.ecole_id?.titre}}
+                            </td>
+                            <td>
+                                {{ecole?.ecole_id?.titre}} - {{rowData?.libelle}}
+                            </td>
+                            <td>
+                                {{ecole?.email}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </td>
+        </ng-template>
+    </p-table>
 
 </div>
 

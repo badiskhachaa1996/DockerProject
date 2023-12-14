@@ -66,6 +66,47 @@ export class UpdateAgentComponent implements OnInit {
     { value: "Remboursement", label: "Remboursement" }
   ]
 
+  onOpenDropdown(module: string) {
+    this.dropdownModule = [
+      { label: 'Choisissez un Module', value: null },
+      { value: "Admission", label: "Admission" },
+      { value: "Partenaire", label: "Partenaire" },
+      { value: "Ticketing", label: "Ticketing" },
+      { value: "CRM", label: "CRM" },
+      { value: "Mailing", label: "Mailing" },
+      { value: "Commerciale", label: "Commerciale" },
+      { value: "International", label: "International" },
+      { value: "Pedagogie", label: "Pedagogie" },
+      { value: "iMatch", label: "iMatch" },
+      { value: "Générateur de Document", label: "Générateur de Document" },
+      { value: "Ressources Humaines", label: "Ressources Humaines" },
+      { value: "Admin IMS", label: "Admin IMS" },
+      { value: "Administration", label: "Administration" },
+      { value: "Booking", label: "Booking" },
+      { value: "Questionnaire", label: "Questionnaire" },
+      { value: "Intuns", label: "Intuns" },
+      { value: "Gestions des emails", label: "Gestions des emails" },
+      { value: "Links", label: "Links" },
+      { value: "Remboursement", label: "Remboursement" }
+    ]
+    if (this.USER?.role == 'Admin')
+      this.dropdownModule.splice(11, 1) //Supprimer Admin-IMS
+    if (this.USER?.type == 'Responsable')
+      this.dropdownModule.splice(10, 1) //Supprimer RH
+    this.roles_list.forEach(r => {
+      if (r.module != module)
+        this.dropdownModule.splice(this.customIndexOf(this.dropdownModule, r.module), 1)
+    })
+
+  }
+  customIndexOf(list: { label: string, value: string }[], label: string) {
+    let r = -1
+    list.forEach((ele, idx) => {
+      if (ele.label == label)
+        r = idx
+    })
+    return r
+  }
   dropdownRole = [
     { label: 'Choisissez un Role', value: null },
     { value: "Agent", label: "Agent" },
@@ -126,29 +167,43 @@ export class UpdateAgentComponent implements OnInit {
   ];
   SITE = []
   onAdd() {
-    this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
-      this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
-      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur') || this.addForm.value.type == 'Formateur' && this.USER.type != 'Formateur')
-        this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
-          if (!c)
-            this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
-              this.router.navigate(['/agent/list'])
-            })
-          else
-            this.router.navigate(['/agent/list'])
-        })
-      else
-        this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
-          if (c)
-            this.CollaborateurService.patchCollaborateurData({ _id: c._id, user_id: this.USER, localisation: this.SITE }).then(c => {
-              this.router.navigate(['/agent/list'])
-            })
-          else
-            this.router.navigate(['/agent/list'])
-        })
-
-
+    let modulesList = []
+    let isOkay = true
+    this.roles_list.forEach((r, idx) => {
+      if (!r.module || !r.role)
+        this.roles_list.splice(this.roles_list.indexOf(r))
+      else {
+        if (modulesList.includes(r.module)) {
+          isOkay = false
+          this.ToastService.add({ summary: 'Duplication de module trouvé', detail: 'Supprimer l\'un des entrées du module ' + r.module, severity: 'error' })
+        } else
+          modulesList.push(r.module)
+      }
     })
+    if (isOkay)
+      this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
+        this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
+        if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur') || this.addForm.value.type == 'Formateur' && this.USER.type != 'Formateur')
+          this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
+            if (!c)
+              this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
+                this.router.navigate(['/agent/list'])
+              })
+            else
+              this.router.navigate(['/agent/list'])
+          })
+        else
+          this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
+            if (c)
+              this.CollaborateurService.patchCollaborateurData({ _id: c._id, user_id: this.USER, localisation: this.SITE }).then(c => {
+                this.router.navigate(['/agent/list'])
+              })
+            else
+              this.router.navigate(['/agent/list'])
+          })
+
+
+      })
   }
   constructor(private UserService: AuthService, private ToastService: MessageService,
     private ServiceS: ServService, private route: ActivatedRoute, private router: Router,
@@ -171,7 +226,6 @@ export class UpdateAgentComponent implements OnInit {
           this.dropdownModule.splice(11, 1) //Supprimer Admin-IMS
         if (this.USER?.type == 'Responsable')
           this.dropdownModule.splice(10, 1) //Supprimer RH
-
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
         this.onSelectRole()

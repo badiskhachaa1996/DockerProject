@@ -22,6 +22,9 @@ import { environment } from 'src/environments/environment';
 })
 export class AddProspectComponent implements OnInit {
 
+
+  formDataList: any[] = [];
+
   RegisterForm2: UntypedFormGroup = new FormGroup({
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
@@ -83,12 +86,18 @@ export class AddProspectComponent implements OnInit {
     email_perso: new FormControl('', Validators.required),
     indicatif: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
-
+    rue: new FormControl(''),
+    ville: new FormControl(''),
+    codep: new FormControl(''),
     campus: new FormControl(this.campusDropdown[0]),
     rentree_scolaire: new FormControl(''),
     // programme: new FormControl(this.programList[0], Validators.required),
     formation: new FormControl('', Validators.required),
     rythme_formation: new FormControl('', Validators.required),
+    postal_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    
   })
 
 
@@ -192,6 +201,8 @@ export class AddProspectComponent implements OnInit {
   }
 
   redirectToForm2() {
+    const formData = this.RegisterForm2.value;
+    this.formDataList.push(formData);
     let code = this.RegisterForm2.value.commercial
     let source = this.RegisterForm2.value.source
     source = source.replace('ECOLE', this.RegisterForm2.value.ecole)
@@ -297,6 +308,10 @@ export class AddProspectComponent implements OnInit {
   }
 
   addNewProspect() {
+
+    const formData = this.newLeadForm.value;
+    this.formDataList.push(formData);
+
     let customid = ""
     try {
       customid = this.generateCode(this.newLeadForm.value.nationalite.value, this.newLeadForm.value.firstname, this.newLeadForm.value.lastname, this.newLeadForm.value.date_naissance)
@@ -319,7 +334,9 @@ export class AddProspectComponent implements OnInit {
         this.newLeadForm.value.civilite.value,
         null, null, 'Prospect', null,
         this.newLeadForm.value.pays.value,
-        null, null, null, null,
+        this.newLeadForm.value.ville_adresse, 
+        this.newLeadForm.value.rue_adresse, 
+       null, this.newLeadForm.value.postal_adresse,
         this.newLeadForm.value.nationalite.value,
         null,
         new Date(),
@@ -329,17 +346,23 @@ export class AddProspectComponent implements OnInit {
       ), 'newProspect': new Prospect(
         null, null,
         this.newLeadForm.value.date_naissance,
-        null, null, null, null, null, null,
+        null, null, null, null, 
+        null, 
+        null,
         this.newLeadForm.value.campus?.value,
         null, null,
-        this.newLeadForm.value.programme.value,
+        null,
         this.newLeadForm.value.formation,
         this.newLeadForm.value.rythme_formation.value,
         null, null, null, null, true, new Date(),
         this.newLeadForm.value.ecole,
         this.newLeadForm.value.commercial,
         null, null, null, null, null, null, null, null,
-        null, customid
+        null, customid, 
+        this.newLeadForm.value.codep,
+        null,
+        this.newLeadForm.value.rue,
+        this.newLeadForm.value.ville_adresse,
       )
     }).subscribe(
       ((response) => {

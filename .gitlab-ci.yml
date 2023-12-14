@@ -9,7 +9,10 @@ stages:
   - PROD2 # auto from main
   - PROD1 # Current PROD, MANUAL from main
 
-#variables:
+variables:
+# https://docs.gitlab.com/ee/ci/runners/configure_runners.html#git-clean-flags
+  GIT_CLEAN_FLAGS: -ffdx -e back/node_modules/ -e back/storage
+
 #  MOUNT_POINT: /builds/$CI_PROJECT_PATH/mnt
 #  SAST_IMAGE_SUFFIX: '-fips'
 
@@ -30,7 +33,10 @@ install_back_dependencies_on_dev:
   stage: Install
   tags:
     - dev-shell
-    
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -40,25 +46,6 @@ install_back_dependencies_on_dev:
       - develop
     changes:
       - back/package.json
-
-install_front_dependencies_on_dev:
-  stage: Install
-  tags:
-    - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
-    paths:
-      - front/node_modules/
-      
-  script:
-    - cd front
-    - rm -rf node_modules/
-    - npm install
-  only:
-    refs:
-      - develop
-    changes:
-      - front/package.json
 
 install_forms-app_dependencies_on_dev:
   stage: Install
@@ -68,7 +55,6 @@ install_forms-app_dependencies_on_dev:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
-
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -79,13 +65,34 @@ install_forms-app_dependencies_on_dev:
     changes:
       - forms-app/package.json
 
+install_front_dependencies_on_dev:
+  stage: Install
+  tags:
+    - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - develop
+    changes:
+      - front/package.json
+
 #==========================================================
 
 install_back_dependencies_on_qa:
   stage: Install
   tags:
     - qa-shell
-    
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
   script:
     - cd back
     - rm -rf node_modules/
@@ -95,25 +102,6 @@ install_back_dependencies_on_qa:
       - main
     changes:
       - back/package.json
-
-install_front_dependencies_on_qa:
-  stage: Install
-  tags:
-    - qa-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
-    paths:
-      - front/node_modules/
-
-  script:
-    - cd front
-    - rm -rf node_modules/
-    - npm install
-  only:
-    refs:
-      - main
-    changes:
-      - front/package.json
 
 install_forms-app_dependencies_on_qa:
   stage: Install
@@ -123,7 +111,6 @@ install_forms-app_dependencies_on_qa:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
-
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -134,32 +121,14 @@ install_forms-app_dependencies_on_qa:
     changes:
       - forms-app/package.json
 
-#==========================================================
-
-install_back_dependencies_on_prod2:
+install_front_dependencies_on_qa:
   stage: Install
   tags:
-    - prod2-shell
-
-  script:
-    - cd back
-    - rm -rf node_modules/
-    - npm install
-  only:
-    refs:
-      - main
-    changes:
-      - back/package.json
-
-install_front_dependencies_on_prod2:
-  stage: Install
-  tags:
-    - prod2-shell
+    - qa-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
-
   script:
     - cd front
     - rm -rf node_modules/
@@ -169,6 +138,26 @@ install_front_dependencies_on_prod2:
       - main
     changes:
       - front/package.json
+
+#==========================================================
+
+install_back_dependencies_on_prod2:
+  stage: Install
+  tags:
+    - prod2-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - main
+    changes:
+      - back/package.json
 
 install_forms-app_dependencies_on_prod2:
   stage: Install
@@ -178,7 +167,6 @@ install_forms-app_dependencies_on_prod2:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
-
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -189,33 +177,14 @@ install_forms-app_dependencies_on_prod2:
     changes:
       - forms-app/package.json
 
-#==========================================================
-
-manual_install_back_dependencies_on_prod1:
+install_front_dependencies_on_prod2:
   stage: Install
   tags:
-    - prod1-shell
-
-  script:
-    - cd back
-    - rm -rf node_modules/
-    - npm install
-  only:
-    refs:
-      - main
-    changes:
-      - back/package.json
-  when: manual
-
-manual_install_front_dependencies_on_prod1:
-  stage: Install
-  tags:
-    - prod1-shell
+    - prod2-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
     paths:
       - front/node_modules/
-
   script:
     - cd front
     - rm -rf node_modules/
@@ -225,6 +194,26 @@ manual_install_front_dependencies_on_prod1:
       - main
     changes:
       - front/package.json
+
+#==========================================================
+
+manual_install_back_dependencies_on_prod1:
+  stage: Install
+  tags:
+    - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-back
+    paths:
+      - back/node_modules/
+  script:
+    - cd back
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - main
+    changes:
+      - back/package.json
   when: manual
 
 manual_install_forms-app_dependencies_on_prod1:
@@ -235,7 +224,6 @@ manual_install_forms-app_dependencies_on_prod1:
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-forms-app
     paths:
       - forms-app/node_modules/
-
   script:
     - cd forms-app
     - rm -rf node_modules/
@@ -245,6 +233,25 @@ manual_install_forms-app_dependencies_on_prod1:
       - main
     changes:
       - forms-app/package.json
+  when: manual
+
+manual_install_front_dependencies_on_prod1:
+  stage: Install
+  tags:
+    - prod1-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR-front
+    paths:
+      - front/node_modules/
+  script:
+    - cd front
+    - rm -rf node_modules/
+    - npm install
+  only:
+    refs:
+      - main
+    changes:
+      - front/package.json
   when: manual
 
 #==========================================================
@@ -505,19 +512,7 @@ manual_build_forms-app_on_prod1:
 #       allow_failure: true # FIXME
 
 #==========================================================
-  
-deploy_front_to_dev:
-  stage: DEV
-  dependencies: 
-    - build_front_on_dev
-  tags:
-    - dev-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - develop
-    
+
 deploy_forms-app_to_dev:
   stage: DEV
   dependencies: 
@@ -530,6 +525,18 @@ deploy_forms-app_to_dev:
   only:
     - develop
 
+deploy_front_to_dev:
+  stage: DEV
+  dependencies: 
+    - build_front_on_dev
+  tags:
+    - dev-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - develop
+
 deploy_back_to_dev:
   stage: DEV
   dependencies: 
@@ -538,27 +545,21 @@ deploy_back_to_dev:
     - dev-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --dev
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - develop
 
 #==========================================================
-
-deploy_front_to_qa:
-  stage: QA
-  dependencies: 
-    - build_front_on_qa
-  tags:
-    - qa-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
 
 deploy_forms-app_to_qa:
   stage: QA
@@ -572,6 +573,18 @@ deploy_forms-app_to_qa:
   only:
     - main
 
+deploy_front_to_qa:
+  stage: QA
+  dependencies: 
+    - build_front_on_qa
+  tags:
+    - qa-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - main
+
 deploy_back_to_qa:
   stage: QA
   dependencies: 
@@ -580,28 +593,22 @@ deploy_back_to_qa:
     - qa-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/gitlab-runner/storage storage
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --qa
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
 
 #==========================================================
-  
-deploy_front_to_prod2:
-  stage: PROD2
-  dependencies:
-    - build_front_on_prod2
-  tags:
-    - prod2-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
-    
+      
 deploy_forms-app_to_prod2:
   stage: PROD2
   dependencies:
@@ -614,6 +621,18 @@ deploy_forms-app_to_prod2:
   only:
     - main
 
+deploy_front_to_prod2:
+  stage: PROD2
+  dependencies:
+    - build_front_on_prod2
+  tags:
+    - prod2-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - main
+
 deploy_back_to_prod2:
   stage: PROD2
   dependencies: 
@@ -622,28 +641,21 @@ deploy_back_to_prod2:
     - prod2-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod2
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
 
 #==========================================================
-  
-manual_deploy_front_to_prod1:
-  stage: PROD1
-  dependencies:
-    - manual_build_front_on_prod1
-  tags:
-    - prod1-shell
-  script:
-    - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
-  only:
-    - main
-  when: manual
 
 manual_deploy_forms-app_to_prod1:
   stage: PROD1
@@ -658,6 +670,19 @@ manual_deploy_forms-app_to_prod1:
     - main
   when: manual
 
+manual_deploy_front_to_prod1:
+  stage: PROD1
+  dependencies:
+    - manual_build_front_on_prod1
+  tags:
+    - prod1-shell
+  script:
+    - sudo rm -r /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
+  only:
+    - main
+  when: manual
+
 manual_deploy_back_to_prod1:
   stage: PROD1
   dependencies: 
@@ -666,11 +691,17 @@ manual_deploy_back_to_prod1:
     - prod1-shell
   script:
     - cd back
+    - rm storage
     - ln -s /home/ubuntu/storage storage
     - npm ci
     - pm2 delete index
     - pm2 start index.js --time -- --prod1
     - pm2 save
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}-back
+    paths:
+      - back/node_modules
+      - back/storage
   only:
     - main
   when: manual

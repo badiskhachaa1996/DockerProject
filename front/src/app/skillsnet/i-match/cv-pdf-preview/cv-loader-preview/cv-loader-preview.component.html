@@ -1,9 +1,13 @@
-<app-cv-pdf-preview
-    [student]="{fullName: fullName, profile: profil, imgPDP: imgPDP}"
+<div *ngIf="!CV || !user">
+    <p-skeleton width="100rem" height="50rem"></p-skeleton>
+</div>
+<app-cv-pdf-preview [student]="{fullName: fullName, profile: profil, imgPDP: imgPDP}" *ngIf="!CV.showCVPDF || !pdfSrc"
     [sidebar]="{apropos: CV?.a_propos, interets: CV?.centre_interets, competences: CV.competences, langues: CV.langues}"
     [maintContent]="{
     experiences_pro: CV?.experiences_pro,
     experiences_associatif: CV?.experiences_associatif,
     educations: CV?.education,
     informatiques: CV?.informatique 
-}" [school]="CV?.ecole" *ngIf="loaded"></app-cv-pdf-preview>
+}" [school]="CV?.ecole"></app-cv-pdf-preview>
+<pdf-viewer *ngIf="CV.showCVPDF && pdfSrc" [src]="pdfSrc" [original-size]="false"
+    style="min-width: 12.6cm; min-height: 17.82cm"></pdf-viewer>

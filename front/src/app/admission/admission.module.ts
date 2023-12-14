@@ -33,6 +33,7 @@ import { LeadDossierModule } from './lead/lead-dossier/lead-dossier.module';
 import { LeadCandidatureModule } from './lead/lead-candidature/lead-candidature.module';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TooltipModule } from 'primeng/tooltip';
+import { LeadersListComponent } from './leaders-list/leaders-list.component';
 @NgModule({
     declarations: [
         FormationAdmissionComponent,
@@ -45,7 +46,8 @@ import { TooltipModule } from 'primeng/tooltip';
         LeadInformationsPersonnelComponent,
         LeadSuiviComponent,
         LeadEvaluationComponent,
-        InformationsComponent
+        InformationsComponent,
+        LeadersListComponent
     ],
     imports: [
         CommonModule,

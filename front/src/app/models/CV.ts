@@ -84,6 +84,7 @@ export class CV {
         public source?: string,
         public profil?: Profile,
         public taux?: number,
-        public ecole?: string
+        public ecole?: string,
+        public showCVPDF?: Boolean,
     ) { }
 }
