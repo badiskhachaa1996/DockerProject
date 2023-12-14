@@ -130,8 +130,9 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { GroupesComponent } from './administration-v1/configuration/groupes/groupes.component';
 import { CriteresComponent } from './crm/criteres/criteres.component';
-import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { LeadersListComponent } from './admission/leaders-list/leaders-list.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 const routes: Routes = [
     {
         path: '',
@@ -225,6 +226,12 @@ const routes: Routes = [
                 component: AddProspectComponent,
                 canActivate: [AuthGuardService],
             }, //Admission
+            {
+                path: 'listdeslead',
+                component:LeadersListComponent ,
+                canActivate: [AuthGuardService],
+            },
+
 
             {
                 path: 'profil',
