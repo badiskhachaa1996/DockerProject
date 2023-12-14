@@ -50,12 +50,12 @@ export class GestionComponent implements OnInit {
   private project_id!: string;
   private ressources_id!: string;
   private budgetid!: string;
-  docAdded:boolean=false;
+  docAdded: boolean = false;
   toggleAssignees: { [taskId: string]: boolean } = {};
-  test:boolean=true;
+  test: boolean = true;
   avancement_p: number = 0;
   avancement_t: number = 0;
-  identifiant:number = 1;
+  identifiant: number = 1;
   displayTache: boolean = false;
   showAddProjectForm: boolean = false;
   showressources: boolean = false;
@@ -212,7 +212,7 @@ export class GestionComponent implements OnInit {
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
-      priorite: ['', ],
+      priorite: ['',],
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
       description: ['', Validators.required],
@@ -243,7 +243,12 @@ export class GestionComponent implements OnInit {
   //recuperation de user qui vas cree le formulaire
   getthecrateur() {
     this.userService.getInfoById(this.token.id).subscribe({
-      next: (response) => { this.userConnected = response; },
+      next: (response) => {
+        this.userConnected = response;
+        this.userConnected.savedProject.forEach(project => {
+          this.projectSelecteds.push(project);
+        });
+      },
       error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
       complete: () => console.log("information de l'utilisateur connecté récuperé")
     });
@@ -396,7 +401,7 @@ export class GestionComponent implements OnInit {
   //PATIE TACHES
   addTache(project_id) {
 
-    if (this.formAddTache.invalid)return; {}
+    if (this.formAddTache.invalid) return; { }
     const newTache = {
       libelle: this.formAddTache.get('libelle').value,
       number_of_hour: this.formAddTache.get('number_of_hour').value,
@@ -407,44 +412,47 @@ export class GestionComponent implements OnInit {
       project_id: this.projectIdForTask,
       validation: "La tâche n’est pas validée",
       identifian: this.identifiant,
-      urgent:this.formAddTache.get('urgent').value,
+      urgent: this.formAddTache.get('urgent').value,
     }
     this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
     this.formAddTache.reset();
     this.taskToDo.push(newTache);
-
+    this.showAddTacheForm = false;
 
   }
 
-  showTaskList(project) {
-
+  showTaskList(project: Project) {
+    console.log("je suis la");
+    this.userConnected.savedProject.push(project);
+    this.AuthService.update(this.userConnected).subscribe(data => { })
     this.projectSelecteds.push(project);
     this.projectService.getTasksByIdProject(project._id).then((data) => {
-      this.task = [];
+      this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
       this.task = data;
       this.projectIdForTask = project._id;
       data.forEach((d) => {
         this.task.push(d);
         if (d.etat === "En attente de traitement") {
           this.taskToDo.push(d);
-        }else if(d.etat === "En cours de traitement"){
-this.taskDoing.push(d);
-        } else if (d.etat ==="Traiter"){
+        } else if (d.etat === "En cours de traitement") {
+          this.taskDoing.push(d);
+        } else if (d.etat === "Traiter") {
           this.taskDone.push(d);
         }
       });
-      
-      this.selectedTabIndex = 3;
+
+      this.selectedTabIndex = 2 + this.projectSelecteds.length;
     });
   }
-  OnShowAddTach(){
+  OnShowAddTach() {
     this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
-      if(tasks){
-      this.identifiant=(tasks[tasks.length-1]?.identifian)+1;
-      
-      
-}})
+      if (tasks.length > 0) {
+        this.identifiant = (tasks[tasks.length - 1]?.identifian) + 1;
+
+
+      }
+    })
   }
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
   initialisation(task: Task) {
@@ -456,7 +464,7 @@ this.taskDoing.push(d);
     const new_date = `${year}-${month}-${day}`;
     this.showUpdateTacheForm = true;
     this.task_id = task._id;
-    
+
     this.formAddTache = this.formBuilder.group({
       libelle: task.libelle,
       priorite: task.priorite,
@@ -544,14 +552,19 @@ this.taskDoing.push(d);
   }
   deleteTaskFromSiderbar() {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette activité ?")) {
+      const indexToRemovedoing = this.taskDoing.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemovedoing !== -1) { this.taskDoing.splice(indexToRemovedoing, 1); }
+      const indexToRemovetodo = this.taskToDo.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemovetodo !== -1) { this.taskToDo.splice(indexToRemovetodo, 1); }
+      const indexToRemove = this.taskDone.findIndex(task => task._id === this.TaskToShow._id); if (indexToRemove !== -1) { this.taskDone.splice(indexToRemove, 1); }
       this.projectService.deleteTask(this.TaskToShow._id).then(() => {
         this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' });
       })
     }
 
   }
+
   taches(id, ri) {
     this.showTachesTable = true;
+
   }
   calculeAvancementTache() {
     this.projectService.getTasks().then(tasks => {
@@ -569,11 +582,34 @@ this.taskDoing.push(d);
     )
   }
   // Affichage tache
+  onChangeTabView(event) {
+    if (event > 2) {
+      console.log(this.projectSelecteds[event - 3]);
+      console.log(this.projectSelecteds)
+      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 3]._id).then((data) => {
+        this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
+        this.task = data;
+        this.projectIdForTask = this.projectSelecteds[event - 3]._id
+        data.forEach((d) => {
+          this.task.push(d);
+          if (d.etat === "En attente de traitement") {
+            this.taskToDo.push(d);
+          } else if (d.etat === "En cours de traitement") {
+            this.taskDoing.push(d);
+          } else if (d.etat === "Traiter") {
+            this.taskDone.push(d);
+          }
+        });
+
+
+      });
+    }
+  }
   onShowTache(task: Task) {
     this.TaskToShow = task;
     this.AtributateTable = []
     for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
-      this.AtributateTable.push(this.TaskToShow.attribuate_to[0]._id);
+      this.AtributateTable.push(this.TaskToShow.attribuate_to[i]._id);
     };
     this.taskToShowForm.patchValue({
       number_of_hour: this.TaskToShow.number_of_hour,
@@ -588,7 +624,7 @@ this.taskDoing.push(d);
   //passer une tache en doing
   ToDoing(t: Task) {
 
-    if (t.etat === "En attente de traitement") {
+    if (t.etat == "En attente de traitement") {
       const indexToRemove = this.taskToDo.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskToDo.splice(indexToRemove, 1); }
     } else { const indexToRemove = this.taskDone.findIndex(task => task._id === t._id); if (indexToRemove !== -1) { this.taskDone.splice(indexToRemove, 1); } }
     t.etat = "En cours de traitement"
@@ -712,7 +748,7 @@ this.taskDoing.push(d);
     this.projectService.getBudgetByIdProject(project_id).then((data) => {
       this.budget = [];
       this.budget = data;
-      console.log(this.budget);
+
       this.budget_charge = 0;
       this.budgect_depense = 0;
       for (let j = 0; j < data.length; j = j + 1) {
@@ -767,7 +803,7 @@ this.taskDoing.push(d);
       // Mise à jour du projet actuel
       this.currentProject = this.project.find(p => p._id == this.currentProject._id);
 
-      console.log(this.budget);
+
     } catch (error) {
       console.error('Erreur lors de la mise à jour du budget:', error);
       // Gérer l'erreur ici, par exemple, afficher un message d'erreur
@@ -889,7 +925,7 @@ this.taskDoing.push(d);
     const taskID = event.value;
     this.projectService.getTask(taskID).then(data => {
       this.taskSelected = data;
-      
+
       this.TicketForm.patchValue({
         description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,
         priorite: this.taskSelected.priorite,
@@ -968,7 +1004,7 @@ this.taskDoing.push(d);
   onDownloadBudgetFile(_id: string, file_id: string, path: string) {
     this.projectService.downloadFile(_id, file_id, path).subscribe(
       data => {
-        console.log(data);
+
       },
       error => {
         console.error(error);
@@ -982,5 +1018,9 @@ this.taskDoing.push(d);
     const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
     const day = String(dateObjectl.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`
+  }
+  onCloseTable(event) {
+    this.userConnected.savedProject.splice(event.index - 3, 1)
+    this.AuthService.update(this.userConnected).subscribe(data => { });
   }
 }

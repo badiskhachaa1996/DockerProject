@@ -4,6 +4,7 @@ import { Matching } from "./Matching";
 import { Prospect } from "./Prospect";
 import { Service } from "./Service";
 import { Ticket } from "./Ticket";
+import { Project } from "./Project";
 
 export class User {
     indicateur: any;
@@ -63,7 +64,8 @@ export class User {
         public haveNewAccess?: Boolean,
         public type_supp?: string[],
         public savedAdministration?: Prospect[],
-        public savedLeadCRM?: LeadCRM[]
+        public savedLeadCRM?: LeadCRM[],
+        public savedProject?: Project[]
     ) { }
 
 

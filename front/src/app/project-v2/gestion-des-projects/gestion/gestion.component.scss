@@ -1,44 +1,112 @@
 .card-done {
-    background-color: rgb(193, 193, 250);
-    color: white;
+  background-color: rgb(193, 193, 250);
+  color: white;
 }
+
 :host ::ng-deep .card-todo .p-component {
-    background: rgb(241, 241, 241) !important ;/* Couleur pour To Do */
+  background: rgb(241, 241, 241) !important;
+  /* Couleur pour To Do */
 }
+
 :host ::ng-deep .card-doing .p-component {
-    background: rgb(241, 241, 241) !important ;
-    ;/* Couleur pour To Doing */
+  background: rgb(241, 241, 241) !important;
+  ;
+  /* Couleur pour To Doing */
 }
+
 :host ::ng-deep .card-done .p-component {
-    background: rgb(241, 241, 241) !important ;
-    /* Couleur pour To Done */
+  background: rgb(241, 241, 241) !important;
+  scrollbar-width: none !important;
+  /* Couleur pour To Done */
 }
+
 .color-square {
-    width: 10px;
-    height: 10px;
-    margin: 5px;
-    cursor: pointer;
-    border: 1px solid #000;
-  }
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  cursor: pointer;
+  border: 1px solid #000;
+}
 
-  :host ::ng-deep .card-todo .p-card .p-component {
-    background-color: rgb(255, 174, 174) !important;
-   
-  }
-  :host ::ng-deep .card-todo .p-card .p-component:not(.p-button) {
-   
-    height: 14em;
-  }
-  :host ::ng-deep .p-button .p-component {
-    background-color: rgb(255, 174, 174) !important;   /* Définir la couleur de fond du bouton comme transparent */
-  }
-  :host ::ng-deep .card-doing .p-card .p-component{
-    background-color: rgb(181, 245, 255) !important;
-    height: 14em;
-    
-  }
+:host ::ng-deep .card-todo .p-card .p-component {
+  background-color: rgb(255, 174, 174) !important;
 
-  :host ::ng-deep .card-done .p-card .p-component{
-    background-color: rgb(158, 255, 160) !important;
-    height: 14em;
-  }
+}
+
+:host ::ng-deep .card-todo .p-card .p-component:not(.p-button) {
+
+  height: 16em;
+  overflow: auto;
+  scrollbar-width: none !important;
+}
+
+:host ::ng-deep .p-button .p-component {
+  background-color: rgb(255, 174, 174) !important;
+  /* Définir la couleur de fond du bouton comme transparent */
+}
+
+:host ::ng-deep .card-doing .p-card .p-component {
+  background-color: rgb(181, 245, 255) !important;
+  height: 16em;
+  overflow: auto !important;
+  scrollbar-width: none !important;
+
+}
+
+:host ::ng-deep .card-done .p-card .p-component {
+  background-color: rgb(158, 255, 160) !important;
+  height: 16em;
+  overflow: scroll !important;
+  scrollbar-width: none !important;
+
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar {
+  width: 0.2em;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar {
+  width: 0.2em;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar-thumb {
+  background-color: transparent;
+}
+
+//Scrollbar
+:host ::ng-deep .card-doing .p-card .p-component::-webkit-scrollbar {
+  width: 0.2em;
+}
+
+:host ::ng-deep .card-doing .p-card .p-component::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+:host ::ng-deep .card-doing .p-card .p-component::-moz-scrollbar {
+  width: 0em;
+}
+
+:host ::ng-deep .card-doing .p-card .p-component::-moz-scrollbar-thumb {
+  background-color: transparent;
+}
+
+//Scrollbar
+:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar {
+  width: 0em;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar {
+  width: 0em;
+}
+
+:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar-thumb {
+  background-color: transparent;
+}
