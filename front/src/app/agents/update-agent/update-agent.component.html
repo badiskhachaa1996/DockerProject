@@ -99,9 +99,16 @@
             </ng-template>
             <ng-template pTemplate="body" let-role let-ri="rowIndex">
                 <tr [pEditableRow]="role">
-                    <td>
-                        <p-dropdown [options]="dropdownModule" [(ngModel)]="role.module"
-                            placeholder="Choisissez une module de IMS"></p-dropdown>
+                    <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="dropdownModule" [(ngModel)]="role.module" [filter]="true"
+                                    (onShow)="onOpenDropdown(role.module)" placeholder="Choisissez une module de IMS"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{role.module}}
+                            </ng-template>
+                        </p-cellEditor>
                     </td>
                     <td>
                         <p-dropdown [options]="dropdownRole" [(ngModel)]="role.role"
