@@ -2,7 +2,17 @@
     style="display: none;" pInputFile />
 <div class="grid col-12">
     <div class="col-4 ">
-        <p-card header="To DO({{taskToDo.length}}) " class="card-todo">
+        <p-card class="card-todo">
+            <ng-template pTemplate="header">
+                <div class="grid col-12">
+                    <div class="col-11">
+                        <h2><strong>TO DO</strong></h2>
+                    </div>
+                    <div class="col-1">
+                        <span>({{taskToDo.length}})</span>
+                    </div>
+                </div>
+            </ng-template>
             <ng-container *ngFor="let t of taskToDo">
                 <p-card>
                     <p-card-header>
@@ -19,26 +29,31 @@
                             </div>
                         </div>
                         <div class="grid col-12" *ngIf="t.labels">
-                            <div *ngFor="let l of t.labels;let index = index" class="col-3">
-                                <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                    {{l.libelle}}
+                            <ng-container *ngFor="let l of t.labels;let index = index">
+                                <div class="col-3" *ngIf="index<4">
+                                    <div class="label" [style]="{'background-color':l.color}">
+                                        {{l.libelle}}
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-container>
                         </div>
                     </p-card-header>
                     <div class="grid col-12">
-                        <div class="col-6">
-                            <strong>DDL :</strong>{{t?.date_limite | date:'dd MMMM YY'}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>DDL :</strong><br>
+                            {{t?.date_limite | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            <strong>Attribué le :</strong> {{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-6">
-                            <strong>Par:</strong> {{t?.attribuate_by?.firstname | titlecase}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
                             {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>&nbsp;</strong><br>
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
                         </div>
                     </div>
                     <p-card-footer>
@@ -54,7 +69,17 @@
         </p-card>
     </div>
     <div class="col-4 ">
-        <p-card header="Doing ({{taskDoing.length}})" class="card-doing">
+        <p-card class="card-doing">
+            <ng-template pTemplate="header">
+                <div class="grid col-12">
+                    <div class="col-11">
+                        <h2><strong>Doing</strong></h2>
+                    </div>
+                    <div class="col-1">
+                        <span>({{taskDoing.length}})</span>
+                    </div>
+                </div>
+            </ng-template>
             <ng-container *ngFor="let t of taskDoing">
                 <p-card>
                     <p-card-header>
@@ -71,27 +96,32 @@
                             </div>
                         </div>
                         <div class="grid col-12" *ngIf="t.labels">
-                            <div *ngFor="let l of t.labels;let index = index" class="col-3">
-                                <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                    {{l.libelle}}
+                            <ng-container *ngFor="let l of t.labels;let index = index">
+                                <div class="col-3" *ngIf="index<4">
+                                    <div class="label" [style]="{'background-color':l.color}">
+                                        {{l.libelle}}
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-container>
                         </div>
                     </p-card-header>
 
                     <div class="grid col-12">
-                        <div class="col-6">
-                            <strong>DDL :</strong>{{t?.date_limite | date:'dd MMMM YY'}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>DDL :</strong><br>
+                            {{t?.date_limite | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            <strong>Attribué le :</strong> {{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-6">
-                            <strong>Par :</strong> {{t?.attribuate_by?.firstname | titlecase}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
                             {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>&nbsp;</strong><br>
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
                         </div>
                     </div>
                     <p-card-footer>
@@ -110,7 +140,17 @@
         </p-card>
     </div>
     <div class="col-4 ">
-        <p-card header="Done ({{taskDone.length}})" class="card-done">
+        <p-card class="card-done">
+            <ng-template pTemplate="header">
+                <div class="grid col-12">
+                    <div class="col-11">
+                        <h2><strong>Done</strong></h2>
+                    </div>
+                    <div class="col-1">
+                        <span>({{taskDone.length}})</span>
+                    </div>
+                </div>
+            </ng-template>
             <ng-container *ngFor="let t of taskDone">
                 <p-card>
                     <p-card-header>
@@ -127,27 +167,32 @@
                             </div>
                         </div>
                         <div class="grid col-12" *ngIf="t.labels">
-                            <div *ngFor="let l of t.labels; let index = index" class="col-3">
-                                <div *ngIf="index<4" class="label" [style]="{'background-color':l.color}">
-                                    {{l.libelle}}
+                            <ng-container *ngFor="let l of t.labels;let index = index">
+                                <div class="col-3" *ngIf="index<4">
+                                    <div class="label" [style]="{'background-color':l.color}">
+                                        {{l.libelle}}
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-container>
                         </div>
                     </p-card-header>
 
                     <div class="grid col-12">
-                        <div class="col-6">
-                            <strong>DDL :</strong>{{t?.date_limite | date:'dd MMMM YY'}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>DDL :</strong><br>
+                            {{t?.date_limite | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
+
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>Attribué le :</strong><br>{{t?.attribuate_date | date:'dd MMMM YY'}}
                         </div>
-                        <div class="col-6">
-                            <strong>Attribué le :</strong>{{t?.attribuate_date | date:'dd MMMM YY'}}
-                        </div>
-                        <div class="col-6">
-                            <strong>Par :</strong>{{t?.attribuate_by?.firstname | titlecase}}
+                        <div class="col-3" style="font-size: 10px;">
+                            <strong>Par :</strong><br>{{t?.attribuate_by?.firstname | titlecase}}
                             {{t?.attribuate_by?.lastname | uppercase}}
+                        </div>
+                        <div class="col-3" style="font-size:10px;">
+                            <strong>&nbsp;</strong><br>
+                            {{(t?.urgent)?'Urgent':'Non Urgent'}}
                         </div>
                     </div>
                     <p-card-footer>
