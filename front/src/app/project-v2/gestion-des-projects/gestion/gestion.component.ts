@@ -281,7 +281,7 @@ export class GestionComponent implements OnInit {
           if (projects[i].etat == "cloture") {
             this.nbr_projectCloturer++;
           }
-          if (projects[i].etat == "encour") {
+          if (projects[i].etat == "encours") {
             this.nbr_projectEnCour++
           }
         }
@@ -454,11 +454,9 @@ export class GestionComponent implements OnInit {
     });
   }
   OnShowAddTach() {
-    this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
+    this.projectService.getTasks().then((tasks) => {
       if (tasks.length > 0) {
         this.identifiant = (tasks[tasks.length - 1]?.identifian) + 1;
-
-
       }
     })
   }

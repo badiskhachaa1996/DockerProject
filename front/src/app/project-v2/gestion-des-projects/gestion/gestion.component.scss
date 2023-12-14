@@ -43,11 +43,35 @@
 
 :host ::ng-deep .card-todo .p-card .p-component:not(.p-button) {
 
-  height: 16em;
+  height: 13em;
   overflow: auto;
   scrollbar-width: none !important;
 }
+:host ::ng-deep .multiselect-custom {
+  .p-multiselect-label {
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+  }
 
+  .country-item-value {
+      padding: .25rem .5rem;
+      border-radius: 3px;
+      display: inline-flex;
+      margin-right: .5rem;
+      color: white;
+  }
+
+  .country-placeholder {
+      padding: 0.25rem;
+  }
+}
+.label {
+  padding: .25rem .5rem;
+  border-radius: 3px;
+  display: inline-flex;
+  margin-right: .5rem;
+  color: white;
+}
 :host ::ng-deep .p-button .p-component {
   background-color: rgb(255, 174, 174) !important;
   /* Définir la couleur de fond du bouton comme transparent */
@@ -55,7 +79,7 @@
 
 :host ::ng-deep .card-doing .p-card .p-component {
   background-color: rgb(181, 245, 255) !important;
-  height: 16em;
+  height: 13em;
   overflow: auto !important;
   scrollbar-width: none !important;
 
@@ -63,25 +87,25 @@
 
 :host ::ng-deep .card-done .p-card .p-component {
   background-color: rgb(158, 255, 160) !important;
-  height: 16em;
+  height: 13em;
   overflow: scroll !important;
   scrollbar-width: none !important;
 
 }
 
-:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar {
+:host ::ng-deep .card-todo .p-card .p-component::-webkit-scrollbar {
   width: 0.2em;
 }
 
-:host ::ng-deep .card-done .p-card .p-component::-webkit-scrollbar-thumb {
+:host ::ng-deep .card-todo .p-card .p-component::-webkit-scrollbar-thumb {
   background-color: transparent;
 }
 
-:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar {
+:host ::ng-deep .card-todo .p-card .p-component::-moz-scrollbar {
   width: 0.2em;
 }
 
-:host ::ng-deep .card-done .p-card .p-component::-moz-scrollbar-thumb {
+:host ::ng-deep .card-todo .p-card .p-component::-moz-scrollbar-thumb {
   background-color: transparent;
 }
 
