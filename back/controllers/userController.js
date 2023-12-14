@@ -698,10 +698,21 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
+app.get("/deletePDP/:user_id", (req, res, next) => {
+  User.findByIdAndUpdate(req.params.user_id, { pathImageProfil: null, typeImageProfil: null }).then(old_user => {
+    try {
+      fs.unlinkSync(
+        "storage/profile/" + req.params.user_id + "/" + old_user.pathImageProfil
+      );
+    } catch {
+
+    }
+    res.send(old_user)
+  })
+})
 //Sauvegarde de la photo de profile
 app.post("/file", upload.single("file"), (req, res, next) => {
   const file = req.file;
-  console.log(file);
   if (!file) {
     const error = new Error("No File");
     error.httpStatusCode = 400;
