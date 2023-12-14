@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes} from '@angular/router';
-//import {ContactUsComponent} from "./components/contact-us/contact-us.component";
+import {ContactUsComponent} from "./components/contact-us/contact-us.component";
 import {ContactUsEspicComponent} from "./components/contact-us-espic/contact-us-espic.component";
 import {ContactUsIntunsComponent} from "./components/contact-us-intuns/contact-us-intuns.component";
 import {ContactUsAdgComponent} from "./components/contact-us-adg/contact-us-adg.component";
@@ -12,7 +12,7 @@ import {ContactUsMedasupComponent} from "./components/contact-us-medasup/contact
 import {ContactUsIntComponent} from "./components/contact-us-int/contact-us-int.component";
 
 const routes: Routes = [
-  //{ path: 'contact-form/:ecole', component: ContactUsComponent },
+  { path: 'contact-form', component: ContactUsComponent },
   { path: 'contact-form/btech', component: ContactUsBtechComponent },
   { path: 'contact-form/espic', component: ContactUsEspicComponent },
   { path: 'contact-form/intuns', component: ContactUsIntunsComponent },
