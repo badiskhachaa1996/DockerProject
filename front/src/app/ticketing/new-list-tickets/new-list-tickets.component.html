@@ -179,12 +179,12 @@
                             placeholder="Service" emptyFilterMessage="Pas de service trouvé"
                             filterPlaceholder="Choisissez un service"></p-dropdown>
                         <p-dropdown [style]="{'width':'12em'}" [options]="filtreSujet" filter="true" [group]="true"
-                            [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
+                            *ngIf="serviceFiltered" [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
                             (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');" placeholder="Sujet"
                             emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
                         <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true"
-                            [(ngModel)]="selectedSite" [showClear]="true"
+                            *ngIf="serviceFiltered=='Ressources Humaines'" [(ngModel)]="selectedSite" [showClear]="true"
                             (onChange)="dt1.filter($event.value, 'site', 'equals');"
                             (onClear)="dt1.filter('', 'site', 'equals');" placeholder="Site"
                             emptyFilterMessage="Pas de site trouvé" filterPlaceholder="Choisissez un site"></p-dropdown>
@@ -446,13 +446,8 @@
                             filterPlaceholder="Choisissez un collaborateur"></p-dropdown>
                         <input type="date" [style]="{'width':'12em'}" (change)="filterDate(dt2,$event.target.value)"
                             placeholder="Date" pInputText>
-                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true"
-                            [(ngModel)]="selectedSite" [showClear]="true"
-                            (onChange)="dt2.filter($event.value, 'site', 'equals');"
-                            (onClear)="dt2.filter('', 'site', 'equals');" placeholder="Site"
-                            emptyFilterMessage="Pas de site trouvé" filterPlaceholder="Choisissez un site"></p-dropdown>
                         <p-dropdown [style]="{'width':'12em'}" [options]="filterService" filter="true"
-                            [(ngModel)]="serviceFiltered"
+                            *ngIf="serviceFiltered" [(ngModel)]="serviceFiltered"
                             (onChange)="dt2.filter($event.value, 'sujet_id.service_id._id', 'equals');onChangeService()"
                             placeholder="Service" emptyFilterMessage="Pas de service trouvé"
                             filterPlaceholder="Choisissez un service"></p-dropdown>
@@ -467,7 +462,11 @@
                             (onChange)="dt2.filter($event.value, 'statut', 'in');" placeholder="Statut"
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez un statut"></p-multiSelect>
-
+                        <p-dropdown [style]="{'width':'12em'}" [options]="filterSite" filter="true"
+                            *ngIf="serviceFiltered=='Ressources Humaines'" [(ngModel)]="selectedSite" [showClear]="true"
+                            (onChange)="dt2.filter($event.value, 'site', 'equals');"
+                            (onClear)="dt2.filter('', 'site', 'equals');" placeholder="Site"
+                            emptyFilterMessage="Pas de site trouvé" filterPlaceholder="Choisissez un site"></p-dropdown>
                         <p-dropdown [style]="{'width':'12em'}" [options]="filterAux1" filter="true"
                             *ngIf="filterAux1.length>1" (onChange)="dt2.filter($event.value, 'filiere', 'equals');"
                             [placeholder]="selectedService.extraInfo.title1"></p-dropdown>

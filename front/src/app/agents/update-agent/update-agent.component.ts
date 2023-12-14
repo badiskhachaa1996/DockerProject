@@ -170,7 +170,7 @@ export class UpdateAgentComponent implements OnInit {
     let modulesList = []
     let isOkay = true
     this.roles_list.forEach((r, idx) => {
-      if (!r.module)
+      if (!r.module || !r.role)
         this.roles_list.splice(this.roles_list.indexOf(r))
       else {
         if (modulesList.includes(r.module)) {
