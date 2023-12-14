@@ -8,6 +8,14 @@
   /* Couleur pour To Do */
 }
 
+:host ::ng-deep .p-card-content {
+  padding: 0;
+}
+
+:host ::ng-deep .p-card-body {
+  padding: 0.5rem;
+}
+
 :host ::ng-deep .card-doing .p-component {
   background: rgb(241, 241, 241) !important;
   ;

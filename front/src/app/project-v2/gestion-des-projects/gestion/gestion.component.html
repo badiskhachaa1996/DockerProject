@@ -238,7 +238,10 @@
     <p-tabPanel header="Reporting">
         <app-dashboard-project-v2></app-dashboard-project-v2>
     </p-tabPanel>
-    <p-tabPanel style="width: 100%;" header="Project -  {{projectSelected?.titre}} "
+    <p-tabPanel header="Mes activités">
+        <app-mytask></app-mytask>
+    </p-tabPanel>
+    <p-tabPanel style="width: 100%;" header="Project -  {{projectSelected?.titre}}"
         *ngFor="let projectSelected of projectSelecteds " [closable]="true" (onChange)="showTaskList(projectSelected)">
         <p-card>
             <div class="grid col-12">
@@ -283,6 +286,15 @@
                                     <div class="col-1">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
+                                </div>
+                                <div class="grid col-12" *ngIf="t.labels">
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
                             <p-card-content>
@@ -337,10 +349,16 @@
                         </p-card><br>
                     </ng-container>
 
+<<<<<<< HEAD
 
                 </p-card> <br>
                 <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true" pTooltip="Ajouter une activité"
                     (click)="OnShowAddTach(); showAddTacheForm=true"></p-button>
+=======
+                    <p-button icon="pi pi-plus" [rounded]="true" [outlined]="true"
+                        (click)="OnShowAddTach(); showAddTacheForm=true"></p-button>
+                </p-card>
+>>>>>>> a1a4c87d0c957adcdad7e7769eac1b6413b399c4
             </div>
             <div class="col-4 ">
                 <p-card class="card-doing">
@@ -358,12 +376,26 @@
                         <p-card>
                             <p-card-header>
                                 <div class="grid col-12">
+<<<<<<< HEAD
                                     <div class="col-11">
                                         #{{t.identifian}} <strong> {{t?.libelle}}</strong>
+=======
+                                    <div class="col-11" style="text-align: center;">
+                                        <strong> {{t?.libelle}}</strong>
+>>>>>>> a1a4c87d0c957adcdad7e7769eac1b6413b399c4
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
+                                </div>
+                                <div class="grid col-12" *ngIf="t.labels">
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
 
@@ -436,12 +468,26 @@
                         <p-card>
                             <p-card-header>
                                 <div class="grid col-12">
+<<<<<<< HEAD
                                     <div class="col-11">
                                         #{{t?.identifian}} <strong> {{t?.libelle}}</strong>
+=======
+                                    <div class="col-11" style="text-align: center;">
+                                        <strong> {{t?.libelle}}</strong>
+>>>>>>> a1a4c87d0c957adcdad7e7769eac1b6413b399c4
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
+                                </div>
+                                <div class="grid col-12" *ngIf="t.labels">
+                                    <ng-container *ngFor="let l of t.labels;let index = index">
+                                        <div class="col-3" *ngIf="index<4">
+                                            <div class="label" [style]="{'background-color':l.color}">
+                                                {{l.libelle}}
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </p-card-header>
 
@@ -872,6 +918,76 @@
             </div>
         </div>
     </form>
+    <div class="col-10" *ngIf="TaskToShow">
+        Labels:<br>
+        <p-multiSelect [(ngModel)]="TaskToShow.labels" defaultLabel="Choisissez un label" (onChange)="onUpdate()"
+            autoWidth="false" [options]="labels" [style]="{'width':'100%'}" class="multiselect-custom">
+            <ng-template let-value pTemplate="selectedItems">
+                <div class="country-item country-item-value" *ngFor="let option of TaskToShow.labels"
+                    [style]="{'background-color':option.color}">
+                    <div>{{option.libelle}}</div>
+                </div>
+                <div *ngIf="!TaskToShow.labels || TaskToShow.labels.length === 0" class="country-placeholder">
+                    Choisissez un label
+                </div>
+            </ng-template>
+            <ng-template let-label pTemplate="item">
+                <div class="country-item-value" [style]="{'background-color':label.color}">
+                    <div>{{label.libelle}}</div>
+                </div>
+            </ng-template>
+        </p-multiSelect>
+    </div>
+    <div class="col-2">
+        &nbsp;<br>
+        <button pButton icon="pi pi-cog" (click)="showLabelConfig = true" pTooltip="Configurer les labels"
+            tooltipPosition="bottom"></button>
+    </div>
+    <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.commentaires" class="col-12" [scrollable]="true"
+        scrollHeight="256px" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date" style="text-align: center;"> Date <p-sortIcon field="date">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="description" style="text-align: center;">
+                    Commentaire <p-sortIcon field="description">
+                    </p-sortIcon>
+                </th>
+
+                <th pSortableColumn="by" style="text-align: center;">
+                    Commenté par <p-sortIcon field="by">
+                    </p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-commentaire>
+            <tr [pEditableRow]="commentaire">
+                <td>
+                    {{commentaire?.date | date: 'dd MMMM YY'}}
+                </td>
+                <td pEditableColumn pTooltip="Clickez pour modifier" tooltipPosition="bottom">
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <textarea *ngIf="commentaire?.by._id==token.id" type="text" pInputTextarea
+                                (blur)="onUpdate()" [(ngModel)]="commentaire.description"></textarea>
+                            <p *ngIf="commentaire?.by._id!=token.id">{{commentaire?.description}}</p>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{commentaire?.description}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    {{commentaire?.by?.firstname | titlecase}} {{commentaire?.by?.lastname | uppercase}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+    <button pButton icon="pi pi-plus" (click)="onAddComment()" pTooltip="Ajouter un commentaire"
+        tooltipPosition="bottom"></button>
+    <br>
     <div>
         <p-table #dtdocuments dataKey="_id" [value]="TaskToShow?.documents" class="col-12"
             styleClass="p-datatable-gridlines">
@@ -1182,3 +1298,45 @@
         </div>
     </form>
 </div>
+
+<p-dialog header="Configuration des labels" [(visible)]="showLabelConfig" [style]="{width: '50vw'}" [modal]="true">
+    <button pButton icon="pi pi-plus" class="p-button mb-2" (click)="onAddLabel()"></button>
+    <p-table dataKey="_id" [value]="labels" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nom" style="text-align: center;"> Nom <p-sortIcon field="nom">
+                    </p-sortIcon>
+                </th>
+                <th>
+                    Couleur
+                </th>
+
+                <th style="text-align: center;">
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-label let-ri="rowIndex">
+            <tr [pEditableRow]="label">
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input type="text" pInputText [(ngModel)]="label.libelle" (blur)="onUpdateLabel(label)">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{label?.libelle}} &nbsp;
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <p-colorPicker appendTo="body" [(ngModel)]="label.color"
+                        (onHide)="onUpdateLabel(label)"></p-colorPicker>
+                </td>
+                <td>
+                    <i style="padding-left: 3%;" pTooltip="Supprimer le label" tooltipPosition="bottom"
+                        class="pi pi-trash mr-2" aria-hidden="true" (click)="deleteLabel(label)"> </i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

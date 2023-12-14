@@ -1,13 +1,11 @@
 <p-toast></p-toast>
 <div class="grid">
     <div class="col-12">
+
+        
         <div class="card">
-            <h4 style="text-align: center;">Ajouter un nouveau lead avec le nouveau formulaire</h4>
-            <div style="text-align: center;">
-                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                    obligatoires</small><br>
-            </div>
-            <br>
+      
+    
             <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm2()" [formGroup]="RegisterForm2">
                 <div class="field col-12 md:col-12">
                     <label For="role">Ecole <span style="color:red"> *</span></label>
@@ -15,11 +13,11 @@
                         formControlName="ecole"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
-                    <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                    <label For="role">Source <span style="color:red"> *</span></label> 
                     <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
                         (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne"> <!--SI INTERNE-->
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
                     <label For="role">Commercial</label>
                     <p-dropdown [options]="commercialList" filter="true"
                         placeholder="Choisissez le commercial qui a ajouté le lead"
@@ -32,39 +30,8 @@
             </form>
         </div>
     </div>
-    <!--<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <div class="col-12" *ngIf="!isPartenaireExterne">
-        <div class="card" style="background-color: #eeeded;">
-            <h4 style="text-align: center;">Ajouter un nouveau lead avec l'ancien formulaire</h4>
-            <div style="text-align: center;">
-                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                    obligatoires</small><br>
-            </div>
-            <br>
-            <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm()"
-                [formGroup]="RegisterForm">
-                <div class="field col-12 md:col-12">
-                    <label For="role">Ecole <span style="color:red"> *</span></label>
-                    <p-dropdown [options]="ecoleList" placeholder="Choisissez l'école du lead"
-                        formControlName="ecole"></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
-                    <label For="role">Source <span style="color:red"> *</span></label> 
-                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead" (onChange)="changeSource($event.value)"
-                        formControlName="source"></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  
-                    <label For="role">Commercial</label> 
-                    <p-dropdown [options]="commercialList" filter="true"
-                        placeholder="Choisissez le commercial qui a ajouté le lead"
-                        formControlName="commercial"></p-dropdown>
-                </div>
-                <div style="justify-content: right;">
-                    <button pButton type="submit" label="Ajouter" [disabled]="(RegisterForm.invalid && !isPartenaireExterne) || (!RegisterForm.value.ecole)"></button>
-                </div>
-            </form>
-        </div>
-    </div>-->
+
+  
     <div class="col-12 card">
         <h4 style="text-align: center;">Ajouter un nouveau lead avec le Quick Ajout</h4>
         <div style="text-align: center;">
@@ -122,7 +89,7 @@
                     optionDisabled="actif"></p-dropdown>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Adresse électronique :<span style="color:red"> *</span></label>
+                <label>Email :<span style="color:red"> *</span></label>
                 <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
                     pInputText>
             </div>
@@ -136,8 +103,24 @@
                 <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
                     formControlName="phone" />
             </div>
+            <div class="field col-12 md:col-6">
 
-            <h5 class="col-12" style="text-align: center;">Informations pédagogique</h5><br>
+                <label>Rue:</label>
+                <input formControlName="rue_adresse" placeholder="Ex: 20 Place de l'église" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Ville:</label>
+                <input formControlName="ville_adresse" placeholder="Ex: Paris" pInputText>
+            </div>
+            <div class="field col-12 md:col-6">
+
+                <label>Code postale:</label>
+                <input formControlName="postal_adresse" placeholder="Ex: 14950" pInputText>
+            </div>
+
+
+            <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
 
             <div class="field col-12">
                 <label>Choix du campus <span style="color: red;"> * </span></label>
@@ -153,18 +136,7 @@
                 </p-dropdown>
             </div>
 
-            <!--<div class="field col-12 md:col-4">
-                <label>Choix du programme <span style="color: red;"> * </span></label>
-                <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
-                    placeholder="Choisissez un programme">
-                </p-dropdown>
-            </div>-->
-            <!--<div class="field col-12 md:col-12" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
-                <label For="formation">Choix de la formation <span style="color: red;">
-                        *</span></label>
-                <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program" autoWidth="false"
-                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="formation"></p-dropdown>
-            </div>-->
+    
             <div class="field col-12 md:col-12">
                 <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                     </span></label>
@@ -184,5 +156,7 @@
                     [disabled]="(newLeadForm.invalid && !isPartenaireExterne) || (!newLeadForm.value.ecole)"></button>
             </div>
         </form>
+
+        
     </div>
 </div>

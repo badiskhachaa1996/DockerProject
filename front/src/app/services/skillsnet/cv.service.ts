@@ -14,15 +14,15 @@ import { CV } from 'src/app/models/CV';
 
 export class CvService {
 
- 
+
 
   apiUrl = `${environment.origin}cv`;
 
- 
+
 
   constructor(private httpClient: HttpClient) { }
 
- 
+
 
   // methode d'ajout de cv
 
@@ -30,7 +30,7 @@ export class CvService {
 
     const url = `${this.apiUrl}/post-cv`;
 
- 
+
 
     return new Promise<CV>((resolve, reject) => {
 
@@ -48,7 +48,7 @@ export class CvService {
 
   }
 
- 
+
 
   //Methode d'envoi du fichier brute
 
@@ -56,7 +56,7 @@ export class CvService {
 
     const url = `${this.apiUrl}/upload-cv`;
 
- 
+
 
     return new Promise((resolve, reject) => {
 
@@ -74,7 +74,7 @@ export class CvService {
 
   }
 
- 
+
 
   // methode de modification de cv
 
@@ -82,7 +82,7 @@ export class CvService {
 
     const url = `${this.apiUrl}/put-cv`;
 
- 
+
 
     return new Promise((resolve, reject) => {
 
@@ -100,7 +100,7 @@ export class CvService {
 
   }
 
- 
+
 
   // methode de recupération des cvs
 
@@ -108,7 +108,7 @@ export class CvService {
 
     const url = `${this.apiUrl}/get-cvs`;
 
- 
+
 
     return new Promise<CV[]>((resolve, reject) => {
 
@@ -126,17 +126,17 @@ export class CvService {
 
   }
 
- 
+
 
   getCvsPublic() {
 
     const url = `${this.apiUrl}/get-cvs-public`;
 
- 
+
 
     return new Promise((resolve, reject) => {
 
-      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
 
         next: (response) => resolve(response),
 
@@ -150,7 +150,7 @@ export class CvService {
 
   }
 
- 
+
 
   // methode de recupération d'un cv via son id
 
@@ -158,7 +158,7 @@ export class CvService {
 
     const url = `${this.apiUrl}/get-cv/${id}`;
 
- 
+
 
     return new Promise((resolve, reject) => {
 
@@ -174,15 +174,15 @@ export class CvService {
 
     });
 
- 
+
 
   }
 
- 
 
- 
 
- 
+
+
+
 
   getByID(id: any) {
 
@@ -192,7 +192,7 @@ export class CvService {
 
   }
 
- 
+
 
   // methode de recupération d'un cv via son user id
 
@@ -202,7 +202,7 @@ export class CvService {
 
     return this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
- 
+
 
     /*return new Promise<CV>((resolve, reject) => {
 
@@ -220,7 +220,7 @@ export class CvService {
 
   }
 
- 
+
 
   // verification si l'utilisateur possede un cv
 
@@ -228,7 +228,7 @@ export class CvService {
 
     let result = false;
 
- 
+
 
     for (let user_id in cvLists) {
 
@@ -250,7 +250,7 @@ export class CvService {
 
   }
 
- 
+
 
   uploadPicture(formData: FormData) {
 
@@ -260,7 +260,7 @@ export class CvService {
 
   }
 
- 
+
 
   getAllPicture() {
 
@@ -270,7 +270,7 @@ export class CvService {
 
   }
 
- 
+
 
   getPictureByUser(id) {
 
@@ -280,13 +280,13 @@ export class CvService {
 
   }
 
- 
 
-  downloadCV(id) {
 
-    const url = `${this.apiUrl}/download-cv/${id}`;
+  downloadCV(user_id) {
 
- 
+    const url = `${this.apiUrl}/download-cv/${user_id}`;
+
+
 
     return new Promise<any>((resolve, reject) => {
 
@@ -302,17 +302,17 @@ export class CvService {
 
     });
 
- 
+
 
   }
 
- 
+
 
   deleteCV(id) {
 
     const url = `${this.apiUrl}/delete-cv/${id}`;
 
- 
+
 
     return new Promise<any>((resolve, reject) => {
 
@@ -353,4 +353,3 @@ export class CvService {
   }
 }
 
- 

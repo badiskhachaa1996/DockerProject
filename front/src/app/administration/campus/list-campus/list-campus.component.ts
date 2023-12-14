@@ -20,7 +20,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
   styleUrls: ['./list-campus.component.scss']
 })
 export class ListCampusComponent implements OnInit {
-
+  showAdd = false
   ecoles: Ecole[] = []
   dropdownEcole: any[] = [];
   campuss: CampusR[] = [];
@@ -112,6 +112,7 @@ export class ListCampusComponent implements OnInit {
 
   onAddCampus(campus) {
     this.campuss.push(campus)
+    this.showAdd = false
   }
   delete(campus: CampusR) {
     if (confirm('Êtes-vous sûr de supprimer ce campus ?'))

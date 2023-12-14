@@ -1,20 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormCrmExtComponent } from './form-crm-ext.component';
+import { ContactUsBtechComponent } from './contact-us-btech.component';
 
-describe('FormCrmExtComponent', () => {
-  let component: FormCrmExtComponent;
-  let fixture: ComponentFixture<FormCrmExtComponent>;
+describe('ContactUsSimpleComponent', () => {
+  let component: ContactUsBtechComponent;
+  let fixture: ComponentFixture<ContactUsBtechComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormCrmExtComponent ]
+      declarations: [ ContactUsBtechComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FormCrmExtComponent);
+    fixture = TestBed.createComponent(ContactUsBtechComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

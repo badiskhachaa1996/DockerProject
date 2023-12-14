@@ -149,6 +149,10 @@ export class GestionComponent implements OnInit {
   serviceDic = {}
   sujetDic = {}
   USER!: User;
+  showLabelConfig = false
+  onAddComment() {
+    this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.USER, date: new Date() })
+  }
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -160,6 +164,10 @@ export class GestionComponent implements OnInit {
       this.project = [];
       this.project = data;
 
+    })
+    //Récupération des labels
+    this.projectService.getLabels().subscribe(data => {
+      this.labels = data
     })
     //recuperation du nombre de project
     this.listeprojets();
@@ -442,7 +450,7 @@ export class GestionComponent implements OnInit {
         }
       });
 
-      this.selectedTabIndex = 2 + this.projectSelecteds.length;
+      this.selectedTabIndex = 3 + this.projectSelecteds.length;
     });
   }
   OnShowAddTach() {
@@ -972,6 +980,11 @@ export class GestionComponent implements OnInit {
   onUpdateFollow() {
 
   }
+  onUpdate() {
+    this.projectService.putTask({ ...this.TaskToShow }).then(r => {
+      console.log('Tache modifié')
+    })
+  }
   FileUpload(event) {
     if (event != null) {
       this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
@@ -1021,6 +1034,22 @@ export class GestionComponent implements OnInit {
   }
   onCloseTable(event) {
     this.userConnected.savedProject.splice(event.index - 3, 1)
-    this.AuthService.update(this.userConnected).subscribe(data => { });
+    this.AuthService.update(this.userConnected).subscribe(data => { });}
+  labels = []
+  onAddLabel() {
+    this.projectService.createLabel({ color: '#37BAD4', libelle: 'Label' }).subscribe(r => {
+      this.labels.push(r)
+
+    })
+  }
+  onUpdateLabel(label) {
+    this.projectService.updateLabel(label).subscribe(r => {
+    })
+  }
+
+  deleteLabel(label) {
+    this.projectService.deleteLabel(label._id).subscribe(r => {
+      this.labels.splice(this.labels.indexOf(label), 1)
+    })
   }
 }
