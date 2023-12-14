@@ -152,6 +152,9 @@ const user_schema = new mongoose.Schema({
     savedLeadCRM: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "leadCRM" }], default: []
     },
+    savedProject: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "projects" }], default: []
+    }
 
 
 });
