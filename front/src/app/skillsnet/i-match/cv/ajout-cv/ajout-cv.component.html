@@ -175,7 +175,7 @@
                             (change)="onUpload($event)" chooseLabel="Browse" />
                     </div>
                     <div class="field col-12">
-                        <label for="user">Afficher le CV PDF plutôt que celui de l'école ?</label>
+                        <label for="user">Afficher pour les entreprises le CV original ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="showCVPDF"
                             (onChange)="onAddCV(false)"
                             [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
@@ -185,10 +185,10 @@
                         <input #selectedFile id="selectedFile" multiple type="file" accept="image/*"
                             maxFileSize="10000000" (change)="FileUploadPDP($event)" chooseLabel="Browse" />
                     </div>
-                    <div class="field col-4">
+                    <div class="field col-4" style="text-align: right;">
                         <label>&nbsp;</label>
-                        <button type="button" pButton pRipple icon="pi pi-trash" (click)="deletePhoto()"
-                            pTooltip="Supprimer la photo" tooltipPosition="bottom"></button>
+                        <p-button icon="pi pi-trash" pTooltip="Supprimer la photo" tooltipPosition="bottom"
+                            (click)="deletePhoto()"></p-button>
                     </div>
                     <div class="field col-12">
                         <label>Mobilité - Ville</label>
