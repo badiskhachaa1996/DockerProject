@@ -109,7 +109,7 @@ app.post("/create", (req, res, next) => {
     //Recuperation de nos datas depuis la requete
     prospectData = req.body.newProspect;
     userData = req.body.newUser;
-
+console.log(userData);
     //Suppression du _id venant du frontend
     delete prospectData._id;
     prospectData['decision_admission'] = "En attente de traitement"
@@ -653,11 +653,15 @@ app.get('/getAllEtudiant', (req, res, next) => {
 
 })
 
-//Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
+//Recuperation de toutes les listes des prospect pour le tableau Gestions préinscriptions
 app.get("/getAll", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
-        .then((prospectsFromDb) => {
+      
+    .then((prospectsFromDb) => {
+
+console.log(prospectsFromDb)
+
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -723,6 +727,9 @@ app.get("/get100Sourcing", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Prospeeects du Partenaire
+//Recuperation de la liste des prospect pour le tableau Prospeeects du Partenaire
+//Recuperation de la liste des prospect pour le tableau Prospeeects du Partenaire
 //Recuperation de la liste des prospect pour le tableau Prospects du Partenaire
 app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
     CommercialPartenaire.findOne({ user_id: req.params.id }).populate('partenaire_id').then(commercial => {
@@ -1752,6 +1759,42 @@ app.post('/getDataForDashboardPerformance', (req, res) => {
                     score_attente += Math.ceil((new Date(val?.date_creation).getTime() - new Date(val?.contact_date).getTime()) / (1000 * 3600 * 24))
                 }
             })
+
+
+
+ 
+            app.get("/getconnectedById/:id", (req, res) => {
+                let id = req.params.id;
+                User.findOne({ _id: id })
+                  .then((userFromDb) => {
+                    let userToken = jwt.sign(
+                      { userFromDb, id: id },
+                      "126c43168ab170ee503b686cd857032d",
+                      { expiresIn: "7d" }
+                    );
+                    res.status(200).send({ userToken });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    res.status(404).send(error);
+                  });
+              });
+
+
+              app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
+                Partenaire.findOne({ code_partenaire: req.params.code_partenaire })
+                    .then((partenaireFromDB) => {
+                        if (partenaireFromDB) {
+                            console.log(partenaireFromDB)
+                        } else {
+                            res.status(400).send("Code incorrect, Aucun partenaire trouvé");
+                        }
+                    })
+                    .catch((error) => { res.status(500).send(error); });
+            });
+
+
+
         //let ProspectFiltered = ProspectAdmissionFiltered.concat(ProspectSourcingFiltered, ProspectConsulaireFiltered, ProspectOrientationFiltered)
         let days = Math.ceil((new Date(req.body.member.date_creation).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
 

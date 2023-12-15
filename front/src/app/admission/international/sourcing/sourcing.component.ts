@@ -361,7 +361,7 @@ export class SourcingComponent implements OnInit {
       listTeam.forEach(team => {
         let items = []
         dic[team].forEach(element => {
-          items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+          items.push({ label: `${element.user_id?.lastname} ${element.user_id?.firstname}`, value: element?._id })
           this.memberDic[element._id] = element
         })
         this.agentSourcingList.push({
@@ -645,24 +645,24 @@ export class SourcingComponent implements OnInit {
   }
 
   saveDetails(willClose = false) {
-    let bypass: any = this.showDetails.user_id
+    let bypass: any = this.showDetails?.user_id
     let user = {
-      civilite: this.detailsForm.value.civilite,
-      lastname: this.detailsForm.value.lastname,
-      firstname: this.detailsForm.value.firstname,
-      indicatif: this.detailsForm.value.indicatif,
-      phone: this.detailsForm.value.phone,
-      email_perso: this.detailsForm.value.email_perso,
-      pays_adresse: this.detailsForm.value.pays_adresse,
-      numero_adresse: this.detailsForm.value.numero_adresse,
-      postal_adresse: this.detailsForm.value.postal_adresse,
-      rue_adresse: this.detailsForm.value.rue_adresse,
-      ville_adresse: this.detailsForm.value.ville_adresse,
-      _id: bypass._id
+      civilite: this.detailsForm?.value?.civilite,
+      lastname: this.detailsForm?.value?.lastname,
+      firstname: this.detailsForm?.value?.firstname,
+      indicatif: this.detailsForm?.value?.indicatif,
+      phone: this.detailsForm?.value?.phone,
+      email_perso: this.detailsForm?.value?.email_perso,
+      pays_adresse: this.detailsForm?.value?.pays_adresse,
+      numero_adresse: this.detailsForm?.value?.numero_adresse,
+      postal_adresse: this.detailsForm?.value?.postal_adresse,
+      rue_adresse: this.detailsForm?.value?.rue_adresse,
+      ville_adresse: this.detailsForm?.value?.ville_adresse,
+      _id: bypass?._id
     }
-    let date_cf = this.showDetails.date_cf
-    let date_visa = this.showDetails.date_visa
-    if (this.detailsForm.value.avancement_visa != 'Pas de retour' && this.detailsForm.value.avancement_visa != this.showDetails.avancement_visa)
+    let date_cf = this.showDetails?.date_cf
+    let date_visa = this.showDetails?.date_visa
+    if (this.detailsForm?.value?.avancement_visa != 'Pas de retour' && this.detailsForm?.value?.avancement_visa != this.showDetails?.avancement_visa)
       date_visa = new Date()
     let date_inscription_def = this.showDetails.date_inscription_def
     if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)

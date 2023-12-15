@@ -1329,7 +1329,7 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
-                            <tr>
+                            <tr *ngIf="user.source === 'Partenaire'">
                                 <td pEditableColumn pTooltip="Cliquez pour modifier" tooltipPosition="bottom">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
