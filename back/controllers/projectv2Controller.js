@@ -50,6 +50,26 @@ app.get('/get-project/:id', (req, res, next) => {
         .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperer le projet' }); })
 });
 
+app.get('/getProjectsAsAdmin/:user_id', (req, res, next) => {
+    Project.find({ $or: [{ createur_id: req.params.user_id }, { creator_id: req.params.user_id }, { responsable_id: req.params.user_id }] })?.populate('creator_id')
+        .then((crproject) => {
+            let ids = []
+            crproject.forEach(p => {
+                ids.push(p._id)
+            })
+            console.log(crproject)
+            Task.find({ project_id: { $nin: ids }, attribuate_to: { $in: [req.params.user_id] } }).populate({ path: 'project_id', populate: { path: 'creator_id' } })?.then(moreproject => {
+                console.log(moreproject)
+                moreproject.forEach(p => {
+                    crproject.push(p)
+                })
+                res.status(200).send(crproject);
+            })
+
+        })
+        .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperer le projet' }); })
+});
+
 app.put("/put-project", (req, res, next) => {
     const project = new Project({ ...req.body });
 
@@ -78,7 +98,6 @@ app.get("/gettasks", (req, res, next) => {
 });
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
-    console.log(req.params.id);
     Task.find({ project_id: req.params.id }).populate('labels').populate('attribuate_by').populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate({
         path: 'ticketId',
         populate: {
@@ -115,7 +134,6 @@ app.get("/get-tasks-by-id-agent/:id", (req, res, next) => {
 // update task 
 app.put("/put-task", (req, res, next) => {
     const task = new Task({ ...req.body });
-    console.log(req.body)
     Task.findByIdAndUpdate(task._id, { ...req.body }, { new: true })
         .then((taskUpdated) => { res.status(201).json(taskUpdated); })
         .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour cette tâche' }); });
@@ -144,7 +162,6 @@ app.post("/post-ressources", (req, res, next) => {
 
 // get ressource by id project
 app.get("/get-ressourcess/:id", (req, res, next) => {
-    console.log(req.params.id);
     Ressources.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')
         .then((ressourcesFromDb) => { res.status(200).send(ressourcesFromDb) })
         .catch((error) => { console.error(error); res.status(500).json({ error: 'Impossible de récuperé la liste des ressources' }); });
@@ -186,7 +203,6 @@ app.post("/post-budget", (req, res, next) => {
 
 // get Budget by id project
 app.get("/get-budgets/:id", (req, res, next) => {
-    console.log(req.params.id);
     Budget.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')
         .then((budgetFromDb) => { res.status(200).send(budgetFromDb) })
         .catch((error) => { console.error(error); res.status(500).json({ error: 'Impossible de récuperé la liste des Budget' }); });

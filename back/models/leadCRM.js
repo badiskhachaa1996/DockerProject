@@ -86,7 +86,7 @@ const schema = mongoose.Schema({
             note_qualification: { type: String, required: false },
         }]
     },
-    equipe:{ type: String, required: false },
+    equipe: { type: String, required: false },
 });
 
 const LeadCRM = mongoose.model('leadCRM', schema);
