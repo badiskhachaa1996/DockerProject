@@ -19,6 +19,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         var emailPersoList = []
         var emailIMSList = []
         User.find().then(users => {

@@ -18,6 +18,10 @@ mongoose
     })
     .then(() => {
         console.log('MONGODB CONNECTED')
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         DailyCheck.find({ check_out: null }).then(dcs => {
             Collaborateur.find().then(collabs => {
                 let dicCollab = {}

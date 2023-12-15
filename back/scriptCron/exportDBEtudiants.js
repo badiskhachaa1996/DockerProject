@@ -17,6 +17,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         //Sample data set
         var d = new Date().toLocaleDateString('fr-FR')
         d = d.replace(/\//, '-')
