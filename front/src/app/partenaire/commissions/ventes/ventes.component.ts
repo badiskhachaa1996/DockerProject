@@ -312,7 +312,7 @@ export class VentesComponent implements OnInit {
     if (confirm(`Etes-vous sûr de vouloir supprimer cette vente ?`))
       this.VenteService.delete(vente._id).subscribe(data => {
         this.ventes.splice(this.ventes.indexOf(vente), 1)
-        this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
+        this.MessageService.add({ severity: 'success', summary: 'Suppression de la vente avec succès' })
       })
   }
 

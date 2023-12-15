@@ -112,7 +112,7 @@ export class ConfigurationPointeuseComponent implements OnInit {
   onDelete(machine: Pointeuse) {
     this.PointeuseService.delete(machine._id).subscribe(machine => {
       this.pointeuses.splice(this.pointeuses.indexOf(machine), 1)
-      this.ToastService.add({ severity: 'success', summary: "Suppresion de la pointeuse avec succès" })
+      this.ToastService.add({ severity: 'success', summary: "Suppression de la pointeuse avec succès" })
     })
   }
 

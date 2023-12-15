@@ -150,32 +150,43 @@ export class GestionComponent implements OnInit {
   sujetDic = {}
   USER!: User;
   showLabelConfig = false
+  AccessLevel = "Admin"
   onAddComment() {
     this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.userConnected, date: new Date() })
   }
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.getthecrateur()
     //appelle a la fonction de recupreation des personnes consernees
     this.getallusers();
-    //recuperer les project avec getProjects
-    this.projectService.getProjects().then((data) => {
-      this.project = [];
-      this.project = data;
-
-    })
     //Récupération des labels
     this.projectService.getLabels().subscribe(data => {
       this.labels = data
     })
     //recuperation du nombre de project
-    this.listeprojets();
+    this.userService.getInfoById(this.token.id).subscribe({
+      next: (response) => {
+        this.userConnected = response;
+        if (response.roles_list)
+          response.roles_list.forEach(role => {
+            if (role.module == "Project")
+              this.AccessLevel = role.role
+          })
+        this.listeprojets();
+        this.userConnected.savedProject.forEach(project => {
+          this.projectSelecteds.push(project);
+        });
+      },
+      error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
+      complete: () => console.log("information de l'utilisateur connecté récuperé")
+    });
+
     this.SujetService.getAll().subscribe(data => {
       data.forEach(element => {
         this.sujetDic[element._id] = element.label
       });
     })
+    //récupération du niveau d'accès
     if (this.router.url.startsWith('/ticketing-igs')) {
       //Charger les sujets et services IGS
       this.ServService.getAll().subscribe(data => {
@@ -254,6 +265,11 @@ export class GestionComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        if (response.roles_list)
+          response.roles_list.forEach(role => {
+            if (role.module == "Project")
+              this.AccessLevel = role.role
+          })
         this.userConnected.savedProject.forEach(project => {
           this.projectSelecteds.push(project);
         });
@@ -264,43 +280,84 @@ export class GestionComponent implements OnInit {
   }
 
   listeprojets() {
-    this.projectService.getProjects()
-    .then((projects) => {
-      this.nbr_project = projects.length;
-      this.nbr_projectCloturer = 0;
-      this.nbr_projectEnCour = 0;
+    console.log(this.AccessLevel)
+    if (this.AccessLevel == 'Super-Admin')
+      this.projectService.getProjects()
+        .then(projects => {
+          this.project = projects;
+          this.nbr_project = projects.length;
+          this.nbr_projectCloturer = 0;
+          this.nbr_projectEnCour = 0;
+          this.avancement_p = 0;
+          projects.forEach((project) => {
+            let totalEstimation = 0;
+            let totalCompletedHours = 0;
 
-      projects.forEach((project) => {
-        let totalEstimation = 0;
-        let totalCompletedHours = 0;
+            this.projectService.getTasksByIdProject(project._id).then((data) => {
+              for (let j = 0; j < data.length; j++) {
+                totalEstimation += data[j].number_of_hour;
+                totalCompletedHours += (data[j].avancement / 100) * data[j].number_of_hour;
+              }
 
-        this.projectService.getTasksByIdProject(project._id).then((data) => {
-          for (let j = 0; j < data.length; j++) {
-            totalEstimation += data[j].number_of_hour;
-            totalCompletedHours += (data[j].avancement / 100) * data[j].number_of_hour;
-          }
+              project.avancement = totalEstimation > 0 ? (totalCompletedHours / totalEstimation) * 100 : 0;
 
-          project.avancement = totalEstimation > 0 ? (totalCompletedHours / totalEstimation) * 100 : 0;
+              if (project.avancement === 100) {
+                project.etat = "Clôturé";
+              } else { project.etat = "En cours" }
 
-          if (project.avancement === 100) {
-            project.etat = "Clôturé";
-          }else{project.etat= "En cours"}
+              this.projectService.putProject(project).then(() => {
+                if (project.etat === "Clôturé") {
+                  this.nbr_projectCloturer++;
+                }
 
-          this.projectService.putProject(project).then(() => {
-            if (project.etat === "Clôturé") {
-              this.nbr_projectCloturer++;
+                if (project.etat === "En cours") {
+                  this.nbr_projectEnCour++;
+                }
+              });
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching projects:', error);
+        });
+    else if (this.AccessLevel == 'Admin')
+      this.projectService.getProjectsAsAdmin(this.token.id).then(projects => {
+        this.project = projects;
+        this.nbr_project = projects.length;
+        this.nbr_projectCloturer = 0;
+        this.nbr_projectEnCour = 0;
+        this.avancement_p = 0;
+        projects.forEach((project) => {
+          let totalEstimation = 0;
+          let totalCompletedHours = 0;
+
+          this.projectService.getTasksByIdProject(project._id).then((data) => {
+            for (let j = 0; j < data.length; j++) {
+              totalEstimation += data[j].number_of_hour;
+              totalCompletedHours += (data[j].avancement / 100) * data[j].number_of_hour;
             }
 
-            if (project.etat === "En cours") {
-              this.nbr_projectEnCour++;
-            }
+            project.avancement = totalEstimation > 0 ? (totalCompletedHours / totalEstimation) * 100 : 0;
+
+            if (project.avancement === 100) {
+              project.etat = "Clôturé";
+            } else { project.etat = "En cours" }
+
+            this.projectService.putProject(project).then(() => {
+              if (project.etat === "Clôturé") {
+                this.nbr_projectCloturer++;
+              }
+
+              if (project.etat === "En cours") {
+                this.nbr_projectEnCour++;
+              }
+            });
           });
         });
-      });
-    })
-    .catch((error) => {
-      console.error('Error fetching projects:', error);
-    });
+      })
+        .catch(error => {
+          console.error('Error fetching projects:', error);
+        });
   }
   dicUsers = {}
   // recuperation des utilisateur  pour les afficher dans le drop down
@@ -433,7 +490,7 @@ export class GestionComponent implements OnInit {
       validation: "La tâche n’est pas validée",
       identifian: this.identifiant,
       urgent: this.formAddTache.get('urgent').value,
-      createdDate:new Date(),
+      createdDate: new Date(),
     }
     this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })

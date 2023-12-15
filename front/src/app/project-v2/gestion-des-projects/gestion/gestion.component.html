@@ -168,7 +168,8 @@
                     </td>
 
                     <td>
-                        <p-tag *ngIf="project.etat == 'En cours'" icon="pi pi-times" severity="success" [value]="'En cours'">
+                        <p-tag *ngIf="project.etat == 'En cours'" icon="pi pi-times" severity="success"
+                            [value]="'En cours'">
                         </p-tag>
                         <p-tag *ngIf="project.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
                             [value]="project.statut">
@@ -180,7 +181,8 @@
                     <td>
                         {{project.avancement| number:'1.1-1'}} %
                     </td>
-                    <td>
+                    <td
+                        *ngIf="AccessLevel=='Super-Admin' || project.createur_id==token.id || project.responsable_id==token.id">
                         <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
                             (click)="initialisation_project(project)" aria-hidden="true"></i>
                         <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
@@ -191,8 +193,9 @@
                             (click)="showRessources(project._id)" aria-hidden="true"></i>
                         <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
                             (click)="showBudget(project._id)" aria-hidden="true"></i>
-
-
+                    </td>
+                    <td
+                        *ngIf="AccessLevel=='Admin' && project.createur_id!=token.id && project.responsable_id!=token.id">
                     </td>
                 </tr>
             </ng-template>
@@ -293,7 +296,8 @@
                                 <div class="grid col-12" *ngIf="t.labels">
                                     <ng-container *ngFor="let l of t.labels;let index = index">
                                         <div class="col-3" *ngIf="index<4">
-                                            <div class="label" [style]="{'background-color': l.color, 'color': 'white !important'}">
+                                            <div class="label"
+                                                [style]="{'background-color': l.color, 'color': 'white !important'}">
                                                 {{l.libelle}}
                                             </div>
                                         </div>
@@ -305,7 +309,7 @@
                                     <div class="col-12">
                                         <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                     </div>
-                                   </div> 
+                                </div>
                             </p-card-content>
                             <p-card-footer>
                                 <div class="grid col-12">
@@ -478,7 +482,7 @@
                                     <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                 </div>
                                 <div class="col-6"></div>
-                                
+
 
 
                             </div>

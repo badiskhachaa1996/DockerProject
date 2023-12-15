@@ -9,12 +9,12 @@ import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
 
 @Component({
-  selector: 'app-contact-icbs-eng',
-  templateUrl: './contact-icbs-eng.component.html',
-  styleUrls: ['./contact-icbs-eng.component.scss'],
+  selector: 'app-contact-us-icbs-eng',
+  templateUrl: './contact-us-icbs-eng.component.html',
+  styleUrls: ['./contact-us-icbs-eng.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactIcbsEngComponent implements OnInit {
+export class ContactUsIcbsEngComponent implements OnInit {
   hideFormations = false;
   aFormGroup!: UntypedFormGroup;
 

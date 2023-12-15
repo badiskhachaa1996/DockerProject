@@ -724,7 +724,7 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: [
                                                 'listdeslead'
-                                                
+
                                             ],
                                         },
                                     ],
@@ -6051,7 +6051,7 @@ export class AppMenuComponent implements OnInit {
                 if (services_list.includes('Administration')) {
                     this.items.push(
                         {
-                            label: 'Administration V2',
+                            label: 'Administration',
                             icon: 'pi pi-users',
                             items: [
 
@@ -6502,7 +6502,19 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Ticketing',
                                     icon: 'pi pi-ticket',
-                                    routerLink: ['/ticketing/configuration']
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['/ticketing/configuration']
+                                        },
+                                        {
+                                            label: 'Automatisation',
+                                            icon: 'pi pi-android',
+                                            routerLink: ['/ticketing/automatisation']
+                                        }
+                                    ]
+
                                 },
                                 {
                                     label: 'Configuration des mentions et services',

@@ -24,6 +24,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         let date = new Date()
         let nb = date.getDate()
         Classe.find().sort({ abbrv: 1 }).then(classes => {

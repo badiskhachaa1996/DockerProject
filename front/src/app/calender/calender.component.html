@@ -337,7 +337,7 @@
                         <form class="p-fluid grid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
                             <div class="field col-12 md:col-5">
                                 <p-dropdown [options]="ticketListe" placeholder="Veuillez décrire l'activité"
-                                    [editable]="true" formControlName="task"></p-dropdown>
+                                    (onChange)="onSelectTask()" [editable]="true" formControlName="task"></p-dropdown>
                                 <!--<input pInputText type="text" id="tache" formControlName="task"
                                     placeholder="Veuillez décrire l'activité">-->
                             </div>

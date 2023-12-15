@@ -98,7 +98,7 @@ export class PvAppreciationComponent implements OnInit {
     if (confirm("Etes-vous sûr de vouloir supprimer ce pv ?"))
       this.NoteService.deletePV(pv._id).subscribe(data => {
         if (data) {
-          this.messageService.add({ severity: 'success', summary: "Suppresion du PV avec succès" })
+          this.messageService.add({ severity: 'success', summary: "Suppression du PV avec succès" })
           this.pvAnnuel.splice(this.pvAnnuel.indexOf(pv, 0))
         }
       })

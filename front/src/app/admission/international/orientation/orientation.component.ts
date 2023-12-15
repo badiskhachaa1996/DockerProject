@@ -113,7 +113,7 @@ export class OrientationComponent implements OnInit {
   delete(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.showDetails.documents_dossier[this.showDetails.documents_dossier.indexOf(doc)].path = null
     this.admissionService.deleteFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe(p => {
-      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppression d'un document du dossier Lead-Dossier").subscribe(a => {
         console.log(a)
       })
     })
@@ -145,7 +145,7 @@ export class OrientationComponent implements OnInit {
   }
   deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(doc), 1)
-    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe(p => {

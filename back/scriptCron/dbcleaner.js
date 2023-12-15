@@ -19,6 +19,10 @@ mongoose
     })
     .then(() => {
         //Etudiant
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         Etudiant.find().populate('user_id').then(etudiants => {
             etudiants.forEach(etu => {
                 if (etu.user_id == null) {

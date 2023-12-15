@@ -357,7 +357,7 @@ export class NewEntreprisesComponent implements OnInit {
     if (confirm('Voulez-vous supprimer ' + entreprise?.r_sociale + " et tous les comptes tuteurs attachés ?"))
       this.entrepriseService.delete(entreprise._id).subscribe(r => {
         this.entreprises.splice(this.entreprises.indexOf(entreprise), 1)
-        this.messageService.add({ severity: 'success', summary: 'Suppresion de l\'entreprise avec succès' })
+        this.messageService.add({ severity: 'success', summary: 'Suppression de l\'entreprise avec succès' })
       })
   }
   InitMatching(entreprise: Entreprise) {

@@ -17,20 +17,6 @@
                     <input pInputText id="adress" type="text" formControlName="adresse"
                         placeholder="Adresse du  campus" />
                 </div>
-                <div class="field col-12 md:col-12 grid">
-                    <div class="field col-12 md:col-6 grid" *ngFor="let data of salles; let i = index">
-                        <h5> Salle n°{{i+1}}: </h5>
-                        <div class="col-11">
-                            <label>Nom de la salle:</label><br>
-                            <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]"
-                                placeholder="Salle {{i+1}}" pInputText>
-                        </div>
-                        <div class="col-1">
-                            <i class="pi pi-trash" (click)="salles.splice(i,1)" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    <button type="button" (click)="onAddSalle()" pButton label="Ajouter une salle"></button>
-                </div>
                 <div style="justify-content: right;">
                     <button pButton label="Modifier" type="submit" [disabled]="campusFormUpdate.invalid"></button>
                 </div>
@@ -140,12 +126,9 @@
                 <td style="min-width: 14rem;">
                     <app-read-more [string]="showEcolesStr(rowData)"></app-read-more>
                 </td>
-                <td *ngIf="rowData.salles.length>0" pTooltip="Voir les salles" style="cursor: pointer;"
-                    tooltipPosition="bottom" (click)="afficherSalles=true;selectedCampus=rowData">
+                <td pTooltip="Voir les salles" style="cursor: pointer;" tooltipPosition="bottom"
+                    (click)="afficherSalles=true;selectedCampus=rowData">
                     <a>{{rowData.salles.length}}</a>
-                </td>
-                <td *ngIf="rowData.salles.length==0">
-                    0
                 </td>
                 <td style="min-width: 10rem;">
                     <i pTooltip="Ajouter une école" tooltipPosition="bottom" class="pi pi-building "
@@ -192,13 +175,31 @@
 </div>
 
 <p-dialog [(visible)]="afficherSalles" header="Salle(s) de {{selectedCampus?.libelle}}" [modal]="true"
-    [style]="{width: '50vw'}">
-    <div class="grid" *ngIf="selectedCampus">
-        <div class="col-12 md:col-4" *ngFor="let data of selectedCampus.salles; let i = index">
+    *ngIf="selectedCampus" [style]="{width: '50vw'}" (onHide)="onSaveSalle()">
+    <div class="grid">
+        <div class="field col-6 md:col-4 grid" *ngFor="let data of selectedCampus.salles; let i = index">
             <h5> Salle n°{{i+1}}: </h5>
-            <p>
-                {{data}}
-            </p>
+            <div class="col-10">
+                <label>Nom de la salle:</label><br>
+                <input type="text" (blur)="changeValue(i, $event.target.value)" [(value)]="selectedCampus.salles[i]"
+                    style="width: 100%;" placeholder="Salle {{i+1}}" pInputText>
+            </div>
+            <div class="col-2">
+                <label>&nbsp;</label><br>
+                <button type="button" (click)="selectedCampus.salles.splice(i,1)" pButton
+                    pTooltip="Supprimer cette salle" tooltipPosition="bottom" icon="pi pi-trash"></button>
+            </div>
         </div>
     </div>
+
+    <div>
+        <button type="button" (click)="onAddSalle()" pButton pTooltip="Ajouter une nouvelle salle"
+            tooltipPosition="bottom" icon="pi pi-plus"></button>
+        <div style="float: right;">
+            <button type="button" (click)="onSaveSalle()" pButton pTooltip="Enregistrez les modifications"
+                tooltipPosition="bottom" icon="pi pi-save"></button>
+        </div>
+
+    </div>
+
 </p-dialog>

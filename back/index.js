@@ -45,7 +45,8 @@ if (process.argv[2]) {
       "https://forms.intedgroup.com",
       "https://t.dev.estya.com",
       "https://wio.fr/",
-      "https://studinfo.com"
+      "https://studinfo.com",
+       "https://iegchat.comunikcrm.info/"
     ];
 }
 app.use(cors({ origin: origin }));
@@ -296,7 +297,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/demanderemboursement/newremb' ||
       req.originalUrl === '/soc/demanderemboursement/upload-docs' ||
       req.originalUrl === '/soc/LeadCRM/create'||
-      req.originalUrl === '/webhook'
+      req.originalUrl === '/soc/webhook'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici
@@ -460,6 +461,7 @@ app.use('/soc/template/formulaire', require('./controllers/template/formulaireCo
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
 app.use('/soc/evaluation', require('./controllers/evaluationController'));
+app.use('/soc/auto-ticket', require('./controllers/autoTicketingController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)

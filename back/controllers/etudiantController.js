@@ -671,7 +671,7 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
                         date: new Date(),
                         etudiant_before: et,
                         etudiant_after: { ...req.body },
-                        remarque: "Suppresion de fichier"
+                        remarque: "Suppression de fichier"
                     }
                 )
                 me.save()

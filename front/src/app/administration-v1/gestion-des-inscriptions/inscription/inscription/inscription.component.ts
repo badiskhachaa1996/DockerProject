@@ -288,7 +288,7 @@ export class InscriptionComponent implements OnInit {
     this.prospect_acctuelle.teams = "NON"
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(resultat => {
       console.log(resultat);
-      this.messageService.add({ severity: "success", summary: "Suppresion du compte Teams avec succès" })
+      this.messageService.add({ severity: "success", summary: "Suppression du compte Teams avec succès" })
     });
   }
   //SUPRIMER UN COMPTE YPARIO
@@ -296,7 +296,7 @@ export class InscriptionComponent implements OnInit {
     this.prospect_acctuelle.Ypareo = "NON"
     this.admissionService.updateV2(this.prospect_acctuelle).subscribe(resu => {
       console.log(resu);
-      this.messageService.add({ severity: "success", summary: "Suppresion du compte Ypareo avec succès" })
+      this.messageService.add({ severity: "success", summary: "Suppression du compte Ypareo avec succès" })
     });
   }
   //SUPRIMER UN PROSPECT
@@ -620,7 +620,7 @@ export class InscriptionComponent implements OnInit {
   }
   deleteDocument(doc: { date: Date, nom: string, path: string, _id: string }, ri) {
     this.PROSPECT.documents_administrative.splice(ri, 1)
-    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
