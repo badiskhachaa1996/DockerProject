@@ -28,7 +28,7 @@ app.put("/update-sujet-booking", (req, res) => {
     .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour le sujet, si le problème persite veuillez créer un ticket au service IMS' }); });
 });
 
-// Suppresion d'un sujet 
+// Suppression d'un sujet 
 app.delete("/delete-sujet-booking/:id", (req, res, next) => {
   SujetBooking.deleteOne({ _id: req.params.id })
   .then((response) => { res.status(200).json({ success: "Sujet supprimé" }) })
