@@ -131,6 +131,9 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
+    let serviceSelected: Service = this.serviceDicTrue[this.TicketForm.value.service_id]
+    if (serviceSelected.label != 'Ressources Humaines')
+      this.TicketForm.patchValue({ site: null })
     this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id, priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
@@ -190,7 +193,7 @@ export class AjoutTicketComponent implements OnInit {
     })
     this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
       if (r) {
-        let site = ''
+        let site = null
         if (Array.isArray(r.localisation) && r.localisation.length != 0)
           site = r.localisation[0]
         else if (!Array.isArray(r.localisation)) {

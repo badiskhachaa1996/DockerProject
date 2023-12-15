@@ -182,11 +182,13 @@ export class MytaskComponent implements OnInit {
 
   calcDureeMise() {
 
+    let hours = Math.trunc(this.TaskToShow.duree_mise / 60)
+    let minutes = this.TaskToShow.duree_mise - hours * 60
     /*let HRestant = (this.TaskToShow.avancement * this.TaskToShow.number_of_hour) / 100
     let MinRestant = (Math.abs(HRestant) - Math.floor(HRestant)) * 60
     return `${Math.trunc(HRestant)}H ${Math.trunc(MinRestant)}min`*/
 
-    return "XXH XXmin"
+    return `${hours}H ${minutes}`
   }
 
   onAddLabel() {

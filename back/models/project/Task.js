@@ -35,7 +35,8 @@ const taskSchema = mongoose.Schema({
     labels: {
         type: [mongoose.Schema.Types.ObjectId], ref: 'label',
         default: []
-    }
+    },
+    duree_mise: { type: Number, required: false, default: 0 },
 });
 
 const Task = mongoose.model('tasks', taskSchema);
