@@ -1167,7 +1167,7 @@ export class PreinscriptionComponent implements OnInit {
   delete(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.PROSPECT.documents_dossier[this.PROSPECT.documents_dossier.indexOf(doc)].path = null
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
-      this.admissionService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+      this.admissionService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppression d'un document du dossier Lead-Dossier").subscribe(a => {
         console.log(a)
       })
     })
@@ -1204,7 +1204,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.PROSPECT.documents_autre.splice(this.PROSPECT.documents_autre.indexOf(doc), 1)
-    this.admissionService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
@@ -1214,7 +1214,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   deleteDocument(doc: { date: Date, nom: string, path: string, _id: string }, ri) {
     this.PROSPECT.documents_administrative.splice(ri, 1)
-    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {

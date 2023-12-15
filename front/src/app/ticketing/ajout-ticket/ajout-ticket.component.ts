@@ -79,12 +79,12 @@ export class AjoutTicketComponent implements OnInit {
     description: new FormControl('',),
     resum: new FormControl('', Validators.required),
     priorite: new FormControl("false"),
-    module: new FormControl('',),
-    type: new FormControl('',),
-    demande: new FormControl('',),
-    campus: new FormControl('',),
-    filiere: new FormControl('',),
-    site: new FormControl('')
+    module: new FormControl(null,),
+    type: new FormControl(null,),
+    demande: new FormControl(null,),
+    campus: new FormControl(null,),
+    filiere: new FormControl(null,),
+    site: new FormControl(null)
   })
   token;
   sujetDropdown: any[] = [

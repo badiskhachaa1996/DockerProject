@@ -25,6 +25,7 @@ import { InputText, InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ReadMoreModule } from '../other/component/read-more/read-more.module';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { AutomatisationTicketingComponent } from './automatisation-ticketing/automatisation-ticketing.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
         ConfigurationComponent,
         DashboardTicketingComponent,
         NewListTicketsComponent,
-        NotificationComponent
+        NotificationComponent,
+        AutomatisationTicketingComponent
     ],
     exports: [
         AjoutTicketComponent,
