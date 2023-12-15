@@ -84,60 +84,70 @@ app.post("/create", (req, res) => {
                         console.error(error);
                     }
                 });
-
-                ticket.save((err, doc) => {
-                    if (err) {
-                        console.error(err);
-                        res.status(404).send(err)
+                AutoTicket.findOne({ sujet_id: ticket.sujet_id, filiere: ticket?.filiere, site: ticket?.site, campus: ticket?.campus, type: ticket?.type, demande: ticket?.demande, module: ticket?.module }).then(auto => {
+                    console.log({ sujet_id: ticket.sujet_id, filiere: ticket?.filiere, site: ticket?.site, campus: ticket?.campus, type: ticket?.type, demande: ticket?.demande, module: ticket?.module })
+                    if (auto) {
+                        ticket.assigne_by = null
+                        ticket.statut = "En cours de traitement"
+                        ticket.agent_id = auto.assigned_to
                     }
-                    else
-                        res.send({ message: "Votre ticket a été crée!", doc });
+                    ticket.save((err, doc) => {
+                        if (err) {
+                            console.error(err);
+                            res.status(404).send(err)
+                        }
+                        else
+                            res.send({ message: "Votre ticket a été crée!", doc });
 
-                    Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+                        Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
 
-                        let htmlemail = `
-                        ID: ${ticket.customid}<br>
-                        Créé par : ${u.lastname} ${u.firstname}<br>
-                        Crée le  : ${day}/${month}/${year}<br>
-                        Service : ${sujet.service_id.label}<br>
-                        Sujet : ${sujet.label}<br>
-                        Résumé : ${ticket.resum}<br>
-                        Description : ${ticket.description}<br>
-                        `
-                        let r = ''
-                        if (ticket.module)
-                            r = r + " - " + ticket.module
-                        if (ticket.type)
-                            r = r + " - " + ticket.type
-                        if (ticket.campus)
-                            r = r + " - " + ticket.campus
-                        if (ticket.filiere)
-                            r = r + " - " + ticket.filiere
-                        if (ticket.demande)
-                            r = r + " - " + ticket.demande
-                        if (ticket.site)
-                            r = r + " - " + ticket.site
-                        let mailOptions = {
-                            from: 'ims@intedgroup.com',
-                            to: 'ims.support@intedgroup.com',
-                            subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label + r,
-                            html: htmlemail,
-                            priority: 'high',
-                            attachments: [{
-                                filename: 'signature.png',
-                                path: 'assets/ims-intedgroup-logo.png',
-                                cid: 'red' //same cid value as in the html img src
-                            }]
-                        };
+                            let htmlemail = `
+                            ID: ${ticket.customid}<br>
+                            Créé par : ${u.lastname} ${u.firstname}<br>
+                            Crée le  : ${day}/${month}/${year}<br>
+                            Service : ${sujet.service_id.label}<br>
+                            Sujet : ${sujet.label}<br>
+                            Résumé : ${ticket.resum}<br>
+                            Description : ${ticket.description}<br>
+                            `
+                            if (auto)
+                                htmlemail = htmlemail + "Le ticket a été assigné automatiquement via l'automatisation #" + auto?.custom_id
+                            let r = ''
+                            if (ticket.module)
+                                r = r + " - " + ticket.module
+                            if (ticket.type)
+                                r = r + " - " + ticket.type
+                            if (ticket.campus)
+                                r = r + " - " + ticket.campus
+                            if (ticket.filiere)
+                                r = r + " - " + ticket.filiere
+                            if (ticket.demande)
+                                r = r + " - " + ticket.demande
+                            if (ticket.site)
+                                r = r + " - " + ticket.site
+                            let mailOptions = {
+                                from: 'ims@intedgroup.com',
+                                to: 'ims.support@intedgroup.com',
+                                subject: 'Nouveau -' + sujet.service_id.label + " - " + sujet.label + r,
+                                html: htmlemail,
+                                priority: 'high',
+                                attachments: [{
+                                    filename: 'signature.png',
+                                    path: 'assets/ims-intedgroup-logo.png',
+                                    cid: 'red' //same cid value as in the html img src
+                                }]
+                            };
 
 
-                        transporter.sendMail(mailOptions, function (error, info) {
-                            if (error) {
-                                console.error(error);
-                            }
-                        });
-                    })
-                });
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.error(error);
+                                }
+                            });
+                        })
+                    });
+                })
+
             })
         })
     })
@@ -1028,6 +1038,7 @@ const fs = require("fs")
 var mime = require('mime-types')
 const path = require('path');
 const { Message } = require("../models/message");
+const { AutoTicket } = require("../models/AutomatisationTicketing");
 const st = multer.diskStorage({
     destination: (req, file, callback) => {
         let storage = `storage/ticket/${req.body.ticket_id}/${req.body.document_id}`;
