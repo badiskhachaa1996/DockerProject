@@ -151,7 +151,7 @@ export class GestionComponent implements OnInit {
   USER!: User;
   showLabelConfig = false
   onAddComment() {
-    this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.USER, date: new Date() })
+    this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.userConnected, date: new Date() })
   }
   ngOnInit(): void {
     // decoded the token
@@ -265,38 +265,42 @@ export class GestionComponent implements OnInit {
 
   listeprojets() {
     this.projectService.getProjects()
-      .then(projects => {
-        this.nbr_project = projects.length;
-        this.nbr_projectCloturer = 0;
-        this.nbr_projectEnCour = 0;
-        this.avancement_p=0;
-        for (let i = 0; i < projects.length; i++) {
-          this.avancement_p=0;
-          this.projectService.getTasksByIdProject(projects[i]._id).then((data) => {
-            console.log(projects[i].titre);
-            for (let j = 0; j < data.length; j++) {
-              this.avancement_p = this.avancement_p + (data[j].avancement / data.length);
-            }
-            console.log(this.avancement_p);
-            projects[i].avancement = this.avancement_p;
-            if(this.avancement_p===100){
-              projects[i].etat ="Clôturé";
-            }
-            this.projectService.putProject(projects[i]);
-           
-          })
-          if (projects[i].etat == "Clôturé") {
-            this.nbr_projectCloturer++;
+    .then((projects) => {
+      this.nbr_project = projects.length;
+      this.nbr_projectCloturer = 0;
+      this.nbr_projectEnCour = 0;
+
+      projects.forEach((project) => {
+        let totalEstimation = 0;
+        let totalCompletedHours = 0;
+
+        this.projectService.getTasksByIdProject(project._id).then((data) => {
+          for (let j = 0; j < data.length; j++) {
+            totalEstimation += data[j].number_of_hour;
+            totalCompletedHours += (data[j].avancement / 100) * data[j].number_of_hour;
           }
-          if (projects[i].etat == "En cours") {
-            this.nbr_projectEnCour++
-          }
-          this.avancement_p=0;
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
+
+          project.avancement = totalEstimation > 0 ? (totalCompletedHours / totalEstimation) * 100 : 0;
+
+          if (project.avancement === 100) {
+            project.etat = "Clôturé";
+          }else{project.etat= "En cours"}
+
+          this.projectService.putProject(project).then(() => {
+            if (project.etat === "Clôturé") {
+              this.nbr_projectCloturer++;
+            }
+
+            if (project.etat === "En cours") {
+              this.nbr_projectEnCour++;
+            }
+          });
+        });
       });
+    })
+    .catch((error) => {
+      console.error('Error fetching projects:', error);
+    });
   }
   dicUsers = {}
   // recuperation des utilisateur  pour les afficher dans le drop down
@@ -429,6 +433,7 @@ export class GestionComponent implements OnInit {
       validation: "La tâche n’est pas validée",
       identifian: this.identifiant,
       urgent: this.formAddTache.get('urgent').value,
+      createdDate:new Date(),
     }
     this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
@@ -600,7 +605,7 @@ export class GestionComponent implements OnInit {
     if (event > 2) {
       console.log(this.projectSelecteds[event - 3]);
       console.log(this.projectSelecteds)
-      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 4]._id).then((data) => {
+      this.projectService.getTasksByIdProject(this.projectSelecteds[event - 4]?._id).then((data) => {
         this.task = []; this.taskToDo = []; this.taskDoing = []; this.taskDone = [];
         this.task = data;
         this.projectIdForTask = this.projectSelecteds[event - 4]._id

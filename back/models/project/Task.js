@@ -35,7 +35,8 @@ const taskSchema = mongoose.Schema({
     labels: {
         type: [mongoose.Schema.Types.ObjectId], ref: 'label',
         default: []
-    }
+    },
+    createdDate:                    { type: Date, required: false },
 });
 
 const Task = mongoose.model('tasks', taskSchema);
