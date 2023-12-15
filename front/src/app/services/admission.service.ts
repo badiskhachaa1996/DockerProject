@@ -6,12 +6,15 @@ import { Prospect } from '../models/Prospect';
 import { ProspectAlternable } from '../models/ProspectAlternable';
 import { ProspectIntuns } from '../models/ProspectIntuns';
 import { HistoriqueLead } from '../models/HistoriqueLead';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdmissionService {
+
+
 
   apiUrl = environment.origin + "prospect/";
 
@@ -80,6 +83,16 @@ export class AdmissionService {
     let registreUrl = this.apiUrl + 'get100Sourcing';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+
+// admission.service.ts
+
+// getLeadsByPartenaireCode(partenaireCode: string): Observable<Prospect[]> {
+//   const url = `${this.apiUrl}getLeadsByPartenaireCode/${partenaireCode}`;
+//   return this.httpClient.get<Prospect[]>(url, { headers: this.httpOptions1 });
+// }
+
+
 
   getAllSourcing() {
     let registreUrl = this.apiUrl + 'getAllSourcing';
@@ -388,4 +401,26 @@ export class AdmissionService {
     return this.httpClient.post<any>(registreUrl, { listIds, user_ids }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+
+
+
+
+// une méthode dans votre service pour récupérer l'utilisateur connecté
+
+getUserById(userId: string): Observable<any> {
+  const url = `${this.apiUrl}getconnectedById/${userId}`;
+  return this.httpClient.get<any>(url,  { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
 }
+
+
+// une méthode pour récupérer les leads du partenaire :
+
+getLeadsByCodePartenaire(codePartenaire: string): Observable<any[]> {
+  const url = `${this.apiUrl}/getAllByCodeCommercial/${codePartenaire}`;
+  return this.httpClient.get<any[]>(url,  { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+}
+}
+
+
+
+
