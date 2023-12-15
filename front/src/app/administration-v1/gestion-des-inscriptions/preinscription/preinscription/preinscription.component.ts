@@ -461,7 +461,7 @@ export class PreinscriptionComponent implements OnInit {
           listTeam.forEach(team => {
             let items = []
             dic[team].forEach(element => {
-              items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+              items.push({ label: `${element.user_id?.lastname} ${element.user_id?.firstname}`, value: element._id })
             })
             this.agentSourcingList.push({
               label: team,
@@ -473,8 +473,8 @@ export class PreinscriptionComponent implements OnInit {
           commercials.forEach(commercial => {
             let { user_id }: any = commercial
             if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire) {
-              this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
-              this.commercialListObject.push({ label: `${user_id.firstname} ${user_id.lastname}`, value: commercial })
+              this.commercialList.push({ label: `${user_id?.lastname} ${user_id?.firstname}`, value: commercial.code_commercial_partenaire })
+              this.commercialListObject.push({ label: `${user_id?.firstname} ${user_id?.lastname}`, value: commercial })
             }
 
           })
@@ -482,7 +482,7 @@ export class PreinscriptionComponent implements OnInit {
             .then((response) => {
               response.forEach((c: Collaborateur) => {
                 if (c.user_id && c.matricule)
-                  this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+                  this.commercialList.push({ label: `${c.user_id?.lastname} ${c.user_id?.firstname}`, value: c.matricule })
               })
             })
             .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
@@ -513,7 +513,7 @@ export class PreinscriptionComponent implements OnInit {
         this.prospects = results
         this.default_prospects = results
       }))
-      this.admissionService.getAllInt().subscribe((results => {
+      this.admissionService.getAll().subscribe((results => {
         this.prospectI = results
         this.default_prospectI = results
       }))
@@ -694,14 +694,14 @@ export class PreinscriptionComponent implements OnInit {
           }))
         this.newLeadForm.reset()
         this.ServiceService.getAServiceByLabel("Administration").subscribe((response) => {
-          this.service_id = response.dataService._id;
+          this.service_id = response.dataService?._id;
           this.SujetService.getAllByServiceID(this.service_id).subscribe((response) => {
             response.forEach((result) => {
 
-              if (result.label = "Inscription") {
-                this.sujet_id = result._id;
+              if (result.label === "Inscription") {
+                this.sujet_id = result?._id;
                 this.TicketnewPro = {}
-                this.TicketnewPro.createur_id = responsePRO?.dataUser._id;
+                this.TicketnewPro.createur_id = responsePRO?.dataUser?._id;
                 this.TicketnewPro.sujet_id = this.sujet_id;
 
                 this.admissionService.createticket(this.TicketnewPro).subscribe((result) => { console.log(result); });
@@ -737,13 +737,13 @@ export class PreinscriptionComponent implements OnInit {
         commercials.forEach(commercial => {
           let { user_id }: any = commercial
           if (user_id && commercial.isAdmin && commercial.code_commercial_partenaire)
-            this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+            this.commercialList.push({ label: `${user_id?.lastname} ${user_id?.firstname}`, value: commercial.code_commercial_partenaire })
         })
         this.rhService.getCollaborateurs()
           .then((response) => {
             response.forEach((c: Collaborateur) => {
               if (c.user_id && c.matricule)
-                this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+                this.commercialList.push({ label: `${c.user_id?.lastname} ${c.user_id?.firstname}`, value: c.matricule })
             })
           })
           .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
@@ -1032,26 +1032,26 @@ export class PreinscriptionComponent implements OnInit {
       type_form: prospect?.type_form,
       //commercial:
       source: prospect.source,
-      lastname: prospect.user_id.lastname,
-      firstname: prospect.user_id.firstname,
-      civilite: prospect.user_id.civilite,
+      lastname: prospect.user_id?.lastname,
+      firstname: prospect.user_id?.firstname,
+      civilite: prospect.user_id?.civilite,
       date_naissance: this.convertTime(prospect.date_naissance),
-      nationalite: prospect.user_id.nationnalite,
-      pays: prospect.user_id.pays_adresse,
-      email_perso: prospect.user_id.email_perso,
-      indicatif: prospect.user_id.indicatif,
-      phone: prospect.user_id.phone,
-      campus_choix_1: prospect.campus_choix_1,
+      nationalite: prospect.user_id?.nationnalite,
+      pays: prospect.user_id?.pays_adresse,
+      email_perso: prospect.user_id?.email_perso,
+      indicatif: prospect.user_id?.indicatif,
+      phone: prospect.user_id?.phone,
+      campus_choix_1: prospect?.campus_choix_1,
       rentree_scolaire: prospect?.rentree_scolaire,
       programme: prospect?.programme,
-      formation: prospect.formation,
-      rythme_formation: prospect.rythme_formation,
+      formation: prospect?.formation,
+      rythme_formation: prospect?.rythme_formation,
       //nomlead:
-      rue_adresse: prospect.user_id.rue_adresse,
-      ville_adresse: prospect.user_id.ville_adresse,
-      postal_adresse: prospect.user_id.postal_adresse,
-      _id: prospect._id,
-      user_id: prospect.user_id._id
+      rue_adresse: prospect?.user_id?.rue_adresse,
+      ville_adresse: prospect?.user_id?.ville_adresse,
+      postal_adresse: prospect?.user_id?.postal_adresse,
+      _id: prospect?._id,
+      user_id: prospect.user_id?._id
     })
     console.log(prospect, this.updateLeadForm.invalid, this.updateLeadForm.status)
     this.showupdateLeadForm = true
@@ -1167,7 +1167,7 @@ export class PreinscriptionComponent implements OnInit {
   delete(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.PROSPECT.documents_dossier[this.PROSPECT.documents_dossier.indexOf(doc)].path = null
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
-      this.admissionService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+      this.admissionService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }, "Suppression d'un document du dossier Lead-Dossier").subscribe(a => {
         console.log(a)
       })
     })
@@ -1204,7 +1204,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.PROSPECT.documents_autre.splice(this.PROSPECT.documents_autre.indexOf(doc), 1)
-    this.admissionService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
@@ -1214,7 +1214,7 @@ export class PreinscriptionComponent implements OnInit {
   }
   deleteDocument(doc: { date: Date, nom: string, path: string, _id: string }, ri) {
     this.PROSPECT.documents_administrative.splice(ri, 1)
-    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_administrative: this.PROSPECT.documents_administrative, _id: this.PROSPECT._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {

@@ -133,8 +133,9 @@ export class AddProspectComponent implements OnInit {
   constructor(private commercialService: CommercialPartenaireService, private router: Router, private ToastService: MessageService,
     private FAService: FormulaireAdmissionService, private PService: PartenaireService, private AuthService: AuthService,
     private admissionService: AdmissionService, private rhService: RhService) { }
-
+token;
   ngOnInit(): void {
+    this.token=jwt_decode(localStorage.getItem('token'));
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
@@ -356,8 +357,8 @@ export class AddProspectComponent implements OnInit {
         this.newLeadForm.value.rythme_formation.value,
         null, null, null, null, true, new Date(),
         this.newLeadForm.value.ecole,
-        this.newLeadForm.value.commercial,
-        null, null, null, null, null, null, null, null,
+        this.token.id,
+        null, null, null, null,this.token.id, null, null, null,
         null, customid, 
         this.newLeadForm.value.codep,
         null,

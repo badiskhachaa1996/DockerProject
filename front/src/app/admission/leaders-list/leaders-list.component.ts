@@ -14,6 +14,8 @@ import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import { LeadCRM } from 'src/app/models/LeadCRM';
+import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import mongoose from 'mongoose';
 @Component({
   selector: 'app-leaders-list',
@@ -22,7 +24,9 @@ import mongoose from 'mongoose';
 })
 export class 
 LeadersListComponent implements OnInit {
+  currentUser: any;
 
+  leads : any
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
   DocTypes: any[] = [
@@ -174,7 +178,7 @@ LeadersListComponent implements OnInit {
   delete(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.showDetails.documents_dossier[this.showDetails.documents_dossier.indexOf(doc)].path = null
     this.admissionService.deleteFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe(p => {
-      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppression d'un document du dossier Lead-Dossier").subscribe(a => {
         console.log(a)
       })
     })
@@ -206,7 +210,7 @@ LeadersListComponent implements OnInit {
   }
   deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(doc), 1)
-    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppression d'un document autre Lead-Dossier").subscribe(a => {
       console.log(a)
     })
     this.admissionService.deleteFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe(p => {
@@ -371,9 +375,10 @@ LeadersListComponent implements OnInit {
   filterEcole = []
 
   constructor(private PartenaireService: PartenaireService, private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute,private LeadService:LeadcrmService) { }
 
-  prospects: Prospect[];
+  prospects: Prospect[]=[];
+  
 
   selectedProspect: Prospect = null
 
@@ -395,9 +400,21 @@ LeadersListComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
+    console.log(this.token.id);
     this.admissionService.getAll().subscribe(data => {
-      this.prospects = data
+     data.forEach(pros=>{
+      if(pros.code_commercial==this.token.id){
+        this.prospects.push(pros)
+      }
+     })
+      
     })
+
+    //console.log(this.prospects);
+
+
+    
+
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -793,4 +810,10 @@ LeadersListComponent implements OnInit {
     return [year, month, day].join('-');
   }
 
+
+
+  
+
+
+  
 }

@@ -1,0 +1,134 @@
+<p-table #dt1 id="dt1" dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="autoTickets"
+    [globalFilterFields]="['custom_id']" [paginator]="true" rowExpandMode="single" responsiveLayout="scroll"
+    styleClass="p-datatable-gridlines">
+    <ng-template pTemplate="caption">
+        <div class="flex justify-content-between flex-column sm:flex-row">
+            <input pInputText type="text" #filter [style]="{'width':'12em'}"
+                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+            <div style="float: right;">
+                <button pButton pTooltip="Ajouter" tooltipPosition="bottom" (click)="showAdd=true"
+                    icon="pi pi-plus"></button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="custom_id" style="text-align:center"> ID <p-sortIcon field="custom_id">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="type_auto" style="text-align:center"> Type <p-sortIcon field="type_auto">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="created_date" style="text-align:center"> Crée le <p-sortIcon field="created_date">
+                </p-sortIcon>
+            </th>
+            <th> Action
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-auto let-ri="rowIndex">
+        <tr>
+            <td>
+                {{auto?.custom_id}}
+            </td>
+            <td>
+                {{auto?.type_auto}}
+            </td>
+            <td>
+                {{auto?.created_date | date: 'dd MMMM YY'}}
+            </td>
+            <td>
+                <i pTooltip="Modifier" style="cursor: pointer;" class="pi pi-pencil mr-2" tooltipPosition="bottom"
+                    (click)="onUpdate(auto)" aria-hidden="true"></i>
+                <i style="cursor: pointer;" class="pi pi-trash" pTooltip="Supprimer" tooltipPosition="bottom"
+                    (click)="delete(auto,ri)" aria-hidden="true"></i>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [modal]="true" [(visible)]="showAdd" [modal]="true" [style]="{width: '50vw'}" [draggable]="false"
+    [resizable]="false">
+    <form class="p-fluid p-formgrid grid" [formGroup]="formAdd">
+        <div class="field col-12 md:col-6">
+            <label For="service">Service</label>
+            <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
+                appendTo="body" (onChange)="onSelectService()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="sujet">Sujet</label>
+            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id" placeholder="Choisissez un sujet"
+                appendTo="body" (onChange)="onSubjectChange()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.module">
+            <label For="module">Module</label>
+            <p-dropdown [options]="moduleDropdown" formControlName="module" appendTo="body"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.campus">
+            <label For="campus">Campus</label>
+            <p-multiSelect [options]="campusDropdown" formControlName="campus" appendTo="body"
+                placeholder="Choisissez le campus"></p-multiSelect>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="serviceSelected && serviceSelected?.extra1?.length!=0">
+            <label For="campus">{{serviceSelected?.extraInfo?.title1}}</label>
+            <p-dropdown [options]="serviceSelected?.extra1" formControlName="filiere" appendTo="body"
+                [placeholder]="serviceSelected?.extraInfo?.placeholder1">
+                <ng-template let-item pTemplate="selectedItem">
+                    {{item}}
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                    {{item}}
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="serviceSelected && serviceSelected?.extra2?.length!=0">
+            <label For="campus">{{serviceSelected?.extraInfo?.title2}}</label>
+            <p-dropdown [options]="serviceSelected?.extra2" formControlName="type" appendTo="body"
+                [placeholder]="serviceSelected?.extraInfo?.placeholder2">
+                <ng-template let-item pTemplate="selectedItem">
+                    {{item}}
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                    {{item}}
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.demande">
+            <label For="demande">Demande</label>
+            <p-dropdown [options]="demandeDropdown" formControlName="demande" appendTo="body"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.filiere">
+            <label For="filiere">Filière</label>
+            <p-dropdown [options]="filiereDropdown" formControlName="filiere" appendTo="body"
+                placeholder="Choisissez la filière "></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.type">
+            <label For="type">Type </label>
+            <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type" appendTo="body"
+                placeholder="Choisissez le type"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="displayDropdown.site">
+            <label For="type">Site</label>
+            <p-dropdown [options]="siteDropdown" formControlName="site" placeholder="Choisissez un site"
+                appendTo="body"></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label For="type">Assigné à: <span style="color: red"> * </span></label>
+            <p-dropdown [options]="userDropdown" formControlName="assigned_to" placeholder="Choisissez un collaborateur"
+                appendTo="body"></p-dropdown>
+        </div>
+        <div class="col-12" *ngIf="!autoToUpdate">
+            <button [style]="{ width:'15%' }" autoWidth="false" icon="pi pi-plus" pButton type="submit" pTooltip="Créer"
+                (click)="onSave()" tooltipPosition="bottom" [disabled]="formAdd.invalid"></button>
+        </div>
+
+        <div class="col-12" *ngIf="autoToUpdate">
+            <button [style]="{ width:'15%' }" autoWidth="false" icon="pi pi-check" pButton type="submit"
+                (click)="updateSubmit()" pTooltip="Modifier" tooltipPosition="bottom"
+                [disabled]="formAdd.invalid"></button>
+        </div>
+
+    </form>
+</p-dialog>

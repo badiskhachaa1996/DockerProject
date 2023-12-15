@@ -373,7 +373,7 @@ export class DashboardComponent implements OnInit {
         // console.log(dataUser.type);
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
-        let service: any = dataUser.service_id
+        let service: any = dataUser?.service_id
         if (this.isAgent && service != null) {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
@@ -1076,7 +1076,7 @@ export class DashboardComponent implements OnInit {
   // Recuperation des tickets RH
   onGetTicketsRH() {
     this.ServiceServ.getAServiceByLabel('Ressources Humaines').subscribe(r => {
-      this.TicketService.getAllByServiceAndCreateurID(r.dataService._id, this.token.id).subscribe(tickets => {
+      this.TicketService.getAllByServiceAndCreateurID(r.dataService?._id, this.token.id).subscribe(tickets => {
         this.tickets = tickets
       })
     })

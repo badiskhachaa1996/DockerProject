@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AjouterUnTicketProjetComponent} from "./ajouter-un-ticket-projet/ajouter-un-ticket-projet.component";
-import {AuthGuardService} from "../dev-components/guards/auth-guard";
-import {ConfigurationComponent} from "./configuration/configuration.component";
-import {DashboardTicketingComponent} from "./dashboard-ticketing/dashboard-ticketing.component";
-import {NewListTicketsComponent} from "./new-list-tickets/new-list-tickets.component";
-import {NotificationComponent} from "./notification/notification.component";
+import { AjouterUnTicketProjetComponent } from "./ajouter-un-ticket-projet/ajouter-un-ticket-projet.component";
+import { AuthGuardService } from "../dev-components/guards/auth-guard";
+import { ConfigurationComponent } from "./configuration/configuration.component";
+import { DashboardTicketingComponent } from "./dashboard-ticketing/dashboard-ticketing.component";
+import { NewListTicketsComponent } from "./new-list-tickets/new-list-tickets.component";
+import { NotificationComponent } from "./notification/notification.component";
+import { AutomatisationTicketingComponent } from './automatisation-ticketing/automatisation-ticketing.component';
 
 const routes: Routes = [
     {
@@ -21,7 +22,8 @@ const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardTicketingComponent,
-        canActivate: [AuthGuardService] },
+        canActivate: [AuthGuardService]
+    },
     {
         path: 'mes-tickets',
         component: NewListTicketsComponent,
@@ -42,10 +44,15 @@ const routes: Routes = [
         component: NotificationComponent,
         canActivate: [AuthGuardService],
     },
+    {
+        path: 'automatisation',
+        component: AutomatisationTicketingComponent,
+        canActivate: [AuthGuardService]
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class TicketingRoutingModule { }

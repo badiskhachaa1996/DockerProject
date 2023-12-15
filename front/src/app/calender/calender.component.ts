@@ -330,7 +330,8 @@ export class CalenderComponent implements OnInit {
     private ActuRHService: ActualiteRHService, private TicketService: TicketService,
     private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
     private ticketService: TicketService,
-    private PointageService: PointageService, private PoiService: PointeuseService
+    private PointageService: PointageService, private PoiService: PointeuseService,
+    private ProjectService: ProjectService
   ) { }
   histoPointage: PointageData[];
   reader: FileReader = new FileReader();
@@ -338,6 +339,7 @@ export class CalenderComponent implements OnInit {
   collaborateurList = []
   userSelected: Collaborateur
   collaborateurDic = {}
+  choosenTask
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -494,6 +496,7 @@ export class CalenderComponent implements OnInit {
       task: [null, Validators.required],
       mode_type: ['/min', Validators.required]
     });
+
     //initialisation du formulaire d'ajout de cra ticket
     this.formAddCraTicket = this.formBuilder.group({
       ticket: ['', Validators.required],
@@ -827,6 +830,10 @@ export class CalenderComponent implements OnInit {
       r = r + " - " + ticket.site
     return r
   }
+  taskDic = {}
+  onSelectTask() {
+    this.choosenTask = this.formAddCra.value.task
+  }
   //* Check methods
   // recuperation de l'utilisateur connecté
   onGetUserConnectedInformation(): void {
@@ -835,12 +842,25 @@ export class CalenderComponent implements OnInit {
         this.userConnected = response;
         this.ticketService.getAccAff(this.userConnected._id)
           .subscribe(datatache => {
-            this.ticketListe = datatache.map(ticket => ({
-              ...ticket,
-              label: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`,
-              value: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
-            }))
+            datatache.forEach(ticket => {
+              this.ticketListe.push({
+                ...ticket,
+                label: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`,
+                value: `${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
+              })
+            })
           });
+        this.ProjectService.getTasksByIdUser(this.userConnected._id).then(tasks => {
+          tasks.forEach(t => {
+            let label = `#${t.identifian} - ${t.libelle} - ${t.project_id.titre}`
+            this.ticketListe.push({
+              ...t,
+              label: label,
+              value: label
+            })
+            this.taskDic[label] = t
+          })
+        })
         // recupere la liste des congés
         this.onGetConges(this.userConnected._id);
         // verification du check in journalier
@@ -1160,6 +1180,13 @@ export class CalenderComponent implements OnInit {
         this.formAddCra.patchValue({ mode_type: '/min' })
         this.showFormAddCra = false;
         this.onCheckDailyCheck(response.user_id)
+        if (this.taskDic[this.choosenTask]) {
+          let duree_mise = this.taskDic[this.choosenTask].duree_mise + number_minutes
+          this.ProjectService.putTask({ _id: this.taskDic[this.choosenTask]._id, duree_mise }).then(val => {
+            console.log('MAJ de l\'avancement de l\'activité')
+          })
+        }
+
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
