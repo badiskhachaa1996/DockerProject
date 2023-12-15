@@ -22,7 +22,7 @@ import { ContactUsBtechComponent } from './components/contact-us-btech/contact-u
 import {MessagesModule} from "primeng/messages";
 import {ToastModule} from "primeng/toast";
 import { MessageService } from 'primeng/api';
-import { ContactIcbsEngComponent } from './components/contact-icbs-eng/contact-icbs-eng.component';
+import { ContactUsIcbsEngComponent } from './components/contact-us-icbs-eng/contact-us-icbs-eng.component';
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {InputSwitchModule} from "primeng/inputswitch";
 import { Ng2TelInputModule } from 'ng2-tel-input';
@@ -40,7 +40,7 @@ import { ContactUsStudinfoComponent } from './components/contact-us-studinfo/con
     ContactUsIcbsComponent,
     ContactUsIegComponent,
     ContactUsBtechComponent,
-    ContactIcbsEngComponent,
+    ContactUsIcbsEngComponent,
     ContactUsIntComponent,
     ContactUsStudinfoComponent,
 

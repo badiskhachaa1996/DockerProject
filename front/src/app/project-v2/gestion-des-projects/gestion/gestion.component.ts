@@ -267,24 +267,31 @@ export class GestionComponent implements OnInit {
     this.projectService.getProjects()
       .then(projects => {
         this.nbr_project = projects.length;
-        const length_projects = this.nbr_project
         this.nbr_projectCloturer = 0;
         this.nbr_projectEnCour = 0;
-        for (let i = 0; i < projects.length; i = i + 1) {
+        this.avancement_p=0;
+        for (let i = 0; i < projects.length; i++) {
+          this.avancement_p=0;
           this.projectService.getTasksByIdProject(projects[i]._id).then((data) => {
+            console.log(projects[i].titre);
             for (let j = 0; j < data.length; j++) {
-              this.avancement_p = this.avancement_p + data[j].avancement / data.length;
+              this.avancement_p = this.avancement_p + (data[j].avancement / data.length);
             }
+            console.log(this.avancement_p);
             projects[i].avancement = this.avancement_p;
+            if(this.avancement_p===100){
+              projects[i].etat ="Clôturé";
+            }
             this.projectService.putProject(projects[i]);
-            this.avancement_p = 0;
+           
           })
-          if (projects[i].etat == "cloture") {
+          if (projects[i].etat == "Clôturé") {
             this.nbr_projectCloturer++;
           }
-          if (projects[i].etat == "encour") {
+          if (projects[i].etat == "En cours") {
             this.nbr_projectEnCour++
           }
+          this.avancement_p=0;
         }
       })
       .catch(error => {
@@ -455,11 +462,9 @@ export class GestionComponent implements OnInit {
     });
   }
   OnShowAddTach() {
-    this.projectService.getTasksByIdProject(this.projectIdForTask).then((tasks) => {
+    this.projectService.getTasks().then((tasks) => {
       if (tasks.length > 0) {
         this.identifiant = (tasks[tasks.length - 1]?.identifian) + 1;
-
-
       }
     })
   }
@@ -617,7 +622,7 @@ export class GestionComponent implements OnInit {
   onShowTache(task: Task) {
     this.TaskToShow = task;
     this.AtributateTable = []
-    for (let i = 0; i < this.TaskToShow.attribuate_to.length; i++) {
+    for (let i = 0; i < this.TaskToShow?.attribuate_to?.length; i++) {
       if (this.TaskToShow.attribuate_to[i])
         this.AtributateTable.push(this.TaskToShow.attribuate_to[i]._id);
     };
