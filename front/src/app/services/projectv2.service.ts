@@ -42,6 +42,18 @@ export class ProjectService {
     return response || [];
   }
 
+  getProjectsAsAdmin(userid: string): Promise<Project[]> {
+    const url = `${this.apiUrl}/getProjectsAsAdmin/${userid}`;
+
+    return new Promise<Project[]>((resolve, reject) => {
+      this.httpClient.get<Project[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Projet récuperé')
+      });
+    });
+  }
+
   // suppression d'une project
   delete(id: string): Promise<any> {
     const url = `${this.apiUrl}/delete/${id}`

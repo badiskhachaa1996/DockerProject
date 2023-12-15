@@ -45,49 +45,13 @@ export class UpdateAgentComponent implements OnInit {
   ]
   dropdownModule = [
     { label: 'Choisissez un Module', value: null },
-    { value: "Admission", label: "Admission" },
-    { value: "Partenaire", label: "Partenaire" },
-    { value: "Ticketing", label: "Ticketing" },
-    { value: "CRM", label: "CRM" },
-    { value: "Mailing", label: "Mailing" },
-    { value: "Commerciale", label: "Commerciale" },
-    { value: "International", label: "International" },
-    { value: "Pedagogie", label: "Pedagogie" },
-    { value: "iMatch", label: "iMatch" },
-    { value: "Générateur de Document", label: "Générateur de Document" },
-    { value: "Ressources Humaines", label: "Ressources Humaines" },
-    { value: "Admin IMS", label: "Admin IMS" },
-    { value: "Administration", label: "Administration" },
-    { value: "Booking", label: "Booking" },
-    { value: "Questionnaire", label: "Questionnaire" },
-    { value: "Intuns", label: "Intuns" },
-    { value: "Gestions des emails", label: "Gestions des emails" },
-    { value: "Links", label: "Links" },
-    { value: "Remboursement", label: "Remboursement" }
+    ...environment.ModuleAccessList
   ]
 
   onOpenDropdown(module: string) {
     this.dropdownModule = [
       { label: 'Choisissez un Module', value: null },
-      { value: "Admission", label: "Admission" },
-      { value: "Partenaire", label: "Partenaire" },
-      { value: "Ticketing", label: "Ticketing" },
-      { value: "CRM", label: "CRM" },
-      { value: "Mailing", label: "Mailing" },
-      { value: "Commerciale", label: "Commerciale" },
-      { value: "International", label: "International" },
-      { value: "Pedagogie", label: "Pedagogie" },
-      { value: "iMatch", label: "iMatch" },
-      { value: "Générateur de Document", label: "Générateur de Document" },
-      { value: "Ressources Humaines", label: "Ressources Humaines" },
-      { value: "Admin IMS", label: "Admin IMS" },
-      { value: "Administration", label: "Administration" },
-      { value: "Booking", label: "Booking" },
-      { value: "Questionnaire", label: "Questionnaire" },
-      { value: "Intuns", label: "Intuns" },
-      { value: "Gestions des emails", label: "Gestions des emails" },
-      { value: "Links", label: "Links" },
-      { value: "Remboursement", label: "Remboursement" }
+      ...environment.ModuleAccessList
     ]
     if (this.USER?.role == 'Admin')
       this.dropdownModule.splice(11, 1) //Supprimer Admin-IMS

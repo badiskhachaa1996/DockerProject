@@ -150,32 +150,43 @@ export class GestionComponent implements OnInit {
   sujetDic = {}
   USER!: User;
   showLabelConfig = false
+  AccessLevel = "Admin"
   onAddComment() {
     this.TaskToShow.commentaires.push({ _id: new mongoose.Types.ObjectId().toString(), by: this.USER, date: new Date() })
   }
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.getthecrateur()
     //appelle a la fonction de recupreation des personnes consernees
     this.getallusers();
-    //recuperer les project avec getProjects
-    this.projectService.getProjects().then((data) => {
-      this.project = [];
-      this.project = data;
-
-    })
     //Récupération des labels
     this.projectService.getLabels().subscribe(data => {
       this.labels = data
     })
     //recuperation du nombre de project
-    this.listeprojets();
+    this.userService.getInfoById(this.token.id).subscribe({
+      next: (response) => {
+        this.userConnected = response;
+        if (response.roles_list)
+          response.roles_list.forEach(role => {
+            if (role.module == "Project")
+              this.AccessLevel = role.role
+          })
+        this.listeprojets();
+        this.userConnected.savedProject.forEach(project => {
+          this.projectSelecteds.push(project);
+        });
+      },
+      error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
+      complete: () => console.log("information de l'utilisateur connecté récuperé")
+    });
+
     this.SujetService.getAll().subscribe(data => {
       data.forEach(element => {
         this.sujetDic[element._id] = element.label
       });
     })
+    //récupération du niveau d'accès
     if (this.router.url.startsWith('/ticketing-igs')) {
       //Charger les sujets et services IGS
       this.ServService.getAll().subscribe(data => {
@@ -254,6 +265,11 @@ export class GestionComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        if (response.roles_list)
+          response.roles_list.forEach(role => {
+            if (role.module == "Project")
+              this.AccessLevel = role.role
+          })
         this.userConnected.savedProject.forEach(project => {
           this.projectSelecteds.push(project);
         });
@@ -264,26 +280,61 @@ export class GestionComponent implements OnInit {
   }
 
   listeprojets() {
-    this.projectService.getProjects()
-      .then(projects => {
+    console.log(this.AccessLevel)
+    if (this.AccessLevel == 'Super-Admin')
+      this.projectService.getProjects()
+        .then(projects => {
+          this.project = projects;
+          this.nbr_project = projects.length;
+          this.nbr_projectCloturer = 0;
+          this.nbr_projectEnCour = 0;
+          this.avancement_p = 0;
+          for (let i = 0; i < projects.length; i++) {
+            this.avancement_p = 0;
+            this.projectService.getTasksByIdProject(projects[i]._id).then((data) => {
+              console.log(projects[i].titre);
+              for (let j = 0; j < data.length; j++) {
+                this.avancement_p = this.avancement_p + (data[j].avancement / data.length);
+              }
+              console.log(this.avancement_p);
+              projects[i].avancement = this.avancement_p;
+              if (this.avancement_p === 100) {
+                projects[i].etat = "Clôturé";
+              }
+              this.projectService.putProject(projects[i]);
+
+            })
+            if (projects[i].etat == "Clôturé") {
+              this.nbr_projectCloturer++;
+            }
+            if (projects[i].etat == "En cours") {
+              this.nbr_projectEnCour++
+            }
+            this.avancement_p = 0;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching projects:', error);
+        });
+    else if (this.AccessLevel == 'Admin')
+      this.projectService.getProjectsAsAdmin(this.token.id).then(projects => {
+        this.project = projects; 
         this.nbr_project = projects.length;
         this.nbr_projectCloturer = 0;
         this.nbr_projectEnCour = 0;
-        this.avancement_p=0;
+        this.avancement_p = 0;
         for (let i = 0; i < projects.length; i++) {
-          this.avancement_p=0;
+          this.avancement_p = 0;
           this.projectService.getTasksByIdProject(projects[i]._id).then((data) => {
-            console.log(projects[i].titre);
             for (let j = 0; j < data.length; j++) {
               this.avancement_p = this.avancement_p + (data[j].avancement / data.length);
             }
-            console.log(this.avancement_p);
             projects[i].avancement = this.avancement_p;
-            if(this.avancement_p===100){
-              projects[i].etat ="Clôturé";
+            if (this.avancement_p === 100) {
+              projects[i].etat = "Clôturé";
             }
             this.projectService.putProject(projects[i]);
-           
+
           })
           if (projects[i].etat == "Clôturé") {
             this.nbr_projectCloturer++;
@@ -291,12 +342,12 @@ export class GestionComponent implements OnInit {
           if (projects[i].etat == "En cours") {
             this.nbr_projectEnCour++
           }
-          this.avancement_p=0;
+          this.avancement_p = 0;
         }
       })
-      .catch(error => {
-        console.error('Error fetching projects:', error);
-      });
+        .catch(error => {
+          console.error('Error fetching projects:', error);
+        });
   }
   dicUsers = {}
   // recuperation des utilisateur  pour les afficher dans le drop down
