@@ -1,8 +1,8 @@
 <div class="grid col-12 card">
     <div class="col-3">
         <div class="card mb-0">
-            <label>Nom du responsable</label>
-            <br>
+            <label>Responsable</label>
+            <br> <br>
             <p-dropdown  [options]="responsablesListe" filter="true" placeholder="Choisissez le nom"
             (onChange)="onResponsableSelected($event)"  [showClear]="true"></p-dropdown>
 
@@ -40,7 +40,7 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">Projets cloturés</span>
+                    <span class="block text-500 font-medium mb-4">Nombre des projets cloturés</span>
                     <div class="text-900 font-medium text-xl">{{nbr_projet_cloture}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -52,16 +52,16 @@
     </div>
 </div>
 <div class="grid col-12 card">
-    <div class="col-2">
+    <div class="col-3">
         <div class="card mb-0">
-            <label>Nom du projet</label>
-            <br>
+            <label>Projet</label>
+            <br><br>
             <p-dropdown  [options]="projectListe" filter="true" placeholder="projet"
             (onChange)="onProjectSelected($event)"  [showClear]="true"></p-dropdown>
 
         </div>
     </div>
-    <div class="col-2">
+    <div class="col-3">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
@@ -75,21 +75,8 @@
             </div>
         </div>
     </div>
-    <div class="col-2">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-4">
-                <div>
-                    <span class="block text-500 font-medium mb-4">Nombre des activités en attente</span>
-                    <div class="text-900 font-medium text-xl">{{nbr_tache_attente}}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-pause text-cyan-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-2">
+    
+    <div class="col-3">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
@@ -103,11 +90,11 @@
             </div>
         </div>
     </div>
-    <div class="col-2">
+    <div class="col-3">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-4">
                 <div>
-                    <span class="block text-500 font-medium mb-4">Activités traitées</span>
+                    <span class="block text-500 font-medium mb-4">Nombre des activités cloturées</span>
                     <div class="text-900 font-medium text-xl">{{nbr_tache_traite}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
@@ -117,25 +104,12 @@
             </div>
         </div>
     </div>
-    <div class="col-2">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-4">
-                <div>
-                    <span class="block text-500 font-medium mb-4">Nombre des activités validées</span>
-                    <div class="text-900 font-medium text-xl">{{nbr_tache_valide}}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-check-square text-blue-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 <div class="grid col-12 card">
     <div class="col-3">
         <div class="card mb-0">
-            <label>Nom de l'activité</label>
+            <label>Activité</label>
             <br>
             <p-dropdown  [options]="taskListe" filter="true" placeholder="activité"
             (onChange)="onTacheSelected($event)" [showClear]="true"></p-dropdown>
@@ -143,30 +117,29 @@
         </div>
     </div>
     <div class="grid col-9" >
-        <div class="col-3"><strong>Date de création:<span style="color:#878787" > {{taskSelected?.ticketId?.date_ajout | date:'dd MMMM yy'}}</span></strong> </div>
-        <div class="col-3"><strong>Etat:<span style="color:#878787" > {{taskSelected?.etat}}</span></strong> </div>
-        <div class="col-3"><strong>Avancement:<span style="color:#878787" > {{taskSelected?.avancement}} %</span></strong> </div>
-        <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"[paginator]="true" rowExpandMode="single"
-        [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+        
+       
+        <p-table #dt1 dataKey="_id" [rows]="100" [rowHover]="true" [paginator]="true"[value]="tasks" [paginator]="true"
+        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
+         responsiveLayout="scroll"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
-                <th style="border-right: 1px solid gray;" > ID ticket</th>
+                <th style="border-right: 1px solid gray;" > ID</th>
+               
                 <th style="border-right: 1px solid gray;"> Collaborateur </th>
-                <th style="border-right: 1px solid gray;"> Date de création </th>
-                <th style="border-right: 1px solid gray;"> Etat</th>
                 <th style="border-right: 1px solid gray;"> Délais de traitement </th>
+                <th style="border-right: 1px solid gray;"> Avancement </th>
+
             </tr>  
             </ng-template>
-            <ng-template  pTemplate="body" let-ticket let-rir="rowIndex">
+            <ng-template  pTemplate="body" let-t let-rir="rowIndex">
             <tr>
-                <td style="border-right: 1px solid gray;">{{ticket?.customid}}</td>
-                <td style="border-right: 1px solid gray;">{{ticket?.agent_id?.firstname}} {{ticket?.agent_id?.lastname}}</td>
-                <td style="border-right: 1px solid gray;">{{ticket?.date_ajout | date:'dd MMMM yy'}}</td>
-                <td style="border-right:  1px solid gray;">{{taskSelected?.etat}}</td>
-                <td style="border-right: 1px solid gray;">
-                      {{getDelaiTraitrement(rir)}}
-                  </td>
+                <td style="border-right: 1px solid gray;">{{t?.identifian}}</td>
+                <td style="border-right: 1px solid gray;">{{t.attribuate_to[0]}} </td>
+                <td style="border-right: 1px solid gray;">{{getDelaiTraitrement(rir)}}</td>
+                <td style="border-right:  1px solid gray;">{{t?.avancement}}</td>
+                
             </tr>
         </ng-template>
     </p-table>

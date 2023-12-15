@@ -283,8 +283,11 @@
                         <p-card>
                             <p-card-header>
                                 <div class="grid col-12">
-                                    <div class="col-11" style="text-align: center;">
-                                        #{{t.identifian}} <strong> {{t?.libelle}}</strong>
+                                    <p class="col-1">
+                                        #{{t.identifian}}
+                                    </p>
+                                    <div class="col-10" style="text-align: center;">
+                                        #{{t.identifian}} <strong> {{t?.libelle}}  : {{t?.avancement}}%</strong>
                                     </div>
                                     <div class="col-1" style="cursor: pointer;">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
@@ -313,7 +316,7 @@
                                     <div class="col-1">
 
                                     </div>
-                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]" style="font-size: 12px;">
                                         <ng-container
                                             *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
                                             <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
@@ -369,10 +372,13 @@
                         <p-card>
                             <p-card-header>
                                 <div class="grid col-12">
-                                    <div class="col-11" style="text-align: center;">
-                                        #{{t.identifian}}<strong> {{t?.libelle}}</strong>
+                                    <p class="col-1">
+                                        #{{t.identifian}}
+                                    </p>
+                                    <div class="col-10" style="text-align: center;">
+                                        #{{t.identifian}} <strong> {{t?.libelle}}  : {{t?.avancement}}%</strong>
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-1" style="cursor: pointer;">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
                                 </div>
@@ -398,7 +404,7 @@
                                         <i class="pi pi-arrow-left" pTooltip="Placer dans To Do" style="color: green"
                                             (click)="ToToDo(t)"></i>
                                     </div>
-                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]" style="font-size: 12px;">
                                         <ng-container
                                             *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
                                             <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
@@ -450,10 +456,13 @@
                         <p-card>
                             <p-card-header>
                                 <div class="grid col-12">
-                                    <div class="col-11" style="text-align: center;">
-                                        #{{t?.identifian}} <strong> {{t?.libelle}}</strong>
+                                    <p class="col-1">
+                                        #{{t.identifian}}
+                                    </p>
+                                    <div class="col-10" style="text-align: center;">
+                                        #{{t.identifian}} <strong> {{t?.libelle}}  : {{t?.avancement}}%</strong>
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-1" style="cursor: pointer;">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
                                 </div>
@@ -483,7 +492,7 @@
                                         <i class="pi pi-arrow-left" style="color: green" pTooltip="Placer dans Doing"
                                             (click)="ToDoing(t)"></i>
                                     </div>
-                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]"style="font-size: 12px;">
                                         <ng-container
                                             *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
                                             <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
@@ -856,7 +865,7 @@
         </div>
     </form>
 </p-dialog>
-<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'30em'}" (onHide)="onChange()">
+<p-sidebar [(visible)]="displayTache" position="right" [style]="{width:'40em'}" (onHide)="onChange()">
     <form [formGroup]="taskToShowForm" class="p-fluid p-formgrid grid col-12">
         <div class="grid col-12" *ngIf="TaskToShow">
 
@@ -926,7 +935,7 @@
                     </p-sortIcon>
                 </th>
                 <th pSortableColumn="description" style="text-align: center;">
-                    Commentaire <p-sortIcon field="description">
+                    Contenu <p-sortIcon field="description">
                     </p-sortIcon>
                 </th>
 
@@ -939,17 +948,18 @@
         <ng-template pTemplate="body" let-commentaire>
             <tr [pEditableRow]="commentaire">
                 <td>
-                    {{commentaire?.date | date: 'dd MMMM YY'}}
+                    {{commentaire?.date | date: 'dd/MM/YY'}}
                 </td>
                 <td pEditableColumn pTooltip="Clickez pour modifier" tooltipPosition="bottom">
                     <p-cellEditor>
                         <ng-template pTemplate="input">
                             <textarea *ngIf="commentaire?.by._id==token.id" type="text" pInputTextarea
                                 (blur)="onUpdate()" [(ngModel)]="commentaire.description"></textarea>
-                            <p *ngIf="commentaire?.by._id!=token.id">{{commentaire?.description}}</p>
+                            <app-read-more *ngIf="commentaire?.by._id!=token.id"
+                                [string]="commentaire?.description"></app-read-more>
                         </ng-template>
                         <ng-template pTemplate="output">
-                            {{commentaire?.description}} &nbsp;
+                            <app-read-more [string]="commentaire?.description"></app-read-more> &nbsp;
                         </ng-template>
                     </p-cellEditor>
                 </td>
