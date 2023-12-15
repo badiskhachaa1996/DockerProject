@@ -6051,7 +6051,7 @@ export class AppMenuComponent implements OnInit {
                 if (services_list.includes('Administration')) {
                     this.items.push(
                         {
-                            label: 'Administration V2',
+                            label: 'Administration',
                             icon: 'pi pi-users',
                             items: [
 

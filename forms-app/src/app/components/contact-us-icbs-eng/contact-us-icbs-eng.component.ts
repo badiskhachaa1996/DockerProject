@@ -9,12 +9,12 @@ import {EcoleAdmission} from "../../models/EcoleAdmission";
 import {RentreeAdmission} from "../../models/RentreeAdmission";
 
 @Component({
-  selector: 'app-contact-icbs-eng',
-  templateUrl: './contact-icbs-eng.component.html',
-  styleUrls: ['./contact-icbs-eng.component.scss'],
+  selector: 'app-contact-us-icbs-eng',
+  templateUrl: './contact-us-icbs-eng.component.html',
+  styleUrls: ['./contact-us-icbs-eng.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContactIcbsEngComponent implements OnInit {
+export class ContactUsIcbsEngComponent implements OnInit {
   hideFormations = false;
   aFormGroup!: UntypedFormGroup;
 
@@ -34,7 +34,7 @@ export class ContactIcbsEngComponent implements OnInit {
       //this.ToastService.add({ severity: 'error', summary: 'Votre email est déjà utilisé' });
       this.viewportScroller.scrollToAnchor('EmailForm');
     } else {
-      if (this.addForm.value.whatsapp.includes('Oui'))
+      if (this.addForm.value.whatsapp === true)
         numero_whatsapp = this.addForm.value.numero_phone
       this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID(), source: `Site Web ICBS`, numero_whatsapp }).subscribe(data => {
           this.addForm.reset()

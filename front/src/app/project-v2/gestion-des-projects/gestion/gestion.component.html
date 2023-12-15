@@ -65,7 +65,7 @@
                     <div class="flex justify-content-between mb-4">
                         <div>
                             <span class="block text-500 font-medium mb-4">Nombre total des projets en cours
-                                {{nbr_project}}</span>
+                                {{nbr_projectEnCour}}</span>
 
                         </div>
                         <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
@@ -168,19 +168,21 @@
                     </td>
 
                     <td>
-                        <p-tag *ngIf="project.etat == null" icon="pi pi-times" severity="success" [value]="'En cours'">
+                        <p-tag *ngIf="project.etat == 'En cours'" icon="pi pi-times" severity="success"
+                            [value]="'En cours'">
                         </p-tag>
                         <p-tag *ngIf="project.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
                             [value]="project.statut">
                         </p-tag>
-                        <p-tag *ngIf="project.statut == 'cloturer'" icon="pi pi-check-square" severity="success"
-                            [value]="project.statut">
+                        <p-tag *ngIf="project.etat == 'Clôturé'" icon="pi pi-check-square" severity="success"
+                            [value]="project.etat">
                         </p-tag>
                     </td>
                     <td>
                         {{project.avancement| number:'1.1-1'}} %
                     </td>
-                    <td>
+                    <td
+                        *ngIf="AccessLevel=='Super-Admin' || project.createur_id==token.id || project.responsable_id==token.id">
                         <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
                             (click)="initialisation_project(project)" aria-hidden="true"></i>
                         <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
@@ -191,8 +193,9 @@
                             (click)="showRessources(project._id)" aria-hidden="true"></i>
                         <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
                             (click)="showBudget(project._id)" aria-hidden="true"></i>
-
-
+                    </td>
+                    <td
+                        *ngIf="AccessLevel=='Admin' && project.createur_id!=token.id && project.responsable_id!=token.id">
                     </td>
                 </tr>
             </ng-template>
@@ -213,7 +216,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td>{{ticket.description}}</td>
+                    <td style="white-space: pre-line;">{{ticket.description}}</td>
                     <td>{{ticket.debut| date:'dd MMMM yy'}}</td>
                     <td>{{ticket.fin| date:'dd MMMM yy'}}</td>
 
@@ -283,14 +286,15 @@
                                     <div class="col-11" style="text-align: center;">
                                         #{{t.identifian}} <strong> {{t?.libelle}}</strong>
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-1" style="cursor: pointer;">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
                                     </div>
                                 </div>
                                 <div class="grid col-12" *ngIf="t.labels">
                                     <ng-container *ngFor="let l of t.labels;let index = index">
                                         <div class="col-3" *ngIf="index<4">
-                                            <div class="label" [style]="{'background-color':l.color}">
+                                            <div class="label"
+                                                [style]="{'background-color': l.color, 'color': 'white !important'}">
                                                 {{l.libelle}}
                                             </div>
                                         </div>
@@ -302,8 +306,14 @@
                                     <div class="col-12">
                                         <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                     </div>
-                                    <div class="col-6"></div>
-                                    <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                </div>
+                            </p-card-content>
+                            <p-card-footer>
+                                <div class="grid col-12">
+                                    <div class="col-1">
+
+                                    </div>
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
                                         <ng-container
                                             *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
                                             <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
@@ -328,17 +338,6 @@
                                         <ng-template #nonAssigner>
                                             Non assigné
                                         </ng-template>
-                                    </div>
-
-                                </div>
-                            </p-card-content>
-                            <p-card-footer>
-                                <div class="grid col-12">
-                                    <div class="col-1">
-
-                                    </div>
-                                    <div class="col-10">
-
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-arrow-right" pTooltip="Placer dans Doing"
@@ -392,35 +391,6 @@
                                 <div class="col-12">
                                     <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                 </div>
-                                <div class="col-6"></div>
-                                <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
-                                    <ng-container
-                                        *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
-                                        <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
-                                            <strong>Assigné à</strong> {{t.attribuate_to[0].firstname}}
-                                            {{t.attribuate_to[0].lastname}}
-                                        </ng-container>
-                                        <ng-template #multipleAssignees>
-                                            <strong>Assigné à</strong>
-                                            {{t.attribuate_to[0].firstname}} {{t.attribuate_to[0].lastname}} et
-                                            <span *ngIf="!toggleAssignees[t._id]">
-                                                {{t.attribuate_to.length - 1}} autre{{t.attribuate_to.length > 2 ? 's' :
-                                                ''}}
-                                            </span>
-                                            <span *ngIf="toggleAssignees[t._id]">
-                                                <ng-container
-                                                    *ngFor="let user of t.attribuate_to.slice(1); let last = last">
-                                                    {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
-                                                </ng-container>
-                                            </span>
-                                        </ng-template>
-                                    </ng-container>
-                                    <ng-template #nonAssigner>
-                                        Non assigné
-                                    </ng-template>
-                                </div>
-
-
                             </div>
                             <p-card-footer>
                                 <div class="grid col-12">
@@ -428,8 +398,31 @@
                                         <i class="pi pi-arrow-left" pTooltip="Placer dans To Do" style="color: green"
                                             (click)="ToToDo(t)"></i>
                                     </div>
-                                    <div class="col-10">
-
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                        <ng-container
+                                            *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
+                                            <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
+                                                <strong>Assigné à</strong> {{t.attribuate_to[0].firstname}}
+                                                {{t.attribuate_to[0].lastname}}
+                                            </ng-container>
+                                            <ng-template #multipleAssignees>
+                                                <strong>Assigné à</strong>
+                                                {{t.attribuate_to[0].firstname}} {{t.attribuate_to[0].lastname}} et
+                                                <span *ngIf="!toggleAssignees[t._id]">
+                                                    {{t.attribuate_to.length - 1}} autre{{t.attribuate_to.length > 2 ?
+                                                    's' : ''}}
+                                                </span>
+                                                <span *ngIf="toggleAssignees[t._id]">
+                                                    <ng-container
+                                                        *ngFor="let user of t.attribuate_to.slice(1); let last = last">
+                                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                                    </ng-container>
+                                                </span>
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-template #nonAssigner>
+                                            Non assigné
+                                        </ng-template>
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-arrow-right" style="color: green" pTooltip="Placer dans Done"
@@ -458,7 +451,7 @@
                             <p-card-header>
                                 <div class="grid col-12">
                                     <div class="col-11" style="text-align: center;">
-                                        #{{t?.identifian}}  <strong> {{t?.libelle}}</strong>
+                                        #{{t?.identifian}} <strong> {{t?.libelle}}</strong>
                                     </div>
                                     <div class="col-1">
                                         <i class="pi pi-ellipsis-h" style="color: green" (click)="onShowTache(t)"></i>
@@ -480,32 +473,7 @@
                                     <app-read-more [string]="t.description_task" [size_max]=30></app-read-more>
                                 </div>
                                 <div class="col-6"></div>
-                                <div class="col-6" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
-                                    <ng-container
-                                        *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
-                                        <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
-                                            <strong>Assigné à</strong> {{t.attribuate_to[0].firstname}}
-                                            {{t.attribuate_to[0].lastname}}
-                                        </ng-container>
-                                        <ng-template #multipleAssignees>
-                                            <strong>Assigné à</strong>
-                                            {{t.attribuate_to[0].firstname}} {{t.attribuate_to[0].lastname}} et
-                                            <span *ngIf="!toggleAssignees[t._id]">
-                                                {{t.attribuate_to.length - 1}} autre{{t.attribuate_to.length > 2 ? 's' :
-                                                ''}}
-                                            </span>
-                                            <span *ngIf="toggleAssignees[t._id]">
-                                                <ng-container
-                                                    *ngFor="let user of t.attribuate_to.slice(1); let last = last">
-                                                    {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
-                                                </ng-container>
-                                            </span>
-                                        </ng-template>
-                                    </ng-container>
-                                    <ng-template #nonAssigner>
-                                        Non assigné
-                                    </ng-template>
-                                </div>
+
 
 
                             </div>
@@ -515,8 +483,31 @@
                                         <i class="pi pi-arrow-left" style="color: green" pTooltip="Placer dans Doing"
                                             (click)="ToDoing(t)"></i>
                                     </div>
-                                    <div class="col-10">
-
+                                    <div class="col-10" (click)="toggleAssignees[t._id] = !toggleAssignees[t._id]">
+                                        <ng-container
+                                            *ngIf="t?.attribuate_to && t.attribuate_to.length > 0; else nonAssigner">
+                                            <ng-container *ngIf="t.attribuate_to.length === 1; else multipleAssignees">
+                                                <strong>Assigné à</strong> {{t.attribuate_to[0].firstname}}
+                                                {{t.attribuate_to[0].lastname}}
+                                            </ng-container>
+                                            <ng-template #multipleAssignees>
+                                                <strong>Assigné à</strong>
+                                                {{t.attribuate_to[0].firstname}} {{t.attribuate_to[0].lastname}} et
+                                                <span *ngIf="!toggleAssignees[t._id]">
+                                                    {{t.attribuate_to.length - 1}} autre{{t.attribuate_to.length > 2 ?
+                                                    's' : ''}}
+                                                </span>
+                                                <span *ngIf="toggleAssignees[t._id]">
+                                                    <ng-container
+                                                        *ngFor="let user of t.attribuate_to.slice(1); let last = last">
+                                                        {{user.firstname}} {{user.lastname}}{{!last ? ', ' : ''}}
+                                                    </ng-container>
+                                                </span>
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-template #nonAssigner>
+                                            Non assigné
+                                        </ng-template>
                                     </div>
                                     <div class="col-1"></div>
                                 </div>

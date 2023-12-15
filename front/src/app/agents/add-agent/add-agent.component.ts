@@ -21,27 +21,7 @@ export class AddAgentComponent implements OnInit {
   paysDropdown = environment.pays
   roles_list: { role: string, module: string, _id: string }[] = []
 
-  dropdownModule = [
-    { value: "Admission", label: "Admission" },
-    { value: "Partenaire", label: "Partenaire" },
-    { value: "Ticketing", label: "Ticketing" },
-    { value: "CRM", label: "CRM" },
-    { value: "Mailing", label: "Mailing" },
-    { value: "Commerciale", label: "Commerciale" },
-    { value: "International", label: "International" },
-    { value: "Pedagogie", label: "Pedagogie" },
-    { value: "iMatch", label: "iMatch" },
-    { value: "Générateur de Document", label: "Générateur de Document" },
-    { value: "Ressources Humaines", label: "Ressources Humaines" },
-    { value: "Admin IMS", label: "Admin IMS" },
-    { value: "Administration", label: "Administration" },
-    { value: "Booking", label: "Booking" },
-    { value: "Questionnaire", label: "Questionnaire" },
-    { value: "Intuns", label: "Intuns" },
-    { value: "Gestions des emails", label: "Gestions des emails" },
-    { value: "Links", label: "Links" },
-    { value: "Remboursement", label: "Remboursement" }
-  ]
+  dropdownModule = environment.ModuleAccessList
   dropdownRole = [
     { value: "Agent", label: "Agent" },
     { value: "Spectateur", label: "Spectateur" },
@@ -103,7 +83,7 @@ export class AddAgentComponent implements OnInit {
     this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list }).subscribe(data => {
       this.ToastService.add({ summary: 'Création de l\'agent avec succès', severity: 'success' })
       this.roles_list = []
-      if (this.addForm.value.type == 'Collaborateur'  || this.addForm.value.type == 'Formateur')
+      if (this.addForm.value.type == 'Collaborateur' || this.addForm.value.type == 'Formateur')
         this.CollaborateurService.postCollaborateur({ user_id: data, localisation: this.SITE }).then(c => {
         })
       this.addForm.reset()
