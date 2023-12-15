@@ -204,7 +204,7 @@ export class NewListTicketsComponent implements OnInit {
               }
               if (isFirst) {
                 this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
-                  let site = ''
+                  let site = null
                   if (Array.isArray(r.localisation) && r.localisation.length != 0)
                     site = r.localisation[0]
                   else if (!Array.isArray(r.localisation)) {
@@ -256,7 +256,7 @@ export class NewListTicketsComponent implements OnInit {
               this.onFilterTicket()
               if (isFirst) {
                 this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(r => {
-                  let site = ''
+                  let site = null
                   if (Array.isArray(r.localisation) && r.localisation.length != 0)
                     site = r.localisation[0]
                   else if (!Array.isArray(r.localisation)) {

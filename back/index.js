@@ -461,6 +461,7 @@ app.use('/soc/template/formulaire', require('./controllers/template/formulaireCo
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
 app.use('/soc/evaluation', require('./controllers/evaluationController'));
+app.use('/soc/auto-ticket', require('./controllers/autoTicketingController'));
 //CRM Gestion Produits
 
 app.use('/soc/gestion-produits', gestionProduitsCrmController)

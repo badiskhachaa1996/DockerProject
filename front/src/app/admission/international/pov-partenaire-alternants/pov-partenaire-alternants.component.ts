@@ -128,7 +128,7 @@ export class PovPartenaireAlternantsComponent implements OnInit {
 
   deleteRequis(path: string) {
     this.APService.deleteRequisFile(this.showDocuments._id, path).subscribe(res => {
-      this.ToastService.add({ severity: 'success', summary: 'Suppresion du Fichier', detail: 'Le fichier a bien été supprimé' });
+      this.ToastService.add({ severity: 'success', summary: 'Suppression du Fichier', detail: 'Le fichier a bien été supprimé' });
       if (res.documents_requis)
         this.alternants[this.alternants.indexOf(this.showDocuments)].documents_requis = res.documents_requis
     })

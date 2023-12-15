@@ -33,5 +33,6 @@ export class Task {
                 date: Date
             }[],
             public labels?: Label[],
+            public duree_mise?: number
         ) { }
 }

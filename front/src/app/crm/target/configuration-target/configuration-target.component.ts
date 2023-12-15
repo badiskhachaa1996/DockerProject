@@ -105,7 +105,7 @@ export class ConfigurationTargetComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette target ?'))
       this.TargetS.delete(target._id).subscribe(data => {
         this.targets.splice(this.targets.indexOf(target), 1)
-        this.ToastService.add({ severity: 'success', summary: 'Suppresion de la target avec succès' })
+        this.ToastService.add({ severity: 'success', summary: 'Suppression de la target avec succès' })
       })
   }
 
