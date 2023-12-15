@@ -38,10 +38,10 @@ export class ListCampusComponent implements OnInit {
   salles = []
 
   onAddSalle() {
-    this.salles.push("")
+    this.selectedCampus.salles.push("")
   }
   changeValue(i, value) {
-    this.salles[i] = value
+    this.selectedCampus.salles[i] = value
   }
   token;
 
@@ -80,14 +80,25 @@ export class ListCampusComponent implements OnInit {
   }
 
   editCampus() {
-    this.campusRService.update({ _id: this.campusToUpdate._id, ...this.campusFormUpdate.value, salles: this.salles }).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
+    this.campusRService.update({ _id: this.campusToUpdate._id, ...this.campusFormUpdate.value }).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été modifié' });
       this.campuss.splice(this.campuss.indexOf(this.campusToUpdate), 1, data)
       this.campusToUpdate = null;
     }, (error) => {
       console.error(error)
     });
 
+  }
+
+  onSaveSalle() {
+    this.campusRService.update({ _id: this.selectedCampus._id, salles: this.selectedCampus.salles }).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Les salles ont bien été modifié' });
+      this.campuss.splice(this.campuss.indexOf(this.selectedCampus), 1, data)
+      this.selectedCampus = null;
+      this.afficherSalles = false
+    }, (error) => {
+      console.error(error)
+    });
   }
 
   showModify(rowData: CampusR) {
