@@ -80,7 +80,7 @@ export class ActualiteComponent implements OnInit {
     this.activiteService.delete(act._id).subscribe(data => {
       this.activites.splice(this.activites.indexOf(act), 1)
       this.formEdit.reset()
-      this.ToastService.add({ severity: 'success', summary: 'Suppresion de l\'activité avec succès' })
+      this.ToastService.add({ severity: 'success', summary: 'Suppression de l\'activité avec succès' })
     })
   }
 
