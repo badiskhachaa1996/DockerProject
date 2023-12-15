@@ -138,10 +138,13 @@ export class ReportingComponent implements OnInit {
   
   }
 
-  /*calculerInsertion(): void {
+  calculerInsertion(): void {
     this.insertion = this.leadsSelected.length;
+  }
+  /*calculerInsertion(): void {
+    this.insertion = this.leadsSelected.filter(lead => 
+      lead.created_by && lead.created_by._id).length;
   }*/
-
   calculerInterresse(): void  {
    
     //this.LCS.getAllQualifies().subscribe(data => { this does not work
@@ -167,10 +170,7 @@ export class ReportingComponent implements OnInit {
     this.insertion = this.leads.filter(lead => lead.created_by==this.acteur).length;
     console.log(this.insertion)
   }*/
-  calculerInsertion(): void {
-    this.insertion = this.leadsSelected.filter(lead => 
-      lead.created_by && lead.created_by._id).length;
-  }
+  
 
   calculerPreQualifie(): void  {
    

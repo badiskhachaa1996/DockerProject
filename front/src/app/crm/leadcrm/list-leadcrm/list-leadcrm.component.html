@@ -503,7 +503,7 @@
                         {{lead?.affected_to_member?.lastname | uppercase}}
                     </td>
                     <td>
-                        <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
+                        <!-- baaaadis un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
                         <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false" appendTo="body"
                             (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
                         </p-dropdown>

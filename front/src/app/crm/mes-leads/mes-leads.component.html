@@ -490,16 +490,24 @@
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification"
-                                    autoWidth="false" (onChange)="onUpdateQualification($event, lead)"
-                                    placeholder="Choisissez une decision">
-                        </p-dropdown>
+                        <p-dropdown [options]="decisionList" [(ngModel)]="lead.decision_qualification" autoWidth="false" appendTo="body"
+                        (onChange)="onUpdateQualification($event, lead);" placeholder="Choisissez une decision">
+                    </p-dropdown>
                     </td>
                     <td>
                         <!-- un dropdown pour les qualification avec pour valeur par defaut {{lead.decision_qualification}} -->
-                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier"
-                                    autoWidth="false" (onChange)="onUpdateStatutDossier($event, lead)"
-                                    placeholder="Choisissez une decision">
+                        <p-dropdown [options]="statutDossierList" [(ngModel)]="lead.statut_dossier" autoWidth="false" appendTo="body"
+                            (onChange)="onUpdateStatutDossier($event, lead)" placeholder="Choisissez une decision">
+                            <ng-template pTemplate="selectedItem">
+                                <div [ngClass]="{
+                                    'nc_red': !lead.statut_dossier || lead.statut_dossier=='Non contacté',
+                                    'int_green': lead?.statut_dossier=='Intéressé',
+                                    'non_int_orange': lead?.statut_dossier=='Non intéressé',
+                                    'rflx_blue': lead?.statut_dossier=='En réflexion'
+                                }">
+                                    {{lead.statut_dossier || 'Non contacté'}}
+                                </div>
+                            </ng-template>
                         </p-dropdown>
                     </td>
 

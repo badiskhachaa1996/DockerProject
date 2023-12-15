@@ -432,13 +432,18 @@ Updatetache=new FormGroup({
     { label: 'Dossier admission cohérant ', value: 'Dossier admission cohérant ' },
   ]
   //En attente de traitement ;Non qualifié, Pré-qualifié, Qualifié
-  decisionList = [
+ /* decisionList = [
     
     { label: 'Non traitée', value: 'Non qualifié' },
     //{ label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'traitée', value: 'Qualifié' },
+  ]*/
+  decisionList = [
+    { label: 'En attente', value: 'En attente' },
+    { label: 'Non qualifié', value: 'Non qualifié' },
+    { label: 'Pré-qualifié', value: 'Pré-qualifié' },
+    { label: 'Qualifié', value: 'Qualifié' },
   ]
-
 
   avancementList = [
     
@@ -446,7 +451,13 @@ Updatetache=new FormGroup({
     { label: 'en cours', value: 'en cours' },
     { label: 'traitée', value: 'traitée' },
   ]
-  
+  statutDossierList = [
+    { label: 'Tous les status', value: null },
+    { label: 'Non contacté', value: 'Non contacté' },
+    { label: 'Intéressé', value: 'Intéressé' },
+    { label: 'Non intéressé', value: 'Non intéressé' },
+    { label: 'En réflexion', value: 'En réflexion' },
+  ]
 
   //Affect Form
   showAffect: LeadCRM = null
@@ -470,6 +481,36 @@ Updatetache=new FormGroup({
       this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })
   }
+
+  onUpdateStatutDossier(event
+    :
+    any, lead
+      :
+      LeadCRM
+  ) {
+    //mettre à jour le champs qualification du lead
+    lead.statut_dossier = event.value
+    this.LCS.update(lead).subscribe(data => {
+      this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.ToastService.add({ severity: "success", summary: "Mis à jour du statut du dossier avec succès" })
+    })
+  }
+  onUpdateQualification(event
+    :
+    any, lead
+      :
+      LeadCRM
+  ) {
+    //mettre à jour le champs qualification du lead
+
+    lead.decision_qualification = event.value
+    this.LCS.update(lead).subscribe(data => {
+      this.leads.splice(this.leads.indexOf(lead), 1, data)
+      this.ToastService.add({ severity: "success", summary: "Mis à jour de la qualification avec succès" })
+    })
+
+  }
+
 
   scrollToTop() {
     var scrollDuration = 250;
