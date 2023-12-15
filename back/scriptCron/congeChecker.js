@@ -27,6 +27,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         console.log('MONGODB CONNECTED')
         Conge.find({ statut: "Validé", date_debut: { $lte: new Date() }, date_fin: { $gte: new Date() } }).then(conges => {
             conges.forEach(c => {

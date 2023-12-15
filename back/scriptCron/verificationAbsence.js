@@ -13,6 +13,10 @@ mongoose
     .then(() => {
         //Trouver toutes les séances de l'étudiant
         //Si
+        setTimeout(() => {
+            process.exit()
+
+        }, 300000)
         Etudiant.find().populate('user_id').then(etudiants => {
             let dicAbsence = {}
             let d3J = new Date()
